@@ -14,12 +14,50 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+ <repositories>
+    <repository>
+      <id>bukkit-repo</id>
+      <url>http://repo.bukkit.org/content/groups/public/</url>
+    </repository> 
+    <repository>
+      <id>tagapi-repo</id>
+      <url>http://repo.kitteh.org/content/repositories/public/</url>
+    </repository> 
+    <repository>
+      <id>sk89q-repo</id>
+      <url>http://maven.sk89q.com/repo/</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bukkit</groupId>
+      <artifactId>bukkit</artifactId>
+      <version>1.7.2-R0.3-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sk89q</groupId>
+      <artifactId>worldedit</artifactId>
+      <version>5.5.8</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.sk89q</groupId>
+      <artifactId>worldguard</artifactId>
+      <version>5.8.1-SNAPSHOT</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.kitteh</groupId>
+      <artifactId>tagapi</artifactId>
+      <version>2.7.1</version>
+      <type>jar</type>
     </dependency>
   </dependencies>
 </project>

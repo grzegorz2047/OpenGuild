@@ -1,0 +1,6 @@
+name: OpenGuild2047
+version: 0.0.1
+main: pl.grzegorz2047.openguild2047.OpenGuild
+commands:
+    gildia:
+        description: komendy zwiazane z gildiami
