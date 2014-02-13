@@ -22,6 +22,20 @@
  * THE SOFTWARE.
  */
 
+/*
+TODO:
+Stworzenie klasy ClanPlayer
+Stworzenie klasy Clan
+Stworzenie klasy od cuboidów
+Ogarnięcie co byłoby dobre do sprawdzania czy gracz jest na cuboidzie gildii
+Tutaj są przydatne linki dla zainteresowanych tworzeniem cuboidów:
+https://github.com/sk89q/worldguard/blob/master/src/main/java/com/sk89q/worldguard/bukkit/WorldGuardPlayerListener.java
+https://forums.bukkit.org/threads/protection-region-cuboid-creation.164161/
+
+
+
+*/
+
 package pl.grzegorz2047.openguild2047;
 
 import org.bukkit.Bukkit;
