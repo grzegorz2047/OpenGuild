@@ -62,6 +62,7 @@ public class OpenGuild extends JavaPlugin{
     	if(getServer().getPluginManager().getPlugin("TagAPI") == null) {
             getLogger().severe("Nie znaleziono pluginu TagAPI! Pobierz go ze strony http://dev.bukkit.org/bukkit-plugins/tag");
             getLogger().severe("Wylaczanie pluginu OpenGuild2047...");
+            return;
     	}
     }
     
