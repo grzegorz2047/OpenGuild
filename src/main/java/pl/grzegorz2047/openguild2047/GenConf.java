@@ -28,6 +28,7 @@ package pl.grzegorz2047.openguild2047;
  *
  * @author Grzegorz
  */
-public class GeneralConfiguartion {
+public class GenConf {
     
+    public static String prefix = "[OG] ";//Mozna pokolorowac
 }
