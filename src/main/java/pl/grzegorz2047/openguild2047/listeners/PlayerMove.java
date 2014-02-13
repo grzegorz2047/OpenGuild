@@ -24,10 +24,12 @@
 
 package pl.grzegorz2047.openguild2047.listeners;
 
+import org.bukkit.event.Listener;
+
 /**
  *
  * @author Grzegorz
  */
-public class PlayerMove {
+public class PlayerMove implements Listener {
     
 }

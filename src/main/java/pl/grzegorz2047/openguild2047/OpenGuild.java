@@ -29,7 +29,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
+import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
+import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
 
 /**
  *
@@ -58,9 +60,8 @@ public class OpenGuild extends JavaPlugin{
     
     private void checkPlugins() {
     	if(getServer().getPluginManager().getPlugin("TagAPI") == null) {
-    		getLogger().severe("Nie znaleziono pluginu TagAPI! Pobierz go ze strony http://dev.bukkit.org/bukkit-plugins/tag");
-    		getLogger().severe("Wylaczanie pluginu OpenGuild2047...");
-    		return;
+            getLogger().severe("Nie znaleziono pluginu TagAPI! Pobierz go ze strony http://dev.bukkit.org/bukkit-plugins/tag");
+            getLogger().severe("Wylaczanie pluginu OpenGuild2047...");
     	}
     }
     
@@ -71,6 +72,8 @@ public class OpenGuild extends JavaPlugin{
     void loadAllListeners(){
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerChat(), this);
+        pm.registerEvents(new PlayerMove(), this);
+        pm.registerEvents(new EntityDamageByEntity(), this);
     }
     
     public static OpenGuild get() {
