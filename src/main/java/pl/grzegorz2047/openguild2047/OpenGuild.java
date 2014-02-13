@@ -79,14 +79,14 @@ public class OpenGuild extends JavaPlugin {
         
     	// Usuwanie wszystkich plikow ktore nie posidaja formatu .log (logger tworzy duzo plikow roboczych)
     	int logFiles = 0;
-		for(File file : logDir.listFiles()) {
-			String format = file.getName().substring(file.getName().length() - 4, file.getName().length());
-			if(!format.equals(".log")) {
-				file.delete();
-				logFiles++;
-			}
+	for(File file : logDir.listFiles()) {
+		String format = file.getName().substring(file.getName().length() - 4, file.getName().length());
+		if(!format.equals(".log")) {
+			file.delete();
+			logFiles++;
 		}
-		System.out.println("Usunieto " + logFiles + " plikow w folderze Arcade/log");
+	}
+	System.out.println("Usunieto " + logFiles + " plikow w folderze Arcade/log");
     }
     
     private void checkPlugins() {
