@@ -26,17 +26,19 @@ package pl.grzegorz2047.openguild2047.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 /**
  *
  * @author Grzegorz
  */
-public class PlayerChat implements Listener{
+public class EntityDamageByEntity implements Listener{
+    
     
     @EventHandler
-    void onChat(AsyncPlayerChatEvent e){
-        
+    void onSomeoneAttack(EntityDamageByEntityEvent e){
+        //Jezeli atakowali sie lukiem czy czymkolwiek ludzie z wlasnej gildii to zablokuj
+        //Daj tu też opcję, że jak jest on to można siebie nawalać
     }
     
 }

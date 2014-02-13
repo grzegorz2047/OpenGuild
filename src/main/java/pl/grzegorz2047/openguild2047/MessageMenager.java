@@ -22,21 +22,12 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.listeners;
-
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+package pl.grzegorz2047.openguild2047;
 
 /**
  *
  * @author Grzegorz
  */
-public class PlayerChat implements Listener{
-    
-    @EventHandler
-    void onChat(AsyncPlayerChatEvent e){
-        
-    }
+public class MessageMenager {
     
 }
