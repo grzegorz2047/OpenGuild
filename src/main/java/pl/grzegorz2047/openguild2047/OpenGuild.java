@@ -40,10 +40,9 @@ public class OpenGuild extends JavaPlugin{
 
     @Override
     public void onEnable() {
-        this.saveDefaultConfig();
+        //this.saveDefaultConfig();
         loadAllListeners();
-        Bukkit.getLogger().log(Level.INFO, "§7 {0} by §3grzegorz2047§7 zostal uruchomiony!", this.getName());
-        Bukkit.getConsoleSender().sendMessage(this.getName()+" by §3grzegorz2047§7 zostal uruchomiony!");
+        Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony!");
         
     }
 
