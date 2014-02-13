@@ -26,9 +26,9 @@
 TODO:
 Stworzenie klasy ClanPlayer
 Stworzenie klasy Clan
-Stworzenie klasy od cuboidów
-Ogarniêcie co by³oby dobre do sprawdzania czy gracz jest na cuboidzie gildii
-Tutaj s¹ przydatne linki dla zainteresowanych tworzeniem cuboidów:
+Stworzenie klasy od cuboidÃ³w
+OgarniÄ™cie co byÅ‚oby dobre do sprawdzania czy gracz jest na cuboidzie gildii
+Tutaj sÄ… przydatne linki dla zainteresowanych tworzeniem cuboidÃ³w:
 https://github.com/sk89q/worldguard/blob/master/src/main/java/com/sk89q/worldguard/bukkit/WorldGuardPlayerListener.java
 https://forums.bukkit.org/threads/protection-region-cuboid-creation.164161/
 
@@ -69,7 +69,7 @@ public class OpenGuild extends JavaPlugin {
         checkPlugins();
         getCommand("gildia").setExecutor(new GildiaCommand());
         loadAllListeners();
-        Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
+        Bukkit.getConsoleSender().sendMessage("ï¿½a"+this.getName()+"ï¿½6 by ï¿½3grzegorz2047ï¿½6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
         
     }
 
@@ -105,10 +105,10 @@ public class OpenGuild extends JavaPlugin {
     	}
     	if(!log.exists()) {
     		try {
-				log.createNewFile();
-			} catch(IOException ex) {
-				ex.printStackTrace();
-			}
+			log.createNewFile();
+		} catch(IOException ex) {
+			ex.printStackTrace();
+		}
     	}
     }
     
