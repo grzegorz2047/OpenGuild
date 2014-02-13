@@ -1,5 +1,5 @@
 name: OpenGuild2047
-version: 0.0.1
+version: 0.0.2
 main: pl.grzegorz2047.openguild2047.OpenGuild
 commands:
     gildia:
