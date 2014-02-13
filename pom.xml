@@ -29,7 +29,7 @@
         <profile>
             <id>otherOutputDir</id>
             <build>
-                <directory>${basedir}/target/</directory>
+                <directory>${basedir}/src/main/compiled/</directory>
             </build>
         </profile>
     </profiles>
