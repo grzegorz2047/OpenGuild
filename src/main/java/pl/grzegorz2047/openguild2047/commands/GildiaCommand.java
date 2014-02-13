@@ -27,6 +27,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import pl.grzegorz2047.openguild2047.GenConf;
 
 import pl.grzegorz2047.openguild2047.commands.arguments.HelpArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
@@ -63,15 +64,15 @@ public class GildiaCommand implements CommandExecutor {
 					error(sender, "Bledny argument");
 				}
 			} else {
-				return error(sender, "Zbyt duzo argumentów");
+				return error(sender, "Zbyt duzo argumentï¿½w");
 			}
 		}
 		return false;
 	}
 	
 	private boolean error(CommandSender sender, String msg) {
-		sender.sendMessage(ChatColor.RED + msg + "!");
-		sender.sendMessage(ChatColor.DARK_GRAY + "Uzyj " + ChatColor.GOLD + "/gildia pomoc" + ChatColor.DARK_GRAY + ", aby uzyskac pomoc.");
+		sender.sendMessage(GenConf.prefix + ChatColor.RED + msg + "!");
+		sender.sendMessage(GenConf.prefix + ChatColor.DARK_GRAY + "Uzyj " + ChatColor.GOLD + "/gildia pomoc" + ChatColor.DARK_GRAY + ", aby uzyskac pomoc.");
 		return true;
 	}
 	

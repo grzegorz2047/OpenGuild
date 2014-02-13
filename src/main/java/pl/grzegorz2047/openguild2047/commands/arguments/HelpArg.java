@@ -25,6 +25,7 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import pl.grzegorz2047.openguild2047.GenConf;
 
 public class HelpArg {
 	
@@ -47,7 +48,7 @@ public class HelpArg {
 	}
 	
 	private static String help(String usage, String desc) {
-		return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
+		return GenConf.prefix + ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
 	}
 	
 }
