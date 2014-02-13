@@ -1,6 +1,12 @@
 name: OpenGuild2047
+description: OpenGuild2047 to publiczny plugin dla wszystkich tworzony przez Grzegorza2047
+author: [grzegorz2047]
+website: http://www.youtube.com/grzegorz20471
 version: 0.0.2
+softdepend: [TagAPI]
 main: pl.grzegorz2047.openguild2047.OpenGuild
 commands:
-    gildia:
-        description: komendy zwiazane z gildiami
+  gildia:
+    description: Komendy zwiazane z gildiami
+    aliases: [g]
+    usage: /gildia help, aby uzyskac pomoc

@@ -24,12 +24,11 @@
 
 package pl.grzegorz2047.openguild2047;
 
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 
 /**
@@ -38,11 +37,17 @@ import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
  */
 public class OpenGuild extends JavaPlugin{
 
+	private static OpenGuild instance;
+	
     @Override
     public void onEnable() {
-        //this.saveDefaultConfig();
+    	long init = System.currentTimeMillis();
+    	instance = this;
+        copyDefaultFiles();
+        checkPlugins();
+        getCommand("gildia").setExecutor(new GildiaCommand());
         loadAllListeners();
-        Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony!");
+        Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
         
     }
 
@@ -50,20 +55,26 @@ public class OpenGuild extends JavaPlugin{
     public void onDisable() {
         super.onDisable(); //To change body of generated methods, choose Tools | Templates.
     }
-     
+    
+    private void checkPlugins() {
+    	if(getServer().getPluginManager().getPlugin("TagAPI") == null) {
+    		getLogger().severe("Nie znaleziono pluginu TagAPI! Pobierz go ze strony http://dev.bukkit.org/bukkit-plugins/tag");
+    		getLogger().severe("Wylaczanie pluginu OpenGuild2047...");
+    		return;
+    	}
+    }
+    
+    private void copyDefaultFiles() {
+    	//saveDefaultConfig();
+    }
+    
     void loadAllListeners(){
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerChat(), this);
     }
     
-    
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        return false;
+    public static OpenGuild get() {
+    	return instance;
     }
-    
-    
-    
-    
     
 }
