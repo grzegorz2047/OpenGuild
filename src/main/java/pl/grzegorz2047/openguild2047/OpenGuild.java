@@ -26,9 +26,9 @@
 TODO:
 Stworzenie klasy ClanPlayer
 Stworzenie klasy Clan
-Stworzenie klasy od cuboidÃ³w
-OgarniÄ™cie co byÅ‚oby dobre do sprawdzania czy gracz jest na cuboidzie gildii
-Tutaj sÄ… przydatne linki dla zainteresowanych tworzeniem cuboidÃ³w:
+Stworzenie klasy od cuboidów
+Ogarniêcie co by³oby dobre do sprawdzania czy gracz jest na cuboidzie gildii
+Tutaj s¹ przydatne linki dla zainteresowanych tworzeniem cuboidów:
 https://github.com/sk89q/worldguard/blob/master/src/main/java/com/sk89q/worldguard/bukkit/WorldGuardPlayerListener.java
 https://forums.bukkit.org/threads/protection-region-cuboid-creation.164161/
 
@@ -38,10 +38,14 @@ https://forums.bukkit.org/threads/protection-region-cuboid-creation.164161/
 
 package pl.grzegorz2047.openguild2047;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
@@ -51,9 +55,11 @@ import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
  *
  * @author Grzegorz
  */
-public class OpenGuild extends JavaPlugin{
+public class OpenGuild extends JavaPlugin {
 
 	private static OpenGuild instance;
+	private File log = new File("plugins/OpenGuild2047/logger/openguild.log");
+	private File logDir = new File("plugins/OpenGuild2047/logger");
 	
     @Override
     public void onEnable() {
@@ -63,29 +69,51 @@ public class OpenGuild extends JavaPlugin{
         checkPlugins();
         getCommand("gildia").setExecutor(new GildiaCommand());
         loadAllListeners();
-        Bukkit.getConsoleSender().sendMessage("Â§a"+this.getName()+"Â§6 by Â§3grzegorz2047Â§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
+        Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
         
     }
 
     @Override
     public void onDisable() {
-        super.onDisable(); //To change body of generated methods, choose Tools | Templates.
+        //super.onDisable(); //To change body of generated methods, choose Tools | Templates.
+        
+    	// Usuwanie wszystkich plikow ktore nie posidaja formatu .log (logger tworzy duzo plikow roboczych)
+    	int logFiles = 0;
+		for(File file : logDir.listFiles()) {
+			String format = file.getName().substring(file.getName().length() - 4, file.getName().length());
+			if(!format.equals(".log")) {
+				file.delete();
+				logFiles++;
+			}
+		}
+		System.out.println("Usunieto " + logFiles + " plikow w folderze Arcade/log");
     }
     
     private void checkPlugins() {
     	if(getServer().getPluginManager().getPlugin("NametagEdit") == null) {
-            getLogger().severe("Nie znaleziono pluginu NametagEdit! Pobierz go ze strony http://dev.bukkit.org/bukkit-plugins/nametagedit/");
-            getLogger().severe("Wylaczanie pluginu OpenGuild2047...");
+            Guilds.getLogger().severe("Nie znaleziono pluginu NametagEdit! Pobierz go ze strony http://dev.bukkit.org/bukkit-plugins/nametagedit/");
+            Guilds.getLogger().severe("Wylaczanie pluginu OpenGuild2047...");
+            getServer().getPluginManager().disablePlugin(this);
             return;
     	}
     }
     
     private void copyDefaultFiles() {
     	//saveDefaultConfig();
+    	if(!logDir.exists()) {
+    		logDir.mkdirs();
+    	}
+    	if(!log.exists()) {
+    		try {
+				log.createNewFile();
+			} catch(IOException ex) {
+				ex.printStackTrace();
+			}
+    	}
     }
     
-    void loadAllListeners(){
-        PluginManager pm = Bukkit.getPluginManager();
+    void loadAllListeners() {
+    	PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerChat(), this);
         pm.registerEvents(new PlayerMove(), this);
         pm.registerEvents(new EntityDamageByEntity(), this);
