@@ -22,6 +22,20 @@
  * THE SOFTWARE.
  */
 
+/*
+TODO:
+Stworzenie klasy ClanPlayer
+Stworzenie klasy Clan
+Stworzenie klasy od cuboidów
+Ogarnięcie co byłoby dobre do sprawdzania czy gracz jest na cuboidzie gildii
+Tutaj są przydatne linki dla zainteresowanych tworzeniem cuboidów:
+https://github.com/sk89q/worldguard/blob/master/src/main/java/com/sk89q/worldguard/bukkit/WorldGuardPlayerListener.java
+https://forums.bukkit.org/threads/protection-region-cuboid-creation.164161/
+
+
+
+*/
+
 package pl.grzegorz2047.openguild2047;
 
 import org.bukkit.Bukkit;
@@ -29,7 +43,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
+import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
+import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
 
 /**
  *
@@ -57,10 +73,10 @@ public class OpenGuild extends JavaPlugin{
     }
     
     private void checkPlugins() {
-    	if(getServer().getPluginManager().getPlugin("TagAPI") == null) {
-    		getLogger().severe("Nie znaleziono pluginu TagAPI! Pobierz go ze strony http://dev.bukkit.org/bukkit-plugins/tag");
-    		getLogger().severe("Wylaczanie pluginu OpenGuild2047...");
-    		return;
+    	if(getServer().getPluginManager().getPlugin("NametagEdit") == null) {
+            getLogger().severe("Nie znaleziono pluginu NametagEdit! Pobierz go ze strony http://dev.bukkit.org/bukkit-plugins/nametagedit/");
+            getLogger().severe("Wylaczanie pluginu OpenGuild2047...");
+            return;
     	}
     }
     
@@ -71,6 +87,8 @@ public class OpenGuild extends JavaPlugin{
     void loadAllListeners(){
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerChat(), this);
+        pm.registerEvents(new PlayerMove(), this);
+        pm.registerEvents(new EntityDamageByEntity(), this);
     }
     
     public static OpenGuild get() {

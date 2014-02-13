@@ -22,14 +22,12 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.listeners;
-
-import org.bukkit.event.Listener;
+package pl.grzegorz2047.openguild2047.handlers;
 
 /**
  *
  * @author Grzegorz
  */
-public class PlayerMove implements Listener {
+public class MySQLHandler {
     
 }
