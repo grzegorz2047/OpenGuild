@@ -31,6 +31,7 @@ import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
 
 import pl.grzegorz2047.openguild2047.commands.arguments.HelpArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
 
 public class GildiaCommand implements CommandExecutor {
@@ -60,6 +61,9 @@ public class GildiaCommand implements CommandExecutor {
                 if(args.length>=2){
                     if(args[0].equalsIgnoreCase("stworz")){
                         return CreateArg.execute(sender, args);
+                    }
+                    if(args[0].equalsIgnoreCase("opusc")){
+                        return LeaveArg.execute(sender);
                     }
                 }
                // else {

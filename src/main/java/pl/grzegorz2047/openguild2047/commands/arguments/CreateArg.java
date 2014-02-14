@@ -26,12 +26,14 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import ca.wacos.nametagedit.NametagAPI;
 import ca.wacos.nametagedit.NametagEdit;
+import java.util.logging.Level;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.PluginData;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
+import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -70,6 +72,7 @@ public class CreateArg {
                             NametagAPI.resetNametag(p.getName());
                         }
                         NametagAPI.setNametagHard(p.getName(), "§6" + spg.getClanTag() +  "§r ", "");
+                        Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
                         p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
                         return true;
                     }else{

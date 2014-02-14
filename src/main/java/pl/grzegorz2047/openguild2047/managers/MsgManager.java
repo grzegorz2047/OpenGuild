@@ -32,13 +32,15 @@ import pl.grzegorz2047.openguild2047.GenConf;
  */
 public class MsgManager {
     
-    public static String createguildsuccess= "Gildia zostala pomysnie stworzona.";
-    public static String cmdonlyforplayer= "Komenda jedynie dla graczy na serwerze!";
-    public static String alreadyinguild= "Aby stworzyc nowa gildie musisz najpierw opuscic aktualna!";
-    public static String usupportedchars= "Nazwa gildii moze zawierac jedynie znaki z tego zakresu [0-9a-zA-Z]";
-    public static String toolongshorttag= "Twoja nazwa gildii jest za dluga badz za krotka!"
+    public static String createguildsuccess = "Gildia zostala pomysnie stworzona.";
+    public static String cmdonlyforplayer = "Komenda jedynie dla graczy na serwerze!";
+    public static String alreadyinguild = "Aby stworzyc nowa gildie musisz najpierw opuscic aktualna!";
+    public static String usupportedchars = "Nazwa gildii moze zawierac jedynie znaki z tego zakresu [0-9a-zA-Z]";
+    public static String toolongshorttag = "Twoja nazwa gildii jest za dluga badz za krotka!"
             + "\n min. ilosc: "+GenConf.minclantag
             + "\n max. ilosc: "+GenConf.maxclantag;
     public static String illegaltag = "Twoja nazwa posiada zabronione slowa!";
+    public static String notinguild = "Aby to wykonac musisz byc w gildii!";
+    public static String errornotinguild = "Nie jestes w gildii?! Czyszcze bledne dane!";
     
 }
