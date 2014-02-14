@@ -33,7 +33,9 @@ import javax.annotation.Nonnull;
 public interface PlayerGuild {
     
     @Nonnull String getPlayerName();
+    
     @Nonnull String getClanTag();
+    
     @Nonnull boolean isLeader();
     
 }
