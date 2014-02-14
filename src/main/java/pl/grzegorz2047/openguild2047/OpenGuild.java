@@ -47,6 +47,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
+import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
@@ -60,6 +61,10 @@ public class OpenGuild extends JavaPlugin {
     private static OpenGuild instance;
     private File log = new File("plugins/OpenGuild2047/logger/openguild.log");
     private File logDir = new File("plugins/OpenGuild2047/logger");
+    private String address;
+    private String database;
+    private String login;
+    private String password;
 
     @Override
     public void onEnable() {
@@ -73,6 +78,7 @@ public class OpenGuild extends JavaPlugin {
         loadAllListeners();
         PluginData pd = new PluginData();
         PluginData.setDataInstance(pd);
+        new MySQLHandler(address, database, login, password);
         getCommand("gildia").setExecutor(new GildiaCommand());
         Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
         
@@ -107,6 +113,7 @@ public class OpenGuild extends JavaPlugin {
     
     private void copyDefaultFiles() {
     	saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
+    	loadConfig();
     	if(!logDir.exists()) {
             logDir.mkdirs();
     	}
@@ -117,6 +124,14 @@ public class OpenGuild extends JavaPlugin {
                     ex.printStackTrace();
             }
     	}
+    }
+    
+    private void loadConfig() {
+        // MySQL
+        address = getConfig().getString("mysql.adres");
+        database = getConfig().getString("mysql.baza-danych");
+        login = getConfig().getString("mysql.login");
+        password = getConfig().getString("mysql.haslo");
     }
     
     void loadAllListeners() {

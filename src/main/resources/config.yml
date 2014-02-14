@@ -1,12 +1,21 @@
 teampvp: false
+mysql:
+  # Twoj adres bazy danych
+  adres: localhost
+  # Twoja nazwa bazy danych
+  baza-danych: openguild
+  # Twoj login do bazy danych
+  login: root
+  # Twoje haslo do bazy danych
+  haslo: password
 #Zasada odczytu do ogarniecia id:ilosc:enchant?:costam:itd
 #Albo kompatybilnie z nowymi wersjami Minecrafta to MATERIAL:ilosc:enchant?:costam:itd
 #Lista material tu: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
 #Lista enchantow tu: http://jd.bukkit.org/rb/apidocs/org/bukkit/enchantments/Enchantment.html
 WymaganePrzedmioty:
-    - 5:4
-    - WOOD:2
-    - APPLE:4
-    - 6:3:PROTECTION
-    - 7:2
-    - 8:2
+  - 5:4
+  - WOOD:2
+  - APPLE:4
+  - 6:3:PROTECTION
+  - 7:2
+  - 8:2
