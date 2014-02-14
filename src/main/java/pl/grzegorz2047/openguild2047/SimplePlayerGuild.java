@@ -36,13 +36,13 @@ public class SimplePlayerGuild implements PlayerGuild{
         jakos logicznie ogarnac to jeszcze nie wiem xd
     */
     private String playername;
-    private String clanname;
+    private String clantag;
     private boolean leader;
     
     
-    public SimplePlayerGuild(String playername, String clanname, boolean leader){
+    public SimplePlayerGuild(String playername, String tag, boolean leader){
         this.playername=playername;
-        this.clanname=clanname;
+        this.clantag=clantag;
         this.leader=leader;
     }
 
@@ -52,8 +52,8 @@ public class SimplePlayerGuild implements PlayerGuild{
     }
 
     @Override
-    public String getClanName() {
-        return this.clanname;
+    public String getClanTag() {
+        return this.clantag;
     }
 
     @Override

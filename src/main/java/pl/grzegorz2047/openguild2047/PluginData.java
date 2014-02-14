@@ -22,18 +22,32 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.api;
+package pl.grzegorz2047.openguild2047;
 
-import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *
  * @author Grzegorz
  */
-public interface PlayerGuild {
+public class PluginData {
+    //Temp data
+    public HashMap guilds;
+    public HashMap guildsplayers;
+    public List<String> ClansTag;
+    static PluginData instance;
     
-    @Nonnull String getPlayerName();
-    @Nonnull String getClanTag();
-    @Nonnull boolean isLeader();
-    
+    public PluginData() {
+        this.guilds = new HashMap<String,SimpleGuild>();
+        this.ClansTag = new ArrayList<String>();
+        this.guildsplayers = new HashMap<String, SimplePlayerGuild>();
+    }
+    public static PluginData getDataInstance(){
+        return PluginData.instance;
+    }
+    public static void setDataInstance(PluginData pd){
+        PluginData.instance=pd;
+    }
 }
