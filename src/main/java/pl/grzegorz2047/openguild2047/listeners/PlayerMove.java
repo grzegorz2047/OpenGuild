@@ -24,12 +24,18 @@
 
 package pl.grzegorz2047.openguild2047.listeners;
 
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
  *
  * @author Grzegorz
  */
 public class PlayerMove implements Listener {
-    
+
+    @EventHandler
+    void onPlayerMove(PlayerMoveEvent e){
+        //To tu bedzie sprawdzane czy ktos wchodzi na cuboid czy nie, raczej xd
+    }
 }
