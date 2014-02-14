@@ -32,23 +32,23 @@ import java.util.List;
  *
  * @author Grzegorz
  */
-public class PluginData {
+public class Data {
     //Temp data
     public HashMap<String, SimpleGuild> guilds;
     public HashMap<String, SimplePlayerGuild> guildsplayers;
     public List<String> ClansTag;
-    static PluginData instance;
+    static Data instance;
     
-    public PluginData() {
+    public Data() {
         this.guilds = new HashMap<String,SimpleGuild>();
         this.ClansTag = new ArrayList<String>();
         this.guildsplayers = new HashMap<String, SimplePlayerGuild>();
     }
-    public static PluginData getDataInstance(){
-        return PluginData.instance;
+    public static Data getInstance(){
+        return Data.instance;
     }
-    public static void setDataInstance(PluginData pd){
-        PluginData.instance=pd;
+    public static void setDataInstance(Data pd){
+        Data.instance=pd;
     }
     
     

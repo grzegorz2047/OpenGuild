@@ -27,7 +27,7 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.PluginData;
+import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -42,15 +42,15 @@ public class LeaveArg {
                 sender.sendMessage(MsgManager.cmdonlyforplayer);
             }
             Player p = (Player) sender;
-            if(PluginData.getDataInstance().guildsplayers.containsKey(p.getName())){
-                SimplePlayerGuild spg = PluginData.getDataInstance().guildsplayers.get(p.getName());
-                if(PluginData.getDataInstance().guilds.containsKey(spg.getClanTag())){
-                    PluginData.getDataInstance().guilds.get(spg.getClanTag()).removeMember(p.getName());
-                    PluginData.getDataInstance().guildsplayers.remove(p.getName());
+            if(Data.getInstance().guildsplayers.containsKey(p.getName())){
+                SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(p.getName());
+                if(Data.getInstance().guilds.containsKey(spg.getClanTag())){
+                    Data.getInstance().guilds.get(spg.getClanTag()).removeMember(p.getName());
+                    Data.getInstance().guildsplayers.remove(p.getName());
                     //TODO: Usuń też w mysqlu
                 }else{
                     p.sendMessage(GenConf.prefix+MsgManager.errornotinguild);
-                    PluginData.getDataInstance().guildsplayers.remove(p.getName());
+                    Data.getInstance().guildsplayers.remove(p.getName());
                     //Mozliwe, ze wtedy tez jest mysql, ale nie wiem w sumie xd
                 }
             }else{

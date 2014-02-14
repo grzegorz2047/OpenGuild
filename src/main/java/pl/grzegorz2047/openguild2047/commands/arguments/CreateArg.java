@@ -30,7 +30,7 @@ import java.util.logging.Level;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.PluginData;
+import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
@@ -53,7 +53,7 @@ public class CreateArg {
             return false;
         }
         Player p = (Player) sender;
-        if(!PluginData.getDataInstance().guildsplayers.containsKey(p.getName())){
+        if(!Data.getInstance().guildsplayers.containsKey(p.getName())){
             if(clantag.matches("[0-9a-zA-Z]*")){
                 if(clantag.length()<=GenConf.maxclantag && clantag.length()>=GenConf.minclantag){
                     if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)){
@@ -61,13 +61,14 @@ public class CreateArg {
                         sg.setLeader(p.getName());
                         sg.setHome(p.getLocation());
                         if(args.length>2){
-                            sg.setDescription(PluginData.argsToString(args, 2, args.length));
+                            sg.setDescription(Data.argsToString(args, 2, args.length));
                         }else{
                             sg.setDescription("Domyslny opis gildii :<");
                         }
                         SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
-                        PluginData.getDataInstance().guilds.put(sg.getTag(), sg);
-                        PluginData.getDataInstance().guildsplayers.put(p.getName(), spg);
+                        Data.getInstance().guilds.put(sg.getTag(), sg);
+                        Data.getInstance().ClansTag.add(sg.getTag());
+                        Data.getInstance().guildsplayers.put(p.getName(), spg);
                         if(NametagAPI.hasCustomNametag(p.getName())){
                             NametagAPI.resetNametag(p.getName());
                         }

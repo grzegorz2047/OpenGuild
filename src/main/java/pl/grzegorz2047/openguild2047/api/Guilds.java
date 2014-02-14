@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 import org.bukkit.entity.Player;
 
-import pl.grzegorz2047.openguild2047.PluginData;
+import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimpleLogger;
 
@@ -44,7 +44,7 @@ public class Guilds {
 	 * @throws NullPointerException jezeli player nie jest w zadnej gildii
 	 */
 	@Nullable public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
-	    SimpleGuild guild = PluginData.getDataInstance().guilds.get(player.getName());
+	    SimpleGuild guild = Data.getInstance().guilds.get(player.getName());
 	    return getGuild(guild.getTag());
 	}
 	
@@ -75,7 +75,7 @@ public class Guilds {
      * @throws NullPointerException jezeli player nie jest w zadnej gildii
      */
     @Nullable public static PlayerGuild getPlayer(@Nonnull String name) throws NullPointerException {
-        PlayerGuild guild = PluginData.getDataInstance().guildsplayers.get(name);
+        PlayerGuild guild = Data.getInstance().guildsplayers.get(name);
         return guild;
     }
 	

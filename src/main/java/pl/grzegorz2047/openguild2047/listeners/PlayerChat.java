@@ -27,7 +27,7 @@ package pl.grzegorz2047.openguild2047.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import pl.grzegorz2047.openguild2047.PluginData;
+import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 
 /**
@@ -41,8 +41,8 @@ public class PlayerChat implements Listener{
          
         //Jezeli gracz jest  w gildii to e.setFormat(e.getFormat().replace("{OpenGuildTag}", pobierajakistag));
         //else e.setFormat(e.getFormat().replace("{OpenGuildTag}", ""));
-        if(PluginData.getDataInstance().guildsplayers.containsKey(e.getPlayer().getName())){
-            SimplePlayerGuild spg = PluginData.getDataInstance().guildsplayers.get(e.getPlayer().getName());
+        if(Data.getInstance().guildsplayers.containsKey(e.getPlayer().getName())){
+            SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(e.getPlayer().getName());
             if(e.getFormat().contains("{OpenGuildTag}")){
                 e.setFormat(e.getFormat().replace("{OpenGuildTag}", spg.getClanTag()));
             }

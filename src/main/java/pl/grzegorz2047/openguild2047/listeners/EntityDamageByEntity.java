@@ -24,9 +24,13 @@
  
 package pl.grzegorz2047.openguild2047.listeners;
 
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import pl.grzegorz2047.openguild2047.Data;
 
 /**
  *
@@ -39,6 +43,23 @@ public class EntityDamageByEntity implements Listener{
     void onSomeoneAttack(EntityDamageByEntityEvent e){
         //Jezeli atakowali sie lukiem czy czymkolwiek ludzie z wlasnej gildii to zablokuj
         //Daj tu też opcję, że jak jest on to można siebie nawalać
+        Entity attacker = (Entity) e.getDamager();
+    	Entity attacked = (Entity) e.getEntity();
+        //System.out.println("atakuja!");
+    	if(attacker instanceof Player && attacked instanceof Player){
+            Player attackerp = (Player) attacker;
+            Player attackedp = (Player) attacked;
+            if(Data.getInstance().guildsplayers.containsKey(attackerp.getName()) && Data.getInstance().guildsplayers.containsKey(attackedp.getName())){
+                Data.getInstance().guilds.get(Data.getInstance().guildsplayers.get(attackerp.getName()));
+            }
+ 
+        }
+        else if (attacker instanceof Arrow) {
+            Arrow arrow = (Arrow) e.getDamager();
+            if(arrow.getShooter() instanceof Player && e.getEntity() instanceof Player ){
+                Player attackerp = (Player) arrow.getShooter();
+                Player attackedp = (Player) e.getEntity();
+            }
+        }
     }
-    
 }
