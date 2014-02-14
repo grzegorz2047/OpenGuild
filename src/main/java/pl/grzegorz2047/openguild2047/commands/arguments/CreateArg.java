@@ -24,10 +24,15 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import org.bukkit.command.CommandSender;
+
 /**
  *
  * @author Grzegorz
  */
 public class CreateArg {
-    
+    public static boolean execute(CommandSender sender, String[] args){
+        
+        return false;
+    }
 }
