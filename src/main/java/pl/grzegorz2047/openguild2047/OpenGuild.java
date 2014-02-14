@@ -57,10 +57,10 @@ import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
  */
 public class OpenGuild extends JavaPlugin {
 
-	private static OpenGuild instance;
-	private File log = new File("plugins/OpenGuild2047/logger/openguild.log");
-	private File logDir = new File("plugins/OpenGuild2047/logger");
-	
+    private static OpenGuild instance;
+    private File log = new File("plugins/OpenGuild2047/logger/openguild.log");
+    private File logDir = new File("plugins/OpenGuild2047/logger");
+
     @Override
     public void onEnable() {
     	long init = System.currentTimeMillis();
@@ -80,11 +80,11 @@ public class OpenGuild extends JavaPlugin {
     	// Usuwanie wszystkich plikow ktore nie posidaja formatu .log (logger tworzy duzo plikow roboczych)
     	int logFiles = 0;
 	for(File file : logDir.listFiles()) {
-		String format = file.getName().substring(file.getName().length() - 4, file.getName().length());
-		if(!format.equals(".log")) {
-			file.delete();
-			logFiles++;
-		}
+            String format = file.getName().substring(file.getName().length() - 4, file.getName().length());
+            if(!format.equals(".log")) {
+                file.delete();
+                logFiles++;
+            }
 	}
 	System.out.println("Usunieto " + logFiles + " plikow w folderze Arcade/log");
     }
@@ -101,14 +101,14 @@ public class OpenGuild extends JavaPlugin {
     private void copyDefaultFiles() {
     	saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
     	if(!logDir.exists()) {
-    		logDir.mkdirs();
+            logDir.mkdirs();
     	}
     	if(!log.exists()) {
-    		try {
-			log.createNewFile();
-		} catch(IOException ex) {
-			ex.printStackTrace();
-		}
+            try {
+                    log.createNewFile();
+            } catch(IOException ex) {
+                    ex.printStackTrace();
+            }
     	}
     }
     
