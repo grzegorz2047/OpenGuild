@@ -52,7 +52,7 @@ public class CreateArg {
         if(!PluginData.getDataInstance().guildsplayers.containsKey(p.getName())){
             if(clantag.matches("[0-9a-zA-Z]*")){
                 if(clantag.length()<=GenConf.maxclantag && clantag.length()>=GenConf.minclantag){
-                    if(GenConf.badwords==null || !GenConf.badwords.contains(clantag)){
+                    if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)){
                         SimpleGuild sg = new SimpleGuild(clantag);
                         sg.setLeader(p.getName());
                         sg.setHome(p.getLocation());
