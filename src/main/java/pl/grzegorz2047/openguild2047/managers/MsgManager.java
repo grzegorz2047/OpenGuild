@@ -28,6 +28,9 @@ package pl.grzegorz2047.openguild2047.managers;
  *
  * @author Grzegorz
  */
-public class MessageManager {
+public class MsgManager {
+    
+    public static String createguildsuccess="Gildia zostala pomysnie stworzona";
+    public static String cmdonlyforplayer="Komenda jedynie dla graczy na serwerze!";
     
 }

@@ -25,6 +25,12 @@
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.PluginData;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  *
@@ -32,7 +38,28 @@ import org.bukkit.command.CommandSender;
  */
 public class CreateArg {
     public static boolean execute(CommandSender sender, String[] args){
-        
+        String clantag = args[1];
+        if(!(sender instanceof Player)){
+            sender.sendMessage(MsgManager.cmdonlyforplayer);
+            return false;
+        }
+        Player p = (Player) sender;
+        if(!PluginData.getDataInstance().guildsplayers.containsKey(p.getName())){
+            if(clantag.matches("[0-9a-zA-Z]*")){
+                if(clantag.length()<=GenConf.maxclantag && clantag.length()>=GenConf.minclantag){
+                    if(GenConf.badwords==null || !GenConf.badwords.contains(clantag)){
+                        SimpleGuild sg = new SimpleGuild(clantag);
+                        sg.setLeader(p.getName());
+                        sg.setHome(p.getLocation());
+                        SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
+                        PluginData.getDataInstance().guilds.put(sg.getTag(), sg);
+                        PluginData.getDataInstance().guildsplayers.put(p.getName(), spg);
+                        p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 }

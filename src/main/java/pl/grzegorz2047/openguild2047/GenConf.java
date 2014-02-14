@@ -24,6 +24,8 @@
 
 package pl.grzegorz2047.openguild2047;
 
+import java.util.List;
+
 /**
  *
  * @author Grzegorz
@@ -32,4 +34,7 @@ public class GenConf {
     
     public static String prefix = "[OG] ";//Mozna pokolorowac
     public static boolean teampvp = false;
+    public static int maxclantag = 6;
+    public static int minclantag = 4;
+    public static List<String> badwords;
 }
