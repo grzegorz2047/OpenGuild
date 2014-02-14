@@ -31,4 +31,5 @@ package pl.grzegorz2047.openguild2047;
 public class GenConf {
     
     public static String prefix = "[OG] ";//Mozna pokolorowac
+    public static boolean teampvp = false;
 }
