@@ -85,7 +85,7 @@ public class MySQLHandler {
 	
 	public void createTables() {
 		// Tabela z gildiami
-		log.info("[MySQL] Tworzenie tabeli " + tableGuilds + "...");
+		log.info("[MySQL] Tworzenie tabeli " + tableGuilds + " jezeli nie istnieje...");
 		try {
 			stat = con.createStatement();
 			stat.execute("CREATE TABLE IF NOT EXISTS " + tableGuilds +
