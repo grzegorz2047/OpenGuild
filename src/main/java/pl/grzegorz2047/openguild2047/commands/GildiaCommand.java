@@ -67,7 +67,7 @@ public class GildiaCommand implements CommandExecutor {
                     }
                 }
                // else {
-                //    return error(sender, "Zbyt duzo argumentów");//Na razie to pominmy
+                //    return error(sender, "Zbyt duzo argumentów");//Na razie to pominiemy
                // }
             }else{
                 sender.sendMessage(ChatColor.DARK_GRAY + " -------------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " -------------------- ");
