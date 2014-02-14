@@ -49,9 +49,9 @@ public class MySQLHandler {
 	private String database;
 	
 	public MySQLHandler(String address, String database, String login, String password) {
-		this.address = address;
-		this.database = database;
-		createConnection(login, password);
+            this.address = address;
+            this.database = database;
+            createConnection(login, password);
 	}
 	
 	public enum Type {
@@ -68,18 +68,14 @@ public class MySQLHandler {
 	private void createConnection(String login, String password) {
 		log.info("[MySQL] Laczenie z baza MySQL...");
 		try {
-			Class.forName(driver).newInstance();
-			con = DriverManager.getConnection("jdbc:mysql://" + address + ":3306/" + database, login, password);
-			log.info("[MySQL] Skutecznie polaczono!");
-			createTables();
+                    Class.forName(driver).newInstance();
+                    con = DriverManager.getConnection("jdbc:mysql://" + address + ":3306/" + database, login, password);
+                    log.info("[MySQL] Skutecznie polaczono!");
+                    createTables();
 		} catch(ClassNotFoundException ex) {
-			Guilds.getLogger().severe("[MySQL] Wystapil blad z zaladowaniem sterownika " + driver + " pod baze MySQL!");
-		} catch(InstantiationException ex) {
-			ex.printStackTrace();
-		} catch(IllegalAccessException ex) {
-			ex.printStackTrace();
-		} catch(SQLException ex) {
-			ex.printStackTrace();
+                    Guilds.getLogger().severe("[MySQL] Wystapil blad z zaladowaniem sterownika " + driver + " pod baze MySQL!");
+		} catch(InstantiationException | IllegalAccessException | SQLException ex) {
+                    ex.printStackTrace();
 		}
 	}
 	
@@ -87,18 +83,18 @@ public class MySQLHandler {
 		// Tabela z gildiami
 		log.info("[MySQL] Tworzenie tabeli " + tableGuilds + " jezeli nie istnieje...");
 		try {
-			stat = con.createStatement();
-			stat.execute("CREATE TABLE IF NOT EXISTS " + tableGuilds +
-					"(id INT AUTO_INCREMENT," +
-					"tag VARCHAR(4)," +
-					"description VARCHAR(100)," +
-					"leader VARCHAR(16)," +
-					"sojusze VARCHAR(255)," +
-					"home_x INT," +
-					"home_y INT," +
-					"home_z INT," +
-					"cuboid_radius INT," +
-					"PRIMARY KEY(id));");
+                    stat = con.createStatement();
+                    stat.execute("CREATE TABLE IF NOT EXISTS " + tableGuilds +
+                                    "(id INT AUTO_INCREMENT," +
+                                    "tag VARCHAR(4)," +
+                                    "description VARCHAR(100)," +
+                                    "leader VARCHAR(16)," +
+                                    "sojusze VARCHAR(255)," +
+                                    "home_x INT," +
+                                    "home_y INT," +
+                                    "home_z INT," +
+                                    "cuboid_radius INT," +
+                                    "PRIMARY KEY(id));");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -108,25 +104,25 @@ public class MySQLHandler {
 	
 	public static void delete(Guild guild) {
 		try {
-			stat = con.createStatement();
-			stat.execute("DELETE FROM " + tableGuilds + " WHERE tag='" + guild.getTag() + "');");
+                    stat = con.createStatement();
+                    stat.execute("DELETE FROM " + tableGuilds + " WHERE tag='" + guild.getTag() + "');");
 		} catch(SQLException ex) {
-			ex.printStackTrace();
+                    ex.printStackTrace();
 		}
 	}
 	
 	public static void insert(Guild guild, String tag, String description, String leader, String sojusze, int homeX, int homeY, int homeZ, int cuboidRadius) {
 		try {
-			stat = con.createStatement();
-			stat.execute("INSERT INTO " + tableGuilds + " VALUES(NULL," +
-					"'" + tag + "'," +
-					"'" + description + "'," +
-					"'" + leader + "'," +
-					"'" + sojusze + "'," +
-					homeX + "," +
-					homeY + "," +
-					homeZ + "," +
-					cuboidRadius + ");");
+                    stat = con.createStatement();
+                    stat.execute("INSERT INTO " + tableGuilds + " VALUES(NULL," +
+                                    "'" + tag + "'," +
+                                    "'" + description + "'," +
+                                    "'" + leader + "'," +
+                                    "'" + sojusze + "'," +
+                                    homeX + "," +
+                                    homeY + "," +
+                                    homeZ + "," +
+                                    cuboidRadius + ");");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -134,8 +130,8 @@ public class MySQLHandler {
 	
 	public static void update(Guild guild, Type type, int value) {
 		try {
-			stat = con.createStatement();
-			stat.execute("UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE tag='" + guild.getTag() + "');");
+                    stat = con.createStatement();
+                    stat.execute("UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE tag='" + guild.getTag() + "');");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -143,10 +139,10 @@ public class MySQLHandler {
 	
 	public static void update(Guild guild, Type type, String value) {
 		try {
-			stat = con.createStatement();
-			stat.execute("UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE tag='" + guild.getTag() + "');");
+                    stat = con.createStatement();
+                    stat.execute("UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE tag='" + guild.getTag() + "');");
 		} catch(SQLException ex) {
-			ex.printStackTrace();
+                    ex.printStackTrace();
 		}
 	}
 	

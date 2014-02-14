@@ -71,9 +71,11 @@ public class EntityDamageByEntity implements Listener{
             if(arrow.getShooter() instanceof Player && e.getEntity() instanceof Player ){
                 Player attackerp = (Player) arrow.getShooter();
                 Player attackedp = (Player) e.getEntity();
-                SimpleGuild sg = Data.getInstance().guilds.get(Data.getInstance().guildsplayers.get(attackerp.getName()).getClanTag());
-                if(sg.containsMember(attackerp.getName()) &&  sg.containsMember(attackedp.getName())){
-                    e.setCancelled(true);
+                if(Data.getInstance().guildsplayers.containsKey(attackerp.getName()) && Data.getInstance().guildsplayers.containsKey(attackedp.getName())){
+                    SimpleGuild sg = Data.getInstance().guilds.get(Data.getInstance().guildsplayers.get(attackerp.getName()).getClanTag());
+                    if(sg.containsMember(attackerp.getName()) &&  sg.containsMember(attackedp.getName())){
+                        e.setCancelled(true);
+                    }
                 }
             }
         }
