@@ -50,4 +50,15 @@ public class PluginData {
     public static void setDataInstance(PluginData pd){
         PluginData.instance=pd;
     }
+    
+    
+    public static String argsToString(String args[], int minindex,int maxindex){
+        StringBuilder sb = new StringBuilder();
+        for(int i=minindex;i<=maxindex;i++){
+            sb.append(args[i]);
+            sb.append("");
+        }
+        return sb.toString();
+    }
+    
 }

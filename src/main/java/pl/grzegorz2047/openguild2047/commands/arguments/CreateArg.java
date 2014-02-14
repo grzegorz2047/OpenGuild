@@ -56,6 +56,11 @@ public class CreateArg {
                         SimpleGuild sg = new SimpleGuild(clantag);
                         sg.setLeader(p.getName());
                         sg.setHome(p.getLocation());
+                        if(args.length>2){
+                            sg.setDescription(PluginData.argsToString(args, 2, args.length));
+                        }else{
+                            sg.setDescription("Domyslny opis gildii :<");
+                        }
                         SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
                         PluginData.getDataInstance().guilds.put(sg.getTag(), sg);
                         PluginData.getDataInstance().guildsplayers.put(p.getName(), spg);
