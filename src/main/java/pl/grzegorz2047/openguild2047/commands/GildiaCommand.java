@@ -45,20 +45,16 @@ public class GildiaCommand implements CommandExecutor {
                     }
                     else if(args[0].equalsIgnoreCase("ver") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("about")) {
                         return VersionArg.execute(sender);
-                    } else {
-                        error(sender, "Bledny argument");
                     }
                 }
                 if(args.length == 2) {
                     if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
                         try {
-                                return HelpArg.execute(sender, Integer.valueOf(args[1]));
+                            return HelpArg.execute(sender, Integer.valueOf(args[1]));
                         } catch(NumberFormatException ex) {
-                                sender.sendMessage(ChatColor.RED + "Musisz podac liczbe!");
-                                return true;
+                            sender.sendMessage(ChatColor.RED + "Musisz podac liczbe!");
+                            return true;
                         }
-                    } else {
-                        error(sender, "Bledny argument");
                     }
                 }
                 if(args.length>=2){

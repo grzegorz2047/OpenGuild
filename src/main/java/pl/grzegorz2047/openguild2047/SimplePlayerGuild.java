@@ -42,7 +42,7 @@ public class SimplePlayerGuild implements PlayerGuild{
     
     public SimplePlayerGuild(String playername, String tag, boolean leader){
         this.playername=playername;
-        this.clantag=clantag;
+        this.clantag=tag;
         this.leader=leader;
     }
 

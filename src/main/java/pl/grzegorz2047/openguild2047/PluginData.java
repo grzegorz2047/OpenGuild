@@ -34,8 +34,8 @@ import java.util.List;
  */
 public class PluginData {
     //Temp data
-    public HashMap guilds;
-    public HashMap guildsplayers;
+    public HashMap<String, SimpleGuild> guilds;
+    public HashMap<String, SimplePlayerGuild> guildsplayers;
     public List<String> ClansTag;
     static PluginData instance;
     
