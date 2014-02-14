@@ -67,6 +67,8 @@ public class OpenGuild extends JavaPlugin {
     	instance = this;
         copyDefaultFiles();
         checkPlugins();
+        PluginData pd = new PluginData();
+        PluginData.setDataInstance(pd);
         getCommand("gildia").setExecutor(new GildiaCommand());
         loadAllListeners();
         Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8

@@ -37,6 +37,11 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * @author Grzegorz
  */
 public class CreateArg {
+    
+    private CreateArg(){
+    
+    }
+    
     public static boolean execute(CommandSender sender, String[] args){
         String clantag = args[1];
         if(!(sender instanceof Player)){
