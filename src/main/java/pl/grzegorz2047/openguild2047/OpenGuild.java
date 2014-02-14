@@ -99,7 +99,7 @@ public class OpenGuild extends JavaPlugin {
     }
     
     private void copyDefaultFiles() {
-    	//saveDefaultConfig();
+    	saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
     	if(!logDir.exists()) {
     		logDir.mkdirs();
     	}
@@ -117,6 +117,9 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerChat(), this);
         pm.registerEvents(new PlayerMove(), this);
         pm.registerEvents(new EntityDamageByEntity(), this);
+    }
+    void loadConfigSettings(){
+        GenConf.teampvp = this.getConfig().getBoolean("teampvp");
     }
     
     public static OpenGuild get() {

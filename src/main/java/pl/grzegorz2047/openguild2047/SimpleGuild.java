@@ -37,6 +37,7 @@ public class SimpleGuild implements Guild {
         private String leader;
         private List<String> members;
         private List<String> invitedplayers;
+        
 	public SimpleGuild(String tag) {
 		this.tag = tag;
 	}
@@ -96,6 +97,7 @@ public class SimpleGuild implements Guild {
             if(!this.members.contains(member)){
                 this.members.add(member);
             }
+            
 	}
         @Override
 	public void removeMember(String member) {

@@ -1,0 +1,10 @@
+teampvp: false
+#Zasada odczytu do ogarniecia id:ilosc:enchant?:costam:itd
+#Albo kompatybilnie z nowymi wersjami Minecrafta to MATERIAL:ilosc:enchant?:costam:itd
+WymaganePrzedmioty:
+    - 5:4
+    - WOOD:2
+    - APPLE:4
+    - 6:3
+    - 7:2
+    - 8:2

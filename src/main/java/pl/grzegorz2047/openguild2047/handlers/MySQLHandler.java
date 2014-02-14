@@ -30,4 +30,5 @@ package pl.grzegorz2047.openguild2047.handlers;
  */
 public class MySQLHandler {
     
+    //Nie wiem czy zrobić obiekty, ktore beda uniwersalne czy jechać na statycznych metodach
 }
