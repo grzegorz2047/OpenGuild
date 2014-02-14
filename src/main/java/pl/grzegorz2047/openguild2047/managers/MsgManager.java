@@ -32,7 +32,7 @@ import pl.grzegorz2047.openguild2047.GenConf;
  */
 public class MsgManager {
     
-    public static String createguildsuccess= "Gildia zostala pomysnie stworzona";
+    public static String createguildsuccess= "Gildia zostala pomysnie stworzona.";
     public static String cmdonlyforplayer= "Komenda jedynie dla graczy na serwerze!";
     public static String alreadyinguild= "Aby stworzyc nowa gildie musisz najpierw opuscic aktualna!";
     public static String usupportedchars= "Nazwa gildii moze zawierac jedynie znaki z tego zakresu [0-9a-zA-Z]";

@@ -69,7 +69,7 @@ public class CreateArg {
                         if(NametagAPI.hasCustomNametag(p.getName())){
                             NametagAPI.resetNametag(p.getName());
                         }
-                        NametagAPI.setNametagHard(p.getName(), sg.getTag(), "");
+                        NametagAPI.setNametagHard(p.getName(), "§6" + spg.getClanTag() +  "§r ", "");
                         p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
                         return true;
                     }else{
