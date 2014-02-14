@@ -27,52 +27,61 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
 
 import pl.grzegorz2047.openguild2047.commands.arguments.HelpArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
 
 public class GildiaCommand implements CommandExecutor {
 	
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(command.getName().equalsIgnoreCase("gildia")) {
-			if(args.length == 0) {
-				sender.sendMessage(ChatColor.DARK_GRAY + " -------------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " -------------------- ");
-				sender.sendMessage(ChatColor.DARK_GRAY + "Aby uzyskac pomoc dotyczaca gildii uzyj komendy /gildia help.");
-				return true;
-			}
-			if(args.length == 1) {
-				if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
-					return HelpArg.execute(sender, 1);
-				}
-				else if(args[0].equalsIgnoreCase("ver") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("about")) {
-					return VersionArg.execute(sender);
-				} else {
-					error(sender, "Bledny argument");
-				}
-			}
-			if(args.length == 2) {
-				if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
-					try {
-						return HelpArg.execute(sender, Integer.valueOf(args[1]));
-					} catch(NumberFormatException ex) {
-						sender.sendMessage(ChatColor.RED + "Musisz podac liczbe!");
-						return true;
-					}
-				} else {
-					error(sender, "Bledny argument");
-				}
-			} else {
-				return error(sender, "Zbyt duzo argumentÛw");
-			}
-		}
-		return false;
-	}
-	
-	private boolean error(CommandSender sender, String msg) {
-		sender.sendMessage(ChatColor.RED + msg + "!");
-		sender.sendMessage(ChatColor.DARK_GRAY + "Uzyj " + ChatColor.GOLD + "/gildia pomoc" + ChatColor.DARK_GRAY + ", aby uzyskac pomoc.");
-		return true;
-	}
-	
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if(command.getName().equalsIgnoreCase("gildia")) {
+            if(args.length>0){
+                if(args.length == 1) {
+                    if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
+                        return HelpArg.execute(sender, 1);
+                    }
+                    else if(args[0].equalsIgnoreCase("ver") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("about")) {
+                        return VersionArg.execute(sender);
+                    } else {
+                        error(sender, "Bledny argument");
+                    }
+                }
+                if(args.length == 2) {
+                    if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
+                        try {
+                                return HelpArg.execute(sender, Integer.valueOf(args[1]));
+                        } catch(NumberFormatException ex) {
+                                sender.sendMessage(ChatColor.RED + "Musisz podac liczbe!");
+                                return true;
+                        }
+                    } else {
+                        error(sender, "Bledny argument");
+                    }
+                }
+                if(args.length>=2){
+                    if(args[0].equalsIgnoreCase("stworz")){
+                        return CreateArg.execute(sender, args);
+                    }
+                }
+               // else {
+                //    return error(sender, "Zbyt duzo argument√≥w");//Na razie to pominiemy
+               // }
+            }else{
+                sender.sendMessage(ChatColor.DARK_GRAY + " -------------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " -------------------- ");
+                sender.sendMessage(ChatColor.DARK_GRAY + "Aby uzyskac pomoc dotyczaca gildii uzyj komendy /gildia help.");
+                return true;
+            }
+        }
+            return false;
+    }
+
+    private boolean error(CommandSender sender, String msg) {
+            sender.sendMessage(GenConf.prefix + ChatColor.RED + msg + "!");
+            sender.sendMessage(GenConf.prefix + ChatColor.DARK_GRAY + "Uzyj " + ChatColor.GOLD + "/gildia pomoc" + ChatColor.DARK_GRAY + ", aby uzyskac pomoc.");
+            return true;
+    }
+
 }

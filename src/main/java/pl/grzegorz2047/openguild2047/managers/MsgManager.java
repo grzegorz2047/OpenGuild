@@ -22,13 +22,23 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.handlers;
+package pl.grzegorz2047.openguild2047.managers;
+
+import pl.grzegorz2047.openguild2047.GenConf;
 
 /**
  *
  * @author Grzegorz
  */
-public class MySQLHandler {
+public class MsgManager {
     
-    //Nie wiem czy zrobić obiekty, ktore beda uniwersalne czy jechać na statycznych metodach
+    public static String createguildsuccess= "Gildia zostala pomysnie stworzona";
+    public static String cmdonlyforplayer= "Komenda jedynie dla graczy na serwerze!";
+    public static String alreadyinguild= "Aby stworzyc nowa gildie musisz najpierw opuscic aktualna!";
+    public static String usupportedchars= "Nazwa gildii moze zawierac jedynie znaki z tego zakresu [0-9a-zA-Z]";
+    public static String toolongshorttag= "Twoja nazwa gildii jest za dluga badz za krotka!"
+            + "\n min. ilosc: "+GenConf.minclantag
+            + "\n max. ilosc: "+GenConf.maxclantag;
+    public static String illegaltag = "Twoja nazwa posiada zabronione slowa!";
+    
 }

@@ -31,29 +31,31 @@ import javax.annotation.Nullable;
 import org.bukkit.Location;
 
 public interface Guild {
-	
-	@Nonnull String getDescription();
-	
-	@Nonnull Location getHome();
-	
-	@Nullable List<String> getInvitedPlayers();
-	
-	@Nonnull String getLeader();
-	
-	@Nullable List<String> getMembers();
-	
-	@Nonnull String getTag();
-	
-	void setDescription(@Nonnull String description);
-	
-	void setHome(@Nonnull Location home);
-	
-	void setInvitedPlayers(@Nullable List<String> invitedPlayers);
-	
-	void setLeader(@Nonnull String leader);
-	
-	void setMembers(@Nullable String members);
-	
-	void setTag(@Nonnull String tag);
+
+    @Nonnull String getDescription();
+
+    @Nonnull Location getHome();
+
+    @Nullable List<String> getInvitedPlayers();
+
+    @Nonnull String getLeader();
+
+    @Nullable List<String> getMembers();
+
+    @Nonnull String getTag();
+
+    void setDescription(@Nonnull String description);
+
+    void setHome(@Nonnull Location home);
+
+    void setInvitedPlayers(@Nullable List<String> invitedPlayers);
+
+    void setLeader(@Nonnull String leader);
+
+    void addMember(@Nonnull String member);
+
+    void removeMember(@Nonnull String member);
+
+    void setTag(@Nonnull String tag);
 	
 }

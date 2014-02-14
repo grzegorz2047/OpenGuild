@@ -32,48 +32,48 @@ import java.util.logging.SimpleFormatter;
 import pl.grzegorz2047.openguild2047.api.Logger;
 
 public class SimpleLogger implements Logger {
-	
-	private File dir = new File("plugins/OpenGuild2047/logger");
-	private FileHandler file;
-	private java.util.logging.Logger logger = java.util.logging.Logger.getLogger("OpenGuild");
-	private SimpleFormatter formatter = new SimpleFormatter();
-	
-	public SimpleLogger() {
-		try {
-			if(!dir.exists()) {
-				dir.mkdir();
-			}
-			file = new FileHandler("plugins/OpenGuild2047/logger/openguild.log");
-			logger.addHandler(file);
-			file.setFormatter(formatter);
-		} catch(IOException ex) {
-			ex.printStackTrace();
-		}
-	}
-	
-	@Override
-	public void debug(String debug) {
-		log(Level.INFO, debug);
-	}
-	
-	@Override
-	public void info(String info) {
-		log(Level.INFO, info);
-	}
-	
-	@Override
-	public void log(Level level, String log) {
-		logger.log(level, "[OpenGuild] " + log);
-	}
-	
-	@Override
-	public void severe(String severe) {
-		log(Level.SEVERE, severe);
-	}
-	
-	@Override
-	public void warning(String warning) {
-		log(Level.WARNING, warning);
-	}
-	
+
+    private File dir = new File("plugins/OpenGuild2047/logger");
+    private FileHandler file;
+    private java.util.logging.Logger logger = java.util.logging.Logger.getLogger("OpenGuild");
+    private SimpleFormatter formatter = new SimpleFormatter();
+
+    public SimpleLogger() {
+        try {
+            if(!dir.exists()) {
+                dir.mkdir();
+            }
+            file = new FileHandler("plugins/OpenGuild2047/logger/openguild.log");
+            logger.addHandler(file);
+            file.setFormatter(formatter);
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void debug(String debug) {
+        log(Level.INFO, debug);
+    }
+
+    @Override
+    public void info(String info) {
+        log(Level.INFO, info);
+    }
+
+    @Override
+    public void log(Level level, String log) {
+        logger.log(level, "[OpenGuild] {0}", log);
+    }
+
+    @Override
+    public void severe(String severe) {
+        log(Level.SEVERE, severe);
+    }
+
+    @Override
+    public void warning(String warning) {
+        log(Level.WARNING, warning);
+    }
+
 }

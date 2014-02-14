@@ -22,13 +22,46 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.handlers;
+package pl.grzegorz2047.openguild2047;
+
+import pl.grzegorz2047.openguild2047.api.PlayerGuild;
 
 /**
  *
  * @author Grzegorz
  */
-public class MySQLHandler {
+public class SimplePlayerGuild implements PlayerGuild{
+    /*
+        Ta klasa bedzie potrzebna, ale jak to wszystko 
+        jakos logicznie ogarnac to jeszcze nie wiem xd
+    */
+    private String playername;
+    private String clantag;
+    private boolean leader;
     
-    //Nie wiem czy zrobić obiekty, ktore beda uniwersalne czy jechać na statycznych metodach
+    
+    public SimplePlayerGuild(String playername, String tag, boolean leader){
+        this.playername=playername;
+        this.clantag=clantag;
+        this.leader=leader;
+    }
+
+    @Override
+    public String getPlayerName() {
+        return this.playername;
+    }
+
+    @Override
+    public String getClanTag() {
+        return this.clantag;
+    }
+
+    @Override
+    public boolean isLeader() {
+        return this.leader;
+    }
+    
+    
+    
+    
 }

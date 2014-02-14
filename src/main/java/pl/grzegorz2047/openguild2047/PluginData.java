@@ -22,13 +22,43 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.handlers;
+package pl.grzegorz2047.openguild2047;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *
  * @author Grzegorz
  */
-public class MySQLHandler {
+public class PluginData {
+    //Temp data
+    public HashMap guilds;
+    public HashMap guildsplayers;
+    public List<String> ClansTag;
+    static PluginData instance;
     
-    //Nie wiem czy zrobić obiekty, ktore beda uniwersalne czy jechać na statycznych metodach
+    public PluginData() {
+        this.guilds = new HashMap<String,SimpleGuild>();
+        this.ClansTag = new ArrayList<String>();
+        this.guildsplayers = new HashMap<String, SimplePlayerGuild>();
+    }
+    public static PluginData getDataInstance(){
+        return PluginData.instance;
+    }
+    public static void setDataInstance(PluginData pd){
+        PluginData.instance=pd;
+    }
+    
+    
+    public static String argsToString(String args[], int minindex,int maxindex){
+        StringBuilder sb = new StringBuilder();
+        for(int i=minindex;i<=maxindex;i++){
+            sb.append(args[i]);
+            sb.append("");
+        }
+        return sb.toString();
+    }
+    
 }

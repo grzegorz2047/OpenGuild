@@ -57,19 +57,21 @@ import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
  */
 public class OpenGuild extends JavaPlugin {
 
-	private static OpenGuild instance;
-	private File log = new File("plugins/OpenGuild2047/logger/openguild.log");
-	private File logDir = new File("plugins/OpenGuild2047/logger");
-	
+    private static OpenGuild instance;
+    private File log = new File("plugins/OpenGuild2047/logger/openguild.log");
+    private File logDir = new File("plugins/OpenGuild2047/logger");
+
     @Override
     public void onEnable() {
     	long init = System.currentTimeMillis();
     	instance = this;
         copyDefaultFiles();
         checkPlugins();
+        PluginData pd = new PluginData();
+        PluginData.setDataInstance(pd);
         getCommand("gildia").setExecutor(new GildiaCommand());
         loadAllListeners();
-        Bukkit.getConsoleSender().sendMessage("�a"+this.getName()+"�6 by �3grzegorz2047�6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
+        Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
         
     }
 
@@ -80,11 +82,11 @@ public class OpenGuild extends JavaPlugin {
     	// Usuwanie wszystkich plikow ktore nie posidaja formatu .log (logger tworzy duzo plikow roboczych)
     	int logFiles = 0;
 	for(File file : logDir.listFiles()) {
-		String format = file.getName().substring(file.getName().length() - 4, file.getName().length());
-		if(!format.equals(".log")) {
-			file.delete();
-			logFiles++;
-		}
+            String format = file.getName().substring(file.getName().length() - 4, file.getName().length());
+            if(!format.equals(".log")) {
+                file.delete();
+                logFiles++;
+            }
 	}
 	System.out.println("Usunieto " + logFiles + " plikow w folderze Arcade/log");
     }
@@ -99,16 +101,16 @@ public class OpenGuild extends JavaPlugin {
     }
     
     private void copyDefaultFiles() {
-    	//saveDefaultConfig();
+    	saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
     	if(!logDir.exists()) {
-    		logDir.mkdirs();
+            logDir.mkdirs();
     	}
     	if(!log.exists()) {
-    		try {
-			log.createNewFile();
-		} catch(IOException ex) {
-			ex.printStackTrace();
-		}
+            try {
+                    log.createNewFile();
+            } catch(IOException ex) {
+                    ex.printStackTrace();
+            }
     	}
     }
     
@@ -117,6 +119,9 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerChat(), this);
         pm.registerEvents(new PlayerMove(), this);
         pm.registerEvents(new EntityDamageByEntity(), this);
+    }
+    void loadConfigSettings(){
+        GenConf.teampvp = this.getConfig().getBoolean("teampvp");
     }
     
     public static OpenGuild get() {

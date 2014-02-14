@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047;
+package pl.grzegorz2047.openguild2047.commands.arguments;
 
 /**
  *
  * @author Grzegorz
  */
-public class MessageManager {
+public class DescriptionArg {
     
 }

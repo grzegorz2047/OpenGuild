@@ -30,21 +30,21 @@ import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimpleLogger;
 
 public class Guilds {
-	
-	/**
-	 * Zdobadz gildie
-	 * @param tag Tag gildii
-	 * @return Gildia
-	 * @throws NullPointerException jezeli wskazana gildia nie istnieje
-	 */
-	@Nullable public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
-		Guild guild = new SimpleGuild(tag);
-		return guild;
-	}
-	
-	@Nonnull public static Logger getLogger() {
-		Logger logger = new SimpleLogger();
-		return logger;
-	}
+
+    /**
+     * Zdobadz gildie
+     * @param tag Tag gildii
+     * @return Gildia
+     * @throws NullPointerException jezeli wskazana gildia nie istnieje
+     */
+    @Nullable public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
+        Guild guild = new SimpleGuild(tag);
+        return guild;
+    }
+
+    @Nonnull public static Logger getLogger() {
+        Logger logger = new SimpleLogger();
+        return logger;
+    }
 	
 }

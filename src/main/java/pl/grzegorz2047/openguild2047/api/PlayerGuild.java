@@ -22,12 +22,18 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047;
+package pl.grzegorz2047.openguild2047.api;
+
+import javax.annotation.Nonnull;
 
 /**
  *
  * @author Grzegorz
  */
-public class GeneralConfiguartion {
+public interface PlayerGuild {
+    
+    @Nonnull String getPlayerName();
+    @Nonnull String getClanTag();
+    @Nonnull boolean isLeader();
     
 }
