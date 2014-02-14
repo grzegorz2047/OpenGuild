@@ -65,12 +65,15 @@ public class OpenGuild extends JavaPlugin {
     public void onEnable() {
     	long init = System.currentTimeMillis();
     	instance = this;
+        if(!checkPlugins()){
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         copyDefaultFiles();
-        checkPlugins();
+        loadAllListeners();
         PluginData pd = new PluginData();
         PluginData.setDataInstance(pd);
         getCommand("gildia").setExecutor(new GildiaCommand());
-        loadAllListeners();
         Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
         
     }
@@ -91,13 +94,15 @@ public class OpenGuild extends JavaPlugin {
 	System.out.println("Usunieto " + logFiles + " plikow w folderze Arcade/log");
     }
     
-    private void checkPlugins() {
+    private boolean checkPlugins() {
     	if(getServer().getPluginManager().getPlugin("NametagEdit") == null) {
             Guilds.getLogger().severe("Nie znaleziono pluginu NametagEdit! Pobierz go ze strony http://dev.bukkit.org/bukkit-plugins/nametagedit/");
             Guilds.getLogger().severe("Wylaczanie pluginu OpenGuild2047...");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
+            return false;
     	}
+        else{
+            return true;
+        }
     }
     
     private void copyDefaultFiles() {

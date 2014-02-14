@@ -24,6 +24,8 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import ca.wacos.nametagedit.NametagAPI;
+import ca.wacos.nametagedit.NametagEdit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
@@ -52,7 +54,7 @@ public class CreateArg {
         if(!PluginData.getDataInstance().guildsplayers.containsKey(p.getName())){
             if(clantag.matches("[0-9a-zA-Z]*")){
                 if(clantag.length()<=GenConf.maxclantag && clantag.length()>=GenConf.minclantag){
-                    if(GenConf.badwords==null || !GenConf.badwords.contains(clantag)){
+                    if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)){
                         SimpleGuild sg = new SimpleGuild(clantag);
                         sg.setLeader(p.getName());
                         sg.setHome(p.getLocation());
@@ -64,6 +66,10 @@ public class CreateArg {
                         SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
                         PluginData.getDataInstance().guilds.put(sg.getTag(), sg);
                         PluginData.getDataInstance().guildsplayers.put(p.getName(), spg);
+                        if(NametagAPI.hasCustomNametag(p.getName())){
+                            NametagAPI.resetNametag(p.getName());
+                        }
+                        NametagAPI.setNametagHard(p.getName(), sg.getTag(), "");
                         p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
                         return true;
                     }else{
