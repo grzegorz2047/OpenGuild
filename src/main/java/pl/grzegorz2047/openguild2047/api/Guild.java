@@ -52,9 +52,9 @@ public interface Guild {
 	
 	void setLeader(@Nonnull String leader);
 	
-	void addMember(@Nullable String member);
+	void addMember(@Nonnull String member);
         
-        void removeMember(@Nullable String member);
+        void removeMember(@Nonnull String member);
 	
 	void setTag(@Nonnull String tag);
 	
