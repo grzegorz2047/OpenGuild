@@ -53,6 +53,8 @@ public interface Guild {
     void setLeader(@Nonnull String leader);
 
     void addMember(@Nonnull String member);
+    
+    boolean containsMember(@Nonnull String member);
 
     void removeMember(@Nonnull String member);
 

@@ -31,6 +31,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.api.Guild;
 
 /**
  *
@@ -41,6 +44,12 @@ public class EntityDamageByEntity implements Listener{
     
     @EventHandler
     void onSomeoneAttack(EntityDamageByEntityEvent e){
+        if(e.isCancelled()){
+            return;
+        }
+        if(GenConf.teampvp){
+            return;
+        }
         //Jezeli atakowali sie lukiem czy czymkolwiek ludzie z wlasnej gildii to zablokuj
         //Daj tu też opcję, że jak jest on to można siebie nawalać
         Entity attacker = (Entity) e.getDamager();
@@ -50,7 +59,10 @@ public class EntityDamageByEntity implements Listener{
             Player attackerp = (Player) attacker;
             Player attackedp = (Player) attacked;
             if(Data.getInstance().guildsplayers.containsKey(attackerp.getName()) && Data.getInstance().guildsplayers.containsKey(attackedp.getName())){
-                Data.getInstance().guilds.get(Data.getInstance().guildsplayers.get(attackerp.getName()));
+                SimpleGuild sg = Data.getInstance().guilds.get(Data.getInstance().guildsplayers.get(attackerp.getName()).getClanTag());
+                if(sg.containsMember(attackerp.getName()) &&  sg.containsMember(attackedp.getName())){
+                    e.setCancelled(true);
+                }
             }
  
         }
@@ -59,6 +71,10 @@ public class EntityDamageByEntity implements Listener{
             if(arrow.getShooter() instanceof Player && e.getEntity() instanceof Player ){
                 Player attackerp = (Player) arrow.getShooter();
                 Player attackedp = (Player) e.getEntity();
+                SimpleGuild sg = Data.getInstance().guilds.get(Data.getInstance().guildsplayers.get(attackerp.getName()).getClanTag());
+                if(sg.containsMember(attackerp.getName()) &&  sg.containsMember(attackedp.getName())){
+                    e.setCancelled(true);
+                }
             }
         }
     }

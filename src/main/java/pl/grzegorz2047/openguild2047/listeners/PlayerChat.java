@@ -38,7 +38,9 @@ public class PlayerChat implements Listener{
     
     @EventHandler
     void onChat(AsyncPlayerChatEvent e){
-         
+        if(e.isCancelled()){
+            return;
+        }
         //Jezeli gracz jest  w gildii to e.setFormat(e.getFormat().replace("{OpenGuildTag}", pobierajakistag));
         //else e.setFormat(e.getFormat().replace("{OpenGuildTag}", ""));
         if(Data.getInstance().guildsplayers.containsKey(e.getPlayer().getName())){

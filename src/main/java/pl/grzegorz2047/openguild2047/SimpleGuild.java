@@ -110,5 +110,15 @@ public class SimpleGuild implements Guild {
     public void setTag(String tag) {
         this.tag=tag;
     }
+
+    @Override
+    public boolean containsMember(String member) {
+        if(this.members.contains(member)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 	
 }
