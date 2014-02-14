@@ -56,10 +56,21 @@ public class CreateArg {
                         PluginData.getDataInstance().guildsplayers.put(p.getName(), spg);
                         p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
                         return true;
+                    }else{
+                        p.sendMessage(GenConf.prefix+MsgManager.illegaltag);
+                        return false;
                     }
+                }else{
+                    p.sendMessage(GenConf.prefix+MsgManager.toolongshorttag);
+                    return false;
                 }
+            }else{
+                p.sendMessage(GenConf.prefix+MsgManager.usupportedchars);
+                return false;
             }
+        }else{
+            p.sendMessage(GenConf.prefix+MsgManager.alreadyinguild);
+            return false;
         }
-        return false;
     }
 }
