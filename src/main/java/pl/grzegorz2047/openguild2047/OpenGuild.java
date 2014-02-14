@@ -97,7 +97,7 @@ public class OpenGuild extends JavaPlugin {
                 logFiles++;
             }
 	}
-	System.out.println("Usunieto " + logFiles + " plikow w folderze Arcade/log");
+	System.out.println("Usunieto " + logFiles + " plikow w folderze OpenGuild/log");
     }
     
     private boolean checkPlugins() {
