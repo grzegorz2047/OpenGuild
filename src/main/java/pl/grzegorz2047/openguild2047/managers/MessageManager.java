@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047;
+package pl.grzegorz2047.openguild2047.managers;
 
 /**
  *
