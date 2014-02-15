@@ -24,10 +24,33 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
+
 /**
  *
  * @author Grzegorz
  */
 public class HomeArg {
-    
+        public static boolean execute(CommandSender sender){
+            if(!(sender instanceof Player)){
+                sender.sendMessage(GenConf.prefix+MsgManager.cmdonlyforplayer);
+                return false;
+            }
+            Player p = (Player) sender;
+            if(Data.getInstance().guildsplayers.containsKey(p.getName())){
+                String tag = Data.getInstance().guildsplayers.get(p.getName()).getClanTag();
+                if(Data.getInstance().guilds.containsKey(tag)){
+                    SimpleGuild sg = Data.getInstance().guilds.get(tag);
+                    //Mozliwosc dania jakiegos opoznienia do teleportu
+                    p.teleport(sg.getHome());
+                    p.sendMessage(GenConf.prefix+MsgManager.teleportsuccess);
+                }
+            }
+            return false;
+        }
 }
