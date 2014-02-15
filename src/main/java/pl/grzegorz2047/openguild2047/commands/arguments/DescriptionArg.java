@@ -24,10 +24,61 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.utils.GenUtil;
+
 /**
  *
  * @author Grzegorz
  */
 public class DescriptionArg {
+    
+    public static boolean execute(CommandSender sender, String args[]) {
+        if(!(sender instanceof Player)){
+            sender.sendMessage(MsgManager.cmdonlyforplayer);
+            return false;
+        }
+        Player p = (Player) sender;
+        if(args.length>1){
+            if(args[1].equalsIgnoreCase("zmien")){
+                if(args.length>3){
+                    if(Data.getInstance().isPlayerInGuild(p.getName())){
+                        SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
+                        if(sg.getLeader().equals(p.getName())){
+                            String desc = GenUtil.argsToString(args, 3, args.length);
+                            sg.setDescription(desc);
+                            return true;
+                        }else{
+                            p.sendMessage(GenConf.prefix+MsgManager.playernotleader);
+                            return false;
+                        }
+                    }else{
+                        p.sendMessage(GenConf.prefix+MsgManager.notinguild);
+                        return false;
+                    }
+                }else{
+                    p.sendMessage(GenConf.prefix+MsgManager.wronguseddesccmd);
+                    return false;
+                }
+            }else{
+                p.sendMessage(GenConf.prefix+MsgManager.wrongcmdargument);
+                return false;
+            }
+        }else{
+            if(Data.getInstance().isPlayerInGuild(p.getName())){
+                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
+                p.sendMessage("Opis gildii to: "+sg.getDescription());
+                return true;
+            }else{
+                p.sendMessage(GenConf.prefix+MsgManager.notinguild);
+                return false;
+            }
+        }
+    }
     
 }

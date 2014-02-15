@@ -47,4 +47,7 @@ public class MsgManager {
     public static String nomembersinguild = "Aktualnie nie posiadasz zadnych czlonkow w gildii.";
     public static String notenoughitems = "Posiadasz nie wystarczaczajaca liczbe przedmiotow na stworzenie gildii";
     public static String homenotenabled = "Na tym serwerze komenda /gildia dom jest wylaczona!";
+    public static String wrongcmdargument = "Podales bledny argument!";
+    public static String wronguseddesccmd = "Poprawne uzycie: /gildia dom zmien <Tresc>";
+    public static String playernotleader = "Nie mozesz tego wykonac, poniewaz nie jestes liderem gildii!";
 }

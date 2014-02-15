@@ -30,6 +30,7 @@ import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.DescriptionArg;
 
 import pl.grzegorz2047.openguild2047.commands.arguments.HelpArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.HomeArg;
@@ -44,39 +45,38 @@ public class GildiaCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(command.getName().equalsIgnoreCase("gildia")) {
             if(args.length>0){
-                if(args.length == 1) {
-                    if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
-                        return HelpArg.execute(sender, 1);
-                    }
-                    else if(args[0].equalsIgnoreCase("reload")) {
-                	    return ReloadArg.execute(sender);
-                    }
-                    else if(args[0].equalsIgnoreCase("ver") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("about")) {
-                        return VersionArg.execute(sender);
+                if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
+                    return HelpArg.execute(sender, 1);
+                }
+                else if(args[0].equalsIgnoreCase("reload")) {
+                    return ReloadArg.execute(sender);
+                }
+                else if(args[0].equalsIgnoreCase("ver") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("about")) {
+                    return VersionArg.execute(sender);
+                }
+                if(args[0].equalsIgnoreCase("opusc")) {
+                    return LeaveArg.execute(sender);
+                }
+                if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
+                    try {
+                        return HelpArg.execute(sender, Integer.valueOf(args[1]));
+                    } catch(NumberFormatException ex) {
+                        sender.sendMessage(ChatColor.RED + "Musisz podac liczbe!");
+                        return true;
                     }
                 }
-                if(args.length == 2) {
-                    if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
-                        try {
-                            return HelpArg.execute(sender, Integer.valueOf(args[1]));
-                        } catch(NumberFormatException ex) {
-                            sender.sendMessage(ChatColor.RED + "Musisz podac liczbe!");
-                            return true;
-                        }
-                    }
+                if(args[0].equalsIgnoreCase("dom")){
+                    return HomeArg.execute(sender);
+                }
+                if(args[0].equalsIgnoreCase("lista")){
+                    return ListArg.execute(sender);
+                }
+                if(args[0].equalsIgnoreCase("opis")){
+                    return DescriptionArg.execute(sender, args);
                 }
                 if(args.length>=2) {
                     if(args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                         return CreateArg.execute(sender, args);
-                    }
-                    if(args[0].equalsIgnoreCase("opusc")) {
-                        return LeaveArg.execute(sender);
-                    }
-                    if(args[0].equalsIgnoreCase("dom")){
-                        return HomeArg.execute(sender);
-                    }
-                    if(args[0].equalsIgnoreCase("lista")){
-                        return ListArg.execute(sender);
                     }
                 }
                // else {

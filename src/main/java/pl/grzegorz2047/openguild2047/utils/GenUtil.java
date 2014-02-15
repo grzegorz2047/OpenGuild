@@ -119,4 +119,13 @@ public class GenUtil {
         }
     }
     
+    public static String argsToString(String args[], int minindex,int maxindex){
+        StringBuilder sb = new StringBuilder();
+        for(int i=minindex;i<=maxindex;i++){
+            sb.append(args[i]);
+            sb.append("");
+        }
+        return sb.toString();
+    }
+    
 }

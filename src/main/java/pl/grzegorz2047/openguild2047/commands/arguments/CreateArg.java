@@ -66,7 +66,7 @@ public class CreateArg {
                             sg.setHome(p.getLocation());
                             sg.addMember(p.getName());
                             if(args.length>2){
-                                sg.setDescription(Data.argsToString(args, 2, args.length));
+                                sg.setDescription(GenUtil.argsToString(args, 2, args.length));
                             }else{
                                 sg.setDescription("Domyslny opis gildii :<");
                             }
@@ -77,7 +77,7 @@ public class CreateArg {
                             if(NametagAPI.hasCustomNametag(p.getName())){
                                 NametagAPI.resetNametag(p.getName());
                             }
-                            saveToDb(clantag, Data.argsToString(args, 2, args.length), p.getName(), p.getLocation());
+                            saveToDb(clantag, GenUtil.argsToString(args, 2, args.length), p.getName(), p.getLocation());
                             NametagAPI.setNametagHard(p.getName(), "§6" + spg.getClanTag() +  "§r ", "");
                             Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
                             p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);

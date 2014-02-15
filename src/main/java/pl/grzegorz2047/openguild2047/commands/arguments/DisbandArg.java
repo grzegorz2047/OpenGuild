@@ -24,10 +24,16 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import org.bukkit.command.CommandSender;
+
 /**
  *
  * @author Grzegorz
  */
 public class DisbandArg {
     
+    public static boolean execute(CommandSender sender) {
+        
+        return false;
+    }
 }
