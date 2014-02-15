@@ -26,6 +26,7 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import ca.wacos.nametagedit.NametagAPI;
 import java.util.logging.Level;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
@@ -33,7 +34,9 @@ import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
+import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
 /**
  *
@@ -56,27 +59,33 @@ public class CreateArg {
             if(clantag.matches("[0-9a-zA-Z]*")){
                 if(clantag.length()<=GenConf.maxclantag && clantag.length()>=GenConf.minclantag){
                     if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)){
-                        SimpleGuild sg = new SimpleGuild(clantag);
-                        sg.setLeader(p.getName());
-                        sg.setHome(p.getLocation());
-                        sg.addMember(p.getName());
-                        if(args.length>2){
-                            sg.setDescription(Data.argsToString(args, 2, args.length));
+                        if(GenUtil.hasEnoughItemsForGuild(p.getInventory())){
+                            GenUtil.removeRequiredItemsForGuild(p.getInventory());
+                            SimpleGuild sg = new SimpleGuild(clantag);
+                            sg.setLeader(p.getName());
+                            sg.setHome(p.getLocation());
+                            sg.addMember(p.getName());
+                            if(args.length>2){
+                                sg.setDescription(Data.argsToString(args, 2, args.length));
+                            }else{
+                                sg.setDescription("Domyslny opis gildii :<");
+                            }
+                            SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
+                            Data.getInstance().guilds.put(sg.getTag(), sg);
+                            Data.getInstance().ClansTag.add(sg.getTag());
+                            Data.getInstance().guildsplayers.put(p.getName(), spg);
+                            if(NametagAPI.hasCustomNametag(p.getName())){
+                                NametagAPI.resetNametag(p.getName());
+                            }
+                            saveToDb(clantag, Data.argsToString(args, 2, args.length), p.getName(), p.getLocation());
+                            NametagAPI.setNametagHard(p.getName(), "§6" + spg.getClanTag() +  "§r ", "");
+                            Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
+                            p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
+                            return true;
                         }else{
-                            sg.setDescription("Domyslny opis gildii :<");
+                            p.sendMessage(GenConf.prefix+MsgManager.notenoughitems);
+                            return false;
                         }
-                        SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
-                        Data.getInstance().guilds.put(sg.getTag(), sg);
-                        Data.getInstance().ClansTag.add(sg.getTag());
-                        Data.getInstance().guildsplayers.put(p.getName(), spg);
-                        if(NametagAPI.hasCustomNametag(p.getName())){
-                            NametagAPI.resetNametag(p.getName());
-                        }
-                        saveToDb(clantag, Data.argsToString(args, 2, args.length), p.getName(), p.getLocation());
-                        NametagAPI.setNametagHard(p.getName(), "§6" + spg.getClanTag() +  "§r ", "");
-                        Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
-                        p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
-                        return true;
                     }else{
                         p.sendMessage(GenConf.prefix+MsgManager.illegaltag);
                         return false;
