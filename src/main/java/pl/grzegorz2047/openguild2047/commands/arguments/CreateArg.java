@@ -72,6 +72,7 @@ public class CreateArg {
                         if(NametagAPI.hasCustomNametag(p.getName())){
                             NametagAPI.resetNametag(p.getName());
                         }
+                        saveToDb(clantag, Data.argsToString(args, 2, args.length), p.getName(), p.getLocation());
                         NametagAPI.setNametagHard(p.getName(), "§6" + spg.getClanTag() +  "§r ", "");
                         Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
                         p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
@@ -93,4 +94,9 @@ public class CreateArg {
             return false;
         }
     }
+    
+    private static void saveToDb(String tag, String description, String leader, Location home) {
+        MySQLHandler.insert(tag, description, leader, null, home.getBlockX(), home.getBlockY(), home.getBlockZ(), GenConf.MIN_CUBOID_RADIUS);
+    }
+    
 }

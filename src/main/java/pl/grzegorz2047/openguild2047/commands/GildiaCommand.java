@@ -32,10 +32,11 @@ import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
 
 import pl.grzegorz2047.openguild2047.commands.arguments.HelpArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
 
 public class GildiaCommand implements CommandExecutor {
-	
+    
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(command.getName().equalsIgnoreCase("gildia")) {
@@ -43,6 +44,9 @@ public class GildiaCommand implements CommandExecutor {
                 if(args.length == 1) {
                     if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
                         return HelpArg.execute(sender, 1);
+                    }
+                    else if(args[0].equalsIgnoreCase("reload")) {
+                	    return ReloadArg.execute(sender);
                     }
                     else if(args[0].equalsIgnoreCase("ver") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("about")) {
                         return VersionArg.execute(sender);
@@ -58,11 +62,11 @@ public class GildiaCommand implements CommandExecutor {
                         }
                     }
                 }
-                if(args.length>=2){
-                    if(args[0].equalsIgnoreCase("stworz")){
+                if(args.length>=2) {
+                    if(args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                         return CreateArg.execute(sender, args);
                     }
-                    if(args[0].equalsIgnoreCase("opusc")){
+                    if(args[0].equalsIgnoreCase("opusc")) {
                         return LeaveArg.execute(sender);
                     }
                 }
@@ -77,11 +81,11 @@ public class GildiaCommand implements CommandExecutor {
         }
             return false;
     }
-
+    
     private boolean error(CommandSender sender, String msg) {
-            sender.sendMessage(GenConf.prefix + ChatColor.RED + msg + "!");
-            sender.sendMessage(GenConf.prefix + ChatColor.DARK_GRAY + "Uzyj " + ChatColor.GOLD + "/gildia pomoc" + ChatColor.DARK_GRAY + ", aby uzyskac pomoc.");
-            return true;
+        sender.sendMessage(GenConf.prefix + ChatColor.RED + msg + "!");
+        sender.sendMessage(GenConf.prefix + ChatColor.DARK_GRAY + "Uzyj " + ChatColor.GOLD + "/gildia pomoc" + ChatColor.DARK_GRAY + ", aby uzyskac pomoc.");
+        return true;
     }
-
+    
 }

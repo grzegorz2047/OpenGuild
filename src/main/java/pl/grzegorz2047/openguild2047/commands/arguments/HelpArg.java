@@ -25,30 +25,39 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild2047.GenConf;
 
 public class HelpArg {
-	
-	public static boolean execute(CommandSender sender, int page) {
-		if(page <= 0) {
-			execute(sender, 1);
-			return true;
-		}
-		sender.sendMessage(getTitle(page));
-		if(page == 1) {
-			sender.sendMessage(help("help [strona]", "Pokaz pomoc [strona]"));
-			sender.sendMessage(help("version", "Informacje o plugine OpenGuild2047"));
-			return true;
-		}
-		return true;
-	}
-	
-	private static String getTitle(int page) {
-		return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help (" + page + "/1)" + ChatColor.DARK_GRAY + " --------------- ";
-	}
-	
-	private static String help(String usage, String desc) {
-		return GenConf.prefix + ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
-	}
-	
+    
+    public static boolean execute(CommandSender sender, int page) {
+        if(page <= 0) {
+            execute(sender, 1);
+            return true;
+        }
+        sender.sendMessage(getTitle(page));
+        if(page == 1) {
+            sender.sendMessage(help("disband", "Usun gildie jako operator"));
+            sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
+            sender.sendMessage(help("help [strona]", "Pokaz pomoc [strona]"));
+            sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii graczowi"));
+            sender.sendMessage(help("lista", "Lista wszystkich gildii na serwerze"));
+            sender.sendMessage(help("opisc <opis...>", "Zmien opis gildii"));
+            sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
+            sender.sendMessage(help("reload", "Przeladuj konfiguracje pluginu"));
+        }
+        else if(page == 2) {
+            sender.sendMessage(help("stworz <tag> [opis...]", "Zaloz gildie"));
+            sender.sendMessage(help("version", "Informacje o plugine OpenGuild2047"));
+            sender.sendMessage(help("zamknij", "Zamknij gildie"));
+        }
+        return true;
+    }
+    
+    private static String getTitle(int page) {
+        return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help (" + page + "/2)" + ChatColor.DARK_GRAY + " --------------- ";
+    }
+    
+    private static String help(String usage, String desc) {
+        return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
+    }
+    
 }

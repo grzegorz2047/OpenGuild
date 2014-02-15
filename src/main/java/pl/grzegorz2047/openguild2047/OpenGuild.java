@@ -49,6 +49,7 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
+import pl.grzegorz2047.openguild2047.listeners.Monitors;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
 
@@ -132,14 +133,15 @@ public class OpenGuild extends JavaPlugin {
         database = getConfig().getString("mysql.baza-danych");
         login = getConfig().getString("mysql.login");
         password = getConfig().getString("mysql.haslo");
-        //Inne ustawienia
+        // Inne ustawienia
         GenConf.teampvp = this.getConfig().getBoolean("teampvp");
     }
     
     void loadAllListeners() {
-    	PluginManager pm = Bukkit.getPluginManager();
+        PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerChat(), this);
         pm.registerEvents(new PlayerMove(), this);
+        pm.registerEvents(new Monitors(), this);
         pm.registerEvents(new EntityDamageByEntity(), this);
     }
     
