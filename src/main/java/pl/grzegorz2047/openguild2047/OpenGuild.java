@@ -42,6 +42,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -135,7 +136,13 @@ public class OpenGuild extends JavaPlugin {
         password = getConfig().getString("mysql.haslo");
         // Inne ustawienia
         GenConf.teampvp = this.getConfig().getBoolean("teampvp");
-        GenConf.homecommand= this.getConfig().getBoolean("dom-command");
+        GenConf.homecommand = this.getConfig().getBoolean("dom-command");
+        GenConf.colortagu = this.getConfig().getString("kolortagugildii").replace('&', '§');
+        if(GenConf.colortagu.length() > 2){
+            Guilds.getLogger().severe("Kolor tagu moze skladac sie tylko z 2 znaków: & oraz znaku identyfikujacy kolor!");
+            Guilds.getLogger().warning("Uzywam domyslnego koloru gildii!");
+            GenConf.colortagu = "§6";
+        }
     }
     
     void loadAllListeners() {

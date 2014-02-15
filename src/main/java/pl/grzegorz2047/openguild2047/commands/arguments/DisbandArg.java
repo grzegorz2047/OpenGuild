@@ -49,9 +49,12 @@ public class DisbandArg {
             if(sg.getLeader().equals(p.getName())){
                 for(String player : sg.getMembers()){
                     NametagAPI.resetNametag(player);
+                    Data.getInstance().guildsplayers.remove(player);
                 }
-                 Data.getInstance().guilds.remove(sg);
-                 p.sendMessage(GenConf.prefix+MsgManager.guilddisbandsuccess);
+                Data.getInstance().guildsplayers.remove(p.getName());
+                Data.getInstance().ClansTag.remove(sg.getTag());
+                Data.getInstance().guilds.remove(sg);
+                p.sendMessage(GenConf.prefix+MsgManager.guilddisbandsuccess);
                 //TODO: Aktualizuj dane w mysqlu itd!
                 return true;
             }else{
