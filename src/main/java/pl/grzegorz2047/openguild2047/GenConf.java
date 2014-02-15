@@ -34,6 +34,7 @@ public class GenConf {
     
     public static String prefix = "§7[§6OpenGuild§7]§7 ";//Mozna pokolorowac
     public static boolean teampvp = false;
+    public static boolean homecommand = true;
     //Max 11, bo prefix jest 16 znakowy - 5 znaków kolorujacych
     public static int maxclantag = 6;
     public static int minclantag = 4;

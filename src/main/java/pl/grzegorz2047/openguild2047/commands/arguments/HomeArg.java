@@ -42,6 +42,10 @@ public class HomeArg {
             return false;
         }
         Player p = (Player) sender;
+        if(!GenConf.homecommand){
+            sender.sendMessage(GenConf.prefix+MsgManager.homenotenabled);
+            return false;
+        }
         if(Data.getInstance().guildsplayers.containsKey(p.getName())){
             String tag = Data.getInstance().guildsplayers.get(p.getName()).getClanTag();
             if(Data.getInstance().guilds.containsKey(tag)){
@@ -49,6 +53,7 @@ public class HomeArg {
                 //Mozliwosc dania jakiegos opoznienia do teleportu
                 p.teleport(sg.getHome());
                 p.sendMessage(GenConf.prefix+MsgManager.teleportsuccess); 
+                return true;
             }
         }
         return false;

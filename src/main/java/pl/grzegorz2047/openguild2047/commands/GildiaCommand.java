@@ -27,10 +27,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
 
 import pl.grzegorz2047.openguild2047.commands.arguments.HelpArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.HomeArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
@@ -68,6 +70,9 @@ public class GildiaCommand implements CommandExecutor {
                     }
                     if(args[0].equalsIgnoreCase("opusc")) {
                         return LeaveArg.execute(sender);
+                    }
+                    if(args[0].equalsIgnoreCase("dom")){
+                        return HomeArg.execute(sender);
                     }
                 }
                // else {

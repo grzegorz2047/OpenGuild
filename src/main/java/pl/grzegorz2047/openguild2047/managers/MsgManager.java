@@ -46,4 +46,5 @@ public class MsgManager {
     public static String leaveguildsuccess = "Pomyslnie opusciles gildie!";
     public static String nomembersinguild = "Aktualnie nie posiadasz zadnych czlonkow w gildii.";
     public static String notenoughitems = "Posiadasz nie wystarczaczajaca liczbe przedmiotow na stworzenie gildii";
+    public static String homenotenabled = "Na tym serwerze komenda /gildia dom jest wylaczona!";
 }

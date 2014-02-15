@@ -135,6 +135,7 @@ public class OpenGuild extends JavaPlugin {
         password = getConfig().getString("mysql.haslo");
         // Inne ustawienia
         GenConf.teampvp = this.getConfig().getBoolean("teampvp");
+        GenConf.homecommand= this.getConfig().getBoolean("dom-command");
     }
     
     void loadAllListeners() {
