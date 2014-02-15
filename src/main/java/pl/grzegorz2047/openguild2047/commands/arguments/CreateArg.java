@@ -59,6 +59,7 @@ public class CreateArg {
                         SimpleGuild sg = new SimpleGuild(clantag);
                         sg.setLeader(p.getName());
                         sg.setHome(p.getLocation());
+                        sg.addMember(p.getName());
                         if(args.length>2){
                             sg.setDescription(Data.argsToString(args, 2, args.length));
                         }else{

@@ -24,10 +24,50 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import java.util.List;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
+
 /**
  *
  * @author Grzegorz
  */
 public class ListArg {
+    
+    public static boolean execute(CommandSender sender) {
+        if(!(sender instanceof Player)){
+            return false;
+        }
+        Player p = (Player) sender; 
+        if(Data.getInstance().isPlayerInGuild(p.getName())){
+            List<String> members = Data.getInstance().getPlayersGuild(p.getName()).getMembers();
+            StringBuilder sb = new StringBuilder();
+            if(members.size()!=1){
+                sb.append("Lista czlonkow w twojej gildii:\n ");
+                for(int i=0;i< members.size();i++){
+                    String member = Data.getInstance().getPlayersGuild(p.getName()).getMembers().get(i);
+                    if(i % 5 != 0){
+                           sb.append(member+", ");
+                    }
+                    else{
+                        sb.append("\n");
+                    }
+                }
+                p.sendMessage(sb.toString());
+                return true;
+            }
+            else{
+                p.sendMessage(GenConf.prefix+MsgManager.nomembersinguild);
+                return false;
+            }
+
+        }
+        
+        return false;
+    }
+
     
 }

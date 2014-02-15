@@ -44,5 +44,6 @@ public class MsgManager {
     public static String errornotinguild = "Nie jestes w gildii?! Czyszcze bledne dane!";
     public static String teleportsuccess = "Zostales pomyslnie przeteleportowany!";
     public static String leaveguildsuccess = "Pomyslnie opusciles gildie!";
+    public static String nomembersinguild = "Aktualnie nie posiadasz zadnych czlonkow w gildii.";
     
 }
