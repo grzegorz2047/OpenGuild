@@ -66,7 +66,7 @@ public class GildiaCommand implements CommandExecutor {
                     }
                 }
                 if(args[0].equalsIgnoreCase("dom")){
-                    return HomeArg.execute(sender);
+                    return HomeArg.execute(sender,args);
                 }
                 if(args[0].equalsIgnoreCase("lista")){
                     return ListArg.execute(sender);

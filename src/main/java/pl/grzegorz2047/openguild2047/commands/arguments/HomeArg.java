@@ -29,6 +29,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -36,7 +37,7 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * @author Grzegorz
  */
 public class HomeArg {
-    public static boolean execute(CommandSender sender){
+    public static boolean execute(CommandSender sender,String args[]){
         if(!(sender instanceof Player)){
             sender.sendMessage(GenConf.prefix+MsgManager.cmdonlyforplayer);
             return false;
@@ -47,11 +48,24 @@ public class HomeArg {
             return false;
         }
         if(Data.getInstance().isPlayerInGuild(p.getName())){
-            Location homeloc = Data.getInstance().getPlayersGuild(p.getName()).getHome();
-            //Mozliwosc dania jakiegos opoznienia do teleportu
-            p.teleport(homeloc);
-            p.sendMessage(GenConf.prefix+MsgManager.teleportsuccess); 
-            return true;
+            if(args.length>=2){
+                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
+                if(sg.getLeader().equals(p.getName())){
+                    sg.setHome(p.getLocation());
+                    //TODO: Aktualizuj dane w mysqlu itd!
+                    return true;
+                }else{
+                    p.sendMessage(GenConf.prefix+MsgManager.playernotleader);
+                    return false;
+                }
+            }else{
+                Location homeloc = Data.getInstance().getPlayersGuild(p.getName()).getHome();
+                //Mozliwosc dania jakiegos opoznienia do teleportu
+                p.teleport(homeloc);
+                p.sendMessage(GenConf.prefix+MsgManager.teleportsuccess); 
+                return true;
+            }
+
         }else{
             p.sendMessage(GenConf.prefix+MsgManager.notinguild);
             return false;

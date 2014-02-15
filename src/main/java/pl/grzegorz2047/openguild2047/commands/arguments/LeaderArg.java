@@ -24,10 +24,55 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
+
 /**
  *
  * @author Grzegorz
  */
 public class LeaderArg {
+    
+    public static boolean execute(CommandSender sender,String args[]) {
+        if(!(sender instanceof Player)){
+            sender.sendMessage(GenConf.prefix+MsgManager.cmdonlyforplayer);
+            return false;
+        }
+        Player p = (Player) sender;
+        if(Data.getInstance().isPlayerInGuild(p.getName())){
+            SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
+            if(args.length>=3){
+                if(args[1].equalsIgnoreCase("zmien")){
+                    if(sg.getLeader().equals(p.getName())){
+                        if(Bukkit.getOfflinePlayer(p.getName()).hasPlayedBefore()){
+                            sg.setLeader(args[2]);
+                            //TODO: Zmienic dane gildii w mysqlu
+                            return true;
+                        }else{
+                            p.sendMessage(GenConf.prefix+MsgManager.playerneverplayed);
+                            return false;
+                        }
+                    }else{
+                        p.sendMessage(GenConf.prefix+MsgManager.playernotleader);
+                        return false;
+                    }
+                }else{
+                   p.sendMessage(GenConf.prefix+MsgManager.wrongcmdargument);
+                   return false;
+                }
+            }else{
+               p.sendMessage("Liderem gildii jest "+sg.getLeader());
+               return true;
+            }
+        }else{
+            p.sendMessage(GenConf.prefix+MsgManager.notinguild);
+            return false;
+        }
+    }
     
 }

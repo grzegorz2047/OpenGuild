@@ -50,4 +50,6 @@ public class MsgManager {
     public static String wrongcmdargument = "Podales bledny argument!";
     public static String wronguseddesccmd = "Poprawne uzycie: /gildia dom zmien <Tresc>";
     public static String playernotleader = "Nie mozesz tego wykonac, poniewaz nie jestes liderem gildii!";
+    public static String playerneverplayed = "Nie mozesz przekazac lidera osobie, ktora nigdy nie grala na serwerze!";
+    public static String guilddisbandsuccess = "Pomyslnie usunieto gildie!";
 }

@@ -24,7 +24,13 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import ca.wacos.nametagedit.NametagAPI;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  *
@@ -33,7 +39,29 @@ import org.bukkit.command.CommandSender;
 public class DisbandArg {
     
     public static boolean execute(CommandSender sender) {
+        if(!(sender instanceof Player)){
+            sender.sendMessage(GenConf.prefix+MsgManager.cmdonlyforplayer);
+            return false;
+        }
+        Player p = (Player) sender;
+        if(Data.getInstance().isPlayerInGuild(p.getName())){
+            SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
+            if(sg.getLeader().equals(p.getName())){
+                for(String player : sg.getMembers()){
+                    NametagAPI.resetNametag(player);
+                }
+                 Data.getInstance().guilds.remove(sg);
+                 p.sendMessage(GenConf.prefix+MsgManager.guilddisbandsuccess);
+                //TODO: Aktualizuj dane w mysqlu itd!
+                return true;
+            }else{
+                p.sendMessage(GenConf.prefix+MsgManager.playernotleader);
+                return false;
+            }
+        }else{
+            p.sendMessage(GenConf.prefix+MsgManager.notinguild);
+            return false;
+        }
         
-        return false;
     }
 }

@@ -52,6 +52,7 @@ public class DescriptionArg {
                         if(sg.getLeader().equals(p.getName())){
                             String desc = GenUtil.argsToString(args, 3, args.length);
                             sg.setDescription(desc);
+                            //TODO: Aktualizuj dane w mysqlu itd!
                             return true;
                         }else{
                             p.sendMessage(GenConf.prefix+MsgManager.playernotleader);
