@@ -39,6 +39,7 @@ public class ListArg {
     
     public static boolean execute(CommandSender sender) {
         if(!(sender instanceof Player)){
+            sender.sendMessage(MsgManager.cmdonlyforplayer);
             return false;
         }
         Player p = (Player) sender; 
@@ -50,7 +51,7 @@ public class ListArg {
                 for(int i=0;i< members.size();i++){
                     String member = Data.getInstance().getPlayersGuild(p.getName()).getMembers().get(i);
                     if(i % 5 != 0){
-                           sb.append(member+", ");
+                           sb.append(member).append(", ");
                     }
                     else{
                         sb.append("\n");

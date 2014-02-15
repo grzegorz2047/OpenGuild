@@ -33,7 +33,8 @@ import java.util.List;
  * @author Grzegorz
  */
 public class Data {
-    //Temp data
+    //Temp data - ogarnac sposob wczytywania tego i wgl. bo na razie jest, bo jest xd
+    // Jak bedzie lepszy sposob na odnajdowanie i wgl. to mozna system zmienic
     public HashMap<String, SimpleGuild> guilds;
     public HashMap<String, SimplePlayerGuild> guildsplayers;
     public List<String> ClansTag;
