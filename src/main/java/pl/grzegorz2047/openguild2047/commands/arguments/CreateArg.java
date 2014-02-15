@@ -52,7 +52,7 @@ public class CreateArg {
             return false;
         }
         Player p = (Player) sender;
-        if(!Data.getInstance().guildsplayers.containsKey(p.getName())){
+        if(!Data.getInstance().isPlayerInGuild(p.getName())){
             if(clantag.matches("[0-9a-zA-Z]*")){
                 if(clantag.length()<=GenConf.maxclantag && clantag.length()>=GenConf.minclantag){
                     if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)){

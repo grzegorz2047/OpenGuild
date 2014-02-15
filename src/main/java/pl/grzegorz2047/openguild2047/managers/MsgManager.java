@@ -42,6 +42,7 @@ public class MsgManager {
     public static String illegaltag = "Twoja nazwa posiada zabronione slowa!";
     public static String notinguild = "Aby to wykonac musisz byc w gildii!";
     public static String errornotinguild = "Nie jestes w gildii?! Czyszcze bledne dane!";
-    public static String teleportsuccess = "Zostales pomyslnie przeteleportowany";
+    public static String teleportsuccess = "Zostales pomyslnie przeteleportowany!";
+    public static String leaveguildsuccess = "Pomyslnie opusciles gildie!";
     
 }

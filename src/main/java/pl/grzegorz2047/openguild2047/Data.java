@@ -44,12 +44,36 @@ public class Data {
         this.ClansTag = new ArrayList<String>();
         this.guildsplayers = new HashMap<String, SimplePlayerGuild>();
     }
+    
+    
+    public boolean isPlayerInGuild(String playername){
+        if(this.guildsplayers.containsKey(playername)){
+            String tag = this.guildsplayers.get(playername).getClanTag();
+            if(this.guilds.containsKey(tag)){
+                SimpleGuild sg = this.guilds.get(tag);
+                return sg.containsMember(playername);
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+    
+    public SimpleGuild getPlayersGuild(String p){
+        if(this.isPlayerInGuild(p)){
+            return this.guilds.get(this.guildsplayers.get(p).getClanTag());
+        }
+        return null;
+    }
     public static Data getInstance(){
         return Data.instance;
     }
     public static void setDataInstance(Data pd){
         Data.instance=pd;
     }
+
+    
     
     
     public static String argsToString(String args[], int minindex,int maxindex){

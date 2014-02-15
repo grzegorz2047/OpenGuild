@@ -28,7 +28,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.Data;
-import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -42,17 +41,11 @@ public class LeaveArg {
                 sender.sendMessage(MsgManager.cmdonlyforplayer);
             }
             Player p = (Player) sender;
-            if(Data.getInstance().guildsplayers.containsKey(p.getName())){
-                SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(p.getName());
-                if(Data.getInstance().guilds.containsKey(spg.getClanTag())){
-                    Data.getInstance().guilds.get(spg.getClanTag()).removeMember(p.getName());
-                    Data.getInstance().guildsplayers.remove(p.getName());
-                    //TODO: Usuń też w mysqlu
-                }else{
-                    p.sendMessage(GenConf.prefix+MsgManager.errornotinguild);
-                    Data.getInstance().guildsplayers.remove(p.getName());
-                    //Mozliwe, ze wtedy tez jest mysql, ale nie wiem w sumie xd
-                }
+            if(Data.getInstance().isPlayerInGuild(p.getName())){
+                Data.getInstance().guildsplayers.remove(p.getName());
+                Data.getInstance().getPlayersGuild(p.getName()).removeMember(p.getName());
+                p.sendMessage(GenConf.prefix+MsgManager.leaveguildsuccess);
+                //TODO: Usuń też w mysqlu
             }else{
                 p.sendMessage(GenConf.prefix+MsgManager.notinguild);
             }
