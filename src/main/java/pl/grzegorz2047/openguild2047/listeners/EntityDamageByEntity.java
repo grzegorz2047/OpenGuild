@@ -33,7 +33,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.api.Guild;
 
 /**
  *

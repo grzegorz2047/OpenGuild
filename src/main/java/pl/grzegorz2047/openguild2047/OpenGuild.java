@@ -97,7 +97,7 @@ public class OpenGuild extends JavaPlugin {
                 logFiles++;
             }
 	}
-	System.out.println("Usunieto " + logFiles + " plikow w folderze OpenGuild/log");
+	System.out.println("Usunieto " + logFiles + " plikow w folderze OpenGuild2047/log");
     }
     
     private boolean checkPlugins() {
@@ -119,9 +119,9 @@ public class OpenGuild extends JavaPlugin {
     	}
     	if(!log.exists()) {
             try {
-                    log.createNewFile();
+                log.createNewFile();
             } catch(IOException ex) {
-                    ex.printStackTrace();
+                ex.printStackTrace();
             }
     	}
     }
@@ -132,6 +132,8 @@ public class OpenGuild extends JavaPlugin {
         database = getConfig().getString("mysql.baza-danych");
         login = getConfig().getString("mysql.login");
         password = getConfig().getString("mysql.haslo");
+        //Inne ustawienia
+        GenConf.teampvp = this.getConfig().getBoolean("teampvp");
     }
     
     void loadAllListeners() {
@@ -139,9 +141,6 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerChat(), this);
         pm.registerEvents(new PlayerMove(), this);
         pm.registerEvents(new EntityDamageByEntity(), this);
-    }
-    void loadConfigSettings(){
-        GenConf.teampvp = this.getConfig().getBoolean("teampvp");
     }
     
     public static OpenGuild get() {

@@ -113,12 +113,7 @@ public class SimpleGuild implements Guild {
 
     @Override
     public boolean containsMember(String member) {
-        if(this.members.contains(member)){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return this.members.contains(member);
     }
 	
 }
