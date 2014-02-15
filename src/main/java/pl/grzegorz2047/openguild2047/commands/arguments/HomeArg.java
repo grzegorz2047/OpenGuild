@@ -24,11 +24,11 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -46,16 +46,15 @@ public class HomeArg {
             sender.sendMessage(GenConf.prefix+MsgManager.homenotenabled);
             return false;
         }
-        if(Data.getInstance().guildsplayers.containsKey(p.getName())){
-            String tag = Data.getInstance().guildsplayers.get(p.getName()).getClanTag();
-            if(Data.getInstance().guilds.containsKey(tag)){
-                SimpleGuild sg = Data.getInstance().guilds.get(tag);
-                //Mozliwosc dania jakiegos opoznienia do teleportu
-                p.teleport(sg.getHome());
-                p.sendMessage(GenConf.prefix+MsgManager.teleportsuccess); 
-                return true;
-            }
+        if(Data.getInstance().isPlayerInGuild(p.getName())){
+            Location homeloc = Data.getInstance().getPlayersGuild(p.getName()).getHome();
+            //Mozliwosc dania jakiegos opoznienia do teleportu
+            p.teleport(homeloc);
+            p.sendMessage(GenConf.prefix+MsgManager.teleportsuccess); 
+            return true;
+        }else{
+            p.sendMessage(GenConf.prefix+MsgManager.notinguild);
+            return false;
         }
-        return false;
     }
 }
