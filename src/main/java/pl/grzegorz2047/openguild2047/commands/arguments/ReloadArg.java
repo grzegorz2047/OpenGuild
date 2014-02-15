@@ -23,18 +23,46 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.GenConf;
 
-public class VersionArg {
+/**
+ * @author TheMolkaPL
+ */
+public class ReloadArg {
+	
+	private static File file = new File("plugins/OpenGuild2047/config.yml");
+	private static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 	
 	public static boolean execute(CommandSender sender) {
-		sender.sendMessage(ChatColor.DARK_GRAY + " -------------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " -------------------- ");
-		sender.sendMessage(ChatColor.DARK_GRAY + "Wersja: " + ChatColor.GOLD + OpenGuild.get().getDescription().getVersion());
-		sender.sendMessage(ChatColor.DARK_GRAY + "Autor: " + ChatColor.GOLD + "grzegorz2047");
-		sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild2047");
+		if(!sender.hasPermission("openguild.admin.reload") || !sender.isOp()) {
+			sender.sendMessage(GenConf.prefix + ChatColor.RED + "Brak odpowiednich uprawnien.");
+			return true;
+		}
+		if(file.exists()) {
+			try {
+				config.load(file);
+				sender.sendMessage(ChatColor.GREEN + "Pomyslnie przeladowano plik config.yml!");
+			} catch(IOException ex) {
+				sender.sendMessage(ChatColor.RED + "Wystapil problem z plikiem config.yml! " + ex.getMessage());
+				ex.printStackTrace();
+			} catch(InvalidConfigurationException ex) {
+				sender.sendMessage(ChatColor.RED + "Wystapil problem z konfiguracja pliku config.yml! Sprawdz wszystkie spacje!");
+				ex.printStackTrace();
+			}
+			return true;
+		} else {
+			config.options().copyDefaults(true);
+			sender.sendMessage(ChatColor.RED + "Wystapil problem z plikiem config.yml! Stworzono nowy.");
+		}
 		return true;
 	}
 	

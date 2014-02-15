@@ -1,4 +1,12 @@
+# Wlacz/wylacz PvP pomiedzy czlonkami gildii
 teampvp: false
+# Wlacz/wylacz komende /dom
+dom-command: true
+cuboid:
+  # Promien cuboida po zalozeniu gildii
+  min-radius: 15
+  # Maksymalny promien cuboida po powiekszaniu (/gildia powieksz)
+  max-radius: 50
 mysql:
   # Twoj adres bazy danych
   adres: localhost
@@ -8,8 +16,12 @@ mysql:
   login: root
   # Twoje haslo do bazy danych
   haslo: password
-#Zasada odczytu do ogarniecia id:ilosc:byte
-#Albo kompatybilnie z nowymi wersjami Minecrafta to MATERIAL:ilosc:byte
+#Zakazane nazwy gildii
+badwords:
+    - kupa
+    - tylek
+#Zasada zapisu id:ilosc
+#Albo kompatybilnie z nowymi wersjami Minecrafta to MATERIAL:ilosc
 #Lista material tu: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
 WymaganePrzedmioty:
   - 5:4

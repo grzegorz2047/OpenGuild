@@ -38,4 +38,8 @@ public class GenConf {
     public static int maxclantag = 6;
     public static int minclantag = 4;
     public static List<String> badwords;
+    public static List<String> reqitems;
+    public static final int MIN_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.min-radius");
+    public static final int MAX_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.max-radius");
+    
 }
