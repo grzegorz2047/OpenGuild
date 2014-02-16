@@ -31,6 +31,7 @@ import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.DescriptionArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.DisbandArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.HelpArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.HomeArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
@@ -55,6 +56,9 @@ public class GildiaCommand implements CommandExecutor {
                 }
                 if(args[0].equalsIgnoreCase("opusc")) {
                     return LeaveArg.execute(sender);
+                }
+                if(args[0].equalsIgnoreCase("rozwiaz")){
+                    return DisbandArg.execute(sender);
                 }
                 if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
                     try {
