@@ -50,6 +50,7 @@ public class DisbandArg {
         Player p = (Player) sender;
         if(Data.getInstance().isPlayerInGuild(p.getName())){
             SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
+            String tag = sg.getTag();
             if(sg.getLeader().equals(p.getName())){
                 for(String player : sg.getMembers()){
                     NametagAPI.resetNametag(player);
@@ -57,8 +58,11 @@ public class DisbandArg {
                 }
                 saveDb(Guilds.getGuild(p));
                 Data.getInstance().guildsplayers.remove(p.getName());
-                Data.getInstance().ClansTag.remove(sg.getTag());
-                Data.getInstance().guilds.remove(sg);
+                Data.getInstance().ClansTag.remove(tag);
+                Data.getInstance().guilds.remove(tag);
+                Data.getInstance().cuboids.remove(tag);
+                
+                //TODO: Usunac cuboida z mysqla
                 p.sendMessage(GenConf.prefix+MsgManager.guilddisbandsuccess);
                 return true;
             }else{

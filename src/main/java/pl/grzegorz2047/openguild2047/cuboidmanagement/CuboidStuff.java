@@ -60,5 +60,9 @@ public class CuboidStuff {
         }
         return false;
     }
+    public static boolean checkIfCuboidFarForGuild(Location loc){
+        Iterator<Map.Entry<String, Cuboid>> it = Data.getInstance().cuboids.entrySet().iterator();
+        return !CuboidStuff.checkIfInAnyCuboid(it, loc);
+    }
     
 }
