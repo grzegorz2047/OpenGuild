@@ -24,13 +24,17 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
-import ca.wacos.nametagedit.NametagAPI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.api.Guild;
+import pl.grzegorz2047.openguild2047.api.Guilds;
+import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import ca.wacos.nametagedit.NametagAPI;
 
 /**
  *
@@ -51,11 +55,11 @@ public class DisbandArg {
                     NametagAPI.resetNametag(player);
                     Data.getInstance().guildsplayers.remove(player);
                 }
+                saveDb(Guilds.getGuild(p));
                 Data.getInstance().guildsplayers.remove(p.getName());
                 Data.getInstance().ClansTag.remove(sg.getTag());
                 Data.getInstance().guilds.remove(sg);
                 p.sendMessage(GenConf.prefix+MsgManager.guilddisbandsuccess);
-                //TODO: Aktualizuj dane w mysqlu itd!
                 return true;
             }else{
                 p.sendMessage(GenConf.prefix+MsgManager.playernotleader);
@@ -67,4 +71,9 @@ public class DisbandArg {
         }
         
     }
+    
+    private static void saveDb(Guild guld) {
+        MySQLHandler.delete(guld);
+    }
+    
 }

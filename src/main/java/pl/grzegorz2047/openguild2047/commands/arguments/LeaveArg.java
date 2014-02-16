@@ -26,8 +26,11 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GenConf;
+
 import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.api.Guild;
+import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -42,15 +45,19 @@ public class LeaveArg {
             }
             Player p = (Player) sender;
             if(Data.getInstance().isPlayerInGuild(p.getName())){
+            	saveDb(Guilds.getGuild(p), p.getName());
                 Data.getInstance().guildsplayers.remove(p.getName());
                 Data.getInstance().getPlayersGuild(p.getName()).removeMember(p.getName());
                 p.sendMessage(GenConf.prefix+MsgManager.leaveguildsuccess);
-                //TODO: Usuń też w mysqlu
             }else{
                 p.sendMessage(GenConf.prefix+MsgManager.notinguild);
             }
             
             return true;
 	}
+    
+    private static void saveDb(Guild guild, String player) {
+        // TODO Tu trzeba zrobic pobieranie gildii, String -> ArrayList, potem usuwanie gracza i ArrayList<String>
+    }
     
 }

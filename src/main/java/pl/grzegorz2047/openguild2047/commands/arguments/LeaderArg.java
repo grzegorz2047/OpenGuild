@@ -27,9 +27,14 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.api.Guild;
+import pl.grzegorz2047.openguild2047.api.Guilds;
+import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.handlers.MySQLHandler.Type;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -51,7 +56,7 @@ public class LeaderArg {
                     if(sg.getLeader().equals(p.getName())){
                         if(Bukkit.getOfflinePlayer(p.getName()).hasPlayedBefore()){
                             sg.setLeader(args[2]);
-                            //TODO: Zmienic dane gildii w mysqlu
+                            saveDb(Guilds.getGuild(p), args[2]);
                             return true;
                         }else{
                             p.sendMessage(GenConf.prefix+MsgManager.playerneverplayed);
@@ -73,6 +78,10 @@ public class LeaderArg {
             p.sendMessage(GenConf.prefix+MsgManager.notinguild);
             return false;
         }
+    }
+    
+    private static void saveDb(Guild guild, String leader) {
+        MySQLHandler.update(guild, Type.LEADER, leader);
     }
     
 }

@@ -26,9 +26,14 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.api.Guild;
+import pl.grzegorz2047.openguild2047.api.Guilds;
+import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.handlers.MySQLHandler.Type;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
@@ -52,7 +57,7 @@ public class DescriptionArg {
                         if(sg.getLeader().equals(p.getName())){
                             String desc = GenUtil.argsToString(args, 3, args.length);
                             sg.setDescription(desc);
-                            //TODO: Aktualizuj dane w mysqlu itd!
+                            saveDb(Guilds.getGuild(p), desc);
                             return true;
                         }else{
                             p.sendMessage(GenConf.prefix+MsgManager.playernotleader);
@@ -80,6 +85,10 @@ public class DescriptionArg {
                 return false;
             }
         }
+    }
+    
+    private static void saveDb(Guild guild, String description) {
+        MySQLHandler.update(guild, Type.DESCRIPTION, description);
     }
     
 }
