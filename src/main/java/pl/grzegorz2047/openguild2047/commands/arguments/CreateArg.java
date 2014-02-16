@@ -63,7 +63,9 @@ public class CreateArg {
                 if(clantag.length()<=GenConf.maxclantag && clantag.length()>=GenConf.minclantag){
                     if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)){
                         if(GenUtil.hasEnoughItemsForGuild(p.getInventory())){
-                            if(CuboidStuff.checkIfCuboidFarForGuild(p.getLocation())){
+                            SimpleCuboid sc = new SimpleCuboid();
+                            sc.setCenter(p.getLocation());
+                            if(CuboidStuff.checkIfCuboidFarForGuild(sc.getMin())&& CuboidStuff.checkIfCuboidFarForGuild(sc.getMax())){//Nakładanie się cuboidów jest 
                                 //Jesli gracze blisko to tez blokuj
                                 GenUtil.removeRequiredItemsForGuild(p.getInventory());
                                 SimpleGuild sg = new SimpleGuild(clantag);
