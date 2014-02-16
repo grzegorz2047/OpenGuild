@@ -50,35 +50,35 @@ public class Guilds {
 	    return getGuild(guild.getTag());
 	}
 	
-    /**
-     * Zdobadz gildie
-     * @param tag Tag gildii
-     * @return Gildia
-     * @throws NullPointerException jezeli wskazana gildia nie istnieje
-     */
-    @Nullable public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
-        Guild guild = new SimpleGuild(tag);
-        return guild;
-    }
-    
-    /**
-     * Zdobadz Logger
-     * @return Logger
-     */
-    @Nonnull public static Logger getLogger() {
-        Logger logger = new SimpleLogger();
-        return logger;
-    }
-    
-    /**
-     * Zdobadz gildie gracz
-     * @param name Nick gracza
-     * @return Gildia gracza
-     * @throws NullPointerException jezeli player nie jest w zadnej gildii
-     */
-    @Nullable public static PlayerGuild getPlayer(@Nonnull String name) throws NullPointerException {
-        PlayerGuild guild = Data.getInstance().guildsplayers.get(name);
-        return guild;
-    }
+	/**
+	 * Zdobadz gildie
+	 * @param tag Tag gildii
+	 * @return Gildia
+	 * @throws NullPointerException jezeli wskazana gildia nie istnieje
+	 */
+	@Nullable public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
+		Guild guild = new SimpleGuild(tag);
+		return guild;
+	}
+	
+	/**
+	 * Zdobadz Logger
+	 * @return Logger
+	 */
+	@Nonnull public static Logger getLogger() {
+		Logger logger = new SimpleLogger();
+		return logger;
+	}
+	
+	/**
+	 * Zdobadz gildie gracz
+	 * @param name Nick gracza
+	 * @return Gildia gracza
+	 * @throws NullPointerException jezeli player nie jest w zadnej gildii
+	 */
+	@Nullable public static PlayerGuild getPlayer(@Nonnull String name) throws NullPointerException {
+		PlayerGuild guild = Data.getInstance().guildsplayers.get(name);
+		return guild;
+	}
 	
 }
