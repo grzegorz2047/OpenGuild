@@ -31,6 +31,7 @@ import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimpleLogger;
+import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 
 /**
  * Glowna klasa API OpenGuild2047
@@ -44,7 +45,8 @@ public class Guilds {
 	 * @throws NullPointerException jezeli player nie jest w zadnej gildii
 	 */
 	@Nullable public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
-	    SimpleGuild guild = Data.getInstance().guilds.get(player.getName());
+	    SimplePlayerGuild guildPlayer = Data.getInstance().guildsplayers.get(player.getName());
+	    SimpleGuild guild = new SimpleGuild(guildPlayer.getClanTag());
 	    return getGuild(guild.getTag());
 	}
 	
