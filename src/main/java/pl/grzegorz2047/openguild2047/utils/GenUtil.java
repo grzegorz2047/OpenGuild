@@ -66,27 +66,34 @@ public class GenUtil {
     public static boolean hasEnoughItemsForGuild(Inventory inv){
         for(String linia:GenConf.reqitems){
             String[] splits = linia.split(":");
+            if(splits.length!=2){
+                Guilds.getLogger().severe("To jest niepoprawne "+splits);
+                continue;
+            }
             try{
                 Material material = Material.getMaterial(splits[0]);
                 if(material == null){
                     material = Material.getMaterial(splits[0]);
                     if(material == null){
                         Guilds.getLogger().severe("Material "+splits[0]+" w ilosci "+splits[1]+" jest niepoprawny");
+                        continue;
                     }
                 } 
                 int amount = Integer.parseInt(splits[1]);
                 if(amount == 0){
                     Guilds.getLogger().severe("Material "+splits[0]+" w ilosci "+splits[1]+" ma niepoprawna ilosc");
+                    continue;
                 }
+                
                 //System.out.println(" "+BlockName);
-                if(splits.length==2){
-                    if(!inv.contains(material, amount)){
-                        return false;
-                    }
+                
+                if(!inv.contains(material, amount)){
+                    return false;
                 }
+                
             }
             catch(Exception ex){
-                Guilds.getLogger().severe("Config losowych blokow jest niepoprawny. Cos tam "+splits[0]+" "+splits[1]+"! Ignoruje!");
+                Guilds.getLogger().severe("Config wymaganych blokow jest niepoprawny. Tutaj -> "+splits[0]+" "+splits[1]+"! Ignoruje!");
             }
         }
         return true;

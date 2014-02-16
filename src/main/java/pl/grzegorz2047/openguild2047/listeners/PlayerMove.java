@@ -27,6 +27,7 @@ package pl.grzegorz2047.openguild2047.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 
 /**
  *
@@ -36,6 +37,9 @@ public class PlayerMove implements Listener {
 
     @EventHandler
     void onPlayerMove(PlayerMoveEvent e){
-        //To tu bedzie sprawdzane czy ktos wchodzi na cuboid czy nie, raczej xd
+        if(!CuboidStuff.canMove(e.getPlayer(), e.getFrom(), e.getTo())){
+            e.setCancelled(true);//TODO: Bedzie mozliwosc ustawienia czy bedzie blokowac 
+            //wchodzenie czy blokowac interakcje itd.
+        }
     }
 }
