@@ -53,4 +53,5 @@ public class MsgManager {
     public static String playerneverplayed = "Nie mozesz przekazac lidera osobie, ktora nigdy nie grala na serwerze!";
     public static String guilddisbandsuccess = "Pomyslnie usunieto gildie!";
     public static String gildtocloseothers = "Nie mozesz tworzyc gildii blisko innej gildii!";
+    public static String playerstooclose = "Nie mozesz stworzyc gildii blisko innych graczy!";
 }

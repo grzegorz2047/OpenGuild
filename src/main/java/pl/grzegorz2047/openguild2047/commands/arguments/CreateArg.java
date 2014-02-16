@@ -66,35 +66,39 @@ public class CreateArg {
                             SimpleCuboid sc = new SimpleCuboid();
                             sc.setCenter(p.getLocation());
                             if(CuboidStuff.checkIfCuboidFarForGuild(sc.getMin())&& CuboidStuff.checkIfCuboidFarForGuild(sc.getMax())){//Nakładanie się cuboidów jest 
-                                //Jesli gracze blisko to tez blokuj
-                                GenUtil.removeRequiredItemsForGuild(p.getInventory());
-                                SimpleGuild sg = new SimpleGuild(clantag);
-                                sg.setLeader(p.getName());
-                                sg.setHome(p.getLocation());
-                                sg.addMember(p.getName());
-                                SimpleCuboid c = new SimpleCuboid();
-                                c.setOwner(clantag);
-                                c.setRadius(GenConf.MIN_CUBOID_RADIUS);
-                                c.setCenter(p.getLocation());
-                                //TODO: dodac jakies dane o cuboidzie
-                                Data.getInstance().cuboids.put(clantag, c);
-                                if(args.length>2){
-                                    sg.setDescription(GenUtil.argsToString(args, 2, args.length));
+                                if(GenUtil.checkIfPlayersNearby(p, GenConf.MIN_CUBOID_RADIUS)){ 
+                                    GenUtil.removeRequiredItemsForGuild(p.getInventory());
+                                    SimpleGuild sg = new SimpleGuild(clantag);
+                                    sg.setLeader(p.getName());
+                                    sg.setHome(p.getLocation());
+                                    sg.addMember(p.getName());
+                                    SimpleCuboid c = new SimpleCuboid();
+                                    c.setOwner(clantag);
+                                    c.setRadius(GenConf.MIN_CUBOID_RADIUS);
+                                    c.setCenter(p.getLocation());
+                                    //TODO: dodac jakies dane o cuboidzie
+                                    Data.getInstance().cuboids.put(clantag, c);
+                                    if(args.length>2){
+                                        sg.setDescription(GenUtil.argsToString(args, 2, args.length));
+                                    }else{
+                                        sg.setDescription("Domyslny opis gildii :<");
+                                    }
+                                    SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
+                                    Data.getInstance().guilds.put(sg.getTag(), sg);
+                                    Data.getInstance().ClansTag.add(sg.getTag());
+                                    Data.getInstance().guildsplayers.put(p.getName(), spg);
+                                    if(NametagAPI.hasCustomNametag(p.getName())){
+                                        NametagAPI.resetNametag(p.getName());
+                                    }
+                                    saveToDb(clantag, GenUtil.argsToString(args, 2, args.length), p.getName(), p.getLocation());
+                                    NametagAPI.setPrefix(p.getName(), "§6" + spg.getClanTag() +  "§r ");//Cos ten nametag bladzi, ale dziala dziwne
+                                    Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
+                                    p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
+                                    return true;
                                 }else{
-                                    sg.setDescription("Domyslny opis gildii :<");
+                                    p.sendMessage(GenConf.prefix+MsgManager.playerstooclose);
+                                    return false;
                                 }
-                                SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
-                                Data.getInstance().guilds.put(sg.getTag(), sg);
-                                Data.getInstance().ClansTag.add(sg.getTag());
-                                Data.getInstance().guildsplayers.put(p.getName(), spg);
-                                if(NametagAPI.hasCustomNametag(p.getName())){
-                                    NametagAPI.resetNametag(p.getName());
-                                }
-                                saveToDb(clantag, GenUtil.argsToString(args, 2, args.length), p.getName(), p.getLocation());
-                                NametagAPI.setPrefix(p.getName(), "§6" + spg.getClanTag() +  "§r ");//Cos ten nametag bladzi, ale dziala dziwne
-                                Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
-                                p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
-                                return true;
                             }else{
                                 p.sendMessage(GenConf.prefix+MsgManager.gildtocloseothers);
                                 return false;

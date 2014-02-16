@@ -24,7 +24,11 @@
 
 package pl.grzegorz2047.openguild2047.utils;
 
+import java.util.HashSet;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import pl.grzegorz2047.openguild2047.GenConf;
@@ -133,6 +137,26 @@ public class GenUtil {
             sb.append("");
         }
         return sb.toString();
+    }
+    
+    public static boolean checkIfPlayersNearby(Player p, int radius){//Znaleziony kod
+        Location l = p.getLocation();
+        int chunkRadius = radius < 16 ? 1 : (radius - (radius % 16)) / 16;
+
+        for (int chX = 0 - chunkRadius; chX <= chunkRadius; chX++) {
+            for (int chZ = 0 - chunkRadius; chZ <= chunkRadius; chZ++) {
+                int x = (int) l.getX(), y = (int) l.getY(), z = (int) l.getZ();
+                for (Entity e: new Location(l.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities()) {
+                    if (e.getLocation().distance(l) <= radius && e.getLocation().getBlock() != l.getBlock()){
+                        if(e instanceof Player){
+                            return true;
+                        }
+                    }
+
+                }
+            }
+        }
+        return false;
     }
     
 }
