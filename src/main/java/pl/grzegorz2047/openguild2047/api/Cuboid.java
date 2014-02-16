@@ -36,9 +36,9 @@ public interface Cuboid {
     @Nonnull Location getCenter();
     @Nonnull int getRadius();
     @Nonnull String getOwner();
-    @Nonnull int getMin();
-    @Nonnull int getMax();
-    @Nonnull boolean isinCuboid(@Nonnull String player);
+    @Nonnull Location getMin();
+    @Nonnull Location getMax();
+    @Nonnull boolean isinCuboid(@Nonnull Location loc);
     
     @Nonnull void setCenter(@Nonnull Location center);
     @Nonnull void setRadius(@Nonnull int radius);

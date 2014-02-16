@@ -24,8 +24,12 @@
 
 package pl.grzegorz2047.openguild2047.cuboidmanagement;
 
+import java.util.Iterator;
+import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.api.Cuboid;
 
 /**
  *
@@ -34,8 +38,27 @@ import org.bukkit.entity.Player;
 public class CuboidStuff {
     
     public static boolean canMove(Player player, Location from, Location to){
-        
-        return true;
+        //To tylko jest proba, moze sie uda xd
+        Iterator<Map.Entry<String, Cuboid>> it = Data.getInstance().cuboids.entrySet().iterator();
+        if(Data.getInstance().isPlayerInGuild(player.getName())){
+            String tag = Data.getInstance().getPlayersGuild(player.getName()).getTag();
+            if(Data.getInstance().cuboids.get(tag).isinCuboid(to)){
+                return true;
+            }else{
+                return !CuboidStuff.checkIfInAnyCuboid(it,to);
+            }
+            
+        }else{
+            return !CuboidStuff.checkIfInAnyCuboid(it,to);
+        }
+    }
+    private static boolean checkIfInAnyCuboid(Iterator<Map.Entry<String, Cuboid>> it, Location to){
+        while(it.hasNext()){
+            if(it.next().getValue().isinCuboid(to)){
+                return true;
+            }
+        }
+        return false;
     }
     
 }

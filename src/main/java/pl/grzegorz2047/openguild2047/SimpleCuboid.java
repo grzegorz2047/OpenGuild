@@ -25,6 +25,7 @@
 package pl.grzegorz2047.openguild2047;
 
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
 import pl.grzegorz2047.openguild2047.api.Cuboid;
 
 /**
@@ -49,8 +50,9 @@ public class SimpleCuboid implements Cuboid{
     }
 
     @Override
-    public boolean isinCuboid(String player) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean isinCuboid(Location loc) {
+        Vector v = loc.toVector();
+        return v.isInAABB(this.getMin().toVector(), this.getMax().toVector());
     }
 
     @Override
@@ -74,13 +76,13 @@ public class SimpleCuboid implements Cuboid{
     }
 
     @Override
-    public int getMin() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Location getMin() {
+        return new Location(this.center.getWorld(),this.center.getBlockX()-this.radius,this.center.getBlockY()-this.radius,this.center.getBlockZ()-this.radius);
     }
 
     @Override
-    public int getMax() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Location getMax() {
+        return new Location(this.center.getWorld(),this.center.getBlockX()+this.radius,this.center.getBlockY()+this.radius,this.center.getBlockZ()+this.radius);
     }
     
 }
