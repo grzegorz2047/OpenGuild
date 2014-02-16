@@ -37,7 +37,9 @@ public class SimpleGuild implements Guild {
     private String leader;
     private List<String> members;
     private List<String> invitedplayers;
-
+    private List<String> allyguilds;
+    private List<String> enemyguilds;
+    
     public SimpleGuild(String tag) {
         this.tag = tag;
     }
@@ -114,6 +116,16 @@ public class SimpleGuild implements Guild {
     @Override
     public boolean containsMember(String member) {
         return this.members.contains(member);
+    }
+
+    @Override
+    public List<String> getAllyGuilds() {
+        return this.allyguilds;
+    }
+
+    @Override
+    public List<String> getEnemyGuilds() {
+        return this.enemyguilds;
     }
 	
 }

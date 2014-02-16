@@ -43,6 +43,10 @@ public interface Guild {
     @Nullable List<String> getMembers();
 
     @Nonnull String getTag();
+    
+    @Nonnull List<String> getAllyGuilds();
+    
+    @Nonnull List<String> getEnemyGuilds();
 
     void setDescription(@Nonnull String description);
 
