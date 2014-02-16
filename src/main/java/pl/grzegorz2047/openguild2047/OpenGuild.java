@@ -24,8 +24,6 @@
 
 /*
 TODO:
-Stworzenie klasy ClanPlayer
-Stworzenie klasy Clan
 Stworzenie klasy od cuboidów
 Ogarnięcie co byłoby dobre do sprawdzania czy gracz jest na cuboidzie gildii
 Tutaj są przydatne linki dla zainteresowanych tworzeniem cuboidów:
@@ -42,7 +40,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 

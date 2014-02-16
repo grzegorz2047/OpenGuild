@@ -71,12 +71,12 @@ public class GenUtil {
                 if(material == null){
                     material = Material.getMaterial(splits[0]);
                     if(material == null){
-                        Guilds.getLogger().severe("Material "+splits[0]+"w ilosci "+splits[1]+" jest niepoprawny");
+                        Guilds.getLogger().severe("Material "+splits[0]+" w ilosci "+splits[1]+" jest niepoprawny");
                     }
                 } 
                 int amount = Integer.parseInt(splits[1]);
                 if(amount == 0){
-                    Guilds.getLogger().severe("Material "+splits[0]+"w ilosci "+splits[1]+" ma niepoprawna ilosc");
+                    Guilds.getLogger().severe("Material "+splits[0]+" w ilosci "+splits[1]+" ma niepoprawna ilosc");
                 }
                 //System.out.println(" "+BlockName);
                 if(splits.length==2){
@@ -86,7 +86,7 @@ public class GenUtil {
                 }
             }
             catch(Exception ex){
-                System.out.println("Config losowych blokow jest niepoprawny. Cos tam "+splits[0]+" "+splits[1]+"! Ignoruje!");
+                Guilds.getLogger().severe("Config losowych blokow jest niepoprawny. Cos tam "+splits[0]+" "+splits[1]+"! Ignoruje!");
             }
         }
         return true;
@@ -100,20 +100,20 @@ public class GenUtil {
                 if(material == null){
                     material = Material.getMaterial(splits[0]);
                     if(material == null){
-                        Guilds.getLogger().severe("Material "+splits[0]+"w ilosci "+splits[1]+" jest niepoprawny");
+                        Guilds.getLogger().severe("Material "+splits[0]+" w ilosci "+splits[1]+" jest niepoprawny");
                         continue;
                     }
                 } 
                 int amount = Integer.parseInt(splits[1]);
                 if(amount == 0){
-                    Guilds.getLogger().severe("Material "+splits[0]+"w ilosci "+splits[1]+" ma niepoprawna ilosc");
+                    Guilds.getLogger().severe("Material "+splits[0]+" w ilosci "+splits[1]+" ma niepoprawna ilosc");
                     continue;
                 }
                 GenUtil.removeFromInv(inv, material, 0, amount);
                 //System.out.println(" "+BlockName);
             }
             catch(Exception ex){
-                System.out.println("Config losowych blokow jest niepoprawny. W tym miejscu "+splits[0]+":"+splits[1]+"! Ignoruje!");
+            	Guilds.getLogger().severe("Config losowych blokow jest niepoprawny. W tym miejscu "+splits[0]+":"+splits[1]+"! Ignoruje!");
                 
             }
         }

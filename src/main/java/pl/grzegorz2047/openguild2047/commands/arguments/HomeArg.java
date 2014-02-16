@@ -75,7 +75,13 @@ public class HomeArg {
                 }
             }else{
                 Location homeloc = Data.getInstance().getPlayersGuild(p.getName()).getHome();
-                teleport(p, homeloc, 10 /* TODO Pobieranie z configu? */);
+                int cooldown = GenConf.TELEPORT_COOLDOWN;
+                if(cooldown <= 0) {
+                	teleport(p, homeloc, 10); // Teleportacja gdy jest bledny config - 10 sekund
+                    Guilds.getLogger().severe("Czas oczekiwania teleportacji musi miec minimum 1 sekunde!");
+                    return true;
+                }
+                teleport(p, homeloc, cooldown);
                 p.sendMessage(GenConf.prefix+MsgManager.teleportsuccess); 
                 return true;
             }

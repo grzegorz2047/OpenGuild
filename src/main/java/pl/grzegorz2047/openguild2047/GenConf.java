@@ -38,10 +38,10 @@ public class GenConf {
     //Max 11, bo prefix jest 16 znakowy - 5 znaków kolorujacych
     public static int maxclantag = 6;
     public static int minclantag = 4;
-    public static String colortagu = "§6";
     public static List<String> badwords;
     public static List<String> reqitems;
     public static final int MIN_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.min-radius");
     public static final int MAX_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.max-radius");
+    public static final int TELEPORT_COOLDOWN = OpenGuild.get().getConfig().getInt("teleport-cooldown");
     
 }

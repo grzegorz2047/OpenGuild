@@ -2,6 +2,8 @@
 teampvp: false
 # Wlacz/wylacz komende /dom
 dom-command: true
+# Czas oczekiwania teleportacji do gildii (w sekundach)
+teleport-cooldown: 10
 cuboid:
   # Promien cuboida po zalozeniu gildii
   min-radius: 15

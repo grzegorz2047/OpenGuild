@@ -27,11 +27,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild2047.Data;
+
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.DescriptionArg;
-
 import pl.grzegorz2047.openguild2047.commands.arguments.HelpArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.HomeArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
@@ -91,7 +90,8 @@ public class GildiaCommand implements CommandExecutor {
             return false;
     }
     
-    private boolean error(CommandSender sender, String msg) {
+    @SuppressWarnings("unused")
+	private boolean error(CommandSender sender, String msg) {
         sender.sendMessage(GenConf.prefix + ChatColor.RED + msg + "!");
         sender.sendMessage(GenConf.prefix + ChatColor.DARK_GRAY + "Uzyj " + ChatColor.GOLD + "/gildia pomoc" + ChatColor.DARK_GRAY + ", aby uzyskac pomoc.");
         return true;
