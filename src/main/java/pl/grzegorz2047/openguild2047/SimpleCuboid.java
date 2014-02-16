@@ -77,11 +77,13 @@ public class SimpleCuboid implements Cuboid{
 
     @Override
     public Location getMin() {
-        return new Location(this.center.getWorld(),this.center.getBlockX()-this.radius,this.center.getBlockY()-this.radius,this.center.getBlockZ()-this.radius);
+        // TODO Naprawic NPE
+    	return new Location(this.center.getWorld(),this.center.getBlockX()-this.radius,this.center.getBlockY()-this.radius,this.center.getBlockZ()-this.radius);
     }
 
     @Override
     public Location getMax() {
+    	// TODO Naprawic NPE
         return new Location(this.center.getWorld(),this.center.getBlockX()+this.radius,this.center.getBlockY()+this.radius,this.center.getBlockZ()+this.radius);
     }
     

@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
 
 import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimpleLogger;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
@@ -37,7 +38,12 @@ import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
  * Glowna klasa API OpenGuild2047
  */
 public class Guilds {
-    
+	
+	@Nonnull public static Cuboid getCuboid() {
+		Cuboid cuboid = new SimpleCuboid();
+		return cuboid;
+	}
+	
 	/**
 	 * Zdobadz gildie
 	 * @param player Member gildii

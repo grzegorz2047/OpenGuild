@@ -24,13 +24,13 @@
 
 package pl.grzegorz2047.openguild2047.utils;
 
-import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 
@@ -67,7 +67,8 @@ public class GenUtil {
         }
     }
     
-    public static boolean hasEnoughItemsForGuild(Inventory inv){
+    @SuppressWarnings("deprecation")
+	public static boolean hasEnoughItemsForGuild(Inventory inv){
         for(String linia:GenConf.reqitems){
             String[] splits = linia.split(":");
             if(splits.length!=2){

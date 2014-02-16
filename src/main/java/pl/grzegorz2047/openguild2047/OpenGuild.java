@@ -46,6 +46,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
 import pl.grzegorz2047.openguild2047.listeners.Monitors;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
@@ -87,16 +88,16 @@ public class OpenGuild extends JavaPlugin {
     public void onDisable() {
         //super.onDisable(); //To change body of generated methods, choose Tools | Templates.
         
-    	// Usuwanie wszystkich plikow ktore nie posidaja formatu .log (logger tworzy duzo plikow roboczych)
-    	int logFiles = 0;
-	for(File file : logDir.listFiles()) {
+        // Usuwanie wszystkich plikow ktore nie posidaja formatu .log (logger tworzy duzo plikow roboczych)
+        int logFiles = 0;
+        for(File file : logDir.listFiles()) {
             String format = file.getName().substring(file.getName().length() - 4, file.getName().length());
             if(!format.equals(".log")) {
                 file.delete();
                 logFiles++;
             }
-	}
-	System.out.println("Usunieto " + logFiles + " plikow w folderze OpenGuild2047/log");
+        }
+        System.out.println("Usunieto " + logFiles + " plikow w folderze OpenGuild2047/log");
     }
     
     private boolean checkPlugins() {
@@ -145,6 +146,7 @@ public class OpenGuild extends JavaPlugin {
     
     void loadAllListeners() {
         PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new CuboidListeners(), this);
         pm.registerEvents(new PlayerChat(), this);
         pm.registerEvents(new PlayerMove(), this);
         pm.registerEvents(new Monitors(), this);

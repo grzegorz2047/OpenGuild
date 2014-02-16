@@ -44,5 +44,6 @@ public class GenConf {
     public static final int MIN_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.min-radius");
     public static final int MAX_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.max-radius");
     public static final int TELEPORT_COOLDOWN = OpenGuild.get().getConfig().getInt("teleport-cooldown");
+    public static final boolean EXTRA_PROTECTION = OpenGuild.get().getConfig().getBoolean("cuboid.extra-protection");
     
 }
