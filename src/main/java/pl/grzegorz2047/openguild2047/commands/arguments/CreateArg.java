@@ -86,7 +86,7 @@ public class CreateArg {
                                 NametagAPI.resetNametag(p.getName());
                             }
                             saveToDb(clantag, GenUtil.argsToString(args, 2, args.length), p.getName(), p.getLocation());
-                            NametagAPI.setPrefix(p.getName(), "§6" + spg.getClanTag() +  "§r ");
+                            NametagAPI.setPrefix(p.getName(), "§6" + spg.getClanTag() +  "§r ");//Cos ten nametag bladzi, ale dziala dziwne
                             Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
                             p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
                             return true;

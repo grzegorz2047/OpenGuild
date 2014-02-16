@@ -67,13 +67,13 @@ public class GenUtil {
         for(String linia:GenConf.reqitems){
             String[] splits = linia.split(":");
             if(splits.length!=2){
-                Guilds.getLogger().severe("To jest niepoprawne "+splits);
+                Guilds.getLogger().severe("To jest niepoprawne "+linia);
                 continue;
             }
             try{
                 Material material = Material.getMaterial(splits[0]);
                 if(material == null){
-                    material = Material.getMaterial(splits[0]);
+                    material = Material.getMaterial(Integer.parseInt(splits[0]));
                     if(material == null){
                         Guilds.getLogger().severe("Material "+splits[0]+" w ilosci "+splits[1]+" jest niepoprawny");
                         continue;
@@ -128,7 +128,7 @@ public class GenUtil {
     
     public static String argsToString(String args[], int minindex,int maxindex){
         StringBuilder sb = new StringBuilder();
-        for(int i=minindex;i<=maxindex;i++){
+        for(int i=minindex;i<maxindex;i++){
             sb.append(args[i]);
             sb.append("");
         }

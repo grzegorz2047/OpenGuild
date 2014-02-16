@@ -23,6 +23,7 @@
  */
 package pl.grzegorz2047.openguild2047;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -41,6 +42,9 @@ public class SimpleGuild implements Guild {
     private List<String> enemyguilds;
     
     public SimpleGuild(String tag) {
+        this.members = new ArrayList<String>();
+        this.allyguilds = new ArrayList<String>();
+        this.enemyguilds = new ArrayList<String>();
         this.tag = tag;
     }
 
@@ -96,16 +100,14 @@ public class SimpleGuild implements Guild {
 
     @Override
     public void addMember(String member) {
-        if(!this.members.contains(member)){
-            this.members.add(member);
-        }
+        this.members.add(member);
+        
 
     }
     @Override
     public void removeMember(String member) {
-        if(this.members.contains(member)){
-            this.members.remove(member);
-        }
+        this.members.remove(member);
+        
     }
 
     @Override

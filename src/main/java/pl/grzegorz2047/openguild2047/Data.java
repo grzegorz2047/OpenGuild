@@ -47,6 +47,7 @@ public class Data {
         this.guilds = new HashMap<String,SimpleGuild>();
         this.ClansTag = new ArrayList<String>();
         this.guildsplayers = new HashMap<String, SimplePlayerGuild>();
+        this.cuboids = new HashMap<String, Cuboid>();
     }
     
     
