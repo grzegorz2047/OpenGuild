@@ -24,22 +24,23 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
-import ca.wacos.nametagedit.NametagAPI;
 import java.util.logging.Level;
+
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GenConf;
+
 import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
-import pl.grzegorz2047.openguild2047.api.Cuboid;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
+import ca.wacos.nametagedit.NametagAPI;
 
 /**
  *
