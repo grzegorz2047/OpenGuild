@@ -76,7 +76,7 @@ public class CreateArg {
                                     c.setOwner(clantag);
                                     c.setRadius(GenConf.MIN_CUBOID_RADIUS);
                                     c.setCenter(p.getLocation());
-                                    //TODO: dodac jakies dane o cuboidzie
+                                    //TODO: dodac jakies dane o cuboidzie w mysql
                                     Data.getInstance().cuboids.put(clantag, c);
                                     if(args.length>2){
                                         sg.setDescription(GenUtil.argsToString(args, 2, args.length));
