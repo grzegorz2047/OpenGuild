@@ -31,8 +31,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
+import pl.grzegorz2047.openguild2047.api.Cuboid;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
@@ -65,6 +67,12 @@ public class CreateArg {
                             sg.setLeader(p.getName());
                             sg.setHome(p.getLocation());
                             sg.addMember(p.getName());
+                            SimpleCuboid c = new SimpleCuboid();
+                            c.setOwner(clantag);
+                            c.setRadius(GenConf.MIN_CUBOID_RADIUS);
+                            c.setCenter(p.getLocation());
+                            //TODO: dodac jakies dane o cuboidzie
+                            Data.getInstance().cuboids.put(clantag, c);
                             if(args.length>2){
                                 sg.setDescription(GenUtil.argsToString(args, 2, args.length));
                             }else{
