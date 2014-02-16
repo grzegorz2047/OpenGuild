@@ -27,6 +27,7 @@ package pl.grzegorz2047.openguild2047;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import pl.grzegorz2047.openguild2047.api.Cuboid;
 
 /**
  *
@@ -38,6 +39,9 @@ public class Data {
     public HashMap<String, SimplePlayerGuild> guildsplayers;
     public List<String> ClansTag;
     static Data instance;
+    //Test mojego pomysłu z cuboidami
+    // <tag gildii,obiekt>
+    public HashMap<String, Cuboid> cuboids;
     
     public Data() {
         this.guilds = new HashMap<String,SimpleGuild>();
