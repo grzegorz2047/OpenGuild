@@ -52,11 +52,12 @@ public class DisbandArg {
             SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
             String tag = sg.getTag();
             if(sg.getLeader().equals(p.getName())){
+                saveDb(Guilds.getGuild(p));
                 for(String player : sg.getMembers()){
                     NametagAPI.resetNametag(player);
                     Data.getInstance().guildsplayers.remove(player);
                 }
-                saveDb(Guilds.getGuild(p));
+                
                 Data.getInstance().guildsplayers.remove(p.getName());
                 Data.getInstance().ClansTag.remove(tag);
                 Data.getInstance().guilds.remove(tag);
@@ -76,8 +77,8 @@ public class DisbandArg {
         
     }
     
-    private static void saveDb(Guild guld) {
-        MySQLHandler.delete(guld);
+    private static void saveDb(Guild guild) {
+        MySQLHandler.delete(guild);
     }
     
 }

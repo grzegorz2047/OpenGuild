@@ -78,10 +78,16 @@ public class GenUtil {
             try{
                 Material material = Material.getMaterial(splits[0]);
                 if(material == null){
-                    material = Material.getMaterial(Integer.parseInt(splits[0]));
-                    if(material == null){
-                        Guilds.getLogger().severe("Material "+splits[0]+" w ilosci "+splits[1]+" jest niepoprawny");
-                        continue;
+                    try {
+                      material = Material.getMaterial(Integer.parseInt(splits[0]));
+                    } catch (Exception e) {
+                        material = Material.matchMaterial(splits[0]);
+
+                        if ((material == null) || (!material.isBlock())) {
+                          Guilds.getLogger().severe("Material "+splits[0]+" w ilosci "+splits[1]+" jest niewlasciwy!");
+                          continue;
+
+                        }
                     }
                 } 
                 int amount = Integer.parseInt(splits[1]);
