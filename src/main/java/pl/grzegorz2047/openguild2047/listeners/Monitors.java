@@ -27,6 +27,10 @@ public class Monitors implements Listener {
                     if(Data.getInstance().isPlayerInGuild(e.getPlayer().getName())){
                         NametagAPI.setPrefix(e.getPlayer().getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(e.getPlayer().getName()).getTag() +  "§r ");
                         
+                    }else{
+                        if(NametagAPI.hasCustomNametag(e.getPlayer().getName())){
+                            NametagAPI.resetNametag(e.getPlayer().getName());
+                        }
                     }
                 }
 	}

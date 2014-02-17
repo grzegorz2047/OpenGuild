@@ -37,9 +37,7 @@ public class PlayerQuit implements Listener{
     
     @EventHandler
     void onQuit(PlayerQuitEvent e){
-        if(NametagAPI.hasCustomNametag(e.getPlayer().getName())){
-         NametagAPI.resetNametag(e.getPlayer().getName());
-        }
+
     }
     
 }
