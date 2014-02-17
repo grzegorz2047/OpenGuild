@@ -40,61 +40,61 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  */
 public class JoinArg {
     
-        public static boolean execute(CommandSender sender, String[] args){
-            if(!(sender instanceof Player)){
-                sender.sendMessage(MsgManager.cmdonlyforplayer);
-                return false;
-            }
-            Player p = (Player) sender;
-            if(args.length>=2){
-                if(!Data.getInstance().isPlayerInGuild(p.getName())){
-                    //TODO: System zapraszania do gildii
-                    String tag = args[1];
-                    if(Data.getInstance().guilds.containsKey(tag)){
-                        SimpleGuild sg = Data.getInstance().guilds.get(tag);
-                        if(sg.getInvitedPlayers().contains(p.getName())){
-                            SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
-                            Data.getInstance().guilds.put(sg.getTag(), sg);
-                            Data.getInstance().ClansTag.add(sg.getTag());
-                            Data.getInstance().guildsplayers.put(p.getName(), spg);
-                            sg.addMember(p.getName());
-                            if(GenConf.playerprefixenabled){
-                                if(NametagAPI.hasCustomNametag(p.getName())){
-                                    NametagAPI.resetNametag(p.getName());
-                                }
-                                NametagAPI.setPrefix(p.getName(), GenConf.colortagu + spg.getClanTag() +  "§r ");
-                                p.sendMessage(GenConf.prefix+MsgManager.guildjoinsuccess);
+    public static boolean execute(CommandSender sender, String[] args){
+        if(!(sender instanceof Player)){
+            sender.sendMessage(MsgManager.cmdonlyforplayer);
+            return false;
+        }
+        Player p = (Player) sender;
+        if(args.length>=2){
+            if(!Data.getInstance().isPlayerInGuild(p.getName())){
+                //TODO: System zapraszania do gildii
+                String tag = args[1];
+                if(Data.getInstance().guilds.containsKey(tag)){
+                    SimpleGuild sg = Data.getInstance().guilds.get(tag);
+                    if(sg.getInvitedPlayers().contains(p.getName())){
+                        SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
+                        Data.getInstance().guilds.put(sg.getTag(), sg);
+                        Data.getInstance().ClansTag.add(sg.getTag());
+                        Data.getInstance().guildsplayers.put(p.getName(), spg);
+                        sg.addMember(p.getName());
+                        if(GenConf.playerprefixenabled){
+                            if(NametagAPI.hasCustomNametag(p.getName())){
+                                NametagAPI.resetNametag(p.getName());
                             }
-                            return true;
-                        }else{
-                            p.sendMessage(GenConf.prefix+MsgManager.playernotinvited);
-                            Player leader = Bukkit.getPlayer(sg.getLeader());
-                            if(leader!=null){
-                                if(leader.isOnline()){
-                                    leader.sendMessage(GenConf.prefix+MsgManager.askforinvite+" "+p.getName());
-                                    return false;//Mozna tu wiele dodac np. dodawanie do listy oczekujacych
-                                    //albo dodawanie blokowanych osob, ktore spamia zaproszeniami
-                                    //to moglby wykonywac lider
-                                    //Lista oczekujacych wyswietlana przy wejsciu na serwer
-                                    
-                                }
-                            }
-                            p.sendMessage("Aktualnie nie ma lidera na serwerze!");
-                            return false;
+                            NametagAPI.setPrefix(p.getName(), GenConf.colortagu + spg.getClanTag() +  "§r ");
+                            p.sendMessage(GenConf.prefix+MsgManager.guildjoinsuccess);
                         }
+                        return true;
                     }else{
+                        p.sendMessage(GenConf.prefix+MsgManager.playernotinvited);
+                        Player leader = Bukkit.getPlayer(sg.getLeader());
+                        if(leader!=null){
+                            if(leader.isOnline()){
+                                leader.sendMessage(GenConf.prefix+MsgManager.askforinvite+" "+p.getName());
+                                return false;//Mozna tu wiele dodac np. dodawanie do listy oczekujacych
+                                //albo dodawanie blokowanych osob, ktore spamia zaproszeniami
+                                //to moglby wykonywac lider
+                                //Lista oczekujacych wyswietlana przy wejsciu na serwer
+
+                            }
+                        }
+                        p.sendMessage("Aktualnie nie ma lidera na serwerze!");
                         return false;
                     }
-                    
                 }else{
-                    p.sendMessage(GenConf.prefix+MsgManager.alreadyinguild);
                     return false;
-                } 
-            }else{
-                p.sendMessage(GenConf.prefix+MsgManager.wrongcmdargument);
-                return false;
-            }
+                }
 
+            }else{
+                p.sendMessage(GenConf.prefix+MsgManager.alreadyinguild);
+                return false;
+            } 
+        }else{
+            p.sendMessage(GenConf.prefix+MsgManager.wrongcmdargument);
+            return false;
         }
+
+    }
     
 }

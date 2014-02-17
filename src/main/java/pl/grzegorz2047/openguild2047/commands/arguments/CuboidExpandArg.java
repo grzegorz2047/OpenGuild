@@ -30,7 +30,7 @@ import org.bukkit.command.CommandSender;
  *
  * @author Grzegorz
  */
-public class ExpandArg {
+public class CuboidExpandArg {
         public static boolean execute(CommandSender sender, String[] args){
             //Musi sprawdzac czy ktos nie ma niedaleko gildii, bo wtedy sie nalozy, wiec jak blisko to sory.
             //Moze jakies koszty za powiekszenie o 1 albo iles kratek
