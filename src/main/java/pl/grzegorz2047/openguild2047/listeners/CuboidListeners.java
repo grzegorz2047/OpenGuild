@@ -31,9 +31,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import pl.grzegorz2047.openguild2047.Data;
 
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.api.Guilds;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 
 public class CuboidListeners implements Listener {
 	
@@ -63,17 +65,21 @@ public class CuboidListeners implements Listener {
 	}
 	
 	private boolean isAllowed(Player player, Location location) {
-		if(Guilds.getCuboid().isinCuboid(location)) {
-			if(Guilds.getGuild(player) != null) {
-				if(Guilds.getCuboid().getOwner().equals(Guilds.getGuild(player).getTag())) {
-					return true;
-				}
-			}
-			player.sendMessage(ChatColor.RED + "Nie mozesz budowac na terenie obecej gildii.");
-			return false;
-		} else {
-			return true;
-		}
+            if(CuboidStuff.checkIfInAnyCuboid(Data.getInstance().cuboids.entrySet().iterator(), location)) {
+                if(Data.getInstance().isPlayerInGuild(player.getName())) {
+                    String tag = Data.getInstance().getPlayersGuild(player.getName()).getTag();
+                    if(Data.getInstance().cuboids.get(tag).isinCuboid(location)) {
+                        return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
+                    }else{
+                        player.sendMessage(ChatColor.RED + "Nie mozesz budowac na terenie obecej gildii.");
+                        return false;
+                    }   
+                }else{
+                   return false;
+                }
+            }else{
+                return true;
+            }
 	}
 	
 }

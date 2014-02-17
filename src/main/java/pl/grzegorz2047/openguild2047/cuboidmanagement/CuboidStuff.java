@@ -53,7 +53,7 @@ public class CuboidStuff {
             return !CuboidStuff.checkIfInAnyCuboid(it,to);
         }
     }
-    private static boolean checkIfInAnyCuboid(Iterator<Map.Entry<String, SimpleCuboid>> it, Location to){
+    public static boolean checkIfInAnyCuboid(Iterator<Map.Entry<String, SimpleCuboid>> it, Location to){
         while(it.hasNext()){
             if(it.next().getValue().isinCuboid(to)){
                 return true;
