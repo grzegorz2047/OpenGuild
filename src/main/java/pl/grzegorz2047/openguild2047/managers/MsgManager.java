@@ -54,4 +54,5 @@ public class MsgManager {
     public static String guilddisbandsuccess = "Pomyslnie usunieto gildie!";
     public static String gildtocloseothers = "Nie mozesz tworzyc gildii blisko innej gildii!";
     public static String playerstooclose = "Nie mozesz stworzyc gildii blisko innych graczy!";
+    public static String guildexists = "Gildia o takiej nazwie juz istnieje!";
 }

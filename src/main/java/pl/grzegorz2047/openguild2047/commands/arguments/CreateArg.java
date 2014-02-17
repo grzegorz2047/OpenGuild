@@ -59,71 +59,76 @@ public class CreateArg {
             return false;
         }
         Player p = (Player) sender;
-        if(!Data.getInstance().isPlayerInGuild(p.getName())){
-            if(clantag.matches("[0-9a-zA-Z]*")){
-                if(clantag.length()<=GenConf.maxclantag && clantag.length()>=GenConf.minclantag){
-                    if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)){
-                        if(GenUtil.hasEnoughItemsForGuild(p.getInventory())){
-                            if(CuboidStuff.checkIfCuboidFarForGuild(p.getLocation())){//Nakładanie się cuboidów jest 
-                                if(GenUtil.checkIfPlayersNearby(p, GenConf.MIN_CUBOID_RADIUS)){
-                                    //Sprawdz czy gildia istnieje
-                                    GenUtil.removeRequiredItemsForGuild(p.getInventory());
-                                    SimpleGuild sg = new SimpleGuild(clantag);
-                                    sg.setLeader(p.getName());
-                                    sg.setHome(p.getLocation());
-                                    sg.addMember(p.getName());
-                                    SimpleCuboid c = new SimpleCuboid();
-                                    c.setOwner(clantag);
-                                    c.setRadius(GenConf.MIN_CUBOID_RADIUS);
-                                    c.setCenter(p.getLocation());
-                                    //TODO: dodac jakies dane o cuboidzie w mysql
-                                    Data.getInstance().cuboids.put(clantag, c);
-                                    if(args.length>2){
-                                        sg.setDescription(GenUtil.argsToString(args, 2, args.length));
+        if(Data.getInstance().guilds.containsKey(clantag)){
+            if(!Data.getInstance().isPlayerInGuild(p.getName())){
+                if(clantag.matches("[0-9a-zA-Z]*")){
+                    if(clantag.length()<=GenConf.maxclantag && clantag.length()>=GenConf.minclantag){
+                        if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)){
+                            if(GenUtil.hasEnoughItemsForGuild(p.getInventory())){
+                                if(CuboidStuff.checkIfCuboidFarForGuild(p.getLocation())){//Nakładanie się cuboidów jest 
+                                    if(GenUtil.checkIfPlayersNearby(p, GenConf.MIN_CUBOID_RADIUS)){
+                                        GenUtil.removeRequiredItemsForGuild(p.getInventory());
+                                        SimpleGuild sg = new SimpleGuild(clantag);
+                                        sg.setLeader(p.getName());
+                                        sg.setHome(p.getLocation());
+                                        sg.addMember(p.getName());
+                                        SimpleCuboid c = new SimpleCuboid();
+                                        c.setOwner(clantag);
+                                        c.setRadius(GenConf.MIN_CUBOID_RADIUS);
+                                        c.setCenter(p.getLocation());
+                                        //TODO: dodac jakies dane o cuboidzie w mysql
+                                        Data.getInstance().cuboids.put(clantag, c);
+                                        if(args.length>2){
+                                            sg.setDescription(GenUtil.argsToString(args, 2, args.length));
+                                        }else{
+                                            sg.setDescription("Domyslny opis gildii :<");
+                                        }
+                                        SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
+                                        Data.getInstance().guilds.put(sg.getTag(), sg);
+                                        Data.getInstance().ClansTag.add(sg.getTag());
+                                        Data.getInstance().guildsplayers.put(p.getName(), spg);
+                                        if(NametagAPI.hasCustomNametag(p.getName())){
+                                            NametagAPI.resetNametag(p.getName());
+                                        }
+                                        saveToDb(clantag, GenUtil.argsToString(args, 2, args.length), p.getName(), p.getLocation());
+                                        NametagAPI.setPrefix(p.getName(), "§6" + spg.getClanTag() +  "§r ");//Cos ten nametag bladzi, ale dziala dziwne
+                                        Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
+                                        p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
+                                        return true;
                                     }else{
-                                        sg.setDescription("Domyslny opis gildii :<");
+                                        p.sendMessage(GenConf.prefix+MsgManager.playerstooclose);
+                                        return false;
                                     }
-                                    SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
-                                    Data.getInstance().guilds.put(sg.getTag(), sg);
-                                    Data.getInstance().ClansTag.add(sg.getTag());
-                                    Data.getInstance().guildsplayers.put(p.getName(), spg);
-                                    if(NametagAPI.hasCustomNametag(p.getName())){
-                                        NametagAPI.resetNametag(p.getName());
-                                    }
-                                    saveToDb(clantag, GenUtil.argsToString(args, 2, args.length), p.getName(), p.getLocation());
-                                    NametagAPI.setPrefix(p.getName(), "§6" + spg.getClanTag() +  "§r ");//Cos ten nametag bladzi, ale dziala dziwne
-                                    Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
-                                    p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
-                                    return true;
                                 }else{
-                                    p.sendMessage(GenConf.prefix+MsgManager.playerstooclose);
+                                    p.sendMessage(GenConf.prefix+MsgManager.gildtocloseothers);
                                     return false;
                                 }
+
                             }else{
-                                p.sendMessage(GenConf.prefix+MsgManager.gildtocloseothers);
+                                p.sendMessage(GenConf.prefix+MsgManager.notenoughitems);
                                 return false;
                             }
-                            
                         }else{
-                            p.sendMessage(GenConf.prefix+MsgManager.notenoughitems);
+                            p.sendMessage(GenConf.prefix+MsgManager.illegaltag);
                             return false;
                         }
                     }else{
-                        p.sendMessage(GenConf.prefix+MsgManager.illegaltag);
+                        p.sendMessage(GenConf.prefix+MsgManager.toolongshorttag);
                         return false;
                     }
                 }else{
-                    p.sendMessage(GenConf.prefix+MsgManager.toolongshorttag);
+                    p.sendMessage(GenConf.prefix+MsgManager.usupportedchars);
                     return false;
                 }
             }else{
-                p.sendMessage(GenConf.prefix+MsgManager.usupportedchars);
+                p.sendMessage(GenConf.prefix+MsgManager.alreadyinguild);
                 return false;
             }
         }else{
-            p.sendMessage(GenConf.prefix+MsgManager.alreadyinguild);
+            p.sendMessage(GenConf.prefix+MsgManager.guildexists);
             return false;
         }
+        
     }
     
     private static void saveToDb(String tag, String description, String leader, Location home) {
