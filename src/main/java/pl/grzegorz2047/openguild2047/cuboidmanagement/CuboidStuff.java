@@ -67,7 +67,7 @@ public class CuboidStuff {
             SimpleCuboid c = it.next().getValue();
             Location loc1 = c.getCenter();
             double distance = loc1.distance(loc);
-            if(distance < (c.getRadius()*2))//Totalne uproszczenie, bo juz nie wyrabialem
+            if(distance <= (c.getRadius()*2))//Totalne uproszczenie, bo juz nie wyrabialem
                 return true; 
         }
         return false;

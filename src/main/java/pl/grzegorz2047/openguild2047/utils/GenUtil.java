@@ -146,21 +146,18 @@ public class GenUtil {
         return sb.toString();
     }
     
-    public static boolean checkIfPlayersNearby(Player p, int radius){//Znaleziony kod
+    public static boolean isPlayerNearby(Player p, int radius){//Znaleziony kod
         Location l = p.getLocation();
-        int chunkRadius = radius < 16 ? 1 : (radius - (radius % 16)) / 16;
-
-        for (int chX = 0 - chunkRadius; chX <= chunkRadius; chX++) {
-            for (int chZ = 0 - chunkRadius; chZ <= chunkRadius; chZ++) {
-                int x = (int) l.getX(), y = (int) l.getY(), z = (int) l.getZ();
-                for (Entity e: new Location(l.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities()) {
-                    if (e.getLocation().distance(l) <= radius && e.getLocation().getBlock() != l.getBlock()){
-                        if(e instanceof Player){
-                            return true;
-                        }
-                    }
-
-                }
+        for(Player player : p.getLocation().getWorld().getPlayers()){
+            if(p.equals(player)){
+                continue;
+            }
+            double distance = l.distance(player.getLocation());
+            if(distance <= radius ){
+                System.out.println(distance);
+                return true;
+            }else{
+                System.out.println("Daleko "+distance);
             }
         }
         return false;

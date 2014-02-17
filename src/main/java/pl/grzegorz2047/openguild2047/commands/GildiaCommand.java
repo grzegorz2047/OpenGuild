@@ -45,6 +45,11 @@ public class GildiaCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(command.getName().equalsIgnoreCase("gildia")) {
             if(args.length>0){
+                if(args.length>=2) {
+                    if(args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
+                        return CreateArg.execute(sender, args);
+                    }
+                }
                 if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
                     return HelpArg.execute(sender, 1);
                 }
@@ -60,14 +65,6 @@ public class GildiaCommand implements CommandExecutor {
                 if(args[0].equalsIgnoreCase("rozwiaz")){
                     return DisbandArg.execute(sender);
                 }
-                if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
-                    try {
-                        return HelpArg.execute(sender, Integer.valueOf(args[1]));
-                    } catch(NumberFormatException ex) {
-                        sender.sendMessage(ChatColor.RED + "Musisz podac liczbe!");
-                        return true;
-                    }
-                }
                 if(args[0].equalsIgnoreCase("dom")){
                     return HomeArg.execute(sender,args);
                 }
@@ -77,9 +74,13 @@ public class GildiaCommand implements CommandExecutor {
                 if(args[0].equalsIgnoreCase("opis")){
                     return DescriptionArg.execute(sender, args);
                 }
-                if(args.length>=2) {
-                    if(args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
-                        return CreateArg.execute(sender, args);
+
+                if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
+                    try {
+                        return HelpArg.execute(sender, Integer.valueOf(args[1]));
+                    } catch(NumberFormatException ex) {
+                        sender.sendMessage(ChatColor.RED + "Musisz podac liczbe!");
+                        return true;
                     }
                 }
                // else {

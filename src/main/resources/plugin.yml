@@ -9,4 +9,3 @@ commands:
   gildia:
     description: Komendy zwiazane z gildiami
     aliases: [g]
-    usage: /gildia help, aby uzyskac pomoc

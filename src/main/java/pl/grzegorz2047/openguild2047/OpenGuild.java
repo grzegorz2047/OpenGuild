@@ -36,10 +36,12 @@ https://forums.bukkit.org/threads/protection-region-cuboid-creation.164161/
 
 package pl.grzegorz2047.openguild2047;
 
+import ca.wacos.nametagedit.NametagAPI;
 import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -51,6 +53,7 @@ import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
 import pl.grzegorz2047.openguild2047.listeners.Monitors;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
+import pl.grzegorz2047.openguild2047.listeners.PlayerQuit;
 
 /**
  *
@@ -86,7 +89,11 @@ public class OpenGuild extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        //super.onDisable(); //To change body of generated methods, choose Tools | Templates.
+        for(Player p: Bukkit.getOnlinePlayers()){
+            if(NametagAPI.hasCustomNametag(p.getName())){
+                NametagAPI.resetNametag(p.getName());
+            }
+        }
         
         // Usuwanie wszystkich plikow ktore nie posidaja formatu .log (logger tworzy duzo plikow roboczych)
         int logFiles = 0;
@@ -150,8 +157,10 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new CuboidListeners(), this);
         pm.registerEvents(new PlayerChat(), this);
         pm.registerEvents(new PlayerMove(), this);
+        pm.registerEvents(new PlayerQuit(), this);
         pm.registerEvents(new Monitors(), this);
         pm.registerEvents(new EntityDamageByEntity(), this);
+
     }
     
     public static OpenGuild get() {
