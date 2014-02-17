@@ -22,28 +22,33 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.api;
+package pl.grzegorz2047.openguild2047.commands.arguments;
 
-import javax.annotation.Nonnull;
-import org.bukkit.Location;
-import pl.grzegorz2047.openguild2047.SimpleCuboid;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  *
  * @author Grzegorz
  */
-public interface Cuboid {
+public class JoinArg {
     
-    @Nonnull Location getCenter();
-    @Nonnull int getRadius();
-    @Nonnull String getOwner();
-    @Nonnull Location getMin();
-    @Nonnull Location getMax();
-    @Nonnull boolean isinCuboid(@Nonnull Location loc);
-    
-    @Nonnull void setCenter(@Nonnull Location center);
-    @Nonnull void setRadius(@Nonnull int radius);
-    @Nonnull void setOwner(@Nonnull String tag);
-    
+        public static boolean execute(CommandSender sender, String[] args){
+            if(!(sender instanceof Player)){
+                sender.sendMessage(MsgManager.cmdonlyforplayer);
+                return false;
+            }
+            Player p = (Player) sender;
+            if(!Data.getInstance().isPlayerInGuild(p.getName())){
+                //TODO: System zapraszania do gildii
+                return true;
+            }else{
+                p.sendMessage(GenConf.prefix+MsgManager.alreadyinguild);
+                return false;
+            }
+        }
     
 }

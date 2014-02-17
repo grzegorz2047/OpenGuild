@@ -25,8 +25,10 @@
 package pl.grzegorz2047.openguild2047;
 
 import org.bukkit.Location;
+import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 import pl.grzegorz2047.openguild2047.api.Cuboid;
+import pl.grzegorz2047.openguild2047.api.Guilds;
 
 /**
  *
@@ -41,7 +43,7 @@ public class SimpleCuboid implements Cuboid{
     
     @Override
     public Location getCenter() {
-        return this.getCenter();
+        return this.center;
     }
 
     @Override

@@ -29,6 +29,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.api.Cuboid;
 
 /**
@@ -39,7 +40,7 @@ public class CuboidStuff {
     
     public static boolean canMove(Player player, Location from, Location to){
         //To tylko jest proba, moze sie uda xd
-        Iterator<Map.Entry<String, Cuboid>> it = Data.getInstance().cuboids.entrySet().iterator();
+        Iterator<Map.Entry<String, SimpleCuboid>> it = Data.getInstance().cuboids.entrySet().iterator();
         if(Data.getInstance().isPlayerInGuild(player.getName())){
             String tag = Data.getInstance().getPlayersGuild(player.getName()).getTag();
             if(Data.getInstance().cuboids.get(tag).isinCuboid(to)){
@@ -52,17 +53,28 @@ public class CuboidStuff {
             return !CuboidStuff.checkIfInAnyCuboid(it,to);
         }
     }
-    private static boolean checkIfInAnyCuboid(Iterator<Map.Entry<String, Cuboid>> it, Location to){
+    private static boolean checkIfInAnyCuboid(Iterator<Map.Entry<String, SimpleCuboid>> it, Location to){
         while(it.hasNext()){
             if(it.next().getValue().isinCuboid(to)){
                 return true;
+                
             }
         }
         return false;
     }
+    private static boolean checkCuboidInAnyCuboid(Iterator<Map.Entry<String, SimpleCuboid>> it, Location loc){
+        while(it.hasNext()){
+            SimpleCuboid c = it.next().getValue();
+            Location loc1 = c.getCenter();
+            double distance = loc1.distance(loc);
+            if(distance < (c.getRadius()*2))//Totalne uproszczenie, bo juz nie wyrabialem
+                return true; 
+        }
+        return false;
+    }
     public static boolean checkIfCuboidFarForGuild(Location loc){
-        Iterator<Map.Entry<String, Cuboid>> it = Data.getInstance().cuboids.entrySet().iterator();
-        return !CuboidStuff.checkIfInAnyCuboid(it, loc);
+        Iterator<Map.Entry<String, SimpleCuboid>> it = Data.getInstance().cuboids.entrySet().iterator();
+        return !CuboidStuff.checkCuboidInAnyCuboid(it, loc);
     }
     
 }

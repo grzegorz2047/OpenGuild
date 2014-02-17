@@ -41,13 +41,13 @@ public class Data {
     static Data instance;
     //Test mojego pomysłu z cuboidami
     // <tag gildii,obiekt>
-    public HashMap<String, Cuboid> cuboids;
+    public HashMap<String, SimpleCuboid> cuboids;
     
     public Data() {
         this.guilds = new HashMap<String,SimpleGuild>();
         this.ClansTag = new ArrayList<String>();
         this.guildsplayers = new HashMap<String, SimplePlayerGuild>();
-        this.cuboids = new HashMap<String, Cuboid>();
+        this.cuboids = new HashMap<String, SimpleCuboid>();
     }
     
     
