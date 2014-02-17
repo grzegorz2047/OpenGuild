@@ -91,7 +91,7 @@ public class CreateArg {
                                             if(NametagAPI.hasCustomNametag(p.getName())){
                                                 NametagAPI.resetNametag(p.getName());
                                             }
-                                            NametagAPI.setPrefix(p.getName(), "§6" + spg.getClanTag() +  "§r ");
+                                            NametagAPI.setPrefix(p.getName(), GenConf.colortagu + spg.getClanTag() +  "§r ");
                                         }
 
                                         saveToDb(clantag, GenUtil.argsToString(args, 2, args.length), p.getName(), p.getLocation());
