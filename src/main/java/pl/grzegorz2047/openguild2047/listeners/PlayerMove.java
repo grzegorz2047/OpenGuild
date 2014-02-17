@@ -27,6 +27,7 @@ package pl.grzegorz2047.openguild2047.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 
 /**
@@ -37,9 +38,14 @@ public class PlayerMove implements Listener {
 
     @EventHandler
     void onPlayerMove(PlayerMoveEvent e){
+        if(e.isCancelled()){
+            return;
+        }
+        if(GenConf.CANENTERAREA){
+            return;
+        }
         if(!CuboidStuff.canMove(e.getPlayer(), e.getFrom(), e.getTo())){
-            e.setCancelled(true);//TODO: Bedzie mozliwosc ustawienia czy bedzie blokowac 
-            //wchodzenie czy blokowac interakcje itd.
+            e.setCancelled(true);
         }
     }
 }

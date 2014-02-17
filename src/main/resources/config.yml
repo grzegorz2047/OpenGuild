@@ -9,6 +9,10 @@ cuboid:
   min-radius: 15
   # Maksymalny promien cuboida po powiekszaniu (/gildia powieksz)
   max-radius: 50
+  #Czy ma blokowac wchodzenie na teren gildii przez osoby spoza gildii i sojuszników
+  canenterarea: true
+  #Czy osoby spoza gildii moge wchodzic w interakcje z przedmiotami np. skrzynki, piecyki itd.
+  extra-protection: true
 mysql:
   # Twoj adres bazy danych
   adres: localhost
@@ -18,6 +22,7 @@ mysql:
   login: root
   # Twoje haslo do bazy danych
   haslo: password
+playerprefixtag: true
 kolortagugildii: '&6'
 #Zasada odczytu do ogarniecia id:ilosc:byte
 #Albo kompatybilnie z nowymi wersjami Minecrafta to MATERIAL:ilosc:byte

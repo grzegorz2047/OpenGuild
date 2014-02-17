@@ -80,7 +80,7 @@ public class GenUtil {
                 if(material == null){
                     try {
                       material = Material.getMaterial(Integer.parseInt(splits[0]));
-                    } catch (Exception e) {
+                    } catch (NumberFormatException e) {
                         material = Material.matchMaterial(splits[0]);
 
                         if ((material == null) || (!material.isBlock())) {

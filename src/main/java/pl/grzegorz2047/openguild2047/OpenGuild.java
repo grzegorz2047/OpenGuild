@@ -136,6 +136,7 @@ public class OpenGuild extends JavaPlugin {
         GenConf.teampvp = this.getConfig().getBoolean("teampvp");
         GenConf.homecommand = this.getConfig().getBoolean("dom-command");
         GenConf.reqitems = this.getConfig().getStringList("WymaganePrzedmioty");
+        GenConf.playerprefixenabled = this.getConfig().getBoolean("playerprefixtag");
         GenConf.colortagu = this.getConfig().getString("kolortagugildii").replace('&', '§');
         if(GenConf.colortagu.length() > 2){
             Guilds.getLogger().severe("Kolor tagu moze skladac sie tylko z 2 znaków: & oraz znaku identyfikujacy kolor!");
