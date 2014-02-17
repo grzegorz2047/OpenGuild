@@ -52,8 +52,8 @@ public class Guilds {
 	 */
 	@Nullable public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
 	    SimplePlayerGuild guildPlayer = Data.getInstance().guildsplayers.get(player.getName());
-	    SimpleGuild guild = new SimpleGuild(guildPlayer.getClanTag());
-	    return getGuild(guild.getTag());
+	    SimpleGuild guild = Data.getInstance().guilds.get(guildPlayer.getClanTag());
+	    return guild;
 	}
 	
 	/**
@@ -63,7 +63,7 @@ public class Guilds {
 	 * @throws NullPointerException jezeli wskazana gildia nie istnieje
 	 */
 	@Nullable public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
-		Guild guild = new SimpleGuild(tag);
+		Guild guild = Data.getInstance().guilds.get(tag);
 		return guild;
 	}
 	
