@@ -36,13 +36,14 @@ import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class CuboidListeners implements Listener {
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
 		if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
-			e.setCancelled(true);
+			e.setCancelled(true);//Mozna dac tu, ze mozna niszczyc, ale to duzo zabiera wytrzymalosc diamentowego kilofa
 		}
 	}
 	
@@ -71,7 +72,7 @@ public class CuboidListeners implements Listener {
                     if(Data.getInstance().cuboids.get(tag).isinCuboid(location)) {
                         return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
                     }else{
-                        player.sendMessage(ChatColor.RED + "Nie mozesz budowac na terenie obecej gildii.");
+                        player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
                         return false;
                     }   
                 }else{

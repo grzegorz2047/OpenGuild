@@ -24,6 +24,7 @@
 
 package pl.grzegorz2047.openguild2047.managers;
 
+import org.bukkit.ChatColor;
 import pl.grzegorz2047.openguild2047.GenConf;
 
 /**
@@ -35,7 +36,7 @@ public class MsgManager {
     public static String createguildsuccess = "Gildia zostala pomysnie stworzona.";
     public static String cmdonlyforplayer = "Komenda jedynie dla graczy na serwerze!";
     public static String alreadyinguild = "Aby stworzyc nowa gildie musisz najpierw opuscic aktualna!";
-    public static String usupportedchars = "Nazwa gildii moze zawierac jedynie znaki z tego zakresu [0-9a-zA-Z]";
+    public static String unsupportedchars = "Nazwa gildii moze zawierac jedynie znaki z tego zakresu [0-9a-zA-Z]";
     public static String toolongshorttag = "Twoja nazwa gildii jest za dluga badz za krotka!"
             + "\n min. ilosc: "+GenConf.minclantag
             + "\n max. ilosc: "+GenConf.maxclantag;
@@ -55,4 +56,8 @@ public class MsgManager {
     public static String gildtocloseothers = "Nie mozesz tworzyc gildii blisko innej gildii!";
     public static String playerstooclose = "Nie mozesz stworzyc gildii blisko innych graczy!";
     public static String guildexists = "Gildia o takiej nazwie juz istnieje!";
+    public static String cantdoitonsomeonearea = "Nie mozesz budowac na terenie obcej gildii.";
+    public static String guildjoinsuccess = "Pomyslnie dolaczyles do gildii";
+    public static String playernotinvited = "Nie jestes zaproszony! Wysylam zapytanie do lidera!";
+    public static String askforinvite = "Gracz prosi o zaproszenie do gildii. Nick:";
 }

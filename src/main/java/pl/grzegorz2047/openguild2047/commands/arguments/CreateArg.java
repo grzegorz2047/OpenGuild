@@ -121,7 +121,7 @@ public class CreateArg {
                         return false;
                     }
                 }else{
-                    p.sendMessage(GenConf.prefix+MsgManager.usupportedchars);
+                    p.sendMessage(GenConf.prefix+MsgManager.unsupportedchars);
                     return false;
                 }
             }else{
