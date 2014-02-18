@@ -69,6 +69,7 @@ public class JoinArg {
                     }else{
                         p.sendMessage(GenConf.prefix+MsgManager.playernotinvited);
                         Player leader = Bukkit.getPlayer(sg.getLeader());
+                        sg.getInvitedPlayers().add(p.getName());
                         if(leader!=null){
                             if(leader.isOnline()){
                                 leader.sendMessage(GenConf.prefix+MsgManager.askforinvite+" "+p.getName());
@@ -79,10 +80,11 @@ public class JoinArg {
 
                             }
                         }
-                        p.sendMessage("Aktualnie nie ma lidera na serwerze!");
+                        p.sendMessage(GenConf.prefix+MsgManager.leadernotonline);
                         return false;
                     }
                 }else{
+                    p.sendMessage(GenConf.prefix+MsgManager.guilddoesntexists);
                     return false;
                 }
 

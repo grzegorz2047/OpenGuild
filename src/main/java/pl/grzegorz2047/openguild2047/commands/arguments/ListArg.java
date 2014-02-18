@@ -64,6 +64,8 @@ public class ListArg {
                 return false;
             }
 
+        }else{
+            p.sendMessage(GenConf.prefix+MsgManager.notinguild);
         }
         
         return false;

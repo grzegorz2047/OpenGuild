@@ -22,21 +22,12 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.listeners;
-
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
+package pl.grzegorz2047.openguild2047.commands.arguments;
 
 /**
  *
  * @author Grzegorz
  */
-public class PlayerQuit implements Listener{
-    
-    @EventHandler
-    void onQuit(PlayerQuitEvent e){
-
-    }
-    
+public class DeclineArg {
+    //Brak akceptacji zaproszenia
 }

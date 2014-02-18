@@ -60,4 +60,9 @@ public class MsgManager {
     public static String guildjoinsuccess = "Pomyslnie dolaczyles do gildii";
     public static String playernotinvited = "Nie jestes zaproszony! Wysylam zapytanie do lidera!";
     public static String askforinvite = "Gracz prosi o zaproszenie do gildii. Nick:";
+    public static String invitedplayersuccessfullyjoined = "Gracz pomyslnie dolaczyl do twojej gildii!";
+    public static String guildinviteaccepted = "twoja prosba o dolaczenie zostala pomyslnie rozpatrzona!";
+    public static String playernotoninvitedlist = "Ten gracz nie jest na liscie zaproszonych!";
+    public static String guilddoesntexists = "Gildia do ktorej probujesz dolaczyc nie istnieje!";
+    public static String leadernotonline = "Lider aktualnie nie jest na serwerze!";
 }

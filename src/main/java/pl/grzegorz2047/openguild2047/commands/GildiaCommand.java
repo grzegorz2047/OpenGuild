@@ -29,11 +29,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.commands.arguments.AcceptArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.DescriptionArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.DisbandArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.HelpArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.HomeArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.JoinArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ListArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
@@ -49,6 +51,9 @@ public class GildiaCommand implements CommandExecutor {
                     if(args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                         return CreateArg.execute(sender, args);
                     }
+                    if(args[0].equalsIgnoreCase("akceptuj")){
+                        return AcceptArg.execute(sender, args);
+                    }
                 }
                 if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
                     return HelpArg.execute(sender, 1);
@@ -61,6 +66,9 @@ public class GildiaCommand implements CommandExecutor {
                 }
                 if(args[0].equalsIgnoreCase("opusc")) {
                     return LeaveArg.execute(sender);
+                }
+                if(args[0].equalsIgnoreCase("dolacz")) {
+                    return JoinArg.execute(sender, args);
                 }
                 if(args[0].equalsIgnoreCase("rozwiaz")){
                     return DisbandArg.execute(sender);

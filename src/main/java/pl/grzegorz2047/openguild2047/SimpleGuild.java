@@ -43,6 +43,7 @@ public class SimpleGuild implements Guild {
     
     public SimpleGuild(String tag) {
         this.members = new ArrayList<String>();
+        this.invitedplayers = new ArrayList<String>();
         this.allyguilds = new ArrayList<String>();
         this.enemyguilds = new ArrayList<String>();
         this.tag = tag;
