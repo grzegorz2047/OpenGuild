@@ -41,6 +41,7 @@ import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 import ca.wacos.nametagedit.NametagAPI;
+import pl.grzegorz2047.openguild2047.api.Guild;
 
 /**
  *
@@ -94,7 +95,7 @@ public class CreateArg {
                                             NametagAPI.setPrefix(p.getName(), GenConf.colortagu + spg.getClanTag() +  "§r ");
                                         }
 
-                                        saveToDb(clantag, GenUtil.argsToString(args, 2, args.length), p.getName(), p.getLocation());
+                                        saveToDb(clantag, sg.getDescription(), p.getName(), p.getLocation(), sg);
                                         
                                         Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
                                         p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
@@ -135,8 +136,9 @@ public class CreateArg {
         
     }
     
-    private static void saveToDb(String tag, String description, String leader, Location home) {
+    private static void saveToDb(String tag, String description, String leader, Location home, Guild g) {
         MySQLHandler.insert(tag, description, leader, null, home.getBlockX(), home.getBlockY(), home.getBlockZ(), GenConf.MIN_CUBOID_RADIUS);
+        MySQLHandler.insert(leader, g, 0, 0);
     }
     
 }

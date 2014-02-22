@@ -100,7 +100,7 @@ public class MySQLHandler {
 			stat = con.createStatement();
 			stat.execute("CREATE TABLE IF NOT EXISTS " + tableGuilds +
 					"(id INT AUTO_INCREMENT," +
-					"tag VARCHAR(4)," +
+					"tag VARCHAR(11)," +
 					"description VARCHAR(100)," +
 					"leader VARCHAR(16)," +
 					"sojusze VARCHAR(255)," +
@@ -133,7 +133,7 @@ public class MySQLHandler {
 	public static void delete(Guild guild) {
 		try {
 			stat = con.createStatement();
-			stat.execute("DELETE FROM " + tableGuilds + " WHERE tag='" + guild.getTag() + "');");
+			stat.execute("DELETE FROM " + tableGuilds + " WHERE tag='" + guild.getTag() + "';");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -142,7 +142,7 @@ public class MySQLHandler {
 	public static void delete(String player) {
 		try {
 			stat = con.createStatement();
-			stat.execute("DELETE FROM " + tablePlayers + " WHERE player_lower='" + player.toLowerCase() + "');");
+			stat.execute("DELETE FROM " + tablePlayers + " WHERE player_lower='" + player.toLowerCase() + "';");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -190,7 +190,7 @@ public class MySQLHandler {
 	public static void update(Guild guild, Type type, int value) {
 		try {
 			stat = con.createStatement();
-			stat.execute("UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE tag='" + guild.getTag() + "');");
+			stat.execute("UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE tag='" + guild.getTag() + "';");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -199,7 +199,7 @@ public class MySQLHandler {
 	public static void update(Guild guild, Type type, String value) {
 		try {
 			stat = con.createStatement();
-			stat.execute("UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE tag='" + guild.getTag() + "');");
+			stat.execute("UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE tag='" + guild.getTag() + "';");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -208,7 +208,7 @@ public class MySQLHandler {
 	public static void update(String player, PType type, int value) {
 		try {
 			stat = con.createStatement();
-			stat.execute("UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE player_lower=" + player.toLowerCase() + ");");
+			stat.execute("UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE player_lower=" + player.toLowerCase() + ";");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -217,7 +217,7 @@ public class MySQLHandler {
 	public static void update(String player, PType type, String value) {
 		try {
 			stat = con.createStatement();
-			stat.execute("UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE player_lower='" + player.toLowerCase() + "');");
+			stat.execute("UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE player_lower='" + player.toLowerCase() + "';");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}

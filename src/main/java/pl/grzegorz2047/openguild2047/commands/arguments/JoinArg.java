@@ -32,6 +32,9 @@ import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
+import pl.grzegorz2047.openguild2047.api.Guild;
+import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -64,6 +67,7 @@ public class JoinArg {
                             }
                             NametagAPI.setPrefix(p.getName(), GenConf.colortagu + spg.getClanTag() +  "§r ");
                             p.sendMessage(GenConf.prefix+MsgManager.guildjoinsuccess);
+                            savetodb(p.getName(),sg);
                         }
                         return true;
                     }else{
@@ -97,6 +101,10 @@ public class JoinArg {
             return false;
         }
 
+    }
+    
+    private static void savetodb(String Player, Guild g){
+        MySQLHandler.insert(Player, g, 0, 0);
     }
     
 }
