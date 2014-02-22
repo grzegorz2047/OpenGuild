@@ -30,7 +30,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -250,6 +252,13 @@ public class MySQLHandler {
                     SimpleGuild g = new SimpleGuild(tag);
                     g.setLeader(rs.getString("leader"));
                     g.setDescription(rs.getString("description"));
+                    Iterator<Map.Entry<String, SimplePlayerGuild>> it = Data.getInstance().guildsplayers.entrySet().iterator();
+                    while(it.hasNext()){
+                        SimplePlayerGuild spg = it.next().getValue();
+                        if(spg.getClanTag().equals(g.getTag())){
+                           g.addMember(spg.getPlayerName());
+                        }
+                    }
                     Location loc = new Location(Bukkit.getWorld(rs.getString("home_w")), rs.getInt("home_x"),rs.getInt("home_y"),rs.getInt("home_z"));
                     SimpleCuboid sc = new SimpleCuboid();
                     sc.setCenter(loc);
