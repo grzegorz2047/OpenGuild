@@ -29,6 +29,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -252,13 +253,7 @@ public class MySQLHandler {
                     SimpleGuild g = new SimpleGuild(tag);
                     g.setLeader(rs.getString("leader"));
                     g.setDescription(rs.getString("description"));
-                    Iterator<Map.Entry<String, SimplePlayerGuild>> it = Data.getInstance().guildsplayers.entrySet().iterator();
-                    while(it.hasNext()){
-                        SimplePlayerGuild spg = it.next().getValue();
-                        if(spg.getClanTag().equals(g.getTag())){
-                           g.addMember(spg.getPlayerName());
-                        }
-                    }
+                    g.setMembers(getGuildMembers(tag));
                     Location loc = new Location(Bukkit.getWorld(rs.getString("home_w")), rs.getInt("home_x"),rs.getInt("home_y"),rs.getInt("home_z"));
                     SimpleCuboid sc = new SimpleCuboid();
                     sc.setCenter(loc);
@@ -274,6 +269,26 @@ public class MySQLHandler {
             }
             return hm;
         }
+        
+        public static List<String> getGuildMembers(String tag){
+            try {
+                List<String> members = new ArrayList<String>();
+                stat = con.createStatement();
+                ResultSet rs = stat.executeQuery("SELECT player FROM "+ tablePlayers + " WHERE guild='" + tag + "';");
+                while(rs.next()){
+                    String p = rs.getString("player");
+                    members.add(p);
+                }
+                return members;
+            }
+            catch (SQLException ex) {
+                
+                java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+        }
+        
+         
         public static HashMap<String, SimplePlayerGuild> getAllPlayers(){
             HashMap hm = new HashMap<String, SimplePlayerGuild>();
             try {
@@ -288,11 +303,12 @@ public class MySQLHandler {
                     hm.put(player, sg);
                 }
             }
-            catch (SQLException ex) {
+            catch (SQLException ex) {       
                 java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
             }
             return hm;
         }
 
-	
+	 
 }

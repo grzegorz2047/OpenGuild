@@ -130,5 +130,10 @@ public class SimpleGuild implements Guild {
     public List<String> getEnemyGuilds() {
         return this.enemyguilds;
     }
+
+    @Override
+    public void setMembers(List<String> members) {
+        this.members = members;
+    }
 	
 }

@@ -83,6 +83,16 @@ public class OpenGuild extends JavaPlugin {
         Data.setDataInstance(pd);
         new MySQLHandler(address, database, login, password);
         getCommand("gildia").setExecutor(new GildiaCommand());
+        for(Player p : Bukkit.getOnlinePlayers()){
+            if(Data.getInstance().isPlayerInGuild(p.getName())){
+                NametagAPI.setPrefix(p.getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getName()).getTag() +  "§r ");
+
+            }else{
+                if(NametagAPI.hasCustomNametag(p.getName())){
+                    NametagAPI.resetNametag(p.getName());
+                }
+            }
+        }
         Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
         
     }
