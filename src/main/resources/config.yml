@@ -1,6 +1,6 @@
 # Wlacz/wylacz PvP pomiedzy czlonkami gildii
 teampvp: false
-# Wlacz/wylacz komende /dom
+# Wlacz/wylacz komende /gildia dom
 dom-command: true
 # Czas oczekiwania teleportacji do gildii (w sekundach)
 teleport-cooldown: 10
