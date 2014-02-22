@@ -104,7 +104,7 @@ public class JoinArg {
     }
     
     private static void savetodb(String Player, Guild g){
-        MySQLHandler.insert(Player, g, 0, 0);
+        MySQLHandler.update(Player, MySQLHandler.PType.GUILD, g.getTag());
     }
     
 }

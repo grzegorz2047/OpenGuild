@@ -22,7 +22,7 @@ public class Monitors implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		if(!e.getPlayer().hasPlayedBefore()) {
-			MySQLHandler.insert(e.getPlayer().getName(), null, 0, 0);
+			MySQLHandler.insert(e.getPlayer().getName(), null,"false", 0, 0);
 		}else{
                     if(Data.getInstance().isPlayerInGuild(e.getPlayer().getName())){
                         NametagAPI.setPrefix(e.getPlayer().getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(e.getPlayer().getName()).getTag() +  "§r ");

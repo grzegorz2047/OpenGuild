@@ -26,9 +26,18 @@ package pl.grzegorz2047.openguild2047.handlers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.SimpleCuboid;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
@@ -107,8 +116,9 @@ public class MySQLHandler {
 					"home_x INT," +
 					"home_y INT," +
 					"home_z INT," +
+                                        "home_w VARCHAR(16)" +
 					"cuboid_radius INT," +
-					"PRIMARY KEY(id));");
+					"PRIMARY KEY(id,tag));");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -121,10 +131,11 @@ public class MySQLHandler {
 					"(id INT AUTO_INCREMENT," +
 					"player VARCHAR(16)," +
 					"player_lower VARCHAR(16)," +
-					"guild VARCHAR(4)," +
+					"guild VARCHAR(11)," +
+                                        "isleader VARCHAR(5)" +
 					"kills INT," +
 					"deads INT," +
-					"PRIMARY KEY(id));");
+					"PRIMARY KEY(id,player));");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -148,7 +159,7 @@ public class MySQLHandler {
 		}
 	}
 	
-	public static void insert(String tag, String description, String leader, String sojusze, int homeX, int homeY, int homeZ, int cuboidRadius) {
+	public static void insert(String tag, String description, String leader, String sojusze, int homeX, int homeY, int homeZ,String world, int cuboidRadius) {
 		try {
 			stat = con.createStatement();
 			stat.execute("INSERT INTO " + tableGuilds + " VALUES(NULL," +
@@ -165,13 +176,14 @@ public class MySQLHandler {
 		}
 	}
 	
-	public static void insert(String player, Guild guild, int kills, int deads) {
+	public static void insert(String player, Guild guild,String isleader,  int kills, int deads) {
 		try {
 			stat = con.createStatement();
 			stat.execute("INSERT INTO " + tablePlayers + " VALUES(NULL," +
 					"'" + player + "'," +
 					"'" + player.toLowerCase() + "'," +
-					"'" + guild.getTag().toUpperCase() + "'," +
+					"'" + guild.getTag() + "'," +
+                                        "'" + isleader + "," +
 					kills + "," +
 					deads + ");");
 		} catch(SQLException ex) {
@@ -222,5 +234,48 @@ public class MySQLHandler {
 			ex.printStackTrace();
 		}
 	}
+        public static HashMap<String, SimpleGuild> getAllGuildswithCuboids(){
+            HashMap hm = new HashMap<String, SimpleGuild>();
+            try {
+                stat = con.createStatement();
+                ResultSet rs = stat.executeQuery("SELECT * FROM "+ tableGuilds);
+                while(rs.next()){
+                    String tag = rs.getString("tag");
+                    Data.getInstance().ClansTag.add(tag);
+                    SimpleGuild g = new SimpleGuild(tag);
+                    g.setLeader(rs.getString("leader"));
+                    g.setDescription(rs.getString("description"));
+                    Location loc = new Location(Bukkit.getWorld(rs.getString("home_w")), rs.getInt("home_x"),rs.getInt("home_y"),rs.getInt("home_z"));
+                    SimpleCuboid sc = new SimpleCuboid();
+                    sc.setCenter(loc);
+                    sc.setOwner(tag);
+                    sc.setRadius(rs.getInt("cuboid_radius"));
+                    Data.getInstance().cuboids.put(tag, sc);
+                    g.setHome(loc);
+                    hm.put(g.getTag(), g);
+                }          
+            }
+            catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return hm;
+        }
+        public static HashMap<String, SimplePlayerGuild> getAllPlayers(){
+            HashMap hm = new HashMap<String, SimplePlayerGuild>();
+            try {
+                stat = con.createStatement();
+                ResultSet rs = stat.executeQuery("SELECT * FROM "+ tableGuilds);
+                while(rs.next()){
+                    String player = rs.getString("player");
+                    SimplePlayerGuild sg = new SimplePlayerGuild(rs.getString(player),rs.getString("tag"),Boolean.parseBoolean(rs.getString("isleader")));
+                    hm.put(player, sg);
+                }          
+            }
+            catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return hm;
+        }
+
 	
 }

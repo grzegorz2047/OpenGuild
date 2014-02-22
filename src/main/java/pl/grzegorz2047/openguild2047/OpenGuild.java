@@ -82,6 +82,7 @@ public class OpenGuild extends JavaPlugin {
         Data pd = new Data();
         Data.setDataInstance(pd);
         new MySQLHandler(address, database, login, password);
+        loadDatabase();
         getCommand("gildia").setExecutor(new GildiaCommand());
         Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
         
@@ -165,6 +166,11 @@ public class OpenGuild extends JavaPlugin {
     
     public static OpenGuild get() {
     	return instance;
+    }
+    
+    void loadDatabase(){
+        Data.getInstance().guildsplayers = MySQLHandler.getAllPlayers();
+        MySQLHandler.getAllGuildswithCuboids();
     }
     
 }
