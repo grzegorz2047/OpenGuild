@@ -309,6 +309,26 @@ public class MySQLHandler {
             }
             return hm;
         }
+        
+        public static boolean existsPlayer(String playername){
+            try {
+                stat = con.createStatement();
+                ResultSet rs = stat.executeQuery("select count(*) FROM "+ tablePlayers + "WHERE nick='"+playername+"'");
+                while(rs.next()){
+                    if(rs.getInt(1)==0){
+                        return false;
+                    }else{
+                        return true;
+                    }
+                }
+            }
+            catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            return false;
+            
+        }
 
 	 
 }

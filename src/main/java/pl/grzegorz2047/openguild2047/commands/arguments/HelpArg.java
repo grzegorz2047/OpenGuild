@@ -28,10 +28,11 @@ import org.bukkit.command.CommandSender;
 
 public class HelpArg {
     
-    public static boolean execute(CommandSender sender, int page) {
-        if(page <= 0) {
-            execute(sender, 1);
-            return true;
+    public static boolean execute(CommandSender sender,String[] args) {
+        String Sp = args[1];
+        int page=1;
+        if(Sp!=null){
+            page=Integer.parseInt(Sp);
         }
         sender.sendMessage(getTitle(page));
         if(page == 1) {
@@ -39,7 +40,7 @@ public class HelpArg {
             sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
             sender.sendMessage(help("help [strona]", "Pokaz pomoc [strona]"));
             sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii graczowi"));
-            sender.sendMessage(help("lista", "Lista wszystkich gildii na serwerze"));
+            sender.sendMessage(help("lista", "Lista wszystkich czlonkow gildii"));
             sender.sendMessage(help("opisc <opis...>", "Zmien opis gildii"));
             sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
             sender.sendMessage(help("reload", "Przeladuj konfiguracje pluginu"));

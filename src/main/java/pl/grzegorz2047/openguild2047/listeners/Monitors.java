@@ -21,7 +21,7 @@ public class Monitors implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent e) {
-		if(!e.getPlayer().hasPlayedBefore()) {
+		if(!MySQLHandler.existsPlayer(e.getPlayer().getName())) {
 			MySQLHandler.insert(e.getPlayer().getName(), null,"false", 0, 0);
 		}else{
                     if(Data.getInstance().isPlayerInGuild(e.getPlayer().getName())){

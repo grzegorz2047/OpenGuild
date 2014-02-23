@@ -56,7 +56,7 @@ public class GildiaCommand implements CommandExecutor {
                     }
                 }
                 if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
-                    return HelpArg.execute(sender, 1);
+                    return HelpArg.execute(sender, args);
                 }
                 else if(args[0].equalsIgnoreCase("reload")) {
                     return ReloadArg.execute(sender);
@@ -81,15 +81,6 @@ public class GildiaCommand implements CommandExecutor {
                 }
                 if(args[0].equalsIgnoreCase("opis")){
                     return DescriptionArg.execute(sender, args);
-                }
-
-                if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
-                    try {
-                        return HelpArg.execute(sender, Integer.valueOf(args[1]));
-                    } catch(NumberFormatException ex) {
-                        sender.sendMessage(ChatColor.RED + "Musisz podac liczbe!");
-                        return true;
-                    }
                 }
                // else {
                 //    return error(sender, "Zbyt duzo argumentów");//Na razie to pominiemy
