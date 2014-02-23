@@ -313,7 +313,7 @@ public class MySQLHandler {
         public static boolean existsPlayer(String playername){
             try {
                 stat = con.createStatement();
-                ResultSet rs = stat.executeQuery("select count(*) FROM "+ tablePlayers + "WHERE nick='"+playername+"'");
+                ResultSet rs = stat.executeQuery("select count(*) FROM "+ tablePlayers + " WHERE player='"+playername+"';");
                 while(rs.next()){
                     if(rs.getInt(1)==0){
                         return false;
