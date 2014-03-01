@@ -24,6 +24,10 @@ mysql:
   haslo: password
 playerprefixtag: true
 kolortagugildii: '&6'
+guildprefixinchat: true
+forbiddenguildnames:
+    - 'null'
+    - '    '
 #Zasada odczytu do ogarniecia id:ilosc:byte
 #Albo kompatybilnie z nowymi wersjami Minecrafta to MATERIAL:ilosc:byte
 #Lista material tu: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html

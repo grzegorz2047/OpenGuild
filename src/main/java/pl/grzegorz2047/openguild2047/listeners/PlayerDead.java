@@ -24,39 +24,22 @@
 
 package pl.grzegorz2047.openguild2047.listeners;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import pl.grzegorz2047.openguild2047.Data;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 
 /**
  *
  * @author Grzegorz
  */
-public class PlayerChat implements Listener{
+public class PlayerDead implements Listener {
+ 
     
     @EventHandler
-    void onChat(AsyncPlayerChatEvent e){
-        if(e.isCancelled() || !GenConf.guildprefixinchat){
-            return;
-        }
-        //Jezeli gracz jest  w gildii to e.setFormat(e.getFormat().replace("{OpenGuildTag}", pobierajakistag));
-        //else e.setFormat(e.getFormat().replace("{OpenGuildTag}", ""));
-        if(Data.getInstance().guildsplayers.containsKey(e.getPlayer().getName())){
-            SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(e.getPlayer().getName());
-            if(spg.getClanTag().equals("") || spg.getClanTag().equals("null")){
-                return;
-            }
-            if(e.getFormat().contains("{OpenGuildTag}")){
-                e.setFormat(e.getFormat().replace("{OpenGuildTag}", spg.getClanTag()));
-            }
-            else{
-                e.setFormat("§7[§r" + spg.getClanTag() +  "§7]§r" + e.getFormat());
-            }
-        }
-        
+    void onPlayerDead(PlayerDeathEvent e){
         
     }
     

@@ -61,7 +61,8 @@ public class MySQLHandler {
 	
 	private String address;
 	private String database;
-	
+	private String login;
+        private String password;
 	public MySQLHandler(String address, String database, String login, String password) {
 		this.address = address;
 		this.database = database;
@@ -84,11 +85,22 @@ public class MySQLHandler {
 		PLAYER_LOWER,
 		GUILD,
 		KILLS,
-		DEADS
+		DEADS,
+                ISLEADER
 	}
         void loadDatabase(){
             Data.getInstance().guildsplayers = MySQLHandler.getAllPlayers();
             Data.getInstance().guilds = MySQLHandler.getAllGuildswithCuboids();
+        }
+        void checkIfConnIsClosed(){
+            try {
+                if(con==null || con.isClosed()){
+                    createConnection(login, password);
+                }
+            }
+            catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 	private void createConnection(String login, String password) {
 		log.info("[MySQL] Laczenie z baza MySQL...");
@@ -186,11 +198,18 @@ public class MySQLHandler {
 	
 	public static void insert(String player, Guild guild,String isleader,  int kills, int deads) {
 		try {
+                    String tag;
+                    if(guild == null){
+                        tag="";
+                    }else{
+                        tag = guild.getTag();
+                    }
+                     
 			stat = con.createStatement();
 			stat.execute("INSERT INTO " + tablePlayers + " VALUES(NULL," +
 					"'" + player + "'," +
 					"'" + player.toLowerCase() + "'," +
-					"'" + guild.getTag() + "'," +
+					"'" + tag + "'," +
                                         "'" + isleader + "'," +
 					kills + "," +
 					deads + ");");
@@ -315,11 +334,7 @@ public class MySQLHandler {
                 stat = con.createStatement();
                 ResultSet rs = stat.executeQuery("select count(*) FROM "+ tablePlayers + " WHERE player='"+playername+"';");
                 while(rs.next()){
-                    if(rs.getInt(1)==0){
-                        return false;
-                    }else{
-                        return true;
-                    }
+                    return rs.getInt(1) != 0;
                 }
             }
             catch (SQLException ex) {
@@ -330,5 +345,21 @@ public class MySQLHandler {
             
         }
 
-	 
+	 public static void increaseValue(String playername,PType typ,int value){
+            try {
+                stat = con.createStatement();
+                ResultSet rs = stat.executeQuery("SELECT "+typ+" FROM "+ tablePlayers+" where player='"+playername+"';");
+                int receivedvalue = 0;
+                while(rs.next()){
+                    receivedvalue = rs.getInt(typ.toString().toLowerCase());
+                }
+                receivedvalue+=value;
+                stat.execute("Update "+tablePlayers+" SET "+typ+"="+receivedvalue+" WHERE player="+playername+";");
+                
+            }
+            catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+         }
 }

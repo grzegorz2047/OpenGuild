@@ -80,7 +80,7 @@ public class DisbandArg {
     private static void saveDb(Guild guild) {
         MySQLHandler.delete(guild);
         for(String p : guild.getMembers()){//Usuwa totalnie gildie
-            MySQLHandler.update(p, MySQLHandler.PType.GUILD, "null");
+            MySQLHandler.update(p, MySQLHandler.PType.GUILD, "");
         }
     }
     

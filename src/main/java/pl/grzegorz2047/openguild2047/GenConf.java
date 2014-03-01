@@ -36,11 +36,12 @@ public class GenConf {
     public static boolean teampvp = false;
     public static boolean homecommand = true;
     public static boolean playerprefixenabled = true;
+    public static boolean guildprefixinchat = true; 
     //Max 11, bo prefix jest 16 znakowy - 5 znaków kolorujacych
     public static int maxclantag = 6;
     public static int minclantag = 4;
     public static String colortagu = "§6";
-    public static List<String> badwords;
+    public static List<String> badwords = OpenGuild.get().getConfig().getStringList("forbiddenguildnames");
     public static List<String> reqitems;
     public static final int MIN_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.min-radius");
     public static final int MAX_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.max-radius");

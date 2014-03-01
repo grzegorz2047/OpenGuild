@@ -138,7 +138,8 @@ public class CreateArg {
     
     private static void saveToDb(String tag, String description, String leader, Location home, Guild g) {
         MySQLHandler.insert(tag, description, leader, null, home.getBlockX(), home.getBlockY(), home.getBlockZ(),home.getWorld().getName(), GenConf.MIN_CUBOID_RADIUS);
-        MySQLHandler.insert(leader, g,"true", 0, 0);
+        MySQLHandler.update(leader, MySQLHandler.PType.GUILD, tag);
+        MySQLHandler.update(leader, MySQLHandler.PType.ISLEADER, "true");//ustawia isleader wa bazie na true
     }
     
 }

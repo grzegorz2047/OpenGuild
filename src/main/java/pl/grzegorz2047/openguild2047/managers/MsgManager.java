@@ -65,4 +65,5 @@ public class MsgManager {
     public static String playernotoninvitedlist = "Ten gracz nie jest na liscie zaproszonych!";
     public static String guilddoesntexists = "Gildia do ktorej probujesz dolaczyc nie istnieje!";
     public static String leadernotonline = "Lider aktualnie nie jest na serwerze!";
+    public static String notyetaccepted = "Twoja prosba nie zostala jeszcze zaakceptowana";
 }

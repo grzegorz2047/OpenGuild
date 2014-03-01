@@ -56,20 +56,8 @@ public class JoinArg {
                 if(Data.getInstance().guilds.containsKey(tag)){
                     SimpleGuild sg = Data.getInstance().guilds.get(tag);
                     if(sg.getInvitedPlayers().contains(p.getName())){
-                        SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
-                        Data.getInstance().guilds.put(sg.getTag(), sg);
-                        Data.getInstance().ClansTag.add(sg.getTag());
-                        Data.getInstance().guildsplayers.put(p.getName(), spg);
-                        sg.addMember(p.getName());
-                        if(GenConf.playerprefixenabled){
-                            if(NametagAPI.hasCustomNametag(p.getName())){
-                                NametagAPI.resetNametag(p.getName());
-                            }
-                            NametagAPI.setPrefix(p.getName(), GenConf.colortagu + spg.getClanTag() +  "§r ");
-                            p.sendMessage(GenConf.prefix+MsgManager.guildjoinsuccess);
-                            savetodb(p.getName(),sg);
-                        }
-                        return true;
+                        p.sendMessage(GenConf.prefix+MsgManager.notyetaccepted);
+                        return false;
                     }else{
                         p.sendMessage(GenConf.prefix+MsgManager.playernotinvited);
                         Player leader = Bukkit.getPlayer(sg.getLeader());
