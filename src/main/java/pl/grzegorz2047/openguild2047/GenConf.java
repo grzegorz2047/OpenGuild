@@ -48,4 +48,6 @@ public class GenConf {
     public static final int TELEPORT_COOLDOWN = OpenGuild.get().getConfig().getInt("teleport-cooldown");
     public static final boolean EXTRA_PROTECTION = OpenGuild.get().getConfig().getBoolean("cuboid.extra-protection");
     public static final boolean CANENTERAREA = OpenGuild.get().getConfig().getBoolean("cuboid.canenterarea");
+    public static final List<String> BREAKING_ITEMS = OpenGuild.get().getConfig().getStringList("cuboid.breaking-blocks.item-types");
+    public static final short BREAKING_DAMAGE = Short.parseShort(OpenGuild.get().getConfig().getString("cuboid.breaking-blocks.damage"));
 }

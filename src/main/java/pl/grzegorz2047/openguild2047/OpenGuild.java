@@ -88,6 +88,7 @@ public class OpenGuild extends JavaPlugin {
                 NametagAPI.setPrefix(p.getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getName()).getTag() +  "§r ");
             }
         }
+        CuboidListeners.loadItems();
         Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
         
     }

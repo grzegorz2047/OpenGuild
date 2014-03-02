@@ -13,6 +13,14 @@ cuboid:
   canenterarea: true
   #Czy osoby spoza gildii moge wchodzic w interakcje z przedmiotami np. skrzynki, piecyki itd.
   extra-protection: true
+  # Niszczenie bloków na terenie itemów
+  breaking-blocks:
+    # Typy itemów którymi mozna zniszczyc blok na terenie gildii
+    # Lista itemów znajduje sie na http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
+    item-types: [DIAMOND_PICKAXE]
+    # Ilosc sily jaka zostaje zadana itemowi
+    # Jezeli ustawione na 0 niszczenie bloków bedzie wylaczone
+    damage: 0
 mysql:
   # Twoj adres bazy danych
   adres: localhost

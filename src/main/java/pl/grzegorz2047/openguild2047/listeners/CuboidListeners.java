@@ -23,28 +23,42 @@
  */
 package pl.grzegorz2047.openguild2047.listeners;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import pl.grzegorz2047.openguild2047.Data;
 
+import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class CuboidListeners implements Listener {
-	
+        
+        private static List<Material> breakingItems;
+        
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
-		if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
-			e.setCancelled(true);//Mozna dac tu, ze mozna niszczyc, ale to duzo zabiera wytrzymalosc diamentowego kilofa
-		}
+            if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
+                if(GenConf.BREAKING_DAMAGE >= 0) {
+                    e.setCancelled(true); // Damage jest rowny 0; niszczenie blokow jest wylaczone
+                } else {
+                    if(breakingItems.contains(e.getPlayer().getItemInHand().getType())) {
+                        e.getPlayer().getItemInHand().setDurability((short) (e.getPlayer().getItemInHand().getDurability() - GenConf.BREAKING_DAMAGE));
+                    } else {
+                        e.setCancelled(true);
+                    }
+                }
+            }
 	}
 	
 	@EventHandler
@@ -64,7 +78,7 @@ public class CuboidListeners implements Listener {
 			}
 		}
 	}
-	
+        
 	private boolean isAllowed(Player player, Location location) {
             if(CuboidStuff.checkIfInAnyCuboid(Data.getInstance().cuboids.entrySet().iterator(), location)) {
                 if(Data.getInstance().isPlayerInGuild(player.getName())) {
@@ -82,5 +96,16 @@ public class CuboidListeners implements Listener {
                 return true;
             }
 	}
+        
+        
+        public static void loadItems() {
+            for(String item : GenConf.BREAKING_ITEMS) {
+                try {
+                    breakingItems.add(Material.valueOf(item.toUpperCase()));
+                } catch(Exception ex) {
+                    Guilds.getLogger().severe("Wystapil blad podczas ladowana itemow do niszczenia blokow na teranie gildii: Nie mozna wczytac " + item.toUpperCase());
+                }
+            }
+        }
 	
 }
