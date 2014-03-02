@@ -20,7 +20,7 @@ Kompilacja
 
 Używam Maven 3 do wszystkich wymaganych bibliotek.
 * Zainstaluj [Maven 3](http://maven.apache.org/download.html)
-* Sprawdź do repozytorium oraz wykonaj komendę: `mvn clean install`
+* Sprawdź to repozytorium oraz wykonaj komendę: `mvn clean install`
 
 Pull Requesty
 =============
