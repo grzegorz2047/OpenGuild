@@ -49,7 +49,7 @@ public class CuboidListeners implements Listener {
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
             if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
-                if(GenConf.BREAKING_DAMAGE >= 0) {
+                if(GenConf.BREAKING_DAMAGE <= 0) {
                     e.setCancelled(true); // Damage jest rowny 0; niszczenie blokow jest wylaczone
                 } else {
                     if(breakingItems.contains(e.getPlayer().getItemInHand().getType())) {
@@ -99,10 +99,11 @@ public class CuboidListeners implements Listener {
         
         
         public static void loadItems() {
+            breakingItems = new ArrayList<Material>();
             for(String item : GenConf.BREAKING_ITEMS) {
                 try {
                     breakingItems.add(Material.valueOf(item.toUpperCase()));
-                } catch(Exception ex) {
+                } catch(IllegalArgumentException ex) {
                     Guilds.getLogger().severe("Wystapil blad podczas ladowana itemow do niszczenia blokow na teranie gildii: Nie mozna wczytac " + item.toUpperCase());
                 }
             }
