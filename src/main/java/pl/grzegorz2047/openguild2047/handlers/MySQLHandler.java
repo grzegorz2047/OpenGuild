@@ -247,7 +247,7 @@ public class MySQLHandler {
 	public static void update(String player, PType type, int value) {
 		try {
 			stat = con.createStatement();
-			stat.execute("UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE player_lower=" + player.toLowerCase() + ";");
+			stat.execute("UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE player_lower='" + player.toLowerCase() + "';");
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}

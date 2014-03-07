@@ -66,4 +66,5 @@ public class MsgManager {
     public static String guilddoesntexists = "Gildia do ktorej probujesz dolaczyc nie istnieje!";
     public static String leadernotonline = "Lider aktualnie nie jest na serwerze!";
     public static String notyetaccepted = "Twoja prosba nie zostala jeszcze zaakceptowana";
+    public static String desctoolong = "Opis gildii jest za dlugi";
 }

@@ -78,12 +78,18 @@ public class CreateArg {
                                         c.setRadius(GenConf.MIN_CUBOID_RADIUS);
                                         c.setCenter(p.getLocation());
                                         //TODO: dodac jakies dane o cuboidzie w mysql
-                                        Data.getInstance().cuboids.put(clantag, c);
                                         if(args.length>2){
-                                            sg.setDescription(GenUtil.argsToString(args, 2, args.length));
+                                            String desc = GenUtil.argsToString(args, 2, args.length);
+                                            if(desc.length()>32){
+                                                p.sendMessage(GenConf.prefix+MsgManager.desctoolong);
+                                                return false;
+                                            }
+                                            sg.setDescription(desc);
                                         }else{
                                             sg.setDescription("Domyslny opis gildii :<");
                                         }
+                                        Data.getInstance().cuboids.put(clantag, c);
+
                                         SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
                                         Data.getInstance().guilds.put(sg.getTag(), sg);
                                         Data.getInstance().ClansTag.add(sg.getTag());
