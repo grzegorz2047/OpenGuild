@@ -39,6 +39,7 @@ package pl.grzegorz2047.openguild2047;
 import ca.wacos.nametagedit.NametagAPI;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -88,6 +89,7 @@ public class OpenGuild extends JavaPlugin {
                 NametagAPI.setPrefix(p.getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getName()).getTag() +  "§r ");
             }
         }
+        loadPlayers();
         CuboidListeners.loadItems();
         Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
         
@@ -168,6 +170,14 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new Monitors(), this);
         pm.registerEvents(new EntityDamageByEntity(), this);
 
+    }
+    
+    private void loadPlayers() {
+        for(SimpleGuild guild : Data.getInstance().guilds.values()) { // Pobieranie gildii
+            for(String member : MySQLHandler.getGuildMembers(guild.getTag())) { // Pobieranie graczy w gildii
+                guild.addMember(member); // Dodawanie gracza do listy
+            }
+        }
     }
     
     public static OpenGuild get() {
