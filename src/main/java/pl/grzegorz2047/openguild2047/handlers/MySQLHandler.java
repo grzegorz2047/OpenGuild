@@ -30,18 +30,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
-
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.api.Logger;
@@ -51,27 +50,26 @@ import pl.grzegorz2047.openguild2047.api.Logger;
  * @author Grzegorz
  */
 public class MySQLHandler {
-
+    
     private static Connection con = null;
     private static Statement stat;
     private static String driver = "com.mysql.jdbc.Driver";
     private static String tableGuilds = "openguild_guilds";
     private static String tablePlayers = "openguild_players";
     private static Logger log = Guilds.getLogger();
-
+    
     private String address;
     private String database;
     private String login;
     private String password;
-
+    
     public MySQLHandler(String address, String database, String login, String password) {
         this.address = address;
         this.database = database;
         createConnection(login, password);
     }
-
+    
     public enum Type {
-
         TAG,
         DESCRIPTION,
         LEADER,
@@ -81,9 +79,8 @@ public class MySQLHandler {
         HOME_Z,
         CUBOID_RADIUS
     }
-
+    
     public enum PType {
-
         PLAYER,
         PLAYER_LOWER,
         GUILD,
@@ -91,28 +88,28 @@ public class MySQLHandler {
         DEADS,
         ISLEADER
     }
-
+    
     void loadDatabase() {
         Data.getInstance().guildsplayers = MySQLHandler.getAllPlayers();
         Data.getInstance().guilds = MySQLHandler.getAllGuildswithCuboids();
     }
-
+    
     void checkIfConnIsClosed() {
         try {
             if(con == null || con.isClosed()) {
                 createConnection(login, password);
             }
         } catch(SQLException ex) {
-            java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
-
+    
     private static void log(String query) {
         if(GenConf.SQL_DEBUG) {
             Guilds.getLogger().log(Level.INFO, "[Serwer -> MySQL] " + query);
         }
     }
-
+    
     private void createConnection(String login, String password) {
         log.info("[MySQL] Laczenie z baza MySQL...");
         try {
@@ -131,7 +128,7 @@ public class MySQLHandler {
         }
         loadDatabase();
     }
-
+    
     public void createTables() {
         // Tabela z gildiami
         log.info("[MySQL] Tworzenie tabeli " + tableGuilds + " jezeli nie istnieje...");
@@ -154,7 +151,7 @@ public class MySQLHandler {
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
-
+        
         // Tabela z graczami
         log.info("[MySQL] Tworzenie tabeli " + tablePlayers + " jezeli nie istnieje...");
         try {
@@ -174,7 +171,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-
+    
     public static void delete(Guild guild) {
         try {
             String query = "DELETE FROM " + tableGuilds + " WHERE tag='" + guild.getTag() + "';";
@@ -185,7 +182,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-
+    
     public static void delete(String player) {
         try {
             String query = "DELETE FROM " + tablePlayers + " WHERE player_lower='" + player.toLowerCase() + "';";
@@ -196,7 +193,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-
+    
     public static void insert(String tag, String description, String leader, String sojusze, int homeX, int homeY, int homeZ, String homeW, int cuboidRadius) {
         try {
             String query = "INSERT INTO " + tableGuilds + " VALUES(NULL,"
@@ -216,7 +213,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-
+    
     public static void insert(String player, Guild guild, String isleader, int kills, int deads) {
         try {
             String tag;
@@ -240,15 +237,15 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-
+    
     public static List<Object> select(Guild guild) {
         return null; // TODO
     }
-
+    
     public static List<Object> select(String player) {
         return null; // TODO
     }
-
+    
     public static void update(Guild guild, Type type, int value) {
         try {
             String query = "UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE tag='" + guild.getTag() + "';";
@@ -259,7 +256,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-
+    
     public static void update(Guild guild, Type type, String value) {
         try {
             String query = "UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE tag='" + guild.getTag() + "';";
@@ -270,7 +267,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-
+    
     public static void update(String player, PType type, int value) {
         try {
             String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE player_lower='" + player.toLowerCase() + "';";
@@ -281,7 +278,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-
+    
     public static void update(String player, PType type, String value) {
         try {
             String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE player_lower='" + player.toLowerCase() + "';";
@@ -292,7 +289,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-
+    
     public static HashMap<String, SimpleGuild> getAllGuildswithCuboids() {
         HashMap hm = new HashMap<String, SimpleGuild>();
         try {
@@ -317,11 +314,11 @@ public class MySQLHandler {
                 hm.put(g.getTag(), g);
             }
         } catch(SQLException ex) {
-            java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return hm;
     }
-
+    
     public static List<String> getGuildMembers(String tag) {
         try {
             String query = "SELECT player FROM " + tablePlayers + " WHERE guild='" + tag + "';";
@@ -335,7 +332,7 @@ public class MySQLHandler {
             }
             return members;
         } catch(SQLException ex) {
-            java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             return null;
         }
     }
@@ -356,12 +353,12 @@ public class MySQLHandler {
                 hm.put(player, sg);
             }
         } catch(SQLException ex) {
-            java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             return null;
         }
         return hm;
     }
-
+    
     public static boolean existsPlayer(String playername) {
         try {
             String query = "SELECT COUNT(*) FROM " + tablePlayers + " WHERE player='" + playername + "';";
@@ -378,7 +375,7 @@ public class MySQLHandler {
         return false;
 
     }
-
+    
     public static void increaseValue(String playername, PType typ, int value) {
         try {
             String query = "SELECT " + typ + " FROM " + tablePlayers + " where player='" + playername + "';";
@@ -395,8 +392,8 @@ public class MySQLHandler {
             stat.execute(query2);
 
         } catch(SQLException ex) {
-            java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
-
     }
+    
 }
