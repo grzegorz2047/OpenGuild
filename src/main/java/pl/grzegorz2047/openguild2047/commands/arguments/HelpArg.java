@@ -40,7 +40,7 @@ public class HelpArg {
         }
         sender.sendMessage(getTitle(page));
         if(page == 1) {
-            sender.sendMessage(help("disband", "Usun gildie jako operator"));
+            sender.sendMessage(help("rozwiaz", "Usun gildie jako operator"));
             sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
             sender.sendMessage(help("help [strona]", "Pokaz pomoc [strona]"));
             sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii graczowi"));
