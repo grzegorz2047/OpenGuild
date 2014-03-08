@@ -38,6 +38,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
@@ -102,6 +103,13 @@ public class MySQLHandler {
                 java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        private static void log(String query) {
+            if(GenConf.SQL_DEBUG) {
+                Guilds.getLogger().log(Level.INFO, "[Serwer -> MySQL] " + query);
+            }
+        }
+        
 	private void createConnection(String login, String password) {
 		log.info("[MySQL] Laczenie z baza MySQL...");
 		try {
@@ -125,8 +133,7 @@ public class MySQLHandler {
 		// Tabela z gildiami
 		log.info("[MySQL] Tworzenie tabeli " + tableGuilds + " jezeli nie istnieje...");
 		try {
-			stat = con.createStatement();
-			stat.execute("CREATE TABLE IF NOT EXISTS " + tableGuilds +
+            String query = "CREATE TABLE IF NOT EXISTS " + tableGuilds +
 					"(id INT AUTO_INCREMENT," +
 					"tag VARCHAR(11)," +
 					"description VARCHAR(100)," +
@@ -137,7 +144,10 @@ public class MySQLHandler {
 					"home_z INT," +
                                         "home_w VARCHAR(16)," +
 					"cuboid_radius INT," +
-					"PRIMARY KEY(id,tag));");
+					"PRIMARY KEY(id,tag));";
+			stat = con.createStatement();
+            log(query);
+			stat.execute(query);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -145,8 +155,7 @@ public class MySQLHandler {
 		// Tabela z graczami
 		log.info("[MySQL] Tworzenie tabeli " + tablePlayers + " jezeli nie istnieje...");
 		try {
-			stat = con.createStatement();
-			stat.execute("CREATE TABLE IF NOT EXISTS " + tablePlayers +
+            String query = "CREATE TABLE IF NOT EXISTS " + tablePlayers +
 					"(id INT AUTO_INCREMENT," +
 					"player VARCHAR(16)," +
 					"player_lower VARCHAR(16)," +
@@ -154,7 +163,10 @@ public class MySQLHandler {
                                         "isleader VARCHAR(5)," +
 					"kills INT," +
 					"deads INT," +
-					"PRIMARY KEY(id,player));");
+					"PRIMARY KEY(id,player));";
+			stat = con.createStatement();
+            log(query);
+			stat.execute(query);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -162,8 +174,10 @@ public class MySQLHandler {
 	
 	public static void delete(Guild guild) {
 		try {
+            String query = "DELETE FROM " + tableGuilds + " WHERE tag='" + guild.getTag() + "';";
 			stat = con.createStatement();
-			stat.execute("DELETE FROM " + tableGuilds + " WHERE tag='" + guild.getTag() + "';");
+            log(query);
+			stat.execute(query);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -171,8 +185,10 @@ public class MySQLHandler {
 	
 	public static void delete(String player) {
 		try {
+            String query = "DELETE FROM " + tablePlayers + " WHERE player_lower='" + player.toLowerCase() + "';";
 			stat = con.createStatement();
-			stat.execute("DELETE FROM " + tablePlayers + " WHERE player_lower='" + player.toLowerCase() + "';");
+            log(query);
+			stat.execute(query);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -180,8 +196,7 @@ public class MySQLHandler {
 	
 	public static void insert(String tag, String description, String leader, String sojusze, int homeX, int homeY, int homeZ,String homeW, int cuboidRadius) {
 		try {
-			stat = con.createStatement();
-			stat.execute("INSERT INTO " + tableGuilds + " VALUES(NULL," +
+            String query = "INSERT INTO " + tableGuilds + " VALUES(NULL," +
 					"'" + tag + "'," +
 					"'" + description + "'," +
 					"'" + leader + "'," +
@@ -189,8 +204,11 @@ public class MySQLHandler {
 					homeX + "," +
 					homeY + "," +
 					homeZ + "," +
-                                        "'" +homeW + "'," +
-					cuboidRadius + ");");
+                    "'" +homeW + "'," +
+					cuboidRadius + ");";
+			stat = con.createStatement();
+            log(query);
+			stat.execute(query);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -198,21 +216,23 @@ public class MySQLHandler {
 	
 	public static void insert(String player, Guild guild,String isleader,  int kills, int deads) {
 		try {
-                    String tag;
-                    if(guild == null){
-                        tag="";
-                    }else{
-                        tag = guild.getTag();
-                    }
-                     
-			stat = con.createStatement();
-			stat.execute("INSERT INTO " + tablePlayers + " VALUES(NULL," +
+            String tag;
+            if(guild == null) {
+                tag = "";
+            } else {
+                tag = guild.getTag();
+            }
+            
+			String query = "INSERT INTO " + tablePlayers + " VALUES(NULL," +
 					"'" + player + "'," +
 					"'" + player.toLowerCase() + "'," +
 					"'" + tag + "'," +
-                                        "'" + isleader + "'," +
+                    "'" + isleader + "'," +
 					kills + "," +
-					deads + ");");
+					deads + ");";
+            stat = con.createStatement();
+            log(query);
+			stat.execute(query);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -228,8 +248,10 @@ public class MySQLHandler {
 	
 	public static void update(Guild guild, Type type, int value) {
 		try {
-			stat = con.createStatement();
-			stat.execute("UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE tag='" + guild.getTag() + "';");
+			String query = "UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE tag='" + guild.getTag() + "';";
+            stat = con.createStatement();
+            log(query);
+			stat.execute(query);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -237,8 +259,10 @@ public class MySQLHandler {
 	
 	public static void update(Guild guild, Type type, String value) {
 		try {
+            String query = "UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE tag='" + guild.getTag() + "';";
 			stat = con.createStatement();
-			stat.execute("UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE tag='" + guild.getTag() + "';");
+            log(query);
+			stat.execute(query);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -246,8 +270,10 @@ public class MySQLHandler {
 	
 	public static void update(String player, PType type, int value) {
 		try {
+            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE player_lower='" + player.toLowerCase() + "';";
 			stat = con.createStatement();
-			stat.execute("UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE player_lower='" + player.toLowerCase() + "';");
+            log(query);
+			stat.execute(query);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -255,8 +281,10 @@ public class MySQLHandler {
 	
 	public static void update(String player, PType type, String value) {
 		try {
+            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE player_lower='" + player.toLowerCase() + "';";
 			stat = con.createStatement();
-			stat.execute("UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE player_lower='" + player.toLowerCase() + "';");
+            log(query);
+			stat.execute(query);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -264,8 +292,10 @@ public class MySQLHandler {
         public static HashMap<String, SimpleGuild> getAllGuildswithCuboids(){
             HashMap hm = new HashMap<String, SimpleGuild>();
             try {
+                String query = "SELECT * FROM "+ tableGuilds;
                 stat = con.createStatement();
-                ResultSet rs = stat.executeQuery("SELECT * FROM "+ tableGuilds);
+                log(query);
+                ResultSet rs = stat.executeQuery(query);
                 while(rs.next()){
                     String tag = rs.getString("tag");
                     Data.getInstance().ClansTag.add(tag);
@@ -291,9 +321,11 @@ public class MySQLHandler {
         
         public static List<String> getGuildMembers(String tag){
             try {
+                String query = "SELECT player FROM "+ tablePlayers + " WHERE guild='" + tag + "';";
                 List<String> members = new ArrayList<String>();
                 stat = con.createStatement();
-                ResultSet rs = stat.executeQuery("SELECT player FROM "+ tablePlayers + " WHERE guild='" + tag + "';");
+                log(query);
+                ResultSet rs = stat.executeQuery(query);
                 while(rs.next()){
                     String p = rs.getString("player");
                     members.add(p);
@@ -311,8 +343,10 @@ public class MySQLHandler {
         public static HashMap<String, SimplePlayerGuild> getAllPlayers(){
             HashMap hm = new HashMap<String, SimplePlayerGuild>();
             try {
+                String query = "SELECT * FROM "+ tablePlayers;
                 stat = con.createStatement();
-                ResultSet rs = stat.executeQuery("SELECT * FROM "+ tablePlayers);
+                log(query);
+                ResultSet rs = stat.executeQuery(query);
                 while(rs.next()){
                     String player = rs.getString("player");
                     String tag = rs.getString("guild");
@@ -331,8 +365,10 @@ public class MySQLHandler {
         
         public static boolean existsPlayer(String playername){
             try {
+                String query = "SELECT COUNT(*) FROM "+ tablePlayers + " WHERE player='"+playername+"';";
                 stat = con.createStatement();
-                ResultSet rs = stat.executeQuery("select count(*) FROM "+ tablePlayers + " WHERE player='"+playername+"';");
+                log(query);
+                ResultSet rs = stat.executeQuery(query);
                 while(rs.next()){
                     return rs.getInt(1) != 0;
                 }
@@ -347,14 +383,18 @@ public class MySQLHandler {
 
 	 public static void increaseValue(String playername,PType typ,int value){
             try {
+                String query = "SELECT "+typ+" FROM "+ tablePlayers+" where player='"+playername+"';";
                 stat = con.createStatement();
-                ResultSet rs = stat.executeQuery("SELECT "+typ+" FROM "+ tablePlayers+" where player='"+playername+"';");
+                log(query);
+                ResultSet rs = stat.executeQuery(query);
                 int receivedvalue = 0;
                 while(rs.next()){
                     receivedvalue = rs.getInt(typ.toString().toLowerCase());
                 }
                 receivedvalue+=value;
-                stat.execute("Update "+tablePlayers+" SET "+typ+"="+receivedvalue+" WHERE player="+playername+";");
+                String query2 = "UPDATE "+tablePlayers+" SET "+typ+"="+receivedvalue+" WHERE player="+playername+";";
+                log(query2);
+                stat.execute(query2);
                 
             }
             catch (SQLException ex) {

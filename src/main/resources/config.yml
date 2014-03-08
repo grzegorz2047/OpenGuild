@@ -30,6 +30,8 @@ mysql:
   login: root
   # Twoje haslo do bazy danych
   haslo: password
+  # Informowanie w konsoli serwera o wszystkich komendach do bazy MySQL
+  debug: false
 playerprefixtag: true
 kolortagugildii: '&6'
 guildprefixinchat: true
