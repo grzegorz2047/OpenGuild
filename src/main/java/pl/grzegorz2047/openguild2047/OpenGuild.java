@@ -37,9 +37,9 @@ https://forums.bukkit.org/threads/protection-region-cuboid-creation.164161/
 package pl.grzegorz2047.openguild2047;
 
 import ca.wacos.nametagedit.NametagAPI;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -139,6 +139,7 @@ public class OpenGuild extends JavaPlugin {
                 ex.printStackTrace();
             }
     	}
+        saveResource("messages.yml", false);
     }
     
     private void loadConfig() {
