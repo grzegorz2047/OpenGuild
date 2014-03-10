@@ -26,6 +26,8 @@ database: MYSQL
 # Ustaw lokalizacje pliku z gildiami.
 # UWAGA: Dostepne wylacznie gdy database jest ustawione na FILE
 file-dir: plugins/OpenGuild2047/guilds.yml
+# Wlacz/wylacz wysylanie informacji o bledach na http://pastebin.com
+snooper: true
 mysql:
   # Twoj adres bazy danych
   adres: localhost

@@ -50,8 +50,9 @@ public class GenConf {
     public static final boolean CANENTERAREA = OpenGuild.get().getConfig().getBoolean("cuboid.canenterarea");
     public static final List<String> BREAKING_ITEMS = OpenGuild.get().getConfig().getStringList("cuboid.breaking-blocks.item-types");
     public static final short BREAKING_DAMAGE = Short.parseShort(OpenGuild.get().getConfig().getString("cuboid.breaking-blocks.damage"));
-    public static final boolean SQL_DEBUG = OpenGuild.get().getConfig().getBoolean("mysql.debug");
-    public static final Database DATABASE = Database.valueOf(OpenGuild.get().getConfig().getString("database").toUpperCase());
-    public static final String FILE_DIR = OpenGuild.get().getConfig().getString("file-dir");
+    public static final boolean SQL_DEBUG = OpenGuild.get().getConfig().getBoolean("mysql.debug", false);
+    public static final Database DATABASE = Database.valueOf(OpenGuild.get().getConfig().getString("database", "MYSQL").toUpperCase());
+    public static final String FILE_DIR = OpenGuild.get().getConfig().getString("file-dir", "plugins/OpenGuild2047/guilds.yml");
+    public static final boolean SNOOPER = OpenGuild.get().getConfig().getBoolean("snooper", true);
     
 }
