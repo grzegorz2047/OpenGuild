@@ -41,7 +41,6 @@ import ca.wacos.nametagedit.NametagAPI;
 import java.io.File;
 import java.io.IOException;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -82,22 +81,22 @@ public class OpenGuild extends JavaPlugin {
         loadAllListeners();
         Data pd = new Data();
         Data.setDataInstance(pd);
-        new MySQLHandler(address, database, login, password);
+        loadDb();
         getCommand("gildia").setExecutor(new GildiaCommand());
-        for(Player p : Bukkit.getOnlinePlayers()){
+        for(Player p : getServer().getOnlinePlayers()){
             if(Data.getInstance().isPlayerInGuild(p.getName())){
                 NametagAPI.setPrefix(p.getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getName()).getTag() +  "§r ");
             }
         }
         loadPlayers();
         CuboidListeners.loadItems();
-        Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
+        getServer().getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
         
     }
 
     @Override
     public void onDisable() {
-        for(Player p: Bukkit.getOnlinePlayers()){
+        for(Player p : getServer().getOnlinePlayers()){
             if(NametagAPI.hasCustomNametag(p.getName())){
                 NametagAPI.resetNametag(p.getName());
             }
@@ -162,8 +161,24 @@ public class OpenGuild extends JavaPlugin {
         }
     }
     
+    private void loadDb() {
+        switch(GenConf.DATABASE) {
+        case FILE:
+            Guilds.getLogger().warning("Przykro nam, ale system plików jeszcze nie dziala! Próba polaczenia sie z baza danych MySQL...");
+            new MySQLHandler(address, database, login, password); // TODO Pliki...
+            break;
+        case MYSQL:
+            new MySQLHandler(address, database, login, password);
+            break;
+        default:
+            Guilds.getLogger().severe("Nie mozna wczytac typu bazy danych (database)! Popraw to w pliku config.yml!");
+            getServer().getPluginManager().disablePlugin(this);
+            break;
+        }
+    }
+    
     void loadAllListeners() {
-        PluginManager pm = Bukkit.getPluginManager();
+        PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new CuboidListeners(), this);
         pm.registerEvents(new PlayerChat(), this);
         pm.registerEvents(new PlayerMove(), this);

@@ -21,6 +21,11 @@ cuboid:
     # Ilosc sily jaka zostaje zadana itemowi
     # Jezeli ustawione na 0 niszczenie bloków bedzie wylaczone
     damage: 0
+# Ustaw styl zapisywania danych; dostepne opcje to MYSQL oraz FILE
+database: MYSQL
+# Ustaw lokalizacje pliku z gildiami.
+# UWAGA: Dostepne wylacznie gdy database jest ustawione na FILE
+file-dir: plugins/OpenGuild2047/guilds.yml
 mysql:
   # Twoj adres bazy danych
   adres: localhost
