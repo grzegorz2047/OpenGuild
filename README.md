@@ -8,12 +8,12 @@ Każde błędy, poprawki, propozycje piszcie w zakładce issues (po prawej stron
 Pobieranie
 -----------
 
-Najnowszy plik .jar można zawszę pobrać z https://github.com/grzegorz2047/OpenGuild2047/releases.
+Najnowszy plik .jar można zawszę pobrać z [releases] (https://github.com/grzegorz2047/OpenGuild2047/releases).
 
 Bugi oraz propozycje
 -----------
 
-Każdy uznany i znaleziony bug/propozycje prosimy kierować w zakładcę Issues (https://github.com/grzegorz2047/OpenGuild2047/issues). Jedak przed jego złożeniem prosimy przeczytać wszystkie inne zgłoszenia, pomoże w tym wyszukiwarka na górze strony.
+Każdy uznany i znaleziony bug/propozycje prosimy kierować w zakładcę [Issues] (https://github.com/grzegorz2047/OpenGuild2047/issues). Jedak przed jego złożeniem prosimy przeczytać wszystkie inne zgłoszenia, pomoże w tym wyszukiwarka na górze strony.
 
 Kompilacja
 -----------
