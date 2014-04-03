@@ -164,7 +164,7 @@ public class MySQLHandler {
                     + "isleader VARCHAR(5),"
                     + "kills INT,"
                     + "deads INT,"
-                    + "uuid VARCHAR"
+                    + "uuid VARCHAR,"
                     + "PRIMARY KEY(id,player));";
             stat = con.createStatement();
             log(query);
@@ -218,30 +218,10 @@ public class MySQLHandler {
     
     @Deprecated
     public static void insert(String player, Guild guild, String isleader, int kills, int deads) {
-        try {
-            String tag;
-            if(guild == null) {
-                tag = "";
-            } else {
-                tag = guild.getTag();
-            }
-
-            String query = "INSERT INTO " + tablePlayers + " VALUES(NULL,"
-                    + "'" + player + "',"
-                    + "'" + player.toLowerCase() + "',"
-                    + "'" + tag + "',"
-                    + "'" + isleader + "',"
-                    + kills + ","
-                    + deads + ");";
-            stat = con.createStatement();
-            log(query);
-            stat.execute(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
+        insert(player, guild, isleader, kills, deads, Bukkit.getPlayer(player).getUniqueId().toString());
     }
     
-    public static void insert(String player, Guild guild, String isleader, int kills, int deads, String uuid) {
+    public static void insert(String player, Guild guild, String isLeader, int kills, int deads, String uuid) {
         try {
             String tag;
             if(guild == null) {
@@ -270,10 +250,6 @@ public class MySQLHandler {
         return null; // TODO
     }
     
-    public static List<Object> select(String player) {
-        return null; // TODO
-    }
-    
     public static void update(Guild guild, Type type, int value) {
         try {
             String query = "UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE tag='" + guild.getTag() + "';";
@@ -296,6 +272,7 @@ public class MySQLHandler {
         }
     }
     
+    @Deprecated
     public static void update(String player, PType type, int value) {
         try {
             String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE player_lower='" + player.toLowerCase() + "';";
@@ -307,9 +284,32 @@ public class MySQLHandler {
         }
     }
     
+    public static void update(String uuid, PType type, int value) {
+        try {
+            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE uuid='" + uuid + "';";
+            stat = con.createStatement();
+            log(query);
+            stat.execute(query);
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    @Deprecated
     public static void update(String player, PType type, String value) {
         try {
             String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE player_lower='" + player.toLowerCase() + "';";
+            stat = con.createStatement();
+            log(query);
+            stat.execute(query);
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public static void update(String uuid, PType type, String value) {
+        try {
+            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE uuid='" + uuid + "';";
             stat = con.createStatement();
             log(query);
             stat.execute(query);
