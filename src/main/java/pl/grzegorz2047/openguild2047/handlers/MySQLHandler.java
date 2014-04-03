@@ -81,12 +81,13 @@ public class MySQLHandler {
     }
     
     public enum PType {
-        PLAYER,
-        PLAYER_LOWER,
+        PLAYER, // Raczej do usunęicia
+        PLAYER_LOWER, // Raczej do usunięcia
         GUILD,
         KILLS,
         DEADS,
-        ISLEADER
+        ISLEADER,
+        UUID
     }
     
     void loadDatabase() {
@@ -163,6 +164,7 @@ public class MySQLHandler {
                     + "isleader VARCHAR(5),"
                     + "kills INT,"
                     + "deads INT,"
+                    + "uuid VARCHAR"
                     + "PRIMARY KEY(id,player));";
             stat = con.createStatement();
             log(query);
@@ -214,6 +216,7 @@ public class MySQLHandler {
         }
     }
     
+    @Deprecated
     public static void insert(String player, Guild guild, String isleader, int kills, int deads) {
         try {
             String tag;
@@ -230,6 +233,31 @@ public class MySQLHandler {
                     + "'" + isleader + "',"
                     + kills + ","
                     + deads + ");";
+            stat = con.createStatement();
+            log(query);
+            stat.execute(query);
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public static void insert(String player, Guild guild, String isleader, int kills, int deads, String uuid) {
+        try {
+            String tag;
+            if(guild == null) {
+                tag = "";
+            } else {
+                tag = guild.getTag();
+            }
+
+            String query = "INSERT INTO " + tablePlayers + " VALUES(NULL,"
+                    + "'" + player + "',"
+                    + "'" + player.toLowerCase() + "',"
+                    + "'" + tag + "',"
+                    + "'" + isleader + "',"
+                    + kills + ","
+                    + deads + ","
+                    + uuid + ");";
             stat = con.createStatement();
             log(query);
             stat.execute(query);
