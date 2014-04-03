@@ -139,6 +139,7 @@ public class OpenGuild extends JavaPlugin {
             }
     	}
         saveResource("messages.yml", false);
+        saveResource("players.yml", false);
     }
     
     private void loadConfig() {
