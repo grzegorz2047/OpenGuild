@@ -82,8 +82,8 @@ public class MySQLHandler {
     }
     
     public enum PType {
-        PLAYER, // Raczej do usunęicia
-        PLAYER_LOWER, // Raczej do usunięcia
+        PLAYER,
+        @Deprecated PLAYER_LOWER,
         GUILD,
         KILLS,
         DEADS,
@@ -247,7 +247,7 @@ public class MySQLHandler {
                     + "'" + player + "',"
                     + "'" + player.toLowerCase() + "',"
                     + "'" + tag + "',"
-                    + "'" + isleader + "',"
+                    + "'" + isLeader + "',"
                     + kills + ","
                     + deads + ","
                     + uuid.toString() + ");";
@@ -399,6 +399,21 @@ public class MySQLHandler {
         }
         return hm;
     }
+	
+	public static String getPlayer(UUID uuid) {
+		String player = null;
+		try {
+			String query = "SELECT player FROM " + tablePlayer + " WHERE uuid='" + uuid.toString() + "';";
+			stat = con.createStatement();
+			log(query);
+			ResultSet rs = stat.executeQuery(query);
+			while(rs.next())
+				player = rs.getString(1);
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		return player;
+	}
     
     @Deprecated
     public static boolean existsPlayer(String playername) {
