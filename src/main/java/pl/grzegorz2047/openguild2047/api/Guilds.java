@@ -99,7 +99,7 @@ public class Guilds {
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
             StringBuilder builder = new StringBuilder();
             builder.append("Wygenerowano " + format.format(new Date()));
-            builder.append("Wystąpił następujacy błąd " + error);
+            builder.append("Wystapil nastepujacy blad " + error);
             builder.append("-------------------------");
             builder.append("Uruchomione pluginy");
             builder.append(Bukkit.getPluginManager().getPlugins().toString());
@@ -123,7 +123,7 @@ public class Guilds {
                 
                 @Override
                 public void error(String err) {
-                    getLogger().warning("Nie udalo sie wyslac bledu: " + err);
+                    getLogger().warning("Nie udalo sie wyslac bledu z powodu: " + err);
                 }
             } );
         }
