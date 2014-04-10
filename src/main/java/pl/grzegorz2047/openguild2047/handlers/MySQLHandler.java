@@ -165,7 +165,7 @@ public class MySQLHandler {
                     + "isleader VARCHAR(5),"
                     + "kills INT,"
                     + "deads INT,"
-                    + "uuid VARCHAR,"
+                    + "uuid VARCHAR(100)," // Obecnie nie wiem jaka dlugosc ma UUID gracza :(
                     + "PRIMARY KEY(id,player));";
             stat = con.createStatement();
             log(query);
@@ -299,7 +299,7 @@ public class MySQLHandler {
     
     public static void update(UUID uuid, PType type, int value) {
         try {
-            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE uuid='" + uuid.toString + "';";
+            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE uuid='" + uuid.toString() + "';";
             stat = con.createStatement();
             log(query);
             stat.execute(query);
@@ -403,7 +403,7 @@ public class MySQLHandler {
 	public static String getPlayer(UUID uuid) {
 		String player = null;
 		try {
-			String query = "SELECT player FROM " + tablePlayer + " WHERE uuid='" + uuid.toString() + "';";
+			String query = "SELECT player FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
 			stat = con.createStatement();
 			log(query);
 			ResultSet rs = stat.executeQuery(query);
