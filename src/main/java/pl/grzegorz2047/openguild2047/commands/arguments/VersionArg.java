@@ -33,7 +33,7 @@ public class VersionArg {
 	public static boolean execute(CommandSender sender) {
 		sender.sendMessage(ChatColor.DARK_GRAY + " -------------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " -------------------- ");
 		sender.sendMessage(ChatColor.DARK_GRAY + "Wersja: " + ChatColor.GOLD + OpenGuild.get().getDescription().getVersion());
-		sender.sendMessage(ChatColor.DARK_GRAY + "Autor: " + ChatColor.GOLD + "grzegorz2047");
+		sender.sendMessage(ChatColor.DARK_GRAY + "Autor: " + ChatColor.GOLD + "Lider projektu: grzegorz2047, pomocnik: TheMolkaPL");
 		sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild2047");
 		return true;
 	}
