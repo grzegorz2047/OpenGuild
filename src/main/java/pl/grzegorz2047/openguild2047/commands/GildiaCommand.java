@@ -51,11 +51,18 @@ public class GildiaCommand implements CommandExecutor {
                     if(args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                         return CreateArg.execute(sender, args);
                     }
-                    if(args[0].equalsIgnoreCase("akceptuj")){
+                    if(args[0].equalsIgnoreCase("akceptuj")) {
                         return AcceptArg.execute(sender, args);
                     }
                 }
-                if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
+                else if(args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
+                    return error(sender, "Podano zbyt malo argumentów");
+                }
+                else if(args[0].equalsIgnoreCase("akceptuj")) {
+                    return error(sender, "Podano zbyt malo argumentów");
+                }
+                
+                else if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
                     return HelpArg.execute(sender, args);
                 }
                 else if(args[0].equalsIgnoreCase("reload")) {
@@ -64,27 +71,26 @@ public class GildiaCommand implements CommandExecutor {
                 else if(args[0].equalsIgnoreCase("ver") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("about")) {
                     return VersionArg.execute(sender);
                 }
-                if(args[0].equalsIgnoreCase("opusc")) {
+                if(args[0].equalsIgnoreCase("opusc") || args[0].equalsIgnoreCase("wyjdz")) {
                     return LeaveArg.execute(sender);
                 }
                 if(args[0].equalsIgnoreCase("dolacz")) {
                     return JoinArg.execute(sender, args);
                 }
-                if(args[0].equalsIgnoreCase("rozwiaz")){
+                if(args[0].equalsIgnoreCase("rozwiaz") || args[0].equalsIgnoreCase("zamknij")){
                     return DisbandArg.execute(sender);
                 }
-                if(args[0].equalsIgnoreCase("dom")){
+                if(args[0].equalsIgnoreCase("dom") || args[0].equalsIgnoreCase("home")){
                     return HomeArg.execute(sender,args);
                 }
                 if(args[0].equalsIgnoreCase("lista")){
                     return ListArg.execute(sender);
                 }
-                if(args[0].equalsIgnoreCase("opis")){
+                if(args[0].equalsIgnoreCase("opis") || args[0].equalsIgnoreCase("desc")){
                     return DescriptionArg.execute(sender, args);
+                } else {
+                    return error(sender, "Podano blad w komendzie");
                 }
-               // else {
-                //    return error(sender, "Zbyt duzo argumentów");//Na razie to pominiemy
-               // }
             }else{
                 sender.sendMessage(ChatColor.DARK_GRAY + " -------------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " -------------------- ");
                 sender.sendMessage(ChatColor.DARK_GRAY + "Aby uzyskac pomoc dotyczaca gildii uzyj komendy /gildia help.");
@@ -95,7 +101,7 @@ public class GildiaCommand implements CommandExecutor {
     }
     
     @SuppressWarnings("unused")
-	private boolean error(CommandSender sender, String msg) {
+    private boolean error(CommandSender sender, String msg) {
         sender.sendMessage(GenConf.prefix + ChatColor.RED + msg + "!");
         sender.sendMessage(GenConf.prefix + ChatColor.DARK_GRAY + "Uzyj " + ChatColor.GOLD + "/gildia pomoc" + ChatColor.DARK_GRAY + ", aby uzyskac pomoc.");
         return true;
