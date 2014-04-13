@@ -38,7 +38,7 @@ import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 public class PlayerChat implements Listener {
     
     @EventHandler
-    void onChat(AsyncPlayerChatEvent e){
+    void onChat(AsyncPlayerChatEvent e) {
         if(e.isCancelled() || !GenConf.guildprefixinchat) {
             return;
         }
@@ -53,7 +53,6 @@ public class PlayerChat implements Listener {
                 e.setFormat("§7[§r" + spg.getClanTag() +  "§7]§r " + e.getFormat());
             }
         }
-        
         
     }
     
