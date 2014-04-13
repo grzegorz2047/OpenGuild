@@ -35,25 +35,22 @@ import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
  *
  * @author Grzegorz
  */
-public class PlayerChat implements Listener{
+public class PlayerChat implements Listener {
     
     @EventHandler
     void onChat(AsyncPlayerChatEvent e){
-        if(e.isCancelled() || !GenConf.guildprefixinchat){
+        if(e.isCancelled() || !GenConf.guildprefixinchat) {
             return;
         }
-        //Jezeli gracz jest  w gildii to e.setFormat(e.getFormat().replace("{OpenGuildTag}", pobierajakistag));
-        //else e.setFormat(e.getFormat().replace("{OpenGuildTag}", ""));
-        if(Data.getInstance().guildsplayers.containsKey(e.getPlayer().getName())){
+        if(Data.getInstance().guildsplayers.containsKey(e.getPlayer().getName())) {
             SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(e.getPlayer().getName());
-            if(spg.getClanTag().equals("") || spg.getClanTag().equals("null")){
+            if(spg.getClanTag().equals("") || spg.getClanTag().equals("null")) {
                 return;
             }
-            if(e.getFormat().contains("{OpenGuildTag}")){
-                e.setFormat(e.getFormat().replace("{OpenGuildTag}", spg.getClanTag()));
-            }
-            else{
-                e.setFormat("§7[§r" + spg.getClanTag() +  "§7]§r" + e.getFormat());
+            if(e.getFormat().contains("{OpenGuildTag}") || e.getFormat().contains("%tag")){
+                e.setFormat(e.getFormat().replace("{OpenGuildTag}", spg.getClanTag()).replace("%tag", spg.getClanTag()));
+            } else {
+                e.setFormat("§7[§r" + spg.getClanTag() +  "§7]§r " + e.getFormat());
             }
         }
         
