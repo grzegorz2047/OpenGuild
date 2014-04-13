@@ -41,10 +41,12 @@ mysql:
   debug: false
 playerprefixtag: true
 kolortagugildii: '&6'
+# Wlacz/wylacz tag gildii na chacie w grze jako prefix
+# Aby wyswietlic tag na chacie; ustaw flage %flag w Twoim pluginie od chatu (np EssentialsChat).
 guildprefixinchat: true
+# Zablokowane slowa w nazwach gildii
 forbiddenguildnames:
     - 'null'
-    - '    '
 #Zasada odczytu do ogarniecia id:ilosc:byte
 #Albo kompatybilnie z nowymi wersjami Minecrafta to MATERIAL:ilosc:byte
 #Lista material tu: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
