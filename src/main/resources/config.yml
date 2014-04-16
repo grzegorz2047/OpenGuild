@@ -1,5 +1,7 @@
 # Wlacz/wylacz PvP pomiedzy czlonkami gildii
 teampvp: false
+# Wlacz/wylacz wiadomosc o wylaczonym PvP w trakcie próby uderzenia
+teampvp-msg: false
 # Wlacz/wylacz komende /gildia dom
 dom-command: true
 # Czas oczekiwania teleportacji do gildii (w sekundach)
