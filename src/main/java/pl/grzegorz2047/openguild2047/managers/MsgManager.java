@@ -75,7 +75,7 @@ public class MsgManager {
     public static String desctoolong = get("desctoolong", "Opis gildii jest za dlugi");
 
     public static String get(String path) {
-        return get(path, "Wiadomosc nie zostala odnaleziona :(");
+        return get(path, "&cWiadomosc nie zostala odnaleziona :(");
     }
 
     public static String get(String path, String def) {

@@ -48,17 +48,18 @@ public class HelpArg {
         }
         sender.sendMessage(getTitle(page));
         if(page == 1) {
-            sender.sendMessage(help("disband", "Usun gildie jako operator"));
-            sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
-            sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
-            sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii graczowi"));
-            sender.sendMessage(help("lista", "Lista wszystkich czlonkow gildii"));
-            sender.sendMessage(help("opis <opis...>", "Zmien opis gildii"));
+            sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
+            sender.sendMessage(help("akceptuj <gracz>", "Akceptuj zaproszenie do gildii"));
+            sender.sendMessage(help("opis <opis...>", "Stwórz opis gildii"));
+            sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii innemu graczowi"));
+            sender.sendMessage(help("dolacz", "Dolacz do gildii"));
             sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
-            sender.sendMessage(help("stworz <tag> [opis...]", "Zaloz gildie"));
             sender.sendMessage(help("zamknij", "Zamknij gildie"));
+            sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
+            sender.sendMessage(help("lista", "Lista wszystkich czlonkow gildii"));
+            sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
         } else {
-            sender.sendMessage("");
+            sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze {NUMBER} nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
         }
         return true;
     }

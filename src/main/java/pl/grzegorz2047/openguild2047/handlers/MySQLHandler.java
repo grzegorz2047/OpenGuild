@@ -283,7 +283,7 @@ public class MySQLHandler {
                     + "'" + isLeader + "',"
                     + kills + ","
                     + deads + ","
-                    + uuid.toString() + ");";
+                    + "'" + uuid.toString() + "');";
             stat = con.createStatement();
             log(query);
             stat.execute(query);

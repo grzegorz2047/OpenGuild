@@ -47,7 +47,7 @@ public class LeaveArg {
         Player p = (Player) sender;
         if(Data.getInstance().isPlayerInGuild(p.getName())) {
             if(Data.getInstance().getPlayersGuild(p.getName()).getLeader().equalsIgnoreCase(p.getName())) {
-                p.sendMessage("Jezeli chcesz to zrobic wpisz /gidlia rozwiaz!");
+                p.sendMessage("Jezeli chcesz to zrobic wpisz /gildia rozwiaz!");
                 return true;
             }
             saveDb(Guilds.getGuild(p), p.getName());
