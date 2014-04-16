@@ -32,7 +32,7 @@ public class HelpArg {
 
     public static boolean execute(CommandSender sender, String[] args) {
         int page = 1;
-        if(args.length == 1) {
+        if(args.length != 2) {
             page = 1;
         } else {
             try {
