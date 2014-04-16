@@ -26,43 +26,57 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
+
 public class HelpArg {
 
     public static boolean execute(CommandSender sender, String[] args) {
-        String sp = null;
-        if(args.length > 1) {
-            sp = args[1];
-        }
-
         int page = 1;
-        if(sp != null) {
-            page = Integer.parseInt(sp);
+        if(args.length == 1) {
+            page = 1;
+        } else {
+            try {
+                page = Integer.parseInt(args[1]);
+            } catch(NumberFormatException ex) {
+                if(args[1].equalsIgnoreCase("admin") || args[1].equalsIgnoreCase("a")) {
+                    admin(sender);
+                } else {
+                    sender.sendMessage(MsgManager.get("pagenotnumber", "&cNumer strony musi byc liczba!"));
+                }
+                return true;
+            }
         }
         sender.sendMessage(getTitle(page));
         if(page == 1) {
             sender.sendMessage(help("disband", "Usun gildie jako operator"));
             sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
-            sender.sendMessage(help("help [strona]", "Pokaz pomoc [strona]"));
+            sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
             sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii graczowi"));
             sender.sendMessage(help("lista", "Lista wszystkich czlonkow gildii"));
             sender.sendMessage(help("opis <opis...>", "Zmien opis gildii"));
             sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
-            sender.sendMessage(help("reload", "Przeladuj konfiguracje pluginu"));
-        }
-        else if(page == 2) {
             sender.sendMessage(help("stworz <tag> [opis...]", "Zaloz gildie"));
-            sender.sendMessage(help("version", "Informacje o plugine OpenGuild2047"));
             sender.sendMessage(help("zamknij", "Zamknij gildie"));
         }
         return true;
     }
 
+    private static String getTitleAdmin() {
+        return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help Admin" + ChatColor.DARK_GRAY + " --------------- ";
+    }
+
     private static String getTitle(int page) {
-        return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help (" + page + "/2)" + ChatColor.DARK_GRAY + " --------------- ";
+        return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help (" + page + "/1)" + ChatColor.DARK_GRAY + " --------------- ";
     }
 
     private static String help(String usage, String desc) {
         return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
+    }
+
+    private static void admin(CommandSender sender) {
+        sender.sendMessage(getTitleAdmin());
+        sender.sendMessage(help("reload", "Przeladuj konfiguracje pluginu"));
+        sender.sendMessage(help("version", "Informacje o plugine OpenGuild2047"));
     }
 
 }
