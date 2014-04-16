@@ -67,6 +67,7 @@ public class MySQLHandler {
     public MySQLHandler(String address, String database, String login, String password) {
         this.address = address;
         this.database = database;
+        createFirstConnection(login, password);
         createConnection(login, password);
     }
     
@@ -112,6 +113,32 @@ public class MySQLHandler {
         }
     }
     
+    public void createFirstConnection(String login, String password) {
+        log.info("[MySQL] Laczenie z baza MySQL...");
+        try {
+            Class.forName(driver).newInstance();
+            con = DriverManager.getConnection("jdbc:mysql://" + address + ":3306/" + database, login, password);
+            if(con != null) {
+                log.info("[MySQL] Pomyslnie polaczono z baza danych.");
+                createTables();
+            }
+        } catch(ClassNotFoundException ex) {
+            Guilds.getLogger().severe("[MySQL] Nie udane polaczenie z baza: Wystapil blad z zaladowaniem sterownika " + driver + " pod baze MySQL!");
+        } catch(InstantiationException ex) {
+            ex.printStackTrace();
+        } catch(IllegalAccessException ex) {
+            log.info("[MySQL] Nie udane polaczenie z baza: Odmowa dostepu: " + ex.getMessage());
+            ex.printStackTrace();
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        if(con != null)
+            loadDatabase();
+        else
+            log.info("Wystapil blad podczas laczania z baza danych.");
+    }
+    
     private void createConnection(String login, String password) {
         log.info("[MySQL] Laczenie z baza MySQL...");
         try {
@@ -120,10 +147,11 @@ public class MySQLHandler {
             log.info("[MySQL] Skutecznie polaczono!");
             createTables();
         } catch(ClassNotFoundException ex) {
-            Guilds.getLogger().severe("[MySQL] Wystapil blad z zaladowaniem sterownika " + driver + " pod baze MySQL!");
+            Guilds.getLogger().severe("[MySQL] Nie udane polaczenie z baza: Wystapil blad z zaladowaniem sterownika " + driver + " pod baze MySQL!");
         } catch(InstantiationException ex) {
             ex.printStackTrace();
         } catch(IllegalAccessException ex) {
+            log.info("[MySQL] Nie udane polaczenie z baza: Odmowa dostepu: " + ex.getMessage());
             ex.printStackTrace();
         } catch(SQLException ex) {
             ex.printStackTrace();
