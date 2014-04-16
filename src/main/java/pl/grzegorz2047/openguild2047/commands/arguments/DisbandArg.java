@@ -64,14 +64,14 @@ public class DisbandArg {
                 Data.getInstance().cuboids.remove(tag);
 
                 //TODO: Usunac cuboida z mysqla
-                p.sendMessage(GenConf.prefix + MsgManager.guilddisbandsuccess);
+                p.sendMessage(MsgManager.guilddisbandsuccess);
                 return true;
             } else {
-                p.sendMessage(GenConf.prefix + MsgManager.playernotleader);
+                p.sendMessage(MsgManager.playernotleader);
                 return false;
             }
         } else {
-            p.sendMessage(GenConf.prefix + MsgManager.notinguild);
+            p.sendMessage(MsgManager.notinguild);
             return false;
         }
 

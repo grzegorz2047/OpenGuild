@@ -59,12 +59,12 @@ public class ListArg {
                 p.sendMessage(sb.toString());
                 return true;
             } else {
-                p.sendMessage(GenConf.prefix + MsgManager.nomembersinguild);
+                p.sendMessage(MsgManager.nomembersinguild);
                 return false;
             }
 
         } else {
-            p.sendMessage(GenConf.prefix + MsgManager.notinguild);
+            p.sendMessage(MsgManager.notinguild);
         }
 
         return false;

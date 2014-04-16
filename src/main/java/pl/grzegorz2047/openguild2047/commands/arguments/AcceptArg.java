@@ -70,23 +70,23 @@ public class AcceptArg {
 
                         }
                         savetodb(p.getName(), sg);
-                        player.sendMessage(GenConf.prefix + MsgManager.guildjoinsuccess);
-                        p.sendMessage(GenConf.prefix + MsgManager.invitedplayersuccessfullyjoined);
+                        player.sendMessage(MsgManager.guildjoinsuccess);
+                        p.sendMessage(MsgManager.invitedplayersuccessfullyjoined);
                         return true;
                     } else {
-                        p.sendMessage(GenConf.prefix + MsgManager.playernotoninvitedlist);
+                        p.sendMessage(MsgManager.playernotoninvitedlist);
                         return true;
                     }
                 } else {
-                    p.sendMessage(GenConf.prefix + MsgManager.playernotleader);
+                    p.sendMessage(MsgManager.playernotleader);
                     return false;
                 }
             } else {
-                p.sendMessage(GenConf.prefix + MsgManager.notinguild);
+                p.sendMessage(MsgManager.notinguild);
                 return false;
             }
         } else {
-            p.sendMessage(GenConf.prefix + MsgManager.wrongcmdargument);
+            p.sendMessage(MsgManager.wrongcmdargument);
             return false;
         }
     }

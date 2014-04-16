@@ -69,7 +69,7 @@ public class HomeArg {
                     saveDb(Guilds.getGuild(p), p.getLocation());
                     return true;
                 } else {
-                    p.sendMessage(GenConf.prefix + MsgManager.playernotleader);
+                    p.sendMessage(MsgManager.playernotleader);
                     return false;
                 }
             } else {
@@ -81,12 +81,12 @@ public class HomeArg {
                     return true;
                 }
                 teleport(p, homeloc, cooldown);
-                p.sendMessage(GenConf.prefix + MsgManager.teleportsuccess);
+                p.sendMessage(MsgManager.teleportsuccess);
                 return true;
             }
 
         } else {
-            p.sendMessage(GenConf.prefix + MsgManager.notinguild);
+            p.sendMessage(MsgManager.notinguild);
             return false;
         }
     }

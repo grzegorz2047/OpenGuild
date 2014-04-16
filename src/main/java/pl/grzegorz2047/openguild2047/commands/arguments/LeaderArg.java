@@ -44,7 +44,7 @@ public class LeaderArg {
 
     public static boolean execute(CommandSender sender, String args[]) {
         if(!(sender instanceof Player)) {
-            sender.sendMessage(GenConf.prefix + MsgManager.cmdonlyforplayer);
+            sender.sendMessage(MsgManager.cmdonlyforplayer);
             return false;
         }
         Player p = (Player) sender;
@@ -58,15 +58,15 @@ public class LeaderArg {
                             saveDb(Guilds.getGuild(p), args[2]);
                             return true;
                         } else {
-                            p.sendMessage(GenConf.prefix + MsgManager.playerneverplayed);
+                            p.sendMessage(MsgManager.playerneverplayed);
                             return false;
                         }
                     } else {
-                        p.sendMessage(GenConf.prefix + MsgManager.playernotleader);
+                        p.sendMessage(MsgManager.playernotleader);
                         return false;
                     }
                 } else {
-                    p.sendMessage(GenConf.prefix + MsgManager.wrongcmdargument);
+                    p.sendMessage(MsgManager.wrongcmdargument);
                     return false;
                 }
             } else {
@@ -74,7 +74,7 @@ public class LeaderArg {
                 return true;
             }
         } else {
-            p.sendMessage(GenConf.prefix + MsgManager.notinguild);
+            p.sendMessage(MsgManager.notinguild);
             return false;
         }
     }

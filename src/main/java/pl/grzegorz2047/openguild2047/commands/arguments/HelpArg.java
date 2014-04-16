@@ -57,6 +57,8 @@ public class HelpArg {
             sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
             sender.sendMessage(help("stworz <tag> [opis...]", "Zaloz gildie"));
             sender.sendMessage(help("zamknij", "Zamknij gildie"));
+        } else {
+            sender.sendMessage("");
         }
         return true;
     }

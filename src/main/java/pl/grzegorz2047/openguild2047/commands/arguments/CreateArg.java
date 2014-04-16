@@ -81,7 +81,7 @@ public class CreateArg {
                                         if(args.length > 2) {
                                             String desc = GenUtil.argsToString(args, 2, args.length);
                                             if(desc.length() > 32) {
-                                                p.sendMessage(GenConf.prefix + MsgManager.desctoolong);
+                                                p.sendMessage(MsgManager.desctoolong);
                                                 return false;
                                             }
                                             sg.setDescription(desc);
@@ -104,39 +104,39 @@ public class CreateArg {
                                         saveToDb(clantag, sg.getDescription(), p.getName(), p.getLocation(), sg);
 
                                         Guilds.getLogger().log(Level.INFO, "Gracz " + p.getName() + " stworzyl gildie o nazwie " + spg.getClanTag());
-                                        p.sendMessage(GenConf.prefix + MsgManager.createguildsuccess);
+                                        p.sendMessage(MsgManager.createguildsuccess);
                                         return true;
                                     } else {
-                                        p.sendMessage(GenConf.prefix + MsgManager.playerstooclose);
+                                        p.sendMessage(MsgManager.playerstooclose);
                                         return false;
                                     }
                                 } else {
-                                    p.sendMessage(GenConf.prefix + MsgManager.gildtocloseothers);
+                                    p.sendMessage(MsgManager.gildtocloseothers);
                                     return false;
                                 }
 
                             } else {
-                                p.sendMessage(GenConf.prefix + MsgManager.notenoughitems);
+                                p.sendMessage(MsgManager.notenoughitems);
                                 return false;
                             }
                         } else {
-                            p.sendMessage(GenConf.prefix + MsgManager.illegaltag);
+                            p.sendMessage(MsgManager.illegaltag);
                             return false;
                         }
                     } else {
-                        p.sendMessage(GenConf.prefix + MsgManager.toolongshorttag);
+                        p.sendMessage(MsgManager.toolongshorttag);
                         return false;
                     }
                 } else {
-                    p.sendMessage(GenConf.prefix + MsgManager.unsupportedchars);
+                    p.sendMessage(MsgManager.unsupportedchars);
                     return false;
                 }
             } else {
-                p.sendMessage(GenConf.prefix + MsgManager.alreadyinguild);
+                p.sendMessage(MsgManager.alreadyinguild);
                 return false;
             }
         } else {
-            p.sendMessage(GenConf.prefix + MsgManager.guildexists);
+            p.sendMessage(MsgManager.guildexists);
             return false;
         }
 

@@ -53,15 +53,15 @@ public class JoinArg {
                 if(Data.getInstance().guilds.containsKey(tag)) {
                     SimpleGuild sg = Data.getInstance().guilds.get(tag);
                     if(sg.getInvitedPlayers().contains(p.getName())) {
-                        p.sendMessage(GenConf.prefix + MsgManager.notyetaccepted);
+                        p.sendMessage(MsgManager.notyetaccepted);
                         return false;
                     } else {
-                        p.sendMessage(GenConf.prefix + MsgManager.playernotinvited);
+                        p.sendMessage(MsgManager.playernotinvited);
                         Player leader = Bukkit.getPlayer(sg.getLeader());
                         sg.getInvitedPlayers().add(p.getName());
                         if(leader != null) {
                             if(leader.isOnline()) {
-                                leader.sendMessage(GenConf.prefix + MsgManager.askforinvite + " " + p.getName());
+                                leader.sendMessage(MsgManager.askforinvite + " " + p.getName());
                                 return false;//Mozna tu wiele dodac np. dodawanie do listy oczekujacych
                                 //albo dodawanie blokowanych osob, ktore spamia zaproszeniami
                                 //to moglby wykonywac lider
@@ -69,20 +69,20 @@ public class JoinArg {
 
                             }
                         }
-                        p.sendMessage(GenConf.prefix + MsgManager.leadernotonline);
+                        p.sendMessage(MsgManager.leadernotonline);
                         return false;
                     }
                 } else {
-                    p.sendMessage(GenConf.prefix + MsgManager.guilddoesntexists);
+                    p.sendMessage(MsgManager.guilddoesntexists);
                     return false;
                 }
 
             } else {
-                p.sendMessage(GenConf.prefix + MsgManager.alreadyinguild);
+                p.sendMessage(MsgManager.alreadyinguild);
                 return false;
             }
         } else {
-            p.sendMessage(GenConf.prefix + MsgManager.wrongcmdargument);
+            p.sendMessage(MsgManager.wrongcmdargument);
             return false;
         }
 

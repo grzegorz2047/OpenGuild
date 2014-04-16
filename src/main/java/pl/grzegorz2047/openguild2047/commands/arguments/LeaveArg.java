@@ -41,21 +41,21 @@ public class LeaveArg {
 
     public static boolean execute(CommandSender sender) {
         if(!(sender instanceof Player)) {
-            sender.sendMessage(MsgManager.cmdonlyforplayer);
+            sender.sendMessage(GenConf.prefix + MsgManager.cmdonlyforplayer);
             return true;
         }
         Player p = (Player) sender;
         if(Data.getInstance().isPlayerInGuild(p.getName())) {
             if(Data.getInstance().getPlayersGuild(p.getName()).getLeader().equalsIgnoreCase(p.getName())) {
-                p.sendMessage(GenConf.prefix + "Jak chcesz to zrobic wpisz /gidlia rozwiaz!");
-                return false;
+                p.sendMessage("Jezeli chcesz to zrobic wpisz /gidlia rozwiaz!");
+                return true;
             }
             saveDb(Guilds.getGuild(p), p.getName());
             Data.getInstance().getPlayersGuild(p.getName()).removeMember(p.getName());
             Data.getInstance().guildsplayers.remove(p.getName());
-            p.sendMessage(GenConf.prefix + MsgManager.leaveguildsuccess);
+            p.sendMessage(MsgManager.leaveguildsuccess);
         } else {
-            p.sendMessage(GenConf.prefix + MsgManager.notinguild);
+            p.sendMessage(MsgManager.notinguild);
         }
         return true;
     }

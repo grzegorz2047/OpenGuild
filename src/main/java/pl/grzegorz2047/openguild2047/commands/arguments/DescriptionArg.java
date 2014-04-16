@@ -60,19 +60,19 @@ public class DescriptionArg {
                             saveDb(Guilds.getGuild(p), desc);
                             return true;
                         } else {
-                            p.sendMessage(GenConf.prefix + MsgManager.playernotleader);
+                            p.sendMessage(MsgManager.playernotleader);
                             return false;
                         }
                     } else {
-                        p.sendMessage(GenConf.prefix + MsgManager.notinguild);
+                        p.sendMessage(MsgManager.notinguild);
                         return false;
                     }
                 } else {
-                    p.sendMessage(GenConf.prefix + MsgManager.wronguseddesccmd);
+                    p.sendMessage(MsgManager.wronguseddesccmd);
                     return false;
                 }
             } else {
-                p.sendMessage(GenConf.prefix + MsgManager.wrongcmdargument);
+                p.sendMessage(MsgManager.wrongcmdargument);
                 return false;
             }
         } else {
@@ -81,7 +81,7 @@ public class DescriptionArg {
                 p.sendMessage("Opis gildii to: " + sg.getDescription());
                 return true;
             } else {
-                p.sendMessage(GenConf.prefix + MsgManager.notinguild);
+                p.sendMessage(MsgManager.notinguild);
                 return false;
             }
         }
