@@ -37,8 +37,8 @@ import pl.grzegorz2047.openguild2047.GenConf;
  */
 public class MsgManager {
     
-    private static final File FILE = new File("plugins/OpenGuild2047/messages.yml");
-    private static final FileConfiguration CONFIG = YamlConfiguration.loadConfiguration(FILE);
+    public static final File FILE = new File("plugins/OpenGuild2047/messages.yml");
+    public static final FileConfiguration CONFIG = YamlConfiguration.loadConfiguration(FILE);
     
     public static String createguildsuccess = get("createguildsuccess", "Gildia zostala pomysnie stworzona.");
     public static String cmdonlyforplayer = get("cmdonlyforplayer", "Komenda jedynie dla graczy na serwerze!");
