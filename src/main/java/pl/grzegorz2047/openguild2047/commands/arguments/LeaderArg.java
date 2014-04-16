@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import org.bukkit.Bukkit;
@@ -42,46 +41,46 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * @author Grzegorz
  */
 public class LeaderArg {
-    
-    public static boolean execute(CommandSender sender,String args[]) {
-        if(!(sender instanceof Player)){
-            sender.sendMessage(GenConf.prefix+MsgManager.cmdonlyforplayer);
+
+    public static boolean execute(CommandSender sender, String args[]) {
+        if(!(sender instanceof Player)) {
+            sender.sendMessage(GenConf.prefix + MsgManager.cmdonlyforplayer);
             return false;
         }
         Player p = (Player) sender;
-        if(Data.getInstance().isPlayerInGuild(p.getName())){
+        if(Data.getInstance().isPlayerInGuild(p.getName())) {
             SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
-            if(args.length>=3){
-                if(args[1].equalsIgnoreCase("zmien")){
-                    if(sg.getLeader().equals(p.getName())){
-                        if(Bukkit.getOfflinePlayer(p.getName()).hasPlayedBefore()){
+            if(args.length >= 3) {
+                if(args[1].equalsIgnoreCase("zmien")) {
+                    if(sg.getLeader().equals(p.getName())) {
+                        if(Bukkit.getOfflinePlayer(p.getName()).hasPlayedBefore()) {
                             sg.setLeader(args[2]);
                             saveDb(Guilds.getGuild(p), args[2]);
                             return true;
-                        }else{
-                            p.sendMessage(GenConf.prefix+MsgManager.playerneverplayed);
+                        } else {
+                            p.sendMessage(GenConf.prefix + MsgManager.playerneverplayed);
                             return false;
                         }
-                    }else{
-                        p.sendMessage(GenConf.prefix+MsgManager.playernotleader);
+                    } else {
+                        p.sendMessage(GenConf.prefix + MsgManager.playernotleader);
                         return false;
                     }
-                }else{
-                   p.sendMessage(GenConf.prefix+MsgManager.wrongcmdargument);
-                   return false;
+                } else {
+                    p.sendMessage(GenConf.prefix + MsgManager.wrongcmdargument);
+                    return false;
                 }
-            }else{
-               p.sendMessage("Liderem gildii jest "+sg.getLeader());
-               return true;
+            } else {
+                p.sendMessage("Liderem gildii jest " + sg.getLeader());
+                return true;
             }
-        }else{
-            p.sendMessage(GenConf.prefix+MsgManager.notinguild);
+        } else {
+            p.sendMessage(GenConf.prefix + MsgManager.notinguild);
             return false;
         }
     }
-    
+
     private static void saveDb(Guild guild, String leader) {
         MySQLHandler.update(guild, Type.LEADER, leader);
     }
-    
+
 }

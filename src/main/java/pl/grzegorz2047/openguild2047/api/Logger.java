@@ -18,8 +18,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package pl.grzegorz2047.openguild2047.api;
 
@@ -28,15 +28,15 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
 public interface Logger {
-	
-	void debug(@Nonnull String debug);
-	
-	void info(@Nonnull String info);
-	
-	void log(@Nonnull Level level, @Nonnull String log);
-	
-	void severe(@Nonnull String severe);
-	
-	void warning(@Nonnull String warning);
-	
+
+    void debug(@Nonnull String debug);
+
+    void info(@Nonnull String info);
+
+    void log(@Nonnull Level level, @Nonnull String log);
+
+    void severe(@Nonnull String severe);
+
+    void warning(@Nonnull String warning);
+
 }

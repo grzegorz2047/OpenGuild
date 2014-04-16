@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047;
 
 import pl.grzegorz2047.openguild2047.api.PlayerGuild;
@@ -30,20 +29,20 @@ import pl.grzegorz2047.openguild2047.api.PlayerGuild;
  *
  * @author Grzegorz
  */
-public class SimplePlayerGuild implements PlayerGuild{
+public class SimplePlayerGuild implements PlayerGuild {
     /*
-        Ta klasa bedzie potrzebna, ale jak to wszystko 
-        jakos logicznie ogarnac to jeszcze nie wiem xd
-    */
+     Ta klasa bedzie potrzebna, ale jak to wszystko 
+     jakos logicznie ogarnac to jeszcze nie wiem xd
+     */
+
     private String playername;
     private String clantag;
     private boolean leader;
-    
-    
-    public SimplePlayerGuild(String playername, String tag, boolean leader){
-        this.playername=playername;
-        this.clantag=tag;
-        this.leader=leader;
+
+    public SimplePlayerGuild(String playername, String tag, boolean leader) {
+        this.playername = playername;
+        this.clantag = tag;
+        this.leader = leader;
     }
 
     @Override
@@ -60,8 +59,5 @@ public class SimplePlayerGuild implements PlayerGuild{
     public boolean isLeader() {
         return this.leader;
     }
-    
-    
-    
-    
+
 }

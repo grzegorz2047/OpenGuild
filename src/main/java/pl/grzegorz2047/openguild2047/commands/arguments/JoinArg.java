@@ -21,19 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
-import ca.wacos.nametagedit.NametagAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -42,29 +39,29 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * @author Grzegorz
  */
 public class JoinArg {
-    
-    public static boolean execute(CommandSender sender, String[] args){
-        if(!(sender instanceof Player)){
+
+    public static boolean execute(CommandSender sender, String[] args) {
+        if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return false;
         }
         Player p = (Player) sender;
-        if(args.length>=2){
-            if(!Data.getInstance().isPlayerInGuild(p.getName())){
+        if(args.length >= 2) {
+            if(!Data.getInstance().isPlayerInGuild(p.getName())) {
                 //TODO: System zapraszania do gildii
                 String tag = args[1];
-                if(Data.getInstance().guilds.containsKey(tag)){
+                if(Data.getInstance().guilds.containsKey(tag)) {
                     SimpleGuild sg = Data.getInstance().guilds.get(tag);
-                    if(sg.getInvitedPlayers().contains(p.getName())){
-                        p.sendMessage(GenConf.prefix+MsgManager.notyetaccepted);
+                    if(sg.getInvitedPlayers().contains(p.getName())) {
+                        p.sendMessage(GenConf.prefix + MsgManager.notyetaccepted);
                         return false;
-                    }else{
-                        p.sendMessage(GenConf.prefix+MsgManager.playernotinvited);
+                    } else {
+                        p.sendMessage(GenConf.prefix + MsgManager.playernotinvited);
                         Player leader = Bukkit.getPlayer(sg.getLeader());
                         sg.getInvitedPlayers().add(p.getName());
-                        if(leader!=null){
-                            if(leader.isOnline()){
-                                leader.sendMessage(GenConf.prefix+MsgManager.askforinvite+" "+p.getName());
+                        if(leader != null) {
+                            if(leader.isOnline()) {
+                                leader.sendMessage(GenConf.prefix + MsgManager.askforinvite + " " + p.getName());
                                 return false;//Mozna tu wiele dodac np. dodawanie do listy oczekujacych
                                 //albo dodawanie blokowanych osob, ktore spamia zaproszeniami
                                 //to moglby wykonywac lider
@@ -72,27 +69,27 @@ public class JoinArg {
 
                             }
                         }
-                        p.sendMessage(GenConf.prefix+MsgManager.leadernotonline);
+                        p.sendMessage(GenConf.prefix + MsgManager.leadernotonline);
                         return false;
                     }
-                }else{
-                    p.sendMessage(GenConf.prefix+MsgManager.guilddoesntexists);
+                } else {
+                    p.sendMessage(GenConf.prefix + MsgManager.guilddoesntexists);
                     return false;
                 }
 
-            }else{
-                p.sendMessage(GenConf.prefix+MsgManager.alreadyinguild);
+            } else {
+                p.sendMessage(GenConf.prefix + MsgManager.alreadyinguild);
                 return false;
-            } 
-        }else{
-            p.sendMessage(GenConf.prefix+MsgManager.wrongcmdargument);
+            }
+        } else {
+            p.sendMessage(GenConf.prefix + MsgManager.wrongcmdargument);
             return false;
         }
 
     }
-    
-    private static void savetodb(String Player, Guild g){
+
+    private static void savetodb(String Player, Guild g) {
         MySQLHandler.update(Player, MySQLHandler.PType.GUILD, g.getTag());
     }
-    
+
 }

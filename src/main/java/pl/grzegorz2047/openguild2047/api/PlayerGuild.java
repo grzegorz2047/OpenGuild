@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.api;
 
 import javax.annotation.Nonnull;
@@ -31,11 +30,11 @@ import javax.annotation.Nonnull;
  * @author Grzegorz
  */
 public interface PlayerGuild {
-    
+
     @Nonnull String getPlayerName();
-    
+
     @Nonnull String getClanTag();
-    
+
     @Nonnull boolean isLeader();
-    
+
 }

@@ -10,31 +10,35 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class PastebinWriter {
-    
+
     public static void paste(String message, Callback callback) {
         Poster poster = new Poster(message, callback);
         Thread thread = new Thread(poster);
         thread.start();
     }
-    
+
     public static interface Callback {
+
         void success(URL url);
+
         void error(String err);
+
     }
-    
+
     private static class Poster implements Runnable {
+
         private String message;
         private Callback callback;
-        
+
         public Poster(String message, Callback callback) {
             this.message = message;
             this.callback = callback;
         }
-        
+
         @Override
         public void run() {
             HttpURLConnection con = null;
-            OutputStream out = null; 
+            OutputStream out = null;
             InputStream in = null;
             try {
                 URL url = new URL("http://pastebin.com/api/api_post.php");
@@ -56,7 +60,7 @@ public class PastebinWriter {
                         + "&api_user_key=" + URLEncoder.encode("", "utf-8")).getBytes());
                 out.flush();
                 out.close();
-                
+
                 if(con.getResponseCode() != 200) {
                     callback.error("Nie zdobyto prawidlowej odpowiedzi z serwera!");
                     return;
@@ -71,10 +75,10 @@ public class PastebinWriter {
                 }
                 reader.close();
                 String result = builder.toString().trim();
-                if(result.matches("^https?://.*"))
+                if(result.matches("^https?://.*")) {
                     callback.success(new URL(result.trim()));
-                else {
-                    String err =result.trim();
+                } else {
+                    String err = result.trim();
                     if (err.length() > 100) {
                         err = err.substring(0, 100);
                     }
@@ -83,14 +87,26 @@ public class PastebinWriter {
             } catch(IOException ex) {
                 callback.error(ex.getMessage());
             }
-            if(con != null)
+            if(con != null) {
                 con.disconnect();
-            if(in != null)
-                try { in.close(); } catch(IOException ex) {}
-            if(out != null)
-                try { out.close(); } catch(IOException ex) {}
+            }
+            if(in != null) {
+                try {
+                    in.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if(out != null) {
+                try {
+                    out.close();
+                } catch(IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
-        
+
     }
-    
+
 }

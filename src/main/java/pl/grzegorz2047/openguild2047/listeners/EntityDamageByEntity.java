@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
 package pl.grzegorz2047.openguild2047.listeners;
 
 import org.bukkit.entity.Arrow;
@@ -30,49 +29,53 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  *
  * @author Grzegorz
  */
-public class EntityDamageByEntity implements Listener{
-    
-    
+public class EntityDamageByEntity implements Listener {
+
     @EventHandler
-    void onSomeoneAttack(EntityDamageByEntityEvent e){
-        if(e.isCancelled()){
+    public void onSomeoneAttack(EntityDamageByEntityEvent e) {
+        if (e.isCancelled()) {
             return;
         }
-        if(GenConf.teampvp){
+        if (GenConf.teampvp) {
             return;
         }
         //Jezeli atakowali sie lukiem czy czymkolwiek ludzie z wlasnej gildii to zablokuj
         //Daj tu też opcję, że jak jest on to można siebie nawalać
         Entity attacker = (Entity) e.getDamager();
-    	Entity attacked = (Entity) e.getEntity();
+        Entity attacked = (Entity) e.getEntity();
         //System.out.println("atakuja!");
-    	if(attacker instanceof Player && attacked instanceof Player){
+        if(attacker instanceof Player && attacked instanceof Player) {
             Player attackerp = (Player) attacker;
             Player attackedp = (Player) attacked;
-            if(Data.getInstance().guildsplayers.containsKey(attackerp.getName()) && Data.getInstance().guildsplayers.containsKey(attackedp.getName())){
+            if(Data.getInstance().guildsplayers.containsKey(attackerp.getName()) && Data.getInstance().guildsplayers.containsKey(attackedp.getName())) {
                 SimpleGuild sg = Data.getInstance().guilds.get(Data.getInstance().guildsplayers.get(attackerp.getName()).getClanTag());
-                if(sg.containsMember(attackerp.getName()) &&  sg.containsMember(attackedp.getName())){
+                if(sg.containsMember(attackerp.getName()) && sg.containsMember(attackedp.getName())) {
                     e.setCancelled(true);
+                    if(GenConf.TEAMPVP_MSG) {
+                        attackedp.sendMessage(MsgManager.get("pvpguildmember", "&cNie mozesz uderzyc gracza sojuszniczej gildii"));
+                    }
                 }
             }
- 
+
         }
         else if (attacker instanceof Arrow) {
             Arrow arrow = (Arrow) e.getDamager();
-            if(arrow.getShooter() instanceof Player && e.getEntity() instanceof Player ){
+            if(arrow.getShooter() instanceof Player && e.getEntity() instanceof Player) {
                 Player attackerp = (Player) arrow.getShooter();
                 Player attackedp = (Player) e.getEntity();
-                if(Data.getInstance().guildsplayers.containsKey(attackerp.getName()) && Data.getInstance().guildsplayers.containsKey(attackedp.getName())){
+                if(Data.getInstance().guildsplayers.containsKey(attackerp.getName()) && Data.getInstance().guildsplayers.containsKey(attackedp.getName())) {
                     SimpleGuild sg = Data.getInstance().guilds.get(Data.getInstance().guildsplayers.get(attackerp.getName()).getClanTag());
-                    if(sg.containsMember(attackerp.getName()) &&  sg.containsMember(attackedp.getName())){
+                    if(sg.containsMember(attackerp.getName()) && sg.containsMember(attackedp.getName())) {
                         e.setCancelled(true);
                     }
                 }

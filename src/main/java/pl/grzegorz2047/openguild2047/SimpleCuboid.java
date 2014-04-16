@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047;
 
 import org.bukkit.Location;
@@ -32,13 +31,12 @@ import pl.grzegorz2047.openguild2047.api.Cuboid;
  *
  * @author Grzegorz
  */
-public class SimpleCuboid implements Cuboid{
+public class SimpleCuboid implements Cuboid {
 
-    
     private Location center;
     private int radius;
     private String owner;
-    
+
     @Override
     public Location getCenter() {
         return this.center;
@@ -57,12 +55,12 @@ public class SimpleCuboid implements Cuboid{
 
     @Override
     public void setCenter(Location center) {
-        this.center=center;
+        this.center = center;
     }
 
     @Override
     public void setRadius(int radius) {
-        this.radius=radius;
+        this.radius = radius;
     }
 
     @Override
@@ -72,17 +70,17 @@ public class SimpleCuboid implements Cuboid{
 
     @Override
     public void setOwner(String tag) {
-        this.owner=tag;
+        this.owner = tag;
     }
 
     @Override
     public Location getMin() {
-    	return new Location(this.center.getWorld(),this.center.getBlockX()-this.radius,this.center.getBlockY()-this.radius,this.center.getBlockZ()-this.radius);
+        return new Location(this.center.getWorld(), this.center.getBlockX() - this.radius, this.center.getBlockY() - this.radius, this.center.getBlockZ() - this.radius);
     }
 
     @Override
     public Location getMax() {
-        return new Location(this.center.getWorld(),this.center.getBlockX()+this.radius,this.center.getBlockY()+this.radius,this.center.getBlockZ()+this.radius);
+        return new Location(this.center.getWorld(), this.center.getBlockX() + this.radius, this.center.getBlockY() + this.radius, this.center.getBlockZ() + this.radius);
     }
-    
+
 }

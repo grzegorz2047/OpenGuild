@@ -42,53 +42,53 @@ import pl.grzegorz2047.openguild2047.utils.GenUtil;
  * @author Grzegorz
  */
 public class DescriptionArg {
-    
+
     public static boolean execute(CommandSender sender, String args[]) {
-        if(!(sender instanceof Player)){
+        if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return false;
         }
         Player p = (Player) sender;
-        if(args.length>1){
-            if(args[1].equalsIgnoreCase("zmien")){
-                if(args.length>3){
-                    if(Data.getInstance().isPlayerInGuild(p.getName())){
+        if(args.length > 1) {
+            if(args[1].equalsIgnoreCase("zmien")) {
+                if(args.length > 3) {
+                    if(Data.getInstance().isPlayerInGuild(p.getName())) {
                         SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
-                        if(sg.getLeader().equals(p.getName())){
+                        if(sg.getLeader().equals(p.getName())) {
                             String desc = GenUtil.argsToString(args, 3, args.length);
                             sg.setDescription(desc);
                             saveDb(Guilds.getGuild(p), desc);
                             return true;
-                        }else{
-                            p.sendMessage(GenConf.prefix+MsgManager.playernotleader);
+                        } else {
+                            p.sendMessage(GenConf.prefix + MsgManager.playernotleader);
                             return false;
                         }
-                    }else{
-                        p.sendMessage(GenConf.prefix+MsgManager.notinguild);
+                    } else {
+                        p.sendMessage(GenConf.prefix + MsgManager.notinguild);
                         return false;
                     }
-                }else{
-                    p.sendMessage(GenConf.prefix+MsgManager.wronguseddesccmd);
+                } else {
+                    p.sendMessage(GenConf.prefix + MsgManager.wronguseddesccmd);
                     return false;
                 }
-            }else{
-                p.sendMessage(GenConf.prefix+MsgManager.wrongcmdargument);
+            } else {
+                p.sendMessage(GenConf.prefix + MsgManager.wrongcmdargument);
                 return false;
             }
-        }else{
-            if(Data.getInstance().isPlayerInGuild(p.getName())){
+        } else {
+            if(Data.getInstance().isPlayerInGuild(p.getName())) {
                 SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
-                p.sendMessage("Opis gildii to: "+sg.getDescription());
+                p.sendMessage("Opis gildii to: " + sg.getDescription());
                 return true;
-            }else{
-                p.sendMessage(GenConf.prefix+MsgManager.notinguild);
+            } else {
+                p.sendMessage(GenConf.prefix + MsgManager.notinguild);
                 return false;
             }
         }
     }
-    
+
     private static void saveDb(Guild guild, String description) {
         MySQLHandler.update(guild, Type.DESCRIPTION, description);
     }
-    
+
 }

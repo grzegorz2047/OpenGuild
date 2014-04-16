@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047;
 
 import java.util.List;
@@ -31,12 +30,12 @@ import java.util.List;
  * @author Grzegorz
  */
 public class GenConf {
-    
+
     public static String prefix = "§7[§6OpenGuild§7]§7 ";//Mozna pokolorowac
     public static boolean teampvp = false;
     public static boolean homecommand = true;
     public static boolean playerprefixenabled = true;
-    public static boolean guildprefixinchat = true; 
+    public static boolean guildprefixinchat = true;
     //Max 11, bo prefix jest 16 znakowy - 5 znaków kolorujacych
     public static int maxclantag = 6;
     public static int minclantag = 4;
@@ -54,5 +53,6 @@ public class GenConf {
     public static final Database DATABASE = Database.valueOf(OpenGuild.get().getConfig().getString("database", "MYSQL").toUpperCase());
     public static final String FILE_DIR = OpenGuild.get().getConfig().getString("file-dir", "plugins/OpenGuild2047/guilds.yml");
     public static final boolean SNOOPER = OpenGuild.get().getConfig().getBoolean("snooper", true);
-    
+    public static final boolean TEAMPVP_MSG = OpenGuild.get().getConfig().getBoolean("teampvp-msg", false);
+
 }

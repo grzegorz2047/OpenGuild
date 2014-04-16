@@ -18,8 +18,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
@@ -27,16 +27,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class HelpArg {
-    
-    public static boolean execute(CommandSender sender,String[] args) {
+
+    public static boolean execute(CommandSender sender, String[] args) {
         String sp = null;
-        if(args.length>1){
-            sp= args[1];
+        if(args.length > 1) {
+            sp = args[1];
         }
-         
-        int page=1;
-        if(sp!=null){
-            page=Integer.parseInt(sp);
+
+        int page = 1;
+        if(sp != null) {
+            page = Integer.parseInt(sp);
         }
         sender.sendMessage(getTitle(page));
         if(page == 1) {
@@ -56,13 +56,13 @@ public class HelpArg {
         }
         return true;
     }
-    
+
     private static String getTitle(int page) {
         return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help (" + page + "/2)" + ChatColor.DARK_GRAY + " --------------- ";
     }
-    
+
     private static String help(String usage, String desc) {
         return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
     }
-    
+
 }

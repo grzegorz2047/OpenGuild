@@ -18,8 +18,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package pl.grzegorz2047.openguild2047.api;
 
@@ -43,9 +43,9 @@ public interface Guild {
     @Nullable List<String> getMembers();
 
     @Nonnull String getTag();
-    
+
     @Nonnull List<String> getAllyGuilds();
-    
+
     @Nonnull List<String> getEnemyGuilds();
 
     void setDescription(@Nonnull String description);
@@ -57,13 +57,13 @@ public interface Guild {
     void setLeader(@Nonnull String leader);
 
     void addMember(@Nonnull String member);
-    
+
     void setMembers(@Nonnull List<String> members);
-    
+
     boolean containsMember(@Nonnull String member);
 
     void removeMember(@Nonnull String member);
 
     void setTag(@Nonnull String tag);
-	
+
 }

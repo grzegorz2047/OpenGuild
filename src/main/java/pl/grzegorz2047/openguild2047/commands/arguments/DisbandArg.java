@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.commands.arguments;
+
+import ca.wacos.nametagedit.NametagAPI;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,54 +35,53 @@ import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
-import ca.wacos.nametagedit.NametagAPI;
 
 /**
  *
  * @author Grzegorz
  */
 public class DisbandArg {
-    
+
     public static boolean execute(CommandSender sender) {
-        if(!(sender instanceof Player)){
-            sender.sendMessage(GenConf.prefix+MsgManager.cmdonlyforplayer);
+        if(!(sender instanceof Player)) {
+            sender.sendMessage(GenConf.prefix + MsgManager.cmdonlyforplayer);
             return false;
         }
         Player p = (Player) sender;
-        if(Data.getInstance().isPlayerInGuild(p.getName())){
+        if(Data.getInstance().isPlayerInGuild(p.getName())) {
             SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
             String tag = sg.getTag();
-            if(sg.getLeader().equals(p.getName())){
+            if(sg.getLeader().equals(p.getName())) {
                 saveDb(Guilds.getGuild(p));
-                for(String player : sg.getMembers()){
+                for(String player : sg.getMembers()) {
                     NametagAPI.resetNametag(player);
                     Data.getInstance().guildsplayers.remove(player);
                 }
-                
+
                 Data.getInstance().guildsplayers.remove(p.getName());
                 Data.getInstance().ClansTag.remove(tag);
                 Data.getInstance().guilds.remove(tag);
                 Data.getInstance().cuboids.remove(tag);
-                
+
                 //TODO: Usunac cuboida z mysqla
-                p.sendMessage(GenConf.prefix+MsgManager.guilddisbandsuccess);
+                p.sendMessage(GenConf.prefix + MsgManager.guilddisbandsuccess);
                 return true;
-            }else{
-                p.sendMessage(GenConf.prefix+MsgManager.playernotleader);
+            } else {
+                p.sendMessage(GenConf.prefix + MsgManager.playernotleader);
                 return false;
             }
-        }else{
-            p.sendMessage(GenConf.prefix+MsgManager.notinguild);
+        } else {
+            p.sendMessage(GenConf.prefix + MsgManager.notinguild);
             return false;
         }
-        
+
     }
-    
+
     private static void saveDb(Guild guild) {
         MySQLHandler.delete(guild);
-        for(String p : guild.getMembers()){//Usuwa totalnie gildie
+        for(String p : guild.getMembers()) {//Usuwa totalnie gildie
             MySQLHandler.update(p, MySQLHandler.PType.GUILD, "");
         }
     }
-    
+
 }

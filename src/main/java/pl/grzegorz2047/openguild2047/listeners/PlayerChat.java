@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
@@ -36,9 +36,9 @@ import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
  * @author Grzegorz
  */
 public class PlayerChat implements Listener {
-    
+
     @EventHandler
-    void onChat(AsyncPlayerChatEvent e) {
+    public void onChat(AsyncPlayerChatEvent e) {
         if(e.isCancelled() || !GenConf.guildprefixinchat) {
             return;
         }
@@ -47,13 +47,13 @@ public class PlayerChat implements Listener {
             if(spg.getClanTag().equals("") || spg.getClanTag().equals("null")) {
                 return;
             }
-            if(e.getFormat().contains("{OpenGuildTag}") || e.getFormat().contains("%tag")){
+            if(e.getFormat().contains("{OpenGuildTag}") || e.getFormat().contains("%tag")) {
                 e.setFormat(e.getFormat().replace("{OpenGuildTag}", spg.getClanTag()).replace("%tag", spg.getClanTag()));
             } else {
-                e.setFormat("§7[§r" + spg.getClanTag() +  "§7]§r " + e.getFormat());
+                e.setFormat("§7[§r" + spg.getClanTag() + "§7]§r " + e.getFormat());
             }
         }
-        
+
     }
-    
+
 }

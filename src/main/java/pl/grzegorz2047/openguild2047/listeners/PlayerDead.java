@@ -21,26 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.listeners;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 
 /**
  *
  * @author Grzegorz
  */
 public class PlayerDead implements Listener {
- 
-    
+
     @EventHandler
-    void onPlayerDead(PlayerDeathEvent e){
-        
+    public void onPlayerDead(PlayerDeathEvent e) {
+
     }
-    
+
 }

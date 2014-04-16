@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import ca.wacos.nametagedit.NametagAPI;
@@ -41,56 +40,56 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * @author Grzegorz
  */
 public class AcceptArg {
-    
-    public static boolean execute(CommandSender sender, String[] args){
-        if(!(sender instanceof Player)){
+
+    public static boolean execute(CommandSender sender, String[] args) {
+        if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return false;
         }
         Player p = (Player) sender;
-            if(args.length>=2){
-                if(Data.getInstance().isPlayerInGuild(p.getName())){
-                    SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
-                    if(sg.getLeader().equalsIgnoreCase(p.getName())){
-                        String acceptedplayer = args[1];
-                        Player player = Bukkit.getPlayer(acceptedplayer);
-                        if(sg.getInvitedPlayers().contains(acceptedplayer)){
-                            sg.getInvitedPlayers().remove(acceptedplayer);
-                            SimplePlayerGuild spg = new SimplePlayerGuild(player.getName(),sg.getTag(),true);
-                            Data.getInstance().guilds.put(sg.getTag(), sg);
-                            Data.getInstance().ClansTag.add(sg.getTag());
-                            Data.getInstance().guildsplayers.put(player.getName(), spg);
-                            sg.addMember(player.getName());
-                            if(GenConf.playerprefixenabled){
-                                if(NametagAPI.hasCustomNametag(player.getName())){
-                                    NametagAPI.resetNametag(player.getName());
-                                }
-                                NametagAPI.setPrefix(player.getName(), GenConf.colortagu + spg.getClanTag() +  "§r ");
-
+        if(args.length >= 2) {
+            if(Data.getInstance().isPlayerInGuild(p.getName())) {
+                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
+                if(sg.getLeader().equalsIgnoreCase(p.getName())) {
+                    String acceptedplayer = args[1];
+                    Player player = Bukkit.getPlayer(acceptedplayer);
+                    if(sg.getInvitedPlayers().contains(acceptedplayer)) {
+                        sg.getInvitedPlayers().remove(acceptedplayer);
+                        SimplePlayerGuild spg = new SimplePlayerGuild(player.getName(), sg.getTag(), true);
+                        Data.getInstance().guilds.put(sg.getTag(), sg);
+                        Data.getInstance().ClansTag.add(sg.getTag());
+                        Data.getInstance().guildsplayers.put(player.getName(), spg);
+                        sg.addMember(player.getName());
+                        if(GenConf.playerprefixenabled) {
+                            if(NametagAPI.hasCustomNametag(player.getName())) {
+                                NametagAPI.resetNametag(player.getName());
                             }
-                            savetodb(p.getName(),sg);
-                            player.sendMessage(GenConf.prefix+MsgManager.guildjoinsuccess);
-                            p.sendMessage(GenConf.prefix+MsgManager.invitedplayersuccessfullyjoined);
-                            return true;
-                        }else{
-                            p.sendMessage(GenConf.prefix+MsgManager.playernotoninvitedlist);
-                            return true;
+                            NametagAPI.setPrefix(player.getName(), GenConf.colortagu + spg.getClanTag() + "§r ");
+
                         }
-                    }else{
-                        p.sendMessage(GenConf.prefix+MsgManager.playernotleader);
-                        return false;
+                        savetodb(p.getName(), sg);
+                        player.sendMessage(GenConf.prefix + MsgManager.guildjoinsuccess);
+                        p.sendMessage(GenConf.prefix + MsgManager.invitedplayersuccessfullyjoined);
+                        return true;
+                    } else {
+                        p.sendMessage(GenConf.prefix + MsgManager.playernotoninvitedlist);
+                        return true;
                     }
-                }else{
-                    p.sendMessage(GenConf.prefix+MsgManager.notinguild);
+                } else {
+                    p.sendMessage(GenConf.prefix + MsgManager.playernotleader);
                     return false;
                 }
-            }else{
-                p.sendMessage(GenConf.prefix+MsgManager.wrongcmdargument);
-                return false;  
+            } else {
+                p.sendMessage(GenConf.prefix + MsgManager.notinguild);
+                return false;
             }
+        } else {
+            p.sendMessage(GenConf.prefix + MsgManager.wrongcmdargument);
+            return false;
         }
-    
-    private static void savetodb(String Player, Guild g){
+    }
+
+    private static void savetodb(String Player, Guild g) {
         MySQLHandler.update(Player, MySQLHandler.PType.GUILD, g.getTag());
     }
 }

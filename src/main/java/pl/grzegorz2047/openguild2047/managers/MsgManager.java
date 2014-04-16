@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.managers;
 
 import java.io.File;
@@ -36,17 +35,17 @@ import pl.grzegorz2047.openguild2047.GenConf;
  * @author Grzegorz
  */
 public class MsgManager {
-    
+
     public static final File FILE = new File("plugins/OpenGuild2047/messages.yml");
     public static final FileConfiguration CONFIG = YamlConfiguration.loadConfiguration(FILE);
-    
+
     public static String createguildsuccess = get("createguildsuccess", "Gildia zostala pomysnie stworzona.");
     public static String cmdonlyforplayer = get("cmdonlyforplayer", "Komenda jedynie dla graczy na serwerze!");
     public static String alreadyinguild = get("alreadyinguild", "Aby stworzyc nowa gildie musisz najpierw opuscic aktualna!");
     public static String unsupportedchars = get("unsupportedchars", "Nazwa gildii moze zawierac jedynie znaki z tego zakresu [0-9a-zA-Z]");
     public static String toolongshorttag = get("toolongshorttag", "Twoja nazwa gildii jest za dluga badz za krotka!"
-            + "\n min. ilosc: "+GenConf.minclantag
-            + "\n max. ilosc: "+GenConf.maxclantag).replace("{MIN}", String.valueOf(GenConf.minclantag)).replace("{MAX}", String.valueOf(GenConf.maxclantag));
+            + "\n min. ilosc: " + GenConf.minclantag
+            + "\n max. ilosc: " + GenConf.maxclantag).replace("{MIN}", String.valueOf(GenConf.minclantag)).replace("{MAX}", String.valueOf(GenConf.maxclantag));
     public static String illegaltag = get("illegaltag", "Twoja nazwa posiada zabronione slowa!");
     public static String notinguild = get("notinguild", "Aby to wykonac musisz byc w gildii!");
     public static String errornotinguild = get("errornotinguild", "Nie jestes w gildii?! Czyszcze bledne dane!");
@@ -74,13 +73,13 @@ public class MsgManager {
     public static String leadernotonline = get("leadernotonline", "Lider aktualnie nie jest na serwerze!");
     public static String notyetaccepted = get("notyetaccepted", "Twoja prosba nie zostala jeszcze zaakceptowana");
     public static String desctoolong = get("desctoolong", "Opis gildii jest za dlugi");
-    
+
     public static String get(String path) {
         return get(path, "Wiadomosc nie zostala odnaleziona :(");
     }
-    
+
     public static String get(String path, String def) {
-        return CONFIG.getString(path, def).replace("&", "§");
+        return GenConf.prefix + CONFIG.getString(path, def).replace("&", "§");
     }
-    
+
 }

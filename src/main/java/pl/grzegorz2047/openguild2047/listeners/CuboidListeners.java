@@ -18,8 +18,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package pl.grzegorz2047.openguild2047.listeners;
 
@@ -43,70 +43,69 @@ import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class CuboidListeners implements Listener {
-        
-        private static List<Material> breakingItems;
-        
-	@EventHandler
-	public void onBlockBreak(BlockBreakEvent e) {
-            if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
-                if(GenConf.BREAKING_DAMAGE <= 0) {
-                    e.setCancelled(true); // Damage jest rowny 0; niszczenie blokow jest wylaczone
+
+    private static List<Material> breakingItems;
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent e) {
+        if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
+            if(GenConf.BREAKING_DAMAGE <= 0) {
+                e.setCancelled(true); // Damage jest rowny 0; niszczenie blokow jest wylaczone
+            } else {
+                if(breakingItems.contains(e.getPlayer().getItemInHand().getType())) {
+                    e.getPlayer().getItemInHand().setDurability((short) (e.getPlayer().getItemInHand().getDurability() - GenConf.BREAKING_DAMAGE));
                 } else {
-                    if(breakingItems.contains(e.getPlayer().getItemInHand().getType())) {
-                        e.getPlayer().getItemInHand().setDurability((short) (e.getPlayer().getItemInHand().getDurability() - GenConf.BREAKING_DAMAGE));
-                    } else {
-                        e.setCancelled(true);
-                    }
-                }
-            }
-	}
-	
-	@EventHandler
-	public void onBlockPlace(BlockPlaceEvent e) {
-		if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
-			e.setCancelled(true);
-		}
-	}
-	
-	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent e) {
-		if(e.getClickedBlock() != null) {
-			if(GenConf.EXTRA_PROTECTION) {
-				if(!isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())) {
-					e.setCancelled(true);
-				}
-			}
-		}
-	}
-        
-	private boolean isAllowed(Player player, Location location) {
-            if(CuboidStuff.checkIfInAnyCuboid(Data.getInstance().cuboids.entrySet().iterator(), location)) {
-                if(Data.getInstance().isPlayerInGuild(player.getName())) {
-                    String tag = Data.getInstance().getPlayersGuild(player.getName()).getTag();
-                    if(Data.getInstance().cuboids.get(tag).isinCuboid(location)) {
-                        return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
-                    }else{
-                        player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
-                        return false;
-                    }   
-                }else{
-                   return false;
-                }
-            }else{
-                return true;
-            }
-	}
-        
-        
-        public static void loadItems() {
-            breakingItems = new ArrayList<Material>();
-            for(String item : GenConf.BREAKING_ITEMS) {
-                try {
-                    breakingItems.add(Material.valueOf(item.toUpperCase()));
-                } catch(IllegalArgumentException ex) {
-                    Guilds.getLogger().severe("Wystapil blad podczas ladowana itemow do niszczenia blokow na teranie gildii: Nie mozna wczytac " + item.toUpperCase());
+                    e.setCancelled(true);
                 }
             }
         }
-	
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent e) {
+        if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        if(e.getClickedBlock() != null) {
+            if(GenConf.EXTRA_PROTECTION) {
+                if(!isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())) {
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    private boolean isAllowed(Player player, Location location) {
+        if(CuboidStuff.checkIfInAnyCuboid(Data.getInstance().cuboids.entrySet().iterator(), location)) {
+            if(Data.getInstance().isPlayerInGuild(player.getName())) {
+                String tag = Data.getInstance().getPlayersGuild(player.getName()).getTag();
+                if(Data.getInstance().cuboids.get(tag).isinCuboid(location)) {
+                    return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
+                } else {
+                    player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    public static void loadItems() {
+        breakingItems = new ArrayList<Material>();
+        for(String item : GenConf.BREAKING_ITEMS) {
+            try {
+                breakingItems.add(Material.valueOf(item.toUpperCase()));
+            } catch(IllegalArgumentException ex) {
+                Guilds.getLogger().severe("Wystapil blad podczas ladowana itemow do niszczenia blokow na teranie gildii: Nie mozna wczytac " + item.toUpperCase());
+            }
+        }
+    }
+
 }

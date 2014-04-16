@@ -51,27 +51,28 @@ import pl.grzegorz2047.openguild2047.api.Logger;
  * @author Grzegorz
  */
 public class MySQLHandler {
-    
+
     private static Connection con = null;
     private static Statement stat;
     private static String driver = "com.mysql.jdbc.Driver";
     private static String tableGuilds = "openguild_guilds";
     private static String tablePlayers = "openguild_players";
     private static Logger log = Guilds.getLogger();
-    
+
     private String address;
     private String database;
     private String login;
     private String password;
-    
+
     public MySQLHandler(String address, String database, String login, String password) {
         this.address = address;
         this.database = database;
         createFirstConnection(login, password);
         createConnection(login, password);
     }
-    
+
     public enum Type {
+
         TAG,
         DESCRIPTION,
         LEADER,
@@ -81,38 +82,41 @@ public class MySQLHandler {
         HOME_Z,
         CUBOID_RADIUS
     }
-    
+
     public enum PType {
+
         PLAYER,
-        @Deprecated PLAYER_LOWER,
+        @Deprecated
+        PLAYER_LOWER,
         GUILD,
         KILLS,
         DEADS,
         ISLEADER,
         UUID
     }
-    
+
     void loadDatabase() {
         Data.getInstance().guildsplayers = MySQLHandler.getAllPlayers();
         Data.getInstance().guilds = MySQLHandler.getAllGuildswithCuboids();
     }
-    
+
     void checkIfConnIsClosed() {
         try {
             if(con == null || con.isClosed()) {
                 createConnection(login, password);
             }
-        } catch(SQLException ex) {
+        }
+        catch(SQLException ex) {
             ex.printStackTrace();
         }
     }
-    
+
     private static void log(String query) {
         if(GenConf.SQL_DEBUG) {
             Guilds.getLogger().log(Level.INFO, "[Serwer -> MySQL] " + query);
         }
     }
-    
+
     public void createFirstConnection(String login, String password) {
         log.info("[MySQL] Laczenie z baza MySQL...");
         try {
@@ -132,13 +136,14 @@ public class MySQLHandler {
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
-        
-        if(con != null)
+
+        if(con != null) {
             loadDatabase();
-        else
+        } else {
             log.info("Wystapil blad podczas laczania z baza danych.");
+        }
     }
-    
+
     private void createConnection(String login, String password) {
         log.info("[MySQL] Laczenie z baza MySQL...");
         try {
@@ -158,7 +163,7 @@ public class MySQLHandler {
         }
         loadDatabase();
     }
-    
+
     public void createTables() {
         // Tabela z gildiami
         log.info("[MySQL] Tworzenie tabeli " + tableGuilds + " jezeli nie istnieje...");
@@ -181,7 +186,7 @@ public class MySQLHandler {
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
-        
+
         // Tabela z graczami
         log.info("[MySQL] Tworzenie tabeli " + tablePlayers + " jezeli nie istnieje...");
         try {
@@ -202,7 +207,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     public static void delete(Guild guild) {
         try {
             String query = "DELETE FROM " + tableGuilds + " WHERE tag='" + guild.getTag() + "';";
@@ -213,7 +218,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     @Deprecated
     public static void delete(String player) {
         try {
@@ -225,7 +230,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     public static void delete(UUID uuid) {
         try {
             String query = "DELETE FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
@@ -236,7 +241,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     public static void insert(String tag, String description, String leader, String sojusze, int homeX, int homeY, int homeZ, String homeW, int cuboidRadius) {
         try {
             String query = "INSERT INTO " + tableGuilds + " VALUES(NULL,"
@@ -256,16 +261,16 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     @Deprecated
     public static void insert(String player, Guild guild, String isleader, int kills, int deads) {
         insert(player, guild, isleader, kills, deads, Bukkit.getPlayer(player).getUniqueId());
     }
-    
+
     public static void insert(String player, Guild guild, String isLeader, int kills, int deads, UUID uuid) {
         try {
             String tag;
-            if(guild == null) {
+            if (guild == null) {
                 tag = "";
             } else {
                 tag = guild.getTag();
@@ -286,11 +291,11 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     public static List<Object> select(Guild guild) {
         return null; // TODO
     }
-    
+
     public static void update(Guild guild, Type type, int value) {
         try {
             String query = "UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE tag='" + guild.getTag() + "';";
@@ -301,7 +306,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     public static void update(Guild guild, Type type, String value) {
         try {
             String query = "UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE tag='" + guild.getTag() + "';";
@@ -312,7 +317,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     @Deprecated
     public static void update(String player, PType type, int value) {
         try {
@@ -324,7 +329,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     public static void update(UUID uuid, PType type, int value) {
         try {
             String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE uuid='" + uuid.toString() + "';";
@@ -335,7 +340,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     @Deprecated
     public static void update(String player, PType type, String value) {
         try {
@@ -347,7 +352,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     public static void update(UUID uuid, PType type, String value) {
         try {
             String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE uuid='" + uuid.toString() + "';";
@@ -358,7 +363,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     public static HashMap<String, SimpleGuild> getAllGuildswithCuboids() {
         HashMap hm = new HashMap<String, SimpleGuild>();
         try {
@@ -387,7 +392,7 @@ public class MySQLHandler {
         }
         return hm;
     }
-    
+
     public static List<String> getGuildMembers(String tag) {
         try {
             String query = "SELECT player FROM " + tablePlayers + " WHERE guild='" + tag + "';";
@@ -427,22 +432,23 @@ public class MySQLHandler {
         }
         return hm;
     }
-	
-	public static String getPlayer(UUID uuid) {
-		String player = null;
-		try {
-			String query = "SELECT player FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
-			stat = con.createStatement();
-			log(query);
-			ResultSet rs = stat.executeQuery(query);
-			while(rs.next())
-				player = rs.getString(1);
-		} catch(SQLException ex) {
-			ex.printStackTrace();
-		}
-		return player;
-	}
-    
+
+    public static String getPlayer(UUID uuid) {
+        String player = null;
+        try {
+            String query = "SELECT player FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
+            stat = con.createStatement();
+            log(query);
+            ResultSet rs = stat.executeQuery(query);
+            while(rs.next()) {
+                player = rs.getString(1);
+            }
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        return player;
+    }
+
     @Deprecated
     public static boolean existsPlayer(String playername) {
         try {
@@ -458,14 +464,14 @@ public class MySQLHandler {
         }
         return false;
     }
-    
+
     public static boolean existsPlayer(UUID uuid) {
         try {
             String query = "SELECT COUNT(*) FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
             stat = con.createStatement();
             log(query);
             ResultSet rs = stat.executeQuery(query);
-            while(rs.next()) {
+            while (rs.next()) {
                 return rs.getInt(1) != 0;
             }
         } catch(SQLException ex) {
@@ -473,7 +479,7 @@ public class MySQLHandler {
         }
         return false;
     }
-    
+
     @Deprecated
     public static void increaseValue(String playername, PType typ, int value) {
         try {
@@ -494,7 +500,7 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
     public static void increaseValue(UUID uuid, PType typ, int value) {
         try {
             String query = "SELECT " + typ + " FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
@@ -514,5 +520,5 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
     }
-    
+
 }

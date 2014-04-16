@@ -21,29 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.api;
 
 import javax.annotation.Nonnull;
+
 import org.bukkit.Location;
-import pl.grzegorz2047.openguild2047.SimpleCuboid;
 
 /**
  *
  * @author Grzegorz
  */
 public interface Cuboid {
-    
+
     @Nonnull Location getCenter();
+
     @Nonnull int getRadius();
+
     @Nonnull String getOwner();
+
     @Nonnull Location getMin();
+
     @Nonnull Location getMax();
+
     @Nonnull boolean isinCuboid(@Nonnull Location loc);
-    
+
     @Nonnull void setCenter(@Nonnull Location center);
+
     @Nonnull void setRadius(@Nonnull int radius);
+
     @Nonnull void setOwner(@Nonnull String tag);
-    
-    
+
 }

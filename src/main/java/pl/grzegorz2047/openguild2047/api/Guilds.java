@@ -18,8 +18,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package pl.grzegorz2047.openguild2047.api;
 
@@ -45,55 +45,59 @@ import pl.grzegorz2047.openguild2047.utils.PastebinWriter;
  * Glowna klasa API OpenGuild2047
  */
 public class Guilds {
-	
-	@Nonnull public static Cuboid getCuboid() {
-		Cuboid cuboid = new SimpleCuboid();
-		return cuboid;
-	}
-	
-	/**
-	 * Zdobadz gildie
-	 * @param player Member gildii
-	 * @return Gildia
-	 * @throws NullPointerException jezeli player nie jest w zadnej gildii
-	 */
-	@Nullable public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
-	    SimplePlayerGuild guildPlayer = Data.getInstance().guildsplayers.get(player.getName());
-	    SimpleGuild guild = Data.getInstance().guilds.get(guildPlayer.getClanTag());
-	    return guild;
-	}
-	
-	/**
-	 * Zdobadz gildie
-	 * @param tag Tag gildii
-	 * @return Gildia
-	 * @throws NullPointerException jezeli wskazana gildia nie istnieje
-	 */
-	@Nullable public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
-		Guild guild = Data.getInstance().guilds.get(tag);
-		return guild;
-	}
-	
-	/**
-	 * Zdobadz Logger
-	 * @return Logger
-	 */
-	@Nonnull public static Logger getLogger() {
-		Logger logger = new SimpleLogger();
-		return logger;
-	}
-	
-	/**
-	 * Zdobadz gildie gracz
-	 * @param name Nick gracza
-	 * @return Gildia gracza
-	 * @throws NullPointerException jezeli player nie jest w zadnej gildii
-	 */
-	@Nullable public static PlayerGuild getPlayer(@Nonnull String name) throws NullPointerException {
-		PlayerGuild guild = Data.getInstance().guildsplayers.get(name);
-		return guild;
-	}
-    
+
+    @Nonnull public static Cuboid getCuboid() {
+        Cuboid cuboid = new SimpleCuboid();
+        return cuboid;
+    }
+
+    /**
+     * Zdobadz gildie
+     *
+     * @param player Member gildii
+     * @return Gildia
+     * @throws NullPointerException jezeli player nie jest w zadnej gildii
+     */
+    @Nullable public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
+        SimplePlayerGuild guildPlayer = Data.getInstance().guildsplayers.get(player.getName());
+        SimpleGuild guild = Data.getInstance().guilds.get(guildPlayer.getClanTag());
+        return guild;
+    }
+
+    /**
+     * Zdobadz gildie
+     *
+     * @param tag Tag gildii
+     * @return Gildia
+     * @throws NullPointerException jezeli wskazana gildia nie istnieje
+     */
+    @Nullable public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
+        Guild guild = Data.getInstance().guilds.get(tag);
+        return guild;
+    }
+
+    /**
+     * Zdobadz Logger
+     *
+     * @return Logger
+     */
+    @Nonnull public static Logger getLogger() {
+        Logger logger = new SimpleLogger();
+        return logger;
+    }
+
+    /**
+     * Zdobadz gildie gracz
+     *
+     * @param name Nick gracza
+     * @return Gildia gracza
+     * @throws NullPointerException jezeli player nie jest w zadnej gildii
+     */
+    @Nullable public static PlayerGuild getPlayer(@Nonnull String name) throws NullPointerException {
+        PlayerGuild guild = Data.getInstance().guildsplayers.get(name);
+        return guild;
+    }
+
     public static void report(String error) {
         if(GenConf.SNOOPER) {
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
@@ -114,19 +118,19 @@ public class Guilds {
             builder.append("System.getProperty(\"sun.arch.data.model\") == " + System.getProperty("sun.arch.data.model"));
             builder.append("-------------------------");
             PastebinWriter.paste(builder.toString(), new PastebinWriter.Callback() {
-                
+
                 @Override
                 public void success(URL url) {
                     getLogger().info("Pomyslnie wyslano blad pod adresem " + url.toString());
                     getLogger().info("Prosimy wyslac link (" + url.toString() + ") na https://github.com/grzegorz2047/OpenGuild2047/issues");
                 }
-                
+
                 @Override
                 public void error(String err) {
                     getLogger().warning("Nie udalo sie wyslac bledu z powodu: " + err);
                 }
-            } );
+            });
         }
     }
-	
+
 }
