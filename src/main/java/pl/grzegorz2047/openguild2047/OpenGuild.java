@@ -166,10 +166,10 @@ public class OpenGuild extends JavaPlugin {
         switch(GenConf.DATABASE) {
         case FILE:
             Guilds.getLogger().warning("Przykro nam, ale system plików jeszcze nie dziala! Próba polaczenia sie z baza danych MySQL...");
-            new MySQLHandler(address, database, login, password); // TODO Pliki...
+            new MySQLHandler(address, database, login, password).createFirstConnection(login, password); // TODO Pliki...
             break;
         case MYSQL:
-            new MySQLHandler(address, database, login, password);
+            new MySQLHandler(address, database, login, password).createFirstConnection(login, password);
             break;
         default:
             Guilds.getLogger().severe("Nie mozna wczytac typu bazy danych (database)! Popraw to w pliku config.yml!");
