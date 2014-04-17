@@ -91,8 +91,7 @@ public class GildiaCommand implements CommandExecutor {
                     return error(sender, "Podano blad w komendzie");
                 }
             } else {
-                sender.sendMessage(ChatColor.DARK_GRAY + " -------------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " -------------------- ");
-                sender.sendMessage(ChatColor.DARK_GRAY + "Aby uzyskac pomoc dotyczaca gildii uzyj komendy /gildia help.");
+                HelpArg.execute(sender, args);
                 return true;
             }
         }
