@@ -79,7 +79,7 @@ public class DisbandArg {
 
     private static void saveDb(Guild guild) {
         MySQLHandler.delete(guild);
-        for(String p : guild.getMembers()) {//Usuwa totalnie gildie
+        for(String p : guild.getMembers()) {//Usuwa totalnie gildie // Trzeba zrobic List<UUID> zamiast List<String> :P
             MySQLHandler.update(p, MySQLHandler.PType.GUILD, "");
         }
     }

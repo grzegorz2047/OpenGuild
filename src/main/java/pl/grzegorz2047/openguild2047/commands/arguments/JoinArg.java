@@ -88,8 +88,8 @@ public class JoinArg {
 
     }
 
-    private static void savetodb(String Player, Guild g) {
-        MySQLHandler.update(Player, MySQLHandler.PType.GUILD, g.getTag());
+    private static void savetodb(Player player, Guild g) {
+        MySQLHandler.update(player.getUniqueId(), MySQLHandler.PType.GUILD, g.getTag());
     }
 
 }

@@ -47,10 +47,10 @@ public class LeaveArg {
         Player p = (Player) sender;
         if(Data.getInstance().isPlayerInGuild(p.getName())) {
             if(Data.getInstance().getPlayersGuild(p.getName()).getLeader().equalsIgnoreCase(p.getName())) {
-                p.sendMessage("Jezeli chcesz to zrobic wpisz /gildia rozwiaz!");
+                p.sendMessage(GenConf.prefix + "Jezeli chcesz to zrobic wpisz /gildia rozwiaz!");
                 return true;
             }
-            saveDb(Guilds.getGuild(p), p.getName());
+            saveDb(Guilds.getGuild(p), p);
             Data.getInstance().getPlayersGuild(p.getName()).removeMember(p.getName());
             Data.getInstance().guildsplayers.remove(p.getName());
             p.sendMessage(MsgManager.leaveguildsuccess);
@@ -60,10 +60,10 @@ public class LeaveArg {
         return true;
     }
 
-    private static void saveDb(Guild guild, String player) {
+    private static void saveDb(Guild guild, Player player) {
         // TODO Tu trzeba zrobic pobieranie gildii, String -> ArrayList, potem usuwanie gracza i ArrayList<String>
         //Nie za bardzo wiem co z TODO, ale na razie tyle wystarczy
-        MySQLHandler.update(player, MySQLHandler.PType.GUILD, "");
+        MySQLHandler.update(player.getUniqueId(), MySQLHandler.PType.GUILD, "");
     }
 
 }

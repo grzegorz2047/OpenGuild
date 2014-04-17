@@ -23,12 +23,12 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import pl.grzegorz2047.openguild2047.Data;
-import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
@@ -53,9 +53,10 @@ public class LeaderArg {
             if(args.length >= 3) {
                 if(args[1].equalsIgnoreCase("zmien")) {
                     if(sg.getLeader().equals(p.getName())) {
-                        if(Bukkit.getOfflinePlayer(p.getName()).hasPlayedBefore()) {
-                            sg.setLeader(args[2]);
-                            saveDb(Guilds.getGuild(p), args[2]);
+                        if(Bukkit.getPlayer(p.getName()) != null) {
+                            Player leader = Bukkit.getPlayer(p.getName());
+                            sg.setLeader(leader.getName());
+                            saveDb(Guilds.getGuild(p), leader.getUniqueId());
                             return true;
                         } else {
                             p.sendMessage(MsgManager.playerneverplayed);
@@ -79,8 +80,8 @@ public class LeaderArg {
         }
     }
 
-    private static void saveDb(Guild guild, String leader) {
-        MySQLHandler.update(guild, Type.LEADER, leader);
+    private static void saveDb(Guild guild, UUID leader) {
+        MySQLHandler.update(guild, Type.LEADER, leader.toString());
     }
 
 }

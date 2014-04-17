@@ -67,9 +67,8 @@ public class AcceptArg {
                                 NametagAPI.resetNametag(player.getName());
                             }
                             NametagAPI.setPrefix(player.getName(), GenConf.colortagu + spg.getClanTag() + "§r ");
-
                         }
-                        savetodb(p.getName(), sg);
+                        savetodb(p, sg);
                         player.sendMessage(MsgManager.guildjoinsuccess);
                         p.sendMessage(MsgManager.invitedplayersuccessfullyjoined);
                         return true;
@@ -91,7 +90,7 @@ public class AcceptArg {
         }
     }
 
-    private static void savetodb(String Player, Guild g) {
-        MySQLHandler.update(Player, MySQLHandler.PType.GUILD, g.getTag());
+    private static void savetodb(Player player, Guild g) {
+        MySQLHandler.update(player.getUniqueId(), MySQLHandler.PType.GUILD, g.getTag());
     }
 }

@@ -242,12 +242,33 @@ public class MySQLHandler {
         }
     }
 
+    @Deprecated
     public static void insert(String tag, String description, String leader, String sojusze, int homeX, int homeY, int homeZ, String homeW, int cuboidRadius) {
         try {
             String query = "INSERT INTO " + tableGuilds + " VALUES(NULL,"
                     + "'" + tag + "',"
                     + "'" + description + "',"
                     + "'" + leader + "',"
+                    + "'" + sojusze + "',"
+                    + homeX + ","
+                    + homeY + ","
+                    + homeZ + ","
+                    + "'" + homeW + "',"
+                    + cuboidRadius + ");";
+            stat = con.createStatement();
+            log(query);
+            stat.execute(query);
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void insert(String tag, String description, UUID leader, String sojusze, int homeX, int homeY, int homeZ, String homeW, int cuboidRadius) {
+        try {
+            String query = "INSERT INTO " + tableGuilds + " VALUES(NULL,"
+                    + "'" + tag + "',"
+                    + "'" + description + "',"
+                    + "'" + leader.toString() + "',"
                     + "'" + sojusze + "',"
                     + homeX + ","
                     + homeY + ","
