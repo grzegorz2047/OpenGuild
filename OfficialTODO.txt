@@ -1,0 +1,4 @@
+//Tu dodajemy co jest aktualnie do zrobienia tak, aby mo¿na by³o ³atwo to ogarn¹æ.
+
+1. Zaproszenia nie dzia³aj¹
+2. Dokoñczyæ przygotowania pod 1.8
