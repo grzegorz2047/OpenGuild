@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.commands.arguments;
+
+import ca.wacos.nametagedit.NametagAPI;
 
 import java.util.logging.Level;
 
@@ -40,7 +41,6 @@ import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
-import ca.wacos.nametagedit.NametagAPI;
 import pl.grzegorz2047.openguild2047.api.Guild;
 
 /**
@@ -48,26 +48,26 @@ import pl.grzegorz2047.openguild2047.api.Guild;
  * @author Grzegorz
  */
 public class CreateArg {
-    
-    private CreateArg(){
-    
+
+    private CreateArg() {
+
     }
-    
-    public static boolean execute(CommandSender sender, String[] args){
+
+    public static boolean execute(CommandSender sender, String[] args) {
         String clantag = args[1];
-        if(!(sender instanceof Player)){
+        if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return false;
         }
         Player p = (Player) sender;
-        if(!Data.getInstance().guilds.containsKey(clantag)){
-            if(!Data.getInstance().isPlayerInGuild(p.getName())){
-                if(clantag.matches("[0-9a-zA-Z]*")){
-                    if(clantag.length()<=GenConf.maxclantag && clantag.length()>=GenConf.minclantag){
-                        if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)){
-                            if(GenUtil.hasEnoughItemsForGuild(p.getInventory())){
-                                if(CuboidStuff.checkIfCuboidFarForGuild(p.getLocation())){
-                                    if(!GenUtil.isPlayerNearby(p, GenConf.MIN_CUBOID_RADIUS)){
+        if(!Data.getInstance().guilds.containsKey(clantag)) {
+            if(!Data.getInstance().isPlayerInGuild(p.getName())) {
+                if(clantag.matches("[0-9a-zA-Z]*")) {
+                    if(clantag.length() <= GenConf.maxclantag && clantag.length() >= GenConf.minclantag) {
+                        if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)) {
+                            if(GenUtil.hasEnoughItemsForGuild(p.getInventory())) {
+                                if(CuboidStuff.checkIfCuboidFarForGuild(p.getLocation())) {
+                                    if(!GenUtil.isPlayerNearby(p, GenConf.MIN_CUBOID_RADIUS)) {
                                         GenUtil.removeRequiredItemsForGuild(p.getInventory());
                                         SimpleGuild sg = new SimpleGuild(clantag);
                                         sg.setLeader(p.getName());
@@ -78,74 +78,74 @@ public class CreateArg {
                                         c.setRadius(GenConf.MIN_CUBOID_RADIUS);
                                         c.setCenter(p.getLocation());
                                         //TODO: dodac jakies dane o cuboidzie w mysql
-                                        if(args.length>2){
+                                        if(args.length > 2) {
                                             String desc = GenUtil.argsToString(args, 2, args.length);
-                                            if(desc.length()>32){
-                                                p.sendMessage(GenConf.prefix+MsgManager.desctoolong);
+                                            if(desc.length() > 32) {
+                                                p.sendMessage(MsgManager.desctoolong);
                                                 return false;
                                             }
                                             sg.setDescription(desc);
-                                        }else{
+                                        } else {
                                             sg.setDescription("Domyslny opis gildii :<");
                                         }
                                         Data.getInstance().cuboids.put(clantag, c);
 
-                                        SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(),sg.getTag(),true);
+                                        SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(), sg.getTag(), true);
                                         Data.getInstance().guilds.put(sg.getTag(), sg);
                                         Data.getInstance().ClansTag.add(sg.getTag());
                                         Data.getInstance().guildsplayers.put(p.getName(), spg);
-                                        if(GenConf.playerprefixenabled){
-                                            if(NametagAPI.hasCustomNametag(p.getName())){
+                                        if(GenConf.playerprefixenabled) {
+                                            if(NametagAPI.hasCustomNametag(p.getName())) {
                                                 NametagAPI.resetNametag(p.getName());
                                             }
-                                            NametagAPI.setPrefix(p.getName(), GenConf.colortagu + spg.getClanTag() +  "§r ");
+                                            NametagAPI.setPrefix(p.getName(), GenConf.colortagu + spg.getClanTag() + "§r ");
                                         }
 
-                                        saveToDb(clantag, sg.getDescription(), p.getName(), p.getLocation(), sg);
-                                        
-                                        Guilds.getLogger().log(Level.INFO, "Gracz "+p.getName()+" stworzyl gildie o nazwie "+spg.getClanTag());
-                                        p.sendMessage(GenConf.prefix+MsgManager.createguildsuccess);
+                                        saveToDb(clantag, sg.getDescription(), p, p.getLocation(), sg);
+
+                                        Guilds.getLogger().log(Level.INFO, "Gracz " + p.getName() + " stworzyl gildie o nazwie " + spg.getClanTag());
+                                        p.sendMessage(MsgManager.createguildsuccess);
                                         return true;
-                                    }else{
-                                        p.sendMessage(GenConf.prefix+MsgManager.playerstooclose);
+                                    } else {
+                                        p.sendMessage(MsgManager.playerstooclose);
                                         return false;
                                     }
-                                }else{
-                                    p.sendMessage(GenConf.prefix+MsgManager.gildtocloseothers);
+                                } else {
+                                    p.sendMessage(MsgManager.gildtocloseothers);
                                     return false;
                                 }
 
-                            }else{
-                                p.sendMessage(GenConf.prefix+MsgManager.notenoughitems);
+                            } else {
+                                p.sendMessage(MsgManager.notenoughitems);
                                 return false;
                             }
-                        }else{
-                            p.sendMessage(GenConf.prefix+MsgManager.illegaltag);
+                        } else {
+                            p.sendMessage(MsgManager.illegaltag);
                             return false;
                         }
-                    }else{
-                        p.sendMessage(GenConf.prefix+MsgManager.toolongshorttag);
+                    } else {
+                        p.sendMessage(MsgManager.toolongshorttag);
                         return false;
                     }
-                }else{
-                    p.sendMessage(GenConf.prefix+MsgManager.unsupportedchars);
+                } else {
+                    p.sendMessage(MsgManager.unsupportedchars);
                     return false;
                 }
-            }else{
-                p.sendMessage(GenConf.prefix+MsgManager.alreadyinguild);
+            } else {
+                p.sendMessage(MsgManager.alreadyinguild);
                 return false;
             }
-        }else{
-            p.sendMessage(GenConf.prefix+MsgManager.guildexists);
+        } else {
+            p.sendMessage(MsgManager.guildexists);
             return false;
         }
-        
+
     }
-    
-    private static void saveToDb(String tag, String description, String leader, Location home, Guild g) {
-        MySQLHandler.insert(tag, description, leader, null, home.getBlockX(), home.getBlockY(), home.getBlockZ(),home.getWorld().getName(), GenConf.MIN_CUBOID_RADIUS);
-        MySQLHandler.update(leader, MySQLHandler.PType.GUILD, tag);
-        MySQLHandler.update(leader, MySQLHandler.PType.ISLEADER, "true");//ustawia isleader wa bazie na true
+
+    private static void saveToDb(String tag, String description, Player leader, Location home, Guild g) {
+        MySQLHandler.insert(tag, description, leader.getUniqueId(), null, home.getBlockX(), home.getBlockY(), home.getBlockZ(), home.getWorld().getName(), GenConf.MIN_CUBOID_RADIUS);
+        MySQLHandler.update(leader.getUniqueId(), MySQLHandler.PType.GUILD, tag);
+        MySQLHandler.update(leader.getUniqueId(), MySQLHandler.PType.ISLEADER, "true");//ustawia isleader wa bazie na true
     }
-    
+
 }

@@ -23,24 +23,23 @@
  */
 
 /*
-TODO:
-Stworzenie klasy od cuboidów
-Ogarnięcie co byłoby dobre do sprawdzania czy gracz jest na cuboidzie gildii
-Tutaj są przydatne linki dla zainteresowanych tworzeniem cuboidów:
-https://github.com/sk89q/worldguard/blob/master/src/main/java/com/sk89q/worldguard/bukkit/WorldGuardPlayerListener.java
-https://forums.bukkit.org/threads/protection-region-cuboid-creation.164161/
+ TODO:
+ Stworzenie klasy od cuboidów
+ Ogarnięcie co byłoby dobre do sprawdzania czy gracz jest na cuboidzie gildii
+ Tutaj są przydatne linki dla zainteresowanych tworzeniem cuboidów:
+ https://github.com/sk89q/worldguard/blob/master/src/main/java/com/sk89q/worldguard/bukkit/WorldGuardPlayerListener.java
+ https://forums.bukkit.org/threads/protection-region-cuboid-creation.164161/
 
 
 
-*/
-
+ */
 package pl.grzegorz2047.openguild2047;
 
 import ca.wacos.nametagedit.NametagAPI;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -71,9 +70,9 @@ public class OpenGuild extends JavaPlugin {
 
     @Override
     public void onEnable() {
-    	long init = System.currentTimeMillis();
-    	instance = this;
-        if(!checkPlugins()){
+        long init = System.currentTimeMillis();
+        instance = this;
+        if(!checkPlugins()) {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -81,26 +80,27 @@ public class OpenGuild extends JavaPlugin {
         loadAllListeners();
         Data pd = new Data();
         Data.setDataInstance(pd);
-        new MySQLHandler(address, database, login, password);
+        loadDb();
         getCommand("gildia").setExecutor(new GildiaCommand());
-        for(Player p : Bukkit.getOnlinePlayers()){
-            if(Data.getInstance().isPlayerInGuild(p.getName())){
-                NametagAPI.setPrefix(p.getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getName()).getTag() +  "§r ");
+        for(Player p : getServer().getOnlinePlayers()) {
+            if(Data.getInstance().isPlayerInGuild(p.getName())) {
+                NametagAPI.setPrefix(p.getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getName()).getTag() + "§r ");
             }
         }
+        loadPlayers();
         CuboidListeners.loadItems();
-        Bukkit.getConsoleSender().sendMessage("§a"+this.getName()+"§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
-        
+        getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
+
     }
 
     @Override
     public void onDisable() {
-        for(Player p: Bukkit.getOnlinePlayers()){
-            if(NametagAPI.hasCustomNametag(p.getName())){
+        for(Player p : getServer().getOnlinePlayers()) {
+            if(NametagAPI.hasCustomNametag(p.getName())) {
                 NametagAPI.resetNametag(p.getName());
             }
         }
-        
+
         // Usuwanie wszystkich plikow ktore nie posidaja formatu .log (logger tworzy duzo plikow roboczych)
         int logFiles = 0;
         for(File file : logDir.listFiles()) {
@@ -112,33 +112,34 @@ public class OpenGuild extends JavaPlugin {
         }
         System.out.println("Usunieto " + logFiles + " plikow w folderze OpenGuild2047/log");
     }
-    
+
     private boolean checkPlugins() {
-    	if(getServer().getPluginManager().getPlugin("NametagEdit") == null) {
+        if(getServer().getPluginManager().getPlugin("NametagEdit") == null) {
             Guilds.getLogger().severe("Nie znaleziono pluginu NametagEdit! Pobierz go ze strony http://dev.bukkit.org/bukkit-plugins/nametagedit/");
             Guilds.getLogger().severe("Wylaczanie pluginu OpenGuild2047...");
             return false;
-    	}
-        else{
+        } else {
             return true;
         }
     }
-    
+
     private void copyDefaultFiles() {
-    	saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
-    	loadConfig();
-    	if(!logDir.exists()) {
+        saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
+        loadConfig();
+        if(!logDir.exists()) {
             logDir.mkdirs();
-    	}
-    	if(!log.exists()) {
+        }
+        if(!log.exists()) {
             try {
                 log.createNewFile();
             } catch(IOException ex) {
                 ex.printStackTrace();
             }
-    	}
+        }
+        saveResource("messages.yml", false);
+        saveResource("players.yml", false);
     }
-    
+
     private void loadConfig() {
         // MySQL
         address = getConfig().getString("mysql.adres");
@@ -152,28 +153,49 @@ public class OpenGuild extends JavaPlugin {
         GenConf.playerprefixenabled = this.getConfig().getBoolean("playerprefixtag");
         GenConf.guildprefixinchat = this.getConfig().getBoolean("guildprefixinchat");
         GenConf.colortagu = this.getConfig().getString("kolortagugildii").replace('&', '§');
-        if(GenConf.colortagu.length() > 2){
+        if(GenConf.colortagu.length() > 2) {
             Guilds.getLogger().severe("Kolor tagu moze skladac sie tylko z 2 znaków: & oraz znaku identyfikujacy kolor!");
             Guilds.getLogger().warning("Uzywam domyslnego koloru gildii!");
             GenConf.colortagu = "§6";
         }
     }
-    
+
+    private void loadDb() {
+        switch(GenConf.DATABASE) {
+            case FILE:
+                Guilds.getLogger().warning("Przykro nam, ale system plików jeszcze nie dziala! Próba polaczenia sie z baza danych MySQL...");
+                new MySQLHandler(address, database, login, password).createFirstConnection(login, password); // TODO Pliki...
+                break;
+            case MYSQL:
+                new MySQLHandler(address, database, login, password).createFirstConnection(login, password);
+                break;
+            default:
+                Guilds.getLogger().severe("Nie mozna wczytac typu bazy danych (database)! Popraw to w pliku config.yml!");
+                getServer().getPluginManager().disablePlugin(this);
+                break;
+        }
+    }
+
     void loadAllListeners() {
-        PluginManager pm = Bukkit.getPluginManager();
+        PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new CuboidListeners(), this);
         pm.registerEvents(new PlayerChat(), this);
         pm.registerEvents(new PlayerMove(), this);
         pm.registerEvents(new PlayerQuit(), this);
         pm.registerEvents(new Monitors(), this);
         pm.registerEvents(new EntityDamageByEntity(), this);
-
     }
-    
+
+    private void loadPlayers() {
+        for(SimpleGuild guild : Data.getInstance().guilds.values()) { // Pobieranie gildii
+            for(String member : MySQLHandler.getGuildMembers(guild.getTag())) { // Pobieranie graczy w gildii
+                guild.addMember(member); // Dodawanie gracza do listy
+            }
+        }
+    }
+
     public static OpenGuild get() {
-    	return instance;
+        return instance;
     }
-    
 
-    
 }

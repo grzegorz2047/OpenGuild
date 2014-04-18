@@ -18,25 +18,33 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
+
 public class HelpArg {
-    
-    public static boolean execute(CommandSender sender,String[] args) {
-        String sp = null;
-        if(args.length>1){
-            sp= args[1];
-        }
-         
-        int page=1;
-        if(sp!=null){
-            page=Integer.parseInt(sp);
+
+    public static boolean execute(CommandSender sender, String[] args) {
+        int page = 1;
+        if(args.length != 2) {
+            page = 1;
+        } else {
+            try {
+                page = Integer.parseInt(args[1]);
+            } catch(NumberFormatException ex) {
+                if(args[1].equalsIgnoreCase("admin") || args[1].equalsIgnoreCase("a")) {
+                    admin(sender);
+                } else {
+                    sender.sendMessage(MsgManager.get("pagenotnumber", "&cNumer strony musi byc liczba!"));
+                }
+                return true;
+            }
         }
         sender.sendMessage(getTitle(page));
         if(page == 1) {
@@ -46,23 +54,38 @@ public class HelpArg {
             sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii graczowi"));
             sender.sendMessage(help("lista", "Lista wszystkich czlonkow gildii"));
             sender.sendMessage(help("opis <opis...>", "Zmien opis gildii"));
+            sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
+            sender.sendMessage(help("akceptuj <gracz>", "Akceptuj zaproszenie do gildii"));
+            sender.sendMessage(help("opis <opis...>", "Stwórz opis gildii"));
+            sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii innemu graczowi"));
+            sender.sendMessage(help("dolacz", "Dolacz do gildii"));
             sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
-            sender.sendMessage(help("reload", "Przeladuj konfiguracje pluginu"));
-        }
-        else if(page == 2) {
-            sender.sendMessage(help("stworz <tag> [opis...]", "Zaloz gildie"));
-            sender.sendMessage(help("version", "Informacje o plugine OpenGuild2047"));
             sender.sendMessage(help("zamknij", "Zamknij gildie"));
+            sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
+            sender.sendMessage(help("lista", "Lista wszystkich czlonkow gildii"));
+            sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
+        } else {
+            sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze {NUMBER} nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
         }
         return true;
     }
-    
-    private static String getTitle(int page) {
-        return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help (" + page + "/2)" + ChatColor.DARK_GRAY + " --------------- ";
+
+    private static String getTitleAdmin() {
+        return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help Admin" + ChatColor.DARK_GRAY + " --------------- ";
     }
-    
+
+    private static String getTitle(int page) {
+        return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help (" + page + "/1)" + ChatColor.DARK_GRAY + " --------------- ";
+    }
+
     private static String help(String usage, String desc) {
         return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
     }
-    
+
+    private static void admin(CommandSender sender) {
+        sender.sendMessage(getTitleAdmin());
+        sender.sendMessage(help("reload", "Przeladuj konfiguracje pluginu"));
+        sender.sendMessage(help("version", "Informacje o plugine OpenGuild2047"));
+    }
+
 }

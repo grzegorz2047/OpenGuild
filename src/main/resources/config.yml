@@ -1,5 +1,7 @@
 # Wlacz/wylacz PvP pomiedzy czlonkami gildii
 teampvp: false
+# Wlacz/wylacz wiadomosc o wylaczonym PvP w trakcie próby uderzenia
+teampvp-msg: false
 # Wlacz/wylacz komende /gildia dom
 dom-command: true
 # Czas oczekiwania teleportacji do gildii (w sekundach)
@@ -21,6 +23,13 @@ cuboid:
     # Ilosc sily jaka zostaje zadana itemowi
     # Jezeli ustawione na 0 niszczenie bloków bedzie wylaczone
     damage: 0
+# Ustaw styl zapisywania danych; dostepne opcje to MYSQL oraz FILE
+database: MYSQL
+# Ustaw lokalizacje pliku z gildiami.
+# UWAGA: Dostepne wylacznie gdy database jest ustawione na FILE
+file-dir: plugins/OpenGuild2047/guilds.yml
+# Wlacz/wylacz wysylanie informacji o bledach na http://pastebin.com
+snooper: true
 mysql:
   # Twoj adres bazy danych
   adres: localhost
@@ -30,12 +39,16 @@ mysql:
   login: root
   # Twoje haslo do bazy danych
   haslo: password
+  # Informowanie w konsoli serwera o wszystkich komendach do bazy MySQL
+  debug: false
 playerprefixtag: true
 kolortagugildii: '&6'
+# Wlacz/wylacz tag gildii na chacie w grze jako prefix
+# Aby wyswietlic tag na chacie; ustaw flage %flag w Twoim pluginie od chatu (np EssentialsChat).
 guildprefixinchat: true
+# Zablokowane slowa w nazwach gildii
 forbiddenguildnames:
     - 'null'
-    - '    '
 #Zasada odczytu do ogarniecia id:ilosc:byte
 #Albo kompatybilnie z nowymi wersjami Minecrafta to MATERIAL:ilosc:byte
 #Lista material tu: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html

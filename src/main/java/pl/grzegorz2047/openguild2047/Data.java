@@ -21,19 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import pl.grzegorz2047.openguild2047.api.Cuboid;
 
 /**
  *
  * @author Grzegorz
  */
 public class Data {
+
     //Temp data
     public HashMap<String, SimpleGuild> guilds;
     public HashMap<String, SimplePlayerGuild> guildsplayers;
@@ -42,45 +41,41 @@ public class Data {
     //Test mojego pomysłu z cuboidami
     // <tag gildii,obiekt>
     public HashMap<String, SimpleCuboid> cuboids;
-    
+
     public Data() {
-        this.guilds = new HashMap<String,SimpleGuild>();
+        this.guilds = new HashMap<String, SimpleGuild>();
         this.ClansTag = new ArrayList<String>();
         this.guildsplayers = new HashMap<String, SimplePlayerGuild>();
         this.cuboids = new HashMap<String, SimpleCuboid>();
     }
-    
-    
-    public boolean isPlayerInGuild(String playername){
-        if(this.guildsplayers.containsKey(playername)){
+
+    public boolean isPlayerInGuild(String playername) {
+        if(this.guildsplayers.containsKey(playername)) {
             String tag = this.guildsplayers.get(playername).getClanTag();
-            if(this.guilds.containsKey(tag)){
+            if(this.guilds.containsKey(tag)) {
                 SimpleGuild sg = this.guilds.get(tag);
                 return sg.containsMember(playername);
-            }else{
+            } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }
-    
-    public SimpleGuild getPlayersGuild(String p){
-        if(this.isPlayerInGuild(p)){
+
+    public SimpleGuild getPlayersGuild(String p) {
+        if(this.isPlayerInGuild(p)) {
             return this.guilds.get(this.guildsplayers.get(p).getClanTag());
         }
         return null;
     }
-    public static Data getInstance(){
+
+    public static Data getInstance() {
         return Data.instance;
     }
-    public static void setDataInstance(Data pd){
-        Data.instance=pd;
+
+    public static void setDataInstance(Data pd) {
+        Data.instance = pd;
     }
 
-    
-    
-    
-
-    
 }

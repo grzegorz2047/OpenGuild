@@ -18,8 +18,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package pl.grzegorz2047.openguild2047;
 
@@ -40,7 +40,7 @@ public class SimpleGuild implements Guild {
     private List<String> invitedplayers;
     private List<String> allyguilds;
     private List<String> enemyguilds;
-    
+
     public SimpleGuild(String tag) {
         this.members = new ArrayList<String>();
         this.invitedplayers = new ArrayList<String>();
@@ -81,12 +81,12 @@ public class SimpleGuild implements Guild {
 
     @Override
     public void setDescription(String description) {
-        this.description=description;
+        this.description = description;
     }
 
     @Override
     public void setHome(Location home) {
-        this.home=home;
+        this.home = home;
     }
 
     @Override
@@ -96,24 +96,24 @@ public class SimpleGuild implements Guild {
 
     @Override
     public void setLeader(String leader) {
-        this.leader=leader;
+        this.leader = leader;
     }
 
     @Override
     public void addMember(String member) {
         this.members.add(member);
-        
 
     }
+
     @Override
     public void removeMember(String member) {
         this.members.remove(member);
-        
+
     }
 
     @Override
     public void setTag(String tag) {
-        this.tag=tag;
+        this.tag = tag;
     }
 
     @Override
@@ -135,5 +135,5 @@ public class SimpleGuild implements Guild {
     public void setMembers(List<String> members) {
         this.members = members;
     }
-	
+
 }

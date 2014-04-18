@@ -1,4 +1,4 @@
-/*
+/**
  * The MIT License
  *
  * Copyright 2014 Grzegorz.
@@ -18,15 +18,17 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
-package pl.grzegorz2047.openguild2047.handlers;
+package pl.grzegorz2047.openguild2047;
 
 /**
- *
- * @author Grzegorz
+ * @author TheMolkaPL
  */
-public class FileHandler {
-    //Tu podobnie do MySQLHandler czyli czy stawiać na uniwersalizm czy robić statyczne metody dla odpowiednich plików
+public enum Database {
+
+    FILE,
+    MYSQL;
+
 }

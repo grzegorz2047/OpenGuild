@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.listeners;
 
 import org.bukkit.event.EventHandler;
@@ -32,11 +31,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
  *
  * @author Grzegorz
  */
-public class PlayerQuit implements Listener{
-    
+public class PlayerQuit implements Listener {
+
     @EventHandler
-    void onQuit(PlayerQuitEvent e){
+    public void onQuit(PlayerQuitEvent e) {
 
     }
-    
+
 }
