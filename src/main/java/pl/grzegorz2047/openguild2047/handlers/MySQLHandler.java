@@ -217,42 +217,9 @@ public class MySQLHandler {
         }
     }
 
-    @Deprecated
-    public static void delete(String player) {
-        try {
-            String query = "DELETE FROM " + tablePlayers + " WHERE player_lower='" + player.toLowerCase() + "';";
-            stat = con.createStatement();
-            log(query);
-            stat.execute(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
     public static void delete(UUID uuid) {
         try {
             String query = "DELETE FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
-            stat = con.createStatement();
-            log(query);
-            stat.execute(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Deprecated
-    public static void insert(String tag, String description, String leader, String sojusze, int homeX, int homeY, int homeZ, String homeW, int cuboidRadius) {
-        try {
-            String query = "INSERT INTO " + tableGuilds + " VALUES(NULL,"
-                    + "'" + tag + "',"
-                    + "'" + description + "',"
-                    + "'" + leader + "',"
-                    + "'" + sojusze + "',"
-                    + homeX + ","
-                    + homeY + ","
-                    + homeZ + ","
-                    + "'" + homeW + "',"
-                    + cuboidRadius + ");";
             stat = con.createStatement();
             log(query);
             stat.execute(query);
@@ -279,11 +246,6 @@ public class MySQLHandler {
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
-    }
-
-    @Deprecated
-    public static void insert(String player, Guild guild, String isleader, int kills, int deads) {
-        insert(guild, isleader, kills, deads, Bukkit.getPlayer(player).getUniqueId());
     }
 
     public static void insert(Guild guild, String isLeader, int kills, int deads, UUID uuid) {
@@ -333,33 +295,9 @@ public class MySQLHandler {
         }
     }
 
-    @Deprecated
-    public static void update(String player, PType type, int value) {
-        try {
-            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE player_lower='" + player.toLowerCase() + "';";
-            stat = con.createStatement();
-            log(query);
-            stat.execute(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
     public static void update(UUID uuid, PType type, int value) {
         try {
             String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE uuid='" + uuid.toString() + "';";
-            stat = con.createStatement();
-            log(query);
-            stat.execute(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Deprecated
-    public static void update(String player, PType type, String value) {
-        try {
-            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE player_lower='" + player.toLowerCase() + "';";
             stat = con.createStatement();
             log(query);
             stat.execute(query);
@@ -464,22 +402,6 @@ public class MySQLHandler {
         return player;
     }
 
-    @Deprecated
-    public static boolean existsPlayer(String playername) {
-        try {
-            String query = "SELECT COUNT(*) FROM " + tablePlayers + " WHERE player='" + playername + "';";
-            stat = con.createStatement();
-            log(query);
-            ResultSet rs = stat.executeQuery(query);
-            while(rs.next()) {
-                return rs.getInt(1) != 0;
-            }
-        } catch(SQLException ex) {
-            java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
-    }
-
     public static boolean existsPlayer(UUID uuid) {
         try {
             String query = "SELECT COUNT(*) FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
@@ -493,27 +415,6 @@ public class MySQLHandler {
             java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
-    }
-
-    @Deprecated
-    public static void increaseValue(String playername, PType typ, int value) {
-        try {
-            String query = "SELECT " + typ + " FROM " + tablePlayers + " WHERE player='" + playername + "';";
-            stat = con.createStatement();
-            log(query);
-            ResultSet rs = stat.executeQuery(query);
-            int receivedvalue = 0;
-            while(rs.next()) {
-                receivedvalue = rs.getInt(typ.toString().toLowerCase());
-            }
-            receivedvalue += value;
-            String query2 = "UPDATE " + tablePlayers + " SET " + typ + "=" + receivedvalue + " WHERE player=" + playername + ";";
-            log(query2);
-            stat.execute(query2);
-
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
     }
 
     public static void increaseValue(UUID uuid, PType typ, int value) {
