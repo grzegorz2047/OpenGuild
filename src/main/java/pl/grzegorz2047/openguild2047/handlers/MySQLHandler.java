@@ -172,7 +172,7 @@ public class MySQLHandler {
                     + "(id INT AUTO_INCREMENT,"
                     + "tag VARCHAR(11),"
                     + "description VARCHAR(100),"
-                    + "leader VARCHAR(16),"
+                    + "leader VARCHAR(37),"
                     + "sojusze VARCHAR(255),"
                     + "home_x INT,"
                     + "home_y INT,"
@@ -198,7 +198,7 @@ public class MySQLHandler {
                     + "isleader VARCHAR(5),"
                     + "kills INT,"
                     + "deads INT,"
-                    + "uuid VARCHAR(100)," // Obecnie nie wiem jaka dlugosc ma UUID gracza :(
+                    + "uuid VARCHAR(37)," // UUID gracza z myślnikami ma 35 znaków? Więc dla pewności dam 37
                     + "PRIMARY KEY(id,player));";
             stat = con.createStatement();
             log(query);
