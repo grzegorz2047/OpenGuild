@@ -20,18 +20,15 @@ public class Monitors implements Listener {
         //MySQLHandler.update(e.getEntity().getName(), PType.DEADS, (Integer) MySQLHandler.select(e.getEntity().getName()).get(5) + 1);
         if(e.getEntity().getKiller() != null) {
             Player killer = e.getEntity().getKiller();
-            MySQLHandler.update(killer.getName(), MySQLHandler.PType.KILLS, 1);
+            MySQLHandler.update(killer.getUniqueId(), MySQLHandler.PType.KILLS, 1);
         }
-        MySQLHandler.update(e.getEntity().getName(), MySQLHandler.PType.DEADS, 1);
+        MySQLHandler.update(e.getEntity().getUniqueId(), MySQLHandler.PType.DEADS, 1);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        if(!MySQLHandler.existsPlayer(e.getPlayer().getName())) {
-            MySQLHandler.
-                    insert(e.getPlayer().getName(),
-                            null, "false",
-                            0, 0);
+        if(!MySQLHandler.existsPlayer(e.getPlayer().getUniqueId())) {
+            MySQLHandler.insert(null, "false", 0, 0, e.getPlayer().getUniqueId());
         } else {
             if(Data.getInstance().isPlayerInGuild(e.getPlayer().getName())) {
                 NametagAPI.setPrefix(e.getPlayer().getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(e.getPlayer().getName()).getTag() + "§r ");
