@@ -422,7 +422,7 @@ public class MySQLHandler {
             log(query);
             ResultSet rs = stat.executeQuery(query);
             while(rs.next()) {
-                String p = rs.getString("player");
+                String p = rs.getString("uuid");
                 members.add(p);
             }
             return members;
@@ -440,7 +440,7 @@ public class MySQLHandler {
             log(query);
             ResultSet rs = stat.executeQuery(query);
             while (rs.next()) {
-                String player = rs.getString("player");
+                String player = rs.getString("uuid");
                 String tag = rs.getString("guild");
                 boolean isleader = Boolean.parseBoolean(rs.getString("isleader"));
 

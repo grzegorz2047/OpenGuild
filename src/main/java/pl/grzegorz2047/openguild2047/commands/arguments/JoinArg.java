@@ -47,12 +47,12 @@ public class JoinArg {
         }
         Player p = (Player) sender;
         if(args.length >= 2) {
-            if(!Data.getInstance().isPlayerInGuild(p.getName())) {
+            if(!Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
                 //TODO: System zapraszania do gildii
                 String tag = args[1];
                 if(Data.getInstance().guilds.containsKey(tag)) {
                     SimpleGuild sg = Data.getInstance().guilds.get(tag);
-                    if(sg.getInvitedPlayers().contains(p.getName())) {
+                    if(sg.getInvitedPlayers().contains(p.getUniqueId().toString())) {
                         p.sendMessage(MsgManager.notyetaccepted);
                         return false;
                     } else {
