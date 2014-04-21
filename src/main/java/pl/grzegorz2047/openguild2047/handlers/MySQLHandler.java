@@ -71,7 +71,6 @@ public class MySQLHandler {
     }
 
     public enum Type {
-
         TAG,
         DESCRIPTION,
         LEADER,
@@ -83,11 +82,6 @@ public class MySQLHandler {
     }
 
     public enum PType {
-
-        @Deprecated
-        PLAYER,
-        @Deprecated
-        PLAYER_LOWER,
         GUILD,
         KILLS,
         DEADS,
@@ -190,8 +184,6 @@ public class MySQLHandler {
         try {
             String query = "CREATE TABLE IF NOT EXISTS " + tablePlayers
                     + "(id INT AUTO_INCREMENT,"
-                    + "player VARCHAR(16),"
-                    + "player_lower VARCHAR(16),"
                     + "guild VARCHAR(11),"
                     + "isleader VARCHAR(5),"
                     + "kills INT,"
