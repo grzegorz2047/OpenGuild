@@ -24,6 +24,7 @@
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -52,13 +53,13 @@ public class JoinArg {
                 String tag = args[1];
                 if(Data.getInstance().guilds.containsKey(tag)) {
                     SimpleGuild sg = Data.getInstance().guilds.get(tag);
-                    if(sg.getInvitedPlayers().contains(p.getUniqueId().toString())) {
+                    if(sg.getInvitedPlayers().contains(p.getUniqueId())) {
                         p.sendMessage(MsgManager.notyetaccepted);
                         return false;
                     } else {
                         p.sendMessage(MsgManager.playernotinvited);
                         Player leader = Bukkit.getPlayer(UUID.fromString(sg.getLeader()));
-                        sg.getInvitedPlayers().add(p.getUniqueId().toString());
+                        sg.getInvitedPlayers().add(p.getUniqueId());
                         if(leader != null) {
                             if(leader.isOnline()) {
                                 leader.sendMessage(MsgManager.askforinvite + " " + p.getName());

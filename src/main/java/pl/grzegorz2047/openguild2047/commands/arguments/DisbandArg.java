@@ -25,6 +25,9 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import ca.wacos.nametagedit.NametagAPI;
 
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -53,8 +56,9 @@ public class DisbandArg {
             String tag = sg.getTag();
             if(sg.getLeader().equals(p.getName())) {
                 saveDb(Guilds.getGuild(p));
-                for(String player : sg.getMembers()) {
-                    NametagAPI.resetNametag(player);
+                for(UUID player : sg.getMembers()) {
+                    String nick = Bukkit.getOfflinePlayer(player).getName();
+                    NametagAPI.resetNametag(nick);
                     Data.getInstance().guildsplayers.remove(player);
                 }
 
@@ -79,7 +83,7 @@ public class DisbandArg {
 
     private static void saveDb(Guild guild) {
         MySQLHandler.delete(guild);
-        for(String p : guild.getMembers()) {//Usuwa totalnie gildie // Trzeba zrobic List<UUID> zamiast List<String> :P
+        for(UUID p : guild.getMembers()) {//Usuwa totalnie gildie
             MySQLHandler.update(p, MySQLHandler.PType.GUILD, "");
         }
     }

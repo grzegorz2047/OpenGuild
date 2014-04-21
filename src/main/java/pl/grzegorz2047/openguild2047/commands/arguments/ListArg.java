@@ -24,12 +24,13 @@
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import java.util.List;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import pl.grzegorz2047.openguild2047.Data;
-import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -44,14 +45,15 @@ public class ListArg {
         }
         Player p = (Player) sender;
         if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
-            List<String> members = Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).getMembers();
+            List<UUID> members = Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).getMembers();
             StringBuilder sb = new StringBuilder();
             if(members.size() != 1) {
                 sb.append("Lista czlonkow w twojej gildii:\n ");
                 for(int i = 0; i < members.size(); i++) {
-                    String member = Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).getMembers().get(i);
+                    UUID member = Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).getMembers().get(i);
+                    String nick = Bukkit.getOfflinePlayer(member).getName(); // https://github.com/Xephi/Bukkit/commit/f6a3abaa35f4b9ff16427a82be8f818d212b3927
                     if(i % 5 != 0) {
-                        sb.append(member + ", ");
+                        sb.append(nick + ", ");
                     } else {
                         sb.append("\n");
                     }

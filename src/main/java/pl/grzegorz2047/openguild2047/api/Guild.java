@@ -24,6 +24,7 @@
 package pl.grzegorz2047.openguild2047.api;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,11 +37,11 @@ public interface Guild {
 
     @Nonnull Location getHome();
 
-    @Nullable List<String> getInvitedPlayers();
+    @Nullable List<UUID> getInvitedPlayers();
 
     @Nonnull String getLeader();
 
-    @Nullable List<String> getMembers();
+    @Nullable List<UUID> getMembers();
 
     @Nonnull String getTag();
 
@@ -52,13 +53,13 @@ public interface Guild {
 
     void setHome(@Nonnull Location home);
 
-    void setInvitedPlayers(@Nullable List<String> invitedPlayers);
+    void setInvitedPlayers(@Nullable List<UUID> invitedPlayers);
 
     void setLeader(@Nonnull String leader);
 
     void addMember(@Nonnull String member);
 
-    void setMembers(@Nonnull List<String> members);
+    void setMembers(@Nonnull List<UUID> members);
 
     boolean containsMember(@Nonnull String member);
 

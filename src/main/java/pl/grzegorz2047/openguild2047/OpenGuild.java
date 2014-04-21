@@ -39,6 +39,8 @@ import ca.wacos.nametagedit.NametagAPI;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -188,8 +190,9 @@ public class OpenGuild extends JavaPlugin {
 
     private void loadPlayers() {
         for(SimpleGuild guild : Data.getInstance().guilds.values()) { // Pobieranie gildii
-            for(String member : MySQLHandler.getGuildMembers(guild.getTag())) { // Pobieranie graczy w gildii
-                guild.addMember(member); // Dodawanie gracza do listy
+            for(UUID member : MySQLHandler.getGuildMembers(guild.getTag())) { // Pobieranie graczy w gildii
+                guild.addMember(Bukkit.getOfflinePlayer(member).getName()); // Dodawanie gracza do listy
+                // getName() -> https://github.com/Xephi/Bukkit/commit/f6a3abaa35f4b9ff16427a82be8f818d212b3927
             }
         }
     }

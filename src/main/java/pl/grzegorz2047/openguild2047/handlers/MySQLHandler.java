@@ -414,16 +414,16 @@ public class MySQLHandler {
         return hm;
     }
 
-    public static List<String> getGuildMembers(String tag) {
+    public static List<UUID> getGuildMembers(String tag) {
         try {
             String query = "SELECT uuid FROM " + tablePlayers + " WHERE guild='" + tag + "';";
-            List<String> members = new ArrayList<String>();
+            List<UUID> members = new ArrayList<UUID>();
             stat = con.createStatement();
             log(query);
             ResultSet rs = stat.executeQuery(query);
             while(rs.next()) {
                 String p = rs.getString("uuid");
-                members.add(p);
+                members.add(UUID.fromString(p));
             }
             return members;
         } catch(SQLException ex) {

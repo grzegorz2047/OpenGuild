@@ -25,6 +25,8 @@ package pl.grzegorz2047.openguild2047;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 
 import org.bukkit.Location;
 
@@ -36,14 +38,14 @@ public class SimpleGuild implements Guild {
     private String description;
     private Location home;
     private String leader;
-    private List<String> members;
-    private List<String> invitedplayers;
+    private List<UUID> members;
+    private List<UUID> invitedplayers;
     private List<String> allyguilds;
     private List<String> enemyguilds;
 
     public SimpleGuild(String tag) {
-        this.members = new ArrayList<String>();
-        this.invitedplayers = new ArrayList<String>();
+        this.members = new ArrayList<UUID>();
+        this.invitedplayers = new ArrayList<UUID>();
         this.allyguilds = new ArrayList<String>();
         this.enemyguilds = new ArrayList<String>();
         this.tag = tag;
@@ -60,7 +62,7 @@ public class SimpleGuild implements Guild {
     }
 
     @Override
-    public List<String> getInvitedPlayers() {
+    public List<UUID> getInvitedPlayers() {
         return this.invitedplayers;
     }
 
@@ -70,7 +72,7 @@ public class SimpleGuild implements Guild {
     }
 
     @Override
-    public List<String> getMembers() {
+    public List<UUID> getMembers() {
         return this.members;
     }
 
@@ -90,8 +92,8 @@ public class SimpleGuild implements Guild {
     }
 
     @Override
-    public void setInvitedPlayers(List<String> invitedPlayers) {
-
+    public void setInvitedPlayers(List<UUID> invitedPlayers) {
+        this.invitedplayers = invitedPlayers;
     }
 
     @Override
@@ -101,14 +103,13 @@ public class SimpleGuild implements Guild {
 
     @Override
     public void addMember(String member) {
-        this.members.add(member);
+        this.members.add(Bukkit.getOfflinePlayer(member).getUniqueId());
 
     }
 
     @Override
     public void removeMember(String member) {
-        this.members.remove(member);
-
+        this.members.remove(Bukkit.getOfflinePlayer(member).getUniqueId());
     }
 
     @Override
@@ -118,7 +119,7 @@ public class SimpleGuild implements Guild {
 
     @Override
     public boolean containsMember(String member) {
-        return this.members.contains(member);
+        return this.members.contains(Bukkit.getOfflinePlayer(member).getUniqueId());
     }
 
     @Override
@@ -132,7 +133,7 @@ public class SimpleGuild implements Guild {
     }
 
     @Override
-    public void setMembers(List<String> members) {
+    public void setMembers(List<UUID> members) {
         this.members = members;
     }
 
