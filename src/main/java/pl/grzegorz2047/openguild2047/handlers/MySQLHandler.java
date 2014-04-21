@@ -250,8 +250,6 @@ public class MySQLHandler {
             }
 
             String query = "INSERT INTO " + tablePlayers + " VALUES(NULL,"
-                    + "NULL,"
-                    + "NULL,"
                     + "'" + tag + "',"
                     + "'" + isLeader + "',"
                     + kills + ","
