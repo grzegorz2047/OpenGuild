@@ -61,7 +61,7 @@ public class AcceptArg {
                         SimplePlayerGuild spg = new SimplePlayerGuild(uuid.toString(), sg.getTag(), true);
                         Data.getInstance().guilds.put(sg.getTag(), sg);
                         Data.getInstance().ClansTag.add(sg.getTag());
-                        Data.getInstance().guildsplayers.put(uuid.toString(), spg);
+                        Data.getInstance().guildsplayers.put(uuid, spg);
                         sg.addMember(uuid.toString());
                         if(GenConf.playerprefixenabled) {
                             if(NametagAPI.hasCustomNametag(acceptedplayer)) {

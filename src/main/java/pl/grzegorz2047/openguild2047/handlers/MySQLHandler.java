@@ -67,7 +67,6 @@ public class MySQLHandler {
     public MySQLHandler(String address, String database, String login, String password) {
         this.address = address;
         this.database = database;
-        createFirstConnection(login, password);
         createConnection(login, password);
     }
 
@@ -85,6 +84,7 @@ public class MySQLHandler {
 
     public enum PType {
 
+        @Deprecated
         PLAYER,
         @Deprecated
         PLAYER_LOWER,
@@ -102,11 +102,9 @@ public class MySQLHandler {
 
     void checkIfConnIsClosed() {
         try {
-            if(con == null || con.isClosed()) {
+            if(con == null || con.isClosed())
                 createConnection(login, password);
-            }
-        }
-        catch(SQLException ex) {
+        } catch(SQLException ex) {
             ex.printStackTrace();
         }
     }
@@ -285,10 +283,10 @@ public class MySQLHandler {
 
     @Deprecated
     public static void insert(String player, Guild guild, String isleader, int kills, int deads) {
-        insert(player, guild, isleader, kills, deads, Bukkit.getPlayer(player).getUniqueId());
+        insert(guild, isleader, kills, deads, Bukkit.getPlayer(player).getUniqueId());
     }
 
-    public static void insert(String player, Guild guild, String isLeader, int kills, int deads, UUID uuid) {
+    public static void insert(Guild guild, String isLeader, int kills, int deads, UUID uuid) {
         try {
             String tag;
             if (guild == null) {
@@ -298,8 +296,8 @@ public class MySQLHandler {
             }
 
             String query = "INSERT INTO " + tablePlayers + " VALUES(NULL,"
-                    + "'" + player + "',"
-                    + "'" + player.toLowerCase() + "',"
+                    + "NULL,"
+                    + "NULL,"
                     + "'" + tag + "',"
                     + "'" + isLeader + "',"
                     + kills + ","
@@ -311,10 +309,6 @@ public class MySQLHandler {
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
-    }
-
-    public static List<Object> select(Guild guild) {
-        return null; // TODO
     }
 
     public static void update(Guild guild, Type type, int value) {
@@ -432,8 +426,8 @@ public class MySQLHandler {
         }
     }
 
-    public static HashMap<String, SimplePlayerGuild> getAllPlayers() {
-        HashMap hm = new HashMap<String, SimplePlayerGuild>();
+    public static HashMap<UUID, SimplePlayerGuild> getAllPlayers() {
+        HashMap hm = new HashMap<UUID, SimplePlayerGuild>();
         try {
             String query = "SELECT * FROM " + tablePlayers;
             stat = con.createStatement();

@@ -40,8 +40,8 @@ import ca.wacos.nametagedit.NametagAPI;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
-import org.bukkit.Bukkit;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;

@@ -93,7 +93,7 @@ public class CreateArg {
                                         SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(), sg.getTag(), true);
                                         Data.getInstance().guilds.put(sg.getTag(), sg);
                                         Data.getInstance().ClansTag.add(sg.getTag());
-                                        Data.getInstance().guildsplayers.put(p.getName(), spg);
+                                        Data.getInstance().guildsplayers.put(p.getUniqueId(), spg);
                                         if(GenConf.playerprefixenabled) {
                                             if(NametagAPI.hasCustomNametag(p.getName())) {
                                                 NametagAPI.resetNametag(p.getName());
