@@ -43,13 +43,13 @@ public class ListArg {
             return false;
         }
         Player p = (Player) sender;
-        if(Data.getInstance().isPlayerInGuild(p.getName())) {
-            List<String> members = Data.getInstance().getPlayersGuild(p.getName()).getMembers();
+        if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
+            List<String> members = Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).getMembers();
             StringBuilder sb = new StringBuilder();
             if(members.size() != 1) {
                 sb.append("Lista czlonkow w twojej gildii:\n ");
                 for(int i = 0; i < members.size(); i++) {
-                    String member = Data.getInstance().getPlayersGuild(p.getName()).getMembers().get(i);
+                    String member = Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).getMembers().get(i);
                     if(i % 5 != 0) {
                         sb.append(member + ", ");
                     } else {

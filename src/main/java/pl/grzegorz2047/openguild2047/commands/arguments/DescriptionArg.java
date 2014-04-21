@@ -52,8 +52,8 @@ public class DescriptionArg {
         if(args.length > 1) {
             if(args[1].equalsIgnoreCase("zmien")) {
                 if(args.length > 3) {
-                    if(Data.getInstance().isPlayerInGuild(p.getName())) {
-                        SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
+                    if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
+                        SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId().toString());
                         if(sg.getLeader().equals(p.getName())) {
                             String desc = GenUtil.argsToString(args, 3, args.length);
                             sg.setDescription(desc);
@@ -76,8 +76,8 @@ public class DescriptionArg {
                 return false;
             }
         } else {
-            if(Data.getInstance().isPlayerInGuild(p.getName())) {
-                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
+            if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
+                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId().toString());
                 p.sendMessage("Opis gildii to: " + sg.getDescription());
                 return true;
             } else {

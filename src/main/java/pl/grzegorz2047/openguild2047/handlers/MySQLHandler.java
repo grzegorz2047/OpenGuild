@@ -416,7 +416,7 @@ public class MySQLHandler {
 
     public static List<String> getGuildMembers(String tag) {
         try {
-            String query = "SELECT player FROM " + tablePlayers + " WHERE guild='" + tag + "';";
+            String query = "SELECT uuid FROM " + tablePlayers + " WHERE guild='" + tag + "';";
             List<String> members = new ArrayList<String>();
             stat = con.createStatement();
             log(query);

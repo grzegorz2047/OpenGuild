@@ -42,7 +42,7 @@ public class CuboidStuff {
         //To tylko jest proba, moze sie uda xd
         Iterator<Map.Entry<String, SimpleCuboid>> it = Data.getInstance().cuboids.entrySet().iterator();
         if(Data.getInstance().isPlayerInGuild(player.getName())) {
-            String tag = Data.getInstance().getPlayersGuild(player.getName()).getTag();
+            String tag = Data.getInstance().getPlayersGuild(player.getUniqueId().toString()).getTag();
             if(Data.getInstance().cuboids.get(tag).isinCuboid(to)) {
                 return true;
             } else {

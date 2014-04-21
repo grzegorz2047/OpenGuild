@@ -24,6 +24,7 @@
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import ca.wacos.nametagedit.NametagAPI;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -50,26 +51,29 @@ public class AcceptArg {
         }
         Player p = (Player) sender;
         if(args.length >= 2) {
-            if(Data.getInstance().isPlayerInGuild(p.getName())) {
-                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
-                if(sg.getLeader().equalsIgnoreCase(p.getName())) {
+            if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
+                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId().toString());
+                if(sg.getLeader().equalsIgnoreCase(p.getUniqueId().toString())) {
                     String acceptedplayer = args[1];
-                    Player player = Bukkit.getPlayer(acceptedplayer);
-                    if(sg.getInvitedPlayers().contains(acceptedplayer)) {
-                        sg.getInvitedPlayers().remove(acceptedplayer);
-                        SimplePlayerGuild spg = new SimplePlayerGuild(player.getName(), sg.getTag(), true);
+                    UUID uuid = Bukkit.getOfflinePlayer(acceptedplayer).getUniqueId();
+                    if(sg.getInvitedPlayers().contains(uuid.toString())) {
+                        sg.getInvitedPlayers().remove(uuid.toString());
+                        SimplePlayerGuild spg = new SimplePlayerGuild(uuid.toString(), sg.getTag(), true);
                         Data.getInstance().guilds.put(sg.getTag(), sg);
                         Data.getInstance().ClansTag.add(sg.getTag());
-                        Data.getInstance().guildsplayers.put(player.getName(), spg);
-                        sg.addMember(player.getName());
+                        Data.getInstance().guildsplayers.put(uuid.toString(), spg);
+                        sg.addMember(uuid.toString());
                         if(GenConf.playerprefixenabled) {
-                            if(NametagAPI.hasCustomNametag(player.getName())) {
-                                NametagAPI.resetNametag(player.getName());
+                            if(NametagAPI.hasCustomNametag(acceptedplayer)) {
+                                NametagAPI.resetNametag(acceptedplayer);
                             }
-                            NametagAPI.setPrefix(player.getName(), GenConf.colortagu + spg.getClanTag() + "§r ");
+                            NametagAPI.setPrefix(acceptedplayer, GenConf.colortagu + spg.getClanTag() + "§r ");
                         }
                         savetodb(p, sg);
-                        player.sendMessage(MsgManager.guildjoinsuccess);
+                        Player playerobj = Bukkit.getPlayer(acceptedplayer);
+                        if(playerobj!=null){
+                           playerobj.sendMessage(MsgManager.guildjoinsuccess);
+                        }
                         p.sendMessage(MsgManager.invitedplayersuccessfullyjoined);
                         return true;
                     } else {

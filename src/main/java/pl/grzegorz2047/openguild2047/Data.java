@@ -49,12 +49,12 @@ public class Data {
         this.cuboids = new HashMap<String, SimpleCuboid>();
     }
 
-    public boolean isPlayerInGuild(String playername) {
-        if(this.guildsplayers.containsKey(playername)) {
-            String tag = this.guildsplayers.get(playername).getClanTag();
+    public boolean isPlayerInGuild(String playeruuid) {
+        if(this.guildsplayers.containsKey(playeruuid)) {
+            String tag = this.guildsplayers.get(playeruuid).getClanTag();
             if(this.guilds.containsKey(tag)) {
                 SimpleGuild sg = this.guilds.get(tag);
-                return sg.containsMember(playername);
+                return sg.containsMember(playeruuid);
             } else {
                 return false;
             }
@@ -63,9 +63,9 @@ public class Data {
         }
     }
 
-    public SimpleGuild getPlayersGuild(String p) {
-        if(this.isPlayerInGuild(p)) {
-            return this.guilds.get(this.guildsplayers.get(p).getClanTag());
+    public SimpleGuild getPlayersGuild(String uuid) {
+        if(this.isPlayerInGuild(uuid)) {
+            return this.guilds.get(this.guildsplayers.get(uuid).getClanTag());
         }
         return null;
     }

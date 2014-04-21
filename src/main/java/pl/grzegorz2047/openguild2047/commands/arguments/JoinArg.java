@@ -23,12 +23,12 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import pl.grzegorz2047.openguild2047.Data;
-import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
@@ -57,8 +57,8 @@ public class JoinArg {
                         return false;
                     } else {
                         p.sendMessage(MsgManager.playernotinvited);
-                        Player leader = Bukkit.getPlayer(sg.getLeader());
-                        sg.getInvitedPlayers().add(p.getName());
+                        Player leader = Bukkit.getPlayer(UUID.fromString(sg.getLeader()));
+                        sg.getInvitedPlayers().add(p.getUniqueId().toString());
                         if(leader != null) {
                             if(leader.isOnline()) {
                                 leader.sendMessage(MsgManager.askforinvite + " " + p.getName());

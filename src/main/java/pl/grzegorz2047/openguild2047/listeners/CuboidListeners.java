@@ -82,7 +82,7 @@ public class CuboidListeners implements Listener {
     private boolean isAllowed(Player player, Location location) {
         if(CuboidStuff.checkIfInAnyCuboid(Data.getInstance().cuboids.entrySet().iterator(), location)) {
             if(Data.getInstance().isPlayerInGuild(player.getName())) {
-                String tag = Data.getInstance().getPlayersGuild(player.getName()).getTag();
+                String tag = Data.getInstance().getPlayersGuild(player.getUniqueId().toString()).getTag();
                 if(Data.getInstance().cuboids.get(tag).isinCuboid(location)) {
                     return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
                 } else {

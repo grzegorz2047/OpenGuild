@@ -42,8 +42,8 @@ public class PlayerChat implements Listener {
         if(e.isCancelled() || !GenConf.guildprefixinchat) {
             return;
         }
-        if(Data.getInstance().guildsplayers.containsKey(e.getPlayer().getName())) {
-            SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(e.getPlayer().getName());
+        if(Data.getInstance().guildsplayers.containsKey(e.getPlayer().getUniqueId().toString())) {
+            SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(e.getPlayer().getUniqueId().toString());
             if(spg.getClanTag().equals("") || spg.getClanTag().equals("null")) {
                 return;
             }

@@ -48,14 +48,14 @@ public class LeaderArg {
             return false;
         }
         Player p = (Player) sender;
-        if(Data.getInstance().isPlayerInGuild(p.getName())) {
-            SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
+        if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
+            SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId().toString());
             if(args.length >= 3) {
                 if(args[1].equalsIgnoreCase("zmien")) {
                     if(sg.getLeader().equals(p.getName())) {
                         if(Bukkit.getPlayer(p.getName()) != null) {
                             Player leader = Bukkit.getPlayer(p.getName());
-                            sg.setLeader(leader.getName());
+                            sg.setLeader(leader.getUniqueId().toString());
                             saveDb(Guilds.getGuild(p), leader.getUniqueId());
                             return true;
                         } else {

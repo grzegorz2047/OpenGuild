@@ -83,8 +83,8 @@ public class OpenGuild extends JavaPlugin {
         loadDb();
         getCommand("gildia").setExecutor(new GildiaCommand());
         for(Player p : getServer().getOnlinePlayers()) {
-            if(Data.getInstance().isPlayerInGuild(p.getName())) {
-                NametagAPI.setPrefix(p.getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getName()).getTag() + "§r ");
+            if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
+                NametagAPI.setPrefix(p.getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).getTag() + "§r ");
             }
         }
         loadPlayers();

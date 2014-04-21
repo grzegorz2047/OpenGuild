@@ -48,8 +48,8 @@ public class DisbandArg {
             return false;
         }
         Player p = (Player) sender;
-        if(Data.getInstance().isPlayerInGuild(p.getName())) {
-            SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getName());
+        if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
+            SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId().toString());
             String tag = sg.getTag();
             if(sg.getLeader().equals(p.getName())) {
                 saveDb(Guilds.getGuild(p));
