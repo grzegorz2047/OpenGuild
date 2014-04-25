@@ -45,14 +45,14 @@ public class LeaveArg {
             return true;
         }
         Player p = (Player) sender;
-        if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
-            if(Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).getLeader().equalsIgnoreCase(p.getUniqueId().toString())) {
+        if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
+            if(Data.getInstance().getPlayersGuild(p.getUniqueId()).getLeader().equals(p.getUniqueId())) {
                 p.sendMessage(GenConf.prefix + "Jezeli chcesz to zrobic wpisz /gildia rozwiaz!");
                 return true;
             }
             saveDb(Guilds.getGuild(p), p);
-            Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).removeMember(p.getUniqueId().toString());
-            Data.getInstance().guildsplayers.remove(p.getUniqueId().toString());
+            Data.getInstance().getPlayersGuild(p.getUniqueId()).removeMember(p.getUniqueId());
+            Data.getInstance().guildsplayers.remove(p.getUniqueId());
             p.sendMessage(MsgManager.leaveguildsuccess);
         } else {
             p.sendMessage(MsgManager.notinguild);

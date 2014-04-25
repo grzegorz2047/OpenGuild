@@ -189,7 +189,7 @@ public class MySQLHandler {
                     + "kills INT,"
                     + "deads INT,"
                     + "uuid VARCHAR(37)," // UUID gracza z myślnikami ma 35 znaków? Więc dla pewności dam 37
-                    + "PRIMARY KEY(id,player));";
+                    + "PRIMARY KEY(id,uuid));";
             stat = con.createStatement();
             log(query);
             stat.execute(query);
@@ -318,7 +318,7 @@ public class MySQLHandler {
                 String tag = rs.getString("tag");
                 Data.getInstance().ClansTag.add(tag);
                 SimpleGuild g = new SimpleGuild(tag);
-                g.setLeader(rs.getString("leader"));
+                g.setLeader(UUID.fromString(rs.getString("leader")));
                 g.setDescription(rs.getString("description"));
                 g.setMembers(getGuildMembers(tag));
                 Location loc = new Location(Bukkit.getWorld(rs.getString("home_w")), rs.getInt("home_x"), rs.getInt("home_y"), rs.getInt("home_z"));
@@ -366,7 +366,7 @@ public class MySQLHandler {
                 String tag = rs.getString("guild");
                 boolean isleader = Boolean.parseBoolean(rs.getString("isleader"));
 
-                SimplePlayerGuild sg = new SimplePlayerGuild(player, tag, isleader);
+                SimplePlayerGuild sg = new SimplePlayerGuild(UUID.fromString(player), tag, isleader);
                 hm.put(player, sg);
             }
         } catch(SQLException ex) {

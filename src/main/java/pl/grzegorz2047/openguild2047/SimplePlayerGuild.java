@@ -23,6 +23,7 @@
  */
 package pl.grzegorz2047.openguild2047;
 
+import java.util.UUID;
 import pl.grzegorz2047.openguild2047.api.PlayerGuild;
 
 /**
@@ -35,18 +36,18 @@ public class SimplePlayerGuild implements PlayerGuild {
      jakos logicznie ogarnac to jeszcze nie wiem xd
      */
 
-    private String playername;
+    private UUID playername;
     private String clantag;
     private boolean leader;
 
-    public SimplePlayerGuild(String playername, String tag, boolean leader) {
+    public SimplePlayerGuild(UUID playername, String tag, boolean leader) {
         this.playername = playername;
         this.clantag = tag;
         this.leader = leader;
     }
 
     @Override
-    public String getPlayerName() {
+    public UUID getPlayerUUID() {
         return this.playername;
     }
 

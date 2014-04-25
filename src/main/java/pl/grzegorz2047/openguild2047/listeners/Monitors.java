@@ -30,8 +30,8 @@ public class Monitors implements Listener {
         if(!MySQLHandler.existsPlayer(e.getPlayer().getUniqueId())) {
             MySQLHandler.insert(null, "false", 0, 0, e.getPlayer().getUniqueId());
         } else {
-            if(Data.getInstance().isPlayerInGuild(e.getPlayer().getName())) {
-                NametagAPI.setPrefix(e.getPlayer().getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(e.getPlayer().getName()).getTag() + "§r ");
+            if(Data.getInstance().isPlayerInGuild(e.getPlayer().getUniqueId())) {
+                NametagAPI.setPrefix(e.getPlayer().getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(e.getPlayer().getUniqueId()).getTag() + "§r ");
 
             } else {
                 if(NametagAPI.hasCustomNametag(e.getPlayer().getName())) {

@@ -61,7 +61,7 @@ public class CreateArg {
         }
         Player p = (Player) sender;
         if(!Data.getInstance().guilds.containsKey(clantag)) {
-            if(!Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
+            if(!Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
                 if(clantag.matches("[0-9a-zA-Z]*")) {
                     if(clantag.length() <= GenConf.maxclantag && clantag.length() >= GenConf.minclantag) {
                         if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)) {
@@ -70,9 +70,9 @@ public class CreateArg {
                                     if(!GenUtil.isPlayerNearby(p, GenConf.MIN_CUBOID_RADIUS)) {
                                         GenUtil.removeRequiredItemsForGuild(p.getInventory());
                                         SimpleGuild sg = new SimpleGuild(clantag);
-                                        sg.setLeader(p.getName());
+                                        sg.setLeader(p.getUniqueId());
                                         sg.setHome(p.getLocation());
-                                        sg.addMember(p.getName());
+                                        sg.addMember(p.getUniqueId());
                                         SimpleCuboid c = new SimpleCuboid();
                                         c.setOwner(clantag);
                                         c.setRadius(GenConf.MIN_CUBOID_RADIUS);
@@ -90,7 +90,7 @@ public class CreateArg {
                                         }
                                         Data.getInstance().cuboids.put(clantag, c);
 
-                                        SimplePlayerGuild spg = new SimplePlayerGuild(p.getName(), sg.getTag(), true);
+                                        SimplePlayerGuild spg = new SimplePlayerGuild(p.getUniqueId(), sg.getTag(), true);
                                         Data.getInstance().guilds.put(sg.getTag(), sg);
                                         Data.getInstance().ClansTag.add(sg.getTag());
                                         Data.getInstance().guildsplayers.put(p.getUniqueId(), spg);

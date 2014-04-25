@@ -23,6 +23,7 @@
  */
 package pl.grzegorz2047.openguild2047.api;
 
+import java.util.UUID;
 import javax.annotation.Nonnull;
 
 /**
@@ -31,7 +32,7 @@ import javax.annotation.Nonnull;
  */
 public interface PlayerGuild {
 
-    @Nonnull String getPlayerName();
+    @Nonnull UUID getPlayerUUID();
 
     @Nonnull String getClanTag();
 

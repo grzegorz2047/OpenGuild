@@ -50,7 +50,7 @@ public class Data {
         this.cuboids = new HashMap<String, SimpleCuboid>();
     }
 
-    public boolean isPlayerInGuild(String playeruuid) {
+    public boolean isPlayerInGuild(UUID playeruuid) {
         if(this.guildsplayers.containsKey(playeruuid)) {
             String tag = this.guildsplayers.get(playeruuid).getClanTag();
             if(this.guilds.containsKey(tag)) {
@@ -64,7 +64,7 @@ public class Data {
         }
     }
 
-    public SimpleGuild getPlayersGuild(String uuid) {
+    public SimpleGuild getPlayersGuild(UUID uuid) {
         if(this.isPlayerInGuild(uuid)) {
             return this.guilds.get(this.guildsplayers.get(uuid).getClanTag());
         }

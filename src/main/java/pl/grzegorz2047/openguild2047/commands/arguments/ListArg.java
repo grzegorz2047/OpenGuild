@@ -44,16 +44,16 @@ public class ListArg {
             return false;
         }
         Player p = (Player) sender;
-        if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
-            List<UUID> members = Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).getMembers();
+        if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
+            List<UUID> members = Data.getInstance().getPlayersGuild(p.getUniqueId()).getMembers();
             StringBuilder sb = new StringBuilder();
             if(members.size() != 1) {
                 sb.append("Lista czlonkow w twojej gildii:\n ");
                 for(int i = 0; i < members.size(); i++) {
-                    UUID member = Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).getMembers().get(i);
+                    UUID member = Data.getInstance().getPlayersGuild(p.getUniqueId()).getMembers().get(i);
                     String nick = Bukkit.getOfflinePlayer(member).getName(); // https://github.com/Xephi/Bukkit/commit/f6a3abaa35f4b9ff16427a82be8f818d212b3927
                     if(i % 5 != 0) {
-                        sb.append(nick + ", ");
+                        sb.append(nick).append(", ");
                     } else {
                         sb.append("\n");
                     }

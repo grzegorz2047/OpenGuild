@@ -51,18 +51,18 @@ public class AcceptArg {
         }
         Player p = (Player) sender;
         if(args.length >= 2) {
-            if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
-                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId().toString());
-                if(sg.getLeader().equalsIgnoreCase(p.getUniqueId().toString())) {
+            if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
+                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
+                if(sg.getLeader().equals(p.getUniqueId())) {
                     String acceptedplayer = args[1];
                     UUID uuid = Bukkit.getOfflinePlayer(acceptedplayer).getUniqueId();
-                    if(sg.getInvitedPlayers().contains(uuid.toString())) {
-                        sg.getInvitedPlayers().remove(uuid.toString());
-                        SimplePlayerGuild spg = new SimplePlayerGuild(uuid.toString(), sg.getTag(), true);
+                    if(sg.getInvitedPlayers().contains(uuid)) {
+                        sg.getInvitedPlayers().remove(uuid);
+                        SimplePlayerGuild spg = new SimplePlayerGuild(uuid, sg.getTag(), true);
                         Data.getInstance().guilds.put(sg.getTag(), sg);
                         Data.getInstance().ClansTag.add(sg.getTag());
                         Data.getInstance().guildsplayers.put(uuid, spg);
-                        sg.addMember(uuid.toString());
+                        sg.addMember(uuid);
                         if(GenConf.playerprefixenabled) {
                             if(NametagAPI.hasCustomNametag(acceptedplayer)) {
                                 NametagAPI.resetNametag(acceptedplayer);

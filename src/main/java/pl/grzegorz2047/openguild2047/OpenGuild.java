@@ -85,8 +85,8 @@ public class OpenGuild extends JavaPlugin {
         loadDb();
         getCommand("gildia").setExecutor(new GildiaCommand());
         for(Player p : getServer().getOnlinePlayers()) {
-            if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
-                NametagAPI.setPrefix(p.getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getUniqueId().toString()).getTag() + "§r ");
+            if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
+                NametagAPI.setPrefix(p.getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getUniqueId()).getTag() + "§r ");
             }
         }
         loadPlayers();
@@ -191,7 +191,7 @@ public class OpenGuild extends JavaPlugin {
     private void loadPlayers() {
         for(SimpleGuild guild : Data.getInstance().guilds.values()) { // Pobieranie gildii
             for(UUID member : MySQLHandler.getGuildMembers(guild.getTag())) { // Pobieranie graczy w gildii
-                guild.addMember(Bukkit.getOfflinePlayer(member).getName()); // Dodawanie gracza do listy
+                guild.addMember(member); // Dodawanie gracza do listy
                 // getName() -> https://github.com/Xephi/Bukkit/commit/f6a3abaa35f4b9ff16427a82be8f818d212b3927
             }
         }

@@ -26,6 +26,7 @@ package pl.grzegorz2047.openguild2047.api;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.Bukkit;
@@ -59,7 +60,7 @@ public class Guilds {
      * @throws NullPointerException jezeli player nie jest w zadnej gildii
      */
     @Nullable public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
-        SimplePlayerGuild guildPlayer = Data.getInstance().guildsplayers.get(player.getUniqueId().toString());
+        SimplePlayerGuild guildPlayer = Data.getInstance().guildsplayers.get(player.getUniqueId());
         SimpleGuild guild = Data.getInstance().guilds.get(guildPlayer.getClanTag());
         return guild;
     }
@@ -93,7 +94,7 @@ public class Guilds {
      * @return Gildia gracza
      * @throws NullPointerException jezeli player nie jest w zadnej gildii
      */
-    @Nullable public static PlayerGuild getPlayer(@Nonnull String uuid) throws NullPointerException {
+    @Nullable public static PlayerGuild getPlayer(@Nonnull UUID uuid) throws NullPointerException {
         PlayerGuild guild = Data.getInstance().guildsplayers.get(uuid);
         return guild;
     }

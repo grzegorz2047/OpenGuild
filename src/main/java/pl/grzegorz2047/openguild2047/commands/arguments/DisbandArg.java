@@ -51,10 +51,10 @@ public class DisbandArg {
             return false;
         }
         Player p = (Player) sender;
-        if(Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
-            SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId().toString());
+        if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
+            SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
             String tag = sg.getTag();
-            if(sg.getLeader().equals(p.getName())) {
+            if(sg.getLeader().equals(p.getUniqueId())) {
                 saveDb(Guilds.getGuild(p));
                 for(UUID player : sg.getMembers()) {
                     String nick = Bukkit.getOfflinePlayer(player).getName();
@@ -62,7 +62,7 @@ public class DisbandArg {
                     Data.getInstance().guildsplayers.remove(player);
                 }
 
-                Data.getInstance().guildsplayers.remove(p.getName());
+                Data.getInstance().guildsplayers.remove(p.getUniqueId());
                 Data.getInstance().ClansTag.remove(tag);
                 Data.getInstance().guilds.remove(tag);
                 Data.getInstance().cuboids.remove(tag);

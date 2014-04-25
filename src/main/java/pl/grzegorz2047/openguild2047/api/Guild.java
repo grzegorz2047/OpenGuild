@@ -39,7 +39,7 @@ public interface Guild {
 
     @Nullable List<UUID> getInvitedPlayers();
 
-    @Nonnull String getLeader();
+    @Nonnull UUID getLeader();
 
     @Nullable List<UUID> getMembers();
 
@@ -55,15 +55,15 @@ public interface Guild {
 
     void setInvitedPlayers(@Nullable List<UUID> invitedPlayers);
 
-    void setLeader(@Nonnull String leader);
+    void setLeader(@Nonnull UUID leader);
 
-    void addMember(@Nonnull String member);
+    void addMember(@Nonnull UUID member);
 
     void setMembers(@Nonnull List<UUID> members);
 
-    boolean containsMember(@Nonnull String member);
+    boolean containsMember(@Nonnull UUID member);
 
-    void removeMember(@Nonnull String member);
+    void removeMember(@Nonnull UUID member);
 
     void setTag(@Nonnull String tag);
 

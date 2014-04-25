@@ -48,7 +48,7 @@ public class JoinArg {
         }
         Player p = (Player) sender;
         if(args.length >= 2) {
-            if(!Data.getInstance().isPlayerInGuild(p.getUniqueId().toString())) {
+            if(!Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
                 //TODO: System zapraszania do gildii
                 String tag = args[1];
                 if(Data.getInstance().guilds.containsKey(tag)) {
@@ -58,7 +58,7 @@ public class JoinArg {
                         return false;
                     } else {
                         p.sendMessage(MsgManager.playernotinvited);
-                        Player leader = Bukkit.getPlayer(UUID.fromString(sg.getLeader()));
+                        Player leader = Bukkit.getPlayer(sg.getLeader());
                         sg.getInvitedPlayers().add(p.getUniqueId());
                         if(leader != null) {
                             if(leader.isOnline()) {

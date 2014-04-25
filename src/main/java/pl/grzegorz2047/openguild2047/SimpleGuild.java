@@ -37,7 +37,7 @@ public class SimpleGuild implements Guild {
     private String tag;
     private String description;
     private Location home;
-    private String leader;
+    private UUID leader;
     private List<UUID> members;
     private List<UUID> invitedplayers;
     private List<String> allyguilds;
@@ -67,7 +67,7 @@ public class SimpleGuild implements Guild {
     }
 
     @Override
-    public String getLeader() {
+    public UUID getLeader() {
         return this.leader;
     }
 
@@ -97,19 +97,19 @@ public class SimpleGuild implements Guild {
     }
 
     @Override
-    public void setLeader(String leader) {
-        this.leader = leader;
+    public void setLeader(UUID leader) {
+        this.leader = Bukkit.getOfflinePlayer(leader).getUniqueId();
     }
 
     @Override
-    public void addMember(String member) {
-        this.members.add(Bukkit.getOfflinePlayer(member).getUniqueId());
+    public void addMember(UUID member) {
+        this.members.add(member);
 
     }
 
     @Override
-    public void removeMember(String member) {
-        this.members.remove(Bukkit.getOfflinePlayer(member).getUniqueId());
+    public void removeMember(UUID member) {
+        this.members.remove(member);
     }
 
     @Override
@@ -118,8 +118,8 @@ public class SimpleGuild implements Guild {
     }
 
     @Override
-    public boolean containsMember(String member) {
-        return this.members.contains(Bukkit.getOfflinePlayer(member).getUniqueId());
+    public boolean containsMember(UUID member) {
+        return this.members.contains(member);
     }
 
     @Override
