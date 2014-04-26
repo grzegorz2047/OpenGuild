@@ -1,6 +1,6 @@
 createguildsuccess: '&aGildia zostala pomysnie stworzona.'
 cmdonlyforplayer: '&cKomenda jedynie dla graczy na serwerze!'
-alreadyinguild: '&cAby stworzyc nowa gildie musisz najpierw opuscic aktualna!'
+alreadyinguild: '&cNie mozesz tego wykonac, poniewaz jestes w gildii!'
 unsupportedchars: '&cNazwa gildii moze zawierac jedynie znaki z tego zakresu &9[0-9a-zA-Z]'
 toolongshorttag: '&cTwoja nazwa gildii jest za dluga badz za krotka!\n min. ilosc: &9{MIN}\n &cmax. ilosc: &9{MAX}'
 illegaltag: '&cTwoja nazwa posiada zabronione slowa!'

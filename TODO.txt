@@ -1,1 +1,2 @@
 * Informacje "Wkroczyłeś/aś na teren gildii X"
+* Ogarnąć czemu po wczytaniu danych z bazy pokazuje podwójnie nicki niektóre oraz czemu zle pokazuje /gildia lista
