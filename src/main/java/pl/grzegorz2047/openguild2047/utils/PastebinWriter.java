@@ -69,7 +69,7 @@ public class PastebinWriter {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                 StringBuilder builder = new StringBuilder();
                 String line;
-                while((line = reader.readLine()) != null)        {
+                while((line = reader.readLine()) != null){
                     builder.append(line);
                     builder.append("\r\n");
                 }
