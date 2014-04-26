@@ -34,7 +34,7 @@ mysql:
   # Twoj adres bazy danych
   adres: test.pl
   # Twoja nazwa bazy danych
-  baza-danych: nazwa
+  baza-danych: openguild
   # Twoj login do bazy danych
   login: user
   # Twoje haslo do bazy danych
