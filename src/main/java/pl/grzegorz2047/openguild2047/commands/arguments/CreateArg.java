@@ -101,7 +101,7 @@ public class CreateArg {
                                             NametagAPI.setPrefix(p.getName(), GenConf.colortagu + spg.getClanTag() + "§r ");
                                         }
 
-                                        saveToDb(clantag, sg.getDescription(), p, p.getLocation(), sg);
+                                        saveToDb(clantag, sg.getDescription(), p, p.getLocation());
 
                                         Guilds.getLogger().log(Level.INFO, "Gracz " + p.getName() + " stworzyl gildie o nazwie " + spg.getClanTag());
                                         p.sendMessage(MsgManager.createguildsuccess);
@@ -142,7 +142,7 @@ public class CreateArg {
 
     }
 
-    private static void saveToDb(String tag, String description, Player leader, Location home, Guild g) {
+    private static void saveToDb(String tag, String description, Player leader, Location home) {
         MySQLHandler.insert(tag, description, leader.getUniqueId(), null, home.getBlockX(), home.getBlockY(), home.getBlockZ(), home.getWorld().getName(), GenConf.MIN_CUBOID_RADIUS);
         MySQLHandler.update(leader.getUniqueId(), MySQLHandler.PType.GUILD, tag);
         MySQLHandler.update(leader.getUniqueId(), MySQLHandler.PType.ISLEADER, "true");//ustawia isleader wa bazie na true

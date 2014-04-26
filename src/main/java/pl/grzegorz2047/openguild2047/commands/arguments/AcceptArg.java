@@ -59,18 +59,18 @@ public class AcceptArg {
                     if(sg.getInvitedPlayers().contains(uuid)) {
                         sg.getInvitedPlayers().remove(uuid);
                         SimplePlayerGuild spg = new SimplePlayerGuild(uuid, sg.getTag(), true);
+                        sg.addMember(uuid);
                         Data.getInstance().guilds.put(sg.getTag(), sg);
                         Data.getInstance().ClansTag.add(sg.getTag());
                         Data.getInstance().guildsplayers.put(uuid, spg);
-                        sg.addMember(uuid);
                         if(GenConf.playerprefixenabled) {
                             if(NametagAPI.hasCustomNametag(acceptedplayer)) {
                                 NametagAPI.resetNametag(acceptedplayer);
                             }
                             NametagAPI.setPrefix(acceptedplayer, GenConf.colortagu + spg.getClanTag() + "§r ");
                         }
-                        savetodb(p, sg);
                         Player playerobj = Bukkit.getPlayer(acceptedplayer);
+                        savetodb(uuid, spg.getClanTag());
                         if(playerobj!=null){
                            playerobj.sendMessage(MsgManager.guildjoinsuccess);
                         }
@@ -94,7 +94,7 @@ public class AcceptArg {
         }
     }
 
-    private static void savetodb(Player player, Guild g) {
-        MySQLHandler.update(player.getUniqueId(), MySQLHandler.PType.GUILD, g.getTag());
+    private static void savetodb(UUID player, String tag) {
+        MySQLHandler.update(player, MySQLHandler.PType.GUILD, tag);
     }
 }

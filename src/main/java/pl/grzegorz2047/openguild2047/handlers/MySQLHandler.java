@@ -268,7 +268,7 @@ public class MySQLHandler {
             String query = "UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE tag='" + guild.getTag() + "';";
             stat = con.createStatement();
             log(query);
-            stat.execute(query);
+            stat.executeUpdate(query);
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
@@ -279,7 +279,7 @@ public class MySQLHandler {
             String query = "UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE tag='" + guild.getTag() + "';";
             stat = con.createStatement();
             log(query);
-            stat.execute(query);
+            stat.executeUpdate(query);
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
@@ -290,7 +290,7 @@ public class MySQLHandler {
             String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE uuid='" + uuid.toString() + "';";
             stat = con.createStatement();
             log(query);
-            stat.execute(query);
+            stat.executeUpdate(query);
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
@@ -301,7 +301,7 @@ public class MySQLHandler {
             String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE uuid='" + uuid.toString() + "';";
             stat = con.createStatement();
             log(query);
-            stat.execute(query);
+            stat.executeUpdate(query);
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
