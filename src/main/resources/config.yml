@@ -32,13 +32,13 @@ file-dir: plugins/OpenGuild2047/guilds.yml
 snooper: true
 mysql:
   # Twoj adres bazy danych
-  adres: localhost
+  adres: test.pl
   # Twoja nazwa bazy danych
-  baza-danych: openguild
+  baza-danych: nazwa
   # Twoj login do bazy danych
-  login: root
+  login: user
   # Twoje haslo do bazy danych
-  haslo: password
+  haslo: passy321
   # Informowanie w konsoli serwera o wszystkich komendach do bazy MySQL
   debug: false
 playerprefixtag: true
@@ -53,9 +53,4 @@ forbiddenguildnames:
 #Albo kompatybilnie z nowymi wersjami Minecrafta to MATERIAL:ilosc:byte
 #Lista material tu: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
 WymaganePrzedmioty:
-  - '5:4'
   - 'WOOD:2'
-  - 'APPLE:4'
-  - '6:3'
-  - '7:2'
-  - '8:2'
