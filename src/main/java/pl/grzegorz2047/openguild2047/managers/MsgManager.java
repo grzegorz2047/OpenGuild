@@ -41,7 +41,7 @@ public class MsgManager {
 
     public static String createguildsuccess = get("createguildsuccess", "Gildia zostala pomysnie stworzona.");
     public static String cmdonlyforplayer = get("cmdonlyforplayer", "Komenda jedynie dla graczy na serwerze!");
-    public static String alreadyinguild = get("alreadyinguild", "Aby stworzyc nowa gildie musisz najpierw opuscic aktualna!");
+    public static String alreadyinguild = get("alreadyinguild", "Nie mozesz tego wykonac, poniewaz jestes w gildii!");
     public static String unsupportedchars = get("unsupportedchars", "Nazwa gildii moze zawierac jedynie znaki z tego zakresu [0-9a-zA-Z]");
     public static String toolongshorttag = get("toolongshorttag", "Twoja nazwa gildii jest za dluga badz za krotka!"
             + "\n min. ilosc: " + GenConf.minclantag

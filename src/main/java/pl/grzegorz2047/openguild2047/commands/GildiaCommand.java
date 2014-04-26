@@ -54,6 +54,9 @@ public class GildiaCommand implements CommandExecutor {
                     if(args[0].equalsIgnoreCase("akceptuj")) {
                         return AcceptArg.execute(sender, args);
                     }
+                    if(args[0].equalsIgnoreCase("dolacz")) {
+                        return JoinArg.execute(sender, args);
+                    }
                 }
                 else if(args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                     return error(sender, "Podano zbyt malo argumentów");
@@ -72,9 +75,6 @@ public class GildiaCommand implements CommandExecutor {
                 }
                 else if(args[0].equalsIgnoreCase("opusc") || args[0].equalsIgnoreCase("wyjdz")) {
                     return LeaveArg.execute(sender);
-                }
-                else if(args[0].equalsIgnoreCase("dolacz")) {
-                    return JoinArg.execute(sender, args);
                 }
                 else if(args[0].equalsIgnoreCase("rozwiaz") || args[0].equalsIgnoreCase("zamknij")) {
                     return DisbandArg.execute(sender);

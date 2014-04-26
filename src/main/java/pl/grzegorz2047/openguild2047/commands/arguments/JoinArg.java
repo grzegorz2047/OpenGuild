@@ -52,11 +52,13 @@ public class JoinArg {
                 //TODO: System zapraszania do gildii
                 String tag = args[1];
                 if(Data.getInstance().guilds.containsKey(tag)) {
+                    System.out.println("Tag to "+tag+" i istnieje!!");
                     SimpleGuild sg = Data.getInstance().guilds.get(tag);
                     if(sg.getInvitedPlayers().contains(p.getUniqueId())) {
                         p.sendMessage(MsgManager.notyetaccepted);
                         return false;
                     } else {
+                        System.out.println("Nie ma na liscie zapro");
                         p.sendMessage(MsgManager.playernotinvited);
                         Player leader = Bukkit.getPlayer(sg.getLeader());
                         sg.getInvitedPlayers().add(p.getUniqueId());

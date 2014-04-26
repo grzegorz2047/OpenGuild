@@ -328,6 +328,7 @@ public class MySQLHandler {
                 sc.setRadius(rs.getInt("cuboid_radius"));
                 Data.getInstance().cuboids.put(tag, sc);
                 g.setHome(loc);
+                System.out.println("Wczytalem "+tag);
                 hm.put(g.getTag(), g);
             }
         } catch(SQLException ex) {
@@ -365,9 +366,8 @@ public class MySQLHandler {
                 String player = rs.getString("uuid");
                 String tag = rs.getString("guild");
                 boolean isleader = Boolean.parseBoolean(rs.getString("isleader"));
-
                 SimplePlayerGuild sg = new SimplePlayerGuild(UUID.fromString(player), tag, isleader);
-                hm.put(player, sg);
+                hm.put(UUID.fromString(player), sg);
             }
         } catch(SQLException ex) {
             ex.printStackTrace();
@@ -375,8 +375,7 @@ public class MySQLHandler {
         }
         return hm;
     }
-
-    public static String getPlayer(UUID uuid) {
+    public static String getPlayer(UUID uuid) {//BROKEN Popsulem funkcjonalnosc tej metody, wiec mozna to potem ogarnac
         String player = null;
         try {
             String query = "SELECT player FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
@@ -389,7 +388,7 @@ public class MySQLHandler {
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
-        return player;
+        return null;//Na razie wywala null, zeby bylo wiadomo ze niedziala xd
     }
 
     public static boolean existsPlayer(UUID uuid) {
