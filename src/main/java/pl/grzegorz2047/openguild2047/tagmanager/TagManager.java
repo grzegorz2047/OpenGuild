@@ -40,7 +40,7 @@ public class TagManager {
     private static Scoreboard sc;//Mozna trzymac w pamieci tej klasy, zeby nie bawic sie tym za bardzo.
     
     public TagManager(){
-        if(sc == null){//Kiedy trzeba to mozna zainicjowac scoreboard np. przy onEnable()
+        if(TagManager.isInitialised()){//Kiedy trzeba to mozna zainicjowac scoreboard np. przy onEnable()
             sc = Bukkit.getScoreboardManager().getNewScoreboard();
         }
         
@@ -52,7 +52,10 @@ public class TagManager {
     
       A ponizej przykladowa metoda rejestracji teamtagu
     */
-    public void registerTeamTag(String tag, SimpleGuild sg){
+    public static boolean registerTeamTag(String tag, SimpleGuild sg){
+        if(!TagManager.isInitialised()){
+            return false;
+        }
         if(sc.getTeam(tag)== null){
             Team teamtag = sc.registerNewTeam(tag);
             teamtag.setPrefix(GenConf.colortagu + tag + "§r ");
@@ -60,7 +63,12 @@ public class TagManager {
             for(UUID uuid : sg.getMembers()){
                 teamtag.addPlayer(Bukkit.getOfflinePlayer(uuid));
             }
+            return true;
         }
+        return false;
+    }
+    public static boolean isInitialised(){
+        return sc!= null;
         
     }
     
