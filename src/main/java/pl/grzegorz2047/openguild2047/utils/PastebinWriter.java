@@ -69,7 +69,7 @@ public class PastebinWriter {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                 StringBuilder builder = new StringBuilder();
                 String line;
-                while((line = reader.readLine()) != null){
+                while((line = reader.readLine()) != null) {
                     builder.append(line);
                     builder.append("\r\n");
                 }
@@ -79,7 +79,7 @@ public class PastebinWriter {
                     callback.success(new URL(result.trim()));
                 } else {
                     String err = result.trim();
-                    if (err.length() > 100) {
+                    if(err.length() > 100) {
                         err = err.substring(0, 100);
                     }
                     callback.error(err);
@@ -94,7 +94,7 @@ public class PastebinWriter {
                 try {
                     in.close();
                 }
-                catch (IOException ex) {
+                catch(IOException ex) {
                     ex.printStackTrace();
                 }
             }
