@@ -23,8 +23,8 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
-import ca.wacos.nametagedit.NametagAPI;
 
+import ca.wacos.nametagedit.NametagAPI;
 import java.util.logging.Level;
 
 import org.bukkit.Location;

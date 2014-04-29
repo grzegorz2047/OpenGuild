@@ -86,7 +86,7 @@ public class OpenGuild extends JavaPlugin {
         getCommand("gildia").setExecutor(new GildiaCommand());
         for(Player p : getServer().getOnlinePlayers()) {
             if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
-                NametagAPI.setPrefix(p.getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getUniqueId()).getTag() + "§r ");
+                NametagAPI.setPrefix(p.getUniqueId().toString(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getUniqueId()).getTag() + "§r ");
             }
         }
         loadPlayers();
@@ -98,8 +98,8 @@ public class OpenGuild extends JavaPlugin {
     @Override
     public void onDisable() {
         for(Player p : getServer().getOnlinePlayers()) {
-            if(NametagAPI.hasCustomNametag(p.getName())) {
-                NametagAPI.resetNametag(p.getName());
+            if(NametagAPI.hasCustomNametag(p.getUniqueId().toString())) {
+                NametagAPI.resetNametag(p.getUniqueId().toString());
             }
         }
 
