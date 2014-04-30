@@ -28,5 +28,5 @@ package pl.grzegorz2047.openguild2047.handlers;
  * @author Grzegorz
  */
 public class FileHandler {
-    //Tu podobnie do MySQLHandler czyli czy stawiać na uniwersalizm czy robić statyczne metody dla odpowiednich plików
+   //http://wklej.to/mM0ql A moze sqlite, ktory ulatwi nam sprawe xd
 }

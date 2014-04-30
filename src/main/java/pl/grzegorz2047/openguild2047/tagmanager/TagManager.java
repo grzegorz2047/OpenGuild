@@ -68,8 +68,7 @@ public class TagManager {
         return false;
     }
     public static boolean isInitialised(){
-        return sc!= null;
-        
+        return sc!= null; 
     }
     
 }
