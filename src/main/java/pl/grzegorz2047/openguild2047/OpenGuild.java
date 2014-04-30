@@ -41,7 +41,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,6 +50,7 @@ import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
+import pl.grzegorz2047.openguild2047.listeners.Hardcore;
 import pl.grzegorz2047.openguild2047.listeners.Monitors;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
@@ -140,6 +140,9 @@ public class OpenGuild extends JavaPlugin {
         }
         saveResource("messages.yml", false);
         saveResource("players.yml", false);
+        Guilds.getLogger().info("Wczytywanie konfiguracji z pliku config.yml...");
+        GenConf.loadConfiguration();
+        Guilds.getLogger().info("Pomyslnie wczytano konfiguracje!");
     }
 
     private void loadConfig() {
@@ -186,6 +189,7 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerQuit(), this);
         pm.registerEvents(new Monitors(), this);
         pm.registerEvents(new EntityDamageByEntity(), this);
+        pm.registerEvents(new Hardcore(), this);
     }
 
     private void loadPlayers() {

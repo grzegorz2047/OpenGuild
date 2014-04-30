@@ -86,7 +86,8 @@ public class MySQLHandler {
         KILLS,
         DEADS,
         ISLEADER,
-        UUID
+        UUID,
+        BAN_TIME
     }
 
     void loadDatabase() {
@@ -189,6 +190,7 @@ public class MySQLHandler {
                     + "kills INT,"
                     + "deads INT,"
                     + "uuid VARCHAR(37)," // UUID gracza z myślnikami ma 35 znaków? Więc dla pewności dam 37
+                    + "ban_time BIGINT,"
                     + "PRIMARY KEY(id,uuid));";
             stat = con.createStatement();
             log(query);
@@ -254,7 +256,8 @@ public class MySQLHandler {
                     + "'" + isLeader + "',"
                     + kills + ","
                     + deads + ","
-                    + "'" + uuid.toString() + "');";
+                    + "'" + uuid.toString() + "',"
+                    + "NULL);";
             stat = con.createStatement();
             log(query);
             stat.execute(query);
@@ -286,6 +289,17 @@ public class MySQLHandler {
     }
 
     public static void update(UUID uuid, PType type, int value) {
+        try {
+            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE uuid='" + uuid.toString() + "';";
+            stat = con.createStatement();
+            log(query);
+            stat.executeUpdate(query);
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public static void update(UUID uuid, PType type, long value) {
         try {
             String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE uuid='" + uuid.toString() + "';";
             stat = con.createStatement();
@@ -335,6 +349,23 @@ public class MySQLHandler {
             ex.printStackTrace();
         }
         return hm;
+    }
+
+    public static long getBan(UUID uuid) {
+        long result = 0;
+        try {
+            String query = "SELECT ban_time FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
+            stat = con.createStatement();
+            log(query);
+            ResultSet rs = stat.executeQuery(query);
+            while(rs.next()) {
+                long l = rs.getLong("ban_time");
+                result = l;
+            }
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     public static List<UUID> getGuildMembers(String tag) {
