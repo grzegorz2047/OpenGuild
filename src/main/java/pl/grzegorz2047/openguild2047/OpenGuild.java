@@ -41,7 +41,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -140,6 +139,9 @@ public class OpenGuild extends JavaPlugin {
         }
         saveResource("messages.yml", false);
         saveResource("players.yml", false);
+        Guilds.getLogger().info("Wczytywanie konfiguracji z pliku config.yml...");
+        GenConf.loadConfiguration();
+        Guilds.getLogger().info("Pomyslnie wczytano konfiguracje!");
     }
 
     private void loadConfig() {

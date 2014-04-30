@@ -40,19 +40,35 @@ public class GenConf {
     public static int maxclantag = 6;
     public static int minclantag = 4;
     public static String colortagu = "§6";
-    public static List<String> badwords = OpenGuild.get().getConfig().getStringList("forbiddenguildnames");
+    public static List<String> badwords;
     public static List<String> reqitems;
-    public static final int MIN_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.min-radius");
-    public static final int MAX_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.max-radius");
-    public static final int TELEPORT_COOLDOWN = OpenGuild.get().getConfig().getInt("teleport-cooldown");
-    public static final boolean EXTRA_PROTECTION = OpenGuild.get().getConfig().getBoolean("cuboid.extra-protection");
-    public static final boolean CANENTERAREA = OpenGuild.get().getConfig().getBoolean("cuboid.canenterarea");
-    public static final List<String> BREAKING_ITEMS = OpenGuild.get().getConfig().getStringList("cuboid.breaking-blocks.item-types");
-    public static final short BREAKING_DAMAGE = Short.parseShort(OpenGuild.get().getConfig().getString("cuboid.breaking-blocks.damage"));
-    public static final boolean SQL_DEBUG = OpenGuild.get().getConfig().getBoolean("mysql.debug", false);
-    public static final Database DATABASE = Database.valueOf(OpenGuild.get().getConfig().getString("database", "MYSQL").toUpperCase());
-    public static final String FILE_DIR = OpenGuild.get().getConfig().getString("file-dir", "plugins/OpenGuild2047/guilds.yml");
-    public static final boolean SNOOPER = OpenGuild.get().getConfig().getBoolean("snooper", true);
-    public static final boolean TEAMPVP_MSG = OpenGuild.get().getConfig().getBoolean("teampvp-msg", false);
+    public static int MIN_CUBOID_RADIUS;
+    public static int MAX_CUBOID_RADIUS;
+    public static int TELEPORT_COOLDOWN;
+    public static boolean EXTRA_PROTECTION;
+    public static boolean CANENTERAREA;
+    public static List<String> BREAKING_ITEMS;
+    public static short BREAKING_DAMAGE;
+    public static boolean SQL_DEBUG;
+    public static Database DATABASE;
+    public static String FILE_DIR;
+    public static boolean SNOOPER;
+    public static boolean TEAMPVP_MSG;
+
+    protected static void loadConfiguration() {
+        badwords = OpenGuild.get().getConfig().getStringList("forbiddenguildnames");
+        MIN_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.min-radius");
+        MAX_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.max-radius");
+        TELEPORT_COOLDOWN = OpenGuild.get().getConfig().getInt("teleport-cooldown");
+        EXTRA_PROTECTION = OpenGuild.get().getConfig().getBoolean("cuboid.extra-protection");
+        CANENTERAREA = OpenGuild.get().getConfig().getBoolean("cuboid.canenterarea");
+        BREAKING_ITEMS = OpenGuild.get().getConfig().getStringList("cuboid.breaking-blocks.item-types");
+        BREAKING_DAMAGE = Short.parseShort(OpenGuild.get().getConfig().getString("cuboid.breaking-blocks.damage"));
+        SQL_DEBUG = OpenGuild.get().getConfig().getBoolean("mysql.debug", false);
+        DATABASE = Database.valueOf(OpenGuild.get().getConfig().getString("database", "MYSQL").toUpperCase());
+        FILE_DIR = OpenGuild.get().getConfig().getString("file-dir", "plugins/OpenGuild2047/guilds.yml");
+        SNOOPER = OpenGuild.get().getConfig().getBoolean("snooper", true);
+        TEAMPVP_MSG = OpenGuild.get().getConfig().getBoolean("teampvp-msg", false);
+    }
 
 }
