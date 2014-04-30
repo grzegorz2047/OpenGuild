@@ -23,6 +23,8 @@ Plugin dostepny takze na stronie bukkita: tu bedzie link
 Poradnik konfiguracji pluginu na serwerze
 -----------
 
+Artykuł na [wiki](https://github.com/grzegorz2047/OpenGuild2047/wiki/Konfiguracja).
+
 Bugi oraz propozycje
 -----------
 
