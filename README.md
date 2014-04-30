@@ -8,11 +8,12 @@ Każde błędy, poprawki, propozycje piszcie w zakładce issues (po prawej stron
 Pobieranie i instalacja
 -----------
 
-Najnowszy plik .jar można zawszę pobrać z [releases] (https://github.com/grzegorz2047/OpenGuild2047/releases).
+Artykuł na (wiki)[https://github.com/grzegorz2047/OpenGuild2047/wiki/Pobieranie-oraz-instalacja].
 
-Wklej plik archwium JAR do folderu <i>../plugins</i> Twojego serwera. Wpisz komendę <i>/reload</i>
+Podłączanie bazy danych MySQL
+-----------
 
-Pamiętaj, że używasz Bukkit <b>1.7.5-R0.1-SNAPSHOT</b> lub nowszy!
+Artykuł na (wiki)[https://github.com/grzegorz2047/OpenGuild2047/wiki/Pod%C5%82%C4%85czanie-bazy-danych-MySQL].
 
 dev.bukkit.org
 -----------
@@ -25,7 +26,7 @@ Poradnik konfiguracji pluginu na serwerze
 Bugi oraz propozycje
 -----------
 
-Każdy uznany i znaleziony bug/propozycje prosimy kierować w zakładcę [Issues] (https://github.com/grzegorz2047/OpenGuild2047/issues). Jedak przed jego złożeniem prosimy przeczytać wszystkie inne zgłoszenia, pomoże w tym wyszukiwarka na górze strony.
+Każdy uznany i znaleziony bug/propozycje prosimy kierować w zakładcę [Issues](https://github.com/grzegorz2047/OpenGuild2047/issues). Jedak przed jego złożeniem prosimy przeczytać wszystkie inne zgłoszenia, pomoże w tym wyszukiwarka na górze strony.
 
 Kompilacja
 -----------
