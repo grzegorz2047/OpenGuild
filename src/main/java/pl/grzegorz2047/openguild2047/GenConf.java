@@ -25,6 +25,8 @@ package pl.grzegorz2047.openguild2047;
 
 import java.util.List;
 
+import pl.grzegorz2047.openguild2047.api.Guilds;
+
 /**
  *
  * @author Grzegorz
@@ -54,6 +56,10 @@ public class GenConf {
     public static String FILE_DIR;
     public static boolean SNOOPER;
     public static boolean TEAMPVP_MSG;
+    public static boolean hcBans;
+    public static long hcBantime;
+    public static String hcKickMsg;
+    public static String hcLoginMsg;
 
     protected static void loadConfiguration() {
         badwords = OpenGuild.get().getConfig().getStringList("forbiddenguildnames");
@@ -69,6 +75,37 @@ public class GenConf {
         FILE_DIR = OpenGuild.get().getConfig().getString("file-dir", "plugins/OpenGuild2047/guilds.yml");
         SNOOPER = OpenGuild.get().getConfig().getBoolean("snooper", true);
         TEAMPVP_MSG = OpenGuild.get().getConfig().getBoolean("teampvp-msg", false);
+        loadBans();
+    }
+
+    private static void loadBans() {
+        hcBans = OpenGuild.get().getConfig().getBoolean("hardcore-bans.enabled");
+        hcKickMsg = OpenGuild.get().getConfig().getString("hardcore-bans.kick-message").replace("&", "");
+        hcLoginMsg = OpenGuild.get().getConfig().getString("hardcore-bans.login-message").replace("&", "");
+        
+        String time = OpenGuild.get().getConfig().getString("hardcore-bans.ban-time");
+        String lenght = time.substring(0, time.length() - 1);
+        long result;
+        try {
+            result = Long.parseLong(lenght);
+        } catch(NumberFormatException ex) {
+            Guilds.getLogger().warning("Nie udalo sie wczytac czasu bana, domyslne uzywanie 1 minuty. Sprawdz czy ban-time w config.yml zostal poprawnie wpisany.");
+            hcBantime = 60 * 20;
+            return;
+        }
+        if(time.endsWith("s")) { // Seconds
+            result = result * 20;
+        }
+        else if(time.endsWith("m")) { // Minutes
+            result = result * 20 * 60;
+        }
+        else if(time.endsWith("h")) { // Hours
+            result = result * 20 * 60 * 60;
+        }
+        else if(time.endsWith("d")) { // Days
+            result = result * 20 * 60 * 24;
+        } else {} // Ticks or null
+        hcBantime = result;
     }
 
 }
