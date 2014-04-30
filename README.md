@@ -3,27 +3,14 @@ OpenGuild2047
 
 OpenGuild2047 to publiczny, open source plugin na gildie tworzony przez Grzegorza2047.
 Kod możecie dowolnie użytkować itd.
-Każde błędy, poprawki, propozycje piszcie w zakładce issues (po prawej stronie)
+Każde błędy, poprawki, propozycje piszcie w zakładce issues (po prawej stronie).
 
-Pobieranie i instalacja
------------
-
-Artykuł na [wiki](https://github.com/grzegorz2047/OpenGuild2047/wiki/Pobieranie-oraz-instalacja).
-
-Podłączanie bazy danych MySQL
------------
-
-Artykuł na [wiki](https://github.com/grzegorz2047/OpenGuild2047/wiki/Pod%C5%82%C4%85czanie-bazy-danych-MySQL).
+Zobacz [instalacje](https://github.com/grzegorz2047/OpenGuild2047/wiki/Pobieranie-oraz-instalacja) pluginu oraz jego [konfigurację](https://github.com/grzegorz2047/OpenGuild2047/wiki/Konfiguracja).
 
 dev.bukkit.org
 -----------
 
 Plugin dostepny takze na stronie bukkita: tu bedzie link
-
-Poradnik konfiguracji pluginu na serwerze
------------
-
-Artykuł na [wiki](https://github.com/grzegorz2047/OpenGuild2047/wiki/Konfiguracja).
 
 Bugi oraz propozycje
 -----------
