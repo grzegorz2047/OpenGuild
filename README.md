@@ -8,12 +8,12 @@ Każde błędy, poprawki, propozycje piszcie w zakładce issues (po prawej stron
 Pobieranie i instalacja
 -----------
 
-Artykuł na (wiki)[https://github.com/grzegorz2047/OpenGuild2047/wiki/Pobieranie-oraz-instalacja].
+Artykuł na [wiki](https://github.com/grzegorz2047/OpenGuild2047/wiki/Pobieranie-oraz-instalacja).
 
 Podłączanie bazy danych MySQL
 -----------
 
-Artykuł na (wiki)[https://github.com/grzegorz2047/OpenGuild2047/wiki/Pod%C5%82%C4%85czanie-bazy-danych-MySQL].
+Artykuł na [wiki](https://github.com/grzegorz2047/OpenGuild2047/wiki/Pod%C5%82%C4%85czanie-bazy-danych-MySQL).
 
 dev.bukkit.org
 -----------
