@@ -14,6 +14,14 @@ Wklej plik archwium JAR do folderu <i>../plugins</i> Twojego serwera. Wpisz kome
 
 Pamiętaj, że używasz Bukkit <b>1.7.5-R0.1-SNAPSHOT</b> lub nowszy!
 
+dev.bukkit.org
+-----------
+
+Plugin dostepny takze na stronie bukkita: tu bedzie link
+
+Poradnik konfiguracji pluginu na serwerze
+-----------
+
 Bugi oraz propozycje
 -----------
 
