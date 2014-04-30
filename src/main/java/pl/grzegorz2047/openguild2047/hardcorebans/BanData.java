@@ -29,5 +29,7 @@ package pl.grzegorz2047.openguild2047.hardcorebans;
  * @author Grzegorz
  */
 public class BanData {
-    //Jak nie bedzie trzeba to usune te klase, ale pewnie sie przyda
+
+    
+
 }

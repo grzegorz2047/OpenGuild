@@ -50,6 +50,7 @@ import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
+import pl.grzegorz2047.openguild2047.listeners.Hardcore;
 import pl.grzegorz2047.openguild2047.listeners.Monitors;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
@@ -188,6 +189,7 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerQuit(), this);
         pm.registerEvents(new Monitors(), this);
         pm.registerEvents(new EntityDamageByEntity(), this);
+        pm.registerEvents(new Hardcore(), this);
     }
 
     private void loadPlayers() {
