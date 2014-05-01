@@ -34,7 +34,7 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
 public class GenConf {
 
     public enum Lang {
-        EN, PL;
+        EN, PL, SV;
     }
 
     public static String prefix = "§7[§6OpenGuild§7]§7 ";

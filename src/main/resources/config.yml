@@ -1,5 +1,5 @@
-# Choose your language
-language: pl
+# Choose your language. English - EN, polski - PL, svenska - SV
+language: PL
 # Wlacz/wylacz PvP pomiedzy czlonkami gildii
 teampvp: false
 # Wlacz/wylacz wiadomosc o wylaczonym PvP w trakcie próby uderzenia
@@ -48,13 +48,13 @@ file-dir: plugins/OpenGuild2047/guilds.yml
 snooper: true
 mysql:
   # Twoj adres bazy danych
-  adres: test.pl
+  address: localhost
   # Twoja nazwa bazy danych
-  baza-danych: openguild
+  database: openguild
   # Twoj login do bazy danych
   login: user
   # Twoje haslo do bazy danych
-  haslo: passy321
+  password: pass321
   # Informowanie w konsoli serwera o wszystkich komendach do bazy MySQL
   debug: false
 playerprefixtag: true

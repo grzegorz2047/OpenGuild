@@ -1,5 +1,5 @@
 # English translation by TheMolkaPL (themolkapl@gmail.com) - 01.05.2014
-createguildsuccess: '&aGuild has created.'
+createguildsuccess: '&aGuild was created.'
 cmdonlyforplayer: '&cCommand only for in-game players!'
 alreadyinguild: '&cYou can not do this, because you are in the guild!'
 unsupportedchars: '&cGuilds name can only be named from &9[0-9a-zA-Z]'

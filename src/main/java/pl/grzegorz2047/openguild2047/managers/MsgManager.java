@@ -25,10 +25,15 @@ package pl.grzegorz2047.openguild2047.managers;
 
 import java.io.File;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.GenConf.Lang;
+import static pl.grzegorz2047.openguild2047.GenConf.Lang.EN;
+import static pl.grzegorz2047.openguild2047.GenConf.Lang.PL;
+import static pl.grzegorz2047.openguild2047.GenConf.Lang.SV;
 
 /**
  *
@@ -75,11 +80,22 @@ public class MsgManager {
     public static String desctoolong = get("desctoolong", "Opis gildii jest za dlugi");
 
     public static String get(String path) {
-        return get(path, "&cMessage not found :(");
+        return get(path, getNullMessage(GenConf.lang));
     }
 
     public static String get(String path, String def) {
         return GenConf.prefix + config.getString(path, def).replace("&", "§");
+    }
+
+    private static String getNullMessage(Lang lang) {
+        String result;
+        switch(lang) {
+            case EN: result = "Message not found"; break;
+            case PL: result = "Wiadomosc nie znaleziona"; break;
+            case SV: result = "Meddelandet kan inte hittas"; break;
+            default: result = "Message not found"; break;
+        }
+        return ChatColor.RED + result + " :(";
     }
 
 }
