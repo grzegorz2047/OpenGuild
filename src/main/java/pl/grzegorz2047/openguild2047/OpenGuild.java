@@ -149,11 +149,11 @@ public class OpenGuild extends JavaPlugin {
                 ex.printStackTrace();
             }
         }
-        saveResource("messages.yml", false);
+        saveResource("messages_" + GenConf.lang.name().toLowerCase() + ".yml", false);
         saveResource("players.yml", false);
-        Guilds.getLogger().info("Wczytywanie konfiguracji z pliku config.yml...");
+        Guilds.getLogger().info("Loading configuration from config.yml...");
         GenConf.loadConfiguration();
-        Guilds.getLogger().info("Pomyslnie wczytano konfiguracje!");
+        Guilds.getLogger().info("Configuration loaded!");
     }
 
     private void loadConfig() {

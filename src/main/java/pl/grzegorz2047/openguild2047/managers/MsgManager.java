@@ -36,12 +36,12 @@ import pl.grzegorz2047.openguild2047.GenConf;
  */
 public class MsgManager {
 
-    public static final File FILE = new File("plugins/OpenGuild2047/messages.yml");
-    public static final FileConfiguration CONFIG = YamlConfiguration.loadConfiguration(FILE);
+    public static File file = new File("plugins/OpenGuild2047/messages_" + GenConf.lang.name().toLowerCase() + ".yml");
+    public static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
     public static String createguildsuccess = get("createguildsuccess", "Gildia zostala pomysnie stworzona.");
     public static String cmdonlyforplayer = get("cmdonlyforplayer", "Komenda jedynie dla graczy na serwerze!");
-public static String alreadyinguild = get("alreadyinguild", "Nie mozesz tego wykonac, poniewaz jestes w gildii!");
+    public static String alreadyinguild = get("alreadyinguild", "Nie mozesz tego wykonac, poniewaz jestes w gildii!");
     public static String unsupportedchars = get("unsupportedchars", "Nazwa gildii moze zawierac jedynie znaki z tego zakresu [0-9a-zA-Z]");
     public static String toolongshorttag = get("toolongshorttag", "Twoja nazwa gildii jest za dluga badz za krotka!"
             + "\n min. ilosc: " + GenConf.minclantag
@@ -75,11 +75,11 @@ public static String alreadyinguild = get("alreadyinguild", "Nie mozesz tego wyk
     public static String desctoolong = get("desctoolong", "Opis gildii jest za dlugi");
 
     public static String get(String path) {
-        return get(path, "&cWiadomosc nie zostala odnaleziona :(");
+        return get(path, "&cMessage not found :(");
     }
 
     public static String get(String path, String def) {
-        return GenConf.prefix + CONFIG.getString(path, def).replace("&", "§");
+        return GenConf.prefix + config.getString(path, def).replace("&", "§");
     }
 
 }

@@ -1,3 +1,5 @@
+# Choose your language
+language: pl
 # Wlacz/wylacz PvP pomiedzy czlonkami gildii
 teampvp: false
 # Wlacz/wylacz wiadomosc o wylaczonym PvP w trakcie próby uderzenia
