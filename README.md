@@ -10,7 +10,7 @@ Zobacz [instalacje](https://github.com/grzegorz2047/OpenGuild2047/wiki/Pobierani
 dev.bukkit.org
 -----------
 
-Plugin dostepny takze na stronie bukkita: tu bedzie link
+Plugin dostepny takze na stronie bukkita: http://dev.bukkit.org/bukkit-plugins/openguild/
 
 Bugi oraz propozycje
 -----------
