@@ -29,7 +29,11 @@
     <repository>
       <id>bukkit-repo</id>
       <url>http://repo.bukkit.org/content/groups/public/</url>
-    </repository> 
+    </repository>
+    <repository>
+      <id>Plugin Metrics</id>
+      <url>http://repo.mcstats.org/content/repositories/public</url>
+    </repository>
   </repositories>
 
   <dependencies>
@@ -50,6 +54,12 @@
       <version>2.12.1</version>
       <scope>system</scope>
       <systemPath>${basedir}/libs/NametagEdit.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>org.mcstats.MOD</groupId>
+      <artifactId>metrics</artifactId>
+      <version>R6</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>
