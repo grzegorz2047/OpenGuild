@@ -45,6 +45,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import org.mcstats;
+
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
@@ -91,6 +93,15 @@ public class OpenGuild extends JavaPlugin {
         }
         loadPlayers();
         CuboidListeners.loadItems();
+        
+        // Metrics
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+        } catch(IOException e) {
+            // Failed to submit the stats :-(
+        }
+        
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
 
     }
