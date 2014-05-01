@@ -45,7 +45,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import org.mcstats;
+import org.mcstats.Metrics;
 
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
@@ -98,7 +98,7 @@ public class OpenGuild extends JavaPlugin {
         try {
             Metrics metrics = new Metrics(this);
             metrics.start();
-        } catch(IOException e) {
+        } catch(IOException ex) {
             // Failed to submit the stats :-(
         }
         
