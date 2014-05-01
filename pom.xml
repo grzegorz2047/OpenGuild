@@ -56,7 +56,7 @@
       <systemPath>${basedir}/libs/NametagEdit.jar</systemPath>
     </dependency>
     <dependency>
-      <groupId>org.mcstats.MOD</groupId>
+      <groupId>org.mcstats.bukkit</groupId>
       <artifactId>metrics</artifactId>
       <version>R6</version>
       <scope>compile</scope>
