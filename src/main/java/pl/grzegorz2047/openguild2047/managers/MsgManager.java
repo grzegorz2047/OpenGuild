@@ -24,6 +24,7 @@
 package pl.grzegorz2047.openguild2047.managers;
 
 import java.io.File;
+import java.util.HashMap;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -40,6 +41,8 @@ import static pl.grzegorz2047.openguild2047.GenConf.Lang.SV;
  * @author Grzegorz
  */
 public class MsgManager {
+
+    private static HashMap<String, String> messages;
 
     public static File file = new File("plugins/OpenGuild2047/messages_" + GenConf.lang.name().toLowerCase() + ".yml");
     public static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
@@ -84,7 +87,19 @@ public class MsgManager {
     }
 
     public static String get(String path, String def) {
-        return GenConf.prefix + config.getString(path, def).replace("&", "§");
+        if(messages == null)
+            loadMessages();
+        if(messages.get(path) == null) {
+            return def;
+        } else {
+            return messages.get(path);
+        }
+    }
+    
+    private static void loadMessages() {
+        for(String path : config.getConfigurationSection("").getKeys(false)) {
+            messages.put(path, config.getString(path).replace("&", "§"));
+        }
     }
 
     private static String getNullMessage(Lang lang) {
