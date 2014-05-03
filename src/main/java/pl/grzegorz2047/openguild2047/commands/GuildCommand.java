@@ -40,8 +40,9 @@ import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ListArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
-public class GildiaCommand implements CommandExecutor {
+public class GuildCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -88,7 +89,7 @@ public class GildiaCommand implements CommandExecutor {
                 else if(args[0].equalsIgnoreCase("description") || args[0].equalsIgnoreCase("opis") || args[0].equalsIgnoreCase("desc")) {
                     return DescriptionArg.execute(sender, args);
                 } else {
-                    return error(sender, "Podano blad w komendzie");
+                    return error(sender, "cmdsyntaxerr");
                 }
             } else {
                 HelpArg.execute(sender, args);
@@ -98,10 +99,9 @@ public class GildiaCommand implements CommandExecutor {
         return false;
     }
 
-    @SuppressWarnings("unused")
     private boolean error(CommandSender sender, String msg) {
-        sender.sendMessage(GenConf.prefix + ChatColor.RED + msg + "!");
-        sender.sendMessage(GenConf.prefix + ChatColor.DARK_GRAY + "Uzyj " + ChatColor.GOLD + "/gildia pomoc" + ChatColor.DARK_GRAY + ", aby uzyskac pomoc.");
+        sender.sendMessage(MsgManager.get(msg));
+        sender.sendMessage(MsgManager.get("seehelp"));
         return true;
     }
 

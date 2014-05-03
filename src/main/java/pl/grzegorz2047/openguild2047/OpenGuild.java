@@ -48,7 +48,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
 import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.commands.GildiaCommand;
+import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
@@ -85,7 +85,7 @@ public class OpenGuild extends JavaPlugin {
         Data pd = new Data();
         Data.setDataInstance(pd);
         loadDb();
-        getCommand("guild").setExecutor(new GildiaCommand());
+        getCommand("guild").setExecutor(new GuildCommand());
         for(Player p : getServer().getOnlinePlayers()) {
             if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
                 NametagAPI.setPrefix(p.getUniqueId().toString(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getUniqueId()).getTag() + "§r ");
@@ -102,7 +102,7 @@ public class OpenGuild extends JavaPlugin {
             // Failed to submit the stats :-(
         }
         
-        getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 zostal uruchomiony w " + String.valueOf(System.currentTimeMillis() - init) + " ms!"); //Oj krzaczy mi tu przez złe kodowanie Molek xd Ustaw sobie na UTF-8
+        getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
 
     }
 
@@ -114,7 +114,6 @@ public class OpenGuild extends JavaPlugin {
             }
         }
 
-        // Usuwanie wszystkich plikow ktore nie posidaja formatu .log (logger tworzy duzo plikow roboczych)
         int logFiles = 0;
         for(File file : logDir.listFiles()) {
             String format = file.getName().substring(file.getName().length() - 4, file.getName().length());
@@ -123,13 +122,13 @@ public class OpenGuild extends JavaPlugin {
                 logFiles++;
             }
         }
-        System.out.println("Usunieto " + logFiles + " plikow w folderze OpenGuild2047/log");
+        System.out.println("Deleted " + logFiles + " files in OpenGuild2047/logger");
     }
 
     private boolean checkPlugins() {
         if(getServer().getPluginManager().getPlugin("NametagEdit") == null) {
-            Guilds.getLogger().severe("Nie znaleziono pluginu NametagEdit! Pobierz go ze strony http://dev.bukkit.org/bukkit-plugins/nametagedit/");
-            Guilds.getLogger().severe("Wylaczanie pluginu OpenGuild2047...");
+            Guilds.getLogger().severe("Plugin NametagEdit was not found! Download it at http://dev.bukkit.org/bukkit-plugins/nametagedit/");
+            Guilds.getLogger().severe("Disabling OpenGuild2047...");
             return false;
         } else {
             return true;
@@ -164,13 +163,13 @@ public class OpenGuild extends JavaPlugin {
         password = getConfig().getString("mysql.password");
         // Inne ustawienia
         GenConf.teampvp = this.getConfig().getBoolean("teampvp");
-        GenConf.homecommand = this.getConfig().getBoolean("dom-command");
-        GenConf.reqitems = this.getConfig().getStringList("WymaganePrzedmioty");
+        GenConf.homecommand = this.getConfig().getBoolean("home-command");
+        GenConf.reqitems = this.getConfig().getStringList("required-items");
         GenConf.playerprefixenabled = this.getConfig().getBoolean("playerprefixtag");
         GenConf.guildprefixinchat = this.getConfig().getBoolean("guildprefixinchat");
-        GenConf.colortagu = this.getConfig().getString("kolortagugildii").replace('&', '§');
+        GenConf.colortagu = this.getConfig().getString("tag-color").replace('&', '§');
         if(GenConf.colortagu.length() > 2) {
-            Guilds.getLogger().severe("Kolor tagu moze skladac sie tylko z 2 znaków: & oraz znaku identyfikujacy kolor!");
+            Guilds.getLogger().severe("Tags color lenght must have 2 chars: & oraz znaku identyfikujacy kolor!");
             Guilds.getLogger().warning("Uzywam domyslnego koloru gildii!");
             GenConf.colortagu = "§6";
         }
@@ -179,14 +178,14 @@ public class OpenGuild extends JavaPlugin {
     private void loadDb() {
         switch(GenConf.DATABASE) {
             case FILE:
-                Guilds.getLogger().warning("Przykro nam, ale system plików jeszcze nie dziala! Próba polaczenia sie z baza danych MySQL...");
-                new MySQLHandler(address, database, login, password).createFirstConnection(login, password); // TODO Pliki...
+                Guilds.getLogger().warning("We are so sorry! Files database system doesn't work now! Connecting via MySQL...");
+                new MySQLHandler(address, database, login, password).createFirstConnection(login, password); // TODO Files...
                 break;
             case MYSQL:
                 new MySQLHandler(address, database, login, password).createFirstConnection(login, password);
                 break;
             default:
-                Guilds.getLogger().severe("Nie mozna wczytac typu bazy danych (database)! Popraw to w pliku config.yml!");
+                Guilds.getLogger().severe("Could not load database type! Please fix it in your config.yml file!");
                 getServer().getPluginManager().disablePlugin(this);
                 break;
         }

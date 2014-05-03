@@ -63,7 +63,7 @@ public class HomeArg {
         }
         if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
             if(args.length >= 2) {
-                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId()); // lol przeciez jest Guilds.getGuild(p); xD
+                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
                 if(sg.getLeader().equals(p.getUniqueId())) {
                     sg.setHome(p.getLocation());
                     saveDb(Guilds.getGuild(p), p.getLocation());
@@ -76,7 +76,7 @@ public class HomeArg {
                 Location homeloc = Data.getInstance().getPlayersGuild(p.getUniqueId()).getHome();
                 int cooldown = GenConf.TELEPORT_COOLDOWN;
                 if(cooldown <= 0) {
-                    teleport(p, homeloc, 10); // Teleportacja gdy jest bledny config - 10 sekund
+                    teleport(p, homeloc, 10);
                     Guilds.getLogger().severe("Czas oczekiwania teleportacji musi miec minimum 1 sekunde!");
                     return true;
                 }
