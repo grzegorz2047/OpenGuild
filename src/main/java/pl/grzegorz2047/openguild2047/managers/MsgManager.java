@@ -95,8 +95,9 @@ public class MsgManager {
             return messages.get(path);
         }
     }
-    
+
     private static void loadMessages() {
+        messages = new HashMap<String, String>();
         for(String path : config.getConfigurationSection("").getKeys(false)) {
             messages.put(path, config.getString(path).replace("&", "§"));
         }
