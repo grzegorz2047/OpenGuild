@@ -64,9 +64,9 @@ kolortagugildii: '&6'
 guildprefixinchat: true
 # Zablokowane slowa w nazwach gildii
 forbiddenguildnames:
-    - 'null'
+- 'null'
 #Zasada odczytu do ogarniecia id:ilosc:byte
 #Albo kompatybilnie z nowymi wersjami Minecrafta to MATERIAL:ilosc:byte
 #Lista material tu: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
 WymaganePrzedmioty:
-  - 'WOOD:2'
+- 'WOOD:2'
