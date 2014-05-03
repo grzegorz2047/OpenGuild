@@ -6,6 +6,6 @@ version: 0.2
 softdepend: [NametagEdit]
 main: pl.grzegorz2047.openguild2047.OpenGuild
 commands:
-  gildia:
-    description: Komendy zwiazane z gildiami
-    aliases: [g]
+  guild:
+    description: Commands about guilds
+    aliases: [g, gildia]
