@@ -45,7 +45,7 @@ public class GildiaCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(command.getName().equalsIgnoreCase("gildia")) {
+        if(command.getName().equalsIgnoreCase("guild")) {
             if(args.length > 0) {
                 if(args.length >= 2) {
                     if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
