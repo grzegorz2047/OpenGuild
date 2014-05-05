@@ -98,10 +98,10 @@ public class GenConf {
         hcLoginMsg = OpenGuild.get().getConfig().getString("hardcore-bans.login-message").replace("&", "");
         
         String time = OpenGuild.get().getConfig().getString("hardcore-bans.ban-time");
-        String lenght = time.substring(0, time.length() - 1);
+        String length = time.substring(0, time.length() - 1);
         long result;
         try {
-            result = Long.parseLong(lenght);
+            result = Long.parseLong(length);
         } catch(NumberFormatException ex) {
             Guilds.getLogger().warning("Could not load ban time, defaults using 1 minute. Check your ban-time in config.yml file.");
             hcBantime = 60 * 20;
