@@ -1,70 +1,36 @@
-# Wlacz/wylacz PvP pomiedzy czlonkami gildii
+# English: See the configuration tutorial at http://dev.bukkit.org/bukkit-plugins/openguild/pages/config-configuration/
+# polski: Patrz poradnik konfiguracji na https://github.com/grzegorz2047/OpenGuild2047/wiki/Konfiguracja
+# svenska: Det finns inte konfiguration guide på svenska :(
+language: PL
 teampvp: false
-# Wlacz/wylacz wiadomosc o wylaczonym PvP w trakcie próby uderzenia
 teampvp-msg: false
-# Wlacz/wylacz komende /gildia dom
-dom-command: true
-# Czas oczekiwania teleportacji do gildii (w sekundach)
+home-command: true
 teleport-cooldown: 10
 cuboid:
-  # Promien cuboida po zalozeniu gildii
   min-radius: 15
-  # Maksymalny promien cuboida po powiekszaniu (/gildia powieksz)
   max-radius: 50
-  #Czy ma blokowac wchodzenie na teren gildii przez osoby spoza gildii i sojuszników
   canenterarea: true
-  #Czy osoby spoza gildii moge wchodzic w interakcje z przedmiotami np. skrzynki, piecyki itd.
   extra-protection: true
-  # Niszczenie bloków na terenie itemów
   breaking-blocks:
-    # Typy itemów którymi mozna zniszczyc blok na terenie gildii
-    # Lista itemów znajduje sie na http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
     item-types: [DIAMOND_PICKAXE]
-    # Ilosc sily jaka zostaje zadana itemowi
-    # Jezeli ustawione na 0 niszczenie bloków bedzie wylaczone
     damage: 0
-# Bany za smierc (tryb hardcore), wymaga podlaczenia do bazy MySQL
 hardcore-bans:
-  # Wlacz/wylacz bany za smierc
   enabled: true
-  # Czas bana
-  # Formy czasu: t- ticków, s- sekund, m- minut, h- godzin, d- dni
-  # Format: <czas><forma>, np 3d (3 dni)
   ban-time: 1h
-  # Wiadomosc wyswietlana do gracza po jego smierci
-  # Zmienne: %TIME - wyswietlanie czasu w formacie dd-mm-yyyy hh:mm
-  kick-message: '&4Umarles/as! &7Odrodzenie nastapi &6%TIME&7!'
-  # Wiadomosc wyswietlana do gracza podczas próby zalogowania sie na serwer podczas gdy ma bana
-  # Zmienne: %TIME - wyswietlanie czasu w formacie dd-mm-yyyy hh:mm
-  login-message: '&7Jestes zbanowany/a za smierc do &6%TIME'
-# Ustaw styl zapisywania danych; dostepne opcje to MYSQL oraz FILE
+  kick-message: '&4You are dead! &7The revival will occur &6%TIME&7!'
+  login-message: '&7You are banned for death to &6%TIME'
 database: MYSQL
-# Ustaw lokalizacje pliku z gildiami.
-# UWAGA: Dostepne wylacznie gdy database jest ustawione na FILE
 file-dir: plugins/OpenGuild2047/guilds.yml
-# Wlacz/wylacz wysylanie informacji o bledach na http://pastebin.com
 snooper: true
 mysql:
-  # Twoj adres bazy danych
-  adres: test.pl
-  # Twoja nazwa bazy danych
-  baza-danych: openguild
-  # Twoj login do bazy danych
+  address: localhost
+  database: openguild
   login: user
-  # Twoje haslo do bazy danych
-  haslo: passy321
-  # Informowanie w konsoli serwera o wszystkich komendach do bazy MySQL
+  password: password
   debug: false
 playerprefixtag: true
-kolortagugildii: '&6'
-# Wlacz/wylacz tag gildii na chacie w grze jako prefix
-# Aby wyswietlic tag na chacie; ustaw flage %flag w Twoim pluginie od chatu (np EssentialsChat).
+tag-color: '&6'
 guildprefixinchat: true
-# Zablokowane slowa w nazwach gildii
 forbiddenguildnames:
-    - 'null'
-#Zasada odczytu do ogarniecia id:ilosc:byte
-#Albo kompatybilnie z nowymi wersjami Minecrafta to MATERIAL:ilosc:byte
-#Lista material tu: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
-WymaganePrzedmioty:
-  - 'WOOD:2'
+required-items:
+- 'WOOD:2'

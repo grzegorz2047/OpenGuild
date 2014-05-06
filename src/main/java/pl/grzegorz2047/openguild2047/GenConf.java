@@ -33,7 +33,11 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
  */
 public class GenConf {
 
-    public static String prefix = "§7[§6OpenGuild§7]§7 ";//Mozna pokolorowac
+    public enum Lang {
+        EN, PL, SV;
+    }
+
+    public static String prefix = "§7[§6OpenGuild§7]§7 ";
     public static boolean teampvp = false;
     public static boolean homecommand = true;
     public static boolean playerprefixenabled = true;
@@ -60,6 +64,7 @@ public class GenConf {
     public static long hcBantime;
     public static String hcKickMsg;
     public static String hcLoginMsg;
+    public static Lang lang;
 
     protected static void loadConfiguration() {
         badwords = OpenGuild.get().getConfig().getStringList("forbiddenguildnames");
@@ -75,6 +80,15 @@ public class GenConf {
         FILE_DIR = OpenGuild.get().getConfig().getString("file-dir", "plugins/OpenGuild2047/guilds.yml");
         SNOOPER = OpenGuild.get().getConfig().getBoolean("snooper", true);
         TEAMPVP_MSG = OpenGuild.get().getConfig().getBoolean("teampvp-msg", false);
+        
+        String langString = OpenGuild.get().getConfig().getString("language").toUpperCase();
+        try {
+            lang = Lang.valueOf(langString);
+        } catch(IllegalArgumentException ex) {
+            lang = Lang.PL;
+            Guilds.getLogger().warning("Could not load " + langString + " as language - using Polish.");
+        }
+        
         loadBans();
     }
 
@@ -84,12 +98,12 @@ public class GenConf {
         hcLoginMsg = OpenGuild.get().getConfig().getString("hardcore-bans.login-message").replace("&", "");
         
         String time = OpenGuild.get().getConfig().getString("hardcore-bans.ban-time");
-        String lenght = time.substring(0, time.length() - 1);
+        String length = time.substring(0, time.length() - 1);
         long result;
         try {
-            result = Long.parseLong(lenght);
+            result = Long.parseLong(length);
         } catch(NumberFormatException ex) {
-            Guilds.getLogger().warning("Nie udalo sie wczytac czasu bana, domyslne uzywanie 1 minuty. Sprawdz czy ban-time w config.yml zostal poprawnie wpisany.");
+            Guilds.getLogger().warning("Could not load ban time, defaults using 1 minute. Check your ban-time in config.yml file.");
             hcBantime = 60 * 20;
             return;
         }

@@ -24,11 +24,17 @@
 package pl.grzegorz2047.openguild2047.managers;
 
 import java.io.File;
+import java.util.HashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.GenConf.Lang;
+import static pl.grzegorz2047.openguild2047.GenConf.Lang.EN;
+import static pl.grzegorz2047.openguild2047.GenConf.Lang.PL;
+import static pl.grzegorz2047.openguild2047.GenConf.Lang.SV;
 
 /**
  *
@@ -36,12 +42,14 @@ import pl.grzegorz2047.openguild2047.GenConf;
  */
 public class MsgManager {
 
-    public static final File FILE = new File("plugins/OpenGuild2047/messages.yml");
-    public static final FileConfiguration CONFIG = YamlConfiguration.loadConfiguration(FILE);
+    private static HashMap<String, String> messages;
+
+    public static File file = new File("plugins/OpenGuild2047/messages_" + GenConf.lang.name().toLowerCase() + ".yml");
+    public static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
     public static String createguildsuccess = get("createguildsuccess", "Gildia zostala pomysnie stworzona.");
     public static String cmdonlyforplayer = get("cmdonlyforplayer", "Komenda jedynie dla graczy na serwerze!");
-public static String alreadyinguild = get("alreadyinguild", "Nie mozesz tego wykonac, poniewaz jestes w gildii!");
+    public static String alreadyinguild = get("alreadyinguild", "Nie mozesz tego wykonac, poniewaz jestes w gildii!");
     public static String unsupportedchars = get("unsupportedchars", "Nazwa gildii moze zawierac jedynie znaki z tego zakresu [0-9a-zA-Z]");
     public static String toolongshorttag = get("toolongshorttag", "Twoja nazwa gildii jest za dluga badz za krotka!"
             + "\n min. ilosc: " + GenConf.minclantag
@@ -75,11 +83,35 @@ public static String alreadyinguild = get("alreadyinguild", "Nie mozesz tego wyk
     public static String desctoolong = get("desctoolong", "Opis gildii jest za dlugi");
 
     public static String get(String path) {
-        return get(path, "&cWiadomosc nie zostala odnaleziona :(");
+        return get(path, getNullMessage(GenConf.lang));
     }
 
     public static String get(String path, String def) {
-        return GenConf.prefix + CONFIG.getString(path, def).replace("&", "§");
+        if(messages == null)
+            loadMessages();
+        if(messages.get(path) == null) {
+            return def;
+        } else {
+            return messages.get(path);
+        }
+    }
+
+    private static void loadMessages() {
+        messages = new HashMap<String, String>();
+        for(String path : config.getConfigurationSection("").getKeys(false)) {
+            messages.put(path, config.getString(path).replace("&", "§"));
+        }
+    }
+
+    private static String getNullMessage(Lang lang) {
+        String result;
+        switch(lang) {
+            case EN: result = "Message not found"; break;
+            case PL: result = "Wiadomosc nie znaleziona"; break;
+            case SV: result = "Meddelandet kan inte hittas"; break;
+            default: result = "Message not found"; break;
+        }
+        return ChatColor.RED + result + " :(";
     }
 
 }

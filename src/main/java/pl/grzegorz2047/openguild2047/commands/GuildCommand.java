@@ -40,28 +40,29 @@ import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ListArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
-public class GildiaCommand implements CommandExecutor {
+public class GuildCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(command.getName().equalsIgnoreCase("gildia")) {
+        if(command.getName().equalsIgnoreCase("guild")) {
             if(args.length > 0) {
                 if(args.length >= 2) {
-                    if(args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
+                    if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                         return CreateArg.execute(sender, args);
                     }
-                    if(args[0].equalsIgnoreCase("akceptuj")) {
+                    if(args[0].equalsIgnoreCase("accept") || args[0].equalsIgnoreCase("akceptuj")) {
                         return AcceptArg.execute(sender, args);
                     }
-                    if(args[0].equalsIgnoreCase("dolacz")) {
+                    if(args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("dolacz")) {
                         return JoinArg.execute(sender, args);
                     }
                 }
-                else if(args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
+                else if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                     return error(sender, "Podano zbyt malo argumentów");
                 }
-                else if(args[0].equalsIgnoreCase("akceptuj")) {
+                else if(args[0].equalsIgnoreCase("accept") || args[0].equalsIgnoreCase("akceptuj")) {
                     return error(sender, "Podano zbyt malo argumentów");
                 }
                 else if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
@@ -73,22 +74,22 @@ public class GildiaCommand implements CommandExecutor {
                 else if(args[0].equalsIgnoreCase("ver") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("about")) {
                     return VersionArg.execute(sender);
                 }
-                else if(args[0].equalsIgnoreCase("opusc") || args[0].equalsIgnoreCase("wyjdz")) {
+                else if(args[0].equalsIgnoreCase("leave") || args[0].equalsIgnoreCase("opusc") || args[0].equalsIgnoreCase("wyjdz")) {
                     return LeaveArg.execute(sender);
                 }
-                else if(args[0].equalsIgnoreCase("rozwiaz") || args[0].equalsIgnoreCase("zamknij")) {
+                else if(args[0].equalsIgnoreCase("disband") || args[0].equalsIgnoreCase("rozwiaz") || args[0].equalsIgnoreCase("zamknij")) {
                     return DisbandArg.execute(sender);
                 }
                 else if(args[0].equalsIgnoreCase("dom") || args[0].equalsIgnoreCase("home")) {
                     return HomeArg.execute(sender, args);
                 }
-                else if(args[0].equalsIgnoreCase("lista")) {
+                else if(args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("lista")) {
                     return ListArg.execute(sender);
                 }
-                else if(args[0].equalsIgnoreCase("opis") || args[0].equalsIgnoreCase("desc")) {
+                else if(args[0].equalsIgnoreCase("description") || args[0].equalsIgnoreCase("opis") || args[0].equalsIgnoreCase("desc")) {
                     return DescriptionArg.execute(sender, args);
                 } else {
-                    return error(sender, "Podano blad w komendzie");
+                    return error(sender, "cmdsyntaxerr");
                 }
             } else {
                 HelpArg.execute(sender, args);
@@ -98,10 +99,9 @@ public class GildiaCommand implements CommandExecutor {
         return false;
     }
 
-    @SuppressWarnings("unused")
     private boolean error(CommandSender sender, String msg) {
-        sender.sendMessage(GenConf.prefix + ChatColor.RED + msg + "!");
-        sender.sendMessage(GenConf.prefix + ChatColor.DARK_GRAY + "Uzyj " + ChatColor.GOLD + "/gildia pomoc" + ChatColor.DARK_GRAY + ", aby uzyskac pomoc.");
+        sender.sendMessage(MsgManager.get(msg));
+        sender.sendMessage(MsgManager.get("seehelp"));
         return true;
     }
 

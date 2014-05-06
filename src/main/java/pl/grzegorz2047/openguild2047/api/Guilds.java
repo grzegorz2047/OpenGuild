@@ -52,48 +52,22 @@ public class Guilds {
         return cuboid;
     }
 
-    /**
-     * Zdobadz gildie
-     *
-     * @param player Member gildii
-     * @return Gildia
-     * @throws NullPointerException jezeli player nie jest w zadnej gildii
-     */
     @Nullable public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
         SimplePlayerGuild guildPlayer = Data.getInstance().guildsplayers.get(player.getUniqueId());
         SimpleGuild guild = Data.getInstance().guilds.get(guildPlayer.getClanTag());
         return guild;
     }
 
-    /**
-     * Zdobadz gildie
-     *
-     * @param tag Tag gildii
-     * @return Gildia
-     * @throws NullPointerException jezeli wskazana gildia nie istnieje
-     */
     @Nullable public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
         Guild guild = Data.getInstance().guilds.get(tag);
         return guild;
     }
 
-    /**
-     * Zdobadz Logger
-     *
-     * @return Logger
-     */
     @Nonnull public static Logger getLogger() {
         Logger logger = new SimpleLogger();
         return logger;
     }
 
-    /**
-     * Zdobadz gildie gracz
-     *
-     * @param uuid
-     * @return Gildia gracza
-     * @throws NullPointerException jezeli player nie jest w zadnej gildii
-     */
     @Nullable public static PlayerGuild getPlayer(@Nonnull UUID uuid) throws NullPointerException {
         PlayerGuild guild = Data.getInstance().guildsplayers.get(uuid);
         return guild;
@@ -103,14 +77,14 @@ public class Guilds {
         if(GenConf.SNOOPER) {
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
             StringBuilder builder = new StringBuilder();
-            builder.append("Wygenerowano " + format.format(new Date()));
-            builder.append("Wystapil nastepujacy blad " + error);
+            builder.append("Generated " + format.format(new Date()));
+            builder.append("The following error occurred: " + error);
             builder.append("-------------------------");
-            builder.append("Uruchomione pluginy");
+            builder.append("Enabled plugins: ");
             builder.append(Bukkit.getPluginManager().getPlugins().toString());
             builder.append("-------------------------");
-            builder.append("Wersja pluginu == " + OpenGuild.get().getDescription().getVersion());
-            builder.append("Wersja silnika == " + Bukkit.getBukkitVersion() + " (" + Bukkit.getVersion() + ")");
+            builder.append("Plugin version == " + OpenGuild.get().getDescription().getVersion());
+            builder.append("Engine (Bukkit) version == " + Bukkit.getBukkitVersion() + " (" + Bukkit.getVersion() + ")");
             builder.append("System.getProperty(\"os.name\") == " + System.getProperty("os.name"));
             builder.append("System.getProperty(\"os.version\") == " + System.getProperty("os.version"));
             builder.append("System.getProperty(\"os.arch\") == " + System.getProperty("os.arch"));
@@ -122,13 +96,13 @@ public class Guilds {
 
                 @Override
                 public void success(URL url) {
-                    getLogger().info("Pomyslnie wyslano blad pod adresem " + url.toString());
-                    getLogger().info("Prosimy wyslac link (" + url.toString() + ") na https://github.com/grzegorz2047/OpenGuild2047/issues");
+                    getLogger().info("Error has been sent to " + url.toString());
+                    getLogger().info("Please send it (" + url.toString() + ") to https://github.com/grzegorz2047/OpenGuild2047/issues");
                 }
 
                 @Override
                 public void error(String err) {
-                    getLogger().warning("Nie udalo sie wyslac bledu z powodu: " + err);
+                    getLogger().warning("Could not sent error to Pastebin: " + err);
                 }
             });
         }

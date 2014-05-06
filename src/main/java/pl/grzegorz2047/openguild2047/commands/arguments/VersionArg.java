@@ -32,9 +32,10 @@ public class VersionArg {
 
     public static boolean execute(CommandSender sender) {
         sender.sendMessage(ChatColor.DARK_GRAY + " -------------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " -------------------- ");
-        sender.sendMessage(ChatColor.DARK_GRAY + "Wersja: " + ChatColor.GOLD + OpenGuild.get().getDescription().getVersion());
-        sender.sendMessage(ChatColor.DARK_GRAY + "Autor: " + ChatColor.GOLD + "Lider projektu: grzegorz2047, pomocnik: TheMolkaPL");
+        sender.sendMessage(ChatColor.DARK_GRAY + "Version: " + ChatColor.GOLD + OpenGuild.get().getDescription().getVersion());
+        sender.sendMessage(ChatColor.DARK_GRAY + "Author: " + ChatColor.GOLD + "Project leader: grzegorz2047, collaborator: TheMolkaPL");
         sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild2047");
+        sender.sendMessage(ChatColor.DARK_GRAY + "BukkitDev: " + ChatColor.GOLD + "http://dev.bukkit.org/bukkit-plugins/openguild/");
         return true;
     }
 

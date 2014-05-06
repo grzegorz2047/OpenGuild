@@ -26,13 +26,12 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 import java.io.File;
 import java.io.IOException;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  * @author TheMolkaPL
@@ -44,26 +43,25 @@ public class ReloadArg {
 
     public static boolean execute(CommandSender sender) {
         if(!sender.hasPermission("openguild.admin.reload") || !sender.isOp()) {
-            sender.sendMessage(GenConf.prefix + ChatColor.RED + "Brak odpowiednich uprawnien.");
+            sender.sendMessage(MsgManager.get("permission"));
             return true;
         }
         if(file.exists()) {
             try {
                 config.load(file);
-                sender.sendMessage(ChatColor.GREEN + "Pomyslnie przeladowano plik config.yml!");
+                sender.sendMessage(MsgManager.get("configreloaded"));
             }
-            catch (IOException ex) {
-                sender.sendMessage(ChatColor.RED + "Wystapil problem z plikiem config.yml! " + ex.getMessage());
+            catch(IOException ex) {
+                sender.sendMessage(MsgManager.get("configerr") + " " + ex.getMessage());
                 ex.printStackTrace();
             }
-            catch (InvalidConfigurationException ex) {
-                sender.sendMessage(ChatColor.RED + "Wystapil problem z konfiguracja pliku config.yml! Sprawdz wszystkie spacje!");
+            catch(InvalidConfigurationException ex) {
+                sender.sendMessage(MsgManager.get("configyaml"));
                 ex.printStackTrace();
             }
-            return true;
         } else {
             config.options().copyDefaults(true);
-            sender.sendMessage(ChatColor.RED + "Wystapil problem z plikiem config.yml! Stworzono nowy.");
+            sender.sendMessage(MsgManager.get("confignew"));
         }
         return true;
     }
