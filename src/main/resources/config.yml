@@ -26,7 +26,7 @@ mysql:
   address: localhost
   database: openguild
   login: user
-  password: pass321
+  password: password
   debug: false
 playerprefixtag: true
 tag-color: '&6'
