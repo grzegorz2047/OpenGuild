@@ -24,7 +24,7 @@
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 
-import ca.wacos.nametagedit.NametagAPI;
+
 import java.util.logging.Level;
 
 import org.bukkit.Location;
@@ -40,6 +40,7 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
 /**
@@ -94,10 +95,12 @@ public class CreateArg {
                                         Data.getInstance().ClansTag.add(sg.getTag());
                                         Data.getInstance().guildsplayers.put(p.getUniqueId(), spg);
                                         if(GenConf.playerprefixenabled) {
-                                            if(NametagAPI.hasCustomNametag(p.getName())) {
+                                          /*  if(NametagAPI.hasCustomNametag(p.getName())) {
                                                 NametagAPI.resetNametag(p.getName());
                                             }
                                             NametagAPI.setPrefix(p.getName(), GenConf.colortagu + spg.getClanTag() + "§r ");
+                                        */
+                                          TagManager.setTag(p.getUniqueId());           
                                         }
 
                                         saveToDb(clantag, sg.getDescription(), p, p.getLocation());

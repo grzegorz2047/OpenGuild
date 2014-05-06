@@ -32,6 +32,7 @@ import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
 
 /**
  *
@@ -51,6 +52,7 @@ public class LeaveArg {
                 return true;
             }
             saveDb(Guilds.getGuild(p), p);
+            TagManager.removeTag(p.getUniqueId());
             Data.getInstance().getPlayersGuild(p.getUniqueId()).removeMember(p.getUniqueId());
             Data.getInstance().guildsplayers.remove(p.getUniqueId());
             p.sendMessage(MsgManager.leaveguildsuccess);

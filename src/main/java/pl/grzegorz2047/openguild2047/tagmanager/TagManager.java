@@ -26,8 +26,10 @@ package pl.grzegorz2047.openguild2047.tagmanager;
 
 import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 
@@ -40,10 +42,9 @@ public class TagManager {
     private static Scoreboard sc;//Mozna trzymac w pamieci tej klasy, zeby nie bawic sie tym za bardzo.
     
     public TagManager(){
-        if(TagManager.isInitialised()){//Kiedy trzeba to mozna zainicjowac scoreboard np. przy onEnable()
+        if(!TagManager.isInitialised()){//Kiedy trzeba to mozna zainicjowac scoreboard np. przy onEnable()
             sc = Bukkit.getScoreboardManager().getNewScoreboard();
         }
-        
     }
     /*
       Uzycie tagow z teamow z Bukkit API zamiast NametagEdit API.
@@ -52,10 +53,21 @@ public class TagManager {
     
       A ponizej przykladowa metoda rejestracji teamtagu
     */
-    public static boolean registerTeamTag(String tag, SimpleGuild sg){
+    public static Scoreboard getScoreboard(){
+        return TagManager.sc;
+    }
+    public static void updateBoard(){
+            for(Player p : Bukkit.getOnlinePlayers()){
+                p.setScoreboard(TagManager.getScoreboard());
+            }
+    }
+    
+    private static boolean registerTeamTag(SimpleGuild sg){
         if(!TagManager.isInitialised()){
+            System.out.println("Scoreboard nie jest zainicjowany!");
             return false;
         }
+        String tag = sg.getTag();
         if(sc.getTeam(tag)== null){
             Team teamtag = sc.registerNewTeam(tag);
             teamtag.setPrefix(GenConf.colortagu + tag + "§r ");
@@ -63,10 +75,63 @@ public class TagManager {
             for(UUID uuid : sg.getMembers()){
                 teamtag.addPlayer(Bukkit.getOfflinePlayer(uuid));
             }
+            updateBoard();
             return true;
+        }
+        updateBoard();
+        return false;
+    }
+    
+    public static boolean setTag(UUID player){
+        if(TagManager.isInitialised()){
+            if(Data.getInstance().isPlayerInGuild(player)){
+                //System.out.println("gracz w gildii");
+                SimpleGuild g =Data.getInstance().getPlayersGuild(player);
+                Team t = sc.getTeam(g.getTag());
+                if(t == null){
+                   // System.out.println("Brak team pref");
+                    TagManager.registerTeamTag(g);
+                    return true;
+                }else{
+                    //System.out.println("gracz w gildii team pref istnieje");
+                    if(!t.getPlayers().contains(Bukkit.getOfflinePlayer(player))){
+                        t.addPlayer(Bukkit.getOfflinePlayer(player));
+                        updateBoard();
+                        return true;
+                    }else{
+                        updateBoard();
+                        return true;
+                    }
+                }
+            }else{
+                Bukkit.getPlayer(player).setScoreboard(TagManager.getScoreboard());
+            }
         }
         return false;
     }
+    public static boolean removeTag(UUID player){
+        if(TagManager.isInitialised()){
+            if(Data.getInstance().isPlayerInGuild(player)){
+                SimpleGuild g =Data.getInstance().getPlayersGuild(player);
+                Team t = sc.getTeam(g.getTag());
+                if(t == null){
+                    updateBoard();
+                    return true;
+                }else{
+                    if(t.getPlayers().contains(Bukkit.getOfflinePlayer(player))){
+                        t.removePlayer(Bukkit.getOfflinePlayer(player));
+                        updateBoard();
+                        return true;
+                    }else{
+                        updateBoard();
+                        return true;// moze tak
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
     public static boolean isInitialised(){
         return sc!= null; 
     }

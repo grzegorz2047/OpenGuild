@@ -3,7 +3,7 @@ description: OpenGuild2047 to publiczny plugin na gildie dla wszystkich tworzony
 authors: [grzegorz2047]
 website: http://www.youtube.com/grzegorz20471
 version: 0.2
-softdepend: [NametagEdit]
+#softdepend: [NametagEdit]
 main: pl.grzegorz2047.openguild2047.OpenGuild
 commands:
   guild:

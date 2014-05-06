@@ -1,6 +1,5 @@
 package pl.grzegorz2047.openguild2047.listeners;
 
-import ca.wacos.nametagedit.NametagAPI;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,6 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
 
 public class Monitors implements Listener {
 
@@ -30,14 +30,15 @@ public class Monitors implements Listener {
         if(!MySQLHandler.existsPlayer(e.getPlayer().getUniqueId())) {
             MySQLHandler.insert(null, "false", 0, 0, e.getPlayer().getUniqueId());
         } else {
-            if(Data.getInstance().isPlayerInGuild(e.getPlayer().getUniqueId())) {
+           /* if(Data.getInstance().isPlayerInGuild(e.getPlayer().getUniqueId())) {
                 NametagAPI.setPrefix(e.getPlayer().getName(), GenConf.colortagu + Data.getInstance().getPlayersGuild(e.getPlayer().getUniqueId()).getTag() + "§r ");
 
             } else {
                 if(NametagAPI.hasCustomNametag(e.getPlayer().getName())) {
                     NametagAPI.resetNametag(e.getPlayer().getName());
                 }
-            }
+            }*/
+            TagManager.setTag(e.getPlayer().getUniqueId());
         }
     }
 

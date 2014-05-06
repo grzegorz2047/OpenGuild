@@ -35,7 +35,7 @@
  */
 package pl.grzegorz2047.openguild2047;
 
-import ca.wacos.nametagedit.NametagAPI;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -57,6 +57,7 @@ import pl.grzegorz2047.openguild2047.listeners.Monitors;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
 import pl.grzegorz2047.openguild2047.listeners.PlayerQuit;
+import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
 
 /**
  *
@@ -86,10 +87,12 @@ public class OpenGuild extends JavaPlugin {
         Data.setDataInstance(pd);
         loadDb();
         getCommand("guild").setExecutor(new GuildCommand());
+        TagManager tagManager = new TagManager();
         for(Player p : getServer().getOnlinePlayers()) {
-            if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
+/*            if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
                 NametagAPI.setPrefix(p.getUniqueId().toString(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getUniqueId()).getTag() + "§r ");
-            }
+            }*/
+            TagManager.setTag(p.getUniqueId());
         }
         loadPlayers();
         CuboidListeners.loadItems();
@@ -108,11 +111,11 @@ public class OpenGuild extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        for(Player p : getServer().getOnlinePlayers()) {
+        /*for(Player p : getServer().getOnlinePlayers()) {
             if(NametagAPI.hasCustomNametag(p.getUniqueId().toString())) {
                 NametagAPI.resetNametag(p.getUniqueId().toString());
             }
-        }
+        }*/
 
         int logFiles = 0;
         for(File file : logDir.listFiles()) {
@@ -126,13 +129,14 @@ public class OpenGuild extends JavaPlugin {
     }
 
     private boolean checkPlugins() {
-        if(getServer().getPluginManager().getPlugin("NametagEdit") == null) {
+        return true;
+       /* if(getServer().getPluginManager().getPlugin("NametagEdit") == null) {
             Guilds.getLogger().severe("Plugin NametagEdit was not found! Download it at http://dev.bukkit.org/bukkit-plugins/nametagedit/");
             Guilds.getLogger().severe("Disabling OpenGuild2047...");
             return false;
         } else {
             return true;
-        }
+        }*/
     }
 
     private void copyDefaultFiles() {

@@ -23,7 +23,7 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
-import ca.wacos.nametagedit.NametagAPI;
+
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -37,6 +37,7 @@ import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
 
 /**
  *
@@ -64,10 +65,12 @@ public class AcceptArg {
                         Data.getInstance().ClansTag.add(sg.getTag());
                         Data.getInstance().guildsplayers.put(uuid, spg);
                         if(GenConf.playerprefixenabled) {
-                            if(NametagAPI.hasCustomNametag(acceptedplayer)) {
+                         /*   if(NametagAPI.hasCustomNametag(acceptedplayer)) {
                                 NametagAPI.resetNametag(acceptedplayer);
                             }
                             NametagAPI.setPrefix(acceptedplayer, GenConf.colortagu + spg.getClanTag() + "§r ");
+                        */
+                          TagManager.setTag(uuid);       
                         }
                         Player playerobj = Bukkit.getPlayer(acceptedplayer);
                         savetodb(uuid, spg.getClanTag());

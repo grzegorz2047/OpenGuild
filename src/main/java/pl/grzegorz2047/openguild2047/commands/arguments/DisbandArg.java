@@ -23,7 +23,7 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
-import ca.wacos.nametagedit.NametagAPI;
+
 
 import java.util.UUID;
 
@@ -38,6 +38,7 @@ import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
 
 /**
  *
@@ -58,7 +59,8 @@ public class DisbandArg {
                 saveDb(Guilds.getGuild(p));
                 for(UUID player : sg.getMembers()) {
                     String nick = Bukkit.getOfflinePlayer(player).getName();
-                    NametagAPI.resetNametag(nick);
+                    //NametagAPI.resetNametag(nick);
+                    TagManager.removeTag(player);
                     Data.getInstance().guildsplayers.remove(player);
                 }
 
