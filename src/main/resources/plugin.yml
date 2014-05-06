@@ -1,9 +1,8 @@
 name: OpenGuild2047
 description: OpenGuild2047 to publiczny plugin na gildie dla wszystkich tworzony przez Grzegorza2047
-authors: [grzegorz2047]
+authors: [grzegorz2047, TheMolkaPL]
 website: http://www.youtube.com/grzegorz20471
-version: 0.2
-#softdepend: [NametagEdit]
+version: 0.3
 main: pl.grzegorz2047.openguild2047.OpenGuild
 commands:
   guild:
