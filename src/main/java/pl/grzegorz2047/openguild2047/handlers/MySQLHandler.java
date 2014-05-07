@@ -36,9 +36,11 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
@@ -63,11 +65,26 @@ public class MySQLHandler {
     private String database;
     private String login;
     private String password;
+    
+    private static final String DRIVERSQLite = "org.sqlite.JDBC";
+    private static final String DB_URLQLite = "jdbc:sqlite:plugins/OpenGuild2047/og.db";
 
     public MySQLHandler(String address, String database, String login, String password) {
         this.address = address;
         this.database = database;
-        createConnection(login, password);
+        switch(GenConf.DATABASE) {
+            case FILE:
+                //Guilds.getLogger().warning("We are so sorry! Files database system doesn't work now! Connecting via MySQL...");
+                createConnectionSQLite();
+                break;
+            case MYSQL:
+                createConnection(login, password);
+                break;
+            default:
+                Guilds.getLogger().severe("Could not load database type! Please fix it in your config.yml file!");
+                Bukkit.getServer().getPluginManager().disablePlugin(OpenGuild.get());
+                break;
+        }
     }
 
     public enum Type {
@@ -136,8 +153,34 @@ public class MySQLHandler {
             log.info("Wystapil blad podczas laczania z baza danych.");
         }
     }
+    public void createFirstConnectionSQLite() {
+        log.info("[SQLite] Laczenie z baza SQLite...");
+        try {
+            Class.forName(DRIVERSQLite).newInstance();
+            con = DriverManager.getConnection(DB_URLQLite);
+            if(con != null) {
+                log.info("[SQLite] Pomyslnie polaczono z baza danych.");
+                createTables();
+            }
+        } catch(ClassNotFoundException ex) {
+            Guilds.getLogger().severe("[SQLite] Nie udane polaczenie z baza: Wystapil blad z zaladowaniem sterownika " + driver + " pod baze MySQL!");
+        } catch(InstantiationException ex) {
+            ex.printStackTrace();
+        } catch(IllegalAccessException ex) {
+            log.info("[SQLite] Nie udane polaczenie z baza: Odmowa dostepu: " + ex.getMessage());
+            ex.printStackTrace();
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
 
-    private void createConnection(String login, String password) {
+        if(con != null) {
+            loadDatabase();
+        } else {
+            log.info("Wystapil blad podczas laczania z baza danych.");
+        }
+    }
+
+    public void createConnection(String login, String password) {
         log.info("[MySQL] Laczenie z baza MySQL...");
         try {
             Class.forName(driver).newInstance();
@@ -150,6 +193,25 @@ public class MySQLHandler {
             ex.printStackTrace();
         } catch(IllegalAccessException ex) {
             log.info("[MySQL] Nie udane polaczenie z baza: Odmowa dostepu: " + ex.getMessage());
+            ex.printStackTrace();
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        loadDatabase();
+    }
+    public void createConnectionSQLite() {
+        log.info("[SQLite] Laczenie z baza SQLite...");
+        try {
+            Class.forName(DRIVERSQLite).newInstance();
+            con = DriverManager.getConnection(DB_URLQLite);
+            log.info("[SQLite] Skutecznie polaczono!");
+            createTables();
+        } catch(ClassNotFoundException ex) {
+            Guilds.getLogger().severe("[SQLite] Nie udane polaczenie z baza: Wystapil blad z zaladowaniem sterownika " + driver + " pod baze MySQL!");
+        } catch(InstantiationException ex) {
+            ex.printStackTrace();
+        } catch(IllegalAccessException ex) {
+            log.info("[SQLite] Nie udane polaczenie z baza: Odmowa dostepu: " + ex.getMessage());
             ex.printStackTrace();
         } catch(SQLException ex) {
             ex.printStackTrace();

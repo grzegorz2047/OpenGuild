@@ -89,9 +89,6 @@ public class OpenGuild extends JavaPlugin {
         getCommand("guild").setExecutor(new GuildCommand());
         TagManager tagManager = new TagManager();
         for(Player p : getServer().getOnlinePlayers()) {
-/*            if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
-                NametagAPI.setPrefix(p.getUniqueId().toString(), GenConf.colortagu + Data.getInstance().getPlayersGuild(p.getUniqueId()).getTag() + "§r ");
-            }*/
             TagManager.setTag(p.getUniqueId());
         }
         loadPlayers();
@@ -183,8 +180,8 @@ public class OpenGuild extends JavaPlugin {
     private void loadDb() {
         switch(GenConf.DATABASE) {
             case FILE:
-                Guilds.getLogger().warning("We are so sorry! Files database system doesn't work now! Connecting via MySQL...");
-                new MySQLHandler(address, database, login, password).createFirstConnection(login, password); // TODO Files...
+                //Guilds.getLogger().warning("We are so sorry! Files database system doesn't work now! Connecting via MySQL...");
+                new MySQLHandler(address, database, login, password).createFirstConnectionSQLite(); // TODO Files...
                 break;
             case MYSQL:
                 new MySQLHandler(address, database, login, password).createFirstConnection(login, password);
