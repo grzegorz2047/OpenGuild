@@ -10,3 +10,4 @@
 * Można dać prosty system levelowania w gildii
 * Mozna dać prosty system pisania na czacie tylko dla gildii
 * Można dać prosty system ekonomii wspierany przez vaulta
+* Możliwość Zablokowania możliwość tworzenia gildii blisko spawnlocation świata
