@@ -25,6 +25,7 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import pl.grzegorz2047.openguild2047.GenConf;
 
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -41,6 +42,7 @@ public class HelpArg {
                 if(args[1].equalsIgnoreCase("admin") || args[1].equalsIgnoreCase("a")) {
                     admin(sender);
                 } else {
+                    
                     sender.sendMessage(MsgManager.get("pagenotnumber", "&cNumer strony musi byc liczba!"));
                 }
                 return true;
@@ -48,18 +50,37 @@ public class HelpArg {
         }
         sender.sendMessage(getTitle(page));
         if(page == 1) {
-            sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
-            sender.sendMessage(help("akceptuj <gracz>", "Akceptuj zaproszenie do gildii"));
-            sender.sendMessage(help("opis <opis...>", "Stwórz opis gildii"));
-            sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii innemu graczowi"));
-            sender.sendMessage(help("dolacz", "Dolacz do gildii"));
-            sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
-            sender.sendMessage(help("zamknij", "Zamknij gildie"));
-            sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
-            sender.sendMessage(help("lista", "Lista wszystkich czlonkow gildii"));
-            sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
+            if(GenConf.lang.name().equals("PL")){
+                sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
+                sender.sendMessage(help("akceptuj <gracz>", "Akceptuj zaproszenie do gildii"));
+                sender.sendMessage(help("opis <opis...>", "Stwórz opis gildii"));
+                sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii innemu graczowi"));
+                sender.sendMessage(help("dolacz", "Dolacz do gildii"));
+                sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
+                sender.sendMessage(help("zamknij", "Zamknij gildie"));
+                sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
+                sender.sendMessage(help("lista", "Lista wszystkich czlonkow gildii"));
+                sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
+            }else{
+                sender.sendMessage(help("create <tag> [opis...]", "Create guild"));
+                sender.sendMessage(help("accept <gracz>", "Accept invite to join guild"));
+                sender.sendMessage(help("description <description...>", "change description of guild"));
+                sender.sendMessage(help("leader <gracz>", "Give leader to someone else"));
+                sender.sendMessage(help("join", "Join to guild (send invite)"));
+                sender.sendMessage(help("leave", "Leave from current guild"));
+                sender.sendMessage(help("disband", "Disband your guild"));
+                sender.sendMessage(help("home", "Teleport to your guild home location"));
+                sender.sendMessage(help("list", "List of your guild members"));
+                sender.sendMessage(help("help [admin|page]", "Show help [admin/strona]"));
+            }
+
         } else {
-            sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze {NUMBER} nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
+            if(GenConf.lang.name().equals("PL")){
+                sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze {NUMBER} nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
+            }else{
+                sender.sendMessage(MsgManager.get("pagenotfound", "&cPage number {NUMBER} not found").replace("{NUMBER}", String.valueOf(page)));
+            }
+            
         }
         return true;
     }
@@ -73,7 +94,13 @@ public class HelpArg {
     }
 
     private static String help(String usage, String desc) {
-        return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
+        if(GenConf.lang.name().equals("PL")){
+            return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
+        }
+        else{
+            return ChatColor.GOLD + "" + ChatColor.ITALIC + "/guild " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
+        }
+        
     }
 
     private static void admin(CommandSender sender) {
