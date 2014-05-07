@@ -109,6 +109,10 @@ public class GenUtil {
         for(String linia : GenConf.reqitems) {
             String[] splits = linia.split(":");
             try {
+                if(splits == null || splits.length < 2){
+                    Guilds.getLogger().severe("Config losowych blokow jest niepoprawny.");
+                    continue;
+                }
                 Material material = Material.getMaterial(splits[0]);
                 if(material == null) {
                     material = Material.getMaterial(splits[0]);
