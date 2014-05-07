@@ -37,7 +37,7 @@ import pl.grzegorz2047.openguild2047.api.Logger;
 public class SQLite
 {
     private static final String DRIVER = "org.sqlite.JDBC";
-    private static final String DB_URL = "jdbc:sqlite:plugins/OpenGuild/og.db";
+    private static final String DB_URL = "jdbc:sqlite:plugins/OpenGuild2047/og.db";
     
     public Connection conn;
     public Statement st;
