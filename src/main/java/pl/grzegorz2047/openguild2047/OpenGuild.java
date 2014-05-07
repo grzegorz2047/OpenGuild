@@ -39,7 +39,10 @@ package pl.grzegorz2047.openguild2047;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -108,11 +111,12 @@ public class OpenGuild extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        /*for(Player p : getServer().getOnlinePlayers()) {
-            if(NametagAPI.hasCustomNametag(p.getUniqueId().toString())) {
-                NametagAPI.resetNametag(p.getUniqueId().toString());
-            }
-        }*/
+        try {
+            MySQLHandler.getConnection().close();
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
 
         int logFiles = 0;
         for(File file : logDir.listFiles()) {

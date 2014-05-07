@@ -111,7 +111,10 @@ public class MySQLHandler {
         Data.getInstance().guildsplayers = MySQLHandler.getAllPlayers();
         Data.getInstance().guilds = MySQLHandler.getAllGuildswithCuboids();
     }
-
+    public static Connection getConnection(){
+        return con;
+    }
+    
     void checkIfConnIsClosed() {
         try {
             if(con == null || con.isClosed())
