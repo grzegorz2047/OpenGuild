@@ -41,8 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -105,7 +104,14 @@ public class OpenGuild extends JavaPlugin {
         } catch(IOException ex) {
             // Failed to submit the stats :-(
         }
-        
+        try{
+            Bukkit.getOfflinePlayer("test").getUniqueId();
+        }
+        catch(NoSuchMethodError ex){
+            Guilds.getLogger().severe("Your minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5!");
+            getServer().getConsoleSender().sendMessage("§c Your minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
+            getServer().getPluginManager().disablePlugin(this);
+        }
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
 
     }
@@ -116,7 +122,7 @@ public class OpenGuild extends JavaPlugin {
             MySQLHandler.getConnection().close();
         }
         catch (SQLException ex) {
-            ex.printStackTrace();
+            
         }
 
         int logFiles = 0;
