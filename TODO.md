@@ -14,3 +14,4 @@
 * Postawić coś w miejscu stworzenia gildii i przy usunięciu gildii, usunąć ten przedmiot
 * kolorowanie tagów ze względu na sojusz czy wojne
 * komendy dla admina pozwalająca na przejrzenie info o danej gildii
+* API pluginu
