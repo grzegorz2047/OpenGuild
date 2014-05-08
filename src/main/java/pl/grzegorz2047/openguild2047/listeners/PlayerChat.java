@@ -23,7 +23,6 @@
  */
 package pl.grzegorz2047.openguild2047.listeners;
 
-import java.util.UUID;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -31,7 +30,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 
 /**
  *
