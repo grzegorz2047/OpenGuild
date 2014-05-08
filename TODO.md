@@ -7,11 +7,9 @@
 * Możliwość otrzymania specjalnego przedmiotu z jakąś niestandardową mocą
 * Może podpiąć stoniarkę co napisałem, bądź stworzyć coś lepszego
 * Można dać prosty system levelowania w gildii
-* Mozna dać prosty system pisania na czacie tylko dla gildii
 * Można dać prosty system ekonomii wspierany przez vaulta
 * Możliwość Zablokowania możliwość tworzenia gildii blisko spawnlocation świata
 * ??skrzynki i klucze jak z cs:go?? ktoś dał taką propozycję
-* Postawić coś w miejscu stworzenia gildii i przy usunięciu gildii, usunąć ten przedmiot
 * kolorowanie tagów ze względu na sojusz czy wojne
 * komendy dla admina pozwalająca na przejrzenie info o danej gildii
 * API pluginu
