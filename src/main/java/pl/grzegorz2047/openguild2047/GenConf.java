@@ -24,6 +24,10 @@
 package pl.grzegorz2047.openguild2047;
 
 import java.util.List;
+import org.bukkit.Bukkit;
+
+import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import pl.grzegorz2047.openguild2047.api.Guilds;
 
@@ -65,8 +69,14 @@ public class GenConf {
     public static String hcKickMsg;
     public static String hcLoginMsg;
     public static Lang lang;
+    public static Location spawnMax;
+    public static Location spawnMin;
+    public static String spawnMessage;
+    public static boolean blockGuildCreating;
 
     protected static void loadConfiguration() {
+        FileConfiguration config = OpenGuild.get().getConfig();
+
         badwords = OpenGuild.get().getConfig().getStringList("forbiddenguildnames");
         MIN_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.min-radius");
         MAX_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.max-radius");
@@ -90,6 +100,13 @@ public class GenConf {
         }
         
         loadBans();
+        List listMax = config.getList("spawn.location-max");
+        List listMin = config.getList("spawn.location-min");
+        spawnMax = new Location(Bukkit.getWorld((String) listMax.get(0)), (Integer )listMax.get(1), 0, (Integer) listMax.get(2));
+        spawnMin = new Location(Bukkit.getWorld((String) listMin.get(0)), (Integer )listMin.get(1), 0, (Integer) listMin.get(2));
+
+        spawnMessage = config.getString("spawn.message").replace("&", "§");
+        blockGuildCreating = config.getBoolean("spawn.block-guild-creating");
     }
 
     private static void loadBans() {

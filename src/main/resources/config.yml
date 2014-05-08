@@ -6,6 +6,11 @@ teampvp: false
 teampvp-msg: false
 home-command: true
 teleport-cooldown: 10
+spawn:
+  location-max: [world, 50, 50]
+  location-min: [world, -50, -50]
+  block-guild-creating: true
+  message: '&cYou are not allowed to do this at the servers spawn point!'
 cuboid:
   min-radius: 15
   max-radius: 50

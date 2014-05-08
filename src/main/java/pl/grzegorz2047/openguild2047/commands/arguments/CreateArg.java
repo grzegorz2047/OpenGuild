@@ -61,6 +61,10 @@ public class CreateArg {
         Player p = (Player) sender;
         if(!Data.getInstance().guilds.containsKey(clantag)) {
             if(!Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
+                if(isSpawn(p) && GenConf.blockGuildCreating) {
+                    sender.sendMessage(GenConf.spawnMessage);
+                    return true;
+                }
                 if(clantag.matches("[0-9a-zA-Z]*")) {
                     if(clantag.length() <= GenConf.maxclantag && clantag.length() >= GenConf.minclantag) {
                         if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)) {
@@ -140,6 +144,17 @@ public class CreateArg {
             return false;
         }
 
+    }
+
+    private static boolean isSpawn(Player player) {
+        Location l = player.getLocation();
+        Location c1 = GenConf.spawnMax;
+        Location c2 = GenConf.spawnMin;
+        if(l.getWorld().getName().equals(c1.getWorld().getName()))
+            if(l.getBlockX() > c2.getBlockX() && l.getBlockX() < c1.getBlockX())
+                if(l.getBlockZ() > c2.getBlockZ() && l.getBlockZ() < c1.getBlockZ())
+                    return true;
+        return false;
     }
 
     private static void saveToDb(String tag, String description, Player leader, Location home) {
