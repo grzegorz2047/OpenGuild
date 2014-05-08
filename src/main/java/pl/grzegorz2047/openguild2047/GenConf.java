@@ -73,6 +73,7 @@ public class GenConf {
     public static Location spawnMin;
     public static String spawnMessage;
     public static boolean blockGuildCreating;
+    public static boolean playerMoveEvent;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.get().getConfig();
@@ -98,7 +99,7 @@ public class GenConf {
             lang = Lang.PL;
             Guilds.getLogger().warning("Could not load " + langString + " as language - using Polish.");
         }
-        
+
         loadBans();
         List listMax = config.getList("spawn.location-max");
         List listMin = config.getList("spawn.location-min");
@@ -107,6 +108,7 @@ public class GenConf {
 
         spawnMessage = config.getString("spawn.message").replace("&", "§");
         blockGuildCreating = config.getBoolean("spawn.block-guild-creating");
+        playerMoveEvent = config.getBoolean("player-move-event");
     }
 
     private static void loadBans() {

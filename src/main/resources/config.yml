@@ -6,6 +6,7 @@ teampvp: false
 teampvp-msg: false
 home-command: true
 teleport-cooldown: 10
+player-move-event: false
 spawn:
   location-max: [world, 50, 50]
   location-min: [world, -50, -50]
@@ -25,7 +26,7 @@ hardcore-bans:
   kick-message: '&4You are dead! &7The revival will occur &6%TIME&7!'
   login-message: '&7You are banned for death to &6%TIME'
 database: FILE
-file-dir: plugins/OpenGuild2047/guilds.yml
+file-dir: plugins/OpenGuild2047/og.db
 snooper: true
 mysql:
   address: localhost

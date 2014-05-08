@@ -22,27 +22,14 @@
  * THE SOFTWARE.
  */
 
-/*
- TODO:
- Stworzenie klasy od cuboidów
- Ogarnięcie co byłoby dobre do sprawdzania czy gracz jest na cuboidzie gildii
- Tutaj są przydatne linki dla zainteresowanych tworzeniem cuboidów:
- https://github.com/sk89q/worldguard/blob/master/src/main/java/com/sk89q/worldguard/bukkit/WorldGuardPlayerListener.java
- https://forums.bukkit.org/threads/protection-region-cuboid-creation.164161/
-
-
-
- */
 package pl.grzegorz2047.openguild2047;
-
-
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
-import org.bukkit.Bukkit;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -59,7 +46,6 @@ import pl.grzegorz2047.openguild2047.listeners.Hardcore;
 import pl.grzegorz2047.openguild2047.listeners.Monitors;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
-import pl.grzegorz2047.openguild2047.listeners.PlayerQuit;
 import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
 
 /**
@@ -80,10 +66,6 @@ public class OpenGuild extends JavaPlugin {
     public void onEnable() {
         long init = System.currentTimeMillis();
         instance = this;
-        if(!checkPlugins()) {
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
         copyDefaultFiles();
         loadAllListeners();
         Data pd = new Data();
@@ -108,12 +90,11 @@ public class OpenGuild extends JavaPlugin {
             Bukkit.getOfflinePlayer("test").getUniqueId();
         }
         catch(NoSuchMethodError ex){
-            Guilds.getLogger().severe("Your minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5!");
-            getServer().getConsoleSender().sendMessage("§c Your minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
+            Guilds.getLogger().severe("Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5!");
+            getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
             getServer().getPluginManager().disablePlugin(this);
         }
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
-
     }
 
     @Override
@@ -136,17 +117,6 @@ public class OpenGuild extends JavaPlugin {
         System.out.println("Deleted " + logFiles + " files in OpenGuild2047/logger");
     }
 
-    private boolean checkPlugins() {
-        return true;
-       /* if(getServer().getPluginManager().getPlugin("NametagEdit") == null) {
-            Guilds.getLogger().severe("Plugin NametagEdit was not found! Download it at http://dev.bukkit.org/bukkit-plugins/nametagedit/");
-            Guilds.getLogger().severe("Disabling OpenGuild2047...");
-            return false;
-        } else {
-            return true;
-        }*/
-    }
-
     private void copyDefaultFiles() {
         saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
         loadConfig();
@@ -160,11 +130,9 @@ public class OpenGuild extends JavaPlugin {
                 ex.printStackTrace();
             }
         }
+        Guilds.getLogger().info("Loading configuration from config.yml...");
         GenConf.loadConfiguration();
         saveResource("messages_" + GenConf.lang.name().toLowerCase() + ".yml", false);
-        //saveResource("players.yml", false);
-        Guilds.getLogger().info("Loading configuration from config.yml...");
-
         Guilds.getLogger().info("Configuration loaded!");
     }
 
@@ -191,8 +159,7 @@ public class OpenGuild extends JavaPlugin {
     private void loadDb() {
         switch(GenConf.DATABASE) {
             case FILE:
-                //Guilds.getLogger().warning("We are so sorry! Files database system doesn't work now! Connecting via MySQL...");
-                new MySQLHandler(address, database, login, password).createFirstConnectionSQLite(); // TODO Files...
+                new MySQLHandler(address, database, login, password).createFirstConnectionSQLite();
                 break;
             case MYSQL:
                 new MySQLHandler(address, database, login, password).createFirstConnection(login, password);
@@ -208,18 +175,19 @@ public class OpenGuild extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new CuboidListeners(), this);
         pm.registerEvents(new PlayerChat(), this);
-        pm.registerEvents(new PlayerMove(), this);
-        pm.registerEvents(new PlayerQuit(), this);
         pm.registerEvents(new Monitors(), this);
-        pm.registerEvents(new EntityDamageByEntity(), this);
-        pm.registerEvents(new Hardcore(), this);
+        if(!GenConf.teampvp)
+            pm.registerEvents(new EntityDamageByEntity(), this);
+        if(GenConf.hcBans)
+            pm.registerEvents(new Hardcore(), this);
+        if(GenConf.playerMoveEvent)
+            pm.registerEvents(new PlayerMove(), this);
     }
 
     private void loadPlayers() {
         for(SimpleGuild guild : Data.getInstance().guilds.values()) { // Pobieranie gildii
             for(UUID member : MySQLHandler.getGuildMembers(guild.getTag())) { // Pobieranie graczy w gildii
                 guild.addMember(member); // Dodawanie gracza do listy
-                // getName() -> https://github.com/Xephi/Bukkit/commit/f6a3abaa35f4b9ff16427a82be8f818d212b3927
             }
         }
     }
