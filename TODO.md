@@ -9,7 +9,8 @@
 * Można dać prosty system levelowania w gildii
 * Można dać prosty system ekonomii wspierany przez vaulta
 * ??skrzynki i klucze jak z cs:go?? ktoś dał taką propozycję
-* kolorowanie tagów ze względu na sojusz czy wojne
-* komendy dla admina pozwalająca na przejrzenie info o danej gildii
+* Kolorowanie tagów ze względu na sojusz czy wojne
+* Komendy dla admina pozwalająca na przejrzenie info o danej gildii
 * API pluginu
-* usuwanie jajka i bedrocku przy usuwaniu gildii
+* Usuwanie jajka i bedrocku przy usuwaniu gildii
+* Komendy na unban

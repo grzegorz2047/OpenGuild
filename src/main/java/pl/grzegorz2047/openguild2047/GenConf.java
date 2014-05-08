@@ -111,8 +111,8 @@ public class GenConf {
 
     private static void loadBans() {
         hcBans = OpenGuild.get().getConfig().getBoolean("hardcore-bans.enabled");
-        hcKickMsg = OpenGuild.get().getConfig().getString("hardcore-bans.kick-message").replace("&", "");
-        hcLoginMsg = OpenGuild.get().getConfig().getString("hardcore-bans.login-message").replace("&", "");
+        hcKickMsg = OpenGuild.get().getConfig().getString("hardcore-bans.kick-message").replace("&", "§");
+        hcLoginMsg = OpenGuild.get().getConfig().getString("hardcore-bans.login-message").replace("&", "§");
         
         String time = OpenGuild.get().getConfig().getString("hardcore-bans.ban-time");
         String length = time.substring(0, time.length() - 1);

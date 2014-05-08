@@ -44,10 +44,12 @@ public class Hardcore implements Listener {
         if(e.getPlayer().hasPermission("openguild.hardcore.bypass")) return;
         
         long ban = MySQLHandler.getBan(e.getPlayer().getUniqueId());
-        if(ban > System.currentTimeMillis()) {
+        long timebanned = System.currentTimeMillis() - ban;
+        if( timebanned < GenConf.hcBantime ) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-            Date date = new Date(ban);
-            e.disallow(Result.KICK_BANNED, GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
+            long remain = GenConf.hcBantime - timebanned;
+            Date date = new Date(remain+System.currentTimeMillis());
+            e.disallow(Result.KICK_OTHER, GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
         }
     }
 
