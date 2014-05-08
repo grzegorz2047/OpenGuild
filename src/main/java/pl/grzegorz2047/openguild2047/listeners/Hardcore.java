@@ -62,7 +62,7 @@ public class Hardcore implements Listener {
         long ban = MySQLHandler.getBan(e.getEntity().getUniqueId());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         Date date = new Date(ban);
-        MySQLHandler.update(e.getEntity().getUniqueId(), MySQLHandler.PType.BAN_TIME, System.currentTimeMillis()-GenConf.hcBantime);
+        MySQLHandler.update(e.getEntity().getUniqueId(), MySQLHandler.PType.BAN_TIME, System.currentTimeMillis()+GenConf.hcBantime);
         e.getEntity().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
     }
 
