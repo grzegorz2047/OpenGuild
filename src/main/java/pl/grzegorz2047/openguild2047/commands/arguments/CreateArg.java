@@ -107,7 +107,7 @@ public class CreateArg {
                                         p.sendMessage(MsgManager.createguildsuccess);
 
                                         Location l = p.getLocation();
-                                        l.getBlock().setType(Material.EGG);
+                                        l.getBlock().setType(Material.DRAGON_EGG);
                                         new Location(l.getWorld(), l.getBlockX(), l.getBlockY() - 1, l.getBlockZ()).getBlock().setType(Material.BEDROCK);
                                         return true;
                                     } else {
