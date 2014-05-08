@@ -1,10 +1,15 @@
 name: OpenGuild2047
-description: OpenGuild2047 to publiczny plugin na gildie dla wszystkich tworzony przez Grzegorza2047
+description: OpenGuild2047 is as well, public open source guild plugin
 authors: [grzegorz2047, TheMolkaPL]
-website: http://www.youtube.com/grzegorz20471
-version: 0.3
+website: https://www.github.com/grzegorz2047/OpenGuild2047
+version: 0.5-SNAPSHOT
 main: pl.grzegorz2047.openguild2047.OpenGuild
 commands:
   guild:
     description: Commands about guilds
     aliases: [g, gildia]
+    usage: /guild <arg[s]...> Type \'/guild help\' for help
+  team:
+    description: Teams chat
+    aliases: [t]
+    usage: /team <message...>
