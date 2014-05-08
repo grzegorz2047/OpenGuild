@@ -1,6 +1,5 @@
 * Informacje "Wkroczyłeś/aś na teren gildii X"
 * Ogarnąć czemu po wczytaniu danych z bazy pokazuje podwójnie nicki niektóre oraz czemu zle pokazuje /gildia lista
-* Ogarnąć zapis do bazy sqlite
 * Czasowe zablokowanie możliwości niszczenia specjalnym itemem bloków wrogiej gildii
 * Jakiś prosty system nagradzania za zabicia
 * Zablokowanie wybuchanie tnt na czyjejś gildii (itd. bo wystrzeli ktos i spadnie i bum xd)
@@ -11,3 +10,4 @@
 * Mozna dać prosty system pisania na czacie tylko dla gildii
 * Można dać prosty system ekonomii wspierany przez vaulta
 * Możliwość Zablokowania możliwość tworzenia gildii blisko spawnlocation świata
+* ??skrzynki i klucze jak z cs:go?? ktoś dał taką propozycję
