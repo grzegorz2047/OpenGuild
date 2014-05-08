@@ -125,16 +125,16 @@ public class GenConf {
             return;
         }
         if(time.endsWith("s")) { // Seconds
-            result = result * 20;
+            result = result * 1000;
         }
         else if(time.endsWith("m")) { // Minutes
-            result = result * 20 * 60;
+            result = result * 60 * 1000;
         }
         else if(time.endsWith("h")) { // Hours
-            result = result * 20 * 60 * 60;
+            result = result * 60 * 60 * 1000;
         }
         else if(time.endsWith("d")) { // Days
-            result = result * 20 * 60 * 24;
+            result = result * 60 * 24 * 60 * 1000;
         } else {} // Ticks or null
         hcBantime = result;
     }
