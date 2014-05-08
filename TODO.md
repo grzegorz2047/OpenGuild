@@ -12,3 +12,4 @@
 * kolorowanie tagów ze względu na sojusz czy wojne
 * komendy dla admina pozwalająca na przejrzenie info o danej gildii
 * API pluginu
+* usuwanie jajka i bedrocku przy usuwaniu gildii
