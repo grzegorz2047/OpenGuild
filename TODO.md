@@ -8,7 +8,6 @@
 * Może podpiąć stoniarkę co napisałem, bądź stworzyć coś lepszego
 * Można dać prosty system levelowania w gildii
 * Można dać prosty system ekonomii wspierany przez vaulta
-* Możliwość Zablokowania możliwość tworzenia gildii blisko spawnlocation świata
 * ??skrzynki i klucze jak z cs:go?? ktoś dał taką propozycję
 * kolorowanie tagów ze względu na sojusz czy wojne
 * komendy dla admina pozwalająca na przejrzenie info o danej gildii
