@@ -23,8 +23,6 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
-
-
 import java.util.logging.Level;
 
 import org.bukkit.Location;

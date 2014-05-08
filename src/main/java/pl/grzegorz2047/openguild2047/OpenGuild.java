@@ -51,6 +51,7 @@ import org.mcstats.Metrics;
 
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
+import pl.grzegorz2047.openguild2047.commands.TeamCommand;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
@@ -89,7 +90,7 @@ public class OpenGuild extends JavaPlugin {
         Data.setDataInstance(pd);
         loadDb();
         getCommand("guild").setExecutor(new GuildCommand());
-        TagManager tagManager = new TagManager();
+        getCommand("team").setExecutor(new TeamCommand());
         for(Player p : getServer().getOnlinePlayers()) {
             TagManager.setTag(p.getUniqueId());
         }
