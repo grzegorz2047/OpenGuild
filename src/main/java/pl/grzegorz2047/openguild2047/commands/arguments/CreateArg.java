@@ -28,6 +28,7 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 import java.util.logging.Level;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -95,11 +96,6 @@ public class CreateArg {
                                         Data.getInstance().ClansTag.add(sg.getTag());
                                         Data.getInstance().guildsplayers.put(p.getUniqueId(), spg);
                                         if(GenConf.playerprefixenabled) {
-                                          /*  if(NametagAPI.hasCustomNametag(p.getName())) {
-                                                NametagAPI.resetNametag(p.getName());
-                                            }
-                                            NametagAPI.setPrefix(p.getName(), GenConf.colortagu + spg.getClanTag() + "§r ");
-                                        */
                                           TagManager.setTag(p.getUniqueId());           
                                         }
 
@@ -107,6 +103,10 @@ public class CreateArg {
 
                                         Guilds.getLogger().log(Level.INFO, "Gracz " + p.getName() + " stworzyl gildie o nazwie " + spg.getClanTag());
                                         p.sendMessage(MsgManager.createguildsuccess);
+
+                                        Location l = p.getLocation();
+                                        l.getBlock().setType(Material.EGG);
+                                        new Location(l.getWorld(), l.getBlockX(), l.getBlockY() - 1, l.getBlockZ()).getBlock().setType(Material.BEDROCK);
                                         return true;
                                     } else {
                                         p.sendMessage(MsgManager.playerstooclose);
