@@ -29,6 +29,7 @@ import java.util.Date;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -54,15 +55,15 @@ public class Hardcore implements Listener {
     }
 
     @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent e) {
+    public void onPlayerDead(PlayerDeathEvent e) {
         if(!GenConf.hcBans) return;
-        if(e.getPlayer().hasPermission("openguild.hardcore.bypass")) return;
+        if(e.getEntity().hasPermission("openguild.hardcore.bypass")) return;
         
-        long ban = MySQLHandler.getBan(e.getPlayer().getUniqueId());
+        long ban = MySQLHandler.getBan(e.getEntity().getUniqueId());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         Date date = new Date(ban);
-        MySQLHandler.update(e.getPlayer().getUniqueId(), MySQLHandler.PType.BAN_TIME, System.currentTimeMillis());
-        e.getPlayer().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
+        MySQLHandler.update(e.getEntity().getUniqueId(), MySQLHandler.PType.BAN_TIME, System.currentTimeMillis()-GenConf.hcBantime);
+        e.getEntity().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
     }
 
 }
