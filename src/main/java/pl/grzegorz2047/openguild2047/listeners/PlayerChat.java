@@ -52,6 +52,8 @@ public class PlayerChat implements Listener {
             } else {
                 e.setFormat("§7[§r" + spg.getClanTag() + "§7]§r " + e.getFormat());
             }
+        }else{
+            e.setFormat(e.getFormat().replace("{OpenGuildTag}", ""));
         }
 
     }
