@@ -121,7 +121,7 @@ public class OpenGuild extends JavaPlugin {
             MySQLHandler.getConnection().close();
         }
         catch (SQLException ex) {
-            ex.printStackTrace();
+            
         }
 
         int logFiles = 0;
