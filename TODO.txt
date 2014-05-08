@@ -11,3 +11,4 @@
 * Można dać prosty system ekonomii wspierany przez vaulta
 * Możliwość Zablokowania możliwość tworzenia gildii blisko spawnlocation świata
 * ??skrzynki i klucze jak z cs:go?? ktoś dał taką propozycję
+* Postawić coś w miejscu stworzenia gildii i przy usunięciu gildii, usunąć ten przedmiot
