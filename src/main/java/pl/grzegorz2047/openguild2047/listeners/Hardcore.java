@@ -29,6 +29,7 @@ import java.util.Date;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -44,23 +45,23 @@ public class Hardcore implements Listener {
         if(e.getPlayer().hasPermission("openguild.hardcore.bypass")) return;
         
         long ban = MySQLHandler.getBan(e.getPlayer().getUniqueId());
-        if(ban > System.currentTimeMillis()) {
+        if( System.currentTimeMillis() < ban ) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
             Date date = new Date(ban);
-            e.disallow(Result.KICK_BANNED, GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
+            e.disallow(Result.KICK_OTHER, GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
         }
     }
 
     @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent e) {
+    public void onPlayerDead(PlayerDeathEvent e) {
         if(!GenConf.hcBans) return;
-        if(e.getPlayer().hasPermission("openguild.hardcore.bypass")) return;
+        if(e.getEntity().hasPermission("openguild.hardcore.bypass")) return;
         
-        long ban = MySQLHandler.getBan(e.getPlayer().getUniqueId());
+        long ban = System.currentTimeMillis() + GenConf.hcBantime;
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         Date date = new Date(ban);
-        MySQLHandler.update(e.getPlayer().getUniqueId(), MySQLHandler.PType.BAN_TIME, System.currentTimeMillis());
-        e.getPlayer().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
+        MySQLHandler.update(e.getEntity().getUniqueId(), MySQLHandler.PType.BAN_TIME, ban);
+        e.getEntity().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
     }
 
 }

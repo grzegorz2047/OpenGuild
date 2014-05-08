@@ -113,8 +113,8 @@ public class GenConf {
 
     private static void loadBans() {
         hcBans = OpenGuild.get().getConfig().getBoolean("hardcore-bans.enabled");
-        hcKickMsg = OpenGuild.get().getConfig().getString("hardcore-bans.kick-message").replace("&", "");
-        hcLoginMsg = OpenGuild.get().getConfig().getString("hardcore-bans.login-message").replace("&", "");
+        hcKickMsg = OpenGuild.get().getConfig().getString("hardcore-bans.kick-message").replace("&", "§");
+        hcLoginMsg = OpenGuild.get().getConfig().getString("hardcore-bans.login-message").replace("&", "§");
         
         String time = OpenGuild.get().getConfig().getString("hardcore-bans.ban-time");
         String length = time.substring(0, time.length() - 1);
@@ -127,16 +127,16 @@ public class GenConf {
             return;
         }
         if(time.endsWith("s")) { // Seconds
-            result = result * 20;
+            result = result * 1000;
         }
         else if(time.endsWith("m")) { // Minutes
-            result = result * 20 * 60;
+            result = result * 60 * 1000;
         }
         else if(time.endsWith("h")) { // Hours
-            result = result * 20 * 60 * 60;
+            result = result * 60 * 60 * 1000;
         }
         else if(time.endsWith("d")) { // Days
-            result = result * 20 * 60 * 24;
+            result = result * 60 * 24 * 60 * 1000;
         } else {} // Ticks or null
         hcBantime = result;
     }

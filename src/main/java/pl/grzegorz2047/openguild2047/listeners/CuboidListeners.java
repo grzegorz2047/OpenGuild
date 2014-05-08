@@ -76,6 +76,9 @@ public class CuboidListeners implements Listener {
                     e.setCancelled(true);
                 }
             }
+            if(e.getClickedBlock().getType().equals(Material.DRAGON_EGG)){
+                e.setCancelled(true); 
+            }
         }
     }
 
