@@ -27,7 +27,6 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -49,7 +48,7 @@ public class DisbandArg {
     public static boolean execute(CommandSender sender) {
         if(!(sender instanceof Player)) {
             sender.sendMessage(GenConf.prefix + MsgManager.cmdonlyforplayer);
-            return false;
+            return true;
         }
         Player p = (Player) sender;
         if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
@@ -72,11 +71,11 @@ public class DisbandArg {
                 return true;
             } else {
                 p.sendMessage(MsgManager.playernotleader);
-                return false;
+                return true;
             }
         } else {
             p.sendMessage(MsgManager.notinguild);
-            return false;
+            return true;
         }
 
     }

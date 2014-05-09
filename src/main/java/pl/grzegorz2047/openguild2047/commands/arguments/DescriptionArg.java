@@ -61,19 +61,19 @@ public class DescriptionArg {
                             return true;
                         } else {
                             p.sendMessage(MsgManager.playernotleader);
-                            return false;
+                            return true;
                         }
                     } else {
                         p.sendMessage(MsgManager.notinguild);
-                        return false;
+                        return true;
                     }
                 } else {
                     p.sendMessage(MsgManager.wronguseddesccmd);
-                    return false;
+                    return true;
                 }
             } else {
                 p.sendMessage(MsgManager.wrongcmdargument);
-                return false;
+                return true;
             }
         } else {
             if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
@@ -82,7 +82,7 @@ public class DescriptionArg {
                 return true;
             } else {
                 p.sendMessage(MsgManager.notinguild);
-                return false;
+                return true;
             }
         }
     }

@@ -31,7 +31,7 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 public class VersionArg {
 
     public static boolean execute(CommandSender sender) {
-        sender.sendMessage(ChatColor.DARK_GRAY + " -------------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " -------------------- ");
+        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " ----------------- ");
         sender.sendMessage(ChatColor.DARK_GRAY + "Version: " + ChatColor.GOLD + OpenGuild.get().getDescription().getVersion());
         sender.sendMessage(ChatColor.DARK_GRAY + "Author: " + ChatColor.GOLD + "Project leader: grzegorz2047, collaborator: TheMolkaPL");
         sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild2047");

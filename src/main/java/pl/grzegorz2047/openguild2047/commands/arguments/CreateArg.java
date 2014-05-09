@@ -56,7 +56,7 @@ public class CreateArg {
         String clantag = args[1];
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
-            return false;
+            return true;
         }
         Player p = (Player) sender;
         if(!Data.getInstance().guilds.containsKey(clantag)) {
@@ -85,7 +85,7 @@ public class CreateArg {
                                             String desc = GenUtil.argsToString(args, 2, args.length);
                                             if(desc.length() > 32) {
                                                 p.sendMessage(MsgManager.desctoolong);
-                                                return false;
+                                                return true;
                                             }
                                             sg.setDescription(desc);
                                         } else {
@@ -112,36 +112,36 @@ public class CreateArg {
                                         return true;
                                     } else {
                                         p.sendMessage(MsgManager.playerstooclose);
-                                        return false;
+                                        return true;
                                     }
                                 } else {
                                     p.sendMessage(MsgManager.gildtocloseothers);
-                                    return false;
+                                    return true;
                                 }
 
                             } else {
                                 p.sendMessage(MsgManager.notenoughitems);
-                                return false;
+                                return true;
                             }
                         } else {
                             p.sendMessage(MsgManager.illegaltag);
-                            return false;
+                            return true;
                         }
                     } else {
                         p.sendMessage(MsgManager.toolongshorttag);
-                        return false;
+                        return true;
                     }
                 } else {
                     p.sendMessage(MsgManager.unsupportedchars);
-                    return false;
+                    return true;
                 }
             } else {
                 p.sendMessage(MsgManager.alreadyinguild);
-                return false;
+                return true;
             }
         } else {
             p.sendMessage(MsgManager.guildexists);
-            return false;
+            return true;
         }
 
     }

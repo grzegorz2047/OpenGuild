@@ -47,7 +47,7 @@ public class AcceptArg {
     public static boolean execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
-            return false;
+            return true;
         }
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();

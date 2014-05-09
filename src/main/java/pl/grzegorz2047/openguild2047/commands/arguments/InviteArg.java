@@ -45,7 +45,7 @@ public class InviteArg {
     public static boolean execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
-            return false;
+            return true;
         }
         Player p = (Player) sender;
         if(args.length >= 2) {
@@ -80,7 +80,7 @@ public class InviteArg {
             }
         } else {
             p.sendMessage(MsgManager.wrongcmdargument);
-            return false;
+            return true;
         }
 
     }

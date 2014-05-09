@@ -54,6 +54,9 @@ public class GuildCommand implements CommandExecutor {
                     if(args[0].equalsIgnoreCase("accept") || args[0].equalsIgnoreCase("akceptuj")) {
                         return AcceptArg.execute(sender, args);
                     }
+                    else if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
+                        return HelpArg.execute(sender, args);
+                    }
                     if(args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("dolacz")) {
                         return InviteArg.execute(sender, args);
                     }
