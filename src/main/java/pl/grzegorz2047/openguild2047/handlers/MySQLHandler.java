@@ -206,7 +206,7 @@ public class MySQLHandler {
         try {
             Class.forName(DRIVERSQLite).newInstance();
             con = DriverManager.getConnection(DB_URLQLite);
-            log.info("[SQLite] Skutecznie polaczono!");
+            log.info("[SQLite] Connection success!");
             createTables();
         } catch(ClassNotFoundException ex) {
             Guilds.getLogger().severe("[SQLite] Could not connect to SQLite: Could not load driver " + DRIVERSQLite + " to SQLite database!");
