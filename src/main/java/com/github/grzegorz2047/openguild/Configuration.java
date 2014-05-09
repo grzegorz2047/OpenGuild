@@ -24,37 +24,12 @@
 
 package com.github.grzegorz2047.openguild;
 
-import java.util.List;
+public interface Configuration {
 
-import org.bukkit.plugin.Plugin;
+    Object getValue(String path);
 
-public class OpenGuild {
+    Object getValue(String path, Object def);
 
-    private static OpenGuildPlugin guild;
-
-    public static Plugin getBukkit() {
-        return guild.getBukkit();
-    }
-
-    public static Guild getGuild(String name) {
-        return guild.getGuild(name);
-    }
-
-    public static List<Guild> getGuilds() {
-        return guild.getGuilds();
-    }
-
-    public static Messages getMessages() {
-        return guild.getMessages();
-    }
-
-    public static OpenGuildPlugin getPlugin() {
-        return guild.getPlugin();
-    }
-
-    @Deprecated
-    public static void setOpenGuild(OpenGuildPlugin plugin) {
-        guild = plugin;
-    }
+    void reload();
 
 }

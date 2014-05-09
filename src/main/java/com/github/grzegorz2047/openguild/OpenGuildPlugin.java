@@ -36,6 +36,8 @@ public interface OpenGuildPlugin {
 
     List<Guild> getGuilds();
 
+    Messages getMessages();
+
     OpenGuildPlugin getPlugin();
 
 }

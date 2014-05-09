@@ -26,35 +26,20 @@ package com.github.grzegorz2047.openguild;
 
 import java.util.List;
 
-import org.bukkit.plugin.Plugin;
+public interface Messages {
 
-public class OpenGuild {
+    String getErrorMessage(String lang);
 
-    private static OpenGuildPlugin guild;
+    List<String> getLangList();
 
-    public static Plugin getBukkit() {
-        return guild.getBukkit();
-    }
+    String getMessage(String path);
 
-    public static Guild getGuild(String name) {
-        return guild.getGuild(name);
-    }
+    String getMessage(String path, String dev);
 
-    public static List<Guild> getGuilds() {
-        return guild.getGuilds();
-    }
+    String getPrefixedMessage(String path);
 
-    public static Messages getMessages() {
-        return guild.getMessages();
-    }
+    String getPrefixedMessage(String path, String dev);
 
-    public static OpenGuildPlugin getPlugin() {
-        return guild.getPlugin();
-    }
-
-    @Deprecated
-    public static void setOpenGuild(OpenGuildPlugin plugin) {
-        guild = plugin;
-    }
+    void reload();
 
 }
