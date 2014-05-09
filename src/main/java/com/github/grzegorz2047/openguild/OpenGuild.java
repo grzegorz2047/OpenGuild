@@ -36,6 +36,10 @@ public class OpenGuild {
         return guild.getBukkit();
     }
 
+    public static Configuration getConfig() {
+        return guild.getConfig();
+    }
+
     public static Guild getGuild(String name) {
         return guild.getGuild(name);
     }

@@ -32,6 +32,8 @@ public interface OpenGuildPlugin {
 
     Plugin getBukkit();
 
+    Configuration getConfig();
+
     Guild getGuild(String name);
 
     List<Guild> getGuilds();
