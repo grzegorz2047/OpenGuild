@@ -54,7 +54,7 @@ public class UnbanArg  {
             sender.sendMessage(ChatColor.RED + "/g unban <player>");
             return true;
         }
-        OfflinePlayer player = Bukkit.getPlayer(args[1]);
+        OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
         if(player == null || !player.hasPlayedBefore()) {
             sender.sendMessage(MsgManager.get("notplayedbefore"));
             return true;
