@@ -4,9 +4,14 @@
 
   <groupId>pl.grzegorz2047</groupId>
   <artifactId>OpenGuild2047</artifactId>
-  <version>0.3</version>
+  <version>build</version>
   <packaging>jar</packaging>
   <name>OpenGuild2047</name>
+      <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <upload.dbo.category>server-mods</upload.dbo.category>
+        <upload.dbo.slug>OpenGuild2047</upload.dbo.slug>
+    </properties>
   <url>http://maven.apache.org</url>
     <build>
         <plugins>
@@ -25,18 +30,11 @@
             </plugin>
         </plugins>
     </build>
-    <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
 
  <repositories>
     <repository>
       <id>bukkit-repo</id>
       <url>http://repo.bukkit.org/content/groups/public/</url>
-    </repository>
-    <repository>
-      <id>Plugin Metrics</id>
-      <url>http://repo.mcstats.org/content/repositories/public</url>
     </repository>
   </repositories>
 
@@ -45,12 +43,6 @@
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
       <version>1.7.5-R0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mcstats.bukkit</groupId>
-      <artifactId>metrics</artifactId>
-      <version>R6</version>
-      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>
