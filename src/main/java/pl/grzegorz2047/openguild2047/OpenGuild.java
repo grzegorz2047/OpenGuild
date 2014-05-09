@@ -151,8 +151,8 @@ public class OpenGuild extends JavaPlugin {
         GenConf.guildprefixinchat = this.getConfig().getBoolean("guildprefixinchat");
         GenConf.colortagu = this.getConfig().getString("tag-color").replace('&', '§');
         if(GenConf.colortagu.length() > 2) {
-            Guilds.getLogger().severe("Tags color length must have 2 chars: & oraz znaku identyfikujacy kolor!");
-            Guilds.getLogger().warning("Uzywam domyslnego koloru gildii!");
+            Guilds.getLogger().severe("Tags color length must have 2 chars: & and bukkit color id!");
+            Guilds.getLogger().warning("Using default color!");
             GenConf.colortagu = "§6";
         }
     }
