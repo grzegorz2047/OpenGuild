@@ -121,7 +121,7 @@ public class GenConf {
             result = Long.parseLong(length);
         } catch(NumberFormatException ex) {
             Guilds.getLogger().warning("Could not load ban time, defaults using 1 minute. Check your ban-time in config.yml file.");
-            hcBantime = 60 * 20;
+            hcBantime = 60 * 1000;
             return;
         }
         if(time.endsWith("s")) { // Seconds
