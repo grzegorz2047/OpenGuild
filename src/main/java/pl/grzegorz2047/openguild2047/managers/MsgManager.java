@@ -82,7 +82,9 @@ public class MsgManager {
     public static String leadernotonline = get("leadernotonline", "Lider aktualnie nie jest na serwerze!");
     public static String notyetaccepted = get("notyetaccepted", "Twoja prosba nie zostala jeszcze zaakceptowana");
     public static String desctoolong = get("desctoolong", "Opis gildii jest za dlugi");
-
+    public static String invitesendsuccess = get("invitesendsuccess", " Pomyslnie wyslano zaproszenie do gracza");
+    public static String kickplayernotinguild = get("kickplayernotinguild", " Gracz, ktorego kickujesz nie jest w zadnej gildii");
+    public static String playernotinthisguild = get("playernotinthisguild", " Gracz nie jest w twojej gildii");
     public static String get(String path) {
         return get(path, getNullMessage(GenConf.lang));
     }

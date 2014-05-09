@@ -58,15 +58,20 @@ public class InviteArg {
                     return false;
                 }
                 if(!Data.getInstance().isPlayerInGuild(op.getUniqueId())) {
-                    SimpleGuild sg = Data.getInstance().guilds.get(nick);
+                    SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
+                    if(!sg.getLeader().equals(p.getUniqueId())){
+                        p.sendMessage(MsgManager.playernotleader);
+                        return false;
+                    }
                     if(sg.getInvitedPlayers().contains(op.getUniqueId())) {
                         p.sendMessage(MsgManager.notyetaccepted);
                         return false;
                     }else{
                         sg.getInvitedPlayers().add(op.getUniqueId());
                         if(op.isOnline()){
-                            ((Player)op).sendMessage(MsgManager.askforaccept); 
+                            ((Player)op).sendMessage(MsgManager.askforaccept+" "+sg.getTag()); 
                         }
+                        p.sendMessage(MsgManager.invitesendsuccess+" "+op.getName());
                         return true;
                     }
                 } else {

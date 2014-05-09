@@ -50,10 +50,10 @@ public class HelpArg {
         if(page == 1) {
             if(GenConf.lang.name().equals("PL")) {
                 sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
-                sender.sendMessage(help("akceptuj <gracz>", "Akceptuj zaproszenie do gildii"));
+                sender.sendMessage(help("akceptuj <gracz>", "Akceptuj zaproszenie od gildii"));
                 sender.sendMessage(help("opis <opis...>", "Stwórz opis gildii"));
                 sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii innemu graczowi"));
-                sender.sendMessage(help("dolacz", "Dolacz do gildii"));
+                sender.sendMessage(help("akceptuj", "Akceptuje dolaczenie do gildii"));
                 sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
                 sender.sendMessage(help("zamknij", "Zamknij gildie"));
                 sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
@@ -61,10 +61,10 @@ public class HelpArg {
                 sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
             } else {
                 sender.sendMessage(help("create <tag> [opis...]", "Create guild"));
-                sender.sendMessage(help("accept <gracz>", "Accept invite to join guild"));
+                sender.sendMessage(help("accept <gracz>", "Accept invite to joint guild"));
                 sender.sendMessage(help("description <description...>", "change description of guild"));
                 sender.sendMessage(help("leader <gracz>", "Give leader to someone else"));
-                sender.sendMessage(help("join", "Join to guild (send invite)"));
+                sender.sendMessage(help("invite", "Invite to guild (sends invite)"));
                 sender.sendMessage(help("leave", "Leave from current guild"));
                 sender.sendMessage(help("disband", "Disband your guild"));
                 sender.sendMessage(help("home", "Teleport to your guild home location"));
