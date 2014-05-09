@@ -44,7 +44,7 @@ public class JoinArg {
     public static boolean execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
-            return false;
+            return true;
         }
         Player p = (Player) sender;
         if(args.length >= 2) {
@@ -56,7 +56,7 @@ public class JoinArg {
                     SimpleGuild sg = Data.getInstance().guilds.get(tag);
                     if(sg.getInvitedPlayers().contains(p.getUniqueId())) {
                         p.sendMessage(MsgManager.notyetaccepted);
-                        return false;
+                        return true;
                     } else {
                         System.out.println("Nie ma na liscie zapro");
                         p.sendMessage(MsgManager.playernotinvited);
@@ -65,7 +65,7 @@ public class JoinArg {
                         if(leader != null) {
                             if(leader.isOnline()) {
                                 leader.sendMessage(MsgManager.askforinvite + p.getName());
-                                return false;//Mozna tu wiele dodac np. dodawanie do listy oczekujacych
+                                return true;//Mozna tu wiele dodac np. dodawanie do listy oczekujacych
                                 //albo dodawanie blokowanych osob, ktore spamia zaproszeniami
                                 //to moglby wykonywac lider
                                 //Lista oczekujacych wyswietlana przy wejsciu na serwer
@@ -73,20 +73,20 @@ public class JoinArg {
                             }
                         }
                         p.sendMessage(MsgManager.leadernotonline);
-                        return false;
+                        return true;
                     }
                 } else {
                     p.sendMessage(MsgManager.guilddoesntexists);
-                    return false;
+                    return true;
                 }
 
             } else {
                 p.sendMessage(MsgManager.alreadyinguild);
-                return false;
+                return true;
             }
         } else {
             p.sendMessage(MsgManager.wrongcmdargument);
-            return false;
+            return true;
         }
 
     }

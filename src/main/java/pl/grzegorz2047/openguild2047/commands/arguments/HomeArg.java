@@ -54,12 +54,12 @@ public class HomeArg {
     public static boolean execute(CommandSender sender, String args[]) {
         if(!(sender instanceof Player)) {
             sender.sendMessage(GenConf.prefix + MsgManager.cmdonlyforplayer);
-            return false;
+            return true;
         }
         Player p = (Player) sender;
         if(!GenConf.homecommand) {
             sender.sendMessage(GenConf.prefix + MsgManager.homenotenabled);
-            return false;
+            return true;
         }
         if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
             if(args.length >= 2) {
@@ -70,7 +70,7 @@ public class HomeArg {
                     return true;
                 } else {
                     p.sendMessage(MsgManager.playernotleader);
-                    return false;
+                    return true;
                 }
             } else {
                 Location homeloc = Data.getInstance().getPlayersGuild(p.getUniqueId()).getHome();
@@ -87,7 +87,7 @@ public class HomeArg {
 
         } else {
             p.sendMessage(MsgManager.notinguild);
-            return false;
+            return true;
         }
     }
 

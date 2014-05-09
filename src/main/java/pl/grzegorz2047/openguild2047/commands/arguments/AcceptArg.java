@@ -34,7 +34,6 @@ import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
-import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
@@ -48,7 +47,7 @@ public class AcceptArg {
     public static boolean execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
-            return false;
+            return true;
         }
         Player p = (Player) sender;
         if(args.length >= 2) {
@@ -85,15 +84,15 @@ public class AcceptArg {
                     }
                 } else {
                     p.sendMessage(MsgManager.playernotleader);
-                    return false;
+                    return true;
                 }
             } else {
                 p.sendMessage(MsgManager.notinguild);
-                return false;
+                return true;
             }
         } else {
             p.sendMessage(MsgManager.wrongcmdargument);
-            return false;
+            return true;
         }
     }
 

@@ -25,12 +25,13 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import java.util.List;
 import java.util.UUID;
-import org.bukkit.Bukkit;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -41,7 +42,8 @@ public class ListArg {
 
     public static boolean execute(CommandSender sender) {
         if(!(sender instanceof Player)) {
-            return false;
+            sender.sendMessage(GenConf.prefix + MsgManager.cmdonlyforplayer);
+            return true;
         }
         Player p = (Player) sender;
         if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
@@ -62,14 +64,12 @@ public class ListArg {
                 return true;
             } else {
                 p.sendMessage(MsgManager.nomembersinguild);
-                return false;
+                return true;
             }
-
         } else {
             p.sendMessage(MsgManager.notinguild);
         }
-
-        return false;
+        return true;
     }
 
 }
