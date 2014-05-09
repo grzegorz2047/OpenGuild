@@ -13,3 +13,4 @@
 * API pluginu
 * Usuwanie jajka i bedrocku przy usuwaniu gildii
 * Komendy na unban
+* Sprawdzanie czy gildia istnieje nie patrzac na wielkosc liter!
