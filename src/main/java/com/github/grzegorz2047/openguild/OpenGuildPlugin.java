@@ -26,10 +26,16 @@ package com.github.grzegorz2047.openguild;
 
 import java.util.List;
 
+import org.bukkit.plugin.Plugin;
+
 public interface OpenGuildPlugin {
+
+    Plugin getBukkit();
 
     Guild getGuild(String name);
 
     List<Guild> getGuilds();
+
+    OpenGuildPlugin getPlugin();
 
 }

@@ -26,9 +26,15 @@ package com.github.grzegorz2047.openguild;
 
 import java.util.List;
 
+import org.bukkit.plugin.Plugin;
+
 public class OpenGuild {
 
     private static OpenGuildPlugin guild;
+
+    public static Plugin getBukkit() {
+        return guild.getBukkit();
+    }
 
     public static Guild getGuild(String name) {
         return guild.getGuild(name);
@@ -37,7 +43,12 @@ public class OpenGuild {
     public static List<Guild> getGuilds() {
         return guild.getGuilds();
     }
+    
+    public static OpenGuildPlugin getPlugin() {
+        return guild.getPlugin();
+    }
 
+    @Deprecated
     public static void setOpenGuild(OpenGuildPlugin plugin) {
         guild = plugin;
     }
