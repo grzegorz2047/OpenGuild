@@ -92,7 +92,7 @@ public class MsgManager {
         if(messages.get(path) == null) {
             return GenConf.prefix + def;
         } else {
-            return messages.get(path);
+            return GenConf.prefix + messages.get(path);
         }
     }
 
