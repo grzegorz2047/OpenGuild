@@ -9,6 +9,8 @@ Zobacz [instalacje](https://github.com/grzegorz2047/OpenGuild2047/wiki/Pobierani
 
 dev.bukkit.org
 -----------
+Najnowsze buildy pluginu dostępne są tutaj: openguild.kraft.czest.pl
+albo tutaj: https://grzegorz2047.ci.cloudbees.com/job/OpenGuild2047/
 
 Plugin dostepny takze na stronie bukkita: http://dev.bukkit.org/bukkit-plugins/openguild/
 
