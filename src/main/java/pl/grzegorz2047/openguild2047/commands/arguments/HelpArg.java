@@ -93,9 +93,9 @@ public class HelpArg {
 
     private static String help(String usage, String desc) {
         if(GenConf.lang.name().equals("PL")){
-            return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
+            return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.GRAY + " - " + desc;
         } else {
-            return ChatColor.GOLD + "" + ChatColor.ITALIC + "/guild " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
+            return ChatColor.GOLD + "" + ChatColor.ITALIC + "/guild " + usage + ChatColor.RESET + ChatColor.GRAY + " - " + desc;
         }
         
     }
