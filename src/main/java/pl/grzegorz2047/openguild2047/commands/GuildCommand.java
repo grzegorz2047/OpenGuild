@@ -23,12 +23,10 @@
  */
 package pl.grzegorz2047.openguild2047.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.commands.arguments.AcceptArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.DescriptionArg;
@@ -39,6 +37,7 @@ import pl.grzegorz2047.openguild2047.commands.arguments.JoinArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ListArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.UnbanArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -58,6 +57,10 @@ public class GuildCommand implements CommandExecutor {
                     if(args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("dolacz")) {
                         return JoinArg.execute(sender, args);
                     }
+                    if(args[0].equalsIgnoreCase("unban") || args[0].equalsIgnoreCase("ub")) {
+                        return UnbanArg.execute(sender, args);
+                    }
+                    return true;
                 }
                 else if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                     return error(sender, "Podano zbyt malo argumentów");
