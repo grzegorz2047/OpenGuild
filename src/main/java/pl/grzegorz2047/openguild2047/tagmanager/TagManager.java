@@ -89,7 +89,7 @@ public class TagManager {
                 SimpleGuild g =Data.getInstance().getPlayersGuild(player);
                 Team t = sc.getTeam(g.getTag());
                 if(t == null){
-                   // System.out.println("Brak team pref");
+                    //System.out.println("Brak team pref");
                     TagManager.registerTeamTag(g);
                     return true;
                 }else{
@@ -106,6 +106,8 @@ public class TagManager {
             }else{
                 Bukkit.getPlayer(player).setScoreboard(TagManager.getScoreboard());
             }
+        }else{
+            //System.out.println("Nie zainicjalizowano tag managera");
         }
         return false;
     }

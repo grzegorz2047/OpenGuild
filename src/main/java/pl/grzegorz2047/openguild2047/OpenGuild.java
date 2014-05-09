@@ -73,6 +73,7 @@ public class OpenGuild extends JavaPlugin {
         loadDb();
         getCommand("guild").setExecutor(new GuildCommand());
         getCommand("team").setExecutor(new TeamCommand());
+        new TagManager();
         for(Player p : getServer().getOnlinePlayers()) {
             TagManager.setTag(p.getUniqueId());
         }
