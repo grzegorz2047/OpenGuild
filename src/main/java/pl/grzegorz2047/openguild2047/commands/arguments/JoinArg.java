@@ -64,7 +64,7 @@ public class JoinArg {
                         sg.getInvitedPlayers().add(p.getUniqueId());
                         if(leader != null) {
                             if(leader.isOnline()) {
-                                leader.sendMessage(MsgManager.askforinvite + " " + p.getName());
+                                leader.sendMessage(MsgManager.askforinvite + p.getName());
                                 return false;//Mozna tu wiele dodac np. dodawanie do listy oczekujacych
                                 //albo dodawanie blokowanych osob, ktore spamia zaproszeniami
                                 //to moglby wykonywac lider
