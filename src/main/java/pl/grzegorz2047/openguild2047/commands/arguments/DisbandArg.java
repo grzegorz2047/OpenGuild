@@ -58,8 +58,6 @@ public class DisbandArg {
             if(sg.getLeader().equals(p.getUniqueId())) {
                 saveDb(Guilds.getGuild(p));
                 for(UUID player : sg.getMembers()) {
-                    String nick = Bukkit.getOfflinePlayer(player).getName();
-                    //NametagAPI.resetNametag(nick);
                     TagManager.removeTag(player);
                     Data.getInstance().guildsplayers.remove(player);
                 }

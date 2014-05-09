@@ -43,10 +43,10 @@ public class EntityDamageByEntity implements Listener {
 
     @EventHandler
     public void onSomeoneAttack(EntityDamageByEntityEvent e) {
-        if (e.isCancelled()) {
+        if(e.isCancelled()) {
             return;
         }
-        if (GenConf.teampvp) {
+        if(GenConf.teampvp) {
             return;
         }
         //Jezeli atakowali sie lukiem czy czymkolwiek ludzie z wlasnej gildii to zablokuj

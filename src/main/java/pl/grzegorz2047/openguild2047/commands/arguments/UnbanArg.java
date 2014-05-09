@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Grzegorz.
+ * Copyright 2014 Aleksander.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,21 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package pl.grzegorz2047.openguild2047.listeners;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
+package pl.grzegorz2047.openguild2047.commands.arguments;
+
+import org.bukkit.command.CommandSender;
+
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  *
- * @author Grzegorz
+ * @author Aleksander
  */
-public class PlayerQuit implements Listener {
-
-    @EventHandler
-    public void onQuit(PlayerQuitEvent e) {
-
+public class UnbanArg  {
+    
+    public static boolean execute(CommandSender sender, String[] args) {
+        if(!GenConf.hcBans) {
+            sender.sendMessage(MsgManager.get("hcnotenabled"));
+        }
+        else if(!sender.hasPermission("openguild.hardcore.unban")) {
+            sender.sendMessage(MsgManager.get("permission"));
+        } else {
+            // TODO
+        }
+        return true;
     }
-
+    
 }

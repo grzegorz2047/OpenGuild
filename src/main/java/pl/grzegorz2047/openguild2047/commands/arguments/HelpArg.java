@@ -36,21 +36,19 @@ public class HelpArg {
         if(args.length != 2) {
             page = 1;
         } else {
+            if(args[1].equalsIgnoreCase("admin") || args[1].equalsIgnoreCase("a")) {
+                admin(sender);
+                return true;
+            }
             try {
                 page = Integer.parseInt(args[1]);
             } catch(NumberFormatException ex) {
-                if(args[1].equalsIgnoreCase("admin") || args[1].equalsIgnoreCase("a")) {
-                    admin(sender);
-                } else {
-                    
-                    sender.sendMessage(MsgManager.get("pagenotnumber", "&cNumer strony musi byc liczba!"));
-                }
-                return true;
+                sender.sendMessage(MsgManager.get("pagenotnumber"));
             }
         }
         sender.sendMessage(getTitle(page));
         if(page == 1) {
-            if(GenConf.lang.name().equals("PL")){
+            if(GenConf.lang.name().equals("PL")) {
                 sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
                 sender.sendMessage(help("akceptuj <gracz>", "Akceptuj zaproszenie do gildii"));
                 sender.sendMessage(help("opis <opis...>", "Stwórz opis gildii"));
@@ -61,7 +59,7 @@ public class HelpArg {
                 sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
                 sender.sendMessage(help("lista", "Lista wszystkich czlonkow gildii"));
                 sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
-            }else{
+            } else {
                 sender.sendMessage(help("create <tag> [opis...]", "Create guild"));
                 sender.sendMessage(help("accept <gracz>", "Accept invite to join guild"));
                 sender.sendMessage(help("description <description...>", "change description of guild"));
@@ -71,13 +69,13 @@ public class HelpArg {
                 sender.sendMessage(help("disband", "Disband your guild"));
                 sender.sendMessage(help("home", "Teleport to your guild home location"));
                 sender.sendMessage(help("list", "List of your guild members"));
-                sender.sendMessage(help("help [admin|page]", "Show help [admin/strona]"));
+                sender.sendMessage(help("help [admin|page]", "Show help [admin/page]"));
             }
 
         } else {
-            if(GenConf.lang.name().equals("PL")){
+            if(GenConf.lang.name().equals("PL")) {
                 sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze {NUMBER} nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
-            }else{
+            } else {
                 sender.sendMessage(MsgManager.get("pagenotfound", "&cPage number {NUMBER} not found").replace("{NUMBER}", String.valueOf(page)));
             }
             
@@ -96,17 +94,26 @@ public class HelpArg {
     private static String help(String usage, String desc) {
         if(GenConf.lang.name().equals("PL")){
             return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
-        }
-        else{
+        } else {
             return ChatColor.GOLD + "" + ChatColor.ITALIC + "/guild " + usage + ChatColor.RESET + ChatColor.DARK_GRAY + " - " + desc;
         }
         
     }
 
     private static void admin(CommandSender sender) {
+        int hide = 0;
         sender.sendMessage(getTitleAdmin());
         sender.sendMessage(help("reload", "Przeladuj konfiguracje pluginu"));
+        if(GenConf.hcBans) {
+            sender.sendMessage(help("unban <player>", "Odbanuj gracza ze smierci"));
+        } else {
+            hide++;
+        }
         sender.sendMessage(help("version", "Informacje o plugine OpenGuild2047"));
+        
+        if(hide > 0) {
+            sender.sendMessage(MsgManager.get("skipped"));
+        }
     }
 
 }

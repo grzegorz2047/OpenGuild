@@ -66,7 +66,7 @@ public class MySQLHandler {
     private String password;
     
     private static final String DRIVERSQLite = "org.sqlite.JDBC";
-    private static final String DB_URLQLite = "jdbc:sqlite:plugins/OpenGuild2047/og.db";
+    private static final String DB_URLQLite = "jdbc:sqlite:" + GenConf.FILE_DIR;
 
     public MySQLHandler(String address, String database, String login, String password) {
         this.address = address;
@@ -125,25 +125,25 @@ public class MySQLHandler {
 
     private static void log(String query) {
         if(GenConf.SQL_DEBUG) {
-            Guilds.getLogger().log(Level.INFO, "[Serwer -> MySQL] " + query);
+            Guilds.getLogger().log(Level.INFO, "[Server -> Database] " + query);
         }
     }
 
     public void createFirstConnection(String login, String password) {
-        log.info("[MySQL] Laczenie z baza MySQL...");
+        log.info("[MySQL] Connecting to MySQL database...");
         try {
             Class.forName(driver).newInstance();
             con = DriverManager.getConnection("jdbc:mysql://" + address + ":3306/" + database, login, password);
             if(con != null) {
-                log.info("[MySQL] Pomyslnie polaczono z baza danych.");
+                log.info("[MySQL] Connected with MySQL!");
                 createTables();
             }
         } catch(ClassNotFoundException ex) {
-            Guilds.getLogger().severe("[MySQL] Nie udane polaczenie z baza: Wystapil blad z zaladowaniem sterownika " + driver + " pod baze MySQL!");
+            Guilds.getLogger().severe("[MySQL] Could not connect to MySQL: Could not load driver " + driver + " to MySQL database!");
         } catch(InstantiationException ex) {
             ex.printStackTrace();
         } catch(IllegalAccessException ex) {
-            log.info("[MySQL] Nie udane polaczenie z baza: Odmowa dostepu: " + ex.getMessage());
+            log.info("[MySQL] Could not connect to MySQL: Permission error: " + ex.getMessage());
             ex.printStackTrace();
         } catch(SQLException ex) {
             ex.printStackTrace();
@@ -152,24 +152,24 @@ public class MySQLHandler {
         if(con != null) {
             loadDatabase();
         } else {
-            log.info("Wystapil blad podczas laczania z baza danych.");
+            log.info("En error occured while connecting to MySQL.");
         }
     }
     public void createFirstConnectionSQLite() {
-        log.info("[SQLite] Laczenie z baza SQLite...");
+        log.info("[SQLite] Connecting to SQLite database...");
         try {
             Class.forName(DRIVERSQLite).newInstance();
             con = DriverManager.getConnection(DB_URLQLite);
             if(con != null) {
-                log.info("[SQLite] Pomyslnie polaczono z baza danych.");
+                log.info("[SQLite] Connected with SQLite.");
                 createTables();
             }
         } catch(ClassNotFoundException ex) {
-            Guilds.getLogger().severe("[SQLite] Nie udane polaczenie z baza: Wystapil blad z zaladowaniem sterownika " + driver + " pod baze MySQL!");
+            Guilds.getLogger().severe("[SQLite] Could not connect to SQLite: Could not load driver " + DRIVERSQLite + " to SQLite database!");
         } catch(InstantiationException ex) {
             ex.printStackTrace();
         } catch(IllegalAccessException ex) {
-            log.info("[SQLite] Nie udane polaczenie z baza: Odmowa dostepu: " + ex.getMessage());
+            log.info("[SQLite] Could not connect to SQLite: Permission error: " + ex.getMessage());
             ex.printStackTrace();
         } catch(SQLException ex) {
             ex.printStackTrace();
@@ -178,23 +178,23 @@ public class MySQLHandler {
         if(con != null) {
             loadDatabase();
         } else {
-            log.info("Wystapil blad podczas laczania z baza danych.");
+            log.info("En error occured while connecting to MySQL.");
         }
     }
 
     public void createConnection(String login, String password) {
-        log.info("[MySQL] Laczenie z baza MySQL...");
+        log.info("[MySQL] Connecting to MySQL database...");
         try {
             Class.forName(driver).newInstance();
             con = DriverManager.getConnection("jdbc:mysql://" + address + ":3306/" + database, login, password);
-            log.info("[MySQL] Skutecznie polaczono!");
+            log.info("[MySQL] Connected with MySQL.");
             createTables();
         } catch(ClassNotFoundException ex) {
-            Guilds.getLogger().severe("[MySQL] Nie udane polaczenie z baza: Wystapil blad z zaladowaniem sterownika " + driver + " pod baze MySQL!");
+            Guilds.getLogger().severe("[MySQL] Could not connect to MySQL: Could not load driver " + driver + " to MySQL database!");
         } catch(InstantiationException ex) {
             ex.printStackTrace();
         } catch(IllegalAccessException ex) {
-            log.info("[MySQL] Nie udane polaczenie z baza: Odmowa dostepu: " + ex.getMessage());
+            log.info("[MySQL] Could not connect to MySQL: Permission error: " + ex.getMessage());
             ex.printStackTrace();
         } catch(SQLException ex) {
             ex.printStackTrace();
@@ -209,11 +209,11 @@ public class MySQLHandler {
             log.info("[SQLite] Skutecznie polaczono!");
             createTables();
         } catch(ClassNotFoundException ex) {
-            Guilds.getLogger().severe("[SQLite] Nie udane polaczenie z baza: Wystapil blad z zaladowaniem sterownika " + driver + " pod baze MySQL!");
+            Guilds.getLogger().severe("[SQLite] Could not connect to SQLite: Could not load driver " + DRIVERSQLite + " to SQLite database!");
         } catch(InstantiationException ex) {
             ex.printStackTrace();
         } catch(IllegalAccessException ex) {
-            log.info("[SQLite] Nie udane polaczenie z baza: Odmowa dostepu: " + ex.getMessage());
+            log.info("[SQLite] Could not connect to SQLite: Permission error: " + ex.getMessage());
             ex.printStackTrace();
         } catch(SQLException ex) {
             ex.printStackTrace();
@@ -223,7 +223,7 @@ public class MySQLHandler {
 
     public void createTables() {
         // Tabela z gildiami
-        log.info("[MySQL] Tworzenie tabeli " + tableGuilds + " jezeli nie istnieje...");
+        log.info("[Database] Creating table " + tableGuilds + " if not exists...");
         try {
             String query = "CREATE TABLE IF NOT EXISTS " + tableGuilds
                     + "(id INT AUTO_INCREMENT,"
@@ -245,7 +245,7 @@ public class MySQLHandler {
         }
 
         // Tabela z graczami
-        log.info("[MySQL] Tworzenie tabeli " + tablePlayers + " jezeli nie istnieje...");
+        log.info("[Database] Creating table " + tablePlayers + " if not exists...");
         try {
             String query = "CREATE TABLE IF NOT EXISTS " + tablePlayers
                     + "(id INT AUTO_INCREMENT,"
