@@ -34,7 +34,6 @@ import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
-import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
@@ -51,12 +50,47 @@ public class AcceptArg {
             return false;
         }
         Player p = (Player) sender;
+        UUID uuid = p.getUniqueId();
         if(args.length >= 2) {
-            if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
-                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
-                if(sg.getLeader().equals(p.getUniqueId())) {
-                    String acceptedplayer = args[1];
-                    UUID uuid = Bukkit.getOfflinePlayer(acceptedplayer).getUniqueId();
+            if(!Data.getInstance().isPlayerInGuild(uuid)) {
+                    String acceptedguild = args[1];
+                    if(Data.getInstance().ClansTag.contains(acceptedguild)){
+                        SimpleGuild sg = Data.getInstance().guilds.get(acceptedguild);
+                        if(sg.getInvitedPlayers().contains(uuid)) {
+                            sg.getInvitedPlayers().remove(uuid);
+                            SimplePlayerGuild spg = new SimplePlayerGuild(uuid, sg.getTag(), true);
+                            sg.addMember(uuid);
+                            Data.getInstance().guilds.put(sg.getTag(), sg);
+                            Data.getInstance().guildsplayers.put(uuid, spg);
+                            if(GenConf.playerprefixenabled) {
+                              TagManager.setTag(uuid);       
+                            }
+                            savetodb(uuid, spg.getClanTag());
+                            p.sendMessage(MsgManager.invitedplayersuccessfullyjoined);
+                            return true;
+                        }else{
+                            p.sendMessage(MsgManager.playernotinvited);
+                            return false;
+                        }
+                    }else{
+                        p.sendMessage(acceptedguild);
+                        return false;
+                    }
+                } else {
+                    p.sendMessage(MsgManager.playernotleader);
+                    return false;
+                }
+            } else {
+                p.sendMessage(MsgManager.wrongcmdargument);
+            return false;
+        }
+    }
+
+    private static void savetodb(UUID player, String tag) {
+        MySQLHandler.update(player, MySQLHandler.PType.GUILD, tag);
+    }
+}
+/*
                     if(sg.getInvitedPlayers().contains(uuid)) {
                         sg.getInvitedPlayers().remove(uuid);
                         SimplePlayerGuild spg = new SimplePlayerGuild(uuid, sg.getTag(), true);
@@ -65,11 +99,6 @@ public class AcceptArg {
                         Data.getInstance().ClansTag.add(sg.getTag());
                         Data.getInstance().guildsplayers.put(uuid, spg);
                         if(GenConf.playerprefixenabled) {
-                         /*   if(NametagAPI.hasCustomNametag(acceptedplayer)) {
-                                NametagAPI.resetNametag(acceptedplayer);
-                            }
-                            NametagAPI.setPrefix(acceptedplayer, GenConf.colortagu + spg.getClanTag() + "§r ");
-                        */
                           TagManager.setTag(uuid);       
                         }
                         Player playerobj = Bukkit.getPlayer(acceptedplayer);
@@ -83,21 +112,5 @@ public class AcceptArg {
                         p.sendMessage(MsgManager.playernotoninvitedlist);
                         return true;
                     }
-                } else {
-                    p.sendMessage(MsgManager.playernotleader);
-                    return false;
-                }
-            } else {
-                p.sendMessage(MsgManager.notinguild);
-                return false;
-            }
-        } else {
-            p.sendMessage(MsgManager.wrongcmdargument);
-            return false;
-        }
-    }
 
-    private static void savetodb(UUID player, String tag) {
-        MySQLHandler.update(player, MySQLHandler.PType.GUILD, tag);
-    }
-}
+*/

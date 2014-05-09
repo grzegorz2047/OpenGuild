@@ -33,7 +33,7 @@ import pl.grzegorz2047.openguild2047.commands.arguments.DescriptionArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.DisbandArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.HelpArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.HomeArg;
-import pl.grzegorz2047.openguild2047.commands.arguments.JoinArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.InviteArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ListArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
@@ -55,7 +55,7 @@ public class GuildCommand implements CommandExecutor {
                         return AcceptArg.execute(sender, args);
                     }
                     if(args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("dolacz")) {
-                        return JoinArg.execute(sender, args);
+                        return InviteArg.execute(sender, args);
                     }
                     if(args[0].equalsIgnoreCase("unban") || args[0].equalsIgnoreCase("ub")) {
                         return UnbanArg.execute(sender, args);

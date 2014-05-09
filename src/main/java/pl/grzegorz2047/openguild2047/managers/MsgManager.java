@@ -73,8 +73,9 @@ public class MsgManager {
     public static String cantdoitonsomeonearea = get("cantdoitonsomeonearea", "Nie mozesz budowac na terenie obcej gildii.");
     public static String guildjoinsuccess = get("guildjoinsuccess", "Pomyslnie dolaczyles do gildii");
     public static String playernotinvited = get("playernotinvited", "Nie jestes zaproszony! Wysylam zapytanie do lidera!");
-    public static String askforinvite = get("askforinvite", "Gracz prosi o zaproszenie do gildii. Nick:");
-    public static String invitedplayersuccessfullyjoined = get("invitedplayersuccessfullyjoined", "Gracz pomyslnie dolaczyl do twojej gildii!");
+    public static String askforaccept = get("askforaccept", "Lider gildii prosi o dolaczenie do gildii: ");
+    public static String playerhasguild = get("playerhasguild", "Gracz, ktorego probujesz zaprosic jest juz w gildii!");
+    public static String invitedplayersuccessfullyjoined = get("invitedplayersuccessfullyjoined", "Pomyslnie dolaczyles do gildii!");
     public static String guildinviteaccepted = get("guildinviteaccepted", "twoja prosba o dolaczenie zostala pomyslnie rozpatrzona!");
     public static String playernotoninvitedlist = get("playernotoninvitedlist", "Ten gracz nie jest na liscie zaproszonych!");
     public static String guilddoesntexists = get("guilddoesntexists", "Gildia do ktorej probujesz dolaczyc nie istnieje!");

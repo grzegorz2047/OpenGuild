@@ -26,6 +26,7 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,7 +40,7 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  *
  * @author Grzegorz
  */
-public class JoinArg {
+public class InviteArg {
 
     public static boolean execute(CommandSender sender, String[] args) {
         if(!(sender instanceof Player)) {
@@ -48,40 +49,33 @@ public class JoinArg {
         }
         Player p = (Player) sender;
         if(args.length >= 2) {
-            if(!Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
+            if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
                 //TODO: System zapraszania do gildii
-                String tag = args[1];
-                if(Data.getInstance().guilds.containsKey(tag)) {
-                    System.out.println("Tag to "+tag+" i istnieje!!");
-                    SimpleGuild sg = Data.getInstance().guilds.get(tag);
-                    if(sg.getInvitedPlayers().contains(p.getUniqueId())) {
+                String nick = args[1];
+                OfflinePlayer op = Bukkit.getOfflinePlayer(nick);
+                if(!op.hasPlayedBefore()){
+                    p.sendMessage(MsgManager.playerneverplayed);
+                    return false;
+                }
+                if(!Data.getInstance().isPlayerInGuild(op.getUniqueId())) {
+                    SimpleGuild sg = Data.getInstance().guilds.get(nick);
+                    if(sg.getInvitedPlayers().contains(op.getUniqueId())) {
                         p.sendMessage(MsgManager.notyetaccepted);
                         return false;
-                    } else {
-                        System.out.println("Nie ma na liscie zapro");
-                        p.sendMessage(MsgManager.playernotinvited);
-                        Player leader = Bukkit.getPlayer(sg.getLeader());
-                        sg.getInvitedPlayers().add(p.getUniqueId());
-                        if(leader != null) {
-                            if(leader.isOnline()) {
-                                leader.sendMessage(MsgManager.askforinvite + p.getName());
-                                return false;//Mozna tu wiele dodac np. dodawanie do listy oczekujacych
-                                //albo dodawanie blokowanych osob, ktore spamia zaproszeniami
-                                //to moglby wykonywac lider
-                                //Lista oczekujacych wyswietlana przy wejsciu na serwer
-
-                            }
+                    }else{
+                        sg.getInvitedPlayers().add(op.getUniqueId());
+                        if(op.isOnline()){
+                            ((Player)op).sendMessage(MsgManager.askforaccept); 
                         }
-                        p.sendMessage(MsgManager.leadernotonline);
-                        return false;
+                        return true;
                     }
                 } else {
-                    p.sendMessage(MsgManager.guilddoesntexists);
+                    p.sendMessage(MsgManager.playerhasguild);
                     return false;
                 }
 
             } else {
-                p.sendMessage(MsgManager.alreadyinguild);
+                p.sendMessage(MsgManager.notinguild);
                 return false;
             }
         } else {
