@@ -52,7 +52,7 @@ public class GuildCommand implements CommandExecutor {
                     if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                         return CreateArg.execute(sender, args);
                     }
-                    if(args[0].equalsIgnoreCase("accept") || args[0].equalsIgnoreCase("akceptuj")) {
+                    if(args[0].equalsIgnoreCase("accept") || args[0].equalsIgnoreCase("akceptuj") || args[0].equalsIgnoreCase("dolacz")) {
                         return AcceptArg.execute(sender, args);
                     }
                     else if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
