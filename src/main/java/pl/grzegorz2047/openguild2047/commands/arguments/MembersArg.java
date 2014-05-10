@@ -39,7 +39,7 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  *
  * @author Grzegorz
  */
-public class ListArg {
+public class MembersArg {
 
     public static boolean execute(CommandSender sender) {
         if(!(sender instanceof Player)) {
@@ -47,18 +47,30 @@ public class ListArg {
             return true;
         }
         Player p = (Player) sender;
-        StringBuilder sb = new StringBuilder();
-        int i = 0;
-        sb.append("Guild list/Lista gildii:");
-        for(String tag :Data.getInstance().ClansTag) {
-            if(i % 5 != 0) {
-                sb.append(tag).append(", ");
+        if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
+            List<UUID> members = Data.getInstance().getPlayersGuild(p.getUniqueId()).getMembers();
+            StringBuilder sb = new StringBuilder();
+            if(members.size() != 1) {
+                sb.append("Members/Czlonkowie:\n ");
+                for(int i = 0; i < members.size(); i++) {
+                    SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
+                    UUID member = sg.getMembers().get(i);
+                    String nick = Bukkit.getOfflinePlayer(member).getName(); // https://github.com/Xephi/Bukkit/commit/f6a3abaa35f4b9ff16427a82be8f818d212b3927
+                    if(i % 5 != 0) {
+                        sb.append(nick).append(", ");
+                    } else {
+                        sb.append("\n");
+                    }
+                }
+                p.sendMessage(sb.toString());
+                return true;
             } else {
-                sb.append("\n");
+                p.sendMessage(MsgManager.nomembersinguild);
+                return true;
             }
-            i++;
+        } else {
+            p.sendMessage(MsgManager.notinguild);
         }
-        p.sendMessage(sb.toString());
         return true;
     }
 

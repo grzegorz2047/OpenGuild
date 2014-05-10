@@ -37,6 +37,7 @@ import pl.grzegorz2047.openguild2047.commands.arguments.InviteArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.KickArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ListArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.MembersArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.UnbanArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
@@ -92,6 +93,9 @@ public class GuildCommand implements CommandExecutor {
                 }
                 else if(args[0].equalsIgnoreCase("dom") || args[0].equalsIgnoreCase("home")) {
                     return HomeArg.execute(sender, args);
+                }
+                else if(args[0].equalsIgnoreCase("members") || args[0].equalsIgnoreCase("czlonkowie")) {
+                    return MembersArg.execute(sender);
                 }
                 else if(args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("lista")) {
                     return ListArg.execute(sender);

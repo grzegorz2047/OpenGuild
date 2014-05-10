@@ -59,7 +59,8 @@ public class HelpArg {
                 sender.sendMessage(help("zamknij", "Zamknij gildie"));
                 sender.sendMessage(help("wyrzuc", "Wyrzuca czlonka gildii"));
                 sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
-                sender.sendMessage(help("lista", "Lista wszystkich czlonkow gildii"));
+                sender.sendMessage(help("lista", "Lista wszystkich  gildii"));
+                sender.sendMessage(help("czlonkowie", "Lista wszystkich  czlonkow gildii"));
                 sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
             } else {
                 sender.sendMessage(help("create <tag> [opis...]", "Create guild"));
@@ -71,7 +72,8 @@ public class HelpArg {
                 sender.sendMessage(help("leave", "Leave from current guild"));
                 sender.sendMessage(help("disband", "Disband your guild"));
                 sender.sendMessage(help("home", "Teleport to your guild home location"));
-                sender.sendMessage(help("list", "List of your guild members"));
+                sender.sendMessage(help("lista", "List all guilds"));
+                sender.sendMessage(help("members", "List of your guild members"));
                 sender.sendMessage(help("kick", "Kicks member of guild"));
                 sender.sendMessage(help("help [admin|page]", "Show help [admin/page]"));
             }
