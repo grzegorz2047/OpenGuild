@@ -24,39 +24,20 @@
 
 package com.github.grzegorz2047.openguild;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-public interface OpenGuildPlugin {
+public interface User {
 
-    Plugin getBukkit();
+    Player getBukkit();
 
-    Configuration getConfig();
+    int getDeads();
 
-    Guild getGuild(Location location);
+    Guild getGuild();
 
-    Guild getGuild(Player player);
+    double getKD();
 
-    Guild getGuild(String name);
+    int getKills();
 
-    Guild getGuild(User user);
-
-    List<Guild> getGuilds();
-
-    Messages getMessages();
-
-    OpenGuildPlugin getPlugin();
-
-    User getUser(String name);
-
-    User getUser(Player player);
-
-    User getUser(UUID uuid);
-
-    List<User> getUsers();
+    boolean isLeader();
 
 }

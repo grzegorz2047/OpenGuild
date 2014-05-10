@@ -45,6 +45,8 @@ public interface Guild {
 
     List<UUID> getMembers();
 
+    double getPoints();
+
     String getTag();
 
     void setDesciption(String description);
@@ -55,8 +57,10 @@ public interface Guild {
 
     void setLeader(UUID leader);
 
-    void setTag(String tag);
-
     void setMembers(List<UUID> members);
+
+    void setPoints(double points);
+
+    void setTag(String tag);
 
 }

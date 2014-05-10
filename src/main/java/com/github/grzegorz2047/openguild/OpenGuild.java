@@ -25,6 +25,9 @@
 package com.github.grzegorz2047.openguild;
 
 import java.util.List;
+import java.util.UUID;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import org.bukkit.plugin.Plugin;
 
@@ -40,8 +43,20 @@ public class OpenGuild {
         return guild.getConfig();
     }
 
+    public static Guild getGuild(Location location) {
+        return guild.getGuild(location);
+    }
+
+    public static Guild getGuild(Player player) {
+        return guild.getGuild(player);
+    }
+
     public static Guild getGuild(String name) {
         return guild.getGuild(name);
+    }
+
+    public static Guild getGuild(User user) {
+        return guild.getGuild(user);
     }
 
     public static List<Guild> getGuilds() {
@@ -54,6 +69,22 @@ public class OpenGuild {
 
     public static OpenGuildPlugin getPlugin() {
         return guild.getPlugin();
+    }
+
+    public static User getUser(String name) {
+        return guild.getUser(name);
+    }
+
+    public static User getUser(Player player) {
+        return guild.getUser(player);
+    }
+
+    public static User getUser(UUID uuid) {
+        return guild.getUser(uuid);
+    }
+
+    public static List<User> getUsers() {
+        return guild.getUsers();
     }
 
     @Deprecated
