@@ -49,6 +49,8 @@ public interface Guild {
 
     String getTag();
 
+    void reloadPoints();
+
     void setDesciption(String description);
 
     void setHome(Location home);
@@ -58,8 +60,6 @@ public interface Guild {
     void setLeader(UUID leader);
 
     void setMembers(List<UUID> members);
-
-    void setPoints(double points);
 
     void setTag(String tag);
 

@@ -26,21 +26,33 @@ package pl.grzegorz2047.openguild2047.api;
 
 import com.github.grzegorz2047.openguild.Configuration;
 
+import java.util.HashMap;
+
 public class OpenConfiguration implements Configuration {
+    
+    private static HashMap<String, Object> values;
     
     @Override
     public Object getValue(String path) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getValue(path, null);
     }
     
     @Override
     public Object getValue(String path, Object def) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(values == null)
+            load();
+        return values.get(path);
     }
     
     @Override
     public void reload() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        values = null;
+        load();
+    }
+    
+    private void load() {
+        values = new HashMap<String, Object>();
+        // TODO load configuration
     }
     
 }

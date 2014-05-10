@@ -24,96 +24,124 @@
 
 package pl.grzegorz2047.openguild2047.api;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Location;
 
-public class OpenGuild implements Guild {
+public class OpenGuild implements com.github.grzegorz2047.openguild.Guild {
     
-    @Override
-    public String getDescription() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    private List<String> ally;
+    private List<String> enemy;
+    private List<UUID> invited;
+    private List<UUID> members;
+    private String tag;
+    private String desc;
+    private Location home;
+    private UUID leader;
+    private double points;
     
-    @Override
-    public Location getHome() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public List<UUID> getInvitedPlayers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public UUID getLeader() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public List<UUID> getMembers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public String getTag() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public OpenGuild(String tag, String desc, Location home, UUID leader) {
+        this.tag = tag;
+        this.desc = desc;
+        this.home = home;
+        this.leader = leader;
+        this.ally = new ArrayList<String>();
+        this.enemy = new ArrayList<String>();
+        this.invited = new ArrayList<UUID>();
+        this.members = new ArrayList<UUID>();
     }
     
     @Override
     public List<String> getAllyGuilds() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ally;
+    }
+    
+    @Override
+    public String getDescription() {
+        return desc;
     }
     
     @Override
     public List<String> getEnemyGuilds() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return enemy;
     }
     
     @Override
-    public void setDescription(String description) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Location getHome() {
+        return home;
+    }
+    
+    @Override
+    public List<UUID> getInvitedPlayers() {
+        return invited;
+    }
+    
+    @Override
+    public UUID getLeader() {
+        return leader;
+    }
+    
+    @Override
+    public List<UUID> getMembers() {
+        return members;
+    }
+    
+    @Override
+    public double getPoints() {
+        if(points == 0)
+            loadPoints();
+        return points;
+    }
+    
+    @Override
+    public String getTag() {
+        return tag;
+    }
+    
+    @Override
+    public void reloadPoints() {
+        loadPoints();
+    }
+    
+    @Override
+    public void setDesciption(String description) {
+        this.desc = description;
     }
     
     @Override
     public void setHome(Location home) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.home = home;
     }
     
     @Override
-    public void setInvitedPlayers(List<UUID> invitedPlayers) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setInvitedPlayers(List<UUID> invited) {
+        this.invited = invited;
     }
     
     @Override
     public void setLeader(UUID leader) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public void addMember(UUID member) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.leader = leader;
     }
     
     @Override
     public void setMembers(List<UUID> members) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public boolean containsMember(UUID member) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public void removeMember(UUID member) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.members = members;
     }
     
     @Override
     public void setTag(String tag) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.tag = tag;
+    }
+    
+    private void loadPoints() {
+        points = 0;
+        double memPoints = 0;
+        for(UUID member : getMembers()) {
+            memPoints = memPoints + com.github.grzegorz2047.openguild.OpenGuild.getUser(member).getKD();
+        }
+        points = memPoints / getMembers().size();
     }
     
 }
