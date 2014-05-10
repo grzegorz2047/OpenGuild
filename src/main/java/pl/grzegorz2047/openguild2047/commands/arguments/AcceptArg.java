@@ -70,15 +70,15 @@ public class AcceptArg {
                             return true;
                         }else{
                             p.sendMessage(MsgManager.playernotinvited);
-                            return false;
+                            return true;
                         }
                     }else{
                         p.sendMessage(acceptedguild);
-                        return false;
+                        return true;
                     }
                 } else {
                     p.sendMessage(MsgManager.playernotleader);
-                    return false;
+                    return true;
                 }
             } else {
                 p.sendMessage(MsgManager.wrongcmdargument);
