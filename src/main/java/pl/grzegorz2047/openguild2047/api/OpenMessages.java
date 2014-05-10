@@ -22,20 +22,53 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild;
+package pl.grzegorz2047.openguild2047.api;
 
+import com.github.grzegorz2047.openguild.Messages;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public interface Messages {
+import pl.grzegorz2047.openguild2047.GenConf.Lang;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
-    String getErrorMessage(String lang);
-
-    List<String> getLangList();
-
-    String getMessage(String path);
-
-    String getPrefixedMessage(String path);
-
-    void reload();
-
+public class OpenMessages implements Messages {
+    
+    private static List<String> langs;
+    
+    @Override
+    public String getErrorMessage(String lang) {
+        return MsgManager.getNullMessage(Lang.valueOf(lang.toUpperCase()));
+    }
+    
+    @Override
+    public List<String> getLangList() {
+        if(langs == null)
+            load();
+        return langs;
+    }
+    
+    @Override
+    public String getMessage(String path) {
+        return MsgManager.get(path);
+    }
+    
+    @Override
+    public String getPrefixedMessage(String path) {
+        return MsgManager.getIgnorePref(path);
+    }
+    
+    @Override
+    public void reload() {
+        langs = null;
+        load();
+    }
+    
+    private void load() {
+        langs = new ArrayList<String>();
+        for(Lang lang : Lang.values()) {
+            langs.add(lang.name());
+        }
+    }
+    
 }

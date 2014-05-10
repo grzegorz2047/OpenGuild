@@ -22,20 +22,25 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild;
+package pl.grzegorz2047.openguild2047.api;
 
-import java.util.List;
+import com.github.grzegorz2047.openguild.Configuration;
 
-public interface Messages {
-
-    String getErrorMessage(String lang);
-
-    List<String> getLangList();
-
-    String getMessage(String path);
-
-    String getPrefixedMessage(String path);
-
-    void reload();
-
+public class OpenConfiguration implements Configuration {
+    
+    @Override
+    public Object getValue(String path) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public Object getValue(String path, Object def) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public void reload() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }
