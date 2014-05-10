@@ -59,4 +59,6 @@ public interface OpenGuildPlugin {
 
     List<User> getUsers();
 
+    Guild[] sortGuilds();
+
 }

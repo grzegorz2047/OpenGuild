@@ -26,9 +26,9 @@ package com.github.grzegorz2047.openguild;
 
 import java.util.List;
 import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
 import org.bukkit.plugin.Plugin;
 
 public class OpenGuild {
@@ -85,6 +85,10 @@ public class OpenGuild {
 
     public static List<User> getUsers() {
         return guild.getUsers();
+    }
+
+    public static Guild[] sortGuilds() {
+        return guild.sortGuilds();
     }
 
     @Deprecated
