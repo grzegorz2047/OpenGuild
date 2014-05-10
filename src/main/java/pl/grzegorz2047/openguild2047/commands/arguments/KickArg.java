@@ -52,16 +52,16 @@ public class KickArg {
         OfflinePlayer op = Bukkit.getOfflinePlayer(args[1]);
         if(!op.hasPlayedBefore()){
             leader.sendMessage(MsgManager.playerneverplayed);
-            return false;
+            return true;
         }
         if(!Data.getInstance().isPlayerInGuild(leader.getUniqueId())){
             leader.sendMessage(MsgManager.notinguild);
-            return false;
+            return true;
         }
         SimpleGuild sgl = Data.getInstance().getPlayersGuild(leader.getUniqueId());
         if(!sgl.getLeader().equals(leader.getUniqueId())){
             leader.sendMessage(MsgManager.playernotleader);
-            return false;
+            return true;
         }
         if(Data.getInstance().isPlayerInGuild(op.getUniqueId())) {
             if(sgl.containsMember(op.getUniqueId())){

@@ -46,7 +46,7 @@ public class DescriptionArg {
     public static boolean execute(CommandSender sender, String args[]) {
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
-            return false;
+            return true;
         }
         Player p = (Player) sender;
         if(args.length > 1) {

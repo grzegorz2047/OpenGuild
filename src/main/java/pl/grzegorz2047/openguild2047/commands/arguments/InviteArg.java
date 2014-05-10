@@ -55,17 +55,17 @@ public class InviteArg {
                 OfflinePlayer op = Bukkit.getOfflinePlayer(nick);
                 if(!op.hasPlayedBefore()){
                     p.sendMessage(MsgManager.playerneverplayed);
-                    return false;
+                    return true;
                 }
                 if(!Data.getInstance().isPlayerInGuild(op.getUniqueId())) {
                     SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
                     if(!sg.getLeader().equals(p.getUniqueId())){
                         p.sendMessage(MsgManager.playernotleader);
-                        return false;
+                        return true;
                     }
                     if(sg.getInvitedPlayers().contains(op.getUniqueId())) {
                         p.sendMessage(MsgManager.notyetaccepted);
-                        return false;
+                        return true;
                     }else{
                         sg.getInvitedPlayers().add(op.getUniqueId());
                         if(op.isOnline()){
@@ -76,12 +76,12 @@ public class InviteArg {
                     }
                 } else {
                     p.sendMessage(MsgManager.playerhasguild);
-                    return false;
+                    return true;
                 }
 
             } else {
                 p.sendMessage(MsgManager.notinguild);
-                return false;
+                return true;
             }
         } else {
             p.sendMessage(MsgManager.wrongcmdargument);

@@ -8,7 +8,7 @@ commands:
   guild:
     description: Commands about guilds
     aliases: [g, gildia]
-#    usage: /guild <arg[s]...> Typeguild help\' for help
+    usage: /guild <arg[s]...> Type 'guild help' for help
   team:
     description: Teams chat
     aliases: [t]
