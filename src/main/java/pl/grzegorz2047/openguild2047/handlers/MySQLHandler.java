@@ -74,7 +74,7 @@ public class MySQLHandler {
         switch(GenConf.DATABASE) {
             case FILE:
                 //Guilds.getLogger().warning("We are so sorry! Files database system doesn't work now! Connecting via MySQL...");
-                createConnectionSQLite();
+                //createConnectionSQLite();//Buguje
                 break;
             case MYSQL:
                 createConnection(login, password);
@@ -107,6 +107,8 @@ public class MySQLHandler {
     }
 
     void loadDatabase() {
+        Data.getInstance().guildsplayers= null;
+        Data.getInstance().guilds = null;
         Data.getInstance().guildsplayers = MySQLHandler.getAllPlayers();
         Data.getInstance().guilds = MySQLHandler.getAllGuildswithCuboids();
     }

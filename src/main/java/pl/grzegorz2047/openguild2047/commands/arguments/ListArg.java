@@ -50,10 +50,16 @@ public class ListArg {
         StringBuilder sb = new StringBuilder();
         int i = 0;
         sb.append("Guild list/Lista gildii:");
+        sb.append("\n");
+        sb.append("Number of guilds/ilosc gildii: ").append(Data.getInstance().ClansTag.size());
+        sb.append("\n");
         for(String tag :Data.getInstance().ClansTag) {
-            if(i % 5 != 0) {
+            //if(i % 5 != 0) {
                 sb.append(tag).append(", ");
-            } else {
+            //} else {
+                //sb.append("\n");
+            //}
+            if(i==20 || i==40 || i==60 || i==80){//Testowa prowizorka
                 sb.append("\n");
             }
             i++;
