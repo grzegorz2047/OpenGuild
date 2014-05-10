@@ -23,16 +23,11 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -49,7 +44,7 @@ public class ListArg {
         Player p = (Player) sender;
         StringBuilder sb = new StringBuilder();
         int i = 0;
-        sb.append("Guild list/Lista gildii:");
+        sb.append(MsgManager.get("guildlist"));
         sb.append("\n");
         sb.append("Number of guilds/ilosc gildii: ").append(Data.getInstance().ClansTag.size());
         sb.append("\n");

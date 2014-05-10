@@ -118,7 +118,7 @@ public class HelpArg {
         sender.sendMessage(help("version", "Informacje o plugine OpenGuild2047"));
         
         if(hide > 0) {
-            sender.sendMessage(MsgManager.get("skipped"));
+            sender.sendMessage(MsgManager.get("skipped").replace("{HELP}", String.valueOf(hide)));
         }
     }
 

@@ -56,7 +56,7 @@ public class UnbanArg  {
         }
         OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
         if(player == null || !player.hasPlayedBefore()) {
-            sender.sendMessage(MsgManager.get("notplayedbefore"));
+            sender.sendMessage(MsgManager.get("notplayedbefore").replace("{PLAYER}", args[1]));
             return true;
         }
         
@@ -64,9 +64,9 @@ public class UnbanArg  {
         if(banned != 0) {
             MySQLHandler.update(player.getUniqueId(), MySQLHandler.PType.BAN_TIME, 0);
             Guilds.getLogger().info("Player " + player.getName() + " (" + player.getUniqueId() + ") was unbanned by " + sender.getName());
-            sender.sendMessage(MsgManager.get("hcub"));
+            sender.sendMessage(MsgManager.get("hcub").replace("{PLAYER}", player.getName()));
         } else {
-            sender.sendMessage(MsgManager.get("notbanned"));
+            sender.sendMessage(MsgManager.get("notbanned").replace("{PLAYER}", player.getName()));
         }
         return true;
     }
