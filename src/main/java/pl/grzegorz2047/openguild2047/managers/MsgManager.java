@@ -85,6 +85,8 @@ public class MsgManager {
     public static String invitesendsuccess = get("invitesendsuccess", " Pomyslnie wyslano zaproszenie do gracza");
     public static String kickplayernotinguild = get("kickplayernotinguild", " Gracz, ktorego kickujesz nie jest w zadnej gildii");
     public static String playernotinthisguild = get("playernotinthisguild", " Gracz nie jest w twojej gildii");
+    public static String playerkicked = get("playerkicked", " Zostales wyrzucony z gildii!");
+    public static String playerkicksuccess = get("playerkicksuccess", " Gracz zostal pomyslnie wyrzucony z gildii!");
     public static String get(String path) {
         return get(path, getNullMessage(GenConf.lang));
     }

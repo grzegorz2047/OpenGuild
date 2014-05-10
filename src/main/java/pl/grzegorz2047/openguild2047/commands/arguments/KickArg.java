@@ -69,7 +69,8 @@ public class KickArg {
                 Data.getInstance().getPlayersGuild(op.getUniqueId()).removeMember(op.getUniqueId());
                 Data.getInstance().guildsplayers.remove(op.getUniqueId());
                 saveDb(op);
-                ((Player)op).sendMessage(MsgManager.leaveguildsuccess);
+                ((Player)op).sendMessage(MsgManager.playerkicked);
+                leader.sendMessage(MsgManager.playerkicksuccess);
             }else{
                 leader.sendMessage(MsgManager.playernotinthisguild);
             }
