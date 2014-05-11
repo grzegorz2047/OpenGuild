@@ -88,6 +88,10 @@ public class MsgManager {
     public static String playerkicked = get("playerkicked", " Zostales wyrzucony z gildii!");
     public static String playerkicksuccess = get("playerkicksuccess", " Gracz zostal pomyslnie wyrzucony z gildii!");
     public static String get(String path) {
+        return GenConf.prefix + getIgnorePref(path);
+    }
+
+    public static String getIgnorePref(String path) {
         return get(path, getNullMessage(GenConf.lang));
     }
 
@@ -108,7 +112,7 @@ public class MsgManager {
         }
     }
 
-    private static String getNullMessage(Lang lang) {
+    public static String getNullMessage(Lang lang) {
         String result;
         switch(lang) {
             case EN: result = "Message not found"; break;
