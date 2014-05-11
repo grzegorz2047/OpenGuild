@@ -64,8 +64,9 @@ public class CuboidStuff {
             String tag = Data.getInstance().getPlayersGuild(player.getUniqueId()).getTag();
             String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
             if(checked != null){
-                String tagsaved = CuboidStuff.playersenteredcuboid.get(player.getName());
+                
                 if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())){
+                    String tagsaved = CuboidStuff.playersenteredcuboid.get(player.getName());
                     if(tagsaved.equals(checked)){
                         return;
                     }
@@ -80,18 +81,30 @@ public class CuboidStuff {
                     
                     }
                 }
+            }else{
+                CuboidStuff.playersenteredcuboid.remove(player.getName());
             }
         }else{
             String tag = "";
             String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
             if(checked != null){
                 SimpleGuild sg = Data.getInstance().guilds.get(checked);
+                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())){
+                    String tagsaved = CuboidStuff.playersenteredcuboid.get(player.getName());
+                    if(tagsaved.equals(checked)){
+                        return;
+                    }
+                }else{
+                    CuboidStuff.playersenteredcuboid.put(player.getName(), tag);
+                }
                 for(UUID memeber :sg.getMembers()){
                     Player p = Bukkit.getPlayer(memeber);
                     if(p!=null){
                         p.sendMessage("Gracz "+player.getName()+" wkroczyl na teren twojej gildii!");
                     }
                 }
+            }else{
+                CuboidStuff.playersenteredcuboid.remove(player.getName());
             }
         }
 
