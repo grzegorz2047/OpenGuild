@@ -39,8 +39,8 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler.Type;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler.Type;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -91,9 +91,9 @@ public class HomeArg {
     }
 
     private static void saveDb(Guild guild, Location location) {
-        MySQLHandler.update(guild, Type.HOME_X, location.getBlockX());
-        MySQLHandler.update(guild, Type.HOME_Y, location.getBlockY());
-        MySQLHandler.update(guild, Type.HOME_Z, location.getBlockZ());
+        SQLHandler.update(guild, Type.HOME_X, location.getBlockX());
+        SQLHandler.update(guild, Type.HOME_Y, location.getBlockY());
+        SQLHandler.update(guild, Type.HOME_Z, location.getBlockZ());
     }
 
     private static void teleport(final Player player, final Location location, final int seconds) {

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.listeners;
+package pl.grzegorz2047.openguild2047.modules.hardcore;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,16 +35,16 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 
-public class Hardcore implements Listener {
+public class HardcoreListeners implements Listener {
 
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent e) {
         if(!GenConf.hcBans) return;
         if(e.getPlayer().hasPermission("openguild.hardcore.bypass")) return;
         
-        long ban = MySQLHandler.getBan(e.getPlayer().getUniqueId());
+        long ban = SQLHandler.getBan(e.getPlayer().getUniqueId());
         if( System.currentTimeMillis() < ban ) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
             Date date = new Date(ban);
@@ -60,7 +60,7 @@ public class Hardcore implements Listener {
         long ban = System.currentTimeMillis() + GenConf.hcBantime;
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         Date date = new Date(ban);
-        MySQLHandler.update(e.getEntity().getUniqueId(), MySQLHandler.PType.BAN_TIME, ban);
+        SQLHandler.update(e.getEntity().getUniqueId(), SQLHandler.PType.BAN_TIME, ban);
         e.getEntity().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
     }
 

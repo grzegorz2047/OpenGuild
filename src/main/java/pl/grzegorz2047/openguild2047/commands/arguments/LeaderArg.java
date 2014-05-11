@@ -35,8 +35,8 @@ import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler.Type;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler.Type;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -91,7 +91,7 @@ public class LeaderArg {
     }
 
     private static void saveDb(Guild guild, UUID leader) {
-        MySQLHandler.update(guild, Type.LEADER, leader.toString());
+        SQLHandler.update(guild, Type.LEADER, leader.toString());
     }
 
 }

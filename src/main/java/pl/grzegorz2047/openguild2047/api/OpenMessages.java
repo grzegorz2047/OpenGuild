@@ -50,12 +50,12 @@ public class OpenMessages implements Messages {
     
     @Override
     public String getMessage(String path) {
-        return MsgManager.get(path);
+        return MsgManager.getIgnorePref(path);
     }
     
     @Override
     public String getPrefixedMessage(String path) {
-        return MsgManager.getIgnorePref(path);
+        return MsgManager.get(path);
     }
     
     @Override

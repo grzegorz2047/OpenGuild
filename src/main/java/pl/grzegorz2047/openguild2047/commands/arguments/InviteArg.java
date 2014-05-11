@@ -31,7 +31,7 @@ import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -89,7 +89,7 @@ public class InviteArg {
     }
 
     private static void savetodb(Player player, Guild g) {
-        MySQLHandler.update(player.getUniqueId(), MySQLHandler.PType.GUILD, g.getTag());
+        SQLHandler.update(player.getUniqueId(), SQLHandler.PType.GUILD, g.getTag());
     }
 
 }

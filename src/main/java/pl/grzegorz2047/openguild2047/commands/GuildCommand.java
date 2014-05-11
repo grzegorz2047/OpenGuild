@@ -40,7 +40,7 @@ import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ListArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.MembersArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
-import pl.grzegorz2047.openguild2047.commands.arguments.UnbanArg;
+import pl.grzegorz2047.openguild2047.modules.hardcore.UnbanCommandArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -67,7 +67,7 @@ public class GuildCommand implements CommandExecutor {
                         return KickArg.execute(sender, args);
                     }
                     if(args[0].equalsIgnoreCase("unban") || args[0].equalsIgnoreCase("ub")) {
-                        return UnbanArg.execute(sender, args);
+                        return UnbanCommandArg.execute(sender, args);
                     }
                     return true;
                 }

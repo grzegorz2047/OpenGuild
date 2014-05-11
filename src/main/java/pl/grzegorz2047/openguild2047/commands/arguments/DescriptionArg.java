@@ -34,8 +34,8 @@ import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler.Type;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler.Type;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
@@ -97,7 +97,7 @@ public class DescriptionArg {
     }
 
     private static void saveDb(Guild guild, String description) {
-        MySQLHandler.update(guild, Type.DESCRIPTION, description);
+        SQLHandler.update(guild, Type.DESCRIPTION, description);
     }
 
 }

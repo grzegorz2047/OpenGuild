@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.tagmanager;
+package pl.grzegorz2047.openguild2047.managers;
 
 import java.util.UUID;
 import org.bukkit.Bukkit;

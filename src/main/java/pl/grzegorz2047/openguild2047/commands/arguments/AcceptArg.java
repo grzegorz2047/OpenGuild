@@ -36,9 +36,9 @@ import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
-import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  *
@@ -96,7 +96,7 @@ public class AcceptArg {
     }
 
     private static void savetodb(UUID player, String tag) {
-        MySQLHandler.update(player, MySQLHandler.PType.GUILD, tag);
+        SQLHandler.update(player, SQLHandler.PType.GUILD, tag);
     }
 }
 /*

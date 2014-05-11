@@ -40,14 +40,14 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
-import pl.grzegorz2047.openguild2047.listeners.Hardcore;
+import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreListeners;
 import pl.grzegorz2047.openguild2047.listeners.Monitors;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
-import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  *
@@ -103,7 +103,7 @@ public class OpenGuild extends JavaPlugin {
     @Override
     public void onDisable() {
         try {
-            MySQLHandler.getConnection().close();
+            SQLHandler.getConnection().close();
         }
         catch (SQLException ex) {
             
@@ -162,10 +162,10 @@ public class OpenGuild extends JavaPlugin {
     private void loadDb() {
         switch(GenConf.DATABASE) {
             case FILE:
-                new MySQLHandler(address, database, login, password).createFirstConnectionSQLite();
+                new SQLHandler(address, database, login, password).createFirstConnectionSQLite();
                 break;
             case MYSQL:
-                new MySQLHandler(address, database, login, password).createFirstConnection(login, password);
+                new SQLHandler(address, database, login, password).createFirstConnection(login, password);
                 break;
             default:
                 Guilds.getLogger().severe("Could not load database type! Please fix it in your config.yml file!");
@@ -182,14 +182,14 @@ public class OpenGuild extends JavaPlugin {
         if(!GenConf.teampvp)
             pm.registerEvents(new EntityDamageByEntity(), this);
         if(GenConf.hcBans)
-            pm.registerEvents(new Hardcore(), this);
+            pm.registerEvents(new HardcoreListeners(), this);
         if(GenConf.playerMoveEvent)
             pm.registerEvents(new PlayerMove(), this);
     }
 
     private void loadPlayers() {
         for(SimpleGuild guild : Data.getInstance().guilds.values()) { // Pobieranie gildii
-            for(UUID member : MySQLHandler.getGuildMembers(guild.getTag())) { // Pobieranie graczy w gildii
+            for(UUID member : SQLHandler.getGuildMembers(guild.getTag())) { // Pobieranie graczy w gildii
                 guild.addMember(member); // Dodawanie gracza do listy
             }
         }

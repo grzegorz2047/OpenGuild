@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package pl.grzegorz2047.openguild2047.handlers;
+package pl.grzegorz2047.openguild2047.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -51,7 +51,7 @@ import pl.grzegorz2047.openguild2047.api.Logger;
  *
  * @author Grzegorz
  */
-public class MySQLHandler {
+public class SQLHandler {
 
     private static Connection con = null;
     private static Statement stat;
@@ -68,7 +68,7 @@ public class MySQLHandler {
     private static final String DRIVERSQLite = "org.sqlite.JDBC";
     private static final String DB_URLQLite = "jdbc:sqlite:" + GenConf.FILE_DIR;
 
-    public MySQLHandler(String address, String database, String login, String password) {
+    public SQLHandler(String address, String database, String login, String password) {
         this.address = address;
         this.database = database;
         switch(GenConf.DATABASE) {
@@ -109,8 +109,8 @@ public class MySQLHandler {
     void loadDatabase() {
         Data.getInstance().guildsplayers= null;
         Data.getInstance().guilds = null;
-        Data.getInstance().guildsplayers = MySQLHandler.getAllPlayers();
-        Data.getInstance().guilds = MySQLHandler.getAllGuildswithCuboids();
+        Data.getInstance().guildsplayers = SQLHandler.getAllPlayers();
+        Data.getInstance().guilds = SQLHandler.getAllGuildswithCuboids();
     }
     public static Connection getConnection(){
         return con;
@@ -498,7 +498,7 @@ public class MySQLHandler {
                 return rs.getInt(1) != 0;
             }
         } catch(SQLException ex) {
-            java.util.logging.Logger.getLogger(MySQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SQLHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }

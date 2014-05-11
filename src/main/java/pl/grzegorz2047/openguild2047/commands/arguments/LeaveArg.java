@@ -34,9 +34,9 @@ import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
-import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  *
@@ -77,7 +77,7 @@ public class LeaveArg {
     private static void saveDb(Guild guild, Player player) {
         // TODO Tu trzeba zrobic pobieranie gildii, String -> ArrayList, potem usuwanie gracza i ArrayList<String>
         //Nie za bardzo wiem co z TODO, ale na razie tyle wystarczy
-        MySQLHandler.update(player.getUniqueId(), MySQLHandler.PType.GUILD, "");
+        SQLHandler.update(player.getUniqueId(), SQLHandler.PType.GUILD, "");
     }
 
 }

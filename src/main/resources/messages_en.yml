@@ -45,7 +45,7 @@ confignew: '&cThere was a problem occurred with your config.yml file! Created a 
 hcnotenabled: '&cHardcore module is not enabled on this server.'
 notbanned: '&cPlayer &9{PLAYER} &cis not banned!'
 hcub: '&aPlayer &9{PLAYER} &awas unbanned!'
-skipped: '&9Skipped {HELP} help topics.'
+skipped: '&9Skipped {HELP} help topic(s).'
 notplayedbefore: '&cPlayer &9{PLAYER} &cnot played on this server!'
 invitesendsuccess: '&aInvite sent!'
 kickplayernotinguild: '&cYou cannot kick someone without guild!'

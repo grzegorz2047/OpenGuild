@@ -41,9 +41,9 @@ import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
-import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
 /**
@@ -169,9 +169,9 @@ public class CreateArg {
     }
 
     private static void saveToDb(String tag, String description, Player leader, Location home) {
-        MySQLHandler.insert(tag, description, leader.getUniqueId(), null, home.getBlockX(), home.getBlockY(), home.getBlockZ(), home.getWorld().getName(), GenConf.MIN_CUBOID_RADIUS);
-        MySQLHandler.update(leader.getUniqueId(), MySQLHandler.PType.GUILD, tag);
-        MySQLHandler.update(leader.getUniqueId(), MySQLHandler.PType.ISLEADER, "true");//ustawia isleader wa bazie na true
+        SQLHandler.insert(tag, description, leader.getUniqueId(), null, home.getBlockX(), home.getBlockY(), home.getBlockZ(), home.getWorld().getName(), GenConf.MIN_CUBOID_RADIUS);
+        SQLHandler.update(leader.getUniqueId(), SQLHandler.PType.GUILD, tag);
+        SQLHandler.update(leader.getUniqueId(), SQLHandler.PType.ISLEADER, "true");//ustawia isleader wa bazie na true
     }
 
 }

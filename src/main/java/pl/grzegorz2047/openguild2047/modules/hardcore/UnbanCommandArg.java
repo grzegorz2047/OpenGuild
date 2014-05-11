@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.commands.arguments;
+package pl.grzegorz2047.openguild2047.modules.hardcore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,14 +31,14 @@ import org.bukkit.command.CommandSender;
 
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  *
  * @author Aleksander
  */
-public class UnbanArg  {
+public class UnbanCommandArg  {
     
     public static boolean execute(CommandSender sender, String[] args) {
         if(!GenConf.hcBans) {
@@ -60,9 +60,9 @@ public class UnbanArg  {
             return true;
         }
         
-        long banned = MySQLHandler.getBan(player.getUniqueId());
+        long banned = SQLHandler.getBan(player.getUniqueId());
         if(banned != 0) {
-            MySQLHandler.update(player.getUniqueId(), MySQLHandler.PType.BAN_TIME, 0);
+            SQLHandler.update(player.getUniqueId(), SQLHandler.PType.BAN_TIME, 0);
             Guilds.getLogger().info("Player " + player.getName() + " (" + player.getUniqueId() + ") was unbanned by " + sender.getName());
             sender.sendMessage(MsgManager.get("hcub").replace("{PLAYER}", player.getName()));
         } else {

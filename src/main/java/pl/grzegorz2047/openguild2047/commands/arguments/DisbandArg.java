@@ -41,9 +41,9 @@ import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
-import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  *
@@ -98,9 +98,9 @@ public class DisbandArg {
     }
 
     private static void saveDb(Guild guild) {
-        MySQLHandler.delete(guild);
+        SQLHandler.delete(guild);
         for(UUID p : guild.getMembers()) {//Usuwa totalnie gildie
-            MySQLHandler.update(p, MySQLHandler.PType.GUILD, "");
+            SQLHandler.update(p, SQLHandler.PType.GUILD, "");
         }
     }
 

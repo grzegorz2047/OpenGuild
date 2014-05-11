@@ -33,9 +33,9 @@ import org.bukkit.entity.Player;
 
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
-import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  *
@@ -91,6 +91,6 @@ public class KickArg {
     private static void saveDb(OfflinePlayer player) {
         // TODO Tu trzeba zrobic pobieranie gildii, String -> ArrayList, potem usuwanie gracza i ArrayList<String>
         //Nie za bardzo wiem co z TODO, ale na razie tyle wystarczy
-        MySQLHandler.update(player.getUniqueId(), MySQLHandler.PType.GUILD, "");
+        SQLHandler.update(player.getUniqueId(), SQLHandler.PType.GUILD, "");
     }
 }
