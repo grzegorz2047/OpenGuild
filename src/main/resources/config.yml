@@ -16,6 +16,9 @@ cuboid:
   min-radius: 15
   max-radius: 50
   canenterarea: true
+  notify-enter: true
+  notify-enter-members: false
+  notify-enter-sound: false
   extra-protection: true
   breaking-blocks:
     item-types: [DIAMOND_PICKAXE]

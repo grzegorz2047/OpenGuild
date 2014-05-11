@@ -74,6 +74,9 @@ public class GenConf {
     public static String spawnMessage;
     public static boolean blockGuildCreating;
     public static boolean playerMoveEvent;
+    public static boolean cubNotify;
+    public static boolean cubNotifyMem;
+    public static boolean cubNotifySound;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.get().getConfig();
@@ -109,6 +112,9 @@ public class GenConf {
         spawnMessage = config.getString("spawn.message").replace("&", "§");
         blockGuildCreating = config.getBoolean("spawn.block-guild-creating");
         playerMoveEvent = config.getBoolean("player-move-event");
+        cubNotify = config.getBoolean("cuboid.notify-enter");
+        cubNotifyMem = config.getBoolean("cuboid.notify-enter-members");
+        cubNotifySound = config.getBoolean("cuboid.notify-enter-sound");
     }
 
     private static void loadBans() {
