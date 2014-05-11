@@ -7,7 +7,7 @@ main: pl.grzegorz2047.openguild2047.OpenGuild
 commands:
   guild:
     description: Commands about guilds
-    aliases: [g, gildia]
+    aliases: [g, gildia, og, openguild]
     usage: /guild <arg[s]...> Type 'guild help' for help
   team:
     description: Teams chat

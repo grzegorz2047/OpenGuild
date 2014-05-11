@@ -62,9 +62,9 @@ public class DisbandArg {
             String tag = sg.getTag();
             if(sg.getLeader().equals(p.getUniqueId())) {
                 saveDb(Guilds.getGuild(p));
-                sg.getHome().getBlock().setType(Material.DIRT);
+                    sg.getHome().getBlock().setType(Material.AIR);
                 Location loc = sg.getHome();
-                Block b = sg.getHome().getWorld().getBlockAt(loc.getBlockX(),loc.getBlockY()+1, loc.getBlockZ());
+                Block b = sg.getHome().getWorld().getBlockAt(loc.getBlockX(),loc.getBlockY() - 1, loc.getBlockZ());
                 b.setType(Material.AIR);
                 for(UUID player : sg.getMembers()) {
                     TagManager.removeTag(player);
