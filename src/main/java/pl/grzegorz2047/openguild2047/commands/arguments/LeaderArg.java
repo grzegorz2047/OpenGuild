@@ -23,6 +23,8 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import com.github.grzegorz2047.openguild.event.MessageBroadcastEvent;
+
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -52,12 +54,19 @@ public class LeaderArg {
         if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
             SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
             if(args.length >= 3) {
-                if(args[1].equalsIgnoreCase("zmien")) {
+                if(args[1].equalsIgnoreCase("zmien") || args[1].equalsIgnoreCase("change")) {
                     if(sg.getLeader().equals(p.getUniqueId())) {
                         if(Bukkit.getPlayer(p.getName()) != null) {
                             Player leader = Bukkit.getPlayer(p.getName());
                             sg.setLeader(leader.getUniqueId());
                             saveDb(Guilds.getGuild(p), leader.getUniqueId());
+                            
+                            // Event
+                            MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.LEADER);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if(!event.isCancelled()) {
+                                Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getTag()).replace("{PLAYER}", sender.getName()).replace("{LEADER}", leader.getName()));
+                            }
                             return true;
                         } else {
                             p.sendMessage(MsgManager.playerneverplayed);

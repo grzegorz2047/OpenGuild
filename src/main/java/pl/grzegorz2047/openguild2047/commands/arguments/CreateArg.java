@@ -23,8 +23,11 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import com.github.grzegorz2047.openguild.event.MessageBroadcastEvent;
+
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -110,6 +113,13 @@ public class CreateArg {
                                         Location l = p.getLocation();
                                         l.getBlock().setType(Material.DRAGON_EGG);
                                         new Location(l.getWorld(), l.getBlockX(), l.getBlockY() - 1, l.getBlockZ()).getBlock().setType(Material.BEDROCK);
+                                        
+                                        // Event
+                                        MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.CREATE);
+                                        Bukkit.getPluginManager().callEvent(event);
+                                        if(!event.isCancelled()) {
+                                            Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getTag()).replace("{PLAYER}", sender.getName()));
+                                        }
                                         return true;
                                     } else {
                                         p.sendMessage(MsgManager.playerstooclose);

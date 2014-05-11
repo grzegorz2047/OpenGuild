@@ -37,6 +37,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
 import pl.grzegorz2047.openguild2047.api.Guilds;
+import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
@@ -66,7 +67,7 @@ public class OpenGuild extends JavaPlugin {
     public void onEnable() {
         long init = System.currentTimeMillis();
         instance = this;
-        
+        com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(new OpenGuildBukkitPlugin()); // Setup API
         copyDefaultFiles();
         loadAllListeners();
         Data pd = new Data();

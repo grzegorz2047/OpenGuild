@@ -24,11 +24,13 @@
   //
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import com.github.grzegorz2047.openguild.event.MessageBroadcastEvent;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import pl.grzegorz2047.openguild2047.Data;
-import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
@@ -58,6 +60,13 @@ public class DescriptionArg {
                             String desc = GenUtil.argsToString(args, 3, args.length);
                             sg.setDescription(desc);
                             saveDb(Guilds.getGuild(p), desc);
+                            
+                            // Event
+                            MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.DESCRIPTION);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if(!event.isCancelled()) {
+                                Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getTag()).replace("{PLAYER}", sender.getName()).replace("{DESC}", desc));
+                            }
                             return true;
                         } else {
                             p.sendMessage(MsgManager.playernotleader);

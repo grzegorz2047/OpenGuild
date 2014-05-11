@@ -24,15 +24,15 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import com.github.grzegorz2047.openguild.event.MessageBroadcastEvent;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import pl.grzegorz2047.openguild2047.Data;
-import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.api.Guild;
-import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
@@ -45,7 +45,7 @@ public class KickArg {
     
     public static boolean execute(CommandSender sender,String[] args) {
         if(!(sender instanceof Player)) {
-            sender.sendMessage(GenConf.prefix + MsgManager.cmdonlyforplayer);
+            sender.sendMessage(MsgManager.cmdonlyforplayer);
             return true;
         }
         Player leader = (Player) sender;
@@ -71,6 +71,13 @@ public class KickArg {
                 saveDb(op);
                 ((Player)op).sendMessage(MsgManager.playerkicked);
                 leader.sendMessage(MsgManager.playerkicksuccess);
+                
+                // Event
+                MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.KICK);
+                Bukkit.getPluginManager().callEvent(event);
+                if(!event.isCancelled()) {
+                    Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sgl.getTag()).replace("{PLAYER}", sender.getName()).replace("{MEMBER}", op.getName()));
+                }
             }else{
                 leader.sendMessage(MsgManager.playernotinthisguild);
             }

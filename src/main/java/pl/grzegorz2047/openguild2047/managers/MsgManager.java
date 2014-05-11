@@ -87,21 +87,26 @@ public class MsgManager {
     public static String playernotinthisguild = get("playernotinthisguild", " Gracz nie jest w twojej gildii");
     public static String playerkicked = get("playerkicked", " Zostales wyrzucony z gildii!");
     public static String playerkicksuccess = get("playerkicksuccess", " Gracz zostal pomyslnie wyrzucony z gildii!");
+
     public static String get(String path) {
         return GenConf.prefix + getIgnorePref(path);
     }
 
     public static String getIgnorePref(String path) {
-        return get(path, getNullMessage(GenConf.lang));
+        return getIgnorePref(path, getNullMessage(GenConf.lang));
     }
 
     public static String get(String path, String def) {
+        return GenConf.prefix + getIgnorePref(path, getNullMessage(GenConf.lang));
+    }
+    
+    public static String getIgnorePref(String path, String def) {
         if(messages == null)
             loadMessages();
         if(messages.get(path) == null) {
-            return GenConf.prefix + def;
+            return def;
         } else {
-            return GenConf.prefix + messages.get(path);
+            return messages.get(path);
         }
     }
 

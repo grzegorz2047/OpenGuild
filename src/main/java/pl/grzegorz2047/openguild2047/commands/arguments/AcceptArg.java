@@ -24,6 +24,8 @@
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 
+import com.github.grzegorz2047.openguild.event.MessageBroadcastEvent;
+
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -67,6 +69,13 @@ public class AcceptArg {
                             }
                             savetodb(uuid, spg.getClanTag());
                             p.sendMessage(MsgManager.invitedplayersuccessfullyjoined);
+                            
+                            // Event
+                            MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.JOIN);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if(!event.isCancelled()) {
+                                Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getTag()).replace("{PLAYER}", sender.getName()));
+                            }
                             return true;
                         }else{
                             p.sendMessage(MsgManager.playernotinvited);

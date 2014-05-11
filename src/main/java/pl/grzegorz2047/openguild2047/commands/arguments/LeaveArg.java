@@ -23,11 +23,15 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import com.github.grzegorz2047.openguild.event.MessageBroadcastEvent;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
@@ -53,9 +57,17 @@ public class LeaveArg {
             }
             saveDb(Guilds.getGuild(p), p);
             TagManager.removeTag(p.getUniqueId());
+            final SimplePlayerGuild sg = Data.getInstance().guildsplayers.get(p.getUniqueId());
             Data.getInstance().getPlayersGuild(p.getUniqueId()).removeMember(p.getUniqueId());
             Data.getInstance().guildsplayers.remove(p.getUniqueId());
             p.sendMessage(MsgManager.leaveguildsuccess);
+            
+            // Event
+            MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.LEAVE);
+            Bukkit.getPluginManager().callEvent(event);
+            if(!event.isCancelled()) {
+                Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getClanTag()).replace("{PLAYER}", sender.getName()));
+            }
         } else {
             p.sendMessage(MsgManager.notinguild);
         }

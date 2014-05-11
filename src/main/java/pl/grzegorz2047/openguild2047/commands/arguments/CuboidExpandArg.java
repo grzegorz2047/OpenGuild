@@ -23,6 +23,9 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import com.github.grzegorz2047.openguild.event.MessageBroadcastEvent;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -36,6 +39,19 @@ public class CuboidExpandArg {
         //Moze jakies koszty za powiekszenie o 1 albo iles kratek
         //Gracz moze sobie ustalic a plugin bedzie pobieral wymagania z configu i mnozyl o tyle
         // ile gracz chce rozbudowac cuboida
+        
+        
+        
+        // TODO Kod
+        
+        
+        
+        // Event
+        MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.CUBOID_EXPAND);
+        Bukkit.getPluginManager().callEvent(event);
+        if(!event.isCancelled()) {
+            Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", "TODO").replace("{PLAYER}", sender.getName()).replace("{RADIUS}", "TODO"));
+        }
         return true;
     }
 }
