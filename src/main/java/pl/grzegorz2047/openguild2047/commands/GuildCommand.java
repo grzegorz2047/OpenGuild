@@ -63,9 +63,6 @@ public class GuildCommand implements CommandExecutor {
                     if(args[0].equalsIgnoreCase("invite") || args[0].equalsIgnoreCase("zapros")) {
                         return InviteArg.execute(sender, args);
                     }
-                    if(args[0].equalsIgnoreCase("items") || args[0].equalsIgnoreCase("itemy")) {
-                        return ItemsArg.execute(sender, args);
-                    }
                     if(args[0].equalsIgnoreCase("kick") || args[0].equalsIgnoreCase("wyrzuc")) {
                         return KickArg.execute(sender, args);
                     }
@@ -85,6 +82,9 @@ public class GuildCommand implements CommandExecutor {
                 }
                 else if(args[0].equalsIgnoreCase("reload")) {
                     return ReloadArg.execute(sender);
+                }
+                if(args[0].equalsIgnoreCase("items") || args[0].equalsIgnoreCase("itemy")) {
+                    return ItemsArg.execute(sender, args);
                 }
                 else if(args[0].equalsIgnoreCase("ver") || args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("about")) {
                     return VersionArg.execute(sender);
