@@ -25,6 +25,7 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -62,7 +63,7 @@ public class CreateArg {
         if(!Data.getInstance().guilds.containsKey(clantag)) {
             if(!Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
                 if(isSpawn(p) && GenConf.blockGuildCreating) {
-                    sender.sendMessage(GenConf.spawnMessage);
+                    sender.sendMessage(GenConf.prefix + ChatColor.RED + GenConf.spawnMessage);
                     return true;
                 }
                 if(clantag.matches("[0-9a-zA-Z]*")) {

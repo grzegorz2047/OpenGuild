@@ -53,12 +53,12 @@ public class HomeArg {
 
     public static boolean execute(CommandSender sender, String args[]) {
         if(!(sender instanceof Player)) {
-            sender.sendMessage(GenConf.prefix + MsgManager.cmdonlyforplayer);
+            sender.sendMessage(MsgManager.cmdonlyforplayer);
             return true;
         }
         Player p = (Player) sender;
         if(!GenConf.homecommand) {
-            sender.sendMessage(GenConf.prefix + MsgManager.homenotenabled);
+            sender.sendMessage(MsgManager.homenotenabled);
             return true;
         }
         if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
@@ -81,7 +81,6 @@ public class HomeArg {
                     return true;
                 }
                 teleport(p, homeloc, cooldown);
-                p.sendMessage(MsgManager.teleportsuccess);
                 return true;
             }
 

@@ -66,6 +66,7 @@ public class OpenGuild extends JavaPlugin {
     public void onEnable() {
         long init = System.currentTimeMillis();
         instance = this;
+        
         copyDefaultFiles();
         loadAllListeners();
         Data pd = new Data();
