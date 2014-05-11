@@ -22,47 +22,19 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild;
+package com.github.grzegorz2047.openguild.module;
 
-import com.github.grzegorz2047.openguild.module.ModuleManager;
-
-import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+public interface HardcoreModule {
 
-public interface OpenGuildPlugin {
+    long getBan(UUID uuid);
 
-    Plugin getBukkit();
+    boolean isEnabled();
 
-    Configuration getConfig();
+    void setBan(UUID uuid, long to);
 
-    Guild getGuild(Location location);
-
-    Guild getGuild(Player player);
-
-    Guild getGuild(String name);
-
-    Guild getGuild(User user);
-
-    List<Guild> getGuilds();
-
-    Messages getMessages();
-
-    ModuleManager getModules();
-
-    OpenGuildPlugin getPlugin();
-
-    User getUser(String name);
-
-    User getUser(Player player);
-
-    User getUser(UUID uuid);
-
-    List<User> getUsers();
-
-    Guild[] sortGuilds();
+    @Deprecated
+    void setEnabled(boolean enabled);
 
 }

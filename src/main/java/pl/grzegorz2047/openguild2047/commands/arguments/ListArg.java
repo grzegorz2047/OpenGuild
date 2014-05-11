@@ -45,7 +45,7 @@ public class ListArg {
         Player p = (Player) sender;
         StringBuilder sb = new StringBuilder();
         int i = 0;
-        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.get("titleguildlist") + ChatColor.DARK_GRAY + " ----------------- ");
+        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.getIgnorePref("titleguildlist") + ChatColor.DARK_GRAY + " ----------------- ");
         sb.append(MsgManager.get("numguilds")).append(Data.getInstance().ClansTag.size());
         sb.append("\n");
         for(String tag :Data.getInstance().ClansTag) {

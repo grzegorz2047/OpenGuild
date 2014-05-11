@@ -22,47 +22,44 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild;
+package pl.grzegorz2047.openguild2047.api.module;
 
-import com.github.grzegorz2047.openguild.module.ModuleManager;
-
-import java.util.List;
-import java.util.UUID;
+import com.github.grzegorz2047.openguild.module.SpawnModule;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-public interface OpenGuildPlugin {
+import pl.grzegorz2047.openguild2047.GenConf;
 
-    Plugin getBukkit();
-
-    Configuration getConfig();
-
-    Guild getGuild(Location location);
-
-    Guild getGuild(Player player);
-
-    Guild getGuild(String name);
-
-    Guild getGuild(User user);
-
-    List<Guild> getGuilds();
-
-    Messages getMessages();
-
-    ModuleManager getModules();
-
-    OpenGuildPlugin getPlugin();
-
-    User getUser(String name);
-
-    User getUser(Player player);
-
-    User getUser(UUID uuid);
-
-    List<User> getUsers();
-
-    Guild[] sortGuilds();
-
+public class OpenSpawnModule implements SpawnModule {
+    
+    @Override
+    public boolean canCreate() {
+        return GenConf.blockGuildCreating;
+    }
+    
+    @Override
+    public Location getMaxPosition() {
+        return GenConf.spawnMax;
+    }
+    
+    @Override
+    public Location getMinPosition() {
+        return GenConf.spawnMin;
+    }
+    
+    @Override
+    public void setCanCreate(boolean create) {
+        GenConf.blockGuildCreating = create;
+    }
+    
+    @Override
+    public void setMaxPosition(Location max) {
+        GenConf.spawnMax = max;
+    }
+    
+    @Override
+    public void setMinPosition(Location min) {
+        GenConf.spawnMin = min;
+    }
+    
 }

@@ -22,47 +22,16 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild;
+package com.github.grzegorz2047.openguild.module;
 
-import com.github.grzegorz2047.openguild.module.ModuleManager;
+import java.util.Set;
 
-import java.util.List;
-import java.util.UUID;
+public interface ModuleManager {
 
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+    Object getModule(String name);
 
-public interface OpenGuildPlugin {
+    Set<String> getModules();
 
-    Plugin getBukkit();
-
-    Configuration getConfig();
-
-    Guild getGuild(Location location);
-
-    Guild getGuild(Player player);
-
-    Guild getGuild(String name);
-
-    Guild getGuild(User user);
-
-    List<Guild> getGuilds();
-
-    Messages getMessages();
-
-    ModuleManager getModules();
-
-    OpenGuildPlugin getPlugin();
-
-    User getUser(String name);
-
-    User getUser(Player player);
-
-    User getUser(UUID uuid);
-
-    List<User> getUsers();
-
-    Guild[] sortGuilds();
+    boolean registerModule(String name, Object object);
 
 }

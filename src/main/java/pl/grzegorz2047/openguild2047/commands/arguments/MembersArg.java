@@ -76,7 +76,7 @@ public class MembersArg {
                         sb.append("\n");
                     }
                 }
-                sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.get("titlemems") + ChatColor.DARK_GRAY + " (" + size + ") ----------------- ");
+                sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.getIgnorePref("titlemems") + ChatColor.DARK_GRAY + " (" + size + ") ----------------- ");
                 p.sendMessage(sb.toString());
                 return true;
             } else {

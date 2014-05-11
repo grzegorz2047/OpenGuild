@@ -22,47 +22,22 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild;
-
-import com.github.grzegorz2047.openguild.module.ModuleManager;
-
-import java.util.List;
-import java.util.UUID;
+package com.github.grzegorz2047.openguild.module;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-public interface OpenGuildPlugin {
-
-    Plugin getBukkit();
-
-    Configuration getConfig();
-
-    Guild getGuild(Location location);
-
-    Guild getGuild(Player player);
-
-    Guild getGuild(String name);
-
-    Guild getGuild(User user);
-
-    List<Guild> getGuilds();
-
-    Messages getMessages();
-
-    ModuleManager getModules();
-
-    OpenGuildPlugin getPlugin();
-
-    User getUser(String name);
-
-    User getUser(Player player);
-
-    User getUser(UUID uuid);
-
-    List<User> getUsers();
-
-    Guild[] sortGuilds();
-
+public interface SpawnModule {
+    
+    boolean canCreate();
+    
+    Location getMaxPosition();
+    
+    Location getMinPosition();
+    
+    void setCanCreate(boolean create);
+    
+    void setMaxPosition(Location max);
+    
+    void setMinPosition(Location min);
+    
 }

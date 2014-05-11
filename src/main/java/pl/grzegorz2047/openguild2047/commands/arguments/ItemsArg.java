@@ -61,7 +61,7 @@ public class ItemsArg {
             builder.append(ChatColor.DARK_GRAY);
             builder.append(", ");
         }
-        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.get("titleitems") + ChatColor.DARK_GRAY + " ----------------- ");
+        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.getIgnorePref("titleitems") + ChatColor.DARK_GRAY + " ----------------- ");
         sender.sendMessage(builder.toString());
         return true;
     }
@@ -69,11 +69,11 @@ public class ItemsArg {
     private static int getAmount(Player player, Material material) {
         int amount = 0;
         ItemStack[] stack = player.getInventory().getContents();
-        for (ItemStack stack1 : stack) {
-            if(stack1 == null){
+        for(ItemStack stack1 : stack) {
+            if(stack1 == null) {
                 continue;
             }
-            if (stack1.getType() == material) {
+            if(stack1.getType() == material) {
                 amount = amount + stack1.getAmount();
             }
         }

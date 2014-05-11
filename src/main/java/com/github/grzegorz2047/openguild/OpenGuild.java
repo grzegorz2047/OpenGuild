@@ -24,6 +24,8 @@
 
 package com.github.grzegorz2047.openguild;
 
+import com.github.grzegorz2047.openguild.module.ModuleManager;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -65,6 +67,10 @@ public class OpenGuild {
 
     public static Messages getMessages() {
         return guild.getMessages();
+    }
+    
+    public static ModuleManager getModules() {
+        return guild.getModules();
     }
 
     public static OpenGuildPlugin getPlugin() {

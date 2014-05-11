@@ -44,6 +44,7 @@ import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
+import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
 /**
@@ -65,7 +66,7 @@ public class CreateArg {
         Player p = (Player) sender;
         if(!Data.getInstance().guilds.containsKey(clantag)) {
             if(!Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
-                if(isSpawn(p) && GenConf.blockGuildCreating) {
+                if(SpawnChecker.isSpawn(p.getLocation()) && GenConf.blockGuildCreating) {
                     sender.sendMessage(GenConf.prefix + ChatColor.RED + GenConf.spawnMessage);
                     return true;
                 }
@@ -155,17 +156,6 @@ public class CreateArg {
             return true;
         }
 
-    }
-
-    private static boolean isSpawn(Player player) {
-        Location l = player.getLocation();
-        Location c1 = GenConf.spawnMax;
-        Location c2 = GenConf.spawnMin;
-        if(l.getWorld().getName().equals(c1.getWorld().getName()))
-            if(l.getBlockX() > c2.getBlockX() && l.getBlockX() < c1.getBlockX())
-                if(l.getBlockZ() > c2.getBlockZ() && l.getBlockZ() < c1.getBlockZ())
-                    return true;
-        return false;
     }
 
     private static void saveToDb(String tag, String description, Player leader, Location home) {

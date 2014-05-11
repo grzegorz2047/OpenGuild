@@ -29,6 +29,7 @@ import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Messages;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
 import com.github.grzegorz2047.openguild.User;
+import com.github.grzegorz2047.openguild.module.ModuleManager;
 
 import java.util.List;
 import java.util.UUID;
@@ -38,10 +39,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
+
 public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
     private static Configuration configuration = new OpenConfiguration();
     private static Messages messages = new OpenMessages();
+    private static ModuleManager modules = new OpenModuleManager();
     private static OpenGuildPlugin openGuild;
     
     public OpenGuildBukkitPlugin() {
@@ -86,6 +90,11 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     @Override
     public Messages getMessages() {
         return messages;
+    }
+    
+    @Override
+    public ModuleManager getModules() {
+        return modules;
     }
     
     @Override

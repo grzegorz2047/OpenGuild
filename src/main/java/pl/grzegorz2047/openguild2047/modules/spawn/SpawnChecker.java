@@ -22,47 +22,23 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild;
-
-import com.github.grzegorz2047.openguild.module.ModuleManager;
-
-import java.util.List;
-import java.util.UUID;
+package pl.grzegorz2047.openguild2047.modules.spawn;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-public interface OpenGuildPlugin {
+import pl.grzegorz2047.openguild2047.GenConf;
 
-    Plugin getBukkit();
-
-    Configuration getConfig();
-
-    Guild getGuild(Location location);
-
-    Guild getGuild(Player player);
-
-    Guild getGuild(String name);
-
-    Guild getGuild(User user);
-
-    List<Guild> getGuilds();
-
-    Messages getMessages();
-
-    ModuleManager getModules();
-
-    OpenGuildPlugin getPlugin();
-
-    User getUser(String name);
-
-    User getUser(Player player);
-
-    User getUser(UUID uuid);
-
-    List<User> getUsers();
-
-    Guild[] sortGuilds();
-
+public class SpawnChecker {
+    
+    public static boolean isSpawn(Location location) {
+        Location l = location;
+        Location c1 = GenConf.spawnMax;
+        Location c2 = GenConf.spawnMin;
+        if(l.getWorld().getName().equals(c1.getWorld().getName()))
+            if(l.getBlockX() > c2.getBlockX() && l.getBlockX() < c1.getBlockX())
+                if(l.getBlockZ() > c2.getBlockZ() && l.getBlockZ() < c1.getBlockZ())
+                    return true;
+        return false;
+    }
+    
 }

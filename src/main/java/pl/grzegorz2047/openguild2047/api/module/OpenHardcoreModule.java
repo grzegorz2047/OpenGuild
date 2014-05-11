@@ -22,47 +22,35 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild;
+package pl.grzegorz2047.openguild2047.api.module;
 
-import com.github.grzegorz2047.openguild.module.ModuleManager;
+import com.github.grzegorz2047.openguild.module.HardcoreModule;
 
-import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 
-public interface OpenGuildPlugin {
-
-    Plugin getBukkit();
-
-    Configuration getConfig();
-
-    Guild getGuild(Location location);
-
-    Guild getGuild(Player player);
-
-    Guild getGuild(String name);
-
-    Guild getGuild(User user);
-
-    List<Guild> getGuilds();
-
-    Messages getMessages();
-
-    ModuleManager getModules();
-
-    OpenGuildPlugin getPlugin();
-
-    User getUser(String name);
-
-    User getUser(Player player);
-
-    User getUser(UUID uuid);
-
-    List<User> getUsers();
-
-    Guild[] sortGuilds();
-
+public class OpenHardcoreModule implements HardcoreModule {
+    
+    @Override
+    public long getBan(UUID uuid) {
+        return SQLHandler.getBan(uuid);
+    }
+    
+    @Override
+    public boolean isEnabled() {
+        return GenConf.hcBans;
+    }
+    
+    @Override
+    public void setBan(UUID uuid, long to) {
+        SQLHandler.update(uuid, SQLHandler.PType.BAN_TIME, to);
+    }
+    
+    @Override
+    public void setEnabled(boolean enabled) {
+        GenConf.hcBans = enabled;
+    }
+    
 }
