@@ -46,7 +46,7 @@ public class ListArg {
         int i = 0;
         sb.append(MsgManager.get("guildlist"));
         sb.append("\n");
-        sb.append("Number of guilds/ilosc gildii: ").append(Data.getInstance().ClansTag.size());
+        sb.append(MsgManager.get("numguilds")).append(Data.getInstance().ClansTag.size());
         sb.append("\n");
         for(String tag :Data.getInstance().ClansTag) {
             //if(i % 5 != 0) {

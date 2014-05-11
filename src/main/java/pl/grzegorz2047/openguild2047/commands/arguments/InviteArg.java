@@ -71,7 +71,7 @@ public class InviteArg {
                         if(op.isOnline()){
                             ((Player)op).sendMessage(MsgManager.askforaccept+" "+sg.getTag()); 
                         }
-                        p.sendMessage(MsgManager.invitesendsuccess+" "+op.getName());
+                        p.sendMessage(MsgManager.invitesendsuccess + op.getName());
                         return true;
                     }
                 } else {
