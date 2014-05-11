@@ -53,16 +53,17 @@ public class MembersArg {
             List<UUID> members = Data.getInstance().getPlayersGuild(p.getUniqueId()).getMembers();
             StringBuilder sb = new StringBuilder();
             if(members.size() != 1) {
+                int size = 1;
                 for(int i = 0; i < members.size(); i++) {
+                    size++;
                     SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
                     UUID member = sg.getMembers().get(i);
                     OfflinePlayer nick = Bukkit.getOfflinePlayer(member);
+                    if(sg.getLeader().equals(member)) {
+                        sb.append(ChatColor.GOLD);
+                        sb.append("(Lider) ");
+                    }
                     if(i % 5 != 0) {
-                        if(sg.getLeader().equals(member)) {
-                            sb.append(ChatColor.GOLD);
-                            sb.append("(Lider) ");
-                        }
-                        
                         if(nick != null && nick.isOnline()) {
                             sb.append(ChatColor.GREEN);
                         } else {
@@ -75,7 +76,7 @@ public class MembersArg {
                         sb.append("\n");
                     }
                 }
-                sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.get("titlemems") + ChatColor.DARK_GRAY + " ----------------- ");
+                sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.get("titlemems") + ChatColor.DARK_GRAY + " (" + size + ") ----------------- ");
                 p.sendMessage(sb.toString());
                 return true;
             } else {
@@ -84,8 +85,8 @@ public class MembersArg {
             }
         } else {
             p.sendMessage(MsgManager.notinguild);
+            return true;
         }
-        return true;
     }
 
 }
