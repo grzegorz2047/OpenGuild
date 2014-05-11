@@ -90,9 +90,14 @@ public class OpenGuild extends JavaPlugin {
             // Failed to submit the stats :-(
         }
         try{
-            Bukkit.getOfflinePlayer("test").getUniqueId();
+            if(Bukkit.getOfflinePlayer("Notch").getUniqueId() ==null){
+                Guilds.getLogger().severe("Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5!");
+                getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
+                getServer().getConsoleSender().sendMessage("§4Get newer wersion of bukkit/spigot");
+                getServer().getPluginManager().disablePlugin(this);
+            }
         }
-        catch(NoSuchMethodError ex){
+        catch(Exception ex){
             Guilds.getLogger().severe("Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5!");
             getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
             getServer().getPluginManager().disablePlugin(this);
