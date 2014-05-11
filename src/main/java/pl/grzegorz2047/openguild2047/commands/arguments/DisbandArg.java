@@ -26,6 +26,9 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 
 import java.util.UUID;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -56,11 +59,15 @@ public class DisbandArg {
             String tag = sg.getTag();
             if(sg.getLeader().equals(p.getUniqueId())) {
                 saveDb(Guilds.getGuild(p));
+                sg.getHome().getBlock().setType(Material.DIRT);
+                Location loc = sg.getHome();
+                Block b = sg.getHome().getWorld().getBlockAt(loc.getBlockX(),loc.getBlockY()+1, loc.getBlockZ());
+                b.setType(Material.AIR);
                 for(UUID player : sg.getMembers()) {
                     TagManager.removeTag(player);
                     Data.getInstance().guildsplayers.remove(player);
                 }
-
+                
                 Data.getInstance().guildsplayers.remove(p.getUniqueId());
                 Data.getInstance().ClansTag.remove(tag);
                 Data.getInstance().guilds.remove(tag);
