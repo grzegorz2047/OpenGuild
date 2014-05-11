@@ -49,21 +49,32 @@ public class ItemsArg {
             String nameLower = mat.name().replace("_", " ").toLowerCase();
             String name = " " + nameLower.substring(0, 1).toUpperCase() + nameLower.substring(1);
             
-            if(player.getInventory().contains(new ItemStack(mat, amount))) {
+            if(player.getInventory().contains(mat, amount)) {
                 builder.append(ChatColor.GREEN);
-                builder.append(amount);
-                builder.append(name);
             } else {
                 builder.append(ChatColor.RED);
-                builder.append(amount);
-                builder.append(name);
             }
-            builder.append(ChatColor.BLUE);
+            builder.append(getAmount(player, mat));
+            builder.append("/");
+            builder.append(amount);
+            builder.append(name);
+            builder.append(ChatColor.DARK_GRAY);
             builder.append(", ");
         }
         sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + "Items" + ChatColor.DARK_GRAY + " ----------------- ");
         sender.sendMessage(builder.toString());
         return true;
+    }
+    
+    private static int getAmount(Player player, Material material) {
+        int amount = 0;
+        ItemStack[] stack = player.getInventory().getContents();
+        for(int i = 0; i < stack.length; i++) {
+            if(stack[i].getType() == material) {
+                amount = amount + stack[i].getAmount();
+            }
+        }
+        return amount;
     }
     
 }
