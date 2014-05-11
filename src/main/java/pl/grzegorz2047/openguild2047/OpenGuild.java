@@ -113,7 +113,7 @@ public class OpenGuild extends JavaPlugin {
         catch (SQLException ex) {
             
         }
-
+        
         int logFiles = 0;
         for(File file : logDir.listFiles()) {
             String format = file.getName().substring(file.getName().length() - 4, file.getName().length());

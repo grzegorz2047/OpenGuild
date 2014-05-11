@@ -107,8 +107,11 @@ public class SQLHandler {
     }
 
     void loadDatabase() {
-        Data.getInstance().guildsplayers= null;
+        Data.getInstance().guildsplayers = null;
         Data.getInstance().guilds = null;
+        Data.getInstance().ClansTag = null;
+        Data.getInstance().cuboids = null;
+        
         Data.getInstance().guildsplayers = SQLHandler.getAllPlayers();
         Data.getInstance().guilds = SQLHandler.getAllGuildswithCuboids();
     }
