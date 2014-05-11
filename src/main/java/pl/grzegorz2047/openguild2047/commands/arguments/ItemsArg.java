@@ -69,9 +69,12 @@ public class ItemsArg {
     private static int getAmount(Player player, Material material) {
         int amount = 0;
         ItemStack[] stack = player.getInventory().getContents();
-        for(int i = 0; i < stack.length; i++) {
-            if(stack[i].getType() == material) {
-                amount = amount + stack[i].getAmount();
+        for (ItemStack stack1 : stack) {
+            if(stack1 == null){
+                continue;
+            }
+            if (stack1.getType() == material) {
+                amount = amount + stack1.getAmount();
             }
         }
         return amount;

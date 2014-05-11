@@ -71,7 +71,7 @@ public class CuboidStuff {
                         return;
                     }
                 }else{
-                    CuboidStuff.playersenteredcuboid.put(player.getName(), tag);
+                    CuboidStuff.playersenteredcuboid.put(player.getName(), checked);
                 }
                 SimpleGuild sg = Data.getInstance().guilds.get(checked);
                 for(UUID memeber :sg.getMembers()){
@@ -81,6 +81,7 @@ public class CuboidStuff {
                     
                     }
                 }
+                player.sendMessage("Wkroczyles na teren gildii "+checked);
             }else{
                 CuboidStuff.playersenteredcuboid.remove(player.getName());
             }
@@ -95,14 +96,15 @@ public class CuboidStuff {
                         return;
                     }
                 }else{
-                    CuboidStuff.playersenteredcuboid.put(player.getName(), tag);
+                    CuboidStuff.playersenteredcuboid.put(player.getName(), checked);
                 }
-                for(UUID memeber :sg.getMembers()){
+                for(UUID memeber : sg.getMembers()){
                     Player p = Bukkit.getPlayer(memeber);
                     if(p!=null){
                         p.sendMessage("Gracz "+player.getName()+" wkroczyl na teren twojej gildii!");
                     }
                 }
+                player.sendMessage("Wkroczyles na teren gildii "+checked);
             }else{
                 CuboidStuff.playersenteredcuboid.remove(player.getName());
             }
