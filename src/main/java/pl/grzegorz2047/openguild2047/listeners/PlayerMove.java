@@ -38,6 +38,7 @@ public class PlayerMove implements Listener {
 
     @EventHandler
     void onPlayerMove(PlayerMoveEvent e) {
+        CuboidStuff.notifyGuildWhenPlMoves(e.getPlayer());
         if(e.isCancelled() || GenConf.CANENTERAREA) {
             return;
         }
