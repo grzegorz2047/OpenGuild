@@ -61,7 +61,7 @@ public class ItemsArg {
             builder.append(ChatColor.DARK_GRAY);
             builder.append(", ");
         }
-        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + "Items" + ChatColor.DARK_GRAY + " ----------------- ");
+        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.get("titleitems") + ChatColor.DARK_GRAY + " ----------------- ");
         sender.sendMessage(builder.toString());
         return true;
     }

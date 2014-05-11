@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -51,17 +53,29 @@ public class MembersArg {
             List<UUID> members = Data.getInstance().getPlayersGuild(p.getUniqueId()).getMembers();
             StringBuilder sb = new StringBuilder();
             if(members.size() != 1) {
-                sb.append("Members/Czlonkowie:\n ");
                 for(int i = 0; i < members.size(); i++) {
                     SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
                     UUID member = sg.getMembers().get(i);
-                    String nick = Bukkit.getOfflinePlayer(member).getName(); // https://github.com/Xephi/Bukkit/commit/f6a3abaa35f4b9ff16427a82be8f818d212b3927
+                    OfflinePlayer nick = Bukkit.getOfflinePlayer(member);
                     if(i % 5 != 0) {
-                        sb.append(nick).append(", ");
+                        if(sg.getLeader().equals(member)) {
+                            sb.append(ChatColor.GOLD);
+                            sb.append("(Lider) ");
+                        }
+                        
+                        if(nick != null && nick.isOnline()) {
+                            sb.append(ChatColor.GREEN);
+                        } else {
+                            sb.append(ChatColor.DARK_GRAY);
+                        }
+                        sb.append(nick.getName());
+                        sb.append(ChatColor.DARK_GRAY);
+                        sb.append(", ");
                     } else {
                         sb.append("\n");
                     }
                 }
+                sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.get("titlemems") + ChatColor.DARK_GRAY + " ----------------- ");
                 p.sendMessage(sb.toString());
                 return true;
             } else {

@@ -23,6 +23,7 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -44,7 +45,7 @@ public class ListArg {
         Player p = (Player) sender;
         StringBuilder sb = new StringBuilder();
         int i = 0;
-        sb.append(MsgManager.get("guildlist"));
+        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.get("titleguildlist") + ChatColor.DARK_GRAY + " ----------------- ");
         sb.append("\n");
         sb.append(MsgManager.get("numguilds")).append(Data.getInstance().ClansTag.size());
         sb.append("\n");

@@ -23,8 +23,6 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -69,7 +67,7 @@ public class InviteArg {
                     }else{
                         sg.getInvitedPlayers().add(op.getUniqueId());
                         if(op.isOnline()){
-                            ((Player)op).sendMessage(MsgManager.askforaccept+" "+sg.getTag()); 
+                            ((Player)op).sendMessage(MsgManager.askforaccept + sg.getTag()); 
                         }
                         p.sendMessage(MsgManager.invitesendsuccess + op.getName());
                         return true;
