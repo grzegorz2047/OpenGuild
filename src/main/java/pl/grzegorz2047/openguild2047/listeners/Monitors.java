@@ -7,9 +7,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.handlers.MySQLHandler;
 import pl.grzegorz2047.openguild2047.tagmanager.TagManager;
 
@@ -41,5 +43,9 @@ public class Monitors implements Listener {
             TagManager.setTag(e.getPlayer().getUniqueId());
         }
     }
-
+    @EventHandler
+    public void onPlayerJoin(PlayerQuitEvent e) {
+        CuboidStuff.playersenteredcuboid.remove(e.getPlayer().getName());
+    }
+//Przy wychodzeniu to trzeba to CuboidStuff.playersenteredcuboid.put(player.getName(), tag);
 }

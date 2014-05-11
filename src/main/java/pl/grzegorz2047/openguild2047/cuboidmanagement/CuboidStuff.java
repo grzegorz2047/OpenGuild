@@ -23,14 +23,18 @@
  */
 package pl.grzegorz2047.openguild2047.cuboidmanagement;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
 
 /**
  *
@@ -38,6 +42,8 @@ import pl.grzegorz2047.openguild2047.SimpleCuboid;
  */
 public class CuboidStuff {
 
+    public static HashMap<String, String> playersenteredcuboid = new HashMap<String, String>();
+    
     public static boolean canMove(Player player, Location from, Location to) {
         //To tylko jest proba, moze sie uda xd
         Iterator<Map.Entry<String, SimpleCuboid>> it = Data.getInstance().cuboids.entrySet().iterator();
@@ -52,17 +58,81 @@ public class CuboidStuff {
             return !CuboidStuff.checkIfInAnyCuboid(it, to);
         }
     }
+    public static void notifyGuildWhenPlMoves(Player player){
+        Iterator<Map.Entry<String, SimpleCuboid>> it = Data.getInstance().cuboids.entrySet().iterator();
+        if(Data.getInstance().isPlayerInGuild(player.getUniqueId())){
+            String tag = Data.getInstance().getPlayersGuild(player.getUniqueId()).getTag();
+            String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
+            if(checked != null){
+                
+                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())){
+                    String tagsaved = CuboidStuff.playersenteredcuboid.get(player.getName());
+                    if(tagsaved.equals(checked)){
+                        return;
+                    }
+                }else{
+                    CuboidStuff.playersenteredcuboid.put(player.getName(), checked);
+                }
+                SimpleGuild sg = Data.getInstance().guilds.get(checked);
+                for(UUID memeber :sg.getMembers()){
+                    Player p = Bukkit.getPlayer(memeber);
+                    if(p!=null){
+                        p.sendMessage("Gracz "+player.getName()+" z gildii "+tag+" wkroczyl na teren twojej gildii!");
+                    
+                    }
+                }
+                player.sendMessage("Wkroczyles na teren gildii "+checked);
+            }else{
+                CuboidStuff.playersenteredcuboid.remove(player.getName());
+            }
+        }else{
+            String tag = "";
+            String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
+            if(checked != null){
+                SimpleGuild sg = Data.getInstance().guilds.get(checked);
+                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())){
+                    String tagsaved = CuboidStuff.playersenteredcuboid.get(player.getName());
+                    if(tagsaved.equals(checked)){
+                        return;
+                    }
+                }else{
+                    CuboidStuff.playersenteredcuboid.put(player.getName(), checked);
+                }
+                for(UUID memeber : sg.getMembers()){
+                    Player p = Bukkit.getPlayer(memeber);
+                    if(p!=null){
+                        p.sendMessage("Gracz "+player.getName()+" wkroczyl na teren twojej gildii!");
+                    }
+                }
+                player.sendMessage("Wkroczyles na teren gildii "+checked);
+            }else{
+                CuboidStuff.playersenteredcuboid.remove(player.getName());
+            }
+        }
+
+        
+    }
 
     public static boolean checkIfInAnyCuboid(Iterator<Map.Entry<String, SimpleCuboid>> it, Location to) {
         while(it.hasNext()) {
             if(it.next().getValue().isinCuboid(to)) {
                 return true;
-
             }
         }
         return false;
     }
-
+    public static String checkIfInOtherCuboid(Iterator<Map.Entry<String, SimpleCuboid>> it, Player p, String tag) {
+        while(it.hasNext()) {
+            Map.Entry<String, SimpleCuboid> next = it.next();
+            if(next.getKey().equals(tag)){
+                return null;
+            }
+            if(next.getValue().isinCuboid(p.getLocation())) {
+                return next.getValue().getOwner();
+            }
+        }
+        return null;
+    }
     private static boolean checkCuboidInAnyCuboid(Iterator<Map.Entry<String, SimpleCuboid>> it, Location loc) {
         while(it.hasNext()) {
             SimpleCuboid c = it.next().getValue();
