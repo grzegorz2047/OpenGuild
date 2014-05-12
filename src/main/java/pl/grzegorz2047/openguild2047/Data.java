@@ -77,10 +77,7 @@ public class Data {
     }
 
     public boolean guildExists(String tag){
-        if(Data.getInstance().guilds.containsKey(tag.toLowerCase())){
-            return true;
-        }
-        return false;
+        return Data.getInstance().guilds.containsKey(tag.toLowerCase());
     }
     public String getGuildChatTag(UUID uuid){
         SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(uuid);

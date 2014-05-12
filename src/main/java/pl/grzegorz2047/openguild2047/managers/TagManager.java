@@ -115,7 +115,7 @@ public class TagManager {
         if(TagManager.isInitialised()){
             if(Data.getInstance().isPlayerInGuild(player)){
                 SimpleGuild g =Data.getInstance().getPlayersGuild(player);
-                Team t = sc.getTeam(g.getTag());
+                Team t = sc.getTeam(g.getTag().toUpperCase());
                 if(t == null){
                     updateBoard();
                     return true;
