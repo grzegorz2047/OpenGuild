@@ -42,7 +42,7 @@ public class SimplePlayerGuild implements PlayerGuild {
 
     public SimplePlayerGuild(UUID playername, String tag, boolean leader) {
         this.playername = playername;
-        this.clantag = tag.toUpperCase();
+        this.clantag = tag;
         this.leader = leader;
     }
 
