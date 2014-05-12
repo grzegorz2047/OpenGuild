@@ -59,7 +59,7 @@ public class Guilds {
     }
 
     @Nullable public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
-        Guild guild = Data.getInstance().guilds.get(tag);
+        Guild guild = Data.getInstance().guilds.get(tag.toLowerCase());
         return guild;
     }
 

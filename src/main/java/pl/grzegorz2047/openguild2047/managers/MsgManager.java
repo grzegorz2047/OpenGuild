@@ -87,7 +87,8 @@ public class MsgManager {
     public static String playernotinthisguild = get("playernotinthisguild", " Gracz nie jest w twojej gildii");
     public static String playerkicked = get("playerkicked", " Zostales wyrzucony z gildii!");
     public static String playerkicksuccess = get("playerkicksuccess", " Gracz zostal pomyslnie wyrzucony z gildii!");
-
+    public static String addedAllyGuild = get("addedAllyGuild", " Gildia {Guild} zostala dodana do listy sojusznikow!");
+    
     public static String get(String path) {
         return GenConf.prefix + getIgnorePref(path);
     }
