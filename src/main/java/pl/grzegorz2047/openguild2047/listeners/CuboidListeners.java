@@ -46,7 +46,7 @@ public class CuboidListeners implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        if(e.getPlayer().hasPermission("openguild.cuboid.bypassbreak")){
+        if(e.getPlayer().hasPermission("openguild.cuboid.bypassbreak")) {
             return;
         }
         if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
@@ -64,7 +64,7 @@ public class CuboidListeners implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-        if(e.getPlayer().hasPermission("openguild.cuboid.bypassplace")){
+        if(e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
             return;
         }
         if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
@@ -75,11 +75,20 @@ public class CuboidListeners implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(e.getClickedBlock() != null) {
-            if(GenConf.EXTRA_PROTECTION) {
-                if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")){
+            if(GenConf.EXTRA_PROTECTION && !isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())) {
+                if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
+                    Location block = e.getPlayer().getLocation();
+                    Guilds.getLogger().info("Player " + e.getPlayer().getName() + " (" + e.getPlayer().getUniqueId() +
+                            ") interacted in guilds cuboid at X:" + block.getBlockX() + ", Y:" + block.getBlockY() +
+                            ", Z:" + block.getBlockZ() + " in world " + block.getWorld().getName() + " (" +
+                            block.getBlock().getType().name() + ")");
+                    e.getPlayer().sendMessage(MsgManager.get("interinguild")
+                            .replace("{WORLD}", block.getWorld().getName())
+                            .replace("{X}", String.valueOf(block.getBlockX()))
+                            .replace("{Y}", String.valueOf(block.getBlockY()))
+                            .replace("{Z}", String.valueOf(block.getBlockZ())));
                     return;
-                }
-                if(!isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())) {
+                } else {
                     e.setCancelled(true);
                 }
             }

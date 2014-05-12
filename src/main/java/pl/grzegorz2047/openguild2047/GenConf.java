@@ -75,6 +75,7 @@ public class GenConf {
     public static boolean cubNotify;
     public static boolean cubNotifyMem;
     public static boolean cubNotifySound;
+    public static boolean cubNotifyPerm;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.get().getConfig();
@@ -107,12 +108,13 @@ public class GenConf {
         spawnMax = new Location(Bukkit.getWorld((String) listMax.get(0)), (Integer )listMax.get(1), 0, (Integer) listMax.get(2));
         spawnMin = new Location(Bukkit.getWorld((String) listMin.get(0)), (Integer )listMin.get(1), 0, (Integer) listMin.get(2));
 
-        spawnMessage = config.getString("spawn.message").replace("&", "§");
-        blockGuildCreating = config.getBoolean("spawn.block-guild-creating");
-        playerMoveEvent = config.getBoolean("player-move-event");
-        cubNotify = config.getBoolean("cuboid.notify-enter");
-        cubNotifyMem = config.getBoolean("cuboid.notify-enter-members");
-        cubNotifySound = config.getBoolean("cuboid.notify-enter-sound");
+        spawnMessage = config.getString("spawn.message", "&4Message 'spawn.message' in config.yml file was not found! This is an error! Please notify an operator about it!").replace("&", "§");
+        blockGuildCreating = config.getBoolean("spawn.block-guild-creating", true);
+        playerMoveEvent = config.getBoolean("player-move-event", false);
+        cubNotify = config.getBoolean("cuboid.notify-enter", true);
+        cubNotifyMem = config.getBoolean("cuboid.notify-enter-members", false);
+        cubNotifySound = config.getBoolean("cuboid.notify-enter-sound", false);
+        cubNotifyPerm = config.getBoolean("cuboid.notify-permission", false);
     }
 
     private static void loadBans() {
