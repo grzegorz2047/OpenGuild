@@ -52,13 +52,17 @@ public class KickArg {
             leader.sendMessage(MsgManager.playerneverplayed);
             return true;
         }
-        if(!Data.getInstance().isPlayerInGuild(leader.getUniqueId())){
+        if(!Data.getInstance().isPlayerInGuild(leader.getUniqueId())) {
             leader.sendMessage(MsgManager.notinguild);
             return true;
         }
         SimpleGuild sgl = Data.getInstance().getPlayersGuild(leader.getUniqueId());
-        if(!sgl.getLeader().equals(leader.getUniqueId())){
+        if(!sgl.getLeader().equals(leader.getUniqueId())) {
             leader.sendMessage(MsgManager.playernotleader);
+            return true;
+        }
+        if(sgl.getLeader().equals(op.getUniqueId())) {
+            leader.sendMessage(MsgManager.get("kickleader"));
             return true;
         }
         if(Data.getInstance().isPlayerInGuild(op.getUniqueId())) {
