@@ -1,0 +1,7 @@
+openguild.cuboid.bypassbreak
+openguild.cuboid.bypassplace
+openguild.cuboid.bypassinteract
+openguild.cuboid.bypassmove
+
+openguild.hardcore.bypass
+openguild.hardcore.unban
