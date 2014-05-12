@@ -50,7 +50,7 @@ public class InviteArg {
                 //TODO: System zapraszania do gildii
                 String nick = args[1];
                 OfflinePlayer op = Bukkit.getOfflinePlayer(nick);
-                if(!op.hasPlayedBefore() || !op.isOnline()){
+                if(!op.hasPlayedBefore() && !op.isOnline()){
                     p.sendMessage(MsgManager.playerneverplayed);
                     return true;
                 }
