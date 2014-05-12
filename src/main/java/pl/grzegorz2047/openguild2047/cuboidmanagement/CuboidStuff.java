@@ -110,9 +110,7 @@ public class CuboidStuff {
                     Player p = Bukkit.getPlayer(memeber);
                     if(p != null) {
                         if(GenConf.cubNotifyMem) {
-                            p.sendMessage(MsgManager.get("entercubmems")
-                                    .replace("{PLAYER}", player.getName())
-                                    .replace("{GUILD}", tag));
+                            p.sendMessage(MsgManager.get("entercubmemsnoguild").replace("{PLAYER}", player.getName()));
                         }
                         if(GenConf.cubNotifySound) {
                             p.playSound(p.getLocation(), GenConf.cubNotifySoundType, 10, 5);
