@@ -20,6 +20,7 @@ cuboid:
   notify-enter: true
   notify-enter-members: false
   notify-enter-sound: false
+  notify-enter-sound-type: ENDERMAN_DEATH
   extra-protection: true
   breaking-blocks:
     item-types: [DIAMOND_PICKAXE]

@@ -29,10 +29,14 @@ import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.api.Guilds;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  *
@@ -58,52 +62,65 @@ public class CuboidStuff {
     }
     public static void notifyGuildWhenPlMoves(Player player){
         Iterator<Map.Entry<String, SimpleCuboid>> it = Data.getInstance().cuboids.entrySet().iterator();
-        if(Data.getInstance().isPlayerInGuild(player.getUniqueId())){
+        if(Data.getInstance().isPlayerInGuild(player.getUniqueId())) {
             String tag = Data.getInstance().getPlayersGuild(player.getUniqueId()).getTag();
             String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
-            if(checked != null){
+            if(checked != null) {
                 
                 if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())){
                     String tagsaved = CuboidStuff.playersenteredcuboid.get(player.getName());
-                    if(tagsaved.equals(checked)){
+                    if(tagsaved.equals(checked)) {
                         return;
                     }
-                }else{
+                } else {
                     CuboidStuff.playersenteredcuboid.put(player.getName(), checked);
                 }
                 SimpleGuild sg = Data.getInstance().guilds.get(checked);
                 for(UUID memeber :sg.getMembers()){
                     Player p = Bukkit.getPlayer(memeber);
-                    if(p!=null){
-                        p.sendMessage("Gracz "+player.getName()+" z gildii "+tag+" wkroczyl na teren twojej gildii!");
-                    
+                    if(p != null) {
+                        if(GenConf.cubNotifyMem) {
+                            p.sendMessage(MsgManager.get("entercubmems")
+                                    .replace("{PLAYER}", player.getName())
+                                    .replace("{GUILD}", tag));
+                        }
+                        if(GenConf.cubNotifySound) {
+                            p.playSound(p.getLocation(), GenConf.cubNotifySoundType, 10, 5);
+                        }
                     }
                 }
-                player.sendMessage("Wkroczyles na teren gildii "+checked);
-            }else{
+                player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", checked));
+            } else {
                 CuboidStuff.playersenteredcuboid.remove(player.getName());
             }
-        }else{
+        } else {
             String tag = "";
             String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
-            if(checked != null){
+            if(checked != null) {
                 SimpleGuild sg = Data.getInstance().guilds.get(checked);
-                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())){
+                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
                     String tagsaved = CuboidStuff.playersenteredcuboid.get(player.getName());
-                    if(tagsaved.equals(checked)){
+                    if(tagsaved.equals(checked)) {
                         return;
                     }
-                }else{
+                } else {
                     CuboidStuff.playersenteredcuboid.put(player.getName(), checked);
                 }
-                for(UUID memeber : sg.getMembers()){
+                for(UUID memeber : sg.getMembers()) {
                     Player p = Bukkit.getPlayer(memeber);
-                    if(p!=null){
-                        p.sendMessage("Gracz "+player.getName()+" wkroczyl na teren twojej gildii!");
+                    if(p != null) {
+                        if(GenConf.cubNotifyMem) {
+                            p.sendMessage(MsgManager.get("entercubmems")
+                                    .replace("{PLAYER}", player.getName())
+                                    .replace("{GUILD}", tag));
+                        }
+                        if(GenConf.cubNotifySound) {
+                            p.playSound(p.getLocation(), GenConf.cubNotifySoundType, 10, 5);
+                        }
                     }
                 }
-                player.sendMessage("Wkroczyles na teren gildii "+checked);
-            }else{
+                player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", checked));
+            } else {
                 CuboidStuff.playersenteredcuboid.remove(player.getName());
             }
         }

@@ -26,6 +26,7 @@ package pl.grzegorz2047.openguild2047;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 
@@ -75,6 +76,7 @@ public class GenConf {
     public static boolean cubNotify;
     public static boolean cubNotifyMem;
     public static boolean cubNotifySound;
+    public static Sound cubNotifySoundType;
     public static boolean cubNotifyPerm;
 
     protected static void loadConfiguration() {
@@ -114,6 +116,12 @@ public class GenConf {
         cubNotify = config.getBoolean("cuboid.notify-enter", true);
         cubNotifyMem = config.getBoolean("cuboid.notify-enter-members", false);
         cubNotifySound = config.getBoolean("cuboid.notify-enter-sound", false);
+        try {
+            cubNotifySoundType = Sound.valueOf(config.getString("cuboid.notify-enter-sound-type", "ENDERMAN_DEATH"));
+        } catch(IllegalArgumentException ex) {
+            cubNotifySoundType = Sound.ENDERDRAGON_DEATH;
+            Guilds.getLogger().warning("Sound type " + config.getString("cuboid.notify-enter-sound-type") + " is incorrect! Please visit http://jd.bukkit.org/rb/apidocs/org/bukkit/Sound.html for help.");
+        }
         cubNotifyPerm = config.getBoolean("cuboid.notify-permission", false);
     }
 
