@@ -79,7 +79,7 @@ public class AcceptArg {
                             return true;
                         }
                     }else{
-                        p.sendMessage(acceptedguild);
+                        p.sendMessage(MsgManager.guilddoesntexists);
                         return true;
                     }
                 } else {
