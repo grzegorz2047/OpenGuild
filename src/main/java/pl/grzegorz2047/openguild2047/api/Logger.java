@@ -24,7 +24,6 @@
 package pl.grzegorz2047.openguild2047.api;
 
 import java.util.logging.Level;
-
 import javax.annotation.Nonnull;
 
 public interface Logger {

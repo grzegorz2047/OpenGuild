@@ -25,7 +25,6 @@ package pl.grzegorz2047.openguild2047.listeners;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,7 +34,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.api.Guilds;

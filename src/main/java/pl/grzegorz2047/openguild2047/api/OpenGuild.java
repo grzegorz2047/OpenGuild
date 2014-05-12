@@ -27,7 +27,6 @@ package pl.grzegorz2047.openguild2047.api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import org.bukkit.Location;
 
 public class OpenGuild implements com.github.grzegorz2047.openguild.Guild {
@@ -90,8 +89,9 @@ public class OpenGuild implements com.github.grzegorz2047.openguild.Guild {
     
     @Override
     public double getPoints() {
-        if(points == 0)
+        if(points == 0) {
             loadPoints();
+        }
         return points;
     }
     

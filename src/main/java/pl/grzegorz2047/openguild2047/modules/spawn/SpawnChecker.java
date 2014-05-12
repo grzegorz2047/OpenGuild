@@ -25,7 +25,6 @@
 package pl.grzegorz2047.openguild2047.modules.spawn;
 
 import org.bukkit.Location;
-
 import pl.grzegorz2047.openguild2047.GenConf;
 
 public class SpawnChecker {
@@ -34,10 +33,13 @@ public class SpawnChecker {
         Location l = location;
         Location c1 = GenConf.spawnMax;
         Location c2 = GenConf.spawnMin;
-        if(l.getWorld().getName().equals(c1.getWorld().getName()))
-            if(l.getBlockX() > c2.getBlockX() && l.getBlockX() < c1.getBlockX())
-                if(l.getBlockZ() > c2.getBlockZ() && l.getBlockZ() < c1.getBlockZ())
+        if(l.getWorld().getName().equals(c1.getWorld().getName())) {
+            if(l.getBlockX() > c2.getBlockX() && l.getBlockX() < c1.getBlockX()) {
+                if(l.getBlockZ() > c2.getBlockZ() && l.getBlockZ() < c1.getBlockZ()) {
                     return true;
+                }
+            }
+        }
         return false;
     }
     

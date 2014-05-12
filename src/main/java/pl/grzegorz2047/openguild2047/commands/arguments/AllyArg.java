@@ -27,7 +27,6 @@ import java.util.UUID;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.Data;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**

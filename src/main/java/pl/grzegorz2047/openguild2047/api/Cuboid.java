@@ -24,7 +24,6 @@
 package pl.grzegorz2047.openguild2047.api;
 
 import javax.annotation.Nonnull;
-
 import org.bukkit.Location;
 
 /**

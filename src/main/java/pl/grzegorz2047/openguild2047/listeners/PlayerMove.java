@@ -26,7 +26,6 @@ package pl.grzegorz2047.openguild2047.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 

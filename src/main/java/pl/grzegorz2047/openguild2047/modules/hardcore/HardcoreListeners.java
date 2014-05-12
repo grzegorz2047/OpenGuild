@@ -26,14 +26,11 @@ package pl.grzegorz2047.openguild2047.modules.hardcore;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
-import org.bukkit.event.player.PlayerRespawnEvent;
-
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 
@@ -41,8 +38,12 @@ public class HardcoreListeners implements Listener {
 
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent e) {
-        if(!GenConf.hcBans) return;
-        if(e.getPlayer().hasPermission("openguild.hardcore.bypass")) return;
+        if(!GenConf.hcBans) {
+            return;
+        }
+        if(e.getPlayer().hasPermission("openguild.hardcore.bypass")) {
+            return;
+        }
         
         long ban = SQLHandler.getBan(e.getPlayer().getUniqueId());
         if( System.currentTimeMillis() < ban ) {
@@ -54,8 +55,12 @@ public class HardcoreListeners implements Listener {
 
     @EventHandler
     public void onPlayerDead(PlayerDeathEvent e) {
-        if(!GenConf.hcBans) return;
-        if(e.getEntity().hasPermission("openguild.hardcore.bypass")) return;
+        if(!GenConf.hcBans) {
+            return;
+        }
+        if(e.getEntity().hasPermission("openguild.hardcore.bypass")) {
+            return;
+        }
         
         long ban = System.currentTimeMillis() + GenConf.hcBantime;
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");

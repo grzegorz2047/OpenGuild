@@ -9,8 +9,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import pl.grzegorz2047.openguild2047.Data;
-import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.TagManager;

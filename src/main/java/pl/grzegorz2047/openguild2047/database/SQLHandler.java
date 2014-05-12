@@ -33,10 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;

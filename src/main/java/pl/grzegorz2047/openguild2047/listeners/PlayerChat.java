@@ -29,7 +29,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 
 /**
  *

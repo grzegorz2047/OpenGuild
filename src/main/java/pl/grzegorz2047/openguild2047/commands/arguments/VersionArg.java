@@ -25,7 +25,6 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-
 import pl.grzegorz2047.openguild2047.OpenGuild;
 
 public class VersionArg {

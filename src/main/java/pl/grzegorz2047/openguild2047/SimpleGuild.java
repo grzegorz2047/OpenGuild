@@ -27,9 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
-
 import org.bukkit.Location;
-
 import pl.grzegorz2047.openguild2047.api.Guild;
 
 public class SimpleGuild implements Guild {

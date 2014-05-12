@@ -25,7 +25,6 @@
 package com.github.grzegorz2047.openguild.event;
 
 import com.github.grzegorz2047.openguild.OpenGuild;
-
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

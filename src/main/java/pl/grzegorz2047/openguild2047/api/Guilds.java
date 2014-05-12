@@ -30,9 +30,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.Bukkit;
-
 import org.bukkit.entity.Player;
-
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
@@ -77,20 +75,20 @@ public class Guilds {
         if(GenConf.SNOOPER) {
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
             StringBuilder builder = new StringBuilder();
-            builder.append("Generated " + format.format(new Date()));
-            builder.append("The following error occurred: " + error);
+            builder.append("Generated ").append(format.format(new Date()));
+            builder.append("The following error occurred: ").append(error);
             builder.append("-------------------------");
             builder.append("Enabled plugins: ");
             builder.append(Bukkit.getPluginManager().getPlugins().toString());
             builder.append("-------------------------");
-            builder.append("Plugin version == " + OpenGuild.get().getDescription().getVersion());
-            builder.append("Engine (Bukkit) version == " + Bukkit.getBukkitVersion() + " (" + Bukkit.getVersion() + ")");
-            builder.append("System.getProperty(\"os.name\") == " + System.getProperty("os.name"));
-            builder.append("System.getProperty(\"os.version\") == " + System.getProperty("os.version"));
-            builder.append("System.getProperty(\"os.arch\") == " + System.getProperty("os.arch"));
-            builder.append("System.getProperty(\"java.version\") == " + System.getProperty("java.version"));
-            builder.append("System.getProperty(\"java.vendor\") == " + System.getProperty("java.vendor"));
-            builder.append("System.getProperty(\"sun.arch.data.model\") == " + System.getProperty("sun.arch.data.model"));
+            builder.append("Plugin version == ").append(OpenGuild.get().getDescription().getVersion());
+            builder.append("Engine (Bukkit) version == ").append(Bukkit.getBukkitVersion()).append(" (").append(Bukkit.getVersion()).append(")");
+            builder.append("System.getProperty(\"os.name\") == ").append(System.getProperty("os.name"));
+            builder.append("System.getProperty(\"os.version\") == ").append(System.getProperty("os.version"));
+            builder.append("System.getProperty(\"os.arch\") == ").append(System.getProperty("os.arch"));
+            builder.append("System.getProperty(\"java.version\") == ").append(System.getProperty("java.version"));
+            builder.append("System.getProperty(\"java.vendor\") == ").append(System.getProperty("java.vendor"));
+            builder.append("System.getProperty(\"sun.arch.data.model\") == ").append(System.getProperty("sun.arch.data.model"));
             builder.append("-------------------------");
             PastebinWriter.paste(builder.toString(), new PastebinWriter.Callback() {
 

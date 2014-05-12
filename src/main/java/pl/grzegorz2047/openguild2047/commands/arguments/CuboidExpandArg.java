@@ -24,7 +24,6 @@
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import com.github.grzegorz2047.openguild.event.MessageBroadcastEvent;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 

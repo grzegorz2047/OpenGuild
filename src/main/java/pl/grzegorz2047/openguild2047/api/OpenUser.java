@@ -26,9 +26,7 @@ package pl.grzegorz2047.openguild2047.api;
 
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.User;
-
 import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

@@ -26,7 +26,6 @@ package pl.grzegorz2047.openguild2047.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
 import pl.grzegorz2047.openguild2047.commands.arguments.AcceptArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.DescriptionArg;
@@ -40,9 +39,9 @@ import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ListArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.MembersArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
-import pl.grzegorz2047.openguild2047.modules.hardcore.UnbanCommandArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.modules.hardcore.UnbanCommandArg;
 
 public class GuildCommand implements CommandExecutor {
 

@@ -25,13 +25,11 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import java.util.List;
 import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;

@@ -28,14 +28,11 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import org.mcstats.Metrics;
-
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
@@ -43,11 +40,11 @@ import pl.grzegorz2047.openguild2047.commands.TeamCommand;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
-import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreListeners;
 import pl.grzegorz2047.openguild2047.listeners.Monitors;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
+import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreListeners;
 
 /**
  *
@@ -184,12 +181,15 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new CuboidListeners(), this);
         pm.registerEvents(new PlayerChat(), this);
         pm.registerEvents(new Monitors(), this);
-        if(!GenConf.teampvp)
+        if(!GenConf.teampvp) {
             pm.registerEvents(new EntityDamageByEntity(), this);
-        if(GenConf.hcBans)
+        }
+        if(GenConf.hcBans) {
             pm.registerEvents(new HardcoreListeners(), this);
-        if(GenConf.playerMoveEvent)
+        }
+        if(GenConf.playerMoveEvent) {
             pm.registerEvents(new PlayerMove(), this);
+        }
     }
 
     private void loadPlayers() {

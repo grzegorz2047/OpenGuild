@@ -25,7 +25,6 @@
 package pl.grzegorz2047.openguild2047.api;
 
 import com.github.grzegorz2047.openguild.Configuration;
-
 import java.util.HashMap;
 
 public class OpenConfiguration implements Configuration {
@@ -39,8 +38,9 @@ public class OpenConfiguration implements Configuration {
     
     @Override
     public Object getValue(String path, Object def) {
-        if(values == null)
+        if(values == null) {
             load();
+        }
         return values.get(path);
     }
     

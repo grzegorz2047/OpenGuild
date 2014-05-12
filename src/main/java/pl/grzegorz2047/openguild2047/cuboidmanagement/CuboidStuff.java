@@ -28,10 +28,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;

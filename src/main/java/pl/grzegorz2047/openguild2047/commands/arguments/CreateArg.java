@@ -24,16 +24,13 @@
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import com.github.grzegorz2047.openguild.event.MessageBroadcastEvent;
-
 import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;

@@ -25,12 +25,10 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**

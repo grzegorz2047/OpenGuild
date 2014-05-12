@@ -26,7 +26,6 @@ package com.github.grzegorz2047.openguild;
 
 import java.util.List;
 import java.util.UUID;
-
 import org.bukkit.Location;
 
 public interface Guild {

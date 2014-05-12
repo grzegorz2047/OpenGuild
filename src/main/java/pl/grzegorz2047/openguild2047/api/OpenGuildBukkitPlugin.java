@@ -30,15 +30,12 @@ import com.github.grzegorz2047.openguild.Messages;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
 import com.github.grzegorz2047.openguild.User;
 import com.github.grzegorz2047.openguild.module.ModuleManager;
-
 import java.util.List;
 import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 
 public class OpenGuildBukkitPlugin implements OpenGuildPlugin {

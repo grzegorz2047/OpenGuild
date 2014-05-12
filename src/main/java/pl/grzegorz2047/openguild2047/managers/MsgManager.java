@@ -25,11 +25,9 @@ package pl.grzegorz2047.openguild2047.managers;
 
 import java.io.File;
 import java.util.HashMap;
-
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.GenConf.Lang;
 import static pl.grzegorz2047.openguild2047.GenConf.Lang.EN;
@@ -102,8 +100,9 @@ public class MsgManager {
     }
     
     public static String getIgnorePref(String path, String def) {
-        if(messages == null)
+        if(messages == null) {
             loadMessages();
+        }
         if(messages.get(path) == null) {
             return def;
         } else {

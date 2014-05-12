@@ -25,10 +25,8 @@
 package pl.grzegorz2047.openguild2047.api;
 
 import com.github.grzegorz2047.openguild.Messages;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import pl.grzegorz2047.openguild2047.GenConf.Lang;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -43,8 +41,9 @@ public class OpenMessages implements Messages {
     
     @Override
     public List<String> getLangList() {
-        if(langs == null)
+        if(langs == null) {
             load();
+        }
         return langs;
     }
     

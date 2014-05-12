@@ -25,10 +25,8 @@ package pl.grzegorz2047.openguild2047.api;
 
 import java.util.List;
 import java.util.UUID;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import org.bukkit.Location;
 
 public interface Guild {
