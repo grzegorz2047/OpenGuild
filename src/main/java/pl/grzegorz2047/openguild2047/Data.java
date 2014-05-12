@@ -53,6 +53,10 @@ public class Data {
     public boolean isPlayerInGuild(UUID playeruuid) {
         if(this.guildsplayers.containsKey(playeruuid)) {
             String tag = this.guildsplayers.get(playeruuid).getClanTag();
+            if(tag==null){
+                System.out.println("Gracz nie w gildii");
+                return false;
+            }
             //System.out.println("tag to "+tag);
             if(Data.getInstance().guildExists(tag)) {
                 SimpleGuild sg = this.guilds.get(tag);
@@ -74,9 +78,9 @@ public class Data {
 
     public boolean guildExists(String tag){
         if(Data.getInstance().guilds.containsKey(tag.toLowerCase())){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
     public String getGuildChatTag(UUID uuid){
         SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(uuid);
