@@ -68,7 +68,7 @@ public class GenUtil {
         for(String linia : GenConf.reqitems) {
             String[] splits = linia.split(":");
             if(splits.length != 2) {
-                Guilds.getLogger().severe("To jest niepoprawne " + linia);
+                Guilds.getLogger().severe("To jest niepoprawne/Incorrect " + linia);
                 continue;
             }
             try {
@@ -79,7 +79,7 @@ public class GenUtil {
                     } catch(NumberFormatException e) {
                         material = Material.matchMaterial(splits[0]);
                         if((material == null) || (!material.isBlock())) {
-                            Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " jest niewlasciwy!");
+                            Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " jest niewlasciwy/Incorrect!");
                             continue;
 
                         }
@@ -87,7 +87,7 @@ public class GenUtil {
                 }
                 int amount = Integer.parseInt(splits[1]);
                 if(amount == 0) {
-                    Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " ma niepoprawna ilosc");
+                    Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " ma niepoprawna ilosc/Incorrect amount");
                     continue;
                 }
 
@@ -97,7 +97,7 @@ public class GenUtil {
                 }
 
             } catch(Exception ex) {
-                Guilds.getLogger().severe("Config wymaganych blokow jest niepoprawny. Tutaj -> " + splits[0] + " " + splits[1] + "! Ignoruje!");
+                Guilds.getLogger().severe("Config wymaganych blokow jest niepoprawny/Incorrect. Tutaj -> " + splits[0] + " " + splits[1] + "! Ignoruje/Ignore!");
             }
         }
         return true;
@@ -108,26 +108,26 @@ public class GenUtil {
             String[] splits = linia.split(":");
             try {
                 if(splits == null || splits.length < 2){
-                    Guilds.getLogger().severe("Config losowych blokow jest niepoprawny.");
+                    Guilds.getLogger().severe("Config wymaganych/required blokow/blocks jest niepoprawny/Incorrect.");
                     continue;
                 }
                 Material material = Material.getMaterial(splits[0]);
                 if(material == null) {
                     material = Material.getMaterial(splits[0]);
                     if(material == null) {
-                        Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " jest niepoprawny");
+                        Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " jest niepoprawny/Incorrect");
                         continue;
                     }
                 }
                 int amount = Integer.parseInt(splits[1]);
                 if(amount == 0) {
-                    Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " ma niepoprawna ilosc");
+                    Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " ma niepoprawna ilosc/Incorrect amount");
                     continue;
                 }
                 GenUtil.removeFromInv(inv, material, 0, amount);
                 //System.out.println(" "+BlockName);
             } catch(Exception ex) {
-                Guilds.getLogger().severe("Config losowych blokow jest niepoprawny. W tym miejscu " + splits[0] + ":" + splits[1] + "! Ignoruje!");
+                Guilds.getLogger().severe("Config required blokow/blocks jest niepoprawny/Incorrect. W tym miejscu " + splits[0] + ":" + splits[1] + "! Ignoruje!/Ignore");
             }
         }
     }
@@ -152,7 +152,7 @@ public class GenUtil {
                 System.out.println(distance);
                 return true;
             } else {
-                System.out.println("Daleko " + distance);
+                System.out.println("Player Daleko/far enough: " + distance);
             }
         }
         return false;
