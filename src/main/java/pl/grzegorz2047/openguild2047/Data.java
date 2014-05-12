@@ -77,7 +77,10 @@ public class Data {
     }
 
     public boolean guildExists(String tag){
-        return Data.getInstance().guilds.containsKey(tag.toLowerCase());
+        System.out.println("Gildia "+tag+ "moze istniec");
+        boolean check = Data.getInstance().guilds.containsKey(tag.toLowerCase());
+        System.out.println("Check "+tag+" wynik to "+check);
+        return check;
     }
     public String getGuildChatTag(UUID uuid){
         SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(uuid);
