@@ -67,7 +67,7 @@ public class TagManager {
             System.out.println("Scoreboard nie jest zainicjowany!");
             return false;
         }
-        String tag = sg.getTag();
+        String tag = sg.getTag().toUpperCase();
         if(sc.getTeam(tag)== null){
             Team teamtag = sc.registerNewTeam(tag);
             teamtag.setPrefix(GenConf.colortagu + tag + "§r ");
@@ -87,7 +87,7 @@ public class TagManager {
             if(Data.getInstance().isPlayerInGuild(player)){
                 //System.out.println("gracz w gildii");
                 SimpleGuild g =Data.getInstance().getPlayersGuild(player);
-                Team t = sc.getTeam(g.getTag());
+                Team t = sc.getTeam(g.getTag().toUpperCase());
                 if(t == null){
                     //System.out.println("Brak team pref");
                     TagManager.registerTeamTag(g);

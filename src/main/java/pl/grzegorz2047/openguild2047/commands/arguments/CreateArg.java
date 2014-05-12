@@ -58,13 +58,13 @@ public class CreateArg {
     }
 
     public static boolean execute(CommandSender sender, String[] args) {
-        String clantag = args[1];
+        String clantag = args[1].toLowerCase();
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return true;
         }
         Player p = (Player) sender;
-        if(!Data.getInstance().guilds.containsKey(clantag)) {
+        if(Data.getInstance().guildExists(clantag)) {
             if(!Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
                 if(SpawnChecker.isSpawn(p.getLocation()) && GenConf.blockGuildCreating) {
                     sender.sendMessage(GenConf.prefix + ChatColor.RED + GenConf.spawnMessage);

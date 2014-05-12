@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import org.bukkit.Bukkit;
 
 /**
  *
@@ -53,7 +54,7 @@ public class Data {
     public boolean isPlayerInGuild(UUID playeruuid) {
         if(this.guildsplayers.containsKey(playeruuid)) {
             String tag = this.guildsplayers.get(playeruuid).getClanTag();
-            if(this.guilds.containsKey(tag)) {
+            if(Data.getInstance().guildExists(tag)) {
                 SimpleGuild sg = this.guilds.get(tag);
                 return sg.containsMember(playeruuid);
             } else {
@@ -71,6 +72,24 @@ public class Data {
         return null;
     }
 
+    public boolean guildExists(String tag){
+        if(Data.getInstance().guilds.containsKey(tag.toLowerCase())){
+            return false;
+        }
+        return true;
+    }
+    public String getGuildChatTag(UUID uuid){
+        SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(uuid);
+        if(Data.getInstance().guildsplayers.containsKey(uuid)) {
+            if(spg.getClanTag().equals("") || spg.getClanTag().equals("null")) {
+                return "";
+            }else{
+                return spg.getClanTag();
+            }
+        }
+        return "";
+    }
+    
     public static Data getInstance() {
         return Data.instance;
     }

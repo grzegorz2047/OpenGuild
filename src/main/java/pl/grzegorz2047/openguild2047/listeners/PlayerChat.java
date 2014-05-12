@@ -42,20 +42,16 @@ public class PlayerChat implements Listener {
         if(e.isCancelled() || !GenConf.guildprefixinchat) {
             return;
         }
-        if(Data.getInstance().guildsplayers.containsKey(e.getPlayer().getUniqueId())) {
-            SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(e.getPlayer().getUniqueId());
-            if(spg.getClanTag().equals("") || spg.getClanTag().equals("null")) {
-                return;
-            } 
-            if(e.getFormat().contains("{OpenGuildTag}") || e.getFormat().contains("%tag")) {
-                e.setFormat(e.getFormat().replace("{OpenGuildTag}", spg.getClanTag()).replace("%tag", spg.getClanTag()));
-            } else {
-                e.setFormat("§7[§r" + spg.getClanTag() + "§7]§r " + e.getFormat());
-            }
-        }else{
-            e.setFormat(e.getFormat().replace("{OpenGuildTag}", ""));
+        String tag = Data.getInstance().getGuildChatTag(e.getPlayer().getUniqueId());
+        tag = tag.toUpperCase();
+        if(e.getFormat().contains("{OpenGuildTag}") || e.getFormat().contains("%tag")) {
+            e.setFormat(e.getFormat().replace("{OpenGuildTag}", tag.replace("%tag", tag)));
+        } else {
+            e.setFormat("§7[§r" + tag + "§7]§r " + e.getFormat());
         }
-
     }
+
+
+    
 
 }
