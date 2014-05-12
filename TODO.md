@@ -1,5 +1,3 @@
-* Informacje "Wkroczyłeś/aś na teren gildii X"
-* Ogarnąć czemu po wczytaniu danych z bazy pokazuje podwójnie nicki niektóre oraz czemu zle pokazuje /gildia lista
 * Czasowe zablokowanie możliwości niszczenia specjalnym itemem bloków wrogiej gildii
 * Jakiś prosty system nagradzania za zabicia
 * Zablokowanie wybuchanie tnt na czyjejś gildii (itd. bo wystrzeli ktos i spadnie i bum xd)
@@ -11,6 +9,4 @@
 * Kolorowanie tagów ze względu na sojusz czy wojne
 * Komendy dla admina pozwalająca na przejrzenie info o danej gildii, usuniecie jej, wywalenie kogos z jakiejs gildii, tymczasowe zbanowanie calej gildii na dany czas
 * API pluginu
-* Usuwanie jajka i bedrocku przy usuwaniu gildii
-* Komendy na unban
-* Sprawdzanie czy gildia istnieje nie patrzac na wielkosc liter!
+* Sprawdzanie czy gildia istnieje nie patrzac na wielkosc liter!?
