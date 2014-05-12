@@ -38,7 +38,7 @@ public class PlayerMove implements Listener {
     @EventHandler
     void onPlayerMove(PlayerMoveEvent e) {
         CuboidStuff.notifyGuildWhenPlMoves(e.getPlayer());
-        if(e.isCancelled() || GenConf.CANENTERAREA) {
+        if(e.isCancelled() || GenConf.CANENTERAREA || e.getPlayer().hasPermission("openguild.cuboid.bypassenterflag")) {
             return;
         }
         if(!CuboidStuff.canMove(e.getPlayer(), e.getFrom(), e.getTo())) {

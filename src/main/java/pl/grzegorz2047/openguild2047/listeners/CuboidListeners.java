@@ -46,6 +46,9 @@ public class CuboidListeners implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
+        if(e.getPlayer().hasPermission("openguild.cuboid.bypassbreak")){
+            return;
+        }
         if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
             if(GenConf.BREAKING_DAMAGE <= 0) {
                 e.setCancelled(true); // Damage jest rowny 0; niszczenie blokow jest wylaczone
@@ -61,6 +64,9 @@ public class CuboidListeners implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
+        if(e.getPlayer().hasPermission("openguild.cuboid.bypassplace")){
+            return;
+        }
         if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
             e.setCancelled(true);
         }
@@ -70,6 +76,9 @@ public class CuboidListeners implements Listener {
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(e.getClickedBlock() != null) {
             if(GenConf.EXTRA_PROTECTION) {
+                if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")){
+                    return;
+                }
                 if(!isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())) {
                     e.setCancelled(true);
                 }
