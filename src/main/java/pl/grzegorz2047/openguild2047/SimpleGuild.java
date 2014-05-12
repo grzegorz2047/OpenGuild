@@ -46,7 +46,7 @@ public class SimpleGuild implements Guild {
         this.invitedplayers = new ArrayList<UUID>();
         this.allyguilds = new ArrayList<String>();
         this.enemyguilds = new ArrayList<String>();
-        this.tag = tag;
+        this.tag = tag.toUpperCase();
     }
 
     @Override
@@ -112,7 +112,7 @@ public class SimpleGuild implements Guild {
 
     @Override
     public void setTag(String tag) {
-        this.tag = tag;
+        this.tag = tag.toUpperCase();
     }
 
     @Override
