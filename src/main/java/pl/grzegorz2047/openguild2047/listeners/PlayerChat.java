@@ -42,6 +42,9 @@ public class PlayerChat implements Listener {
             return;
         }
         String tag = Data.getInstance().getGuildChatTag(e.getPlayer().getUniqueId());
+        if(tag== null){
+            return;
+        }
         tag = tag.toUpperCase();
         if(e.getFormat().contains("{OpenGuildTag}") || e.getFormat().contains("%tag")) {
             e.setFormat(e.getFormat().replace("{OpenGuildTag}", tag.replace("%tag", tag)));
