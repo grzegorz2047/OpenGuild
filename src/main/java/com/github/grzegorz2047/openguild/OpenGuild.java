@@ -25,11 +25,10 @@
 package com.github.grzegorz2047.openguild;
 
 import com.github.grzegorz2047.openguild.module.ModuleManager;
-
 import java.util.List;
 import java.util.UUID;
-
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -91,6 +90,11 @@ public class OpenGuild {
 
     public static List<User> getUsers() {
         return guild.getUsers();
+    }
+
+    @Deprecated
+    public static void reload(CommandSender sender) {
+        guild.reload(sender);
     }
 
     public static Guild[] sortGuilds() {

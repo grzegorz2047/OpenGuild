@@ -34,9 +34,11 @@ import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
+import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
 
 public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
@@ -117,6 +119,11 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     @Override
     public List<User> getUsers() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public void reload(CommandSender sender) {
+        ReloadArg.execute(sender);
     }
     
     @Override
