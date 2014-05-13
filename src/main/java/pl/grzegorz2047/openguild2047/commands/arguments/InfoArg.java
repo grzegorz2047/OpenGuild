@@ -25,6 +25,7 @@ package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -34,12 +35,28 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 public class InfoArg {
     
     public static boolean execute(CommandSender sender, String[] args) {
-        if(!(sender instanceof Player)) {
-            sender.sendMessage(MsgManager.cmdonlyforplayer);
-            return true;
+        if(args.length == 1) {
+            if(!(sender instanceof Player)) {
+                sender.sendMessage(MsgManager.cmdonlyforplayer);
+                return true;
+            }
+            if(!Data.getInstance().isPlayerInGuild(((Player) sender).getUniqueId())) {
+                sender.sendMessage(MsgManager.get("alreadyinguild"));
+                return true;
+            }
+            about(sender, Data.getInstance().guildsplayers.get(((Player) sender).getUniqueId()).getClanTag());
+        } else {
+            if(!Data.getInstance().guildExists(args[1])) {
+                sender.sendMessage(MsgManager.get("guildexists"));
+                return true;
+            }
+            about(sender, args[1]);
         }
-        
         return true;
+    }
+    
+    private static void about(CommandSender sender, String guild) {
+        // TODO wyswietlanie info
     }
     
 }
