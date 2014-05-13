@@ -24,6 +24,8 @@
 
 package pl.grzegorz2047.openguild2047.commands;
 
+import com.github.grzegorz2047.openguild.OpenGuild;
+import com.github.grzegorz2047.openguild.event.GuildsChatMessageEvent;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -83,6 +85,17 @@ public class TeamCommand implements CommandExecutor {
                 if(pMember != null)
                     pMember.sendMessage(ChatColor.GRAY + "[Guild] " + ChatColor.BLUE + name + ChatColor.GRAY + ": " + ChatColor.WHITE + message);
             }
+            /* NEW EVENT CODE
+            GuildsChatMessageEvent event = new GuildsChatMessageEvent(OpenGuild.getUser(author), OpenGuild.getGuild(author), message);
+            Bukkit.getPluginManager().callEvent(event);
+            if(!event.isCancelled()) {
+                for(UUID member : event.getGuild().getMembers()) {
+                    Player pMember = Bukkit.getPlayer(member);
+                    if(pMember != null) {
+                        pMember.sendMessage(event.getFormat());
+                    }
+                }
+            }*/
         }
     }
     

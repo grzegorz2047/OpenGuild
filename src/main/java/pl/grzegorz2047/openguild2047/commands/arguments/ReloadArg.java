@@ -23,8 +23,12 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import com.github.grzegorz2047.openguild.event.OpenGuildReloadEvent;
+import com.github.grzegorz2047.openguild.event.OpenGuildReloadedEvent;
 import java.io.File;
 import java.io.IOException;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -44,23 +48,31 @@ public class ReloadArg {
             sender.sendMessage(MsgManager.get("permission"));
             return true;
         }
+        OpenGuildReloadEvent event1 = new OpenGuildReloadEvent(sender);
+        Bukkit.getPluginManager().callEvent(event1);
+        if(event1.isCancelled()) {
+            return true;
+        }
+        boolean success = true;
         if(file.exists()) {
             try {
                 config.load(file);
                 sender.sendMessage(MsgManager.get("configreloaded"));
-            }
-            catch(IOException ex) {
-                sender.sendMessage(MsgManager.get("configerr") + " " + ex.getMessage());
-                ex.printStackTrace();
-            }
-            catch(InvalidConfigurationException ex) {
-                sender.sendMessage(MsgManager.get("configyaml"));
-                ex.printStackTrace();
+                success = true;
+            } catch(IOException ex) {
+                sender.sendMessage(MsgManager.get("configerr") + " " + ChatColor.DARK_RED + ex.getMessage());
+                success = false;
+            } catch(InvalidConfigurationException ex) {
+                sender.sendMessage(MsgManager.get("configyaml") + " " + ChatColor.DARK_RED + ex.getMessage());
+                success = false;
             }
         } else {
             config.options().copyDefaults(true);
             sender.sendMessage(MsgManager.get("confignew"));
+            success = true;
         }
+        OpenGuildReloadedEvent event2 = new OpenGuildReloadedEvent(sender, success);
+        Bukkit.getPluginManager().callEvent(event2);
         return true;
     }
 
