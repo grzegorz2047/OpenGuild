@@ -9,3 +9,4 @@
 * Kolorowanie tagów ze względu na sojusz czy wojne (wdrażane z ally/enemy)
 * Komendy dla admina pozwalająca na przejrzenie info o danej gildii, usuniecie jej, wywalenie kogos z jakiejs gildii, tymczasowe zbanowanie calej gildii na dany czas
 * API pluginu (pisane)
+* Zarządzanie gildiami poprzez /g admin np. delete, deleteall, banguild, 
