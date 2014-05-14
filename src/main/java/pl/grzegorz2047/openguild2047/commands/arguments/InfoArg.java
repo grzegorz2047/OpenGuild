@@ -23,14 +23,16 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  *
- * @author student_U190
+ * @author Grzegorz
  */
 public class InfoArg {
     
@@ -41,7 +43,7 @@ public class InfoArg {
                 return true;
             }
             if(!Data.getInstance().isPlayerInGuild(((Player) sender).getUniqueId())) {
-                sender.sendMessage(MsgManager.get("alreadyinguild"));
+                sender.sendMessage(MsgManager.get("notinguild"));
                 return true;
             }
             about(sender, Data.getInstance().guildsplayers.get(((Player) sender).getUniqueId()).getClanTag());
@@ -56,7 +58,10 @@ public class InfoArg {
     }
     
     private static void about(CommandSender sender, String guild) {
-        // TODO wyswietlanie info
+        SimpleGuild sg = Data.getInstance().guilds.get(guild);
+        sender.sendMessage("Liderem gildii jest "+Bukkit.getOfflinePlayer(sg.getLeader()).getName());
+        sender.sendMessage("Liczba czlonkow: "+ sg.getMembers());
+        sender.sendMessage("Opis gildii to: "+sg.getDescription());
     }
     
 }
