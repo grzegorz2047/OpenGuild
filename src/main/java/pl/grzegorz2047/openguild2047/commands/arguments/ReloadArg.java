@@ -57,18 +57,18 @@ public class ReloadArg {
         if(file.exists()) {
             try {
                 config.load(file);
-                sender.sendMessage(MsgManager.get("configreloaded"));
+                event1.getSender().sendMessage(MsgManager.get("configreloaded"));
                 success = true;
             } catch(IOException ex) {
-                sender.sendMessage(MsgManager.get("configerr") + " " + ChatColor.DARK_RED + ex.getMessage());
+                event1.getSender().sendMessage(MsgManager.get("configerr") + " " + ChatColor.DARK_RED + ex.getMessage());
                 success = false;
             } catch(InvalidConfigurationException ex) {
-                sender.sendMessage(MsgManager.get("configyaml") + " " + ChatColor.DARK_RED + ex.getMessage());
+                event1.getSender().sendMessage(MsgManager.get("configyaml") + " " + ChatColor.DARK_RED + ex.getMessage());
                 success = false;
             }
         } else {
             config.options().copyDefaults(true);
-            sender.sendMessage(MsgManager.get("confignew"));
+            event1.getSender().sendMessage(MsgManager.get("confignew"));
             success = true;
         }
         OpenGuildReloadedEvent event2 = new OpenGuildReloadedEvent(sender, success);
