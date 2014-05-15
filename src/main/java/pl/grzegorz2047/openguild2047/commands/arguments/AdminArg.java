@@ -44,16 +44,16 @@ public class AdminArg {
                 return true;
             }
             Player player =  (Player) sender;
-            if(!sender.hasPermission("openguild.command.admin")){
-                player.sendMessage(MsgManager.get("nopermission"));
+            if(!sender.hasPermission("openguild.command.admin")) {
+                player.sendMessage(MsgManager.get("permission"));
                 return true;
                 
             }
-            if(args.length>2){
-                if(args[1].equalsIgnoreCase("banguild")){
+            if(args.length > 2) {
+                if(args[1].equalsIgnoreCase("banguild")) {
                     String tag = args[2];
-                    if(Data.getInstance().ClansTag.contains(tag.toLowerCase())){
-                     SimpleGuild sg = Data.getInstance().guilds.get(tag);
+                    if(Data.getInstance().ClansTag.contains(tag.toLowerCase())) {
+                        SimpleGuild sg = Data.getInstance().guilds.get(tag);
                         saveDb(sg);
                         player.sendMessage(MsgManager.get("guilddisbandsuccess"));
                         return true;
@@ -61,15 +61,15 @@ public class AdminArg {
                 
                 }  
             }
-            if(args[1].equalsIgnoreCase("kick")){
+            if(args[1].equalsIgnoreCase("kick")) {
                 
             }
-            if(args[1].equalsIgnoreCase("closeguild")){
+            if(args[1].equalsIgnoreCase("closeguild")) {
                 
             }
             
             
-        }else{
+        } else {
             sender.sendMessage(MsgManager.wrongcmdargument);
             return true;
         }
