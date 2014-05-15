@@ -32,6 +32,7 @@ import pl.grzegorz2047.openguild2047.commands.arguments.DescriptionArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.DisbandArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.HelpArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.HomeArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.InfoArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.InviteArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.ItemsArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.KickArg;
@@ -53,22 +54,26 @@ public class GuildCommand implements CommandExecutor {
                     if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                         return CreateArg.execute(sender, args);
                     }
-                    if(args[0].equalsIgnoreCase("accept") || args[0].equalsIgnoreCase("akceptuj") || args[0].equalsIgnoreCase("dolacz")) {
+                    else if(args[0].equalsIgnoreCase("accept") || args[0].equalsIgnoreCase("akceptuj") || args[0].equalsIgnoreCase("dolacz")) {
                         return AcceptArg.execute(sender, args);
                     }
                     else if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
                         return HelpArg.execute(sender, args);
                     }
-                    if(args[0].equalsIgnoreCase("invite") || args[0].equalsIgnoreCase("zapros")) {
+                    else if(args[0].equalsIgnoreCase("info")) {
+                        return InfoArg.execute(sender, args);
+                    }
+                    else if(args[0].equalsIgnoreCase("invite") || args[0].equalsIgnoreCase("zapros")) {
                         return InviteArg.execute(sender, args);
                     }
-                    if(args[0].equalsIgnoreCase("kick") || args[0].equalsIgnoreCase("wyrzuc")) {
+                    else if(args[0].equalsIgnoreCase("kick") || args[0].equalsIgnoreCase("wyrzuc")) {
                         return KickArg.execute(sender, args);
                     }
-                    if(args[0].equalsIgnoreCase("unban") || args[0].equalsIgnoreCase("ub")) {
+                    else if(args[0].equalsIgnoreCase("unban") || args[0].equalsIgnoreCase("ub")) {
                         return UnbanCommandArg.execute(sender, args);
+                    } else {
+                        return error(sender, "cmdsyntaxerr");
                     }
-                    return true;
                 }
                 else if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                     return error(sender, "Podano zbyt malo argumentów");
@@ -78,6 +83,9 @@ public class GuildCommand implements CommandExecutor {
                 }
                 else if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("pomoc") || args[0].equalsIgnoreCase("?")) {
                     return HelpArg.execute(sender, args);
+                }
+                else if(args[0].equalsIgnoreCase("info")) {
+                    return InfoArg.execute(sender, args);
                 }
                 else if(args[0].equalsIgnoreCase("reload")) {
                     return ReloadArg.execute(sender);

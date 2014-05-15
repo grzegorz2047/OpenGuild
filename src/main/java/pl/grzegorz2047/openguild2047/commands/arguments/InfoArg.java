@@ -23,7 +23,10 @@
  */
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import java.util.List;
+import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.Data;
@@ -59,9 +62,19 @@ public class InfoArg {
     
     private static void about(CommandSender sender, String guild) {
         SimpleGuild sg = Data.getInstance().guilds.get(guild);
-        sender.sendMessage("Liderem gildii jest "+Bukkit.getOfflinePlayer(sg.getLeader()).getName());
-        sender.sendMessage("Liczba czlonkow: "+ sg.getMembers());
-        sender.sendMessage("Opis gildii to: "+sg.getDescription());
+        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.getIgnorePref("ginfotit").replace("{GUILD}", sg.getTag().toUpperCase()) + ChatColor.DARK_GRAY + " ----------------- ");
+        sender.sendMessage(MsgManager.getIgnorePref("ginfodesc").replace("{DESCRIPTION}", sg.getDescription()));
+        sender.sendMessage(MsgManager.getIgnorePref("ginfoleader").replace("{LEADER}", Bukkit.getOfflinePlayer(sg.getLeader()).getName()));
+        sender.sendMessage(MsgManager.getIgnorePref("ginfomemlist").replace("{SIZE}", String.valueOf(sg.getMembers().size())).replace("{MEMBERS}", getMembers(sg.getMembers())));
+    }
+    
+    private static String getMembers(List<UUID> mems) {
+        StringBuilder builder = new StringBuilder();
+        for(UUID mem : mems) {
+            builder.append(Bukkit.getOfflinePlayer(mem).getName());
+            builder.append(", ");
+        }
+        return builder.toString();
     }
     
 }
