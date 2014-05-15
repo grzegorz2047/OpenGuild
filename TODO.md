@@ -11,3 +11,8 @@
 - [x] Komendy dla admina pozwalająca na przejrzenie info o danej gildii, usuniecie jej, wywalenie kogos z jakiejs gildii, tymczasowe zbanowanie calej gildii na dany czas
   - [x] Zarządzanie gildiami poprzez /g admin np. delete, deleteall, banguild, 
 - [x] API pluginu
+
+
+***
+- [ ] Planowane
+- [x] Wdrażane - w trakcie pisania
