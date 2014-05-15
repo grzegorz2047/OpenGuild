@@ -53,29 +53,31 @@ public class HelpArg {
                 sender.sendMessage(help("akceptuj <tag>", "Akceptuj zaproszenie od gildii"));
                 sender.sendMessage(help("opis <opis...>", "Stwórz opis gildii"));
                 sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii innemu graczowi"));
-                sender.sendMessage(help("akceptuj", "Akceptuje dolaczenie do gildii"));
+                sender.sendMessage(help("akceptuj <gildia>", "Akceptuje dolaczenie do gildii"));
                 sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
+                sender.sendMessage(help("info [gildia]", "Informacje o gildii"));
                 sender.sendMessage(help("zamknij", "Zamknij gildie"));
-                sender.sendMessage(help("wyrzuc", "Wyrzuca czlonka gildii"));
+                sender.sendMessage(help("wyrzuc <gracz>", "Wyrzuca czlonka gildii"));
                 sender.sendMessage(help("itemy", "Lista itemów na gildie"));
                 sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
                 sender.sendMessage(help("lista", "Lista wszystkich  gildii"));
                 sender.sendMessage(help("czlonkowie", "Lista wszystkich  czlonkow gildii"));
                 sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
             } else {
-                sender.sendMessage(help("create <tag> [opis...]", "Create guild"));
+                sender.sendMessage(help("create <tag> [desc...]", "Create guild"));
                 sender.sendMessage(help("invite <player>", "Accepts invite to joint guild"));
-                sender.sendMessage(help("accept <tag>", "Accept invite to joint guild"));
+                sender.sendMessage(help("accept <guild>", "Accept invite to joint guild"));
                 sender.sendMessage(help("description <description...>", "change description of guild"));
                 sender.sendMessage(help("leader <gracz>", "Give leader to someone else"));
                 sender.sendMessage(help("invite", "Invite to guild (sends invite)"));
                 sender.sendMessage(help("leave", "Leave from current guild"));
+                sender.sendMessage(help("info [guild]", "Information about the guild"));
                 sender.sendMessage(help("disband", "Disband your guild"));
                 sender.sendMessage(help("items", "List of required items"));
                 sender.sendMessage(help("home", "Teleport to your guild home location"));
                 sender.sendMessage(help("list", "List all guilds"));
                 sender.sendMessage(help("members", "List of your guild members"));
-                sender.sendMessage(help("kick", "Kicks member of guild"));
+                sender.sendMessage(help("kick <player>", "Kicks member of guild"));
                 sender.sendMessage(help("help [admin|page]", "Show help [admin/page]"));
             }
 
