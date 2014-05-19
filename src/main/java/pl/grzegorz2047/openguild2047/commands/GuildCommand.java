@@ -23,9 +23,16 @@
  */
 package pl.grzegorz2047.openguild2047.commands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.GenConf.Lang;
 import pl.grzegorz2047.openguild2047.commands.arguments.AcceptArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.DescriptionArg;
@@ -44,7 +51,16 @@ import pl.grzegorz2047.openguild2047.commands.arguments.VersionArg;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.modules.hardcore.UnbanCommandArg;
 
-public class GuildCommand implements CommandExecutor {
+public class GuildCommand implements CommandExecutor, TabCompleter {
+
+    public static String[] argEn = new String[] { "create", "accept", "help", "info", "invite",
+                "kick", "unban", "reload", "items", "version",
+                "leave", "disband", "home", "members", "list",
+                "description" };
+    public static String[] argPl = new String[] { "zaloz", "akceptuj", "pomoc", "info", "zapros",
+                "wyrzuc", "unban", "reload", "itemy", "version",
+                "opusc", "zamknij", "dom", "czlonkowie", "lista",
+                "opis" };
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -122,6 +138,33 @@ public class GuildCommand implements CommandExecutor {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        if(command.getName().equalsIgnoreCase("guild")) {
+            String[] lang = null;
+            List<String> complete = new ArrayList<String>();
+            if(GenConf.lang == Lang.EN)
+                lang = argEn;
+            else if(GenConf.lang == Lang.PL)
+                lang = argPl;
+            
+            if(args.length == 1) {
+                if(args[0].equalsIgnoreCase("")) {
+                    complete.addAll(Arrays.asList(lang));
+                } else {
+                    for(String argument : lang) {
+                        if(argument.startsWith(args[0].toLowerCase())) {
+                            complete.add(argument);
+                        }
+                    }
+                }
+            }
+            Collections.sort(complete);
+            return complete;
+        }
+        return null;
     }
 
     private boolean error(CommandSender sender, String msg) {
