@@ -45,6 +45,7 @@ import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
 import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreListeners;
+import pl.grzegorz2047.openguild2047.utils.Updater;
 
 /**
  *
@@ -65,6 +66,7 @@ public class OpenGuild extends JavaPlugin {
         long init = System.currentTimeMillis();
         instance = this;
         com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(new OpenGuildBukkitPlugin()); // Setup API
+        checkForUpdates();
         copyDefaultFiles();
         loadAllListeners();
         Data pd = new Data();
@@ -120,6 +122,26 @@ public class OpenGuild extends JavaPlugin {
             }
         }
         System.out.println("Deleted " + logFiles + " files in OpenGuild2047/logger");
+    }
+
+    private void checkForUpdates() {
+        boolean update = true;
+        for(String version : new Updater().getVersions()) {
+            if(version.equals(getDescription().getVersion())) {
+                update = false;
+            }
+        }
+        if(update) {
+            Guilds.getLogger().info(" ");
+            Guilds.getLogger().info(" ==================== UPDATER ==================== ");
+            Guilds.getLogger().info("Update found! Please update your plugin to the newest version!");
+            Guilds.getLogger().info("Download it from https://github.com/grzegorz2047/OpenGuild2047/releases");
+            Guilds.getLogger().info(" ==================== UPDATER ==================== ");
+            Guilds.getLogger().info(" ");
+        } else {
+            Guilds.getLogger().info("No updates found! Good job! :D");
+        }
+        Guilds.getLogger().info("Enabling OpenGuild2047 v" + getDescription().getVersion() + "...");
     }
 
     private void copyDefaultFiles() {
