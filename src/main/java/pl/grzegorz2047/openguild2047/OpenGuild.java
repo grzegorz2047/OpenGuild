@@ -66,8 +66,8 @@ public class OpenGuild extends JavaPlugin {
         long init = System.currentTimeMillis();
         instance = this;
         com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(new OpenGuildBukkitPlugin()); // Setup API
-        checkForUpdates();
         copyDefaultFiles();
+        checkForUpdates();
         loadAllListeners();
         Data pd = new Data();
         Data.setDataInstance(pd);
@@ -125,21 +125,25 @@ public class OpenGuild extends JavaPlugin {
     }
 
     private void checkForUpdates() {
-        boolean update = true;
-        for(String version : new Updater().getVersions()) {
-            if(version.equals(getDescription().getVersion())) {
-                update = false;
-            }
-        }
-        if(update) {
-            Guilds.getLogger().info(" ");
-            Guilds.getLogger().info(" ==================== UPDATER ==================== ");
-            Guilds.getLogger().info("Update found! Please update your plugin to the newest version!");
-            Guilds.getLogger().info("Download it from https://github.com/grzegorz2047/OpenGuild2047/releases");
-            Guilds.getLogger().info(" ==================== UPDATER ==================== ");
-            Guilds.getLogger().info(" ");
+        if(!GenConf.updater) {
+            Guilds.getLogger().info("Updater are disabled.");
         } else {
-            Guilds.getLogger().info("No updates found! Good job! :D");
+            boolean update = true;
+            for(String version : new Updater().getVersions()) {
+                if(version.equals(getDescription().getVersion())) {
+                    update = false;
+                }
+            }
+            if(update) {
+                Guilds.getLogger().info(" ");
+                Guilds.getLogger().info(" ==================== UPDATER ==================== ");
+                Guilds.getLogger().info("Update found! Please update your plugin to the newest version!");
+                Guilds.getLogger().info("Download it from https://github.com/grzegorz2047/OpenGuild2047/releases");
+                Guilds.getLogger().info(" ==================== UPDATER ==================== ");
+                Guilds.getLogger().info(" ");
+            } else {
+                Guilds.getLogger().info("No updates found! Good job! :D");
+            }
         }
         Guilds.getLogger().info("Enabling OpenGuild2047 v" + getDescription().getVersion() + "...");
     }

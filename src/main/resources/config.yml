@@ -33,6 +33,7 @@ hardcore-bans:
 database: FILE
 file-dir: plugins/OpenGuild2047/og.db
 snooper: true
+updater: true
 mysql:
   address: localhost
   database: openguild

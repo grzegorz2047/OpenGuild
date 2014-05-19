@@ -78,6 +78,7 @@ public class GenConf {
     public static boolean cubNotifySound;
     public static Sound cubNotifySoundType;
     public static boolean cubNotifyPerm;
+    public static boolean updater;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.get().getConfig();
@@ -123,6 +124,7 @@ public class GenConf {
             Guilds.getLogger().warning("Sound type " + config.getString("cuboid.notify-enter-sound-type") + " is incorrect! Please visit http://jd.bukkit.org/rb/apidocs/org/bukkit/Sound.html for help.");
         }
         cubNotifyPerm = config.getBoolean("cuboid.notify-permission", false);
+        updater = config.getBoolean("updater", false);
     }
 
     private static void loadBans() {
