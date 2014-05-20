@@ -76,6 +76,10 @@ public class OpenGuild {
         return guild.getPlugin();
     }
 
+    public static PluginUpdater getUpdater() {
+        return guild.getUpdater();
+    }
+
     public static User getUser(String name) {
         return guild.getUser(name);
     }
@@ -90,6 +94,10 @@ public class OpenGuild {
 
     public static List<User> getUsers() {
         return guild.getUsers();
+    }
+
+    public static String getVersion() {
+        return guild.getVersion();
     }
 
     @Deprecated

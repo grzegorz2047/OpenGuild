@@ -27,17 +27,17 @@ package com.github.grzegorz2047.openguild.module;
 import org.bukkit.Location;
 
 public interface SpawnModule {
-    
+
     boolean canCreate();
-    
+
     Location getMaxPosition();
-    
+
     Location getMinPosition();
-    
+
     void setCanCreate(boolean create);
-    
+
     void setMaxPosition(Location max);
-    
+
     void setMinPosition(Location min);
-    
+
 }

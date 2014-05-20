@@ -22,38 +22,45 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild.event;
+package pl.grzegorz2047.openguild2047.api;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+import com.github.grzegorz2047.openguild.OpenGuild;
+import com.github.grzegorz2047.openguild.PluginUpdater;
+import java.util.List;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.utils.Updater;
 
-public class OpenGuildReloadedEvent extends Event {
-
-    public static final HandlerList handlers = new HandlerList();
-    public CommandSender sender;
-    public boolean success;
-
-    public OpenGuildReloadedEvent(CommandSender sender, boolean success) {
-        this.sender = sender;
-        this.success = success;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
+public class OpenPluginUpdater implements PluginUpdater {
+    
+    private static final Updater updater = new Updater();
+    private static boolean available;
+    private static boolean checked = false;
+    
     @Override
-    public HandlerList getHandlers() {
-        return handlers;
+    public List<String> getVersions() {
+        return updater.getVersions();
     }
-
-    public CommandSender getSender() {
-        return sender;
+    
+    @Override
+    public boolean isAvailable() {
+        if(!checked)
+            checkForUpdates();
+        return available;
     }
-
-    public boolean isSuccess() {
-        return success;
+    
+    @Override
+    public boolean isEnabled() {
+        return GenConf.updater;
     }
-
+    
+    private void checkForUpdates() {
+        available = true;
+        for(String version : getVersions()) {
+            if(version.equals(OpenGuild.getVersion())) {
+                available = false;
+            }
+        }
+        checked = true;
+    }
+    
 }

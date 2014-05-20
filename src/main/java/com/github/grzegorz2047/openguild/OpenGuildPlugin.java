@@ -54,6 +54,8 @@ public interface OpenGuildPlugin {
 
     OpenGuildPlugin getPlugin();
 
+    PluginUpdater getUpdater();
+
     User getUser(String name);
 
     User getUser(Player player);
@@ -61,6 +63,8 @@ public interface OpenGuildPlugin {
     User getUser(UUID uuid);
 
     List<User> getUsers();
+
+    String getVersion();
 
     @Deprecated
     void reload(CommandSender sender);

@@ -32,7 +32,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class GuildsChatMessageEvent extends Event implements Cancellable {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
     private User user;
@@ -64,29 +64,29 @@ public class GuildsChatMessageEvent extends Event implements Cancellable {
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
     }
-    
+
     public String getFormat() {
         return format;
     }
-    
+
     public Guild getGuild() {
         return guild;
     }
-    
+
     public User getUser() {
         return user;
     }
-    
+
     public void setFormat(String format) {
         this.format = format;
     }
-    
+
     public void setGuild(Guild guild) {
         this.guild = guild;
     }
-    
+
     public void setUser(User user) {
         this.user = user;
     }
-    
+
 }

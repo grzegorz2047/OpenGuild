@@ -22,38 +22,16 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild.event;
+package com.github.grzegorz2047.openguild;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+import java.util.List;
 
-public class OpenGuildReloadedEvent extends Event {
+public interface PluginUpdater {
 
-    public static final HandlerList handlers = new HandlerList();
-    public CommandSender sender;
-    public boolean success;
+    List<String> getVersions();
 
-    public OpenGuildReloadedEvent(CommandSender sender, boolean success) {
-        this.sender = sender;
-        this.success = success;
-    }
+    boolean isAvailable();
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public CommandSender getSender() {
-        return sender;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
+    boolean isEnabled();
 
 }

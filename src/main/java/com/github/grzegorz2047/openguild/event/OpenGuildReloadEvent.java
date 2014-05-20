@@ -30,15 +30,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class OpenGuildReloadEvent extends Event implements Cancellable {
-    
+
     public static final HandlerList handlers = new HandlerList();
     public boolean cancel;
     public CommandSender sender;
-    
+
     public OpenGuildReloadEvent(CommandSender sender) {
         this.sender = sender;
     }
-    
+
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -47,23 +47,23 @@ public class OpenGuildReloadEvent extends Event implements Cancellable {
     public HandlerList getHandlers() {
         return handlers;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return cancel;
     }
-    
+
     @Override
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
     }
-    
+
     public CommandSender getSender() {
         return sender;
     }
-    
+
     public void setSender(CommandSender sender) {
         this.sender = sender;
     }
-    
+
 }

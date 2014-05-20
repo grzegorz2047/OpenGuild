@@ -128,13 +128,7 @@ public class OpenGuild extends JavaPlugin {
         if(!GenConf.updater) {
             Guilds.getLogger().info("Updater are disabled.");
         } else {
-            boolean update = true;
-            for(String version : new Updater().getVersions()) {
-                if(version.equals(getDescription().getVersion())) {
-                    update = false;
-                }
-            }
-            if(update) {
+            if(com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isAvailable()) {
                 Guilds.getLogger().info(" ");
                 Guilds.getLogger().info(" ==================== UPDATER ==================== ");
                 Guilds.getLogger().info("Update found! Please update your plugin to the newest version!");

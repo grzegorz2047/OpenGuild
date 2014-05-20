@@ -28,6 +28,7 @@ import com.github.grzegorz2047.openguild.Configuration;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Messages;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
+import com.github.grzegorz2047.openguild.PluginUpdater;
 import com.github.grzegorz2047.openguild.User;
 import com.github.grzegorz2047.openguild.module.ModuleManager;
 import java.util.List;
@@ -46,6 +47,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     private static Messages messages = new OpenMessages();
     private static ModuleManager modules = new OpenModuleManager();
     private static OpenGuildPlugin openGuild;
+    private static PluginUpdater updater = new OpenPluginUpdater();
     
     public OpenGuildBukkitPlugin() {
         openGuild = this;
@@ -102,6 +104,11 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     }
     
     @Override
+    public PluginUpdater getUpdater() {
+        return updater;
+    }
+    
+    @Override
     public User getUser(String name) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -119,6 +126,11 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     @Override
     public List<User> getUsers() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public String getVersion() {
+        return getBukkit().getDescription().getVersion();
     }
     
     @Override
