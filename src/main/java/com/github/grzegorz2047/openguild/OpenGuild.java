@@ -60,6 +60,10 @@ public class OpenGuild {
         return guild.getGuild(user);
     }
 
+    public static GuildManager getGuildManager() {
+        return guild.getGuildManager();
+    }
+
     public static List<Guild> getGuilds() {
         return guild.getGuilds();
     }

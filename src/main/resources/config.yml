@@ -41,7 +41,7 @@ mysql:
   password: password
   debug: false
 playerprefixtag: true
-tag-color: '&6'
+nickname-tag: '&6[{TAG}] '
 guildprefixinchat: true
 forbiddenguildnames:
 required-items:

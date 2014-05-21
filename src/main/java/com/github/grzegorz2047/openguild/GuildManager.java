@@ -24,53 +24,10 @@
 
 package com.github.grzegorz2047.openguild;
 
-import com.github.grzegorz2047.openguild.module.ModuleManager;
-import java.util.List;
-import java.util.UUID;
-import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+public interface GuildManager {
 
-public interface OpenGuildPlugin {
+    String getNicknameTag();
 
-    Plugin getBukkit();
-
-    Configuration getConfig();
-
-    Guild getGuild(Location location);
-
-    Guild getGuild(Player player);
-
-    Guild getGuild(String name);
-
-    Guild getGuild(User user);
-
-    GuildManager getGuildManager();
-
-    List<Guild> getGuilds();
-
-    Messages getMessages();
-
-    ModuleManager getModules();
-
-    OpenGuildPlugin getPlugin();
-
-    PluginUpdater getUpdater();
-
-    User getUser(String name);
-
-    User getUser(Player player);
-
-    User getUser(UUID uuid);
-
-    List<User> getUsers();
-
-    String getVersion();
-
-    @Deprecated
-    void reload(CommandSender sender);
-
-    Guild[] sortGuilds();
+    void setNicknameTag(String tag);
 
 }

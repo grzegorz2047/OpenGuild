@@ -45,7 +45,6 @@ import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
 import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreListeners;
-import pl.grzegorz2047.openguild2047.utils.Updater;
 
 /**
  *
@@ -173,12 +172,6 @@ public class OpenGuild extends JavaPlugin {
         GenConf.reqitems = this.getConfig().getStringList("required-items");
         GenConf.playerprefixenabled = this.getConfig().getBoolean("playerprefixtag");
         GenConf.guildprefixinchat = this.getConfig().getBoolean("guildprefixinchat");
-        GenConf.colortagu = this.getConfig().getString("tag-color").replace('&', '§');
-        if(GenConf.colortagu.length() > 2) {
-            Guilds.getLogger().severe("Tags color length must have 2 chars: & and bukkit color id!");
-            Guilds.getLogger().warning("Using default color!");
-            GenConf.colortagu = "§6";
-        }
     }
 
     private void loadDb() {

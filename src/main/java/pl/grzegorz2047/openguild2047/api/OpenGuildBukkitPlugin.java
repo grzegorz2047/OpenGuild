@@ -26,6 +26,7 @@ package pl.grzegorz2047.openguild2047.api;
 
 import com.github.grzegorz2047.openguild.Configuration;
 import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.GuildManager;
 import com.github.grzegorz2047.openguild.Messages;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
 import com.github.grzegorz2047.openguild.PluginUpdater;
@@ -44,6 +45,7 @@ import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
 public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
     private static Configuration configuration = new OpenConfiguration();
+    private static GuildManager manager = new OpenGuildManager();
     private static Messages messages = new OpenMessages();
     private static ModuleManager modules = new OpenModuleManager();
     private static OpenGuildPlugin openGuild;
@@ -81,6 +83,11 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     @Override
     public Guild getGuild(User user) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public GuildManager getGuildManager() {
+        return manager;
     }
     
     @Override

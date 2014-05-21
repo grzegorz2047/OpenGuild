@@ -24,13 +24,13 @@
 
 package pl.grzegorz2047.openguild2047.managers;
 
+import com.github.grzegorz2047.openguild.OpenGuild;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import pl.grzegorz2047.openguild2047.Data;
-import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 
 /**
@@ -70,8 +70,8 @@ public class TagManager {
         String tag = sg.getTag().toUpperCase();
         if(sc.getTeam(tag)== null){
             Team teamtag = sc.registerNewTeam(tag);
-            teamtag.setPrefix(GenConf.colortagu + tag + "§r ");
-            teamtag.setDisplayName(GenConf.colortagu + tag + "§r ");
+            teamtag.setPrefix(OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag()));
+            teamtag.setDisplayName(OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag()));
             for(UUID uuid : sg.getMembers()){
                 teamtag.addPlayer(Bukkit.getOfflinePlayer(uuid));
             }

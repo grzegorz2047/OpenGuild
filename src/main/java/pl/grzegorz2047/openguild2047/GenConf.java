@@ -48,7 +48,6 @@ public class GenConf {
     //Max 11, bo prefix jest 16 znakowy - 5 znaków kolorujacych
     public static int maxclantag = 6;
     public static int minclantag = 4;
-    public static String colortagu = "§6";
     public static List<String> badwords;
     public static List<String> reqitems;
     public static int MIN_CUBOID_RADIUS;
@@ -79,6 +78,7 @@ public class GenConf {
     public static Sound cubNotifySoundType;
     public static boolean cubNotifyPerm;
     public static boolean updater;
+    public static String nicknameTag;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.get().getConfig();
@@ -125,6 +125,7 @@ public class GenConf {
         }
         cubNotifyPerm = config.getBoolean("cuboid.notify-permission", false);
         updater = config.getBoolean("updater", false);
+        nicknameTag = config.getString("nickname-tag", "&6[{TAG}] ");
     }
 
     private static void loadBans() {
