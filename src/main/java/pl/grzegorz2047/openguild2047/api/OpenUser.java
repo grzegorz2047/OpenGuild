@@ -25,6 +25,7 @@
 package pl.grzegorz2047.openguild2047.api;
 
 import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.OpenGuild;
 import com.github.grzegorz2047.openguild.User;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -41,12 +42,12 @@ public class OpenUser implements User {
     
     @Override
     public int getDeads() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return 0; // TOOD
     }
     
     @Override
     public Guild getGuild() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return OpenGuild.getGuild(this);
     }
     
     @Override
@@ -56,12 +57,14 @@ public class OpenUser implements User {
     
     @Override
     public int getKills() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return 0; // TODO
     }
     
     @Override
     public boolean isLeader() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(getGuild() == null)
+            return false;
+        return getGuild().getLeader().equals(getBukkit().getUniqueId());
     }
     
 }

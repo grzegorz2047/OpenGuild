@@ -25,10 +25,8 @@
 package pl.grzegorz2047.openguild2047.api.module;
 
 import com.github.grzegorz2047.openguild.module.ModuleManager;
-
 import java.util.HashMap;
 import java.util.Set;
-
 import pl.grzegorz2047.openguild2047.api.Guilds;
 
 public class OpenModuleManager implements ModuleManager {

@@ -25,9 +25,7 @@
 package pl.grzegorz2047.openguild2047.api.module;
 
 import com.github.grzegorz2047.openguild.module.SpawnModule;
-
 import org.bukkit.Location;
-
 import pl.grzegorz2047.openguild2047.GenConf;
 
 public class OpenSpawnModule implements SpawnModule {

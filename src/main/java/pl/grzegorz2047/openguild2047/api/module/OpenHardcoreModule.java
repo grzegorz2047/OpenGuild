@@ -25,9 +25,7 @@
 package pl.grzegorz2047.openguild2047.api.module;
 
 import com.github.grzegorz2047.openguild.module.HardcoreModule;
-
 import java.util.UUID;
-
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 

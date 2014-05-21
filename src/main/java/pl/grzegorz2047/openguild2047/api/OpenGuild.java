@@ -31,8 +31,8 @@ import org.bukkit.Location;
 
 public class OpenGuild implements com.github.grzegorz2047.openguild.Guild {
     
-    private List<String> ally;
-    private List<String> enemy;
+    private List<com.github.grzegorz2047.openguild.Guild> ally;
+    private List<com.github.grzegorz2047.openguild.Guild> enemy;
     private List<UUID> invited;
     private List<UUID> members;
     private String tag;
@@ -46,14 +46,14 @@ public class OpenGuild implements com.github.grzegorz2047.openguild.Guild {
         this.desc = desc;
         this.home = home;
         this.leader = leader;
-        this.ally = new ArrayList<String>();
-        this.enemy = new ArrayList<String>();
+        this.ally = new ArrayList<com.github.grzegorz2047.openguild.Guild>();
+        this.enemy = new ArrayList<com.github.grzegorz2047.openguild.Guild>();
         this.invited = new ArrayList<UUID>();
         this.members = new ArrayList<UUID>();
     }
     
     @Override
-    public List<String> getAllyGuilds() {
+    public List<com.github.grzegorz2047.openguild.Guild> getAllyGuilds() {
         return ally;
     }
     
@@ -63,7 +63,7 @@ public class OpenGuild implements com.github.grzegorz2047.openguild.Guild {
     }
     
     @Override
-    public List<String> getEnemyGuilds() {
+    public List<com.github.grzegorz2047.openguild.Guild> getEnemyGuilds() {
         return enemy;
     }
     

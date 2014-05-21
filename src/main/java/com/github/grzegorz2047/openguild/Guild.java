@@ -30,11 +30,11 @@ import org.bukkit.Location;
 
 public interface Guild {
 
-    List<String> getAllyGuilds(); // Dlaczego nie obiekt Guild?
+    List<Guild> getAllyGuilds();
 
     String getDescription();
 
-    List<String> getEnemyGuilds(); // Dlaczego nie obiekt Guild?
+    List<Guild> getEnemyGuilds();
 
     Location getHome();
 

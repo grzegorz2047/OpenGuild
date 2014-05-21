@@ -39,17 +39,19 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
 
 public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
-    private static Configuration configuration = new OpenConfiguration();
-    private static GuildManager manager = new OpenGuildManager();
-    private static Messages messages = new OpenMessages();
-    private static ModuleManager modules = new OpenModuleManager();
+    private static final Plugin bukkit = Bukkit.getPluginManager().getPlugin("OpenGuild2047");
+    private static final Configuration configuration = new OpenConfiguration();
+    private static final GuildManager manager = new OpenGuildManager();
+    private static final Messages messages = new OpenMessages();
+    private static final ModuleManager modules = new OpenModuleManager();
+    private static final PluginUpdater updater = new OpenPluginUpdater();
     private static OpenGuildPlugin openGuild;
-    private static PluginUpdater updater = new OpenPluginUpdater();
     
     public OpenGuildBukkitPlugin() {
         openGuild = this;
@@ -57,7 +59,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
     @Override
     public Plugin getBukkit() {
-        return Bukkit.getPluginManager().getPlugin("OpenGuild2047");
+        return bukkit;
     }
     
     @Override
@@ -67,22 +69,27 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
     @Override
     public Guild getGuild(Location location) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null; // TODO
     }
     
     @Override
     public Guild getGuild(Player player) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getGuild(Data.getInstance().guildsplayers.get(player.getUniqueId()).getClanTag());
     }
     
     @Override
     public Guild getGuild(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(com.github.grzegorz2047.openguild.Guild guild : getGuilds()) {
+            if(guild.getTag().equalsIgnoreCase(name)) {
+                return guild;
+            }
+        }
+        return null;
     }
     
     @Override
     public Guild getGuild(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getGuild(user.getBukkit());
     }
     
     @Override
@@ -92,7 +99,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
     @Override
     public List<Guild> getGuilds() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null; // TODO
     }
     
     @Override
@@ -117,22 +124,37 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
     @Override
     public User getUser(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(User user : getUsers()) {
+            if(user.getBukkit().getName().equalsIgnoreCase(name)) {
+                return user;
+            }
+        }
+        return null;
     }
     
     @Override
     public User getUser(Player player) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(User user : getUsers()) {
+            if(user.getBukkit().getUniqueId().equals(player.getUniqueId())) {
+                return user;
+            }
+        }
+        return null;
     }
     
     @Override
     public User getUser(UUID uuid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(User user : getUsers()) {
+            if(user.getBukkit().getUniqueId().equals(uuid)) {
+                return user;
+            }
+        }
+        return null;
     }
     
     @Override
     public List<User> getUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null; // TODO
     }
     
     @Override
@@ -147,7 +169,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
     @Override
     public Guild[] sortGuilds() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (Guild[]) getGuilds().toArray();
     }
     
 }
