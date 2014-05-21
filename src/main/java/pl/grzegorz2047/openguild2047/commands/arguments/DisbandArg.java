@@ -59,7 +59,7 @@ public class DisbandArg {
             String tag = sg.getTag();
             if(sg.getLeader().equals(p.getUniqueId())) {
                 saveDb(Guilds.getGuild(p));
-                    sg.getHome().getBlock().setType(Material.AIR);
+                sg.getHome().getBlock().setType(Material.AIR);
                 Location loc = sg.getHome();
                 Block b = sg.getHome().getWorld().getBlockAt(loc.getBlockX(),loc.getBlockY() - 1, loc.getBlockZ());
                 b.setType(Material.AIR);

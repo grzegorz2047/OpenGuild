@@ -24,6 +24,9 @@
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import java.util.UUID;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.Data;
@@ -31,6 +34,7 @@ import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  *
@@ -53,20 +57,37 @@ public class AdminArg {
                 if(args[1].equalsIgnoreCase("banguild")) {
                     String tag = args[2];
                     if(Data.getInstance().ClansTag.contains(tag.toLowerCase())) {
-                        SimpleGuild sg = Data.getInstance().guilds.get(tag);
-                        saveDb(sg);
-                        player.sendMessage(MsgManager.get("guilddisbandsuccess"));
+                        //SimpleGuild sg = Data.getInstance().guilds.get(tag);
+                        //saveDb(sg);
+                        
                         return true;
                     }
                 
-                }  
+                }
+                if(args[1].equalsIgnoreCase("closeguild")) {
+                    String tag = args[2];
+                    if(Data.getInstance().ClansTag.contains(tag.toLowerCase())) {
+                    SimpleGuild sg = Data.getInstance().guilds.get(tag);
+                    saveDb(sg);
+                    sg.getHome().getBlock().setType(Material.AIR);
+                    Location loc = sg.getHome();
+                    Block b = sg.getHome().getWorld().getBlockAt(loc.getBlockX(),loc.getBlockY() - 1, loc.getBlockZ());
+                    b.setType(Material.AIR);
+                    for(UUID member : sg.getMembers()) {
+                        TagManager.removeTag(member);
+                        Data.getInstance().guildsplayers.remove(member);
+                    }
+                
+                    Data.getInstance().ClansTag.remove(tag);
+                    Data.getInstance().guilds.remove(tag);
+                    Data.getInstance().cuboids.remove(tag);
+                    }
+                }
             }
             if(args[1].equalsIgnoreCase("kick")) {
                 
             }
-            if(args[1].equalsIgnoreCase("closeguild")) {
-                
-            }
+
             
             
         } else {

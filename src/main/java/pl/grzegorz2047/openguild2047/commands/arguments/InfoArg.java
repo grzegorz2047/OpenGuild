@@ -52,7 +52,7 @@ public class InfoArg {
             about(sender, Data.getInstance().guildsplayers.get(((Player) sender).getUniqueId()).getClanTag());
         } else {
             if(!Data.getInstance().guildExists(args[1])) {
-                sender.sendMessage(MsgManager.get("guildexists"));
+                sender.sendMessage(MsgManager.get("guilddoesntexists"));
                 return true;
             }
             about(sender, args[1]);
