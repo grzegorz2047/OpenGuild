@@ -70,8 +70,8 @@ public class TagManager {
         String tag = sg.getTag().toUpperCase();
         if(sc.getTeam(tag)== null){
             Team teamtag = sc.registerNewTeam(tag);
-            teamtag.setPrefix(OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag()));
-            teamtag.setDisplayName(OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag()));
+            teamtag.setPrefix(OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag().toUpperCase()));
+            teamtag.setDisplayName(OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag().toUpperCase()));
             for(UUID uuid : sg.getMembers()){
                 teamtag.addPlayer(Bukkit.getOfflinePlayer(uuid));
             }
