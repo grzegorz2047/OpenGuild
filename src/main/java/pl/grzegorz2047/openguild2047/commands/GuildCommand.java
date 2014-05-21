@@ -34,6 +34,7 @@ import org.bukkit.command.TabCompleter;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.GenConf.Lang;
 import pl.grzegorz2047.openguild2047.commands.arguments.AcceptArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.AdminArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.DescriptionArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.DisbandArg;
@@ -66,6 +67,9 @@ public class GuildCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(command.getName().equalsIgnoreCase("guild")) {
             if(args.length > 0) {
+                if(args[0].equalsIgnoreCase("admin") || args[0].equalsIgnoreCase("administrator")) {
+                    return AdminArg.execute(sender, args);
+                }
                 if(args.length >= 2) {
                     if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("stworz") || args[0].equalsIgnoreCase("zaloz")) {
                         return CreateArg.execute(sender, args);

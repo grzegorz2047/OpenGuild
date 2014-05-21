@@ -66,6 +66,8 @@ public class HardcoreListeners implements Listener {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         Date date = new Date(ban);
         SQLHandler.update(e.getEntity().getUniqueId(), SQLHandler.PType.BAN_TIME, ban);
+        e.getEntity().getInventory().clear();
+        e.getEntity().getInventory().setContents(null);
         e.getEntity().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
     }
 

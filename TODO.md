@@ -9,6 +9,8 @@
 - [ ] Można dać prosty system levelowania w gildii
 - [ ] Można dać prosty system ekonomii wspierany przez vaulta
 - [ ] Platne dolaczanie do gildi
+- [ ] Dokończenie komendy /g cuboid expand
+- [ ] [WAŻNE] Usunąć cuboidy z mysqla!
 
 - [x] Komendy dla admina pozwalająca na przejrzenie info o danej gildii, usuniecie jej, wywalenie kogos z jakiejs gildii, tymczasowe zbanowanie calej gildii na dany czas
   - [x] Zarządzanie gildiami poprzez /g admin np. delete, deleteall, banguild, 

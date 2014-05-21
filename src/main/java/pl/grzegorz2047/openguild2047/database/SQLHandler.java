@@ -499,7 +499,7 @@ public class SQLHandler {
                 return rs.getInt(1) != 0;
             }
         } catch(SQLException ex) {
-            java.util.logging.Logger.getLogger(SQLHandler.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return false;
     }
