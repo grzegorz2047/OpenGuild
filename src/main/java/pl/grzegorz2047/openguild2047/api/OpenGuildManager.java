@@ -44,7 +44,7 @@ public class OpenGuildManager implements GuildManager {
         if(tag.length() > 15) {
             throw new IllegalArgumentException("Tag gildii jest za dlugi! " + tag.length() + "/15");
         } else {
-            OpenGuildManager.tag = tag.replace('&', '§');;
+            OpenGuildManager.tag = tag.replace('&', '§').toUpperCase();
         }
     }
     
