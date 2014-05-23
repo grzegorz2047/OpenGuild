@@ -56,9 +56,10 @@ public class EntityDamageByEntity implements Listener {
         if(attacker instanceof Player && attacked instanceof Player) {
             Player attackerp = (Player) attacker;
             Player attackedp = (Player) attacked;
-            if(Data.getInstance().guildsplayers.containsKey(attackerp.getUniqueId()) && Data.getInstance().guildsplayers.containsKey(attackedp.getUniqueId())) {
-                SimpleGuild sg = Data.getInstance().guilds.get(Data.getInstance().guildsplayers.get(attackerp.getUniqueId()).getClanTag());
-                if(sg.containsMember(attackerp.getUniqueId()) && sg.containsMember(attackedp.getUniqueId())) {
+            if(Data.getInstance().isPlayerInGuild(attackerp.getUniqueId()) && Data.getInstance().isPlayerInGuild(attackedp.getUniqueId())) {
+                SimpleGuild sg = Data.getInstance().getPlayersGuild(attackerp.getUniqueId());
+                if(sg.containsMember(attackerp.getUniqueId()) 
+                    && sg.containsMember(attackedp.getUniqueId())) {
                     e.setCancelled(true);
                     if(GenConf.TEAMPVP_MSG) {
                         attackedp.sendMessage(MsgManager.get("pvpguildmember", "&cNie mozesz uderzyc gracza sojuszniczej gildii"));
@@ -72,9 +73,10 @@ public class EntityDamageByEntity implements Listener {
             if(arrow.getShooter() instanceof Player && e.getEntity() instanceof Player) {
                 Player attackerp = (Player) arrow.getShooter();
                 Player attackedp = (Player) e.getEntity();
-                if(Data.getInstance().guildsplayers.containsKey(attackerp.getUniqueId()) && Data.getInstance().guildsplayers.containsKey(attackedp.getUniqueId())) {
-                    SimpleGuild sg = Data.getInstance().guilds.get(Data.getInstance().guildsplayers.get(attackerp.getUniqueId()).getClanTag());
-                    if(sg.containsMember(attackerp.getUniqueId()) && sg.containsMember(attackedp.getUniqueId())) {
+                if(Data.getInstance().isPlayerInGuild(attackerp.getUniqueId()) && Data.getInstance().isPlayerInGuild(attackedp.getUniqueId())) {
+                    SimpleGuild sg = Data.getInstance().getPlayersGuild(attackerp.getUniqueId());
+                    if(sg.containsMember(attackerp.getUniqueId()) 
+                        && sg.containsMember(attackedp.getUniqueId())) {
                         e.setCancelled(true);
                     }
                 }
