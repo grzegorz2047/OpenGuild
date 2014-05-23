@@ -67,14 +67,13 @@ public class OpenGuild extends JavaPlugin {
         instance = this;
         com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(new OpenGuildBukkitPlugin()); // Setup API
         getCommand("guild").setExecutor(new ErrorCommand());
+        getCommand("team").setExecutor(new ErrorCommand());
         copyDefaultFiles();
         checkForUpdates();
         loadAllListeners();
         Data pd = new Data();
         Data.setDataInstance(pd);
         loadDb();
-        getCommand("guild").setExecutor(new GuildCommand());
-        getCommand("team").setExecutor(new TeamCommand());
         new TagManager();
         for(Player p : getServer().getOnlinePlayers()) {
             TagManager.setTag(p.getUniqueId());
@@ -102,6 +101,8 @@ public class OpenGuild extends JavaPlugin {
             getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
             getServer().getPluginManager().disablePlugin(this);
         }
+        getCommand("guild").setExecutor(new GuildCommand());
+        getCommand("team").setExecutor(new TeamCommand());
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
     }
 

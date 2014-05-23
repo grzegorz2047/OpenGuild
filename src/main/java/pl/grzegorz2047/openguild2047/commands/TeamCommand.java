@@ -24,8 +24,6 @@
 
 package pl.grzegorz2047.openguild2047.commands;
 
-import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.event.GuildsChatMessageEvent;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
