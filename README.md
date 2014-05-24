@@ -26,9 +26,7 @@ Używam Maven 3 do wszystkich wymaganych bibliotek.
 * Zainstaluj [Maven 3](http://maven.apache.org/download.html)
 * Sprawdź to repozytorium oraz wykonaj komendę: `mvn clean install`
 
-Pull Requesty
+[Contributing](https://github.com/grzegorz2047/OpenGuild2047/blob/master/CONTRIBUTING.md)
 -----------
 
-Dla projektu wymagam kodowanie UTF-8, ponieważ potem mogą być problemy z formatowaniem tekstu.
-Należy także używać 4 spacji zamiast tabów!
-
+Patrz [CONTRIBUTING.md](https://github.com/grzegorz2047/OpenGuild2047/blob/master/CONTRIBUTING.md).
