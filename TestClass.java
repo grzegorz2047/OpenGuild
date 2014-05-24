@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import pl.openguild2047.openguild.commands.GuildCommand;
 
-public class testClass {
+public class TestClass {
     
     private static final HashMap<Object, Object> hashMap = new HashMap<>();
     
