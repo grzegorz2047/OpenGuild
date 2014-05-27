@@ -23,6 +23,7 @@
  */
 package pl.grzegorz2047.openguild2047;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -128,6 +129,15 @@ public class GenConf {
         updater = config.getBoolean("updater", false);
         nicknameTag = config.getString("nickname-tag", "&6[{TAG}] ");
         cubEnabled = config.getBoolean("cuboid.enabled", true);
+        teampvp = config.getBoolean("teampvp", false);
+        homecommand = config.getBoolean("home-command", true);
+        if(config.getStringList("required-items") != null || !config.getStringList("required-items").isEmpty()) {
+            reqitems = config.getStringList("required-items");
+        } else {
+            reqitems = new ArrayList<String>();
+        }
+        playerprefixenabled = config.getBoolean("playerprefixtag", true);
+        guildprefixinchat = config.getBoolean("guildprefixinchat", true);
     }
 
     private static void loadBans() {

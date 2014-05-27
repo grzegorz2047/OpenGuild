@@ -166,12 +166,6 @@ public class OpenGuild extends JavaPlugin {
         database = getConfig().getString("mysql.database");
         login = getConfig().getString("mysql.login");
         password = getConfig().getString("mysql.password");
-        // Inne ustawienia
-        GenConf.teampvp = this.getConfig().getBoolean("teampvp");
-        GenConf.homecommand = this.getConfig().getBoolean("home-command");
-        GenConf.reqitems = this.getConfig().getStringList("required-items");
-        GenConf.playerprefixenabled = this.getConfig().getBoolean("playerprefixtag");
-        GenConf.guildprefixinchat = this.getConfig().getBoolean("guildprefixinchat");
     }
 
     private void loadDb() {
