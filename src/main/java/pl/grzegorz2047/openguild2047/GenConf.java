@@ -79,6 +79,7 @@ public class GenConf {
     public static boolean cubNotifyPerm;
     public static boolean updater;
     public static String nicknameTag;
+    public static boolean cubEnabled;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.get().getConfig();
@@ -126,6 +127,7 @@ public class GenConf {
         cubNotifyPerm = config.getBoolean("cuboid.notify-permission", false);
         updater = config.getBoolean("updater", false);
         nicknameTag = config.getString("nickname-tag", "&6[{TAG}] ");
+        cubEnabled = config.getBoolean("cuboid.enabled", true);
     }
 
     private static void loadBans() {

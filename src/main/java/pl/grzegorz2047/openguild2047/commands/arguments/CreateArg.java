@@ -70,10 +70,12 @@ public class CreateArg {
                 if(clantag.matches("[0-9a-zA-Z]*")) {
                     if(clantag.length() <= GenConf.maxclantag && clantag.length() >= GenConf.minclantag) {
                         if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)) {
-                            if(GenUtil.hasEnoughItemsForGuild(p.getInventory())) {
+                            if(GenConf.reqitems != null && !GenConf.reqitems.isEmpty() && GenUtil.hasEnoughItemsForGuild(p.getInventory())) {
                                 if(CuboidStuff.checkIfCuboidFarForGuild(p.getLocation())) {
                                     if(!GenUtil.isPlayerNearby(p, GenConf.MIN_CUBOID_RADIUS)) {
-                                        GenUtil.removeRequiredItemsForGuild(p.getInventory());
+                                        if(GenConf.reqitems != null && !GenConf.reqitems.isEmpty()) {
+                                            GenUtil.removeRequiredItemsForGuild(p.getInventory());
+                                        }
                                         SimpleGuild sg = new SimpleGuild(clantag);
                                         sg.setLeader(p.getUniqueId());
                                         sg.setHome(p.getLocation());

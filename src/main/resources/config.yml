@@ -13,6 +13,7 @@ spawn:
   block-guild-creating: true
   message: '&cYou are not allowed to do this at the servers spawn point!'
 cuboid:
+  enabled: true
   notify-permission: false
   min-radius: 15
   max-radius: 50

@@ -110,10 +110,7 @@ public class OpenGuild extends JavaPlugin {
     public void onDisable() {
         try {
             SQLHandler.getConnection().close();
-        }
-        catch (SQLException ex) {
-            
-        }
+        } catch(SQLException ex) {}
         
         int logFiles = 0;
         for(File file : logDir.listFiles()) {
@@ -123,7 +120,7 @@ public class OpenGuild extends JavaPlugin {
                 logFiles++;
             }
         }
-        System.out.println("Deleted " + logFiles + " files in OpenGuild2047/logger");
+        System.out.println("Deleted " + logFiles + " files in 'plugins/OpenGuild2047/logger'");
     }
 
     private void checkForUpdates() {
@@ -194,9 +191,11 @@ public class OpenGuild extends JavaPlugin {
 
     void loadAllListeners() {
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new CuboidListeners(), this);
         pm.registerEvents(new PlayerChat(), this);
         pm.registerEvents(new Monitors(), this);
+        if(GenConf.cubEnabled) {
+            pm.registerEvents(new CuboidListeners(), this);
+        }
         if(!GenConf.teampvp) {
             pm.registerEvents(new EntityDamageByEntity(), this);
         }
