@@ -61,7 +61,7 @@ public class InfoArg {
     }
     
     private static void about(CommandSender sender, String guild) {
-        SimpleGuild sg = Data.getInstance().guilds.get(guild);
+        SimpleGuild sg = Data.getInstance().guilds.get(guild.toLowerCase());
         sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.getIgnorePref("ginfotit").replace("{GUILD}", sg.getTag().toUpperCase()) + ChatColor.DARK_GRAY + " ----------------- ");
         sender.sendMessage(MsgManager.getIgnorePref("ginfodesc").replace("{DESCRIPTION}", sg.getDescription()));
         sender.sendMessage(MsgManager.getIgnorePref("ginfoleader").replace("{LEADER}", Bukkit.getOfflinePlayer(sg.getLeader()).getName()));
