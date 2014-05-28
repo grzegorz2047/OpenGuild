@@ -33,6 +33,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
@@ -75,7 +76,7 @@ public class CuboidListeners implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(e.getClickedBlock() != null) {
-            if(GenConf.EXTRA_PROTECTION && !isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())) {
+            /*if(GenConf.EXTRA_PROTECTION && !isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())) {
                 if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
                     Location block = e.getPlayer().getLocation();
                     Guilds.getLogger().info("Player " + e.getPlayer().getName() + " (" + e.getPlayer().getUniqueId() +
@@ -91,9 +92,29 @@ public class CuboidListeners implements Listener {
                 } else {
                     e.setCancelled(true);
                 }
-            }
+            }*/
             if(e.getClickedBlock().getType().equals(Material.DRAGON_EGG)){
                 e.setCancelled(true); 
+            }
+        }
+    }
+    
+    @EventHandler
+    public void onInventoryOpen(InventoryOpenEvent e) {
+        if(GenConf.EXTRA_PROTECTION /*&& !isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())*/) {
+            if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
+                Location block = e.getPlayer().getLocation();
+                Guilds.getLogger().info("Player " + e.getPlayer().getName() + " (" + e.getPlayer().getUniqueId() +
+                        ") interacted in guilds cuboid at X:" + block.getBlockX() + ", Y:" + block.getBlockY() +
+                        ", Z:" + block.getBlockZ() + " in world " + block.getWorld().getName() + " (" +
+                        block.getBlock().getType().name() + ")");
+                ((Player) e.getPlayer()).sendMessage(MsgManager.get("interinguild")
+                        .replace("{WORLD}", block.getWorld().getName())
+                        .replace("{X}", String.valueOf(block.getBlockX()))
+                        .replace("{Y}", String.valueOf(block.getBlockY()))
+                        .replace("{Z}", String.valueOf(block.getBlockZ())));
+            } else {
+                e.setCancelled(true);
             }
         }
     }
@@ -112,9 +133,8 @@ public class CuboidListeners implements Listener {
             } else {
                 return false;
             }
-        } else {
-            return true;
         }
+        return true;
     }
 
     public static void loadItems() {
