@@ -16,6 +16,9 @@
   - [x] Zarządzanie gildiami poprzez /g admin np. delete, deleteall, banguild, 
 - [x] API pluginu
 - [ ] Wybuch TNT cuboie -> blokowanie budowania na 30 sekund
+- [x] Zmiana opisu gildii (jutro)
+- [x] Blokowanie przesuniecia jajka PiStonem (jutro)
+- [x] /g dom [gildia] jako admin (jutro)
 
 
 ***
