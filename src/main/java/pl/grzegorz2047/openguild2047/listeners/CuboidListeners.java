@@ -104,7 +104,8 @@ public class CuboidListeners implements Listener {
                 String tag = Data.getInstance().getPlayersGuild(player.getUniqueId()).getTag();
                 if(Data.getInstance().cuboids.get(tag).isinCuboid(location)) {
                     return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
-                } else {
+                }
+                else if(player.hasPermission("openguild.cuboid.bypassplace")) {
                     player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
                     return false;
                 }
