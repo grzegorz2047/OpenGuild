@@ -28,10 +28,12 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -64,6 +66,15 @@ public class CuboidListeners implements Listener {
     }
 
     @EventHandler
+    public void onBlockPiStonExtend(BlockPistonExtendEvent e) {
+        for(Block block : e.getBlocks()) {
+            if(block.getType() == Material.DRAGON_EGG) {
+                e.setCancelled(true);
+            }
+        }
+    }
+    
+    @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         if(e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
             return;
@@ -72,7 +83,7 @@ public class CuboidListeners implements Listener {
             e.setCancelled(true);
         }
     }
-
+    
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(e.getClickedBlock() != null) {

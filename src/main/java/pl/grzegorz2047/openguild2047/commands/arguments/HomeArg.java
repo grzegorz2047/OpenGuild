@@ -57,43 +57,37 @@ public class HomeArg {
             return true;
         }
         Player p = (Player) sender;
+        if(args.length == 2) {
+            if(!p.hasPermission("openguild.home.admin")) {
+                p.sendMessage(MsgManager.get("permission"));
+                return true;
+            }
+            String guild = args[1].toLowerCase();
+            if(!Data.getInstance().guildExists(guild)) {
+                p.sendMessage(MsgManager.guilddoesntexists);
+                return true;
+            }
+            p.teleport(Data.getInstance().guilds.get(guild).getHome());
+            return true;
+        }
         if(!GenConf.homecommand) {
             sender.sendMessage(MsgManager.homenotenabled);
             return true;
         }
         if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
-            if(args.length >= 2) {
-                SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
-                if(sg.getLeader().equals(p.getUniqueId())) {
-                    sg.setHome(p.getLocation());
-                    saveDb(Guilds.getGuild(p), p.getLocation());
-                    return true;
-                } else {
-                    p.sendMessage(MsgManager.playernotleader);
-                    return true;
-                }
-            } else {
-                Location homeloc = Data.getInstance().getPlayersGuild(p.getUniqueId()).getHome();
-                int cooldown = GenConf.TELEPORT_COOLDOWN;
-                if(cooldown <= 0) {
-                    teleport(p, homeloc, 10);
-                    Guilds.getLogger().severe("Czas oczekiwania teleportacji musi miec minimum 1 sekunde!");
-                    return true;
-                }
-                teleport(p, homeloc, cooldown);
+            Location homeloc = Data.getInstance().getPlayersGuild(p.getUniqueId()).getHome();
+            int cooldown = GenConf.TELEPORT_COOLDOWN;
+            if(cooldown <= 0) {
+                teleport(p, homeloc, 10);
+                Guilds.getLogger().severe("Czas oczekiwania teleportacji musi miec minimum 1 sekunde!");
                 return true;
             }
-
+            teleport(p, homeloc, cooldown);
+            return true;
         } else {
             p.sendMessage(MsgManager.notinguild);
             return true;
         }
-    }
-
-    private static void saveDb(Guild guild, Location location) {
-        SQLHandler.update(guild, Type.HOME_X, location.getBlockX());
-        SQLHandler.update(guild, Type.HOME_Y, location.getBlockY());
-        SQLHandler.update(guild, Type.HOME_Z, location.getBlockZ());
     }
 
     private static void teleport(final Player player, final Location location, final int seconds) {
