@@ -156,7 +156,7 @@ public class OpenGuild extends JavaPlugin {
         }
         Guilds.getLogger().info("Loading configuration from config.yml...");
         GenConf.loadConfiguration();
-        saveResource("messages_" + GenConf.lang.name().toLowerCase() + ".yml", false);
+        saveResource("messages_" + GenConf.lang.name().toLowerCase() + ".yml", true);
         Guilds.getLogger().info("Configuration loaded!");
     }
 
