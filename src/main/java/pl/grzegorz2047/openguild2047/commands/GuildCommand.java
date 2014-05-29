@@ -67,7 +67,7 @@ public class GuildCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(command.getName().equalsIgnoreCase("guild")) {
             if(args.length > 0) {
-                if(args[0].equalsIgnoreCase("admin") || args[0].equalsIgnoreCase("administrator")) {
+                if(args[0].equalsIgnoreCase("admin") || args[0].equalsIgnoreCase("administrator") || args[0].equalsIgnoreCase("op") || args[0].equalsIgnoreCase("operator")) {
                     return AdminArg.execute(sender, args);
                 }
                 if(args.length >= 2) {
@@ -91,6 +91,9 @@ public class GuildCommand implements CommandExecutor, TabCompleter {
                     }
                     else if(args[0].equalsIgnoreCase("unban") || args[0].equalsIgnoreCase("ub")) {
                         return UnbanCommandArg.execute(sender, args);
+                    }
+                    else if(args[0].equalsIgnoreCase("description") || args[0].equalsIgnoreCase("opis") || args[0].equalsIgnoreCase("desc")) {
+                        return DescriptionArg.execute(sender, args);
                     } else {
                         return error(sender, "cmdsyntaxerr");
                     }

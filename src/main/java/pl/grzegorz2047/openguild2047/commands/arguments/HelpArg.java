@@ -51,7 +51,7 @@ public class HelpArg {
                 sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
                 sender.sendMessage(help("zapros <gracz>", "Zapros gracza do gildii"));
                 sender.sendMessage(help("akceptuj <tag>", "Akceptuj zaproszenie od gildii"));
-                sender.sendMessage(help("opis <opis...>", "Stwórz opis gildii"));
+                sender.sendMessage(help("opis [zmien <opis...>]", "Stwórz lub zobacz opis gildii"));
                 sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii innemu graczowi"));
                 sender.sendMessage(help("akceptuj <gildia>", "Akceptuje dolaczenie do gildii"));
                 sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
@@ -67,7 +67,7 @@ public class HelpArg {
                 sender.sendMessage(help("create <tag> [desc...]", "Create guild"));
                 sender.sendMessage(help("invite <player>", "Accepts invite to joint guild"));
                 sender.sendMessage(help("accept <guild>", "Accept invite to joint guild"));
-                sender.sendMessage(help("description <description...>", "change description of guild"));
+                sender.sendMessage(help("description [change <description...>]", "Change or see description of guild"));
                 sender.sendMessage(help("leader <gracz>", "Give leader to someone else"));
                 sender.sendMessage(help("invite", "Invite to guild (sends invite)"));
                 sender.sendMessage(help("leave", "Leave from current guild"));

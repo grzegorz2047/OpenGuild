@@ -50,7 +50,7 @@ public class DescriptionArg {
         }
         Player p = (Player) sender;
         if(args.length > 1) {
-            if(args[1].equalsIgnoreCase("zmien")) {
+            if(args[1].equalsIgnoreCase("zmien") || args[1].equalsIgnoreCase("change")) {
                 if(args.length > 3) {
                     if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
                         SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
@@ -85,7 +85,7 @@ public class DescriptionArg {
         } else {
             if(Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
                 SimpleGuild sg = Data.getInstance().getPlayersGuild(p.getUniqueId());
-                p.sendMessage("Opis gildii to: " + sg.getDescription());
+                p.sendMessage(sg.getDescription());
                 return true;
             } else {
                 p.sendMessage(MsgManager.notinguild);
