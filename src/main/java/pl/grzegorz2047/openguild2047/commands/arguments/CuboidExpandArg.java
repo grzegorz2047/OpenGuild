@@ -49,7 +49,7 @@ public class CuboidExpandArg {
         MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.CUBOID_EXPAND);
         Bukkit.getPluginManager().callEvent(event);
         if(!event.isCancelled()) {
-            Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", "TODO").replace("{PLAYER}", sender.getName()).replace("{RADIUS}", "TODO"));
+            Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", "TODO".toUpperCase()).replace("{PLAYER}", sender.getName()).replace("{RADIUS}", "TODO"));
         }
         return true;
     }

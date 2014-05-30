@@ -62,7 +62,7 @@ public class LeaderArg {
                             MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.LEADER);
                             Bukkit.getPluginManager().callEvent(event);
                             if(!event.isCancelled()) {
-                                Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getTag()).replace("{PLAYER}", sender.getName()).replace("{LEADER}", leader.getName()));
+                                Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getTag().toUpperCase()).replace("{PLAYER}", sender.getName()).replace("{LEADER}", leader.getName()));
                             }
                             return true;
                         } else {

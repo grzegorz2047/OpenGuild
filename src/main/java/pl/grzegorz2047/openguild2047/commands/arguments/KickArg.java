@@ -78,7 +78,7 @@ public class KickArg {
                 MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.KICK);
                 Bukkit.getPluginManager().callEvent(event);
                 if(!event.isCancelled()) {
-                    Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sgl.getTag()).replace("{PLAYER}", sender.getName()).replace("{MEMBER}", op.getName()));
+                    Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sgl.getTag().toUpperCase()).replace("{PLAYER}", sender.getName()).replace("{MEMBER}", op.getName()));
                 }
             }else{
                 leader.sendMessage(MsgManager.playernotinthisguild);

@@ -80,7 +80,7 @@ public class DisbandArg {
                 MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.DISBAND);
                 Bukkit.getPluginManager().callEvent(event);
                 if(!event.isCancelled()) {
-                    Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getTag()).replace("{PLAYER}", sender.getName()));
+                    Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getTag().toUpperCase()).replace("{PLAYER}", sender.getName()));
                 }
                 return true;
             } else {

@@ -63,7 +63,7 @@ public class DescriptionArg {
                             MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.DESCRIPTION);
                             Bukkit.getPluginManager().callEvent(event);
                             if(!event.isCancelled()) {
-                                Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getTag()).replace("{PLAYER}", sender.getName()).replace("{DESC}", desc));
+                                Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getTag().toUpperCase()).replace("{PLAYER}", sender.getName()).replace("{DESC}", desc));
                             }
                             return true;
                         } else {

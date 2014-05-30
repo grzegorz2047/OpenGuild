@@ -64,7 +64,7 @@ public class LeaveArg {
             MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.LEAVE);
             Bukkit.getPluginManager().callEvent(event);
             if(!event.isCancelled()) {
-                Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getClanTag()).replace("{PLAYER}", sender.getName()));
+                Bukkit.broadcastMessage(event.getMessage().replace("{TAG}", sg.getClanTag().toUpperCase()).replace("{PLAYER}", sender.getName()));
             }
         } else {
             p.sendMessage(MsgManager.notinguild);
