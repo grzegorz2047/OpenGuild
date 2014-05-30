@@ -92,7 +92,6 @@ public class OpenGuild extends JavaPlugin {
             if(Bukkit.getOfflinePlayer("Notch").getUniqueId() ==null){
                 Guilds.getLogger().severe("Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5!");
                 getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
-                getServer().getConsoleSender().sendMessage("§4Get newer wersion of bukkit/spigot");
                 getServer().getPluginManager().disablePlugin(this);
             }
         }
