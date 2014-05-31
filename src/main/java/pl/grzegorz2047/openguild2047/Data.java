@@ -53,11 +53,9 @@ public class Data {
     public boolean isPlayerInGuild(UUID playeruuid) {
         if(this.guildsplayers.containsKey(playeruuid)) {
             String tag = this.guildsplayers.get(playeruuid).getClanTag();
-            if(tag==null){
-                System.out.println("Gracz nie w gildii");
+            if(tag==null) {
                 return false;
             }
-            //System.out.println("tag to "+tag);
             if(Data.getInstance().guildExists(tag)) {
                 SimpleGuild sg = this.guilds.get(tag);
                 return sg.containsMember(playeruuid);
@@ -76,18 +74,16 @@ public class Data {
         return null;
     }
 
-    public boolean guildExists(String tag){
-        //System.out.println("Gildia "+tag+ "moze istniec");
+    public boolean guildExists(String tag) {
         boolean check = Data.getInstance().guilds.containsKey(tag.toLowerCase());
-        //System.out.println("Check "+tag+" wynik to "+check);
         return check;
     }
-    public String getGuildChatTag(UUID uuid){
+    public String getGuildChatTag(UUID uuid) {
         SimplePlayerGuild spg = Data.getInstance().guildsplayers.get(uuid);
         if(Data.getInstance().guildsplayers.containsKey(uuid)) {
             if(spg.getClanTag().equals("") || spg.getClanTag().equals("null")) {
                 return null;
-            }else{
+            } else {
                 return spg.getClanTag();
             }
         }
