@@ -68,6 +68,7 @@ public class HardcoreListeners implements Listener {
         SQLHandler.update(e.getEntity().getUniqueId(), SQLHandler.PType.BAN_TIME, ban);
         e.getEntity().getInventory().clear();
         e.getEntity().getInventory().setContents(null);
+        e.getEntity().getLocation().getWorld().strikeLightningEffect(e.getEntity().getLocation());
         e.getEntity().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
     }
 
