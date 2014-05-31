@@ -81,6 +81,7 @@ public class GenConf {
     public static boolean updater;
     public static String nicknameTag;
     public static boolean cubEnabled;
+    public static boolean hcLightninh;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.get().getConfig();
@@ -138,6 +139,7 @@ public class GenConf {
         }
         playerprefixenabled = config.getBoolean("playerprefixtag", true);
         guildprefixinchat = config.getBoolean("guildprefixinchat", true);
+        hcLightninh = config.getBoolean("hardcore-bans.lightning", true);
     }
 
     private static void loadBans() {

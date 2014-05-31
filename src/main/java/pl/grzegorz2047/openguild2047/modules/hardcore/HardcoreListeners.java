@@ -62,13 +62,16 @@ public class HardcoreListeners implements Listener {
             return;
         }
         
+        if(GenConf.hcLightninh) {
+            e.getEntity().getWorld().strikeLightningEffect(e.getEntity().getLocation());
+        }
+        
         long ban = System.currentTimeMillis() + GenConf.hcBantime;
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         Date date = new Date(ban);
         SQLHandler.update(e.getEntity().getUniqueId(), SQLHandler.PType.BAN_TIME, ban);
         e.getEntity().getInventory().clear();
         e.getEntity().getInventory().setContents(null);
-        e.getEntity().getLocation().getWorld().strikeLightningEffect(e.getEntity().getLocation());
         e.getEntity().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
     }
 
