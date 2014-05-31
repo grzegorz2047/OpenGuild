@@ -35,7 +35,7 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 public class ItemsArg {
     
     public static boolean execute(CommandSender sender, String[] args) {
-        if(GenConf.reqitems != null && !GenConf.reqitems.isEmpty()) {
+        if(GenConf.reqitems == null && !GenConf.reqitems.isEmpty()) {
             sender.sendMessage(MsgManager.get("reqitemsoff"));
             return true;
         }
