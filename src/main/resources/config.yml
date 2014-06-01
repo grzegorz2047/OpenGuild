@@ -46,5 +46,6 @@ playerprefixtag: true
 nickname-tag: '&6[{TAG}] '
 guildprefixinchat: true
 forbiddenguildnames:
+use-new-command-api: false
 required-items:
 - 'WOOD:2'

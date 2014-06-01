@@ -1,3 +1,5 @@
+cmderror: '&cWystapil blad podczas wykonywania tej komendy. Zobacz konsole.'
+numneededsyntax: '&cMusisz podac liczbe, nie {STRING}!'
 createguildsuccess: '&aGildia zostala pomysnie stworzona.'
 cmdonlyforplayer: '&cKomenda jedynie dla graczy na serwerze!'
 alreadyinguild: '&cNie mozesz tego wykonac, poniewaz jestes w gildii!'

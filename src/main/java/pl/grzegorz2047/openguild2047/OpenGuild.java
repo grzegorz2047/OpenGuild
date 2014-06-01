@@ -24,6 +24,9 @@
 
 package pl.grzegorz2047.openguild2047;
 
+import com.github.grzegorz2047.openguild.OpenGuildPlugin;
+import com.github.grzegorz2047.openguild.command.CommandDescription;
+import com.github.grzegorz2047.openguild.command.CommandInfo;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -37,7 +40,9 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.commands.ErrorCommand;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
+import pl.grzegorz2047.openguild2047.commands.NewGuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
+import pl.grzegorz2047.openguild2047.commands2.Version;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
@@ -53,6 +58,7 @@ import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreListeners;
  */
 public class OpenGuild extends JavaPlugin {
 
+    private static OpenGuildPlugin api;
     private static OpenGuild instance;
     private File log = new File("plugins/OpenGuild2047/logger/openguild.log");
     private File logDir = new File("plugins/OpenGuild2047/logger");
@@ -66,9 +72,11 @@ public class OpenGuild extends JavaPlugin {
         long init = System.currentTimeMillis();
         instance = this;
         com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(new OpenGuildBukkitPlugin()); // Setup API
+        api = com.github.grzegorz2047.openguild.OpenGuild.getPlugin();
         getCommand("guild").setExecutor(new ErrorCommand());
         getCommand("team").setExecutor(new ErrorCommand());
         copyDefaultFiles();
+        loadCommands();
         checkForUpdates();
         loadAllListeners();
         Data pd = new Data();
@@ -157,6 +165,28 @@ public class OpenGuild extends JavaPlugin {
         GenConf.loadConfiguration();
         saveResource("messages_" + GenConf.lang.name().toLowerCase() + ".yml", true);
         Guilds.getLogger().info("Configuration loaded!");
+    }
+
+    private void loadCommands() {
+        if(!GenConf.newCmdApi) {
+            return;
+        }
+        
+        CommandDescription version = new CommandDescription();
+        
+        version.set("EN", "See the plugin version");
+        
+        version.set("PL", "Zobacz wersje pluginu");
+        
+        api.registerCommand(new CommandInfo(
+                new String[] {"ver", "about"},
+                login,
+                version,
+                new Version(),
+                null,
+                null));
+        
+        getCommand("guild").setExecutor(new NewGuildCommand());
     }
 
     private void loadConfig() {

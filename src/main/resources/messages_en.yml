@@ -1,5 +1,7 @@
 # English translation by TheMolkaPL (themolkapl@gmail.com) - 01.05.2014
 # Fixed some mistakes by grzegorz2047 - 05.05.2014
+cmderror: '&cAn error ocurred while perform this command. See console.'
+numneededsyntax: '&cYou must type a numer, not {STRING}!'
 createguildsuccess: '&aGuild was created.'
 cmdonlyforplayer: '&cCommand only for in-game players!'
 alreadyinguild: '&cYou cannot do this, because you are already in the guild!'
