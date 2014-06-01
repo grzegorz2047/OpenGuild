@@ -22,12 +22,22 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild.command;
+package com.github.grzegorz2047.openguild.event;
 
-import org.bukkit.command.CommandSender;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
-public interface Command {
+public class ModuleLoadEvent extends Event {
 
-    void execute(CommandSender sender, String[] args) throws CommandException;
+    public static final HandlerList handlers = new HandlerList();
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 
 }

@@ -180,17 +180,18 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     @Override
     public void registerCommand(CommandInfo command) {
         Validate.notNull(command, "command can not be null");
-        Validate.notNull(command.getExecutor(), "executor can not be null");
-        Validate.notNull(command.getName(), "name can not be null");
-        Validate.notNull(command, "command can not be null");
+        Validate.notNull(command.getExecutor(), "command executor can not be null");
+        Validate.notNull(command.getName(), "command name can not be null");
         
         if(commands.containsKey(command.getName())) {
             throw new IllegalArgumentException("Command " + command.getName() + " is already listed");
         }
         
         commands.put(command.getName(), command);
-        for(String alias : command.getAliases()) {
-            commands.put(alias, command);
+        if(command.getAliases() != null) {
+            for(String alias : command.getAliases()) {
+                commands.put(alias, command);
+            }
         }
     }
     

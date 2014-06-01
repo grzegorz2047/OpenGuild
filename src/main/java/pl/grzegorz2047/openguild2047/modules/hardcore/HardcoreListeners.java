@@ -30,12 +30,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 
 public class HardcoreListeners implements Listener {
-
+    
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent e) {
         if(!GenConf.hcBans) {
@@ -49,10 +48,10 @@ public class HardcoreListeners implements Listener {
         if( System.currentTimeMillis() < ban ) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
             Date date = new Date(ban);
-            e.disallow(Result.KICK_OTHER, GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
+            e.disallow(PlayerLoginEvent.Result.KICK_OTHER, GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
         }
     }
-
+    
     @EventHandler
     public void onPlayerDead(PlayerDeathEvent e) {
         if(!GenConf.hcBans) {
@@ -73,5 +72,5 @@ public class HardcoreListeners implements Listener {
         e.getEntity().getInventory().clear();
         e.getEntity().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
     }
-
+    
 }

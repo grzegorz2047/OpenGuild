@@ -25,7 +25,7 @@
 package pl.grzegorz2047.openguild2047.commands2;
 
 import com.github.grzegorz2047.openguild.command.Command;
-import com.github.grzegorz2047.openguild.command.UsageException;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.OpenGuild;
@@ -33,7 +33,7 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 public class Version implements Command {
     
     @Override
-    public void execute(CommandSender sender, String[] args) throws UsageException {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " ----------------- ");
         sender.sendMessage(ChatColor.DARK_GRAY + "Version: " + ChatColor.GOLD + OpenGuild.get().getDescription().getVersion());
         sender.sendMessage(ChatColor.DARK_GRAY + "Authors: " + ChatColor.GOLD + "grzegorz2047 & TheMolkaPL");

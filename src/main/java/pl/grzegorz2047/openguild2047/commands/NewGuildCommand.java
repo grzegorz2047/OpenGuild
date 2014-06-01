@@ -26,6 +26,8 @@ package pl.grzegorz2047.openguild2047.commands;
 
 import com.github.grzegorz2047.openguild.OpenGuild;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
+import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.command.CommandInfo;
 import com.github.grzegorz2047.openguild.command.PermException;
 import com.github.grzegorz2047.openguild.command.UsageException;
 import java.util.ArrayList;
@@ -69,7 +71,15 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
             }
             
             try {
-                og.getCommand(result).getExecutor().execute(sender, args);
+                CommandInfo info = og.getCommand(result);
+                if(!info.hasPermission() || sender.hasPermission(info.getPermission())) {
+                    og.getCommand(result).getExecutor().execute(sender, args);
+                } else {
+                    throw new PermException();
+                }
+            } catch(CommandException ex) {
+                sender.sendMessage(ChatColor.RED + ex.getMessage());
+                return true;
             } catch(PermException ex) {
                 sender.sendMessage(ChatColor.RED + MsgManager.get("permission"));
                 return true;
@@ -81,7 +91,7 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
                 if(ex instanceof NumberFormatException) {
                     sender.sendMessage(ChatColor.RED + MsgManager.get("numneededsyntax").replace("{STRING}", ex.getMessage()));
                 } else {
-                    sender.sendMessage(ChatColor.RED + MsgManager.getIgnorePref("cmderror"));
+                    sender.sendMessage(ChatColor.RED + MsgManager.get("cmderror"));
                     ex.printStackTrace();
                 }
                 return true;
@@ -102,7 +112,8 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
                     complete.addAll(cmds);
                 } else {
                     for(String argument : cmds) {
-                        if(argument.startsWith(args[0].toLowerCase())) {
+                        if(OpenGuild.getCommand(argument).getName().equals(argument) // Remove aliases
+                                && argument.startsWith(args[0].toLowerCase())) {
                             complete.add(argument);
                         }
                     }

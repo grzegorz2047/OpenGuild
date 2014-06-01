@@ -26,8 +26,8 @@ package pl.grzegorz2047.openguild2047.commands2;
 
 import com.github.grzegorz2047.openguild.OpenGuild;
 import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
-import com.github.grzegorz2047.openguild.command.UsageException;
 import java.util.HashMap;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -38,7 +38,7 @@ public class Help implements Command {
     private static final HashMap<String, String> pages = new HashMap<String, String>();
     
     @Override
-    public void execute(CommandSender sender, String[] args) throws UsageException {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         int page = 1;
         if(args.length > 1) {
             try {
@@ -49,7 +49,7 @@ public class Help implements Command {
         }
         
         if(page <= 0) {
-            throw new UsageException("Page number must be positive");
+            throw new CommandException("Page number must be positive");
         } else {
             help(sender, page);
         }
