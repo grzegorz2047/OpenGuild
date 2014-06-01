@@ -24,16 +24,33 @@
 
 package pl.grzegorz2047.openguild2047.modules.hardcore;
 
+import com.github.grzegorz2047.openguild.OpenGuild;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 
 public class HardcoreListeners implements Listener {
+    
+    @EventHandler
+    public void onPlayerDead(PlayerDeathEvent e) {
+        if(!GenConf.hcBans) {
+            return;
+        }
+        
+        if(GenConf.hcLightninh) {
+            e.getEntity().getWorld().strikeLightningEffect(e.getEntity().getLocation());
+        }
+        
+        long ban = System.currentTimeMillis() + GenConf.hcBantime;
+        SQLHandler.update(e.getEntity().getUniqueId(), SQLHandler.PType.BAN_TIME, ban);
+    }
     
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent e) {
@@ -53,24 +70,25 @@ public class HardcoreListeners implements Listener {
     }
     
     @EventHandler
-    public void onPlayerDead(PlayerDeathEvent e) {
+    public void onPlayerRespawn(final PlayerRespawnEvent e) {
         if(!GenConf.hcBans) {
             return;
         }
-        if(e.getEntity().hasPermission("openguild.hardcore.bypass")) {
+        
+        final long ban = SQLHandler.getBan(e.getPlayer().getUniqueId());
+        if(ban == 0) {
             return;
         }
         
-        if(GenConf.hcLightninh) {
-            e.getEntity().getWorld().strikeLightningEffect(e.getEntity().getLocation());
-        }
-        
-        long ban = System.currentTimeMillis() + GenConf.hcBantime;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        Date date = new Date(ban);
-        SQLHandler.update(e.getEntity().getUniqueId(), SQLHandler.PType.BAN_TIME, ban);
-        e.getEntity().getInventory().clear();
-        e.getEntity().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
+        Bukkit.getScheduler().runTaskLater(OpenGuild.getBukkit(), new Runnable() {
+            
+            @Override
+            public void run() {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                Date date = new Date(ban);
+                e.getPlayer().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
+            }
+        }, 5 * 20L); // 5 seconds to say "Good bye"
     }
     
 }

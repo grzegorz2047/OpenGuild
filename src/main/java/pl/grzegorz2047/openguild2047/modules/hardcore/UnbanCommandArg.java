@@ -33,10 +33,7 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
-/**
- *
- * @author Aleksander
- */
+@Deprecated
 public class UnbanCommandArg  {
     
     public static boolean execute(CommandSender sender, String[] args) {
