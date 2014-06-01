@@ -25,21 +25,21 @@
 package com.github.grzegorz2047.openguild.command;
 
 public class UsageException extends RuntimeException {
-    
+
     public UsageException() {
         super();
     }
-    
+
     public UsageException(String message) {
         super(message);
     }
-    
+
     public UsageException(Throwable cause) {
         super(cause);
     }
-    
+
     public UsageException(String message, Throwable cause) {
         super(message, cause);
     }
-    
+
 }

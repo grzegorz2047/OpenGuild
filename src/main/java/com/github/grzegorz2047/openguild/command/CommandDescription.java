@@ -27,20 +27,20 @@ package com.github.grzegorz2047.openguild.command;
 import java.util.HashMap;
 
 public class CommandDescription {
-    
+
     private final HashMap<String, String> list = new HashMap<String, String>();
-    
+
     public String get(String lang) {
         return list.get(lang);
     }
-    
+
     public boolean has(String lang) {
         return list.containsKey(lang.toUpperCase());
     }
-    
+
     public void set(String lang, String description) {
         list.remove(lang.toUpperCase());
         list.put(lang.toUpperCase(), description);
     }
-    
+
 }

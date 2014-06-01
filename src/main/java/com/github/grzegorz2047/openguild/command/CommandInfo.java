@@ -27,14 +27,14 @@ package com.github.grzegorz2047.openguild.command;
 import org.bukkit.ChatColor;
 
 public class CommandInfo {
-    
+
     private final String[] aliases;
     private final String command;
     private final CommandDescription description;
     private final Command executor;
     private final String permission;
     private final String usage;
-    
+
     public CommandInfo(String[] aliases, String command, CommandDescription description, Command executor, String permission, String usage) {
         this.aliases = aliases;
         this.command = command.toLowerCase();
@@ -43,47 +43,47 @@ public class CommandInfo {
         this.permission = permission;
         this.usage = usage;
     }
-    
+
     public String[] getAliases() {
         return aliases;
     }
-    
+
     public String getName() {
         return command;
     }
-    
+
     public CommandDescription getDescription() {
-        if(description == null) {
+        if(description != null) {
             return description;
         } else {
             CommandDescription desc = new CommandDescription();
             desc.set("EN", ChatColor.ITALIC + "Not available yet" + ChatColor.RESET);
+            desc.set("PL", ChatColor.ITALIC + "Obecnie niedostepne" + ChatColor.RESET);
             return desc;
         }
     }
-    
+
     public Command getExecutor() {
         return executor;
     }
-    
+
     public String getPermission() {
         return permission;
     }
-    
+
     public String getUsage() {
-        if(usage != null) {
-            return "/g" + usage;
-        } else {
-            return "/g " + getName();
-        }
+        String result = "";
+        if(usage != null)
+            result = " " + usage;
+        return "/g " + getName() + result;
     }
-    
+
     public boolean hasExecutor() {
         return executor != null;
     }
-    
+
     public boolean hasPermission() {
         return permission != null;
     }
-    
+
 }

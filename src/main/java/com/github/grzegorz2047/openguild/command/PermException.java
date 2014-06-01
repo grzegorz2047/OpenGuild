@@ -25,21 +25,21 @@
 package com.github.grzegorz2047.openguild.command;
 
 public class PermException extends RuntimeException {
-    
+
     public PermException() {
         super();
     }
-    
+
     public PermException(String message) {
         super(message);
     }
-    
+
     public PermException(Throwable cause) {
         super(cause);
     }
-    
+
     public PermException(String message, Throwable cause) {
         super(message, cause);
     }
-    
+
 }

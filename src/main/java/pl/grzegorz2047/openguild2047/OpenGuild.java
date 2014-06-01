@@ -42,6 +42,7 @@ import pl.grzegorz2047.openguild2047.commands.ErrorCommand;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.NewGuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
+import pl.grzegorz2047.openguild2047.commands2.Help;
 import pl.grzegorz2047.openguild2047.commands2.Version;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
@@ -108,7 +109,6 @@ public class OpenGuild extends JavaPlugin {
             getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
             getServer().getPluginManager().disablePlugin(this);
         }
-        getCommand("guild").setExecutor(new GuildCommand());
         getCommand("team").setExecutor(new TeamCommand());
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
     }
@@ -169,18 +169,29 @@ public class OpenGuild extends JavaPlugin {
 
     private void loadCommands() {
         if(!GenConf.newCmdApi) {
+            getCommand("guild").setExecutor(new GuildCommand());
             return;
         }
         
+        CommandDescription help = new CommandDescription();
         CommandDescription version = new CommandDescription();
         
+        help.set("EN", "Help");
         version.set("EN", "See the plugin version");
         
+        help.set("PL", "Pomoc");
         version.set("PL", "Zobacz wersje pluginu");
         
         api.registerCommand(new CommandInfo(
+                new String[] {"pomoc", "?"},
+                "help",
+                help,
+                new Help(),
+                null,
+                "[page]"));
+        api.registerCommand(new CommandInfo(
                 new String[] {"ver", "about"},
-                login,
+                "version",
                 version,
                 new Version(),
                 null,

@@ -38,6 +38,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class NewGuildCommand implements CommandExecutor, TabCompleter {
@@ -45,22 +46,25 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(command.getName().equalsIgnoreCase("guild")) {
+            String result = null;
             if(args.length == 0) {
-                // TODO help
-                return true;
+                result = "help";
             }
             
             OpenGuildPlugin og = OpenGuild.getPlugin();
-            String result = null;
             Iterator<String> it = og.getCommands().iterator();
-            while(it.hasNext()) {
-                if(it.next().toLowerCase().contains(args[0].toLowerCase())) {
-                    result = it.next();
+            if(result == null) {
+                while(it.hasNext()) {
+                    String next = it.next();
+                    if(next.toLowerCase().startsWith(args[0].toLowerCase())) {
+                        result = next;
+                    }
                 }
             }
             
             if(result == null) {
-                // TODO cmd not found
+                sender.sendMessage(GenConf.prefix + ChatColor.RED + "Command '" + args[0] + " was not found.");
+                sender.sendMessage(ChatColor.RED + "/g help [page]");
                 return true;
             }
             
@@ -77,7 +81,7 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
                 if(ex instanceof NumberFormatException) {
                     sender.sendMessage(ChatColor.RED + MsgManager.get("numneededsyntax").replace("{STRING}", ex.getMessage()));
                 } else {
-                    sender.sendMessage(ChatColor.RED + MsgManager.get("cmderror"));
+                    sender.sendMessage(ChatColor.RED + MsgManager.getIgnorePref("cmderror"));
                     ex.printStackTrace();
                 }
                 return true;

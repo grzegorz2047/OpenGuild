@@ -27,7 +27,7 @@ package com.github.grzegorz2047.openguild.command;
 import org.bukkit.command.CommandSender;
 
 public interface Command {
-    
+
     void execute(CommandSender sender, String[] args) throws UsageException;
-    
+
 }
