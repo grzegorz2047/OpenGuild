@@ -22,63 +22,35 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild;
+package pl.grzegorz2047.openguild2047.modules.hardcore;
 
-import com.github.grzegorz2047.openguild.module.ModuleManager;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import com.github.grzegorz2047.openguild.OpenGuild;
+import com.github.grzegorz2047.openguild.command.CommandDescription;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
+import com.github.grzegorz2047.openguild.event.ModuleLoadEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import pl.grzegorz2047.openguild2047.GenConf;
 
-public interface OpenGuildPlugin {
-
-    Plugin getBukkit();
-
-    CommandInfo getCommand(String name);
-
-    Set<String> getCommands();
-
-    Configuration getConfig();
-
-    Guild getGuild(Location location);
-
-    Guild getGuild(Player player);
-
-    Guild getGuild(String name);
-
-    Guild getGuild(User user);
-
-    GuildManager getGuildManager();
-
-    List<Guild> getGuilds();
-
-    Messages getMessages();
-
-    ModuleManager getModules();
-
-    OpenGuildPlugin getPlugin();
-
-    PluginUpdater getUpdater();
-
-    User getUser(String name);
-
-    User getUser(Player player);
-
-    User getUser(UUID uuid);
-
-    List<User> getUsers();
-
-    String getVersion();
-
-    void registerCommand(CommandInfo command);
-
-    @Deprecated
-    void reload(CommandSender sender);
-
-    Guild[] sortGuilds();
-
+public class ModuleHardcore implements Listener {
+    
+    @EventHandler
+    public void onModuleLoad(ModuleLoadEvent e) {
+        if(GenConf.hcBans) {
+            Bukkit.getPluginManager().registerEvents(new HardcoreListeners(), OpenGuild.getBukkit());
+            
+            CommandDescription desc = new CommandDescription();
+            desc.set("EN", "Unban a player from the dead");
+            desc.set("PL", "Odbanuj gracza ze smierci");
+            OpenGuild.registerCommand(new CommandInfo(
+                    new String[] {"ub"},
+                    "unban",
+                    desc,
+                    new Unban(),
+                    "openguild.hardcore.unban",
+                    "<player>"));
+        }
+    }
+    
 }

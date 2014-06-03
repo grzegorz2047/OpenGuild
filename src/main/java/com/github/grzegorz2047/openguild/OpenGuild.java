@@ -26,11 +26,13 @@ package com.github.grzegorz2047.openguild;
 
 import com.github.grzegorz2047.openguild.module.ModuleManager;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import com.github.grzegorz2047.openguild.command.CommandInfo;
 
 public class OpenGuild {
 
@@ -38,6 +40,14 @@ public class OpenGuild {
 
     public static Plugin getBukkit() {
         return guild.getBukkit();
+    }
+
+    public static CommandInfo getCommand(String name) {
+        return guild.getCommand(name);
+    }
+
+    public static Set<String> getCommands() {
+        return guild.getCommands();
     }
 
     public static Configuration getConfig() {
@@ -102,6 +112,10 @@ public class OpenGuild {
 
     public static String getVersion() {
         return guild.getVersion();
+    }
+
+    public static void registerCommand(CommandInfo command) {
+        guild.registerCommand(command);
     }
 
     @Deprecated

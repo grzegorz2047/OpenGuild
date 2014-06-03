@@ -32,8 +32,11 @@ import com.github.grzegorz2047.openguild.OpenGuildPlugin;
 import com.github.grzegorz2047.openguild.PluginUpdater;
 import com.github.grzegorz2047.openguild.User;
 import com.github.grzegorz2047.openguild.module.ModuleManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -42,10 +45,12 @@ import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
+import com.github.grzegorz2047.openguild.command.CommandInfo;
 
 public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
     private static final Plugin bukkit = Bukkit.getPluginManager().getPlugin("OpenGuild2047");
+    private static final HashMap<String, CommandInfo> commands = new HashMap<String, CommandInfo>();
     private static final Configuration configuration = new OpenConfiguration();
     private static final GuildManager manager = new OpenGuildManager();
     private static final Messages messages = new OpenMessages();
@@ -60,6 +65,16 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     @Override
     public Plugin getBukkit() {
         return bukkit;
+    }
+    
+    @Override
+    public CommandInfo getCommand(String name) {
+        return commands.get(name.toLowerCase());
+    }
+    
+    @Override
+    public Set<String> getCommands() {
+        return commands.keySet();
     }
     
     @Override
@@ -160,6 +175,24 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     @Override
     public String getVersion() {
         return getBukkit().getDescription().getVersion();
+    }
+    
+    @Override
+    public void registerCommand(CommandInfo command) {
+        Validate.notNull(command, "command can not be null");
+        Validate.notNull(command.getExecutor(), "command executor can not be null");
+        Validate.notNull(command.getName(), "command name can not be null");
+        
+        if(commands.containsKey(command.getName())) {
+            throw new IllegalArgumentException("Command " + command.getName() + " is already listed");
+        }
+        
+        commands.put(command.getName(), command);
+        if(command.getAliases() != null) {
+            for(String alias : command.getAliases()) {
+                commands.put(alias, command);
+            }
+        }
     }
     
     @Override

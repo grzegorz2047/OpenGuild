@@ -22,63 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild;
+package com.github.grzegorz2047.openguild.command;
 
-import com.github.grzegorz2047.openguild.module.ModuleManager;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import com.github.grzegorz2047.openguild.command.CommandInfo;
 
-public interface OpenGuildPlugin {
+public interface Command {
 
-    Plugin getBukkit();
-
-    CommandInfo getCommand(String name);
-
-    Set<String> getCommands();
-
-    Configuration getConfig();
-
-    Guild getGuild(Location location);
-
-    Guild getGuild(Player player);
-
-    Guild getGuild(String name);
-
-    Guild getGuild(User user);
-
-    GuildManager getGuildManager();
-
-    List<Guild> getGuilds();
-
-    Messages getMessages();
-
-    ModuleManager getModules();
-
-    OpenGuildPlugin getPlugin();
-
-    PluginUpdater getUpdater();
-
-    User getUser(String name);
-
-    User getUser(Player player);
-
-    User getUser(UUID uuid);
-
-    List<User> getUsers();
-
-    String getVersion();
-
-    void registerCommand(CommandInfo command);
-
-    @Deprecated
-    void reload(CommandSender sender);
-
-    Guild[] sortGuilds();
+    void execute(CommandSender sender, String[] args) throws CommandException;
 
 }

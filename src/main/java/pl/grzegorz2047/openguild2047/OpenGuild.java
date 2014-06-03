@@ -24,11 +24,14 @@
 
 package pl.grzegorz2047.openguild2047;
 
+import com.github.grzegorz2047.openguild.OpenGuildPlugin;
+import com.github.grzegorz2047.openguild.command.CommandDescription;
+import com.github.grzegorz2047.openguild.command.CommandInfo;
+import com.github.grzegorz2047.openguild.event.ModuleLoadEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,7 +40,10 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.commands.ErrorCommand;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
+import pl.grzegorz2047.openguild2047.commands.NewGuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
+import pl.grzegorz2047.openguild2047.commands2.Help;
+import pl.grzegorz2047.openguild2047.commands2.Version;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
@@ -45,7 +51,6 @@ import pl.grzegorz2047.openguild2047.listeners.Monitors;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
-import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreListeners;
 
 /**
  *
@@ -53,6 +58,7 @@ import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreListeners;
  */
 public class OpenGuild extends JavaPlugin {
 
+    private static OpenGuildPlugin api;
     private static OpenGuild instance;
     private File log = new File("plugins/OpenGuild2047/logger/openguild.log");
     private File logDir = new File("plugins/OpenGuild2047/logger");
@@ -66,9 +72,11 @@ public class OpenGuild extends JavaPlugin {
         long init = System.currentTimeMillis();
         instance = this;
         com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(new OpenGuildBukkitPlugin()); // Setup API
+        api = com.github.grzegorz2047.openguild.OpenGuild.getPlugin();
         getCommand("guild").setExecutor(new ErrorCommand());
         getCommand("team").setExecutor(new ErrorCommand());
         copyDefaultFiles();
+        loadCommands();
         checkForUpdates();
         loadAllListeners();
         Data pd = new Data();
@@ -89,7 +97,7 @@ public class OpenGuild extends JavaPlugin {
             // Failed to submit the stats :-(
         }
         try{
-            if(Bukkit.getOfflinePlayer("Notch").getUniqueId() ==null){
+            if(getServer().getOfflinePlayer("Notch").getUniqueId() ==null){
                 Guilds.getLogger().severe("Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5!");
                 getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
                 getServer().getPluginManager().disablePlugin(this);
@@ -100,7 +108,6 @@ public class OpenGuild extends JavaPlugin {
             getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
             getServer().getPluginManager().disablePlugin(this);
         }
-        getCommand("guild").setExecutor(new GuildCommand());
         getCommand("team").setExecutor(new TeamCommand());
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
     }
@@ -159,6 +166,39 @@ public class OpenGuild extends JavaPlugin {
         Guilds.getLogger().info("Configuration loaded!");
     }
 
+    private void loadCommands() {
+        if(!GenConf.newCmdApi) {
+            getCommand("guild").setExecutor(new GuildCommand());
+            return;
+        }
+        
+        CommandDescription help = new CommandDescription();
+        CommandDescription version = new CommandDescription();
+        
+        help.set("EN", "Help");
+        version.set("EN", "See the plugin version");
+        
+        help.set("PL", "Pomoc");
+        version.set("PL", "Zobacz wersje pluginu");
+        
+        api.registerCommand(new CommandInfo(
+                new String[] {"pomoc", "?"},
+                "help",
+                help,
+                new Help(),
+                null,
+                "[page]"));
+        api.registerCommand(new CommandInfo(
+                new String[] {"ver", "about"},
+                "version",
+                version,
+                new Version(),
+                null,
+                null));
+        
+        getCommand("guild").setExecutor(new NewGuildCommand());
+    }
+
     private void loadConfig() {
         // MySQL
         address = getConfig().getString("mysql.address");
@@ -192,12 +232,11 @@ public class OpenGuild extends JavaPlugin {
         if(!GenConf.teampvp) {
             pm.registerEvents(new EntityDamageByEntity(), this);
         }
-        if(GenConf.hcBans) {
-            pm.registerEvents(new HardcoreListeners(), this);
-        }
         if(GenConf.playerMoveEvent) {
             pm.registerEvents(new PlayerMove(), this);
         }
+        
+        getServer().getPluginManager().callEvent(new ModuleLoadEvent());
     }
 
     private void loadPlayers() {

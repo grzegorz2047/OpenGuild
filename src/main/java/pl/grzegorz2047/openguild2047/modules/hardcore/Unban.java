@@ -24,8 +24,11 @@
 
 package pl.grzegorz2047.openguild2047.modules.hardcore;
 
+import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.command.PermException;
+import com.github.grzegorz2047.openguild.command.UsageException;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GenConf;
@@ -33,27 +36,20 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
-@Deprecated
-public class UnbanCommandArg  {
+public class Unban implements Command {
     
-    public static boolean execute(CommandSender sender, String[] args) {
+    @Override
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         if(!GenConf.hcBans) {
-            sender.sendMessage(MsgManager.get("hcnotenabled"));
-            return true;
-        }
-        else if(!sender.hasPermission("openguild.hardcore.unban")) {
-            sender.sendMessage(MsgManager.get("permission"));
-            return true;
+            throw new CommandException(MsgManager.get("hcnotenabled"));
         }
         else if(args.length != 2) {
-            sender.sendMessage(MsgManager.get("wrongcmdargument"));
-            sender.sendMessage(ChatColor.RED + "/g unban <player>");
-            return true;
+            throw new UsageException(MsgManager.get("wrongcmdargument"));
         }
+        
         OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
         if(player == null || !player.hasPlayedBefore()) {
-            sender.sendMessage(MsgManager.get("notplayedbefore").replace("{PLAYER}", args[1]));
-            return true;
+            throw new CommandException(MsgManager.get("notplayedbefore").replace("{PLAYER}", args[1]));
         }
         
         long banned = SQLHandler.getBan(player.getUniqueId());
@@ -62,9 +58,9 @@ public class UnbanCommandArg  {
             Guilds.getLogger().info("Player " + player.getName() + " (" + player.getUniqueId() + ") was unbanned by " + sender.getName());
             sender.sendMessage(MsgManager.get("hcub").replace("{PLAYER}", player.getName()));
         } else {
-            sender.sendMessage(MsgManager.get("notbanned").replace("{PLAYER}", player.getName()));
+            throw new CommandException(MsgManager.get("notbanned").replace("{PLAYER}", player.getName()));
         }
-        return true;
+        
     }
     
 }
