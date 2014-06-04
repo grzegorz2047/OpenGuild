@@ -58,10 +58,11 @@ import pl.grzegorz2047.openguild2047.managers.TagManager;
  */
 public class OpenGuild extends JavaPlugin {
 
+    public static final File CMDS = new File("plugins/OpenGuild2047/commands.yml");
     private static OpenGuildPlugin api;
     private static OpenGuild instance;
-    private File log = new File("plugins/OpenGuild2047/logger/openguild.log");
-    private File logDir = new File("plugins/OpenGuild2047/logger");
+    private final File log = new File("plugins/OpenGuild2047/logger/openguild.log");
+    private final File logDir = new File("plugins/OpenGuild2047/logger");
     private String address;
     private String database;
     private String login;
@@ -148,8 +149,6 @@ public class OpenGuild extends JavaPlugin {
     }
 
     private void copyDefaultFiles() {
-        saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
-        loadConfig();
         if(!logDir.exists()) {
             logDir.mkdirs();
         }
@@ -160,6 +159,9 @@ public class OpenGuild extends JavaPlugin {
                 ex.printStackTrace();
             }
         }
+        saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
+        loadConfig();
+        saveResource("commands.yml", false);
         Guilds.getLogger().info("Loading configuration from config.yml...");
         GenConf.loadConfiguration();
         saveResource("messages_" + GenConf.lang.name().toLowerCase() + ".yml", true);
@@ -249,6 +251,10 @@ public class OpenGuild extends JavaPlugin {
 
     public static OpenGuild get() {
         return instance;
+    }
+
+    public static OpenGuildPlugin getAPI() {
+        return api;
     }
 
 }

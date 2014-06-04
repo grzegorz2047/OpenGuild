@@ -46,10 +46,13 @@ import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
+import com.github.grzegorz2047.openguild.command.CommandManager;
+import pl.grzegorz2047.openguild2047.command.OpenCommandManager;
 
 public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
     private static final Plugin bukkit = Bukkit.getPluginManager().getPlugin("OpenGuild2047");
+    private static final CommandManager cmdManager = new OpenCommandManager();
     private static final HashMap<String, CommandInfo> commands = new HashMap<String, CommandInfo>();
     private static final Configuration configuration = new OpenConfiguration();
     private static final GuildManager manager = new OpenGuildManager();
@@ -65,6 +68,11 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     @Override
     public Plugin getBukkit() {
         return bukkit;
+    }
+    
+    @Override
+    public CommandManager getCmdManager() {
+        return cmdManager;
     }
     
     @Override

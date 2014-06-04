@@ -33,6 +33,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
+import com.github.grzegorz2047.openguild.command.CommandManager;
 
 public class OpenGuild {
 
@@ -40,6 +41,10 @@ public class OpenGuild {
 
     public static Plugin getBukkit() {
         return guild.getBukkit();
+    }
+
+    public static CommandManager getCmdManager() {
+        return guild.getCmdManager();
     }
 
     public static CommandInfo getCommand(String name) {

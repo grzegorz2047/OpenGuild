@@ -33,10 +33,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
+import com.github.grzegorz2047.openguild.command.CommandManager;
 
 public interface OpenGuildPlugin {
 
     Plugin getBukkit();
+
+    CommandManager getCmdManager();
 
     CommandInfo getCommand(String name);
 
