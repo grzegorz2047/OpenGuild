@@ -47,7 +47,7 @@ import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
 import com.github.grzegorz2047.openguild.command.CommandManager;
-import pl.grzegorz2047.openguild2047.command.OpenCommandManager;
+import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 
 public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     

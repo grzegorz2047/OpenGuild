@@ -40,6 +40,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
+import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 import pl.grzegorz2047.openguild2047.commands.ErrorCommand;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.NewGuildCommand;
@@ -218,6 +219,7 @@ public class OpenGuild extends JavaPlugin {
                 null,
                 null));
         
+        OpenCommandManager.registerPluginCommands();
         getCommand("guild").setExecutor(new NewGuildCommand());
     }
 
