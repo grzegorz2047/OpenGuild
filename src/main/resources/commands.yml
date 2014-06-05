@@ -3,8 +3,6 @@ commands:
   admin: true
   ally: true
   create: true
-  disband: true
-  decline: true
   description: true
   disband: true
   enemy: true
@@ -15,9 +13,13 @@ commands:
   items: true
   kick: true
   leader: true
+  leave: true
   list: true
   members: true
 aliases:
   admin: [op]
   description: [desc]
   disband: [close]
+  invite: [call]
+  leave: [exit, quit]
+  list: [guilds]

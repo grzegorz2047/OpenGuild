@@ -40,13 +40,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
+import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 import pl.grzegorz2047.openguild2047.commands.ErrorCommand;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.NewGuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
-import pl.grzegorz2047.openguild2047.commands2.def.Help;
-import pl.grzegorz2047.openguild2047.commands2.def.Reload;
-import pl.grzegorz2047.openguild2047.commands2.def.Version;
+import pl.grzegorz2047.openguild2047.commands2.def.HelpCmd;
+import pl.grzegorz2047.openguild2047.commands2.def.ReloadCmd;
+import pl.grzegorz2047.openguild2047.commands2.def.VersionCmd;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
@@ -200,24 +201,25 @@ public class OpenGuild extends JavaPlugin {
                 (String[]) getAliases("help", new String[] {"?"}),
                 "help",
                 help,
-                new Help(),
+                new HelpCmd(),
                 null,
                 "[command|page]"));
         api.registerCommand(new CommandInfo(
                 (String[]) getAliases("reload", null),
                 "reload",
                 reload,
-                new Reload(),
+                new ReloadCmd(),
                 "openguild.command.reload",
                 null));
         api.registerCommand(new CommandInfo(
                 (String[]) getAliases("version", new String[] {"v", "ver", "about"}),
                 "version",
                 version,
-                new Version(),
+                new VersionCmd(),
                 null,
                 null));
         
+        OpenCommandManager.registerPluginCommands();
         getCommand("guild").setExecutor(new NewGuildCommand());
     }
 

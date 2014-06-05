@@ -28,12 +28,14 @@ import com.github.grzegorz2047.openguild.OpenGuild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
+import com.github.grzegorz2047.openguild.command.UsageException;
 import java.util.HashMap;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
-public class Help implements Command {
+public class HelpCmd implements Command {
     
     private static final HashMap<String, String> pages = new HashMap<String, String>();
     
@@ -51,7 +53,7 @@ public class Help implements Command {
                         return;
                     }
                 }
-                throw new NumberFormatException(args[1]);
+                throw new UsageException("Command, alias or page was not found.");
             }
         }
         
@@ -74,15 +76,15 @@ public class Help implements Command {
     private void helpCmd(CommandSender sender, CommandInfo cmd) {
         sender.sendMessage(ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help" + ChatColor.DARK_GRAY + " --------------- ");
         if(!cmd.hasExecutor())
-            sender.sendMessage(ChatColor.RED + "Executor is not defined!");
-        sender.sendMessage(ChatColor.GOLD + "Command: " + ChatColor.GRAY + cmd.getName());
-        if(cmd.getAliases() != null || cmd.getAliases().length > 0)
-            sender.sendMessage(ChatColor.GOLD + "Aliases: " + ChatColor.GRAY + getAliases(cmd.getAliases()));
-        sender.sendMessage(ChatColor.GOLD + "Usage: " + ChatColor.GRAY + cmd.getUsage());
+            sender.sendMessage(ChatColor.RED + MsgManager.get("cmdhelp-noexe"));
+        sender.sendMessage(ChatColor.GOLD + MsgManager.get("cmdhelp-cmd") + ChatColor.GRAY + cmd.getName());
+        if(cmd.getAliases() != null)
+            sender.sendMessage(ChatColor.GOLD + MsgManager.get("cmdhelp-al") + ChatColor.GRAY + getAliases(cmd.getAliases()));
+        sender.sendMessage(ChatColor.GOLD + MsgManager.get("cmdhelp-us") + ChatColor.GRAY + cmd.getUsage());
         if(cmd.hasPermission()) {
             if(sender.hasPermission(cmd.getPermission()))
-                sender.sendMessage(ChatColor.GREEN + "Permission: " + ChatColor.GRAY + cmd.getPermission());
-            else sender.sendMessage(ChatColor.RED + "Permission: " + ChatColor.GRAY + cmd.getPermission());
+                sender.sendMessage(ChatColor.GREEN + MsgManager.get("cmdhelp-perm") + ChatColor.GRAY + cmd.getPermission());
+            else sender.sendMessage(ChatColor.RED + MsgManager.get("cmdhelp-perm") + ChatColor.GRAY + cmd.getPermission());
         }
     }
     
@@ -90,9 +92,6 @@ public class Help implements Command {
         StringBuilder builder = new StringBuilder();
         for(String cmd : OpenGuild.getCommands()) {
             CommandInfo info = OpenGuild.getCommand(cmd);
-            if(!cmd.equals(info.getName()))
-                continue; // Remove aliases
-            
             if(!info.hasPermission() || sender.hasPermission(info.getPermission())) {
                 builder.append(ChatColor.GOLD);
                 builder.append(ChatColor.ITALIC);
