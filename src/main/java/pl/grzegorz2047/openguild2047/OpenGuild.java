@@ -192,9 +192,9 @@ public class OpenGuild extends JavaPlugin {
         CommandDescription reload = new CommandDescription();
         CommandDescription version = new CommandDescription();
         
-        help.set(MsgManager.get("cmd-help"));
-        reload.set(MsgManager.get("cmd-reload"));
-        version.set(MsgManager.get("cmd-version"));
+        help.set(MsgManager.getIgnorePref("cmd-help"));
+        reload.set(MsgManager.getIgnorePref("cmd-reload"));
+        version.set(MsgManager.getIgnorePref("cmd-version"));
         
         api.registerCommand(new CommandInfo(
                 (String[]) getAliases("help", new String[] {"?"}),
@@ -202,7 +202,7 @@ public class OpenGuild extends JavaPlugin {
                 help,
                 new Help(),
                 null,
-                "[page]"));
+                "[command|page]"));
         api.registerCommand(new CommandInfo(
                 (String[]) getAliases("reload", null),
                 "reload",
@@ -211,7 +211,7 @@ public class OpenGuild extends JavaPlugin {
                 "openguild.command.reload",
                 null));
         api.registerCommand(new CommandInfo(
-                (String[]) getAliases("version", new String[] {"ver", "about"}),
+                (String[]) getAliases("version", new String[] {"v", "ver", "about"}),
                 "version",
                 version,
                 new Version(),
