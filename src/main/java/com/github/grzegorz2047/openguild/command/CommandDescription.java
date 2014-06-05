@@ -29,13 +29,24 @@ import java.util.HashMap;
 public class CommandDescription {
 
     private final HashMap<String, String> list = new HashMap<String, String>();
+    private String desc;
 
     public String get(String lang) {
-        return list.get(lang);
+        if(desc != null)
+            return desc;
+        else
+            return list.get(lang);
     }
 
     public boolean has(String lang) {
-        return list.containsKey(lang.toUpperCase());
+        if(desc != null)
+            return true;
+        else
+            return list.containsKey(lang.toUpperCase());
+    }
+
+    public void set(String description) {
+        desc = description;
     }
 
     public void set(String lang, String description) {

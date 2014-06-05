@@ -37,13 +37,21 @@ public class OpenCommandManager implements CommandManager {
     
     private final File file = OpenGuild.CMDS;
     private final FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+    private HashMap<String, List<String>> aliases;
     private HashMap<String, Boolean> cmds;
     private List<String> enabled;
     
     @Override
+    public List<String> getAliases(String cmd) {
+        if(aliases == null)
+            loadAliases();
+        return aliases.get(cmd);
+    }
+    
+    @Override
     public List<String> getCommands() {
         if(cmds == null)
-            load();
+            loadCmds();
         return enabled;
         
     }
@@ -58,13 +66,24 @@ public class OpenCommandManager implements CommandManager {
         return fileConfiguration;
     }
     
-    private void load() {
+    private void loadAliases() {
+        aliases = new HashMap<String, List<String>>();
+        
+        for(String cmd : fileConfiguration.getConfigurationSection("aliases").getKeys(false)) {
+            if(fileConfiguration.getStringList("aliases." + cmd) == null || aliases.containsKey(cmd)) {
+                continue;
+            }
+            aliases.put(cmd, fileConfiguration.getStringList("aliases." + cmd));
+        }
+    }
+    
+    private void loadCmds() {
         cmds = new HashMap<String, Boolean>();
         enabled = new ArrayList<String>();
         
         for(String cmd : fileConfiguration.getConfigurationSection("commands").getKeys(false)) {
             boolean bool = false;
-            if(fileConfiguration.getBoolean("command." + cmd, true)) {
+            if(fileConfiguration.getBoolean("commands." + cmd, true)) {
                 bool = true;
                 enabled.add(cmd);
             }

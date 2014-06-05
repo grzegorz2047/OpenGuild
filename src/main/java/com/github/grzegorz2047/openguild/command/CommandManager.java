@@ -30,6 +30,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public interface CommandManager {
 
+    List<String> getAliases(String cmd);
+
     List<String> getCommands();
 
     File getFile();

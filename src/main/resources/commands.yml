@@ -17,4 +17,7 @@ commands:
   leader: true
   list: true
   members: true
-  reload: true
+aliases:
+  admin: [op]
+  description: [desc]
+  disband: [close]

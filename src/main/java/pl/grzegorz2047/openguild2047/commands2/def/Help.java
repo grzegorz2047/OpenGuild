@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.commands2;
+package pl.grzegorz2047.openguild2047.commands2.def;
 
 import com.github.grzegorz2047.openguild.OpenGuild;
 import com.github.grzegorz2047.openguild.command.Command;
