@@ -45,7 +45,9 @@ public class OpenCommandManager implements CommandManager {
     public List<String> getAliases(String cmd) {
         if(aliases == null)
             loadAliases();
-        return aliases.get(cmd);
+        if(aliases != null)
+            return aliases.get(cmd);
+        else return null;
     }
     
     @Override
@@ -69,11 +71,12 @@ public class OpenCommandManager implements CommandManager {
     private void loadAliases() {
         aliases = new HashMap<String, List<String>>();
         
-        for(String cmd : fileConfiguration.getConfigurationSection("aliases").getKeys(false)) {
-            if(fileConfiguration.getStringList("aliases." + cmd) == null || aliases.containsKey(cmd)) {
-                continue;
+        if(fileConfiguration.getConfigurationSection("aliases") != null) {
+            for(String cmd : fileConfiguration.getConfigurationSection("aliases").getKeys(false)) {
+                if(fileConfiguration.getStringList("aliases." + cmd) != null && !aliases.containsKey(cmd)) {
+                    aliases.put(cmd, fileConfiguration.getStringList("aliases." + cmd));
+                }
             }
-            aliases.put(cmd, fileConfiguration.getStringList("aliases." + cmd));
         }
     }
     

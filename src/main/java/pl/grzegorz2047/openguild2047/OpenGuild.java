@@ -174,8 +174,12 @@ public class OpenGuild extends JavaPlugin {
 
     private String[] getAliases(String cmd, String[] def) {
         List<String> aliases = getAPI().getCmdManager().getAliases(cmd);
-        aliases.addAll(Arrays.asList(def));
-        return (String[]) aliases.toArray();
+        if(aliases == null)
+            return new String[] {};
+        if(def != null)
+            aliases.addAll(Arrays.asList(def));
+        return aliases.toArray(new String[aliases.size()]);
+        
     }
 
     private void loadCommands() {
@@ -193,21 +197,21 @@ public class OpenGuild extends JavaPlugin {
         version.set(MsgManager.get("cmd-version"));
         
         api.registerCommand(new CommandInfo(
-                getAliases("help", new String[] {"?"}),
+                (String[]) getAliases("help", new String[] {"?"}),
                 "help",
                 help,
                 new Help(),
                 null,
                 "[page]"));
         api.registerCommand(new CommandInfo(
-                null,
+                (String[]) getAliases("reload", null),
                 "reload",
                 reload,
                 new Reload(),
                 "openguild.command.reload",
                 null));
         api.registerCommand(new CommandInfo(
-                getAliases("version", new String[] {"ver", "about"}),
+                (String[]) getAliases("version", new String[] {"ver", "about"}),
                 "version",
                 version,
                 new Version(),
