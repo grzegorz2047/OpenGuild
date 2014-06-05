@@ -57,6 +57,7 @@ public class OpenCommandManager implements CommandManager {
     
     private final File file = OpenGuild.CMDS;
     private final FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+    private static int loadedCmds;
     private HashMap<String, List<String>> aliases;
     private HashMap<String, Boolean> cmds;
     private List<String> enabled;
@@ -116,8 +117,8 @@ public class OpenCommandManager implements CommandManager {
     
     public static void registerPluginCommands() {
         List<String> cmds = OpenGuild.getAPI().getCmdManager().getCommands();
+        loadedCmds = 0;
         
-        int loaded = 0;
         if(cmds.contains("accept")) {
             register("accept", new AcceptCmd(), false, "<guild>");
         }
@@ -170,7 +171,7 @@ public class OpenCommandManager implements CommandManager {
             register("members", new MembersCmd(), false, null);
         }
         
-        Guilds.getLogger().log(Level.INFO, "Loaded " + loaded + " commands.");
+        Guilds.getLogger().log(Level.INFO, "Loaded " + loadedCmds + " commands.");
     }
     
     private static void register(String cmd, Command exe, boolean perm, String us) {
@@ -181,6 +182,7 @@ public class OpenCommandManager implements CommandManager {
         if(perm) perms = "openguild.command." + cmd;
         
         OpenGuild.getAPI().registerCommand(new CommandInfo(null, cmd, cmdDesc, exe, perms, us));
+        loadedCmds++;
     }
     
 }
