@@ -22,18 +22,18 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.commands2.def;
+package pl.grzegorz2047.openguild2047.commands2;
 
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
 import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
+import pl.grzegorz2047.openguild2047.commands.arguments.ListArg;
 
-public class Reload implements Command {
+public class ListCmd implements Command {
     
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        ReloadArg.execute(sender);
+        ListArg.execute(sender);
     }
     
 }

@@ -33,7 +33,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GenConf;
 
-public class Help implements Command {
+public class HelpCmd implements Command {
     
     private static final HashMap<String, String> pages = new HashMap<String, String>();
     
