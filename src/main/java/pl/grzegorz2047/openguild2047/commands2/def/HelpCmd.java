@@ -33,6 +33,7 @@ import java.util.HashMap;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class HelpCmd implements Command {
     
@@ -75,15 +76,15 @@ public class HelpCmd implements Command {
     private void helpCmd(CommandSender sender, CommandInfo cmd) {
         sender.sendMessage(ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help" + ChatColor.DARK_GRAY + " --------------- ");
         if(!cmd.hasExecutor())
-            sender.sendMessage(ChatColor.RED + "Executor is not defined!");
-        sender.sendMessage(ChatColor.GOLD + "Command: " + ChatColor.GRAY + cmd.getName());
+            sender.sendMessage(ChatColor.RED + MsgManager.get("cmdhelp-noexe"));
+        sender.sendMessage(ChatColor.GOLD + MsgManager.get("cmdhelp-cmd") + ChatColor.GRAY + cmd.getName());
         if(cmd.getAliases() != null)
-            sender.sendMessage(ChatColor.GOLD + "Aliases: " + ChatColor.GRAY + getAliases(cmd.getAliases()));
-        sender.sendMessage(ChatColor.GOLD + "Usage: " + ChatColor.GRAY + cmd.getUsage());
+            sender.sendMessage(ChatColor.GOLD + MsgManager.get("cmdhelp-al") + ChatColor.GRAY + getAliases(cmd.getAliases()));
+        sender.sendMessage(ChatColor.GOLD + MsgManager.get("cmdhelp-us") + ChatColor.GRAY + cmd.getUsage());
         if(cmd.hasPermission()) {
             if(sender.hasPermission(cmd.getPermission()))
-                sender.sendMessage(ChatColor.GREEN + "Permission: " + ChatColor.GRAY + cmd.getPermission());
-            else sender.sendMessage(ChatColor.RED + "Permission: " + ChatColor.GRAY + cmd.getPermission());
+                sender.sendMessage(ChatColor.GREEN + MsgManager.get("cmdhelp-perm") + ChatColor.GRAY + cmd.getPermission());
+            else sender.sendMessage(ChatColor.RED + MsgManager.get("cmdhelp-perm") + ChatColor.GRAY + cmd.getPermission());
         }
     }
     

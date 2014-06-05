@@ -40,7 +40,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class NewGuildCommand implements CommandExecutor, TabCompleter {
@@ -65,7 +64,7 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
             }
             
             if(result == null) {
-                sender.sendMessage(GenConf.prefix + ChatColor.RED + "Command '" + args[0] + "' was not found.");
+                sender.sendMessage(MsgManager.get("cmdnotfound").replace("{COMMAND}", args[0]));
                 sender.sendMessage(ChatColor.RED + "/g help [command|page]");
                 return true;
             }

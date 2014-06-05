@@ -71,7 +71,7 @@ public class ReloadArg {
             event1.getSender().sendMessage(MsgManager.get("confignew"));
             success = true;
         }
-        event1.getSender().sendMessage(ChatColor.RED + "Reloading is not supported! Please restart your server!");
+        event1.getSender().sendMessage(MsgManager.get("relnosupp"));
         OpenGuildReloadedEvent event2 = new OpenGuildReloadedEvent(sender, success);
         Bukkit.getPluginManager().callEvent(event2);
         return true;
