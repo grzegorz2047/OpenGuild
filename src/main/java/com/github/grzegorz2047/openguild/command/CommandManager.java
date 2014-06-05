@@ -24,34 +24,18 @@
 
 package com.github.grzegorz2047.openguild.command;
 
-import java.util.HashMap;
+import java.io.File;
+import java.util.List;
+import org.bukkit.configuration.file.FileConfiguration;
 
-public class CommandDescription {
+public interface CommandManager {
 
-    private final HashMap<String, String> list = new HashMap<String, String>();
-    private String desc;
+    List<String> getAliases(String cmd);
 
-    public String get(String lang) {
-        if(desc != null)
-            return desc;
-        else
-            return list.get(lang);
-    }
+    List<String> getCommands();
 
-    public boolean has(String lang) {
-        if(desc != null)
-            return true;
-        else
-            return list.containsKey(lang.toUpperCase());
-    }
+    File getFile();
 
-    public void set(String description) {
-        desc = description;
-    }
-
-    public void set(String lang, String description) {
-        list.remove(lang.toUpperCase());
-        list.put(lang.toUpperCase(), description);
-    }
+    FileConfiguration getFileConfiguration();
 
 }

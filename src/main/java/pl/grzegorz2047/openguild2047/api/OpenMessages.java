@@ -41,9 +41,8 @@ public class OpenMessages implements Messages {
     
     @Override
     public List<String> getLangList() {
-        if(langs == null) {
+        if(langs == null)
             load();
-        }
         return langs;
     }
     

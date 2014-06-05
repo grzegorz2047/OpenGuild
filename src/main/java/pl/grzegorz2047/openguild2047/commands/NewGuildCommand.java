@@ -65,8 +65,8 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
             }
             
             if(result == null) {
-                sender.sendMessage(GenConf.prefix + ChatColor.RED + "Command '" + args[0] + " was not found.");
-                sender.sendMessage(ChatColor.RED + "/g help [page]");
+                sender.sendMessage(GenConf.prefix + ChatColor.RED + "Command '" + args[0] + "' was not found.");
+                sender.sendMessage(ChatColor.RED + "/g help [command|page]");
                 return true;
             }
             

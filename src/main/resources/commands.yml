@@ -1,0 +1,23 @@
+commands:
+  accept: true
+  admin: true
+  ally: true
+  create: true
+  disband: true
+  decline: true
+  description: true
+  disband: true
+  enemy: true
+  expand: true
+  home: true
+  info: true
+  invite: true
+  items: true
+  kick: true
+  leader: true
+  list: true
+  members: true
+aliases:
+  admin: [op]
+  description: [desc]
+  disband: [close]

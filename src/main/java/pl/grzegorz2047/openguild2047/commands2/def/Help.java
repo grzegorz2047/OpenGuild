@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.commands2;
+package pl.grzegorz2047.openguild2047.commands2.def;
 
 import com.github.grzegorz2047.openguild.OpenGuild;
 import com.github.grzegorz2047.openguild.command.Command;
@@ -42,8 +42,15 @@ public class Help implements Command {
         int page = 1;
         if(args.length > 1) {
             try {
-                Integer.valueOf(args[1]);
+                page = Integer.valueOf(args[1]);
             } catch(NumberFormatException ex) {
+                for(String cmd : OpenGuild.getCommands()) {
+                    CommandInfo info = OpenGuild.getCommand(cmd);
+                    if(info.getName().contains(args[1].toLowerCase())) {
+                        helpCmd(sender, info);
+                        return;
+                    }
+                }
                 throw new NumberFormatException(args[1]);
             }
         }
@@ -62,6 +69,21 @@ public class Help implements Command {
         
         sender.sendMessage(ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help" + ChatColor.DARK_GRAY + " --------------- ");
         sender.sendMessage(pages.get(sender.getName()));
+    }
+    
+    private void helpCmd(CommandSender sender, CommandInfo cmd) {
+        sender.sendMessage(ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help" + ChatColor.DARK_GRAY + " --------------- ");
+        if(!cmd.hasExecutor())
+            sender.sendMessage(ChatColor.RED + "Executor is not defined!");
+        sender.sendMessage(ChatColor.GOLD + "Command: " + ChatColor.GRAY + cmd.getName());
+        if(cmd.getAliases() != null || cmd.getAliases().length > 0)
+            sender.sendMessage(ChatColor.GOLD + "Aliases: " + ChatColor.GRAY + getAliases(cmd.getAliases()));
+        sender.sendMessage(ChatColor.GOLD + "Usage: " + ChatColor.GRAY + cmd.getUsage());
+        if(cmd.hasPermission()) {
+            if(sender.hasPermission(cmd.getPermission()))
+                sender.sendMessage(ChatColor.GREEN + "Permission: " + ChatColor.GRAY + cmd.getPermission());
+            else sender.sendMessage(ChatColor.RED + "Permission: " + ChatColor.GRAY + cmd.getPermission());
+        }
     }
     
     private void generateHelp(CommandSender sender) {
@@ -84,6 +106,17 @@ public class Help implements Command {
         }
         pages.remove(sender.getName());
         pages.put(sender.getName(), builder.toString());
+    }
+    
+    private String getAliases(String[] cmds) {
+        StringBuilder builder = new StringBuilder();
+        for(String cmd : cmds) {
+            builder.append(ChatColor.GOLD);
+            builder.append(cmd);
+            builder.append(ChatColor.GRAY);
+            builder.append(", ");
+        }
+        return builder.toString();
     }
     
 }

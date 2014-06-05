@@ -31,6 +31,8 @@ import com.github.grzegorz2047.openguild.event.ModuleLoadEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -42,14 +44,16 @@ import pl.grzegorz2047.openguild2047.commands.ErrorCommand;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.NewGuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
-import pl.grzegorz2047.openguild2047.commands2.Help;
-import pl.grzegorz2047.openguild2047.commands2.Version;
+import pl.grzegorz2047.openguild2047.commands2.def.Help;
+import pl.grzegorz2047.openguild2047.commands2.def.Reload;
+import pl.grzegorz2047.openguild2047.commands2.def.Version;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
 import pl.grzegorz2047.openguild2047.listeners.Monitors;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
@@ -58,10 +62,11 @@ import pl.grzegorz2047.openguild2047.managers.TagManager;
  */
 public class OpenGuild extends JavaPlugin {
 
+    public static final File CMDS = new File("plugins/OpenGuild2047/commands.yml");
     private static OpenGuildPlugin api;
     private static OpenGuild instance;
-    private File log = new File("plugins/OpenGuild2047/logger/openguild.log");
-    private File logDir = new File("plugins/OpenGuild2047/logger");
+    private final File log = new File("plugins/OpenGuild2047/logger/openguild.log");
+    private final File logDir = new File("plugins/OpenGuild2047/logger");
     private String address;
     private String database;
     private String login;
@@ -148,8 +153,6 @@ public class OpenGuild extends JavaPlugin {
     }
 
     private void copyDefaultFiles() {
-        saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
-        loadConfig();
         if(!logDir.exists()) {
             logDir.mkdirs();
         }
@@ -160,10 +163,23 @@ public class OpenGuild extends JavaPlugin {
                 ex.printStackTrace();
             }
         }
+        saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
+        loadConfig();
+        saveResource("commands.yml", false);
         Guilds.getLogger().info("Loading configuration from config.yml...");
         GenConf.loadConfiguration();
         saveResource("messages_" + GenConf.lang.name().toLowerCase() + ".yml", true);
         Guilds.getLogger().info("Configuration loaded!");
+    }
+
+    private String[] getAliases(String cmd, String[] def) {
+        List<String> aliases = getAPI().getCmdManager().getAliases(cmd);
+        if(aliases == null)
+            return new String[] {};
+        if(def != null)
+            aliases.addAll(Arrays.asList(def));
+        return aliases.toArray(new String[aliases.size()]);
+        
     }
 
     private void loadCommands() {
@@ -173,23 +189,29 @@ public class OpenGuild extends JavaPlugin {
         }
         
         CommandDescription help = new CommandDescription();
+        CommandDescription reload = new CommandDescription();
         CommandDescription version = new CommandDescription();
         
-        help.set("EN", "Help");
-        version.set("EN", "See the plugin version");
-        
-        help.set("PL", "Pomoc");
-        version.set("PL", "Zobacz wersje pluginu");
+        help.set(MsgManager.getIgnorePref("cmd-help"));
+        reload.set(MsgManager.getIgnorePref("cmd-reload"));
+        version.set(MsgManager.getIgnorePref("cmd-version"));
         
         api.registerCommand(new CommandInfo(
-                new String[] {"pomoc", "?"},
+                (String[]) getAliases("help", new String[] {"?"}),
                 "help",
                 help,
                 new Help(),
                 null,
-                "[page]"));
+                "[command|page]"));
         api.registerCommand(new CommandInfo(
-                new String[] {"ver", "about"},
+                (String[]) getAliases("reload", null),
+                "reload",
+                reload,
+                new Reload(),
+                "openguild.command.reload",
+                null));
+        api.registerCommand(new CommandInfo(
+                (String[]) getAliases("version", new String[] {"v", "ver", "about"}),
                 "version",
                 version,
                 new Version(),
@@ -249,6 +271,10 @@ public class OpenGuild extends JavaPlugin {
 
     public static OpenGuild get() {
         return instance;
+    }
+
+    public static OpenGuildPlugin getAPI() {
+        return api;
     }
 
 }

@@ -24,6 +24,7 @@
 
 package com.github.grzegorz2047.openguild.command;
 
+import com.github.grzegorz2047.openguild.OpenGuild;
 import org.bukkit.ChatColor;
 
 public class CommandInfo {
@@ -57,8 +58,7 @@ public class CommandInfo {
             return description;
         } else {
             CommandDescription desc = new CommandDescription();
-            desc.set("EN", ChatColor.ITALIC + "Not available yet" + ChatColor.RESET);
-            desc.set("PL", ChatColor.ITALIC + "Obecnie niedostepne" + ChatColor.RESET);
+            desc.set(ChatColor.ITALIC + OpenGuild.getMessages().getMessage("cmdnodesc") + ChatColor.RESET);
             return desc;
         }
     }
