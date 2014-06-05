@@ -22,44 +22,39 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.modules.hardcore;
+package pl.grzegorz2047.openguild2047.modules.randomtp;
 
+import com.github.grzegorz2047.openguild.OpenGuild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
-import com.github.grzegorz2047.openguild.command.UsageException;
+import com.github.grzegorz2047.openguild.command.PermException;
+import com.github.grzegorz2047.openguild.module.RandomTPModule;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.database.SQLHandler;
-import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import org.bukkit.entity.Player;
 
-public class Unban implements Command {
+public class Randomtp implements Command {
     
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        if(!GenConf.hcBans) {
-            throw new CommandException(MsgManager.get("hcnotenabled"));
-        }
-        else if(args.length != 2) {
-            throw new UsageException(MsgManager.get("wrongcmdargument"));
+        if(args.length == 2) {
+            if(sender.hasPermission("openguild.randomtp.other")) {
+                String target = args[1];
+                if(Bukkit.getPlayer(target) == null) {
+                    throw new CommandException("Player \"" + target + "\" is not online");
+                } else {
+                    ((RandomTPModule) OpenGuild.getModules().getModule("random-tp")).teleport(Bukkit.getPlayer(target));
+                }
+            } else {
+                throw new PermException();
+            }
         }
         
-        OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
-        if(player == null || !player.hasPlayedBefore()) {
-            throw new CommandException(MsgManager.get("notplayedbefore").replace("{PLAYER}", args[1]));
-        }
-        
-        long banned = SQLHandler.getBan(player.getUniqueId());
-        if(banned != 0) {
-            SQLHandler.update(player.getUniqueId(), SQLHandler.PType.BAN_TIME, 0);
-            Guilds.getLogger().info("Player " + player.getName() + " (" + player.getUniqueId() + ") was unbanned by " + sender.getName());
-            sender.sendMessage(MsgManager.get("hcub").replace("{PLAYER}", player.getName()));
+        if(sender instanceof Player) {
+            ((RandomTPModule) OpenGuild.getModules().getModule("random-tp")).teleport((Player) sender);
         } else {
-            throw new CommandException(MsgManager.get("notbanned").replace("{PLAYER}", player.getName()));
+            throw new CommandException("You must be a player in-game!");
         }
-        
     }
     
 }

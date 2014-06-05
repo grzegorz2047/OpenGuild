@@ -62,7 +62,7 @@ public class HardcoreListeners implements Listener {
         }
         
         long ban = SQLHandler.getBan(e.getPlayer().getUniqueId());
-        if( System.currentTimeMillis() < ban ) {
+        if(System.currentTimeMillis() < ban) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
             Date date = new Date(ban);
             e.disallow(PlayerLoginEvent.Result.KICK_OTHER, GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));

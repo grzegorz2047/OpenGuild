@@ -64,6 +64,7 @@ public class OpenModuleManager implements ModuleManager {
         modules = new HashMap<String, Object>();
         this.registerModule("hardcore", new OpenHardcoreModule());
         this.registerModule("spawn", new OpenSpawnModule());
+        this.registerModule("random-tp", new OpenRandomTPModule());
     }
     
 }
