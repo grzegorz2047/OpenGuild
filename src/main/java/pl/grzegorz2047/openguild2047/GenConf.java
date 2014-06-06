@@ -37,10 +37,6 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
  */
 public class GenConf {
 
-    public enum Lang {
-        EN, PL, SV;
-    }
-
     public static String prefix = "§7[§6OpenGuild§7]§7 ";
     public static boolean teampvp = false;
     public static boolean homecommand = true;
@@ -67,7 +63,7 @@ public class GenConf {
     public static long hcBantime;
     public static String hcKickMsg;
     public static String hcLoginMsg;
-    public static Lang lang;
+    public static String lang;
     public static Location spawnMax;
     public static Location spawnMin;
     public static String spawnMessage;
@@ -103,13 +99,7 @@ public class GenConf {
         SNOOPER = OpenGuild.get().getConfig().getBoolean("snooper", true);
         TEAMPVP_MSG = OpenGuild.get().getConfig().getBoolean("teampvp-msg", false);
 
-        String langString = OpenGuild.get().getConfig().getString("language").toUpperCase();
-        try {
-            lang = Lang.valueOf(langString);
-        } catch(IllegalArgumentException ex) {
-            lang = Lang.PL;
-            Guilds.getLogger().warning("Could not load " + langString + " as language - using Polish.");
-        }
+        lang = OpenGuild.get().getConfig().getString("language").toUpperCase();
 
         loadBans();
         List listMax = config.getList("spawn.location-max");

@@ -29,10 +29,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.GenConf.Lang;
-import static pl.grzegorz2047.openguild2047.GenConf.Lang.EN;
-import static pl.grzegorz2047.openguild2047.GenConf.Lang.PL;
-import static pl.grzegorz2047.openguild2047.GenConf.Lang.SV;
 
 /**
  *
@@ -42,7 +38,7 @@ public class MsgManager {
 
     private static HashMap<String, String> messages;
 
-    public static File file = new File("plugins/OpenGuild2047/messages_" + GenConf.lang.name().toLowerCase() + ".yml");
+    public static File file = new File("plugins/OpenGuild2047/messages_" + GenConf.lang.toLowerCase() + ".yml");
     public static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
     public static String createguildsuccess = get("createguildsuccess", "Gildia zostala pomysnie stworzona.");
@@ -117,14 +113,16 @@ public class MsgManager {
         }
     }
 
-    public static String getNullMessage(Lang lang) {
-        String result;
-        switch(lang) {
-            case EN: result = "Message not found"; break;
-            case PL: result = "Wiadomosc nie znaleziona"; break;
-            case SV: result = "Meddelandet kan inte hittas"; break;
-            default: result = "Message not found"; break;
-        }
+    public static String getNullMessage(String lang) {
+        String result = "";
+        
+        if(lang.equalsIgnoreCase("PL"))
+            result = "Wiadomosc nie znaleziona";
+        else if(lang.equalsIgnoreCase("SV"))
+            result = "Meddelande har inte hittas";
+        else
+            result = "Message not found";
+        
         return ChatColor.RED + result + " :(";
     }
 

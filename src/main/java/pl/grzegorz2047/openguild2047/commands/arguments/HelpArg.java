@@ -47,7 +47,7 @@ public class HelpArg {
         }
         sender.sendMessage(getTitle(page));
         if(page == 1) {
-            if(GenConf.lang.name().equals("PL")) {
+            if(GenConf.lang.equals("PL")) {
                 sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
                 sender.sendMessage(help("zapros <gracz>", "Zapros gracza do gildii"));
                 sender.sendMessage(help("akceptuj <tag>", "Akceptuj zaproszenie od gildii"));
@@ -82,7 +82,7 @@ public class HelpArg {
             }
 
         } else {
-            if(GenConf.lang.name().equals("PL")) {
+            if(GenConf.lang.equals("PL")) {
                 sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze {NUMBER} nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
             } else {
                 sender.sendMessage(MsgManager.get("pagenotfound", "&cPage number {NUMBER} not found").replace("{NUMBER}", String.valueOf(page)));
@@ -101,7 +101,7 @@ public class HelpArg {
     }
 
     private static String help(String usage, String desc) {
-        if(GenConf.lang.name().equals("PL")){
+        if(GenConf.lang.equals("PL")){
             return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.GRAY + " - " + desc;
         } else {
             return ChatColor.GOLD + "" + ChatColor.ITALIC + "/guild " + usage + ChatColor.RESET + ChatColor.GRAY + " - " + desc;

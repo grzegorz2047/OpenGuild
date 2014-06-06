@@ -99,7 +99,7 @@ public class HelpCmd implements Command {
                 builder.append(ChatColor.RESET);
                 builder.append(ChatColor.GRAY);
                 builder.append(" - ");
-                builder.append(info.getDescription().get(GenConf.lang.name().toUpperCase()));
+                builder.append(info.getDescription().get(GenConf.lang.toUpperCase()));
                 builder.append("\n");
             }
         }

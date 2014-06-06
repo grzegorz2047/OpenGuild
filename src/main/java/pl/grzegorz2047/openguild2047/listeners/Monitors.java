@@ -11,7 +11,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.GenConf.Lang;
 
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
@@ -48,11 +47,11 @@ public class Monitors implements Listener {
         // Updater
         if(e.getPlayer().isOp() && OpenGuild.getUpdater().isEnabled() && OpenGuild.getUpdater().isAvailable()) {
             e.getPlayer().sendMessage(ChatColor.RED + " =============== OpenGuild UPDATER =============== ");
-            if(GenConf.lang == Lang.PL) {
+            if(GenConf.lang.equalsIgnoreCase("PL")) {
                 e.getPlayer().sendMessage(ChatColor.YELLOW + "Znaleziono aktualizacje! Prosze zaktualizowac Twój plugin do najnowszej wersji!");
                 e.getPlayer().sendMessage(ChatColor.YELLOW + "Pobierz go z https://github.com/grzegorz2047/OpenGuild2047/releases");
             }
-            else if(GenConf.lang == Lang.SV) {
+            else if(GenConf.lang.equalsIgnoreCase("SV")) {
                 e.getPlayer().sendMessage(ChatColor.YELLOW + "Uppdatering hittas! Uppdatera ditt plugin till den senaste version!");
                 e.getPlayer().sendMessage(ChatColor.YELLOW + "Ladda ner det från https://github.com/grzegorz2047/OpenGuild2047/releases");
             } else {

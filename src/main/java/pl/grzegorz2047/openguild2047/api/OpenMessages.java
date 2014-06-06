@@ -25,9 +25,9 @@
 package pl.grzegorz2047.openguild2047.api;
 
 import com.github.grzegorz2047.openguild.Messages;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import pl.grzegorz2047.openguild2047.GenConf.Lang;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class OpenMessages implements Messages {
@@ -36,7 +36,7 @@ public class OpenMessages implements Messages {
     
     @Override
     public String getErrorMessage(String lang) {
-        return MsgManager.getNullMessage(Lang.valueOf(lang.toUpperCase()));
+        return MsgManager.getNullMessage(lang.toUpperCase());
     }
     
     @Override
@@ -64,8 +64,10 @@ public class OpenMessages implements Messages {
     
     private void load() {
         langs = new ArrayList<String>();
-        for(Lang lang : Lang.values()) {
-            langs.add(lang.name());
+        for(File lang : new File("plugins/OpenGuild2047").listFiles()) {
+            if(lang.getName().startsWith("messages_") && lang.getName().endsWith(".yml")) {
+                langs.add(lang.getName().substring(9, 11));
+            }
         }
     }
     

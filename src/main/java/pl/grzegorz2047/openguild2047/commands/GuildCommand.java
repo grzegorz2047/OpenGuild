@@ -32,7 +32,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.GenConf.Lang;
 import pl.grzegorz2047.openguild2047.commands.arguments.AcceptArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.AdminArg;
 import pl.grzegorz2047.openguild2047.commands.arguments.CreateArg;
@@ -152,9 +151,9 @@ public class GuildCommand implements CommandExecutor, TabCompleter {
         if(command.getName().equalsIgnoreCase("guild")) {
             String[] lang = null;
             List<String> complete = new ArrayList<String>();
-            if(GenConf.lang == Lang.EN)
+            if(GenConf.lang.equalsIgnoreCase("EN"))
                 lang = argEn;
-            else if(GenConf.lang == Lang.PL)
+            else if(GenConf.lang.equalsIgnoreCase("PL"))
                 lang = argPl;
             
             if(args.length == 1) {
