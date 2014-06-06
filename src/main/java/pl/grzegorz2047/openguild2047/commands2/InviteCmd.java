@@ -26,6 +26,7 @@ package pl.grzegorz2047.openguild2047.commands2;
 
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.command.UsageException;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.commands.arguments.InviteArg;
 
@@ -33,7 +34,14 @@ public class InviteCmd implements Command {
     
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        InviteArg.execute(sender, args);
+        if(args.length < 2) {
+            throw new UsageException("Too low arguments");
+        }
+        else if(args.length == 2) {
+            InviteArg.execute(sender, args);
+        } else {
+            throw new UsageException("Too many arguments");
+        }
     }
     
 }
