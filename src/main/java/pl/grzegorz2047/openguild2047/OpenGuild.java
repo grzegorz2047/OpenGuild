@@ -169,7 +169,7 @@ public class OpenGuild extends JavaPlugin {
         saveResource("commands.yml", false);
         Guilds.getLogger().info("Loading configuration from config.yml...");
         GenConf.loadConfiguration();
-        saveResource("messages_" + GenConf.lang.toLowerCase() + ".yml", true);
+        saveResource("messages_" + GenConf.lang.toLowerCase() + ".yml", false);
         Guilds.getLogger().info("Configuration loaded!");
     }
 

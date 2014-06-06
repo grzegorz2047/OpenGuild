@@ -118,6 +118,9 @@ public class OpenCommandManager implements CommandManager {
     public static void registerPluginCommands() {
         List<String> cmds = OpenGuild.getAPI().getCmdManager().getCommands();
         loadedCmds = 0;
+        if(cmds == null) {
+            return;
+        }
         
         if(cmds.contains("accept")) {
             register("accept", new AcceptCmd(), false, "<guild>");
@@ -132,7 +135,7 @@ public class OpenCommandManager implements CommandManager {
             register("create", new CreateCmd(), false, "<tag> [description...]");
         }
         if(cmds.contains("description")) {
-            register("decline", new DescriptionCmd(), false, "[change <desc...>]");
+            register("description", new DescriptionCmd(), false, "[change <desc...>]");
         }
         if(cmds.contains("disband")) {
             register("disband", new DisbandCmd(), false, null);
