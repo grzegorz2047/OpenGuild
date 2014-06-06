@@ -25,6 +25,7 @@
 package com.github.grzegorz2047.openguild.module;
 
 import com.github.grzegorz2047.openguild.User;
+import javax.annotation.Nonnull;
 import org.bukkit.entity.Player;
 
 public interface RandomTPModule {
@@ -38,8 +39,8 @@ public interface RandomTPModule {
 
     void setButtonEnabled(boolean enabled);
 
-    void teleport(Player player);
+    void teleport(@Nonnull Player player);
 
-    void teleport(User user);
+    void teleport(@Nonnull User user);
 
 }

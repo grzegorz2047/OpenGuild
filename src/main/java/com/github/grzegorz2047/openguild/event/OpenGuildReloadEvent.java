@@ -24,6 +24,7 @@
 
 package com.github.grzegorz2047.openguild.event;
 
+import javax.annotation.Nonnull;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -35,16 +36,16 @@ public class OpenGuildReloadEvent extends Event implements Cancellable {
     public boolean cancel;
     public CommandSender sender;
 
-    public OpenGuildReloadEvent(CommandSender sender) {
+    public OpenGuildReloadEvent(@Nonnull CommandSender sender) {
         this.sender = sender;
     }
 
-    public static HandlerList getHandlerList() {
+    @Nonnull public static HandlerList getHandlerList() {
         return handlers;
     }
 
     @Override
-    public HandlerList getHandlers() {
+    @Nonnull public HandlerList getHandlers() {
         return handlers;
     }
 
@@ -58,11 +59,11 @@ public class OpenGuildReloadEvent extends Event implements Cancellable {
         this.cancel = cancel;
     }
 
-    public CommandSender getSender() {
+    @Nonnull public CommandSender getSender() {
         return sender;
     }
 
-    public void setSender(CommandSender sender) {
+    public void setSender(@Nonnull CommandSender sender) {
         this.sender = sender;
     }
 

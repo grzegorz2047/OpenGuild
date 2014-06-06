@@ -25,14 +25,15 @@
 package com.github.grzegorz2047.openguild.module;
 
 import java.util.UUID;
+import javax.annotation.Nonnull;
 
 public interface HardcoreModule {
 
-    long getBan(UUID uuid);
+    @Nonnull long getBan(@Nonnull UUID uuid);
 
     boolean isEnabled();
 
-    void setBan(UUID uuid, long to);
+    void setBan(@Nonnull UUID uuid, @Nonnull long to);
 
     @Deprecated
     void setEnabled(boolean enabled);

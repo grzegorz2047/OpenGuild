@@ -25,6 +25,7 @@
 package com.github.grzegorz2047.openguild.event;
 
 import com.github.grzegorz2047.openguild.OpenGuild;
+import javax.annotation.Nonnull;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -36,7 +37,7 @@ public class MessageBroadcastEvent extends Event implements Cancellable {
     private Message type;
     private String message;
 
-    public MessageBroadcastEvent(MessageBroadcastEvent.Message type) {
+    public MessageBroadcastEvent(@Nonnull MessageBroadcastEvent.Message type) {
         this.type = type;
         this.message = OpenGuild.getMessages().getMessage("broadcast-" + type.name().toLowerCase().replace("_", ""));
     }
@@ -45,12 +46,12 @@ public class MessageBroadcastEvent extends Event implements Cancellable {
         JOIN, CREATE, CUBOID_EXPAND, DESCRIPTION, DISBAND, KICK, LEADER, LEAVE
     }
 
-    public static HandlerList getHandlerList() {
+    @Nonnull public static HandlerList getHandlerList() {
         return handlers;
     }
 
     @Override
-    public HandlerList getHandlers() {
+    @Nonnull public HandlerList getHandlers() {
         return handlers;
     }
 
@@ -64,15 +65,15 @@ public class MessageBroadcastEvent extends Event implements Cancellable {
         this.cancelled = cancel;
     }
 
-    public String getMessage() {
+    @Nonnull public String getMessage() {
         return message;
     }
 
-    public Message getType() {
+    @Nonnull public Message getType() {
         return type;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(@Nonnull String message) {
         this.message = message;
     }
 

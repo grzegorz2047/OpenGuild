@@ -24,21 +24,23 @@
 
 package com.github.grzegorz2047.openguild.command;
 
+import javax.annotation.Nonnull;
+
 public class UsageException extends RuntimeException {
 
     public UsageException() {
         super();
     }
 
-    public UsageException(String message) {
+    public UsageException(@Nonnull String message) {
         super(message);
     }
 
-    public UsageException(Throwable cause) {
+    public UsageException(@Nonnull Throwable cause) {
         super(cause);
     }
 
-    public UsageException(String message, Throwable cause) {
+    public UsageException(@Nonnull String message, @Nonnull Throwable cause) {
         super(message, cause);
     }
 

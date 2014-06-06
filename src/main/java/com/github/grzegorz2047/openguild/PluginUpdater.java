@@ -25,10 +25,11 @@
 package com.github.grzegorz2047.openguild;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 public interface PluginUpdater {
 
-    List<String> getVersions();
+    @Nullable List<String> getVersions();
 
     boolean isAvailable();
 

@@ -25,13 +25,15 @@
 package com.github.grzegorz2047.openguild.module;
 
 import java.util.Set;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface ModuleManager {
 
-    Object getModule(String name);
+    @Nullable Object getModule(@Nonnull String name);
 
-    Set<String> getModules();
+    @Nonnull Set<String> getModules();
 
-    boolean registerModule(String name, Object object);
+    boolean registerModule(@Nonnull String name, @Nonnull Object object);
 
 }

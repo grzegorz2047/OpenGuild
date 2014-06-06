@@ -26,16 +26,18 @@ package com.github.grzegorz2047.openguild.command;
 
 import java.io.File;
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public interface CommandManager {
 
-    List<String> getAliases(String cmd);
+    @Nullable List<String> getAliases(@Nonnull String cmd);
 
-    List<String> getCommands();
+    @Nullable List<String> getCommands();
 
-    File getFile();
+    @Nonnull File getFile();
 
-    FileConfiguration getFileConfiguration();
+    @Nullable FileConfiguration getFileConfiguration();
 
 }

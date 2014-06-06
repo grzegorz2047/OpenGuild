@@ -34,54 +34,56 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
 import com.github.grzegorz2047.openguild.command.CommandManager;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface OpenGuildPlugin {
 
-    Plugin getBukkit();
+    @Nonnull Plugin getBukkit();
 
-    CommandManager getCmdManager();
+    @Nonnull CommandManager getCmdManager();
 
-    CommandInfo getCommand(String name);
+    @Nonnull CommandInfo getCommand(@Nonnull String name);
 
-    Set<String> getCommands();
+    @Nonnull Set<String> getCommands();
 
-    Configuration getConfig();
+    @Nonnull Configuration getConfig();
 
-    Guild getGuild(Location location);
+    @Nullable Guild getGuild(@Nonnull Location location);
 
-    Guild getGuild(Player player);
+    @Nullable Guild getGuild(@Nonnull Player player);
 
-    Guild getGuild(String name);
+    @Nullable Guild getGuild(@Nonnull String name);
 
-    Guild getGuild(User user);
+    @Nullable Guild getGuild(@Nonnull User user);
 
-    GuildManager getGuildManager();
+    @Nonnull GuildManager getGuildManager();
 
-    List<Guild> getGuilds();
+    @Nonnull List<Guild> getGuilds();
 
-    Messages getMessages();
+    @Nonnull Messages getMessages();
 
-    ModuleManager getModules();
+    @Nonnull ModuleManager getModules();
 
-    OpenGuildPlugin getPlugin();
+    @Nonnull OpenGuildPlugin getPlugin();
 
-    PluginUpdater getUpdater();
+    @Nonnull PluginUpdater getUpdater();
 
-    User getUser(String name);
+    @Nullable User getUser(@Nonnull String name);
 
-    User getUser(Player player);
+    @Nullable User getUser(@Nonnull Player player);
 
-    User getUser(UUID uuid);
+    @Nullable User getUser(@Nonnull UUID uuid);
 
-    List<User> getUsers();
+    @Nonnull List<User> getUsers();
 
-    String getVersion();
+    @Nonnull String getVersion();
 
-    void registerCommand(CommandInfo command);
+    void registerCommand(@Nonnull CommandInfo command);
 
     @Deprecated
-    void reload(CommandSender sender);
+    void reload(@Nonnull CommandSender sender);
 
-    Guild[] sortGuilds();
+    @Nonnull Guild[] sortGuilds();
 
 }

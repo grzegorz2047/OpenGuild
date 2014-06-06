@@ -72,7 +72,11 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
             try {
                 CommandInfo info = og.getCommand(result);
                 if(!info.hasPermission() || sender.hasPermission(info.getPermission())) {
-                    og.getCommand(result).getExecutor().execute(sender, args);
+                    if(info.hasExecutor()) {
+                        og.getCommand(result).getExecutor().execute(sender, args);
+                    } else {
+                        throw new CommandException("Executor is not defined!");
+                    }
                 } else {
                     throw new PermException();
                 }

@@ -26,6 +26,7 @@ package com.github.grzegorz2047.openguild.event;
 
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.User;
+import javax.annotation.Nonnull;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -39,19 +40,21 @@ public class GuildsChatMessageEvent extends Event implements Cancellable {
     private Guild guild;
     private String format;
 
-    public GuildsChatMessageEvent(User author, Guild guild, String message) {
+    public GuildsChatMessageEvent(@Nonnull User author,
+            @Nonnull Guild guild,
+            @Nonnull String message) {
         this.cancelled = false;
         this.user = author;
         this.guild = guild;
         this.format = ChatColor.GRAY + "[Guild] " + ChatColor.BLUE + author + ChatColor.GRAY + ": " + ChatColor.WHITE + message;
     }
 
-    public static HandlerList getHandlerList() {
+    @Nonnull public static HandlerList getHandlerList() {
         return handlers;
     }
 
     @Override
-    public HandlerList getHandlers() {
+    @Nonnull public HandlerList getHandlers() {
         return handlers;
     }
 
@@ -65,27 +68,27 @@ public class GuildsChatMessageEvent extends Event implements Cancellable {
         this.cancelled = cancel;
     }
 
-    public String getFormat() {
+    @Nonnull public String getFormat() {
         return format;
     }
 
-    public Guild getGuild() {
+    @Nonnull public Guild getGuild() {
         return guild;
     }
 
-    public User getUser() {
+    @Nonnull public User getUser() {
         return user;
     }
 
-    public void setFormat(String format) {
+    public void setFormat(@Nonnull String format) {
         this.format = format;
     }
 
-    public void setGuild(Guild guild) {
+    public void setGuild(@Nonnull Guild guild) {
         this.guild = guild;
     }
 
-    public void setUser(User user) {
+    public void setUser(@Nonnull User user) {
         this.user = user;
     }
 

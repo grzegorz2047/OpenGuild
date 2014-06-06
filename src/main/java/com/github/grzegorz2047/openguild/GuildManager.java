@@ -24,10 +24,12 @@
 
 package com.github.grzegorz2047.openguild;
 
+import javax.annotation.Nonnull;
+
 public interface GuildManager {
 
-    String getNicknameTag();
+    @Nonnull String getNicknameTag();
 
-    void setNicknameTag(String tag);
+    void setNicknameTag(@Nonnull String tag);
 
 }

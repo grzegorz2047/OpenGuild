@@ -24,6 +24,7 @@
 
 package com.github.grzegorz2047.openguild.event;
 
+import javax.annotation.Nonnull;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -31,12 +32,12 @@ public class ModuleLoadEvent extends Event {
 
     public static final HandlerList handlers = new HandlerList();
 
-    public static HandlerList getHandlerList() {
+    @Nonnull public static HandlerList getHandlerList() {
         return handlers;
     }
 
     @Override
-    public HandlerList getHandlers() {
+    @Nonnull public HandlerList getHandlers() {
         return handlers;
     }
 

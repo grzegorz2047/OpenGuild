@@ -24,21 +24,23 @@
 
 package com.github.grzegorz2047.openguild.command;
 
+import javax.annotation.Nonnull;
+
 public class CommandException extends RuntimeException {
 
     public CommandException() {
         super();
     }
 
-    public CommandException(String message) {
+    public CommandException(@Nonnull String message) {
         super(message);
     }
 
-    public CommandException(Throwable cause) {
+    public CommandException(@Nonnull Throwable cause) {
         super(cause);
     }
 
-    public CommandException(String message, Throwable cause) {
+    public CommandException(@Nonnull String message, @Nonnull Throwable cause) {
         super(message, cause);
     }
 

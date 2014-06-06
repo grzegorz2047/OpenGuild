@@ -24,6 +24,7 @@
 
 package com.github.grzegorz2047.openguild.event;
 
+import javax.annotation.Nonnull;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -34,21 +35,22 @@ public class OpenGuildReloadedEvent extends Event {
     public CommandSender sender;
     public boolean success;
 
-    public OpenGuildReloadedEvent(CommandSender sender, boolean success) {
+    public OpenGuildReloadedEvent(@Nonnull CommandSender sender,
+            boolean success) {
         this.sender = sender;
         this.success = success;
     }
 
-    public static HandlerList getHandlerList() {
+    @Nonnull public static HandlerList getHandlerList() {
         return handlers;
     }
 
     @Override
-    public HandlerList getHandlers() {
+    @Nonnull public HandlerList getHandlers() {
         return handlers;
     }
 
-    public CommandSender getSender() {
+    @Nonnull public CommandSender getSender() {
         return sender;
     }
 

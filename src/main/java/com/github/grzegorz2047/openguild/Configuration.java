@@ -24,11 +24,14 @@
 
 package com.github.grzegorz2047.openguild;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public interface Configuration {
 
-    Object getValue(String path);
+    @Nonnull Object getValue(@Nonnull String path);
 
-    Object getValue(String path, Object def);
+    @Nonnull Object getValue(@Nonnull String path, @Nullable Object def);
 
     void reload();
 

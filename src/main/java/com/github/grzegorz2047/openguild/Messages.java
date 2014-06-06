@@ -25,16 +25,18 @@
 package com.github.grzegorz2047.openguild;
 
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface Messages {
 
-    String getErrorMessage(String lang);
+    @Nullable String getErrorMessage(@Nonnull String lang);
 
-    List<String> getLangList();
+    @Nonnull List<String> getLangList();
 
-    String getMessage(String path);
+    @Nonnull String getMessage(@Nonnull String path);
 
-    String getPrefixedMessage(String path);
+    @Nonnull String getPrefixedMessage(@Nonnull String path);
 
     void reload();
 

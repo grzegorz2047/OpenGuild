@@ -25,6 +25,8 @@
 package com.github.grzegorz2047.openguild.command;
 
 import com.github.grzegorz2047.openguild.OpenGuild;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.bukkit.ChatColor;
 
 public class CommandInfo {
@@ -36,7 +38,12 @@ public class CommandInfo {
     private final String permission;
     private final String usage;
 
-    public CommandInfo(String[] aliases, String command, CommandDescription description, Command executor, String permission, String usage) {
+    public CommandInfo(@Nullable String[] aliases,
+            @Nonnull String command,
+            @Nonnull CommandDescription description,
+            @Nullable Command executor,
+            @Nullable String permission,
+            @Nullable String usage) {
         this.aliases = aliases;
         this.command = command.toLowerCase();
         this.description = description;
@@ -45,15 +52,15 @@ public class CommandInfo {
         this.usage = usage;
     }
 
-    public String[] getAliases() {
+    @Nullable public String[] getAliases() {
         return aliases;
     }
 
-    public String getName() {
+    @Nonnull public String getName() {
         return command;
     }
 
-    public CommandDescription getDescription() {
+    @Nonnull public CommandDescription getDescription() {
         if(description != null) {
             return description;
         } else {
@@ -63,15 +70,15 @@ public class CommandInfo {
         }
     }
 
-    public Command getExecutor() {
+    @Nullable public Command getExecutor() {
         return executor;
     }
 
-    public String getPermission() {
+    @Nullable public String getPermission() {
         return permission;
     }
 
-    public String getUsage() {
+    @Nonnull public String getUsage() {
         String result = "";
         if(usage != null)
             result = " " + usage;

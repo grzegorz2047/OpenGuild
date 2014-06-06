@@ -24,21 +24,23 @@
 
 package com.github.grzegorz2047.openguild.command;
 
+import javax.annotation.Nonnull;
+
 public class PermException extends RuntimeException {
 
     public PermException() {
         super();
     }
 
-    public PermException(String message) {
+    public PermException(@Nonnull String message) {
         super(message);
     }
 
-    public PermException(Throwable cause) {
+    public PermException(@Nonnull Throwable cause) {
         super(cause);
     }
 
-    public PermException(String message, Throwable cause) {
+    public PermException(@Nonnull String message, @Nonnull Throwable cause) {
         super(message, cause);
     }
 

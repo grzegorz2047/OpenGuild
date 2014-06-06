@@ -24,15 +24,16 @@
 
 package com.github.grzegorz2047.openguild;
 
+import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
 
 public interface User {
 
-    Player getBukkit();
+    @Nullable Player getBukkit();
 
     int getDeads();
 
-    Guild getGuild();
+    @Nullable Guild getGuild();
 
     double getKD();
 

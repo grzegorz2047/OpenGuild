@@ -34,101 +34,103 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
 import com.github.grzegorz2047.openguild.command.CommandManager;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class OpenGuild {
 
     private static OpenGuildPlugin guild;
 
-    public static Plugin getBukkit() {
+    @Nonnull public static Plugin getBukkit() {
         return guild.getBukkit();
     }
 
-    public static CommandManager getCmdManager() {
+    @Nonnull public static CommandManager getCmdManager() {
         return guild.getCmdManager();
     }
 
-    public static CommandInfo getCommand(String name) {
+    @Nullable public static CommandInfo getCommand(@Nonnull String name) {
         return guild.getCommand(name);
     }
 
-    public static Set<String> getCommands() {
+    @Nonnull public static Set<String> getCommands() {
         return guild.getCommands();
     }
 
-    public static Configuration getConfig() {
+    @Nonnull public static Configuration getConfig() {
         return guild.getConfig();
     }
 
-    public static Guild getGuild(Location location) {
+    @Nullable public static Guild getGuild(@Nonnull Location location) {
         return guild.getGuild(location);
     }
 
-    public static Guild getGuild(Player player) {
+    @Nullable public static Guild getGuild(@Nonnull Player player) {
         return guild.getGuild(player);
     }
 
-    public static Guild getGuild(String name) {
+    @Nullable public static Guild getGuild(@Nonnull String name) {
         return guild.getGuild(name);
     }
 
-    public static Guild getGuild(User user) {
+    @Nullable public static Guild getGuild(@Nonnull User user) {
         return guild.getGuild(user);
     }
 
-    public static GuildManager getGuildManager() {
+    @Nonnull public static GuildManager getGuildManager() {
         return guild.getGuildManager();
     }
 
-    public static List<Guild> getGuilds() {
+    @Nonnull public static List<Guild> getGuilds() {
         return guild.getGuilds();
     }
 
-    public static Messages getMessages() {
+    @Nonnull public static Messages getMessages() {
         return guild.getMessages();
     }
     
-    public static ModuleManager getModules() {
+    @Nonnull public static ModuleManager getModules() {
         return guild.getModules();
     }
 
-    public static OpenGuildPlugin getPlugin() {
+    @Nonnull public static OpenGuildPlugin getPlugin() {
         return guild.getPlugin();
     }
 
-    public static PluginUpdater getUpdater() {
+    @Nonnull public static PluginUpdater getUpdater() {
         return guild.getUpdater();
     }
 
-    public static User getUser(String name) {
+    @Nullable public static User getUser(@Nonnull String name) {
         return guild.getUser(name);
     }
 
-    public static User getUser(Player player) {
+    @Nullable public static User getUser(@Nonnull Player player) {
         return guild.getUser(player);
     }
 
-    public static User getUser(UUID uuid) {
+    @Nullable public static User getUser(@Nonnull UUID uuid) {
         return guild.getUser(uuid);
     }
 
-    public static List<User> getUsers() {
+    @Nonnull public static List<User> getUsers() {
         return guild.getUsers();
     }
 
-    public static String getVersion() {
+    @Nonnull public static String getVersion() {
         return guild.getVersion();
     }
 
-    public static void registerCommand(CommandInfo command) {
+    public static void registerCommand(@Nonnull CommandInfo command) {
         guild.registerCommand(command);
     }
 
     @Deprecated
-    public static void reload(CommandSender sender) {
+    public static void reload(@Nonnull CommandSender sender) {
         guild.reload(sender);
     }
 
-    public static Guild[] sortGuilds() {
+    @Nonnull public static Guild[] sortGuilds() {
         return guild.sortGuilds();
     }
 

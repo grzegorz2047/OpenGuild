@@ -24,20 +24,22 @@
 
 package com.github.grzegorz2047.openguild.module;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.bukkit.Location;
 
 public interface SpawnModule {
 
     boolean canCreate();
 
-    Location getMaxPosition();
+    @Nullable Location getMaxPosition();
 
-    Location getMinPosition();
+    @Nullable Location getMinPosition();
 
     void setCanCreate(boolean create);
 
-    void setMaxPosition(Location max);
+    void setMaxPosition(@Nonnull Location max);
 
-    void setMinPosition(Location min);
+    void setMinPosition(@Nonnull Location min);
 
 }

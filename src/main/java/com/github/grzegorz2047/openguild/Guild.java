@@ -26,40 +26,42 @@ package com.github.grzegorz2047.openguild;
 
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.bukkit.Location;
 
 public interface Guild {
 
-    List<Guild> getAllyGuilds();
+    @Nullable List<Guild> getAllyGuilds();
 
-    String getDescription();
+    @Nullable String getDescription();
 
-    List<Guild> getEnemyGuilds();
+    @Nullable List<Guild> getEnemyGuilds();
 
-    Location getHome();
+    @Nonnull Location getHome();
 
-    List<UUID> getInvitedPlayers();
+    @Nullable List<UUID> getInvitedPlayers();
 
-    UUID getLeader();
+    @Nonnull UUID getLeader();
 
-    List<UUID> getMembers();
+    @Nullable List<UUID> getMembers();
 
     double getPoints();
 
-    String getTag();
+    @Nonnull String getTag();
 
     void reloadPoints();
 
-    void setDesciption(String description);
+    void setDesciption(@Nullable String description);
 
-    void setHome(Location home);
+    void setHome(@Nonnull Location home);
 
-    void setInvitedPlayers(List<UUID> invited);
+    void setInvitedPlayers(@Nullable List<UUID> invited);
 
-    void setLeader(UUID leader);
+    void setLeader(@Nonnull UUID leader);
 
-    void setMembers(List<UUID> members);
+    void setMembers(@Nullable List<UUID> members);
 
-    void setTag(String tag);
+    void setTag(@Nonnull String tag);
 
 }
