@@ -53,12 +53,12 @@ public class HelpCmd implements Command {
                         return;
                     }
                 }
-                throw new UsageException("Command, alias or page was not found.");
+                throw new UsageException("Polecenie alias lub strona nie zostala odnaleziona.");
             }
         }
         
         if(page <= 0) {
-            throw new CommandException("Page number must be positive");
+            throw new CommandException("Numer strony musi być dodatni.");
         } else {
             help(sender, page);
         }
