@@ -56,6 +56,8 @@ import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
+import pl.grzegorz2047.openguild2047.modules.hardcore.ModuleHardcore;
+import pl.grzegorz2047.openguild2047.modules.randomtp.ModuleRandomTP;
 
 /**
  *
@@ -75,26 +77,33 @@ public class OpenGuild extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Podstawowe rzeczy, itd
         long init = System.currentTimeMillis();
         instance = this;
+        // API
         com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(new OpenGuildBukkitPlugin()); // Setup API
         api = com.github.grzegorz2047.openguild.OpenGuild.getPlugin();
+        // Ustawianie komend na error w przypadku blednego uruchomienia pluginu
         getCommand("guild").setExecutor(new ErrorCommand());
         getCommand("team").setExecutor(new ErrorCommand());
+        // Pliki, komendy, updaty, listenery
         copyDefaultFiles();
         loadCommands();
         checkForUpdates();
         loadAllListeners();
+        // Data gildii
         Data pd = new Data();
         Data.setDataInstance(pd);
+        // Baza danych
         loadDb();
+        // Ustawienie tagow
         new TagManager();
         for(Player p : getServer().getOnlinePlayers()) {
             TagManager.setTag(p.getUniqueId());
         }
+        // Ladowanie graczy i itemow na gildie
         loadPlayers();
         CuboidListeners.loadItems();
-        
         // Metrics
         try {
             Metrics metrics = new Metrics(this);
@@ -102,6 +111,7 @@ public class OpenGuild extends JavaPlugin {
         } catch(IOException ex) {
             // Failed to submit the stats :-(
         }
+        // 1.7.9 ?
         try{
             if(getServer().getOfflinePlayer("Notch").getUniqueId() ==null){
                 Guilds.getLogger().severe("Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5!");
@@ -114,6 +124,7 @@ public class OpenGuild extends JavaPlugin {
             getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
             getServer().getPluginManager().disablePlugin(this);
         }
+        // Prawidlowa komenda i koniec
         getCommand("team").setExecutor(new TeamCommand());
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
     }
@@ -164,7 +175,7 @@ public class OpenGuild extends JavaPlugin {
                 ex.printStackTrace();
             }
         }
-        saveDefaultConfig();//Najprostsza opcja, ale nie aktualizuje configu.
+        saveDefaultConfig(); // Najprostsza opcja, ale nie aktualizuje configu.
         loadConfig();
         saveResource("commands.yml", false);
         Guilds.getLogger().info("Loading configuration from config.yml...");
@@ -259,6 +270,10 @@ public class OpenGuild extends JavaPlugin {
         if(GenConf.playerMoveEvent) {
             pm.registerEvents(new PlayerMove(), this);
         }
+        
+        // Modules
+        pm.registerEvents(new ModuleHardcore(), this);
+        pm.registerEvents(new ModuleRandomTP(), this);
         
         getServer().getPluginManager().callEvent(new ModuleLoadEvent());
     }
