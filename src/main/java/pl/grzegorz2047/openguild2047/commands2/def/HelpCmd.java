@@ -53,12 +53,12 @@ public class HelpCmd implements Command {
                         return;
                     }
                 }
-                throw new UsageException("Command, alias or page was not found.");
+                throw new UsageException(MsgManager.get("cmdhelp-null"));
             }
         }
         
         if(page <= 0) {
-            throw new CommandException("Page number must be positive");
+            throw new CommandException(MsgManager.get("cmdhelp-page"));
         } else {
             help(sender, page);
         }
