@@ -39,6 +39,8 @@ import javax.annotation.Nullable;
 
 public interface OpenGuildPlugin {
 
+    void execute(@Nonnull CommandSender sender, @Nonnull String cmd);
+
     @Nonnull Plugin getBukkit();
 
     @Nonnull CommandManager getCmdManager();

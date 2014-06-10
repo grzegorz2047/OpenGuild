@@ -66,6 +66,11 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     }
     
     @Override
+    public void execute(CommandSender sender, String cmd) {
+        Bukkit.dispatchCommand(sender, "g " + cmd);
+    }
+    
+    @Override
     public Plugin getBukkit() {
         return bukkit;
     }

@@ -41,6 +41,10 @@ public class OpenGuild {
 
     private static OpenGuildPlugin guild;
 
+    public static void execute(@Nonnull CommandSender sender, @Nonnull String cmd) {
+        guild.execute(sender, cmd);
+    }
+
     @Nonnull public static Plugin getBukkit() {
         return guild.getBukkit();
     }
