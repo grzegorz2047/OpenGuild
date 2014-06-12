@@ -81,6 +81,7 @@ public class GenConf {
     public static boolean newCmdApi;
     public static boolean ranTpEnabled;
     public static boolean ranTpButton;
+    public static int spawnExtra;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.get().getConfig();
@@ -136,6 +137,7 @@ public class GenConf {
         newCmdApi = config.getBoolean("use-new-command-api", false);
         ranTpEnabled = config.getBoolean("random-tp.enabled", false);
         ranTpButton = config.getBoolean("random-tp.button", true);
+        spawnExtra = config.getInt("spawn.extra", 50);
     }
 
     private static void loadBans() {

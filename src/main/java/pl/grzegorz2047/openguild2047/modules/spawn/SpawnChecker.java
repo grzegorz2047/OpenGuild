@@ -29,6 +29,8 @@ import pl.grzegorz2047.openguild2047.GenConf;
 
 public class SpawnChecker {
     
+    private static int extra = 50;
+    
     public static boolean isSpawn(Location location) {
         Location l = location;
         Location c1 = GenConf.spawnMax;
@@ -36,6 +38,20 @@ public class SpawnChecker {
         if(l.getWorld().getName().equals(c1.getWorld().getName())) {
             if(l.getBlockX() > c2.getBlockX() && l.getBlockX() < c1.getBlockX()) {
                 if(l.getBlockZ() > c2.getBlockZ() && l.getBlockZ() < c1.getBlockZ()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public static boolean isSpawnExtra(Location location) {
+        Location l = location;
+        Location c1 = GenConf.spawnMax;
+        Location c2 = GenConf.spawnMin;
+        if(l.getWorld().getName().equals(c1.getWorld().getName())) {
+            if(l.getBlockX() > c2.getBlockX() - extra && l.getBlockX() < c1.getBlockX() + extra) {
+                if(l.getBlockZ() > c2.getBlockZ() - extra && l.getBlockZ() < c1.getBlockZ() + extra) {
                     return true;
                 }
             }

@@ -28,16 +28,26 @@ import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 
 public class SpawnListeners implements Listener {
     
     @EventHandler
     public void onGuildCreate(GuildCreateEvent e) {
-        if(SpawnChecker.isSpawn(e.getHome())) {
+        if(GenConf.blockGuildCreating && SpawnChecker.isSpawnExtra(e.getHome())) {
             e.setCancelled(true);
             e.getOwner().sendMessage(GenConf.prefix + ChatColor.RED + GenConf.spawnMessage);
         }
+    }
+    
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent e) {
+        /*
+         * TODO Blokowanie wejscia osobom
+         * które wyszly zza spawna na czas
+         * podany w configu jako 'block-enter-time'
+         */
     }
     
 }
