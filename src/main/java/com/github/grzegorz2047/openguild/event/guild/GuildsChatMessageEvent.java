@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild.event;
+package com.github.grzegorz2047.openguild.event.guild;
 
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.User;

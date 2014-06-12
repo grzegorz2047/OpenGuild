@@ -24,12 +24,14 @@
 
 package pl.grzegorz2047.openguild2047.api.module;
 
+import com.github.grzegorz2047.openguild.event.ModuleLoadEvent;
 import com.github.grzegorz2047.openguild.module.Module;
 import com.github.grzegorz2047.openguild.module.ModuleInfo;
 import com.github.grzegorz2047.openguild.module.ModuleLoadException;
 import com.github.grzegorz2047.openguild.module.ModuleManager;
 import java.util.HashMap;
 import java.util.Set;
+import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.modules.hardcore.ModuleHardcore;
 import pl.grzegorz2047.openguild2047.modules.randomtp.ModuleRandomTP;
@@ -60,15 +62,19 @@ public class OpenModuleManager implements ModuleManager {
             Guilds.getLogger().severe("Could not load module ID '" + id + "'! This modules name already exists!");
             return false;
         } else {
-            modules.put(id, module);
-            
             Guilds.getLogger().info("Enabling module '" + id + "'...");
             try {
                 ModuleInfo info = module.enable(id);
                 if(info == null) {
                     return false;
                 }
+                ModuleLoadEvent event = new ModuleLoadEvent(module);
+                Bukkit.getPluginManager().callEvent(event);
+                if(event.isCancelled()) {
+                    return false;
+                }
                 
+                modules.put(info.getId(), module);
                 Guilds.getLogger().info("Module " + info.getName() + " (as " + id + ") v" + info.getVersion() + " has been enabled.");
                 return true;
             } catch(ModuleLoadException ex) {

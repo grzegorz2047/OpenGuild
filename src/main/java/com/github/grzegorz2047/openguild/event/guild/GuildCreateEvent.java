@@ -22,24 +22,33 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild.event;
+package com.github.grzegorz2047.openguild.event.guild;
 
-import com.github.grzegorz2047.openguild.module.Module;
+import static com.github.grzegorz2047.openguild.event.ModuleLoadEvent.handlers;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class ModuleLoadEvent extends Event implements Cancellable {
+public class GuildCreateEvent extends Event implements Cancellable {
 
-    public static final HandlerList handlers = new HandlerList();
-    private final Module module;
+    private static final HandlerList handlers = new HandlerList();
+    private final String tag;
+    private final String desc;
+    private final Player owner;
+    private final Location home;
     private boolean cancel;
 
-    public ModuleLoadEvent(@Nonnull Module module) {
-        this.module = module;
+    public GuildCreateEvent(@Nonnull String tag, @Nullable String desc, @Nonnull Player owner, @Nonnull Location home) {
+        this.tag = tag;
+        this.desc = desc;
+        this.owner = owner;
+        this.home = home;
     }
-
+    
     @Nonnull public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -59,7 +68,21 @@ public class ModuleLoadEvent extends Event implements Cancellable {
         this.cancel = cancel;
     }
 
-    @Nonnull public Module getModule() {
-        return module;
+    @Nonnull public String getTag() {
+        return tag;
     }
+
+    @Nullable public String getDescription() {
+        return desc;
+    }
+
+    @Deprecated // User soon
+    @Nonnull public Player getOwner() {
+        return owner;
+    }
+
+    @Nonnull public Location getHome() {
+        return home;
+    }
+
 }

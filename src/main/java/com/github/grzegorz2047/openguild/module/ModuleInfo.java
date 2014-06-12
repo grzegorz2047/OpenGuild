@@ -26,20 +26,27 @@ package com.github.grzegorz2047.openguild.module;
 
 public class ModuleInfo {
 
+    private final String id;
     private final String name;
     private final String desc;
     private final String version;
 
-    public ModuleInfo(String name, String desc) {
+    public ModuleInfo(String id, String name, String desc) {
+        this.id = id;
         this.name = name;
         this.desc = desc;
         this.version = "1.0";
     }
 
-    public ModuleInfo(String name, String desc, String version) {
+    public ModuleInfo(String id, String name, String desc, String version) {
+        this.id = id;
         this.name = name;
         this.desc = desc;
         this.version = version;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {

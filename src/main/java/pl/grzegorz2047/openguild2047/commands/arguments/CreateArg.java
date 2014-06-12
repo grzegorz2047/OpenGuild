@@ -24,6 +24,7 @@
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
 import com.github.grzegorz2047.openguild.event.MessageBroadcastEvent;
+import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -63,16 +64,31 @@ public class CreateArg {
         Player p = (Player) sender;
         if(!Data.getInstance().guildExists(clantag)) {
             if(!Data.getInstance().isPlayerInGuild(p.getUniqueId())) {
-                if(SpawnChecker.isSpawn(p.getLocation()) && GenConf.blockGuildCreating) {
-                    sender.sendMessage(GenConf.prefix + ChatColor.RED + GenConf.spawnMessage);
-                    return true;
-                }
                 if(clantag.matches("[0-9a-zA-Z]*")) {
                     if(clantag.length() <= GenConf.maxclantag && clantag.length() >= GenConf.minclantag) {
                         if(GenConf.badwords == null || !GenConf.badwords.contains(clantag)) {
                             if(GenConf.reqitems != null && !GenConf.reqitems.isEmpty() && GenUtil.hasEnoughItemsForGuild(p.getInventory())) {
                                 if(CuboidStuff.checkIfCuboidFarForGuild(p.getLocation())) {
                                     if(!GenUtil.isPlayerNearby(p, GenConf.MIN_CUBOID_RADIUS)) {
+                                        
+                                        String desc;
+                                        if(args.length > 2) {
+                                            desc = GenUtil.argsToString(args, 2, args.length);
+                                            if(desc.length() > 32) {
+                                                p.sendMessage(MsgManager.desctoolong);
+                                                return true;
+                                            }
+                                        } else {
+                                            desc = "Domyslny opis gildii :<";
+                                        }
+                                        
+                                        // Event
+                                        GuildCreateEvent event1 = new GuildCreateEvent(clantag, desc, p, p.getLocation());
+                                        Bukkit.getPluginManager().callEvent(event1);
+                                        if(event1.isCancelled()) {
+                                            return true;
+                                        }
+                                        
                                         if(GenConf.reqitems != null && !GenConf.reqitems.isEmpty()) {
                                             GenUtil.removeRequiredItemsForGuild(p.getInventory());
                                         }
@@ -85,16 +101,6 @@ public class CreateArg {
                                         c.setRadius(GenConf.MIN_CUBOID_RADIUS);
                                         c.setCenter(p.getLocation());
                                         //TODO: dodac jakies dane o cuboidzie w mysql
-                                        if(args.length > 2) {
-                                            String desc = GenUtil.argsToString(args, 2, args.length);
-                                            if(desc.length() > 32) {
-                                                p.sendMessage(MsgManager.desctoolong);
-                                                return true;
-                                            }
-                                            sg.setDescription(desc);
-                                        } else {
-                                            sg.setDescription("Domyslny opis gildii :<");
-                                        }
                                         Data.getInstance().cuboids.put(clantag, c);
 
                                         SimplePlayerGuild spg = new SimplePlayerGuild(p.getUniqueId(), sg.getTag(), true);

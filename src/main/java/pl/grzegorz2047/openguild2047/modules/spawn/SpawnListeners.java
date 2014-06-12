@@ -24,20 +24,20 @@
 
 package pl.grzegorz2047.openguild2047.modules.spawn;
 
-import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.module.Module;
-import com.github.grzegorz2047.openguild.module.ModuleInfo;
-import org.bukkit.Bukkit;
+import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
+import org.bukkit.ChatColor;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import pl.grzegorz2047.openguild2047.GenConf;
 
-public class ModuleSpawn implements Module {
+public class SpawnListeners implements Listener {
     
-    @Override
-    public ModuleInfo enable(String id) {
-        if(GenConf.blockGuildCreating) {
-            Bukkit.getPluginManager().registerEvents(new SpawnListeners(), OpenGuild.getBukkit());
+    @EventHandler
+    public void onGuildCreate(GuildCreateEvent e) {
+        if(SpawnChecker.isSpawn(e.getHome())) {
+            e.setCancelled(true);
+            e.getOwner().sendMessage(GenConf.prefix + ChatColor.RED + GenConf.spawnMessage);
         }
-        return null;
     }
     
 }
