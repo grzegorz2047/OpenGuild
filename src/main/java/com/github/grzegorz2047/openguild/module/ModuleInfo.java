@@ -24,16 +24,34 @@
 
 package com.github.grzegorz2047.openguild.module;
 
-import java.util.Set;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+public class ModuleInfo {
 
-public interface ModuleManager {
+    private final String name;
+    private final String desc;
+    private final String version;
 
-    @Nullable Module getModule(@Nonnull String id);
+    public ModuleInfo(String name, String desc) {
+        this.name = name;
+        this.desc = desc;
+        this.version = "1.0";
+    }
 
-    @Nonnull Set<String> getModules();
+    public ModuleInfo(String name, String desc, String version) {
+        this.name = name;
+        this.desc = desc;
+        this.version = version;
+    }
 
-    boolean registerModule(@Nonnull String id, @Nonnull Module module);
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return desc;
+    }
+
+    public String getVersion() {
+        return version;
+    }
 
 }

@@ -24,16 +24,24 @@
 
 package com.github.grzegorz2047.openguild.module;
 
-import java.util.Set;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public interface ModuleManager {
+public class ModuleLoadException extends RuntimeException {
 
-    @Nullable Module getModule(@Nonnull String id);
+    public ModuleLoadException() {
+        super();
+    }
 
-    @Nonnull Set<String> getModules();
+    public ModuleLoadException(@Nonnull String message) {
+        super(message);
+    }
 
-    boolean registerModule(@Nonnull String id, @Nonnull Module module);
+    public ModuleLoadException(@Nonnull Throwable cause) {
+        super(cause);
+    }
+
+    public ModuleLoadException(@Nonnull String message, @Nonnull Throwable cause) {
+        super(message, cause);
+    }
 
 }

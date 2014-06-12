@@ -24,16 +24,8 @@
 
 package com.github.grzegorz2047.openguild.module;
 
-import java.util.Set;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+public interface Module {
 
-public interface ModuleManager {
-
-    @Nullable Module getModule(@Nonnull String id);
-
-    @Nonnull Set<String> getModules();
-
-    boolean registerModule(@Nonnull String id, @Nonnull Module module);
+    ModuleInfo enable(String id) throws ModuleLoadException;
 
 }

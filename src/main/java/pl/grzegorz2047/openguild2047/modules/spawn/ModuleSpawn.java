@@ -22,36 +22,18 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.modules.hardcore;
+package pl.grzegorz2047.openguild2047.modules.spawn;
 
-import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.command.CommandDescription;
-import com.github.grzegorz2047.openguild.command.CommandInfo;
 import com.github.grzegorz2047.openguild.module.Module;
 import com.github.grzegorz2047.openguild.module.ModuleInfo;
-import com.github.grzegorz2047.openguild.module.ModuleLoadException;
-import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.GenConf;
 
-public class ModuleHardcore implements Module {
+public class ModuleSpawn implements Module {
     
     @Override
-    public ModuleInfo enable(String id) throws ModuleLoadException {
-        if(GenConf.hcBans) {
-            Bukkit.getPluginManager().registerEvents(new HardcoreListeners(), OpenGuild.getBukkit());
-            
-            CommandDescription desc = new CommandDescription();
-            desc.set("EN", "Unban a player from the dead");
-            desc.set("PL", "Odbanuj gracza ze smierci");
-            OpenGuild.registerCommand(new CommandInfo(
-                    new String[] {"ub"},
-                    "unban",
-                    desc,
-                    new Unban(),
-                    "openguild.hardcore.unban",
-                    "<player>"));
-            
-            return new ModuleInfo("Hardcore", "Hardcore mode features", "1.0");
+    public ModuleInfo enable(String id) {
+        if(GenConf.blockGuildCreating) {
+            // Hmmm?
         }
         return null;
     }
