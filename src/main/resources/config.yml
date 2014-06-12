@@ -11,7 +11,7 @@ spawn:
   location-max: [world, 50, 50]
   location-min: [world, -50, -50]
   block-guild-creating: true
-  block-enter: true
+  block-enter: false
   block-enter-time: 10
   message: '&cYou are not allowed to do this at the servers spawn point!'
   extra: 50

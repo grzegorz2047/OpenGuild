@@ -25,13 +25,18 @@
 package pl.grzegorz2047.openguild2047.modules.spawn;
 
 import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
+import java.util.HashMap;
+import java.util.UUID;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 
 public class SpawnListeners implements Listener {
+    
+    private static final HashMap<UUID, Long> blocked = new HashMap<UUID, Long>();
     
     @EventHandler
     public void onGuildCreate(GuildCreateEvent e) {
@@ -48,6 +53,30 @@ public class SpawnListeners implements Listener {
          * które wyszly zza spawna na czas
          * podany w configu jako 'block-enter-time'
          */
+        
+        if(GenConf.blockEnter) {
+            if(e.getFrom().getBlock().equals(e.getTo().getBlock())) {
+                return;
+            }
+            Player player = e.getPlayer();
+            
+            if(SpawnChecker.isSpawn(e.getFrom()) && !SpawnChecker.isSpawn(e.getTo())) {
+                blocked.put(player.getUniqueId(), System.currentTimeMillis());
+                return;
+            }
+            else if(SpawnChecker.isSpawn(e.getTo()) && !SpawnChecker.isSpawn(e.getFrom())) {
+                long ms = 0;
+
+                if(blocked.containsKey(player.getUniqueId())) {
+                    ms = GenConf.blockEnterTime * 1000 + blocked.get(player.getUniqueId());
+                }
+
+                if(System.currentTimeMillis() < ms) {
+                    player.teleport(e.getFrom());
+                    player.sendMessage(ChatColor.RED + "Can not enter!");
+                }
+            }
+        }
     }
     
 }

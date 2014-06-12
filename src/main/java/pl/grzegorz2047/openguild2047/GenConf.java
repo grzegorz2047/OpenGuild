@@ -82,6 +82,8 @@ public class GenConf {
     public static boolean ranTpEnabled;
     public static boolean ranTpButton;
     public static int spawnExtra;
+    public static boolean blockEnter;
+    public static int blockEnterTime;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.get().getConfig();
@@ -138,6 +140,8 @@ public class GenConf {
         ranTpEnabled = config.getBoolean("random-tp.enabled", false);
         ranTpButton = config.getBoolean("random-tp.button", true);
         spawnExtra = config.getInt("spawn.extra", 50);
+        blockEnter = config.getBoolean("spawn.block-enter", false);
+        blockEnterTime = config.getInt("spawn.block-enter-time", 10);
     }
 
     private static void loadBans() {
