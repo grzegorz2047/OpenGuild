@@ -7,12 +7,13 @@ Każde błędy, poprawki, propozycje piszcie w zakładce issues (po prawej stron
 
 Zobacz [instalacje](https://github.com/grzegorz2047/OpenGuild2047/wiki/Pobieranie-oraz-instalacja) pluginu oraz jego [konfigurację](https://github.com/grzegorz2047/OpenGuild2047/wiki/Konfiguracja).
 
-dev.bukkit.org
+Pobieranie
 -----------
-Najnowsze buildy pluginu dostępne są tutaj: openguild.kraft.czest.pl
-albo tutaj: https://grzegorz2047.ci.cloudbees.com/job/OpenGuild2047/
 
-Plugin dostepny takze na stronie bukkita: http://dev.bukkit.org/bukkit-plugins/openguild/
+Oficjalne wersje pluginu dostępne są [__tutaj__](https://github.com/grzegorz2047/OpenGuild2047/releases).
+Wersje dev - czyli najnowsze lecz prawdopodobnie mocno zbugowane są dostępne na [__Jenkins__](openguild.kraft.czest.pl).
+
+Plugin dostepny także na stronie [__BukkitDev__](http://dev.bukkit.org/bukkit-plugins/openguild/).
 
 Bugi oraz propozycje
 -----------
