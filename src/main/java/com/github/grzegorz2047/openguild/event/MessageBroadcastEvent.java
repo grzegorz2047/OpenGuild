@@ -34,7 +34,7 @@ public class MessageBroadcastEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
-    private Message type;
+    private final Message type;
     private String message;
 
     public MessageBroadcastEvent(@Nonnull MessageBroadcastEvent.Message type) {

@@ -22,45 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild.event;
+package com.github.grzegorz2047.openguild.module;
 
-import com.github.grzegorz2047.openguild.module.Module;
-import javax.annotation.Nonnull;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+public interface Module {
 
-public class ModuleLoadEvent extends Event implements Cancellable {
+    void enable(String id) throws ModuleLoadException;
 
-    private static final HandlerList handlers = new HandlerList();
-    private final Module module;
-    private boolean cancel;
-
-    public ModuleLoadEvent(@Nonnull Module module) {
-        this.module = module;
-    }
-
-    @Nonnull public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    @Override
-    @Nonnull public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancel;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancel = cancel;
-    }
-
-    @Nonnull public Module getModule() {
-        return module;
-    }
+    ModuleInfo module();
 
 }

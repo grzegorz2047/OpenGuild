@@ -30,10 +30,10 @@ import javax.annotation.Nullable;
 
 public interface ModuleManager {
 
-    @Nullable Object getModule(@Nonnull String name);
+    @Nullable Module getModule(@Nonnull String id);
 
     @Nonnull Set<String> getModules();
 
-    boolean registerModule(@Nonnull String name, @Nonnull Object object);
+    boolean registerModule(@Nonnull String id, @Nonnull Module module);
 
 }

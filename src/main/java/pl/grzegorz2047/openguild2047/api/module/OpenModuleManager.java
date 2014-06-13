@@ -24,22 +24,30 @@
 
 package pl.grzegorz2047.openguild2047.api.module;
 
+import com.github.grzegorz2047.openguild.event.ModuleLoadEvent;
+import com.github.grzegorz2047.openguild.module.Module;
+import com.github.grzegorz2047.openguild.module.ModuleInfo;
+import com.github.grzegorz2047.openguild.module.ModuleLoadException;
 import com.github.grzegorz2047.openguild.module.ModuleManager;
 import java.util.HashMap;
 import java.util.Set;
+import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.api.Guilds;
+import pl.grzegorz2047.openguild2047.modules.hardcore.ModuleHardcore;
+import pl.grzegorz2047.openguild2047.modules.randomtp.ModuleRandomTP;
+import pl.grzegorz2047.openguild2047.modules.spawn.ModuleSpawn;
 
 public class OpenModuleManager implements ModuleManager {
     
-    private HashMap<String, Object> modules;
+    private HashMap<String, Module> modules;
     
     public OpenModuleManager() {
         defaultModules();
     }
     
     @Override
-    public Object getModule(String name) {
-        return modules.get(name.toLowerCase());
+    public Module getModule(String id) {
+        return modules.get(id.toLowerCase());
     }
     
     @Override
@@ -48,23 +56,42 @@ public class OpenModuleManager implements ModuleManager {
     }
     
     @Override
-    public boolean registerModule(String name, Object object) {
-        name = name.toLowerCase();
-        if(modules.containsKey(name)) {
-            Guilds.getLogger().severe("Could not load module '" + name + "'! This modules name already exists!");
+    public boolean registerModule(String id, Module module) {
+        id = id.toLowerCase();
+        if(modules.containsKey(id)) {
+            Guilds.getLogger().severe("Could not load module ID '" + id + "'! This modules name already exists!");
             return false;
         } else {
-            modules.put(name, object);
-            Guilds.getLogger().info("Loaded module '" + name + "' from " + object.toString() + ".");
-            return true;
+            Guilds.getLogger().info("Enabling module '" + id + "'...");
+            try {
+                ModuleInfo info = module.module();
+                if(info == null) {
+                    throw new ModuleLoadException("ModuleInfo can not be null");
+                }
+                
+                ModuleLoadEvent event = new ModuleLoadEvent(module);
+                Bukkit.getPluginManager().callEvent(event);
+                if(event.isCancelled()) {
+                    Guilds.getLogger().info("Loading cancelled by ModuleLoadEvent");
+                    return false;
+                }
+                
+                module.enable(id);
+                
+                modules.put(id, module);
+                Guilds.getLogger().info("Module " + info.getName() + " (as " + id + ") v" + info.getVersion() + " has been enabled.");
+                return true;
+            } catch(ModuleLoadException ex) {
+                throw new ModuleLoadException("Could not load module '" + id + "': " + ex.getMessage());
+            }
         }
     }
     
     private void defaultModules() {
-        modules = new HashMap<String, Object>();
-        this.registerModule("hardcore", new OpenHardcoreModule());
-        this.registerModule("spawn", new OpenSpawnModule());
-        this.registerModule("random-tp", new OpenRandomTPModule());
+        modules = new HashMap<String, Module>();
+        this.registerModule("hardcore", new ModuleHardcore());
+        this.registerModule("random-tp", new ModuleRandomTP());
+        this.registerModule("spawn", new ModuleSpawn());
     }
     
 }

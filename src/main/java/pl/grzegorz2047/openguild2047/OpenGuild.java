@@ -270,12 +270,6 @@ public class OpenGuild extends JavaPlugin {
         if(GenConf.playerMoveEvent) {
             pm.registerEvents(new PlayerMove(), this);
         }
-        
-        // Modules
-        pm.registerEvents(new ModuleHardcore(), this);
-        pm.registerEvents(new ModuleRandomTP(), this);
-        
-        getServer().getPluginManager().callEvent(new ModuleLoadEvent());
     }
 
     private void loadPlayers() {

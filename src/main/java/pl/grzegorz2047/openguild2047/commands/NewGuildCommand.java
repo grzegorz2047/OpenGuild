@@ -64,7 +64,7 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
             }
             
             if(result == null) {
-                sender.sendMessage(MsgManager.get("cmdnotfound").replace("{COMMAND}", args[0]));
+                sender.sendMessage(MsgManager.get("cmdnotfound").replace("{COMMAND}", "\"" + args[0]) + "\"");
                 sender.sendMessage(ChatColor.RED + "/g help [command|page]");
                 return true;
             }
@@ -88,7 +88,7 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
                 return true;
             } catch(UsageException ex) {
                 sender.sendMessage(ChatColor.RED + ex.getMessage());
-                sender.sendMessage(og.getCommand(result).getUsage());
+                sender.sendMessage(ChatColor.RED + og.getCommand(result).getUsage());
                 return true;
             } catch(Exception ex) {
                 if(ex instanceof NumberFormatException) {

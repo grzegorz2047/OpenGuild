@@ -24,29 +24,23 @@
 
 package com.github.grzegorz2047.openguild.event;
 
-import com.github.grzegorz2047.openguild.Guild;
-import com.github.grzegorz2047.openguild.User;
+import com.github.grzegorz2047.openguild.command.CommandInfo;
+import com.github.grzegorz2047.openguild.module.Module;
 import javax.annotation.Nonnull;
-import org.bukkit.ChatColor;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class GuildsChatMessageEvent extends Event implements Cancellable {
+public class CommandRegisterEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private boolean cancelled;
-    private User user;
-    private Guild guild;
-    private String format;
+    private final boolean canCancel;
+    private boolean cancel;
+    private final CommandInfo command;
 
-    public GuildsChatMessageEvent(@Nonnull User author,
-            @Nonnull Guild guild,
-            @Nonnull String message) {
-        this.cancelled = false;
-        this.user = author;
-        this.guild = guild;
-        this.format = ChatColor.GRAY + "[Guild] " + ChatColor.BLUE + author + ChatColor.GRAY + ": " + ChatColor.WHITE + message;
+    public CommandRegisterEvent(@Nonnull CommandInfo command, boolean canCancel) {
+        this.canCancel = canCancel;
+        this.command = command;
     }
 
     @Nonnull public static HandlerList getHandlerList() {
@@ -60,36 +54,22 @@ public class GuildsChatMessageEvent extends Event implements Cancellable {
 
     @Override
     public boolean isCancelled() {
-        return cancelled;
+        if(!canCancel)
+            return false;
+        else return cancel;
     }
 
     @Override
     public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+        if(canCancel) this.cancel = cancel;
     }
 
-    @Nonnull public String getFormat() {
-        return format;
+    public boolean canCancel() {
+        return canCancel;
     }
 
-    @Nonnull public Guild getGuild() {
-        return guild;
-    }
-
-    @Nonnull public User getUser() {
-        return user;
-    }
-
-    public void setFormat(@Nonnull String format) {
-        this.format = format;
-    }
-
-    public void setGuild(@Nonnull Guild guild) {
-        this.guild = guild;
-    }
-
-    public void setUser(@Nonnull User user) {
-        this.user = user;
+    @Nonnull public CommandInfo getCommand() {
+        return command;
     }
 
 }

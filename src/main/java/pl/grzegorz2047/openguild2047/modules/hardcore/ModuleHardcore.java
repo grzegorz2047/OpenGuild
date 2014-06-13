@@ -27,16 +27,21 @@ package pl.grzegorz2047.openguild2047.modules.hardcore;
 import com.github.grzegorz2047.openguild.OpenGuild;
 import com.github.grzegorz2047.openguild.command.CommandDescription;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
-import com.github.grzegorz2047.openguild.event.ModuleLoadEvent;
+import com.github.grzegorz2047.openguild.module.Module;
+import com.github.grzegorz2047.openguild.module.ModuleInfo;
+import com.github.grzegorz2047.openguild.module.ModuleLoadException;
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import pl.grzegorz2047.openguild2047.GenConf;
 
-public class ModuleHardcore implements Listener {
+public class ModuleHardcore implements Module {
     
-    @EventHandler
-    public void onModuleLoad(ModuleLoadEvent e) {
+    @Override
+    public ModuleInfo module() {
+        return new ModuleInfo("Hardcore", "Hardcore mode features", "1.0");
+    }
+    
+    @Override
+    public void enable(String id) throws ModuleLoadException {
         if(GenConf.hcBans) {
             Bukkit.getPluginManager().registerEvents(new HardcoreListeners(), OpenGuild.getBukkit());
             

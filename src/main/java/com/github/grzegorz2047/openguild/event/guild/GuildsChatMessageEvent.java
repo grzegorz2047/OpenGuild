@@ -22,22 +22,31 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild.event;
+package com.github.grzegorz2047.openguild.event.guild;
 
-import com.github.grzegorz2047.openguild.module.Module;
+import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.User;
 import javax.annotation.Nonnull;
+import org.bukkit.ChatColor;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class ModuleLoadEvent extends Event implements Cancellable {
+public class GuildsChatMessageEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private final Module module;
-    private boolean cancel;
+    private boolean cancelled;
+    private User user;
+    private Guild guild;
+    private String format;
 
-    public ModuleLoadEvent(@Nonnull Module module) {
-        this.module = module;
+    public GuildsChatMessageEvent(@Nonnull User author,
+            @Nonnull Guild guild,
+            @Nonnull String message) {
+        this.cancelled = false;
+        this.user = author;
+        this.guild = guild;
+        this.format = ChatColor.GRAY + "[Guild] " + ChatColor.BLUE + author + ChatColor.GRAY + ": " + ChatColor.WHITE + message;
     }
 
     @Nonnull public static HandlerList getHandlerList() {
@@ -51,16 +60,36 @@ public class ModuleLoadEvent extends Event implements Cancellable {
 
     @Override
     public boolean isCancelled() {
-        return cancel;
+        return cancelled;
     }
 
     @Override
     public void setCancelled(boolean cancel) {
-        this.cancel = cancel;
+        this.cancelled = cancel;
     }
 
-    @Nonnull public Module getModule() {
-        return module;
+    @Nonnull public String getFormat() {
+        return format;
+    }
+
+    @Nonnull public Guild getGuild() {
+        return guild;
+    }
+
+    @Nonnull public User getUser() {
+        return user;
+    }
+
+    public void setFormat(@Nonnull String format) {
+        this.format = format;
+    }
+
+    public void setGuild(@Nonnull Guild guild) {
+        this.guild = guild;
+    }
+
+    public void setUser(@Nonnull User user) {
+        this.user = user;
     }
 
 }

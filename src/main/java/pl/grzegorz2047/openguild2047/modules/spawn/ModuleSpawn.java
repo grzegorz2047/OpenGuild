@@ -22,45 +22,26 @@
  * THE SOFTWARE.
  */
 
-package com.github.grzegorz2047.openguild.event;
+package pl.grzegorz2047.openguild2047.modules.spawn;
 
+import com.github.grzegorz2047.openguild.OpenGuild;
 import com.github.grzegorz2047.openguild.module.Module;
-import javax.annotation.Nonnull;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+import com.github.grzegorz2047.openguild.module.ModuleInfo;
+import org.bukkit.Bukkit;
+import pl.grzegorz2047.openguild2047.GenConf;
 
-public class ModuleLoadEvent extends Event implements Cancellable {
-
-    private static final HandlerList handlers = new HandlerList();
-    private final Module module;
-    private boolean cancel;
-
-    public ModuleLoadEvent(@Nonnull Module module) {
-        this.module = module;
-    }
-
-    @Nonnull public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
+public class ModuleSpawn implements Module {
+    
     @Override
-    @Nonnull public HandlerList getHandlers() {
-        return handlers;
+    public ModuleInfo module() {
+        return new ModuleInfo("Spawn", "SV/HC spawn features", "1.0");
     }
-
+    
     @Override
-    public boolean isCancelled() {
-        return cancel;
+    public void enable(String id) {
+        if(GenConf.blockGuildCreating) {
+            Bukkit.getPluginManager().registerEvents(new SpawnListeners(), OpenGuild.getBukkit());
+        }
     }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancel = cancel;
-    }
-
-    @Nonnull public Module getModule() {
-        return module;
-    }
-
+    
 }
