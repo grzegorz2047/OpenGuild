@@ -62,15 +62,14 @@ public class SpawnListeners implements Listener {
             
             if(SpawnChecker.isSpawn(e.getFrom()) && !SpawnChecker.isSpawn(e.getTo())) {
                 blocked.put(player.getUniqueId(), System.currentTimeMillis());
-                return;
             }
             else if(SpawnChecker.isSpawn(e.getTo()) && !SpawnChecker.isSpawn(e.getFrom())) {
                 long ms = 0;
-
+                
                 if(blocked.containsKey(player.getUniqueId())) {
                     ms = GenConf.blockEnterTime * 1000 + blocked.get(player.getUniqueId());
                 }
-
+                
                 if(System.currentTimeMillis() < ms) {
                     player.teleport(e.getFrom());
                     player.sendMessage(ChatColor.RED + "Can not enter!");

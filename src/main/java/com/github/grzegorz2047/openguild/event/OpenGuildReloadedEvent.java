@@ -31,7 +31,7 @@ import org.bukkit.event.HandlerList;
 
 public class OpenGuildReloadedEvent extends Event {
 
-    public static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     public CommandSender sender;
     public boolean success;
 

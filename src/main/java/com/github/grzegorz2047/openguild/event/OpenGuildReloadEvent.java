@@ -32,7 +32,7 @@ import org.bukkit.event.HandlerList;
 
 public class OpenGuildReloadEvent extends Event implements Cancellable {
 
-    public static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     public boolean cancel;
     public CommandSender sender;
 

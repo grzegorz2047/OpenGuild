@@ -24,20 +24,23 @@
 
 package com.github.grzegorz2047.openguild.event;
 
+import com.github.grzegorz2047.openguild.command.CommandInfo;
 import com.github.grzegorz2047.openguild.module.Module;
 import javax.annotation.Nonnull;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class ModuleLoadEvent extends Event implements Cancellable {
+public class CommandRegisterEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private final Module module;
+    private final boolean canCancel;
     private boolean cancel;
+    private final CommandInfo command;
 
-    public ModuleLoadEvent(@Nonnull Module module) {
-        this.module = module;
+    public CommandRegisterEvent(@Nonnull CommandInfo command, boolean canCancel) {
+        this.canCancel = canCancel;
+        this.command = command;
     }
 
     @Nonnull public static HandlerList getHandlerList() {
@@ -51,16 +54,22 @@ public class ModuleLoadEvent extends Event implements Cancellable {
 
     @Override
     public boolean isCancelled() {
-        return cancel;
+        if(!canCancel)
+            return false;
+        else return cancel;
     }
 
     @Override
     public void setCancelled(boolean cancel) {
-        this.cancel = cancel;
+        if(canCancel) this.cancel = cancel;
     }
 
-    @Nonnull public Module getModule() {
-        return module;
+    public boolean canCancel() {
+        return canCancel;
+    }
+
+    @Nonnull public CommandInfo getCommand() {
+        return command;
     }
 
 }

@@ -24,7 +24,6 @@
 
 package com.github.grzegorz2047.openguild.event.guild;
 
-import static com.github.grzegorz2047.openguild.event.ModuleLoadEvent.handlers;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.Location;

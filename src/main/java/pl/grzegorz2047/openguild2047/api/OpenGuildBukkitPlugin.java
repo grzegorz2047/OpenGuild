@@ -25,12 +25,14 @@
 package pl.grzegorz2047.openguild2047.api;
 
 import com.github.grzegorz2047.openguild.Configuration;
-import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.GuildManager;
 import com.github.grzegorz2047.openguild.Messages;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
 import com.github.grzegorz2047.openguild.PluginUpdater;
 import com.github.grzegorz2047.openguild.User;
+import com.github.grzegorz2047.openguild.command.CommandInfo;
+import com.github.grzegorz2047.openguild.command.CommandManager;
+import com.github.grzegorz2047.openguild.event.CommandRegisterEvent;
 import com.github.grzegorz2047.openguild.module.ModuleManager;
 import java.util.HashMap;
 import java.util.List;
@@ -43,11 +45,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
-import com.github.grzegorz2047.openguild.command.CommandInfo;
-import com.github.grzegorz2047.openguild.command.CommandManager;
-import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 
 public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
@@ -96,17 +96,17 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     }
     
     @Override
-    public Guild getGuild(Location location) {
+    public com.github.grzegorz2047.openguild.Guild getGuild(Location location) {
         return null; // TODO
     }
     
     @Override
-    public Guild getGuild(Player player) {
+    public com.github.grzegorz2047.openguild.Guild getGuild(Player player) {
         return getGuild(Data.getInstance().guildsplayers.get(player.getUniqueId()).getClanTag());
     }
     
     @Override
-    public Guild getGuild(String name) {
+    public com.github.grzegorz2047.openguild.Guild getGuild(String name) {
         for(com.github.grzegorz2047.openguild.Guild guild : getGuilds()) {
             if(guild.getTag().equalsIgnoreCase(name)) {
                 return guild;
@@ -116,7 +116,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     }
     
     @Override
-    public Guild getGuild(User user) {
+    public com.github.grzegorz2047.openguild.Guild getGuild(User user) {
         return getGuild(user.getBukkit());
     }
     
@@ -126,7 +126,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     }
     
     @Override
-    public List<Guild> getGuilds() {
+    public List<com.github.grzegorz2047.openguild.Guild> getGuilds() {
         return null; // TODO
     }
     
@@ -200,10 +200,22 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
             throw new IllegalArgumentException("Command " + command.getName() + " is already listed");
         }
         
-        commands.put(command.getName(), command);
-        if(command.getAliases() != null) {
-            for(String alias : command.getAliases()) {
-                commands.put(alias, command);
+        boolean canCancel = true;
+        String[] cancelList = new String[] {"help", "reload", "version"};
+        
+        for(String cancelCmd : cancelList) {
+            if(command.getName().equals(cancelCmd)) canCancel = true;
+        }
+        
+        CommandRegisterEvent event = new CommandRegisterEvent(command, canCancel);
+        Bukkit.getPluginManager().callEvent(event);
+        
+        if(!event.isCancelled()) {
+            commands.put(command.getName(), command);
+            if(command.getAliases() != null) {
+                for(String alias : command.getAliases()) {
+                    if(!commands.containsKey(alias)) commands.put(alias, command);
+                }
             }
         }
     }
@@ -214,8 +226,8 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     }
     
     @Override
-    public Guild[] sortGuilds() {
-        return (Guild[]) getGuilds().toArray();
+    public com.github.grzegorz2047.openguild.Guild[] sortGuilds() {
+        return (com.github.grzegorz2047.openguild.Guild[]) getGuilds().toArray();
     }
     
 }
