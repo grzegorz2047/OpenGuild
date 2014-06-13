@@ -33,11 +33,15 @@ import pl.grzegorz2047.openguild2047.GenConf;
 public class ModuleSpawn implements Module {
     
     @Override
-    public ModuleInfo enable(String id) {
+    public ModuleInfo module() {
+        return new ModuleInfo("Spawn", "SV/HC spawn features", "1.0");
+    }
+    
+    @Override
+    public void enable(String id) {
         if(GenConf.blockGuildCreating) {
             Bukkit.getPluginManager().registerEvents(new SpawnListeners(), OpenGuild.getBukkit());
         }
-        return null;
     }
     
 }

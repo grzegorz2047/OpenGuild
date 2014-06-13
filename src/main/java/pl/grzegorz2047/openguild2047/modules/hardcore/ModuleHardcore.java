@@ -36,7 +36,12 @@ import pl.grzegorz2047.openguild2047.GenConf;
 public class ModuleHardcore implements Module {
     
     @Override
-    public ModuleInfo enable(String id) throws ModuleLoadException {
+    public ModuleInfo module() {
+        return new ModuleInfo("Hardcore", "Hardcore mode features", "1.0");
+    }
+    
+    @Override
+    public void enable(String id) throws ModuleLoadException {
         if(GenConf.hcBans) {
             Bukkit.getPluginManager().registerEvents(new HardcoreListeners(), OpenGuild.getBukkit());
             
@@ -50,10 +55,7 @@ public class ModuleHardcore implements Module {
                     new Unban(),
                     "openguild.hardcore.unban",
                     "<player>"));
-            
-            return new ModuleInfo("Hardcore", "Hardcore mode features", "1.0");
         }
-        return null;
     }
     
 }

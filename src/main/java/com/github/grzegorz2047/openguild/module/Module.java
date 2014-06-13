@@ -26,6 +26,8 @@ package com.github.grzegorz2047.openguild.module;
 
 public interface Module {
 
-    ModuleInfo enable(String id) throws ModuleLoadException;
+    void enable(String id) throws ModuleLoadException;
+
+    ModuleInfo module();
 
 }

@@ -36,7 +36,12 @@ import pl.grzegorz2047.openguild2047.GenConf;
 public class ModuleRandomTP implements Module {
     
     @Override
-    public ModuleInfo enable(String id) throws ModuleLoadException {
+    public ModuleInfo module() {
+        return new ModuleInfo("Random Teleport", "Teleporting to random coordinates", "1.0");
+    }
+    
+    @Override
+    public void enable(String id) throws ModuleLoadException {
         if(GenConf.ranTpEnabled) {
             Bukkit.getPluginManager().registerEvents(new RandomTPListeners(), OpenGuild.getBukkit());
             
@@ -49,10 +54,7 @@ public class ModuleRandomTP implements Module {
                     new Randomtp(),
                     "openguild.randomtp",
                     "[player]"));
-            
-            return new ModuleInfo("Random Teleport", "Teleporting to random coordinates", "1.0");
         }
-        return null;
     }
     
 }

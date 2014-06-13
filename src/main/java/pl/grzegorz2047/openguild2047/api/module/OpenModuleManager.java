@@ -64,17 +64,21 @@ public class OpenModuleManager implements ModuleManager {
         } else {
             Guilds.getLogger().info("Enabling module '" + id + "'...");
             try {
-                ModuleInfo info = module.enable(id);
+                ModuleInfo info = module.module();
                 if(info == null) {
-                    return false;
+                    throw new ModuleLoadException("ModuleInfo can not be null");
                 }
+                
                 ModuleLoadEvent event = new ModuleLoadEvent(module);
                 Bukkit.getPluginManager().callEvent(event);
                 if(event.isCancelled()) {
+                    Guilds.getLogger().info("Loading cancelled by ModuleLoadEvent");
                     return false;
                 }
                 
-                modules.put(info.getId(), module);
+                module.enable(id);
+                
+                modules.put(id, module);
                 Guilds.getLogger().info("Module " + info.getName() + " (as " + id + ") v" + info.getVersion() + " has been enabled.");
                 return true;
             } catch(ModuleLoadException ex) {
@@ -86,8 +90,8 @@ public class OpenModuleManager implements ModuleManager {
     private void defaultModules() {
         modules = new HashMap<String, Module>();
         this.registerModule("hardcore", new ModuleHardcore());
-        this.registerModule("spawn", new ModuleSpawn());
         this.registerModule("random-tp", new ModuleRandomTP());
+        this.registerModule("spawn", new ModuleSpawn());
     }
     
 }
