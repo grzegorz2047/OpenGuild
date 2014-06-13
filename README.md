@@ -11,7 +11,7 @@ Pobieranie
 -----------
 
 Oficjalne wersje pluginu dostępne są [__tutaj__](https://github.com/grzegorz2047/OpenGuild2047/releases).
-Wersje dev - czyli najnowsze lecz prawdopodobnie mocno zbugowane są dostępne na [__Jenkins__](openguild.kraft.czest.pl).
+Wersje dev - czyli najnowsze lecz prawdopodobnie mocno zbugowane są dostępne na [__Jenkins__](https://openguild.kraft.czest.pl).
 
 Plugin dostepny także na stronie [__BukkitDev__](http://dev.bukkit.org/bukkit-plugins/openguild/).
 
