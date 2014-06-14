@@ -6,6 +6,7 @@
 - [ ] Możliwość otrzymania specjalnego przedmiotu z jakąś niestandardową mocą
 - [ ] Może podpiąć stoniarkę co napisałem, bądź stworzyć coś lepszego
 - [ ] Moduł - niszczenie obsidianu
+- [ ] Dokończenie modułu blokowania powrotu na spawn przez określony czas
 - [ ] Można dać prosty system levelowania w gildii
 - [ ] Można dać prosty system ekonomii wspierany przez vaulta
 - [ ] Platne dolaczanie do gildi
