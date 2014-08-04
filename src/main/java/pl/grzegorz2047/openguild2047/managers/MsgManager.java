@@ -82,6 +82,8 @@ public class MsgManager {
     public static String playerkicked = get("playerkicked", " Zostales wyrzucony z gildii!");
     public static String playerkicksuccess = get("playerkicksuccess", " Gracz zostal pomyslnie wyrzucony z gildii!");
     public static String addedAllyGuild = get("addedAllyGuild", " Gildia {Guild} zostala dodana do listy sojusznikow!");
+    public static String hometpdontmove = get("hometpdontmove", "Juz trwa odliczanie! Prosze sie nie ruszac.");
+    public static String timetotpnotify = get("timetotpnotify","Zostaniesz teleportowany/a do gildii {GUILD} za {HOMETPSECONDS} sekund!");
     
     public static String get(String path) {
         return GenConf.prefix + getIgnorePref(path);

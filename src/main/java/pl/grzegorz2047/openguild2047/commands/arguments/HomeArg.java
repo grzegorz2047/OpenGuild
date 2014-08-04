@@ -92,7 +92,7 @@ public class HomeArg {
 
     private static void teleport(final Player player, final Location location, final int seconds) {
         if(!(blocked == null) && blocked.contains(player.getName().toLowerCase())) {
-            player.sendMessage(ChatColor.RED + "Juz trwa odliczanie! Prosze sie nie ruszac.");
+            player.sendMessage(ChatColor.RED + MsgManager.hometpdontmove);
             return;
         }
         final World world = player.getLocation().getWorld();
@@ -100,7 +100,7 @@ public class HomeArg {
         final int y = player.getLocation().getBlockY();
         final int z = player.getLocation().getBlockZ();
         blocked.add(player.getName().toLowerCase());
-        player.sendMessage(ChatColor.GRAY + "Zostaniesz teleportowany/a do gildii " + Guilds.getGuild(player).getTag() + " za " + seconds + " sekund!");
+        player.sendMessage(ChatColor.GRAY + MsgManager.timetotpnotify.replace("{GUILD}", Guilds.getGuild(player).getTag()).replace("{HOMETPSECONDS}", String.valueOf(seconds)));
         Bukkit.getScheduler().scheduleSyncDelayedTask(OpenGuild.get(), new Runnable() {
 
             @Override
