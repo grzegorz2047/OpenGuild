@@ -76,15 +76,15 @@ public class HelpCmd implements Command {
     private void helpCmd(CommandSender sender, CommandInfo cmd) {
         sender.sendMessage(ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help" + ChatColor.DARK_GRAY + " --------------- ");
         if(!cmd.hasExecutor())
-            sender.sendMessage(ChatColor.RED + MsgManager.get("cmdhelp-noexe"));
-        sender.sendMessage(ChatColor.GOLD + MsgManager.get("cmdhelp-cmd") + ChatColor.GRAY + cmd.getName());
+            sender.sendMessage(ChatColor.RED + MsgManager.getIgnorePref("cmdhelp-noexe"));
+        sender.sendMessage(ChatColor.GOLD + MsgManager.getIgnorePref("cmdhelp-cmd") + ChatColor.GRAY + cmd.getName());
         if(cmd.getAliases() != null)
-            sender.sendMessage(ChatColor.GOLD + MsgManager.get("cmdhelp-al") + ChatColor.GRAY + getAliases(cmd.getAliases()));
-        sender.sendMessage(ChatColor.GOLD + MsgManager.get("cmdhelp-us") + ChatColor.GRAY + cmd.getUsage());
+            sender.sendMessage(ChatColor.GOLD + MsgManager.getIgnorePref("cmdhelp-al") + ChatColor.GRAY + getAliases(cmd.getAliases()));
+        sender.sendMessage(ChatColor.GOLD + MsgManager.getIgnorePref("cmdhelp-us") + ChatColor.GRAY + cmd.getUsage());
         if(cmd.hasPermission()) {
             if(sender.hasPermission(cmd.getPermission()))
-                sender.sendMessage(ChatColor.GREEN + MsgManager.get("cmdhelp-perm") + ChatColor.GRAY + cmd.getPermission());
-            else sender.sendMessage(ChatColor.RED + MsgManager.get("cmdhelp-perm") + ChatColor.GRAY + cmd.getPermission());
+                sender.sendMessage(ChatColor.GREEN + MsgManager.getIgnorePref("cmdhelp-perm") + ChatColor.GRAY + cmd.getPermission());
+            else sender.sendMessage(ChatColor.RED + MsgManager.getIgnorePref("cmdhelp-perm") + ChatColor.GRAY + cmd.getPermission());
         }
     }
     

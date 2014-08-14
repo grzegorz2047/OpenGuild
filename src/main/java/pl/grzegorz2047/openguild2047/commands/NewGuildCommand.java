@@ -64,7 +64,7 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
             }
             
             if(result == null) {
-                sender.sendMessage(MsgManager.get("cmdnotfound").replace("{COMMAND}", "\"" + args[0]) + "\"");
+                sender.sendMessage(MsgManager.get("cmdnotfound").replace("{COMMAND}", "\"" + args[0] + "\""));
                 sender.sendMessage(ChatColor.RED + "/g help [command|page]");
                 return true;
             }
@@ -72,7 +72,7 @@ public class NewGuildCommand implements CommandExecutor, TabCompleter {
             try {
                 CommandInfo info = og.getCommand(result);
                 if(!info.hasPermission() || sender.hasPermission(info.getPermission())) {
-                    if(info.hasExecutor()) {
+                    if(info.hasExecutor() && og.getCommand(result).getExecutor() != null) {
                         og.getCommand(result).getExecutor().execute(sender, args);
                     } else {
                         throw new CommandException("Executor is not defined!");
