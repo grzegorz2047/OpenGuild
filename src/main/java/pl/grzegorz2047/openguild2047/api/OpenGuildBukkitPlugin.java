@@ -204,7 +204,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
         String[] cancelList = new String[] {"help", "reload", "version"};
         
         for(String cancelCmd : cancelList) {
-            if(command.getName().equals(cancelCmd)) canCancel = true;
+            if(command.getName().equals(cancelCmd)) canCancel = false;
         }
         
         CommandRegisterEvent event = new CommandRegisterEvent(command, canCancel);
