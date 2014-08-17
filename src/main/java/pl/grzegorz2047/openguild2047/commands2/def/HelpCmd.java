@@ -29,7 +29,9 @@ import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
 import com.github.grzegorz2047.openguild.command.UsageException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GenConf;
@@ -37,7 +39,8 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class HelpCmd implements Command {
     
-    private static final HashMap<String, String> pages = new HashMap<String, String>();
+    public static final int CMDS_PER_PAGE = 15;
+    private static final HashMap<String, List<HelpPage>> pages = new HashMap<String, List<HelpPage>>();
     
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
@@ -70,7 +73,11 @@ public class HelpCmd implements Command {
         }
         
         sender.sendMessage(ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help" + ChatColor.DARK_GRAY + " --------------- ");
-        sender.sendMessage(pages.get(sender.getName()));
+        for(HelpPage help : pages.get(sender.getName())) {
+            for(String cmd : help.getCommands()) {
+                sender.sendMessage(cmd);
+            }
+        }
     }
     
     private void helpCmd(CommandSender sender, CommandInfo cmd) {
@@ -89,8 +96,9 @@ public class HelpCmd implements Command {
     }
     
     private void generateHelp(CommandSender sender) {
-        StringBuilder builder = new StringBuilder();
+        List<String> cmds = new ArrayList<String>();
         for(String cmd : OpenGuild.getCommands()) {
+            StringBuilder builder = new StringBuilder();
             CommandInfo info = OpenGuild.getCommand(cmd);
             if(!info.hasPermission() || sender.hasPermission(info.getPermission())) {
                 builder.append(ChatColor.GOLD);
@@ -102,9 +110,12 @@ public class HelpCmd implements Command {
                 builder.append(info.getDescription().get(GenConf.lang.toUpperCase()));
                 builder.append("\n");
             }
+            cmds.add(builder.toString());
         }
-        pages.remove(sender.getName());
-        pages.put(sender.getName(), builder.toString());
+        
+        List<HelpPage> helpPages = new ArrayList<HelpPage>();
+        helpPages.add(new HelpPage(cmds, 1));
+        pages.put(sender.getName(), helpPages);
     }
     
     private String getAliases(String[] cmds) {

@@ -113,13 +113,15 @@ public class CreateArg {
 
                                         saveToDb(clantag, sg.getDescription(), p, p.getLocation());
 
-                                        Guilds.getLogger().log(Level.INFO, "Gracz " + p.getName() + " stworzyl gildie o nazwie " + spg.getClanTag());
+                                        Guilds.getLogger().log(Level.INFO, p.getName() + " created new guild namned " + spg.getClanTag());
                                         p.sendMessage(MsgManager.createguildsuccess);
 
-                                        Location l = p.getLocation();
-                                        l.getBlock().setType(Material.DRAGON_EGG);
-                                        new Location(l.getWorld(), l.getBlockX(), l.getBlockY() - 1, l.getBlockZ()).getBlock().setType(Material.BEDROCK);
-                                        
+                                        if(GenConf.cubEnabled) {
+                                            Location l = p.getLocation();
+                                            l.getBlock().setType(Material.DRAGON_EGG);
+                                            new Location(l.getWorld(), l.getBlockX(), l.getBlockY() - 1, l.getBlockZ()).getBlock().setType(Material.BEDROCK);
+                                        }
+
                                         // Event
                                         MessageBroadcastEvent event = new MessageBroadcastEvent(MessageBroadcastEvent.Message.CREATE);
                                         Bukkit.getPluginManager().callEvent(event);
