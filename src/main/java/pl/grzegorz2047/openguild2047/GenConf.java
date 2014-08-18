@@ -84,6 +84,8 @@ public class GenConf {
     public static int spawnExtra;
     public static boolean blockEnter;
     public static int blockEnterTime;
+    public static String joinMsg;
+    public static String quitMsg;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.get().getConfig();
@@ -142,6 +144,8 @@ public class GenConf {
         spawnExtra = config.getInt("spawn.extra", 50);
         blockEnter = config.getBoolean("spawn.block-enter", false);
         blockEnterTime = config.getInt("spawn.block-enter-time", 10);
+        joinMsg = config.getString("join-msg").replace("&", "§");
+        quitMsg = config.getString("quit-msg").replace("&", "§");
     }
 
     private static void loadBans() {

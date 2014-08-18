@@ -2,6 +2,8 @@ package pl.grzegorz2047.openguild2047.listeners;
 
 
 import com.github.grzegorz2047.openguild.OpenGuild;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,7 +12,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
 
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
@@ -44,6 +48,20 @@ public class Monitors implements Listener {
             TagManager.setTag(e.getPlayer().getUniqueId());
         }
         
+        if(Data.getInstance().isPlayerInGuild(e.getPlayer().getUniqueId())) {
+            for(Player player : Bukkit.getOnlinePlayers()) {
+                SimpleGuild guild = Data.getInstance().getPlayersGuild(player.getUniqueId());
+                if(guild != null) {
+                    for(UUID uuid : guild.getMembers()) {
+                        Player online = Bukkit.getPlayer(uuid);
+                        if(online != null) {
+                            online.sendMessage(GenConf.joinMsg.replace("{PLAYER}", e.getPlayer().getName()));
+                        }
+                    }
+                }
+            }
+        }
+        
         // Updater
         if(e.getPlayer().isOp() && OpenGuild.getUpdater().isEnabled() && OpenGuild.getUpdater().isAvailable()) {
             e.getPlayer().sendMessage(ChatColor.RED + " =============== OpenGuild UPDATER =============== ");
@@ -59,6 +77,23 @@ public class Monitors implements Listener {
                 e.getPlayer().sendMessage(ChatColor.YELLOW + "Download it from https://github.com/grzegorz2047/OpenGuild2047/releases");
             }
             e.getPlayer().sendMessage(ChatColor.RED + " =============== OpenGuild UPDATER =============== ");
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        if(Data.getInstance().isPlayerInGuild(e.getPlayer().getUniqueId())) {
+            for(Player player : Bukkit.getOnlinePlayers()) {
+                SimpleGuild guild = Data.getInstance().getPlayersGuild(player.getUniqueId());
+                if(guild != null) {
+                    for(UUID uuid : guild.getMembers()) {
+                        Player online = Bukkit.getPlayer(uuid);
+                        if(online != null) {
+                            online.sendMessage(GenConf.quitMsg.replace("{PLAYER}", e.getPlayer().getName()));
+                        }
+                    }
+                }
+            }
         }
     }
     
