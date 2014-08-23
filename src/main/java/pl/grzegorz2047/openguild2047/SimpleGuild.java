@@ -101,8 +101,9 @@ public class SimpleGuild implements Guild {
 
     @Override
     public void addMember(UUID member) {
-        this.members.add(member);
-
+        if(!this.members.contains(member)) {
+            this.members.add(member);
+        }
     }
 
     @Override

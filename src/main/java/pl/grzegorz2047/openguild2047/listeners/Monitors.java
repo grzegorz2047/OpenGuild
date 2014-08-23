@@ -49,15 +49,11 @@ public class Monitors implements Listener {
         }
         
         if(Data.getInstance().isPlayerInGuild(e.getPlayer().getUniqueId())) {
-            for(Player player : Bukkit.getOnlinePlayers()) {
-                SimpleGuild guild = Data.getInstance().getPlayersGuild(player.getUniqueId());
-                if(guild != null) {
-                    for(UUID uuid : guild.getMembers()) {
-                        Player online = Bukkit.getPlayer(uuid);
-                        if(online != null) {
-                            online.sendMessage(GenConf.joinMsg.replace("{PLAYER}", e.getPlayer().getName()));
-                        }
-                    }
+            SimpleGuild guild = Data.getInstance().getPlayersGuild(e.getPlayer().getUniqueId());
+            for(UUID uuid : guild.getMembers()) {
+                Player online = Bukkit.getPlayer(uuid);
+                if(online != null) {
+                    online.sendMessage(GenConf.joinMsg.replace("{PLAYER}", e.getPlayer().getName()));
                 }
             }
         }
@@ -83,15 +79,11 @@ public class Monitors implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
         if(Data.getInstance().isPlayerInGuild(e.getPlayer().getUniqueId())) {
-            for(Player player : Bukkit.getOnlinePlayers()) {
-                SimpleGuild guild = Data.getInstance().getPlayersGuild(player.getUniqueId());
-                if(guild != null) {
-                    for(UUID uuid : guild.getMembers()) {
-                        Player online = Bukkit.getPlayer(uuid);
-                        if(online != null) {
-                            online.sendMessage(GenConf.quitMsg.replace("{PLAYER}", e.getPlayer().getName()));
-                        }
-                    }
+            SimpleGuild guild = Data.getInstance().getPlayersGuild(e.getPlayer().getUniqueId());
+            for(UUID uuid : guild.getMembers()) {
+                Player online = Bukkit.getPlayer(uuid);
+                if(online != null) {
+                    online.sendMessage(GenConf.quitMsg.replace("{PLAYER}", e.getPlayer().getName()));
                 }
             }
         }
