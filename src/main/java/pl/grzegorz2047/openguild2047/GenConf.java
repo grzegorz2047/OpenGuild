@@ -140,11 +140,10 @@ public class GenConf {
             } else {
                 for(String s : reqItems) {
                     String[] info = s.split(":");
-                    if(info.length == 2) {
-                        Guilds.getLogger().warning("Oops! It looks like you're using an old configuration file! We changed pattern of required-items section. Now it looks like this: Material:Durability:Data:Amount (old was: Material:Amount) - please update your config.yml");
+                    if(info.length != 4) {
+                        Guilds.getLogger().warning("Oops! It looks like you're using an old configuration file!/You have made mistake with required-items section! We changed pattern of required-items section. Now it looks like this: Material:Durability:Data:Amount (old was: Material:Amount) - please update your config.yml Exact line is "+s);
                         break;
                     }
-
                     Material material = Material.valueOf(info[0]);
                     if(material == null) {
                         Guilds.getLogger().warning("Invalid material: " + info[0] + "! Check your configuration file!");
