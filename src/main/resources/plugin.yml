@@ -1,5 +1,5 @@
 name: OpenGuild2047
-description: OpenGuild2047 is as well, public open source guild plugin
+description: OpenGuild2047 is good, public, open source guild plugin
 authors: [grzegorz2047, TheMolkaPL]
 website: https://www.github.com/grzegorz2047/OpenGuild2047
 version: 0.6-SNAPSHOT
@@ -7,7 +7,7 @@ prefix: 'OpenGuild'
 main: pl.grzegorz2047.openguild2047.OpenGuild
 commands:
   guild:
-    description: Commands about guilds
+    description: Commands related to guilds
     aliases: [g, gildia, og, openguild]
     usage: /guild <arg[s]...> Type 'guild help' for help
   team:
