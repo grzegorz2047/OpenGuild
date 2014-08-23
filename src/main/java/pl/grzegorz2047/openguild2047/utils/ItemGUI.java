@@ -40,7 +40,7 @@ public class ItemGUI implements Listener {
     private OpenGuild plugin;
     private Inventory inventory;
     
-    private Map<Integer, ItemGUIClickEventHandler> items = new HashMap<>();
+    private Map<Integer, ItemGUIClickEventHandler> items = new HashMap<Integer, ItemGUIClickEventHandler>();
     
     private int nextPosition = -1;
     

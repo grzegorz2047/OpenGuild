@@ -134,7 +134,7 @@ public class GenConf {
         homecommand = config.getBoolean("home-command", true);
         if(config.getStringList("required-items") != null || !config.getStringList("required-items").isEmpty()) {
             List<String> reqItems = config.getStringList("required-items");
-            reqitems = new ArrayList<>();
+            reqitems = new ArrayList<ItemStack>();
             if(reqItems.size() > 54) {
                 Guilds.getLogger().warning("Too many specified items (required-items)! Maximum size is 54!");
             } else {
@@ -192,7 +192,7 @@ public class GenConf {
                 }
             }
         } else {
-            reqitems = new ArrayList<>();
+            reqitems = new ArrayList<ItemStack>();
         }
         playerprefixenabled = config.getBoolean("playerprefixtag", true);
         guildprefixinchat = config.getBoolean("guildprefixinchat", true);
