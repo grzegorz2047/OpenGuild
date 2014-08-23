@@ -127,6 +127,8 @@ public class CuboidListeners implements Listener {
     public void onInventoryOpen(InventoryOpenEvent e) {
         if(GenConf.EXTRA_PROTECTION /*&& !isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())*/) {
             if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
+                // I am not sure, but I think there should be an 'if' checking if inventory type is chest/enderchest etc.
+                
                 Location block = e.getPlayer().getLocation();
                 Guilds.getLogger().info("Player " + e.getPlayer().getName() + " (" + e.getPlayer().getUniqueId() +
                         ") interacted in guilds cuboid at X:" + block.getBlockX() + ", Y:" + block.getBlockY() +

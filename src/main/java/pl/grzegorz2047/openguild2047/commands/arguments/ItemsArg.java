@@ -24,13 +24,16 @@
 
 package pl.grzegorz2047.openguild2047.commands.arguments;
 
+import java.util.Arrays;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.utils.ItemGUI;
+import pl.grzegorz2047.openguild2047.utils.ItemGUI.ItemGUIClickEvent;
 
 public class ItemsArg {
     
@@ -44,42 +47,67 @@ public class ItemsArg {
             return true;
         }
         Player player = (Player) sender;
-        StringBuilder builder = new StringBuilder();
-        for(String item : GenConf.reqitems) {
-            String[] info = item.split(":");
-            Material mat = Material.valueOf(info[0]);
-            int amount = Integer.parseInt(info[1]);
-            String nameLower = mat.name().replace("_", " ").toLowerCase();
-            String name = " " + nameLower.substring(0, 1).toUpperCase() + nameLower.substring(1);
+        
+        if(GenConf.reqitems.size() > 0) {
+            int inventorySize = 9;
             
-            if(player.getInventory().contains(mat, amount)) {
-                builder.append(ChatColor.GREEN);
-            } else {
-                builder.append(ChatColor.RED);
+            // I can't think of any better way to do this right now.
+            if(GenConf.reqitems.size() > 9) {
+                inventorySize = 18;
             }
-            builder.append(getAmount(player, mat));
-            builder.append("/");
-            builder.append(amount);
-            builder.append(name);
-            builder.append(ChatColor.DARK_GRAY);
-            builder.append(", ");
+            else if(GenConf.reqitems.size() > 18) {
+                inventorySize = 27;
+            }
+            else if(GenConf.reqitems.size() > 27) {
+                inventorySize = 36;
+            }
+            else if(GenConf.reqitems.size() > 36) {
+                inventorySize = 45;
+            }
+            else if(GenConf.reqitems.size() > 45) {
+                inventorySize = 54;
+            }
+            
+            ItemGUI itemsGUI = new ItemGUI(MsgManager.getIgnorePref("gui-items"), inventorySize);
+            for(ItemStack item : GenConf.reqitems) {
+                ItemStack cloned = item.clone();
+                ItemMeta meta = cloned.getItemMeta();
+                
+                int amount = getAmount(player, cloned);
+                
+                if(amount < cloned.getAmount()) {
+                    meta.setLore(Arrays.asList(
+                        ChatColor.RED + "" + amount + "/" + cloned.getAmount()
+                    ));
+                } else {
+                    meta.setLore(Arrays.asList(
+                        ChatColor.GREEN + "" + amount + "/" + cloned.getAmount()
+                    ));
+                }
+                cloned.setItemMeta(meta);
+                
+                itemsGUI.addItem(cloned, new ItemGUI.ItemGUIClickEventHandler() {
+                    @Override
+                    public void handle(ItemGUIClickEvent event) {
+                        
+                    }
+                });
+            }
+            player.openInventory(itemsGUI.getInventory());
         }
-        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.getIgnorePref("titleitems") + ChatColor.DARK_GRAY + " ----------------- ");
-        sender.sendMessage(builder.toString());
+        
         return true;
     }
     
-    private static int getAmount(Player player, Material material) {
+    private static int getAmount(Player player, ItemStack item) {
         int amount = 0;
-        ItemStack[] stack = player.getInventory().getContents();
-        for(ItemStack stack1 : stack) {
-            if(stack1 == null) {
-                continue;
-            }
-            if(stack1.getType() == material) {
-                amount = amount + stack1.getAmount();
+        
+        for(ItemStack i : player.getInventory().getContents()) {
+            if(i != null && i.isSimilar(item)) {
+                amount += i.getAmount();
             }
         }
+        
         return amount;
     }
     

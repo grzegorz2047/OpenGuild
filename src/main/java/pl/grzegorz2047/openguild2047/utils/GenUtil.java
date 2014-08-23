@@ -29,7 +29,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.api.Guilds;
 
 /**
  *
@@ -37,14 +36,32 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
  */
 public class GenUtil {
 
-    public static void removeFromInv(Inventory inv, Material mat, int dmgValue, int amount) {
+    public static void removeFromInv(Inventory inv, Material mat, int dmgValue, int amount, byte data) {
         if(inv.contains(mat)) {
             int remaining = amount;
             ItemStack[] contents = inv.getContents();
             for(ItemStack is : contents) {
                 if(is != null) {
                     if(is.getType() == mat) {
-                        if(is.getDurability() == dmgValue || dmgValue <= 0) {
+                        if(data != -1) {
+                            if(is.getData() != null) {
+                                if(is.getData().getData() == data) {
+                                    if(is.getDurability() == dmgValue || dmgValue <= 0) {
+                                        if(is.getAmount() > remaining) {
+                                            is.setAmount(is.getAmount() - remaining);
+                                            remaining = 0;
+                                        }
+                                        else if(is.getAmount() <= remaining) {
+                                            if(remaining > 0) {
+                                                remaining -= is.getAmount();
+                                                is.setType(Material.AIR);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            if(is.getDurability() == dmgValue || dmgValue <= 0) {
                             if(is.getAmount() > remaining) {
                                 is.setAmount(is.getAmount() - remaining);
                                 remaining = 0;
@@ -56,6 +73,7 @@ public class GenUtil {
                                 }
                             }
                         }
+                        }
                     }
                 }
             }
@@ -63,72 +81,19 @@ public class GenUtil {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public static boolean hasEnoughItemsForGuild(Inventory inv) {
-        for(String linia : GenConf.reqitems) {
-            String[] splits = linia.split(":");
-            if(splits.length != 2) {
-                Guilds.getLogger().severe("To jest niepoprawne/Incorrect " + linia);
-                continue;
-            }
-            try {
-                Material material = Material.getMaterial(splits[0]);
-                if(material == null) {
-                    try {
-                        material = Material.getMaterial(Integer.parseInt(splits[0]));
-                    } catch(NumberFormatException e) {
-                        material = Material.matchMaterial(splits[0]);
-                        if((material == null) || (!material.isBlock())) {
-                            Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " jest niewlasciwy/Incorrect!");
-                            continue;
-
-                        }
-                    }
-                }
-                int amount = Integer.parseInt(splits[1]);
-                if(amount == 0) {
-                    Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " ma niepoprawna ilosc/Incorrect amount");
-                    continue;
-                }
-
-                //System.out.println(" "+BlockName);
-                if(!inv.contains(material, amount)) {
-                    return false;
-                }
-
-            } catch(Exception ex) {
-                Guilds.getLogger().severe("Config wymaganych blokow jest niepoprawny/Incorrect. Tutaj -> " + splits[0] + " " + splits[1] + "! Ignoruje/Ignore!");
+        for(ItemStack item : GenConf.reqitems) {
+            if(!inv.containsAtLeast(item, item.getAmount())) {
+                return false;
             }
         }
+        
         return true;
     }
 
     public static void removeRequiredItemsForGuild(Inventory inv) {
-        for(String linia : GenConf.reqitems) {
-            String[] splits = linia.split(":");
-            try {
-                if(splits == null || splits.length < 2){
-                    Guilds.getLogger().severe("Config wymaganych/required blokow/blocks jest niepoprawny/Incorrect.");
-                    continue;
-                }
-                Material material = Material.getMaterial(splits[0]);
-                if(material == null) {
-                    material = Material.getMaterial(splits[0]);
-                    if(material == null) {
-                        Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " jest niepoprawny/Incorrect");
-                        continue;
-                    }
-                }
-                int amount = Integer.parseInt(splits[1]);
-                if(amount == 0) {
-                    Guilds.getLogger().severe("Material " + splits[0] + " w ilosci " + splits[1] + " ma niepoprawna ilosc/Incorrect amount");
-                    continue;
-                }
-                GenUtil.removeFromInv(inv, material, 0, amount);
-                //System.out.println(" "+BlockName);
-            } catch(Exception ex) {
-                Guilds.getLogger().severe("Config required blokow/blocks jest niepoprawny/Incorrect. W tym miejscu " + splits[0] + ":" + splits[1] + "! Ignoruje!/Ignore");
-            }
+        for(ItemStack item : GenConf.reqitems) {
+            removeFromInv(inv, item.getType(), item.getDurability(), item.getAmount(), item.getData().getData());
         }
     }
 
