@@ -71,6 +71,7 @@ public class OpenGuild extends JavaPlugin {
     private final File log = new File("plugins/OpenGuild2047/logger/openguild.log");
     private final File logDir = new File("plugins/OpenGuild2047/logger");
     private String address;
+    private int port = 3306;
     private String database;
     private String login;
     private String password;
@@ -237,6 +238,7 @@ public class OpenGuild extends JavaPlugin {
     private void loadConfig() {
         // MySQL
         address = getConfig().getString("mysql.address");
+        port = getConfig().getInt("mysql.port", 3306);
         database = getConfig().getString("mysql.database");
         login = getConfig().getString("mysql.login");
         password = getConfig().getString("mysql.password");
@@ -245,10 +247,10 @@ public class OpenGuild extends JavaPlugin {
     private void loadDb() {
         switch(GenConf.DATABASE) {
             case FILE:
-                new SQLHandler(address, database, login, password).createFirstConnectionSQLite();
+                new SQLHandler(address, port, database, login, password).createFirstConnectionSQLite();
                 break;
             case MYSQL:
-                new SQLHandler(address, database, login, password).createFirstConnection(login, password);
+                new SQLHandler(address, port, database, login, password).createFirstConnection(login, password);
                 break;
             default:
                 Guilds.getLogger().severe("Could not load database type! Please fix it in your config.yml file!");

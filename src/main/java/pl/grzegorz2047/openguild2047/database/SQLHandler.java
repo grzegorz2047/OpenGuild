@@ -66,8 +66,8 @@ public class SQLHandler {
     private static final String DRIVERSQLite = "org.sqlite.JDBC";
     private static final String DB_URLQLite = "jdbc:sqlite:" + GenConf.FILE_DIR;
 
-    public SQLHandler(String address, String database, String login, String password) {
-        this.address = address;
+    public SQLHandler(String address, int dbPort, String database, String login, String password) {
+        this.address = address + ":" + dbPort;
         this.database = database;
         switch(GenConf.DATABASE) {
             case FILE:
@@ -136,7 +136,7 @@ public class SQLHandler {
         log.info("[MySQL] Connecting to MySQL database...");
         try {
             Class.forName(driver).newInstance();
-            con = DriverManager.getConnection("jdbc:mysql://" + address + ":3306/" + database, login, password);
+            con = DriverManager.getConnection("jdbc:mysql://" + address + "/" + database, login, password);
             if(con != null) {
                 log.info("[MySQL] Connected with MySQL!");
                 createTables();
@@ -189,7 +189,7 @@ public class SQLHandler {
         log.info("[MySQL] Connecting to MySQL database...");
         try {
             Class.forName(driver).newInstance();
-            con = DriverManager.getConnection("jdbc:mysql://" + address + ":3306/" + database, login, password);
+            con = DriverManager.getConnection("jdbc:mysql://" + address + "/" + database, login, password);
             log.info("[MySQL] Connected with MySQL.");
             createTables();
         } catch(ClassNotFoundException ex) {

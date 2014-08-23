@@ -44,6 +44,7 @@ snooper: true
 updater: true
 mysql:
   address: localhost
+  port: 3306
   database: openguild
   login: user
   password: password
