@@ -27,8 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 
 /**
@@ -46,7 +48,7 @@ public class GenConf {
     public static int maxclantag = 6;
     public static int minclantag = 4;
     public static List<String> badwords;
-    public static List<String> reqitems;
+    public static List<ItemStack> reqitems;
     public static int MIN_CUBOID_RADIUS;
     public static int MAX_CUBOID_RADIUS;
     public static int TELEPORT_COOLDOWN;
@@ -131,9 +133,66 @@ public class GenConf {
         teampvp = config.getBoolean("teampvp", false);
         homecommand = config.getBoolean("home-command", true);
         if(config.getStringList("required-items") != null || !config.getStringList("required-items").isEmpty()) {
-            reqitems = config.getStringList("required-items");
+            List<String> reqItems = config.getStringList("required-items");
+            reqitems = new ArrayList<>();
+            if(reqItems.size() > 54) {
+                Guilds.getLogger().warning("Too many specified items (required-items)! Maximum size is 54!");
+            } else {
+                for(String s : reqItems) {
+                    String[] info = s.split(":");
+                    if(info.length == 2) {
+                        Guilds.getLogger().warning("Oops! It looks like you're using an old configuration file! We changed pattern of required-items section. Now it looks like this: Material:Durability:Data:Amount (old was: Material:Amount) - please update your config.yml");
+                        break;
+                    }
+
+                    Material material = Material.valueOf(info[0]);
+                    if(material == null) {
+                        Guilds.getLogger().warning("Invalid material: " + info[0] + "! Check your configuration file!");
+                        continue;
+                    }
+                    
+                    for(ItemStack i : reqitems) {
+                        if(i.getType().equals(material)) {
+                            Guilds.getLogger().warning("Duplicate item found! Skipping ...");
+                            continue;
+                        }
+                    }
+
+                    ItemStack is = new ItemStack(Material.AIR);
+                    short durability = 0;
+                    try {
+                        durability = Short.valueOf(info[1]);
+                    } catch(NumberFormatException e) {
+                        Guilds.getLogger().warning("Durability must be a number! Please fix 'required-items' section in your config.yml");
+                    }
+
+                    byte data = 0;
+                    try {
+                        data = Byte.valueOf(info[2]);
+                    } catch(NumberFormatException e) {
+                        Guilds.getLogger().warning("Data must be a number! Please fix 'required-items' section in your config.yml");
+                    }
+
+                    int amount = 1;
+                    try {
+                        amount = Integer.valueOf(info[3]);
+                        
+                        if(amount > 64) {
+                            amount = 64;
+                        }
+                        else if(amount < 0) {
+                            continue;
+                        }
+                    } catch(NumberFormatException e) {
+                        Guilds.getLogger().warning("Amount must be a number! Please fix 'required-items' section in your config.yml");
+                    }
+
+                    ItemStack item = new ItemStack(material, amount, durability, data);
+                    reqitems.add(item);
+                }
+            }
         } else {
-            reqitems = new ArrayList<String>();
+            reqitems = new ArrayList<>();
         }
         playerprefixenabled = config.getBoolean("playerprefixtag", true);
         guildprefixinchat = config.getBoolean("guildprefixinchat", true);

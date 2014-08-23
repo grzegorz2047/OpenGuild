@@ -113,7 +113,7 @@ public class CreateArg {
 
                                         saveToDb(clantag, sg.getDescription(), p, p.getLocation());
 
-                                        Guilds.getLogger().log(Level.INFO, p.getName() + " created new guild namned " + spg.getClanTag());
+                                        Guilds.getLogger().log(Level.INFO, p.getName() + " created new guild named " + spg.getClanTag());
                                         p.sendMessage(MsgManager.createguildsuccess);
 
                                         if(GenConf.cubEnabled) {
