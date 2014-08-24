@@ -54,7 +54,5 @@ nickname-tag: '&6[{TAG}] '
 guildprefixinchat: true
 forbiddenguildnames:
 use-new-command-api: true
-join-msg: '&7{PLAYER} from your guild joined the server.'
-quit-msg: '&7{PLAYER} from your guild left the server.'
 required-items:
 - 'WOOL:1:2:1'

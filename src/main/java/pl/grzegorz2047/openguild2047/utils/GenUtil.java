@@ -62,17 +62,17 @@ public class GenUtil {
                             }
                         } else {
                             if(is.getDurability() == dmgValue || dmgValue <= 0) {
-                            if(is.getAmount() > remaining) {
-                                is.setAmount(is.getAmount() - remaining);
-                                remaining = 0;
-                            }
-                            else if(is.getAmount() <= remaining) {
-                                if(remaining > 0) {
-                                    remaining -= is.getAmount();
-                                    is.setType(Material.AIR);
+                                if(is.getAmount() > remaining) {
+                                    is.setAmount(is.getAmount() - remaining);
+                                    remaining = 0;
+                                }
+                                else if(is.getAmount() <= remaining) {
+                                    if(remaining > 0) {
+                                        remaining -= is.getAmount();
+                                        is.setType(Material.AIR);
+                                    }
                                 }
                             }
-                        }
                         }
                     }
                 }

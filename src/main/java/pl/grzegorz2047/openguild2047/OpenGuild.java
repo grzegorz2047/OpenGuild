@@ -100,8 +100,10 @@ public class OpenGuild extends JavaPlugin {
         checkForUpdates();
         loadAllListeners();
         
-        // Validate configuration file
-        validateConfiguration();
+        // Validate files
+        validateFile("config");
+        validateFile("commands");
+        validateFile("messages_" + GenConf.lang.toLowerCase());
         
         // Data gildii
         Data pd = new Data();
@@ -125,7 +127,7 @@ public class OpenGuild extends JavaPlugin {
         }
         // 1.7.9 ?
         try{
-            if(getServer().getOfflinePlayer("Notch").getUniqueId() ==null){
+            if(getServer().getOfflinePlayer("Notch").getUniqueId() == null){
                 Guilds.getLogger().severe("Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5!");
                 getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
                 getServer().getPluginManager().disablePlugin(this);
@@ -136,6 +138,7 @@ public class OpenGuild extends JavaPlugin {
             getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
             getServer().getPluginManager().disablePlugin(this);
         }
+        
         // Prawidlowa komenda i koniec
         getCommand("team").setExecutor(new TeamCommand());
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
@@ -143,6 +146,8 @@ public class OpenGuild extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        instance = null;
+        
         try {
             SQLHandler.getConnection().close();
         } catch(SQLException ex) {}
@@ -177,12 +182,9 @@ public class OpenGuild extends JavaPlugin {
     }
 
     private void copyDefaultFiles() {
-        saveDefaultConfig(); // Najprostsza opcja, ale nie aktualizuje configu.
         loadConfig();
-        saveResource("commands.yml", false);
         Guilds.getLogger().info("Loading configuration from config.yml...");
         GenConf.loadConfiguration();
-        saveResource("messages_" + GenConf.lang.toLowerCase() + ".yml", false);
         Guilds.getLogger().info("Configuration loaded!");
     }
 
@@ -283,16 +285,28 @@ public class OpenGuild extends JavaPlugin {
         }
     }
     
-    private void validateConfiguration() {
-        getOGLogger().info("Validating configuration file ...");
+    private void validateFile(String name) {
+        getOGLogger().info("Validating file '" + name + ".yml ...");
         
         YamlConfiguration c = new YamlConfiguration();
         try {
-            File file = new File("plugins/OpenGuild2047/config.yml");
+            File file = new File("plugins/OpenGuild2047/" + name + ".yml");
+            if(!file.exists()) {
+                getOGLogger().info("File plugins/OpenGuild2047/" + name + ".yml does not exists - creating ...");
+                file.createNewFile();
+            }
+            
             c.load(file);
             
             YamlConfiguration configInside = new YamlConfiguration();
-            configInside.load(getResource("config.yml"));
+            
+            if(getResource(name + ".yml") == null) {
+                getOGLogger().info("File " + name + ".yml does not exists - skipping ...");
+                file.delete();
+                return;
+            }
+            
+            configInside.load(getResource(name + ".yml"));
 
             for(String k : configInside.getKeys(true)) {
                 if(!c.contains(k)) {
@@ -307,8 +321,6 @@ public class OpenGuild extends JavaPlugin {
         catch (InvalidConfigurationException e) {
             e.printStackTrace();
         }
-        
-        getOGLogger().info("Configuration file updated!");
     }
 
     public static OpenGuild get() {

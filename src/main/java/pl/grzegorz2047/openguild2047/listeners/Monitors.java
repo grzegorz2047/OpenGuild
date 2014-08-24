@@ -18,6 +18,7 @@ import pl.grzegorz2047.openguild2047.SimpleGuild;
 
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 public class Monitors implements Listener {
@@ -53,7 +54,7 @@ public class Monitors implements Listener {
             for(UUID uuid : guild.getMembers()) {
                 Player online = Bukkit.getPlayer(uuid);
                 if(online != null) {
-                    online.sendMessage(GenConf.joinMsg.replace("{PLAYER}", e.getPlayer().getName()));
+                    online.sendMessage(MsgManager.get("guildmemberjoined").replace("{PLAYER}", e.getPlayer().getName()));
                 }
             }
         }
@@ -83,7 +84,7 @@ public class Monitors implements Listener {
             for(UUID uuid : guild.getMembers()) {
                 Player online = Bukkit.getPlayer(uuid);
                 if(online != null) {
-                    online.sendMessage(GenConf.quitMsg.replace("{PLAYER}", e.getPlayer().getName()));
+                    online.sendMessage(MsgManager.get("guildmemberleft").replace("{PLAYER}", e.getPlayer().getName()));
                 }
             }
         }
