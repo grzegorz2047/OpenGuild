@@ -32,9 +32,13 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -95,6 +99,10 @@ public class OpenGuild extends JavaPlugin {
         loadCommands();
         checkForUpdates();
         loadAllListeners();
+        
+        // Validate configuration file
+        validateConfiguration();
+        
         // Data gildii
         Data pd = new Data();
         Data.setDataInstance(pd);
@@ -273,6 +281,34 @@ public class OpenGuild extends JavaPlugin {
                 guild.addMember(member); // Dodawanie gracza do listy
             }
         }
+    }
+    
+    private void validateConfiguration() {
+        getOGLogger().info("Validating configuration file ...");
+        
+        YamlConfiguration c = new YamlConfiguration();
+        try {
+            File file = new File("plugins/OpenGuild2047/config.yml");
+            c.load(file);
+            
+            YamlConfiguration configInside = new YamlConfiguration();
+            configInside.load(getResource("config.yml"));
+
+            for(String k : configInside.getKeys(true)) {
+                if(!c.contains(k)) {
+                    c.set(k, configInside.get(k));
+                }
+            }
+
+            c.save(file);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+        
+        getOGLogger().info("Configuration file updated!");
     }
 
     public static OpenGuild get() {
