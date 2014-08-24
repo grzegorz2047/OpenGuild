@@ -25,7 +25,8 @@ package pl.grzegorz2047.openguild2047;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
@@ -40,12 +41,8 @@ public class OGLogger implements Logger {
     private java.util.logging.Logger logger = java.util.logging.Logger.getLogger("OpenGuild");
 
     public OGLogger() {
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH) + 1; // It starts from 0.
-        int year = calendar.get(Calendar.YEAR);
-        
-        logFile = new File(String.format("plugins/OpenGuild2047/logger/%s-%s-%s.log", year, month, day));
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        logFile = new File(String.format("plugins/OpenGuild2047/logger/%s.log", format.format(new Date())));
         
         if(!logFile.getParentFile().exists()) {
             logFile.getParentFile().mkdirs();
@@ -95,27 +92,11 @@ public class OGLogger implements Logger {
     }
 
     class OGFormatter extends Formatter {
-        private Calendar calendar;
-        
-        public OGFormatter() {
-            this.calendar = Calendar.getInstance();
-        }
-        
         @Override
         public String format(LogRecord record) {
-            calendar.setTimeInMillis(record.getMillis());
-            
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-            int month = calendar.get(Calendar.MONTH) + 1; // It starts from 0.
-            int year = calendar.get(Calendar.YEAR);
-            
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(Calendar.MINUTE);
-            int second = calendar.get(Calendar.SECOND);
-            
-            String currentDate = String.format("%s.%s.%s %s:%s:%s", day, (month < 10 ? "0" + month : month), year, hour, (minute < 10 ? "0" + minute : minute), (second < 10 ? "0" + second : second));
+            SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
             String message = formatMessage(record);
-            return "[" + currentDate + "]" + message + System.getProperty("line.separator");
+            return "[" + format.format(new Date(record.getMillis())) + "]" + message + System.getProperty("line.separator");
         }
 
     }
