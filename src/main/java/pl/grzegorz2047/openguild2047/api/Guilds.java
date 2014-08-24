@@ -36,7 +36,6 @@ import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.SimpleLogger;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.utils.PastebinWriter;
 
@@ -62,8 +61,7 @@ public class Guilds {
     }
 
     @Nonnull public static Logger getLogger() {
-        Logger logger = new SimpleLogger();
-        return logger;
+        return OpenGuild.get().getOGLogger();
     }
 
     @Nullable public static PlayerGuild getPlayer(@Nonnull UUID uuid) throws NullPointerException {
