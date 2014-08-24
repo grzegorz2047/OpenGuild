@@ -25,29 +25,40 @@ package pl.grzegorz2047.openguild2047;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
 import java.util.logging.Level;
-import java.util.logging.SimpleFormatter;
+import java.util.logging.LogRecord;
 import pl.grzegorz2047.openguild2047.api.Logger;
 
-public class SimpleLogger implements Logger {
-
-    private File dir = new File("plugins/OpenGuild2047/logger");
-    private FileHandler file;
+public class OGLogger implements Logger {
+    
+    private File logFile;
+    private FileHandler handler;
+    private Formatter formatter = new OGFormatter();
     private java.util.logging.Logger logger = java.util.logging.Logger.getLogger("OpenGuild");
-    private SimpleFormatter formatter = new SimpleFormatter();
 
-    public SimpleLogger() {
-        try {
-            if(!dir.exists()) {
-                dir.mkdir();
-            }
-            file = new FileHandler("plugins/OpenGuild2047/logger/openguild.log");
-            logger.addHandler(file);
-            file.setFormatter(formatter);
+    public OGLogger() {
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        logFile = new File(String.format("plugins/OpenGuild2047/logger/%s.log", format.format(new Date())));
+        
+        if(!logFile.getParentFile().exists()) {
+            logFile.getParentFile().mkdirs();
         }
-        catch(IOException ex) {
-            ex.printStackTrace();
+        
+        try {
+            if(!logFile.exists()) {
+                logFile.createNewFile();
+            }
+            
+            handler = new FileHandler(logFile.getPath(), true);
+            handler.setFormatter(formatter);
+            
+            logger.addHandler(handler);
+        } catch(IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -75,5 +86,18 @@ public class SimpleLogger implements Logger {
     public void warning(String warning) {
         log(Level.WARNING, warning);
     }
+    
+    public File getLoggingDirectory() {
+        return logFile.getParentFile();
+    }
 
+    class OGFormatter extends Formatter {
+        @Override
+        public String format(LogRecord record) {
+            SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+            String message = formatMessage(record);
+            return "[" + format.format(new Date(record.getMillis())) + "]" + message + System.getProperty("line.separator");
+        }
+
+    }
 }

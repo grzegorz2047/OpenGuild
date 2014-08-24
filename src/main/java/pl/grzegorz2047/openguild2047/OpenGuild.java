@@ -34,6 +34,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -56,8 +57,6 @@ import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
-import pl.grzegorz2047.openguild2047.modules.hardcore.ModuleHardcore;
-import pl.grzegorz2047.openguild2047.modules.randomtp.ModuleRandomTP;
 
 /**
  *
@@ -68,19 +67,23 @@ public class OpenGuild extends JavaPlugin {
     public static final File CMDS = new File("plugins/OpenGuild2047/commands.yml");
     private static OpenGuildPlugin api;
     private static OpenGuild instance;
-    private final File log = new File("plugins/OpenGuild2047/logger/openguild.log");
-    private final File logDir = new File("plugins/OpenGuild2047/logger");
     private String address;
     private int port = 3306;
     private String database;
     private String login;
     private String password;
+    
+    private OGLogger ogLogger;
 
     @Override
     public void onEnable() {
         // Podstawowe rzeczy, itd
         long init = System.currentTimeMillis();
         instance = this;
+        
+        // Initialize logger
+        ogLogger = new OGLogger();
+        
         // API
         com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(new OpenGuildBukkitPlugin()); // Setup API
         api = com.github.grzegorz2047.openguild.OpenGuild.getPlugin();
@@ -137,7 +140,7 @@ public class OpenGuild extends JavaPlugin {
         } catch(SQLException ex) {}
         
         int logFiles = 0;
-        for(File file : logDir.listFiles()) {
+        for(File file : getOGLogger().getLoggingDirectory().listFiles()) {
             String format = file.getName().substring(file.getName().length() - 4, file.getName().length());
             if(!format.equals(".log")) {
                 file.delete();
@@ -166,16 +169,6 @@ public class OpenGuild extends JavaPlugin {
     }
 
     private void copyDefaultFiles() {
-        if(!logDir.exists()) {
-            logDir.mkdirs();
-        }
-        if(!log.exists()) {
-            try {
-                log.createNewFile();
-            } catch(IOException ex) {
-                ex.printStackTrace();
-            }
-        }
         saveDefaultConfig(); // Najprostsza opcja, ale nie aktualizuje configu.
         loadConfig();
         saveResource("commands.yml", false);
@@ -288,6 +281,10 @@ public class OpenGuild extends JavaPlugin {
 
     public static OpenGuildPlugin getAPI() {
         return api;
+    }
+    
+    public OGLogger getOGLogger() {
+        return ogLogger;
     }
 
 }
