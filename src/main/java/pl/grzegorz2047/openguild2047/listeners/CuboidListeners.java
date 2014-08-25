@@ -39,7 +39,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GuildHelper;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
@@ -146,20 +146,20 @@ public class CuboidListeners implements Listener {
     }
 
     private boolean isAllowed(Player player, Location location) {
-        if(CuboidStuff.checkIfInAnyCuboid(Data.getInstance().cuboids.entrySet().iterator(), location)) {
-            if(Data.getInstance().isPlayerInGuild(player.getUniqueId())) {
-                String tag = Data.getInstance().getPlayersGuild(player.getUniqueId()).getTag();
-                if(Data.getInstance().cuboids.get(tag).isinCuboid(location)) {
-                    return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
-                }
-                else if(player.hasPermission("openguild.cuboid.bypassplace")) {
-                    player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
+//        if(CuboidStuff.checkIfInAnyCuboid(GuildHelper.getInstance().cuboids.entrySet().iterator(), location)) {
+//            if(GuildHelper.getInstance().isPlayerInGuild(player.getUniqueId())) {
+//                String tag = GuildHelper.getInstance().getPlayersGuild(player.getUniqueId()).getTag();
+//                if(GuildHelper.getInstance().cuboids.get(tag).isinCuboid(location)) {
+//                    return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
+//                }
+//                else if(player.hasPermission("openguild.cuboid.bypassplace")) {
+//                    player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+//                    return false;
+//                }
+//            } else {
+//                return false;
+//            }
+//        }
         return true;
     }
 

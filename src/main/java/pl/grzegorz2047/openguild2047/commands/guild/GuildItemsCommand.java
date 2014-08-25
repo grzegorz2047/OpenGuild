@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Aleksander.
+ * Copyright 2014 Adam.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.commands.arguments;
+package pl.grzegorz2047.openguild2047.commands.guild;
 
 import java.util.Arrays;
 import org.bukkit.ChatColor;
@@ -31,27 +31,39 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.ItemGUI;
-import pl.grzegorz2047.openguild2047.utils.ItemGUI.ItemGUIClickEvent;
 
-public class ItemsArg {
-    
-    public static boolean execute(CommandSender sender, String[] args) {
-        if(GenConf.reqitems == null && !GenConf.reqitems.isEmpty()) {
+/**
+ * Command used to see items, which are needed to create a guild.
+ * 
+ * Usage: /guild items
+ */
+public class GuildItemsCommand extends CommandHandler {
+
+    public GuildItemsCommand(OpenGuild plugin) {
+        super(plugin);
+    }
+
+    @Override
+    public void executeCommand(CommandSender sender, String[] args) {
+        if(GenConf.reqitems == null || !GenConf.reqitems.isEmpty()) {
             sender.sendMessage(MsgManager.get("reqitemsoff"));
-            return true;
+            return;
         }
+        
         if(!(sender instanceof Player)) {
-            sender.sendMessage(MsgManager.cmdonlyforplayer);
-            return true;
+            sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
+            return;
         }
+        
         Player player = (Player) sender;
         
         if(GenConf.reqitems.size() > 0) {
             int inventorySize = 9;
             
-            // I can't think of any better way to do this right now.
             if(GenConf.reqitems.size() > 9) {
                 inventorySize = 18;
             }
@@ -88,18 +100,19 @@ public class ItemsArg {
                 
                 itemsGUI.addItem(cloned, new ItemGUI.ItemGUIClickEventHandler() {
                     @Override
-                    public void handle(ItemGUIClickEvent event) {
-                        
-                    }
+                    public void handle(ItemGUI.ItemGUIClickEvent event) { }
                 });
             }
             player.openInventory(itemsGUI.getInventory());
         }
-        
-        return true;
+    }
+
+    @Override
+    public int getMinimumArguments() {
+        return 1;
     }
     
-    private static int getAmount(Player player, ItemStack item) {
+    private int getAmount(Player player, ItemStack item) {
         int amount = 0;
         
         for(ItemStack i : player.getInventory().getContents()) {
@@ -110,5 +123,5 @@ public class ItemsArg {
         
         return amount;
     }
-    
+
 }

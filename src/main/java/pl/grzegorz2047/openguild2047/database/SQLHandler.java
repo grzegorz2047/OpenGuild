@@ -35,7 +35,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GuildHelper;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
@@ -50,7 +50,9 @@ import pl.grzegorz2047.openguild2047.api.Logger;
  * @author Grzegorz
  */
 public class SQLHandler {
-
+    
+    private static OpenGuild plugin;
+    
     private static Connection con = null;
     private static Statement stat;
     private static String driver = "com.mysql.jdbc.Driver";
@@ -66,7 +68,8 @@ public class SQLHandler {
     private static final String DRIVERSQLite = "org.sqlite.JDBC";
     private static final String DB_URLQLite = "jdbc:sqlite:" + GenConf.FILE_DIR;
 
-    public SQLHandler(String address, int dbPort, String database, String login, String password) {
+    public SQLHandler(OpenGuild plugin, String address, int dbPort, String database, String login, String password) {
+        this.plugin = plugin;
         this.address = address + ":" + dbPort;
         this.database = database;
         switch(GenConf.DATABASE) {
@@ -79,7 +82,7 @@ public class SQLHandler {
                 break;
             default:
                 Guilds.getLogger().severe("Could not load database type! Please fix it in your config.yml file!");
-                Bukkit.getServer().getPluginManager().disablePlugin(OpenGuild.get());
+                Bukkit.getServer().getPluginManager().disablePlugin(OpenGuild.getInstance());
                 break;
         }
     }
@@ -110,8 +113,8 @@ public class SQLHandler {
         //Data.getInstance().ClansTag = null;
         //Data.getInstance().cuboids = null;
         
-        Data.getInstance().guildsplayers = SQLHandler.getAllPlayers();
-        Data.getInstance().guilds = SQLHandler.getAllGuildswithCuboids();
+        plugin.getGuildHelper().setGuilds(SQLHandler.getAllGuildswithCuboids());
+        plugin.getGuildHelper().setPlayers(SQLHandler.getAllPlayers());
     }
     public static Connection getConnection(){
         return con;
@@ -132,7 +135,7 @@ public class SQLHandler {
         }
     }
 
-    public void createFirstConnection(String login, String password) {
+    public void createFirstConnection() {
         log.info("[MySQL] Connecting to MySQL database...");
         try {
             Class.forName(driver).newInstance();
@@ -397,7 +400,7 @@ public class SQLHandler {
             ResultSet rs = stat.executeQuery(query);
             while(rs.next()) {
                 String tag = rs.getString("tag");
-                Data.getInstance().ClansTag.add(tag);
+               // GuildHelper.getInstance().ClansTag.add(tag);
                 SimpleGuild g = new SimpleGuild(tag);
                 g.setLeader(UUID.fromString(rs.getString("leader")));
                 g.setDescription(rs.getString("description"));
@@ -407,7 +410,7 @@ public class SQLHandler {
                 sc.setCenter(loc);
                 sc.setOwner(tag);
                 sc.setRadius(rs.getInt("cuboid_radius"));
-                Data.getInstance().cuboids.put(tag, sc);
+                //GuildHelper.getInstance().cuboids.put(tag, sc);
                 g.setHome(loc);
                 System.out.println("Wczytalem "+tag);
                 hm.put(g.getTag(), g);
@@ -453,8 +456,8 @@ public class SQLHandler {
         }
     }
 
-    public static HashMap<UUID, SimplePlayerGuild> getAllPlayers() {
-        HashMap hm = new HashMap<UUID, SimplePlayerGuild>();
+    public static HashMap<UUID, SimpleGuild> getAllPlayers() {
+        HashMap hm = new HashMap<UUID, SimpleGuild>();
         try {
             String query = "SELECT * FROM " + tablePlayers;
             stat = con.createStatement();
@@ -465,7 +468,7 @@ public class SQLHandler {
                 String tag = rs.getString("guild");
                 boolean isleader = Boolean.parseBoolean(rs.getString("isleader"));
                 SimplePlayerGuild sg = new SimplePlayerGuild(UUID.fromString(player), tag, isleader);
-                hm.put(UUID.fromString(player), sg);
+                hm.put(UUID.fromString(player), plugin.getGuildHelper().getGuilds().get(tag));
             }
         } catch(SQLException ex) {
             ex.printStackTrace();

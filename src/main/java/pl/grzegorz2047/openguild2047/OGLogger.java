@@ -58,7 +58,10 @@ public class OGLogger implements Logger {
             
             logger.addHandler(handler);
         } catch(IOException e) {
-            e.printStackTrace();
+            System.out.println("---- AN EXCEPTION HAS BEEN THROWN!");
+            System.out.println("Cause: " + e.getCause().toString());
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("---- You can find entire report in log file!");
         }
     }
 
@@ -85,6 +88,13 @@ public class OGLogger implements Logger {
     @Override
     public void warning(String warning) {
         log(Level.WARNING, warning);
+    }
+    
+    public void exceptionThrown(Exception exception) {
+        log(Level.SEVERE, "---- AN EXCEPTION HAS BEEN THROWN!");
+        log(Level.SEVERE, "Cause: " + exception.getCause().toString());
+        log(Level.SEVERE, "Message: " + exception.getMessage());
+        log(Level.SEVERE, "---- You can find entire report in log file!");
     }
     
     public File getLoggingDirectory() {

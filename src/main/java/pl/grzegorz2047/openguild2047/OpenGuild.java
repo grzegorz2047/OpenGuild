@@ -27,16 +27,12 @@ package pl.grzegorz2047.openguild2047;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
 import com.github.grzegorz2047.openguild.command.CommandDescription;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
-import com.github.grzegorz2047.openguild.event.ModuleLoadEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -46,13 +42,8 @@ import org.mcstats.Metrics;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
-import pl.grzegorz2047.openguild2047.commands.ErrorCommand;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
-import pl.grzegorz2047.openguild2047.commands.NewGuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
-import pl.grzegorz2047.openguild2047.commands2.def.HelpCmd;
-import pl.grzegorz2047.openguild2047.commands2.def.ReloadCmd;
-import pl.grzegorz2047.openguild2047.commands2.def.VersionCmd;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
@@ -67,57 +58,80 @@ import pl.grzegorz2047.openguild2047.managers.TagManager;
  * @author Grzegorz
  */
 public class OpenGuild extends JavaPlugin {
-
-    public static final File CMDS = new File("plugins/OpenGuild2047/commands.yml");
-    private static OpenGuildPlugin api;
+    
+    private static OpenGuildPlugin ogAPI;
     private static OpenGuild instance;
-    private String address;
-    private int port = 3306;
-    private String database;
-    private String login;
-    private String password;
     
     private OGLogger ogLogger;
+    
+    private GuildHelper guildHelper;
+    
+    private TagManager tagManager;
 
     @Override
     public void onEnable() {
-        // Podstawowe rzeczy, itd
-        long init = System.currentTimeMillis();
+        // We use UUID, which were not available in Bukkit < 1.7.5.
+        try {
+            if(getServer().getOfflinePlayer("Notch").getUniqueId() == null) {
+                Guilds.getLogger().severe("Your Minecraft server version is smaller than 1.7.5!");
+                Guilds.getLogger().severe("This plugin is not compatibile with your version of Minecraft server!");
+                getServer().getPluginManager().disablePlugin(this);
+            }
+        } catch(Exception e) {
+            Guilds.getLogger().severe("Your Minecraft server version is smaller than 1.7.5!");
+            Guilds.getLogger().severe("This plugin is not compatibile with your version of Minecraft server!");
+            getServer().getPluginManager().disablePlugin(this);
+        }
+        
+        long startTime = System.currentTimeMillis();
+        
         instance = this;
         
-        // Initialize logger
-        ogLogger = new OGLogger();
-        
-        // API
-        com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(new OpenGuildBukkitPlugin()); // Setup API
-        api = com.github.grzegorz2047.openguild.OpenGuild.getPlugin();
-        // Ustawianie komend na error w przypadku blednego uruchomienia pluginu
-        getCommand("guild").setExecutor(new ErrorCommand());
-        getCommand("team").setExecutor(new ErrorCommand());
-        // Pliki, komendy, updaty, listenery
-        copyDefaultFiles();
-        loadCommands();
+        // Intialize logger
+        this.ogLogger = new OGLogger();
+
+        // Check for updates
         checkForUpdates();
-        loadAllListeners();
+        
+        // Setup API
+        com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(new OpenGuildBukkitPlugin());
+        
+        OpenGuildBukkitPlugin ogBP = new OpenGuildBukkitPlugin();
+        this.ogAPI = ogBP.getPlugin();
         
         // Validate files
         validateFile("config");
         validateFile("commands");
+        
+        // Load configuration
+        GenConf.loadConfiguration();
+        
+        // Validate language file
         validateFile("messages_" + GenConf.lang.toLowerCase());
         
-        // Data gildii
-        Data pd = new Data();
-        Data.setDataInstance(pd);
-        // Baza danych
-        loadDb();
-        // Ustawienie tagow
-        new TagManager();
-        for(Player p : getServer().getOnlinePlayers()) {
-            TagManager.setTag(p.getUniqueId());
-        }
-        // Ladowanie graczy i itemow na gildie
+        // Register commands
+        loadCommands();
+        
+        // Register events
+        loadAllListeners();
+        
+        // Intialize guild helper class
+        this.guildHelper = new GuildHelper();
+        
+        // Load database
+        loadDB();
         loadPlayers();
+        
+        // Setup Tag Manager
+        this.tagManager = new TagManager(this);
+        
+        for(Player player : getServer().getOnlinePlayers()) {
+            this.tagManager.setTag(player.getUniqueId());
+        }
+        
+        // Load required items section.
         CuboidListeners.loadItems();
+        
         // Metrics
         try {
             Metrics metrics = new Metrics(this);
@@ -125,23 +139,8 @@ public class OpenGuild extends JavaPlugin {
         } catch(IOException ex) {
             // Failed to submit the stats :-(
         }
-        // 1.7.9 ?
-        try{
-            if(getServer().getOfflinePlayer("Notch").getUniqueId() == null){
-                Guilds.getLogger().severe("Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5!");
-                getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
-                getServer().getPluginManager().disablePlugin(this);
-            }
-        }
-        catch(Exception ex){
-            Guilds.getLogger().severe("Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5!");
-            getServer().getConsoleSender().sendMessage("§4Your Minecraft server version is below 1.7.5!/Masz starego bukkita ponizej 1.7.5! Closing! Wylaczam!");
-            getServer().getPluginManager().disablePlugin(this);
-        }
         
-        // Prawidlowa komenda i koniec
-        getCommand("team").setExecutor(new TeamCommand());
-        getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - init) + " ms!");
+        getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!");
     }
 
     @Override
@@ -150,22 +149,30 @@ public class OpenGuild extends JavaPlugin {
         
         try {
             SQLHandler.getConnection().close();
-        } catch(SQLException ex) {}
+        } catch(SQLException ex) {
+            getOGLogger().exceptionThrown(ex);
+        }
         
-        int logFiles = 0;
+        int deletedFiles = 0;
+        
         for(File file : getOGLogger().getLoggingDirectory().listFiles()) {
             String format = file.getName().substring(file.getName().length() - 4, file.getName().length());
             if(!format.equals(".log")) {
                 file.delete();
-                logFiles++;
+                deletedFiles++;
             }
         }
-        System.out.println("Deleted " + logFiles + " files in 'plugins/OpenGuild2047/logger'");
+        
+        System.out.println("Deleted " + deletedFiles + " files from 'plugins/OpenGuild2047/logger'");
     }
 
+    /**
+     * This method checks if any update is available, and shows notification
+     * if there's new version of plugin.
+     */
     private void checkForUpdates() {
         if(!GenConf.updater) {
-            Guilds.getLogger().info("Updater are disabled.");
+            Guilds.getLogger().warning("Updater is disabled.");
         } else {
             if(com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isAvailable()) {
                 Guilds.getLogger().info(" ");
@@ -178,82 +185,59 @@ public class OpenGuild extends JavaPlugin {
                 Guilds.getLogger().info("No updates found! Good job! :D");
             }
         }
-        Guilds.getLogger().info("Enabling OpenGuild2047 v" + getDescription().getVersion() + "...");
     }
 
-    private void copyDefaultFiles() {
-        loadConfig();
-        Guilds.getLogger().info("Loading configuration from config.yml...");
-        GenConf.loadConfiguration();
-        Guilds.getLogger().info("Configuration loaded!");
-    }
-
+    /**
+     * This method is used to get all aliases of specified command.
+     * 
+     * @param cmd command, which aliases should be get.
+     * @param def default aliases.
+     * @return an array of strings.
+     */
     private String[] getAliases(String cmd, String[] def) {
         List<String> aliases = getAPI().getCmdManager().getAliases(cmd);
-        if(aliases == null)
-            return new String[] {};
-        if(def != null)
-            aliases.addAll(Arrays.asList(def));
-        return aliases.toArray(new String[aliases.size()]);
         
-    }
-
-    private void loadCommands() {
-        if(!GenConf.newCmdApi) {
-            getCommand("guild").setExecutor(new GuildCommand());
-            return;
+        if(aliases == null) {
+            return new String[]{};
         }
         
-        CommandDescription help = new CommandDescription();
-        CommandDescription reload = new CommandDescription();
-        CommandDescription version = new CommandDescription();
+        if(def != null) {
+            aliases.addAll(Arrays.asList(def));
+        }
         
-        help.set(MsgManager.getIgnorePref("cmd-help"));
-        reload.set(MsgManager.getIgnorePref("cmd-reload"));
-        version.set(MsgManager.getIgnorePref("cmd-version"));
-        
-        api.registerCommand(new CommandInfo(
-                (String[]) getAliases("help", new String[] {"?"}),
-                "help",
-                help,
-                new HelpCmd(),
-                null,
-                "[command|page]"));
-        api.registerCommand(new CommandInfo(
-                (String[]) getAliases("reload", null),
-                "reload",
-                reload,
-                new ReloadCmd(),
-                "openguild.command.reload",
-                null));
-        api.registerCommand(new CommandInfo(
-                (String[]) getAliases("version", new String[] {"v", "ver", "about"}),
-                "version",
-                version,
-                new VersionCmd(),
-                null,
-                null));
-        
-        OpenCommandManager.registerPluginCommands();
-        getCommand("guild").setExecutor(new NewGuildCommand());
+        return aliases.toArray(new String[aliases.size()]);
     }
 
-    private void loadConfig() {
-        // MySQL
-        address = getConfig().getString("mysql.address");
-        port = getConfig().getInt("mysql.port", 3306);
-        database = getConfig().getString("mysql.database");
-        login = getConfig().getString("mysql.login");
-        password = getConfig().getString("mysql.password");
+    /**
+     * This method sets executors of all commands, and
+     * registers them in our API.
+     */
+    private void loadCommands() {
+        getCommand("team").setExecutor(new TeamCommand(this));
+        getCommand("guild").setExecutor(new GuildCommand(this));
+        
+        CommandDescription cmdDesc = new CommandDescription();
+        
+        OpenCommandManager.registerPluginCommands(this);
     }
 
-    private void loadDb() {
+    /**
+     * This method connects plugin with database using informations from
+     * configuration file.
+     */
+    private void loadDB() {
+        String host = getConfig().getString("mysql.address");
+        int port = getConfig().getInt("mysql.port");
+        String user = getConfig().getString("mysql.login");
+        String pass = getConfig().getString("mysql.password");
+        String name = getConfig().getString("mysql.database");
+        
         switch(GenConf.DATABASE) {
             case FILE:
-                new SQLHandler(address, port, database, login, password).createFirstConnectionSQLite();
+                new SQLHandler(this, host, port, name, user, pass).createFirstConnectionSQLite();
                 break;
             case MYSQL:
-                new SQLHandler(address, port, database, login, password).createFirstConnection(login, password);
+                new SQLHandler(this, host, port, name, user, pass).createFirstConnection();
                 break;
             default:
                 Guilds.getLogger().severe("Could not load database type! Please fix it in your config.yml file!");
@@ -262,30 +246,47 @@ public class OpenGuild extends JavaPlugin {
         }
     }
 
-    void loadAllListeners() {
+    /**
+     * This method registers all events.
+     */
+    private void loadAllListeners() {
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new PlayerChat(), this);
-        pm.registerEvents(new Monitors(), this);
+        pm.registerEvents(new PlayerChat(this), this);
+        pm.registerEvents(new Monitors(this), this);
+        
         if(GenConf.cubEnabled) {
             pm.registerEvents(new CuboidListeners(), this);
         }
+        
         if(!GenConf.teampvp) {
-            pm.registerEvents(new EntityDamageByEntity(), this);
+            pm.registerEvents(new EntityDamageByEntity(this), this);
         }
+        
         if(GenConf.playerMoveEvent) {
             pm.registerEvents(new PlayerMove(), this);
         }
     }
 
+    /**
+     * This method loads all players from database and adds 
+     * them to their guild's member list.
+     */
     private void loadPlayers() {
-        for(SimpleGuild guild : Data.getInstance().guilds.values()) { // Pobieranie gildii
+        for(SimpleGuild guild : this.guildHelper.getGuilds().values()) { // Pobieranie gildii
             for(UUID member : SQLHandler.getGuildMembers(guild.getTag())) { // Pobieranie graczy w gildii
                 guild.addMember(member); // Dodawanie gracza do listy
             }
         }
     }
     
-    private void validateFile(String name) {
+    /**
+     * This method is used to validate YAML configuration file,
+     * it compares file from plugin's JAR and file in plugin's folder,
+     * and adds keys, which doesn't exist.
+     * 
+     * @param name name of file to validate (without extension)
+     */
+    public void validateFile(String name) {
         getOGLogger().info("Validating file '" + name + ".yml ...");
         
         YamlConfiguration c = new YamlConfiguration();
@@ -316,23 +317,60 @@ public class OpenGuild extends JavaPlugin {
 
             c.save(file);
         } catch(IOException e) {
-            e.printStackTrace();
+            getOGLogger().exceptionThrown(e);
         }
         catch (InvalidConfigurationException e) {
-            e.printStackTrace();
+            getOGLogger().exceptionThrown(e);
+        }
+    }
+    
+    /**
+     * This method is used to broadcast message to all
+     * online players.
+     * We're not using Bukkit.broadcastMessage() method, because it sends
+     * messages also to the console.
+     * 
+     * @param message message to be sent
+     */
+    public void broadcastMessage(String message) {
+        for(Player player : getServer().getOnlinePlayers()) {
+            player.sendMessage(message);
         }
     }
 
-    public static OpenGuild get() {
+    /**
+     * @return instance of this class.
+     */
+    public static OpenGuild getInstance() {
         return instance;
     }
 
+    /**
+     * @return instance of OpenGuildPlugin (API) class.
+     */
     public static OpenGuildPlugin getAPI() {
-        return api;
+        return ogAPI;
     }
     
+    /**
+     * @return instance of OGLogger class.
+     */
     public OGLogger getOGLogger() {
         return ogLogger;
     }
 
+    /**
+     * @return instance of GuildHelper class.
+     */
+    public GuildHelper getGuildHelper() {
+        return guildHelper;
+    }
+    
+    /**
+     * @return instance of TagManager class.
+     */
+    public TagManager getTagManager() {
+        return tagManager;
+    }
+    
 }

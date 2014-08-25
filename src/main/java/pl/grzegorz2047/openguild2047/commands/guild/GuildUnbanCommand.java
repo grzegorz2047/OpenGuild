@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Aleksander.
+ * Copyright 2014 Adam.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,27 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.commands2;
+package pl.grzegorz2047.openguild2047.commands.guild;
 
-import com.github.grzegorz2047.openguild.command.Command;
-import com.github.grzegorz2047.openguild.command.CommandException;
 import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild2047.commands.arguments.AdminArg;
+import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 
-public class AdminCmd implements Command {
-    
-    @Override
-    public void execute(CommandSender sender, String[] args) throws CommandException {
-        AdminArg.execute(sender, args);
+@Deprecated
+public class GuildUnbanCommand extends CommandHandler {
+
+    public GuildUnbanCommand(OpenGuild plugin) {
+        super(plugin);
     }
-    
+
+    @Override
+    public void executeCommand(CommandSender sender, String[] args) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getMinimumArguments() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

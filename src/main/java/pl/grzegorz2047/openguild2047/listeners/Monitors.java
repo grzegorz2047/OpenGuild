@@ -1,7 +1,6 @@
 package pl.grzegorz2047.openguild2047.listeners;
 
 
-import com.github.grzegorz2047.openguild.OpenGuild;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,16 +11,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
-
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 public class Monitors implements Listener {
+    
+    private OpenGuild plugin;
+    
+    public Monitors(OpenGuild plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent e) {
@@ -46,11 +51,11 @@ public class Monitors implements Listener {
                     NametagAPI.resetNametag(e.getPlayer().getName());
                 }
             }*/
-            TagManager.setTag(e.getPlayer().getUniqueId());
+            plugin.getTagManager().setTag(e.getPlayer().getUniqueId());
         }
         
-        if(Data.getInstance().isPlayerInGuild(e.getPlayer().getUniqueId())) {
-            SimpleGuild guild = Data.getInstance().getPlayersGuild(e.getPlayer().getUniqueId());
+        if(plugin.getGuildHelper().hasGuild(e.getPlayer().getUniqueId())) {
+            SimpleGuild guild = plugin.getGuildHelper().getPlayerGuild(e.getPlayer().getUniqueId());
             for(UUID uuid : guild.getMembers()) {
                 Player online = Bukkit.getPlayer(uuid);
                 if(online != null) {
@@ -60,7 +65,7 @@ public class Monitors implements Listener {
         }
         
         // Updater
-        if(e.getPlayer().isOp() && OpenGuild.getUpdater().isEnabled() && OpenGuild.getUpdater().isAvailable()) {
+        if(e.getPlayer().isOp() && com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isEnabled() && com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isAvailable()) {
             e.getPlayer().sendMessage(ChatColor.RED + " =============== OpenGuild UPDATER =============== ");
             if(GenConf.lang.equalsIgnoreCase("PL")) {
                 e.getPlayer().sendMessage(ChatColor.YELLOW + "Znaleziono aktualizacje! Prosze zaktualizowac Twój plugin do najnowszej wersji!");
@@ -79,8 +84,8 @@ public class Monitors implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
-        if(Data.getInstance().isPlayerInGuild(e.getPlayer().getUniqueId())) {
-            SimpleGuild guild = Data.getInstance().getPlayersGuild(e.getPlayer().getUniqueId());
+        if(plugin.getGuildHelper().hasGuild(e.getPlayer().getUniqueId())) {
+            SimpleGuild guild = plugin.getGuildHelper().getPlayerGuild(e.getPlayer().getUniqueId());
             for(UUID uuid : guild.getMembers()) {
                 Player online = Bukkit.getPlayer(uuid);
                 if(online != null) {

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Aleksander.
+ * Copyright 2014 Adam.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,31 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.commands2;
+package pl.grzegorz2047.openguild2047.commands.guild;
 
-import com.github.grzegorz2047.openguild.command.Command;
-import com.github.grzegorz2047.openguild.command.CommandException;
 import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild2047.commands.arguments.LeaveArg;
+import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 
-public class LeaveCmd implements Command {
-    
-    @Override
-    public void execute(CommandSender sender, String[] args) throws CommandException {
-        LeaveArg.execute(sender);
+/**
+ * Command used to accept invitation to guild.
+ * 
+ * Usage: /guild accept [optional: tag (required only if there's more than 2 invitations)]
+ */
+public class GuildInvitationAcceptCommand extends CommandHandler {
+
+    public GuildInvitationAcceptCommand(OpenGuild plugin) {
+        super(plugin);
     }
-    
+
+    @Override
+    public void executeCommand(CommandSender sender, String[] args) {
+        // TODO
+    }
+
+    @Override
+    public int getMinimumArguments() {
+        return 1;
+    }
+
 }

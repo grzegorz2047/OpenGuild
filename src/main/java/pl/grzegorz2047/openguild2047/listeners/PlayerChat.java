@@ -26,30 +26,39 @@ package pl.grzegorz2047.openguild2047.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-
-import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
+
+import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 
 /**
  *
  * @author Grzegorz
  */
 public class PlayerChat implements Listener {
-
+    
+    private OpenGuild plugin;
+    
+    public PlayerChat(OpenGuild plugin) {
+        this.plugin = plugin;
+    }
+    
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
         if(e.isCancelled() || !GenConf.guildprefixinchat) {
             return;
         }
-        String tag = Data.getInstance().getGuildChatTag(e.getPlayer().getUniqueId());
-        if(tag== null){
-            return;
-        }
-        tag = tag.toUpperCase();
-        if(e.getFormat().contains("{OpenGuildTag}") || e.getFormat().contains("%tag")) {
-            e.setFormat(e.getFormat().replace("{OpenGuildTag}", tag.replace("%tag", tag)));
-        } else {
-            e.setFormat("§7[§r" + tag + "§7]§r " + e.getFormat());
+        if(plugin.getGuildHelper().hasGuild(e.getPlayer())) {
+            String tag = plugin.getGuildHelper().getPlayerGuild(e.getPlayer().getUniqueId()).getTag().toUpperCase();
+            if(tag== null){
+                return;
+            }
+            tag = tag.toUpperCase();
+            if(e.getFormat().contains("{OpenGuildTag}") || e.getFormat().contains("%tag")) {
+                e.setFormat(e.getFormat().replace("{OpenGuildTag}", tag.replace("%tag", tag)));
+            } else {
+                e.setFormat("§7[§r" + tag + "§7]§r " + e.getFormat());
+            }
         }
     }
 

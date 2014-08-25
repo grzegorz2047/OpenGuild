@@ -45,7 +45,7 @@ public class ItemGUI implements Listener {
     private int nextPosition = -1;
     
     public ItemGUI(String title, int size) {
-        this.plugin  = OpenGuild.get();
+        this.plugin = OpenGuild.getInstance();
         this.inventory = this.plugin.getServer().createInventory(null, size, title);
         
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);

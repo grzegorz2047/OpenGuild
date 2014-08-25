@@ -29,8 +29,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -39,6 +40,12 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * @author Grzegorz
  */
 public class EntityDamageByEntity implements Listener {
+    private OpenGuild plugin;
+    
+    public EntityDamageByEntity(OpenGuild plugin) {
+        this.plugin = plugin;
+    }
+    
 
     @EventHandler
     public void onSomeoneAttack(EntityDamageByEntityEvent e) {
@@ -56,8 +63,8 @@ public class EntityDamageByEntity implements Listener {
         if(attacker instanceof Player && attacked instanceof Player) {
             Player attackerp = (Player) attacker;
             Player attackedp = (Player) attacked;
-            if(Data.getInstance().isPlayerInGuild(attackerp.getUniqueId()) && Data.getInstance().isPlayerInGuild(attackedp.getUniqueId())) {
-                SimpleGuild sg = Data.getInstance().getPlayersGuild(attackerp.getUniqueId());
+            if(plugin.getGuildHelper().hasGuild(attackerp.getUniqueId()) && plugin.getGuildHelper().hasGuild(attackedp.getUniqueId())) {
+                SimpleGuild sg = plugin.getGuildHelper().getPlayerGuild(attackerp.getUniqueId());
                 if(sg.containsMember(attackerp.getUniqueId()) 
                     && sg.containsMember(attackedp.getUniqueId())) {
                     e.setCancelled(true);
@@ -73,8 +80,8 @@ public class EntityDamageByEntity implements Listener {
             if(arrow.getShooter() instanceof Player && e.getEntity() instanceof Player) {
                 Player attackerp = (Player) arrow.getShooter();
                 Player attackedp = (Player) e.getEntity();
-                if(Data.getInstance().isPlayerInGuild(attackerp.getUniqueId()) && Data.getInstance().isPlayerInGuild(attackedp.getUniqueId())) {
-                    SimpleGuild sg = Data.getInstance().getPlayersGuild(attackerp.getUniqueId());
+                if(plugin.getGuildHelper().hasGuild(attackerp.getUniqueId()) && plugin.getGuildHelper().hasGuild(attackedp.getUniqueId())) {
+                    SimpleGuild sg = plugin.getGuildHelper().getPlayerGuild(attackerp.getUniqueId());
                     if(sg.containsMember(attackerp.getUniqueId()) 
                         && sg.containsMember(attackedp.getUniqueId())) {
                         e.setCancelled(true);

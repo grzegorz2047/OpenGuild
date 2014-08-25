@@ -23,6 +23,7 @@
  */
 package pl.grzegorz2047.openguild2047;
 
+import pl.grzegorz2047.openguild2047.database.Database;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
@@ -90,23 +91,23 @@ public class GenConf {
     public static String quitMsg;
 
     protected static void loadConfiguration() {
-        FileConfiguration config = OpenGuild.get().getConfig();
+        FileConfiguration config = OpenGuild.getInstance().getConfig();
 
-        badwords = OpenGuild.get().getConfig().getStringList("forbiddenguildnames");
-        MIN_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.min-radius", 15);
-        MAX_CUBOID_RADIUS = OpenGuild.get().getConfig().getInt("cuboid.max-radius", 50);
-        TELEPORT_COOLDOWN = OpenGuild.get().getConfig().getInt("teleport-cooldown", 10);
-        EXTRA_PROTECTION = OpenGuild.get().getConfig().getBoolean("cuboid.extra-protection", false);
-        CANENTERAREA = OpenGuild.get().getConfig().getBoolean("cuboid.canenterarea", true);
-        BREAKING_ITEMS = OpenGuild.get().getConfig().getStringList("cuboid.breaking-blocks.item-types");
-        BREAKING_DAMAGE = Short.parseShort(OpenGuild.get().getConfig().getString("cuboid.breaking-blocks.damage", "0"));
-        SQL_DEBUG = OpenGuild.get().getConfig().getBoolean("mysql.debug", false);
-        DATABASE = Database.valueOf(OpenGuild.get().getConfig().getString("database", "FILE").toUpperCase());
-        FILE_DIR = OpenGuild.get().getConfig().getString("file-dir", "plugins/OpenGuild2047/og.db");
-        SNOOPER = OpenGuild.get().getConfig().getBoolean("snooper", true);
-        TEAMPVP_MSG = OpenGuild.get().getConfig().getBoolean("teampvp-msg", false);
+        badwords = OpenGuild.getInstance().getConfig().getStringList("forbiddenguildnames");
+        MIN_CUBOID_RADIUS = OpenGuild.getInstance().getConfig().getInt("cuboid.min-radius", 15);
+        MAX_CUBOID_RADIUS = OpenGuild.getInstance().getConfig().getInt("cuboid.max-radius", 50);
+        TELEPORT_COOLDOWN = OpenGuild.getInstance().getConfig().getInt("teleport-cooldown", 10);
+        EXTRA_PROTECTION = OpenGuild.getInstance().getConfig().getBoolean("cuboid.extra-protection", false);
+        CANENTERAREA = OpenGuild.getInstance().getConfig().getBoolean("cuboid.canenterarea", true);
+        BREAKING_ITEMS = OpenGuild.getInstance().getConfig().getStringList("cuboid.breaking-blocks.item-types");
+        BREAKING_DAMAGE = Short.parseShort(OpenGuild.getInstance().getConfig().getString("cuboid.breaking-blocks.damage", "0"));
+        SQL_DEBUG = OpenGuild.getInstance().getConfig().getBoolean("mysql.debug", false);
+        DATABASE = Database.valueOf(OpenGuild.getInstance().getConfig().getString("database", "FILE").toUpperCase());
+        FILE_DIR = OpenGuild.getInstance().getConfig().getString("file-dir", "plugins/OpenGuild2047/og.db");
+        SNOOPER = OpenGuild.getInstance().getConfig().getBoolean("snooper", true);
+        TEAMPVP_MSG = OpenGuild.getInstance().getConfig().getBoolean("teampvp-msg", false);
 
-        lang = OpenGuild.get().getConfig().getString("language").toUpperCase();
+        lang = OpenGuild.getInstance().getConfig().getString("language").toUpperCase();
 
         loadBans();
         List listMax = config.getList("spawn.location-max");
@@ -207,11 +208,11 @@ public class GenConf {
     }
 
     private static void loadBans() {
-        hcBans = OpenGuild.get().getConfig().getBoolean("hardcore-bans.enabled");
-        hcKickMsg = OpenGuild.get().getConfig().getString("hardcore-bans.kick-message").replace("&", "§");
-        hcLoginMsg = OpenGuild.get().getConfig().getString("hardcore-bans.login-message").replace("&", "§");
+        hcBans = OpenGuild.getInstance().getConfig().getBoolean("hardcore-bans.enabled");
+        hcKickMsg = OpenGuild.getInstance().getConfig().getString("hardcore-bans.kick-message").replace("&", "§");
+        hcLoginMsg = OpenGuild.getInstance().getConfig().getString("hardcore-bans.login-message").replace("&", "§");
 
-        String time = OpenGuild.get().getConfig().getString("hardcore-bans.ban-time");
+        String time = OpenGuild.getInstance().getConfig().getString("hardcore-bans.ban-time");
         String length = time.substring(0, time.length() - 1);
         long result;
         try {

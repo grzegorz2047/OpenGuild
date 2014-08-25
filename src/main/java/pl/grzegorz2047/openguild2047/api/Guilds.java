@@ -31,12 +31,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.utils.PastebinWriter;
 
 /**
@@ -50,23 +47,23 @@ public class Guilds {
     }
 
     @Nullable public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
-        SimplePlayerGuild guildPlayer = Data.getInstance().guildsplayers.get(player.getUniqueId());
-        SimpleGuild guild = Data.getInstance().guilds.get(guildPlayer.getClanTag());
-        return guild;
+        //SimplePlayerGuild guildPlayer = GuildHelper.getInstance().guildsplayers.get(player.getUniqueId());
+        //SimpleGuild guild = GuildHelper.getInstance().guilds.get(guildPlayer.getClanTag());
+        return null;
     }
 
     @Nullable public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
-        Guild guild = Data.getInstance().guilds.get(tag.toLowerCase());
-        return guild;
+        //Guild guild = GuildHelper.getInstance().guilds.get(tag.toLowerCase());
+        return null;
     }
 
     @Nonnull public static Logger getLogger() {
-        return OpenGuild.get().getOGLogger();
+        return OpenGuild.getInstance().getOGLogger();
     }
 
     @Nullable public static PlayerGuild getPlayer(@Nonnull UUID uuid) throws NullPointerException {
-        PlayerGuild guild = Data.getInstance().guildsplayers.get(uuid);
-        return guild;
+        //PlayerGuild guild = GuildHelper.getInstance().guildsplayers.get(uuid);
+        return null;
     }
 
     public static void report(String error) {
@@ -79,7 +76,7 @@ public class Guilds {
             builder.append("Enabled plugins: ");
             builder.append(Bukkit.getPluginManager().getPlugins().toString());
             builder.append("-------------------------");
-            builder.append("Plugin version == ").append(OpenGuild.get().getDescription().getVersion());
+            builder.append("Plugin version == ").append(OpenGuild.getInstance().getDescription().getVersion());
             builder.append("Engine (Bukkit) version == ").append(Bukkit.getBukkitVersion()).append(" (").append(Bukkit.getVersion()).append(")");
             builder.append("System.getProperty(\"os.name\") == ").append(System.getProperty("os.name"));
             builder.append("System.getProperty(\"os.version\") == ").append(System.getProperty("os.version"));

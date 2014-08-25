@@ -37,25 +37,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.commands2.AcceptCmd;
-import pl.grzegorz2047.openguild2047.commands2.AdminCmd;
-import pl.grzegorz2047.openguild2047.commands2.CreateCmd;
-import pl.grzegorz2047.openguild2047.commands2.DescriptionCmd;
-import pl.grzegorz2047.openguild2047.commands2.DisbandCmd;
-import pl.grzegorz2047.openguild2047.commands2.HomeCmd;
-import pl.grzegorz2047.openguild2047.commands2.InfoCmd;
-import pl.grzegorz2047.openguild2047.commands2.InviteCmd;
-import pl.grzegorz2047.openguild2047.commands2.ItemsCmd;
-import pl.grzegorz2047.openguild2047.commands2.KickCmd;
-import pl.grzegorz2047.openguild2047.commands2.LeaderCmd;
-import pl.grzegorz2047.openguild2047.commands2.LeaveCmd;
-import pl.grzegorz2047.openguild2047.commands2.ListCmd;
-import pl.grzegorz2047.openguild2047.commands2.MembersCmd;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class OpenCommandManager implements CommandManager {
     
-    private final File file = OpenGuild.CMDS;
+    private final File file = new File("plugins/OpenGuild2047/commands.yml");
     private final FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
     private static int loadedCmds;
     private HashMap<String, List<String>> aliases;
@@ -115,63 +101,11 @@ public class OpenCommandManager implements CommandManager {
         }
     }
     
-    public static void registerPluginCommands() {
+    public static void registerPluginCommands(OpenGuild plugin) {
         List<String> cmds = OpenGuild.getAPI().getCmdManager().getCommands();
         loadedCmds = 0;
         if(cmds == null) {
             return;
-        }
-        
-        if(cmds.contains("accept")) {
-            register("accept", new AcceptCmd(), false, "<guild>");
-        }
-        if(cmds.contains("admin")) {
-            register("admin", new AdminCmd(), true, "<arg>");
-        }
-        if(cmds.contains("ally")) {
-            //register("ally", new AllyCmd(), false, "<guild>");
-        }
-        if(cmds.contains("create")) {
-            register("create", new CreateCmd(), false, "<tag> [description...]");
-        }
-        if(cmds.contains("description")) {
-            register("description", new DescriptionCmd(), false, "[change <desc...>]");
-        }
-        if(cmds.contains("disband")) {
-            register("disband", new DisbandCmd(), false, null);
-        }
-        if(cmds.contains("enemy")) {
-            //register("enemy", new EnemyCmd(), false, "<guild>");
-        }
-        if(cmds.contains("expand")) {
-            //register("expand", new ExpandCmd(), false, null);
-        }
-        if(cmds.contains("home")) {
-            register("home", new HomeCmd(), false, null);
-        }
-        if(cmds.contains("info")) {
-            register("info", new InfoCmd(), false, "[guild]");
-        }
-        if(cmds.contains("invite")) {
-            register("invite", new InviteCmd(), false, "<player>");
-        }
-        if(cmds.contains("items")) {
-            register("items", new ItemsCmd(), false, null);
-        }
-        if(cmds.contains("kick")) {
-            register("kick", new KickCmd(), false, "<player>");
-        }
-        if(cmds.contains("leader")) {
-            register("leader", new LeaderCmd(), false, "<player>");
-        }
-        if(cmds.contains("leave")) {
-            register("leave", new LeaveCmd(), false, null);
-        }
-        if(cmds.contains("list")) {
-            register("list", new ListCmd(), false, null);
-        }
-        if(cmds.contains("members")) {
-            register("members", new MembersCmd(), false, null);
         }
         
         Guilds.getLogger().log(Level.INFO, "Loaded " + loadedCmds + " commands.");

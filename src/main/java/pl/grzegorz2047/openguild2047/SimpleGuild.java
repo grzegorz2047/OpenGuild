@@ -24,10 +24,13 @@
 package pl.grzegorz2047.openguild2047;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.api.Guild;
 
 public class SimpleGuild implements Guild {
@@ -41,12 +44,22 @@ public class SimpleGuild implements Guild {
     private List<String> allyguilds;
     private List<String> enemyguilds;
 
+    private Map<Player, Player> pendingInvitations = new HashMap<Player, Player>();
+    
     public SimpleGuild(String tag) {
         this.members = new ArrayList<UUID>();
         this.invitedplayers = new ArrayList<UUID>();
         this.allyguilds = new ArrayList<String>();
         this.enemyguilds = new ArrayList<String>();
         this.tag = tag;
+    }
+    
+    public void invitePlayer(Player toInvite, Player whoInvited) {
+        if(!pendingInvitations.containsValue(toInvite)) {
+            pendingInvitations.put(whoInvited, toInvite);
+            
+            /** @TODO Complete. */
+        }
     }
 
     @Override

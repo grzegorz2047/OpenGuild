@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Aleksander.
+ * Copyright 2014 Adam.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,31 @@
  * THE SOFTWARE.
  */
 
-package pl.grzegorz2047.openguild2047.commands2.def;
+package pl.grzegorz2047.openguild2047.commands.guild;
 
-import java.util.List;
+import org.bukkit.command.CommandSender;
+import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 
-public class HelpPage {
-    
-    private final List<String> commands;
-    private final int page;
-    
-    public HelpPage(List<String> commands, int page) {
-        this.commands = commands;
-        this.page = page;
+/**
+ * Command used to reload guilds.
+ * 
+ * Usage: /guild reload
+ */
+public class GuildReloadCommand extends CommandHandler {
+
+    public GuildReloadCommand(OpenGuild plugin) {
+        super(plugin);
     }
-    
-    public List<String> getCommands() {
-        return this.commands;
+
+    @Override
+    public void executeCommand(CommandSender sender, String[] args) {
+        /** @TODO */
     }
-    
-    public int getPageNumber() {
-        return this.page;
+
+    @Override
+    public int getMinimumArguments() {
+        return 1;
     }
-    
+
 }

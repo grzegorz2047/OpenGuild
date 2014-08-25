@@ -31,7 +31,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
@@ -41,6 +42,12 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * @author Aleksander
  */
 public class TeamCommand implements CommandExecutor {
+    
+    private OpenGuild plugin;
+    
+    public TeamCommand(OpenGuild plugin) {
+        this.plugin = plugin;
+    }
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -69,11 +76,11 @@ public class TeamCommand implements CommandExecutor {
     }
     
     private void sendMessage(Player author, String message) {
-        SimplePlayerGuild pGuild = Data.getInstance().guildsplayers.get(author.getUniqueId());
-        if(pGuild == null) {
+        GuildHelper helper = this.plugin.getGuildHelper();
+        if(!helper.hasGuild(author)) {
             author.sendMessage(MsgManager.get("notinguild"));
         } else {
-            SimpleGuild guild = Data.getInstance().getPlayersGuild(author.getUniqueId());
+            SimpleGuild guild = this.plugin.getGuildHelper().getPlayerGuild(author.getUniqueId());
             String name = author.getName();
             if(author.getDisplayName() != null)
                 name = author.getDisplayName();

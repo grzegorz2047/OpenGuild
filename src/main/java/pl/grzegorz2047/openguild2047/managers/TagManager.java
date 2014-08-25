@@ -24,13 +24,13 @@
 
 package pl.grzegorz2047.openguild2047.managers;
 
-import com.github.grzegorz2047.openguild.OpenGuild;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import pl.grzegorz2047.openguild2047.Data;
+import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
 
 /**
@@ -38,10 +38,14 @@ import pl.grzegorz2047.openguild2047.SimpleGuild;
  * @author Grzegorz
  */
 public class TagManager {
+    
+    private OpenGuild plugin;
    
     private static Scoreboard sc;//Mozna trzymac w pamieci tej klasy, zeby nie bawic sie tym za bardzo.
     
-    public TagManager(){
+    public TagManager(OpenGuild plugin){
+        this.plugin = plugin;
+        
         if(!TagManager.isInitialised()){//Kiedy trzeba to mozna zainicjowac scoreboard np. przy onEnable()
             sc = Bukkit.getScoreboardManager().getNewScoreboard();
         }
@@ -70,8 +74,8 @@ public class TagManager {
         String tag = sg.getTag().toUpperCase();
         if(sc.getTeam(tag)== null){
             Team teamtag = sc.registerNewTeam(tag);
-            teamtag.setPrefix(OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag().toUpperCase()));
-            teamtag.setDisplayName(OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag().toUpperCase()));
+            teamtag.setPrefix(com.github.grzegorz2047.openguild.OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag().toUpperCase()));
+            teamtag.setDisplayName(com.github.grzegorz2047.openguild.OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag().toUpperCase()));
             for(UUID uuid : sg.getMembers()){
                 teamtag.addPlayer(Bukkit.getOfflinePlayer(uuid));
             }
@@ -82,11 +86,11 @@ public class TagManager {
         return false;
     }
     
-    public static boolean setTag(UUID player){
+    public boolean setTag(UUID player){
         if(TagManager.isInitialised()){
-            if(Data.getInstance().isPlayerInGuild(player)){
+            if(plugin.getGuildHelper().hasGuild(player)){
                 //System.out.println("gracz w gildii");
-                SimpleGuild g =Data.getInstance().getPlayersGuild(player);
+                SimpleGuild g =plugin.getGuildHelper().getPlayerGuild(player);
                 Team t = sc.getTeam(g.getTag().toUpperCase());
                 if(t == null){
                     //System.out.println("Brak team pref");
@@ -111,10 +115,10 @@ public class TagManager {
         }
         return false;
     }
-    public static boolean removeTag(UUID player){
+    public boolean removeTag(UUID player){
         if(TagManager.isInitialised()){
-            if(Data.getInstance().isPlayerInGuild(player)){
-                SimpleGuild g =Data.getInstance().getPlayersGuild(player);
+            if(plugin.getGuildHelper().hasGuild(player)){
+                SimpleGuild g = plugin.getGuildHelper().getPlayerGuild(player);
                 Team t = sc.getTeam(g.getTag().toUpperCase());
                 if(t == null){
                     updateBoard();

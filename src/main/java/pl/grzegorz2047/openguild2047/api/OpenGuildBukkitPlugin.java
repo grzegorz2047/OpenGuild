@@ -44,10 +44,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import pl.grzegorz2047.openguild2047.Data;
 import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
-import pl.grzegorz2047.openguild2047.commands.arguments.ReloadArg;
 
 public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
@@ -102,7 +100,8 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
     @Override
     public com.github.grzegorz2047.openguild.Guild getGuild(Player player) {
-        return getGuild(Data.getInstance().guildsplayers.get(player.getUniqueId()).getClanTag());
+        return null;
+        // return getGuild(GuildHelper.getInstance().guildsplayers.get(player.getUniqueId()).getClanTag());
     }
     
     @Override
@@ -222,7 +221,8 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
     @Override
     public void reload(CommandSender sender) {
-        ReloadArg.execute(sender);
+        // ReloadArg.execute(sender);
+        /** @TODO */
     }
     
     @Override

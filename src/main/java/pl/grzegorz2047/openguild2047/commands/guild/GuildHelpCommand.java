@@ -1,7 +1,7 @@
-/**
+/*
  * The MIT License
  *
- * Copyright 2014 Grzegorz.
+ * Copyright 2014 Adam.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,26 +18,39 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
-package pl.grzegorz2047.openguild2047.commands.arguments;
+
+package pl.grzegorz2047.openguild2047.commands.guild;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
-public class HelpArg {
+/**
+ * This command shows list of 'guild' command sub-commands.
+ * 
+ * Usage: /guild help
+ */
+public class GuildHelpCommand extends CommandHandler {
 
-    public static boolean execute(CommandSender sender, String[] args) {
+    public GuildHelpCommand(OpenGuild plugin) {
+        super(plugin);
+    }
+
+    @Override
+    public void executeCommand(CommandSender sender, String[] args) {
         int page = 1;
         if(args.length != 2) {
             page = 1;
         } else {
             if(args[1].equalsIgnoreCase("admin") || args[1].equalsIgnoreCase("a")) {
                 admin(sender);
-                return true;
+                return;
             }
             try {
                 page = Integer.parseInt(args[1]);
@@ -45,7 +58,9 @@ public class HelpArg {
                 sender.sendMessage(MsgManager.get("pagenotnumber"));
             }
         }
+        
         sender.sendMessage(getTitle(page));
+        
         if(page == 1) {
             if(GenConf.lang.equals("PL")) {
                 sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
@@ -80,18 +95,11 @@ public class HelpArg {
                 sender.sendMessage(help("kick <player>", "Kicks member of guild"));
                 sender.sendMessage(help("help [admin|page]", "Show help [admin/page]"));
             }
-
         } else {
-            if(GenConf.lang.equals("PL")) {
-                sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze {NUMBER} nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
-            } else {
-                sender.sendMessage(MsgManager.get("pagenotfound", "&cPage number {NUMBER} not found").replace("{NUMBER}", String.valueOf(page)));
-            }
-            
+            sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze {NUMBER} nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
         }
-        return true;
     }
-
+    
     private static String getTitleAdmin() {
         return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help Admin" + ChatColor.DARK_GRAY + " --------------- ";
     }
@@ -114,7 +122,7 @@ public class HelpArg {
         sender.sendMessage(getTitleAdmin());
         sender.sendMessage(help("reload", "Przeladuj konfiguracje pluginu"));
         if(GenConf.hcBans) {
-            sender.sendMessage(help("unban <player>", "Odbanuj gracza ze smierci"));
+            sender.sendMessage(help("unban <player>", "Odbanuj gracza"));
         } else {
             hide++;
         }
@@ -123,6 +131,11 @@ public class HelpArg {
         if(hide > 0) {
             sender.sendMessage(MsgManager.get("skipped").replace("{HELP}", String.valueOf(hide)));
         }
+    }
+
+    @Override
+    public int getMinimumArguments() {
+        return 1;
     }
 
 }
