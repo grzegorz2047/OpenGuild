@@ -54,8 +54,13 @@ public class GuildInvitationAcceptCommand extends CommandHandler {
             return;
         }
 
-        List<Guild> invitationsFrom = new ArrayList<Guild>();
         GuildHelper guildHelper = getPlugin().getGuildHelper();
+        if(guildHelper.hasGuild(((Player) sender).getUniqueId())) {
+            sender.sendMessage(MsgManager.alreadyinguild);
+            return;
+        }
+
+        List<Guild> invitationsFrom = new ArrayList<Guild>();
         for (Guild guild : guildHelper.getGuilds().values()) {
             if (guild.getPendingInvitations().contains(((Player) sender).getUniqueId())) {
                 invitationsFrom.add(guild);
