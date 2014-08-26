@@ -101,7 +101,7 @@ public class GuildCommand implements CommandExecutor {
             }
             
             if(!subCommandFound) {
-                sender.sendMessage(MsgManager.get("cmdnotfound"));
+                sender.sendMessage(MsgManager.get("cmdnotfound").replace("{COMMAND}", "/" + label + " " + subCommand));
             }
         }
         

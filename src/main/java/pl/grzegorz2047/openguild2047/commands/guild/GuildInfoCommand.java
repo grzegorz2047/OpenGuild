@@ -51,8 +51,8 @@ public class GuildInfoCommand extends CommandHandler {
     public void executeCommand(CommandSender sender, String[] args) {
         GuildHelper guildHelper = getPlugin().getGuildHelper();
         
-        if(args.length == 3) {
-            String guildToCheck = args[2];
+        if(args.length == 2) {
+            String guildToCheck = args[1];
             
             if(!guildHelper.doesGuildExists(guildToCheck)) {
                 sender.sendMessage(MsgManager.guilddoesntexists);

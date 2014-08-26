@@ -31,7 +31,7 @@ askforaccept: '&9Guild leader asks for an acceptation. To accept write /g accept
 invitedplayersuccessfullyjoined: '&aPlayer successfully joined to your guild!'
 guildinviteaccepted: '&aYour request to join the guild was successfully accepted!'
 playernotoninvitedlist: '&cThis player is not on the invite list!'
-guilddoesntexists: '&cGuild you are trying to join does not exist!'
+guilddoesntexists: '&cGuild with that tag does not exist!'
 leadernotonline: '&cThe leader is not currently online!'
 notyetaccepted: '&cYour request has not been approved yet'
 desctoolong: '&cYour guild description is too long'

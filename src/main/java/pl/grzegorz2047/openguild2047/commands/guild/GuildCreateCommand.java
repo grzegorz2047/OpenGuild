@@ -97,6 +97,7 @@ public class GuildCreateCommand extends CommandHandler {
         }
 
         SimpleGuild guild = new SimpleGuild(tag);
+        guild.addMember(player.getUniqueId());
         guild.setHome(player.getLocation());
         guildHelper.getGuilds().put(tag, guild);
         guildHelper.getPlayers().put(player.getUniqueId(), guild);

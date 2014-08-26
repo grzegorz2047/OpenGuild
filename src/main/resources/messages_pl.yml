@@ -30,7 +30,7 @@ askforaccept: '&9Lider gildii prosi o dolaczenie do gildii. Aby zaakceptowac wpi
 invitedplayersuccessfullyjoined: '&aPomyslnie dolaczyles do gildii!!'
 guildinviteaccepted: '&aTwoja prosba o dolaczenie zostala pomyslnie rozpatrzona!'
 playernotoninvitedlist: '&cTen gracz nie jest na liscie zaproszonych!'
-guilddoesntexists: '&cGildia do ktorej probujesz dolaczyc nie istnieje!'
+guilddoesntexists: '&cGildia o takim tagu nie istnieje!'
 leadernotonline: '&cLider aktualnie nie jest na serwerze!'
 notyetaccepted: '&cTwoja prosba nie zostala jeszcze zaakceptowana'
 desctoolong: '&cOpis gildii jest za dlugi'

@@ -49,7 +49,7 @@ public class GuildItemsCommand extends CommandHandler {
 
     @Override
     public void executeCommand(CommandSender sender, String[] args) {
-        if(GenConf.reqitems == null || !GenConf.reqitems.isEmpty()) {
+        if(GenConf.reqitems == null || GenConf.reqitems.isEmpty()) {
             sender.sendMessage(MsgManager.get("reqitemsoff"));
             return;
         }
@@ -100,7 +100,9 @@ public class GuildItemsCommand extends CommandHandler {
                 
                 itemsGUI.addItem(cloned, new ItemGUI.ItemGUIClickEventHandler() {
                     @Override
-                    public void handle(ItemGUI.ItemGUIClickEvent event) { }
+                    public void handle(ItemGUI.ItemGUIClickEvent event) {
+                        event.getPlayer().closeInventory();
+                    }
                 });
             }
             player.openInventory(itemsGUI.getInventory());

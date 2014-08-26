@@ -25,8 +25,8 @@
 package pl.grzegorz2047.openguild2047.commands;
 
 import java.util.UUID;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,12 +34,13 @@ import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
 /**
- *
- * @author Aleksander
+ * This command is used to send message to members of guild.
+ * 
+ * Usage: /team [message]
  */
 public class TeamCommand implements CommandExecutor {
     
@@ -51,57 +52,35 @@ public class TeamCommand implements CommandExecutor {
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(command.getName().equalsIgnoreCase("team")) {
-            if(!(sender instanceof Player)) {
-                sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
-                return true;
-            }
-            if(args.length <= 0) {
-                sender.sendMessage(MsgManager.get("cmdsyntaxerr"));
-                sender.sendMessage(ChatColor.RED + "/team <message...>");
-                return true;
-            } else {
-                String message;
-                StringBuilder builder = new StringBuilder();
-                for(String arg : args) {
-                    builder.append(arg);
-                    builder.append(" ");
-                }
-                message = builder.toString();
-                sendMessage((Player) sender, message);
-                return true;
+        if(!(sender instanceof Player)) {
+            sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
+            return true;
+        }
+        
+        if(args.length == 0) {
+            sender.sendMessage(MsgManager.get("cmdsyntaxerr"));
+            return true;
+        }
+        
+        GuildHelper guildHelper = plugin.getGuildHelper();
+        
+        Player player = (Player) sender;
+        if(!guildHelper.hasGuild(player)) {
+            player.sendMessage(MsgManager.notinguild);
+            return true;
+        }
+        
+        String message = GenUtil.argsToString(args, 0, args.length);
+        
+        SimpleGuild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+        for(UUID uuid : guild.getMembers()) {
+            OfflinePlayer op = plugin.getServer().getOfflinePlayer(uuid);
+            if(op.isOnline()) {
+                op.getPlayer().sendMessage(ChatColor.GRAY + "[Guild] " + ChatColor.BLUE + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + message);
             }
         }
-        return false;
-    }
-    
-    private void sendMessage(Player author, String message) {
-        GuildHelper helper = this.plugin.getGuildHelper();
-        if(!helper.hasGuild(author)) {
-            author.sendMessage(MsgManager.get("notinguild"));
-        } else {
-            SimpleGuild guild = this.plugin.getGuildHelper().getPlayerGuild(author.getUniqueId());
-            String name = author.getName();
-            if(author.getDisplayName() != null)
-                name = author.getDisplayName();
-
-            for(UUID member : guild.getMembers()) {
-                Player pMember = Bukkit.getPlayer(member);
-                if(pMember != null)
-                    pMember.sendMessage(ChatColor.GRAY + "[Guild] " + ChatColor.BLUE + name + ChatColor.GRAY + ": " + ChatColor.WHITE + message);
-            }
-            /* NEW EVENT CODE
-            GuildsChatMessageEvent event = new GuildsChatMessageEvent(OpenGuild.getUser(author), OpenGuild.getGuild(author), message);
-            Bukkit.getPluginManager().callEvent(event);
-            if(!event.isCancelled()) {
-                for(UUID member : event.getGuild().getMembers()) {
-                    Player pMember = Bukkit.getPlayer(member);
-                    if(pMember != null) {
-                        pMember.sendMessage(event.getFormat());
-                    }
-                }
-            }*/
-        }
+        
+        return true;
     }
     
 }

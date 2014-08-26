@@ -24,9 +24,13 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.commands.CommandHandler;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  * Command used to reload guilds.
@@ -41,7 +45,24 @@ public class GuildReloadCommand extends CommandHandler {
 
     @Override
     public void executeCommand(CommandSender sender, String[] args) {
-        /** @TODO */
+        if(!sender.hasPermission("openguild.admin.reload") || !sender.isOp()) {
+            sender.sendMessage(MsgManager.get("permission"));
+            return;
+        }
+        
+        try {
+            this.getPlugin().getConfig().load(this.getPlugin().getConfig().getCurrentPath());
+            sender.sendMessage(MsgManager.get("configreloaded"));
+        } catch (FileNotFoundException ex) {
+            this.getPlugin().getOGLogger().exceptionThrown(ex);
+            sender.sendMessage(MsgManager.get("cmderror"));
+        } catch (IOException ex) {
+            this.getPlugin().getOGLogger().exceptionThrown(ex);
+            sender.sendMessage(MsgManager.get("cmderror"));
+        } catch (InvalidConfigurationException ex) {
+            this.getPlugin().getOGLogger().exceptionThrown(ex);
+            sender.sendMessage(MsgManager.get("cmderror"));
+        }
     }
 
     @Override
