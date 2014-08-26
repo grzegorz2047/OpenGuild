@@ -28,14 +28,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.api.Guild;
 
 public class SQLHandler {
     
@@ -90,7 +91,7 @@ public class SQLHandler {
     }
     
     private void startWork() {
-        // Create table is they doesn't exists
+        // Create tables is they doesn't exists
         this.createTables();
         
         // Load guilds and players from database
@@ -153,22 +154,52 @@ public class SQLHandler {
                     plugin.getOGLogger().warning("World '" + homeWorld + "' does not exists! Skipping guild '" + tag + "'!");
                     continue;
                 }
-                
+
                 int homeX = result.getInt("home_x");
                 int homeY = result.getInt("home_y");
                 int homeZ = result.getInt("home_z");
+                Location home = new Location(plugin.getServer().getWorld(homeWorld), homeX, homeY, homeZ);
+
                 int cuboidRadius = result.getInt("cuboid_radius");
-                
+
+                SimpleCuboid cuboid = new SimpleCuboid();
+                cuboid.setOwner(tag);
+                cuboid.setCenter(home);
+                cuboid.setRadius(cuboidRadius);
+
+                plugin.getGuildHelper().getCuboids().put(tag, cuboid);
+
                 SimpleGuild guild = new SimpleGuild(plugin);
+                guild.setCuboid(cuboid);
                 guild.setTag(tag);
                 guild.setDescription(description);
-                guild.setHome(new Location(plugin.getServer().getWorld(homeWorld), homeX, homeY, homeZ));
+                guild.setHome(home);
                 guild.setLeader(leaderUUID);
-                
+                guild.setAlliancesString(alliances);
+                guild.setEnemiesString(enemies);
+
                 guilds.put(tag, guild);
             }
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
+        }
+
+        for(SimpleGuild g : plugin.getGuildHelper().getGuilds().values()) {
+            List<Guild> a = new ArrayList<Guild>();
+            List<Guild> e = new ArrayList<Guild>();
+
+            for(SimpleGuild g2 : plugin.getGuildHelper().getGuilds().values()) {
+                if (g.getAlliancesString().contains(g.getTag())) {
+                    a.add(g2);
+                }
+
+                if (g.getEnemiesString().contains(g.getTag())) {
+                    e.add(g2);
+                }
+            }
+
+            g.setAlliances(a);
+            g.setEnemies(e);
         }
         
         return guilds;
@@ -322,4 +353,5 @@ public class SQLHandler {
         }
     }
 }
+
 

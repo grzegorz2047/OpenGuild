@@ -26,11 +26,13 @@ package pl.grzegorz2047.openguild2047.cuboidmanagement;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleCuboid;
+import pl.grzegorz2047.openguild2047.*;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  *
@@ -46,87 +48,85 @@ public class CuboidStuff {
     public static HashMap<String, String> playersenteredcuboid = new HashMap<String, String>();
     
     public static boolean canMove(Player player, Location from, Location to) {
-        // TODO
-        
-        //To tylko jest proba, moze sie uda xd
-        //Iterator<Map.Entry<String, SimpleCuboid>> it = GuildHelper.getInstance().cuboids.entrySet().iterator();
-//        if(plugin.getGuildHelper().hasGuild(player.getUniqueId())) {
-//            String tag = GuildHelper.getInstance().getPlayersGuild(player.getUniqueId()).getTag();
-//            if(GuildHelper.getInstance().cuboids.get(tag).isinCuboid(to)) {
-//                return true;
-//            } else {
-//                return !CuboidStuff.checkIfInAnyCuboid(it, to);
-//            }
-//        } else {
-//            return !CuboidStuff.checkIfInAnyCuboid(it, to);
-//        }
-        
-        return true;
+        Iterator<Map.Entry<String, SimpleCuboid>> it = plugin.getGuildHelper().getCuboids().entrySet().iterator();
+        if(plugin.getGuildHelper().hasGuild(player.getUniqueId())) {
+            String tag = plugin.getGuildHelper().getPlayerGuild(player.getUniqueId()).getTag();
+            if(plugin.getGuildHelper().getCuboids().get(tag).isinCuboid(to)) {
+                return true;
+            } else {
+                return !CuboidStuff.checkIfInAnyCuboid(it, to);
+            }
+        } else {
+            return !CuboidStuff.checkIfInAnyCuboid(it, to);
+        }
     }
     public static void notifyGuildWhenPlMoves(Player player){
-//        Iterator<Map.Entry<String, SimpleCuboid>> it = GuildHelper.getInstance().cuboids.entrySet().iterator();
-//        if(GuildHelper.getInstance().isPlayerInGuild(player.getUniqueId())) {
-//            String tag = GuildHelper.getInstance().getPlayersGuild(player.getUniqueId()).getTag();
-//            String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
-//            if(checked != null) {
-//                
-//                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())){
-//                    String tagsaved = CuboidStuff.playersenteredcuboid.get(player.getName());
-//                    if(tagsaved.equals(checked)) {
-//                        return;
-//                    }
-//                } else {
-//                    CuboidStuff.playersenteredcuboid.put(player.getName(), checked);
-//                }
-//                SimpleGuild sg = GuildHelper.getInstance().guilds.get(checked);
-//                for(UUID memeber :sg.getMembers()){
-//                    Player p = Bukkit.getPlayer(memeber);
-//                    if(p != null) {
-//                        if(GenConf.cubNotifyMem) {
-//                            p.sendMessage(MsgManager.get("entercubmems")
-//                                    .replace("{PLAYER}", player.getName())
-//                                    .replace("{GUILD}", tag));
-//                        }
-//                        if(GenConf.cubNotifySound) {
-//                            p.playSound(p.getLocation(), GenConf.cubNotifySoundType, 10, 5);
-//                        }
-//                    }
-//                }
-//                player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", checked));
-//            } else {
-//                CuboidStuff.playersenteredcuboid.remove(player.getName());
-//            }
-//        } else {
-//            String tag = "";
-//            String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
-//            if(checked != null) {
-//                SimpleGuild sg = GuildHelper.getInstance().guilds.get(checked);
-//                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
-//                    String tagsaved = CuboidStuff.playersenteredcuboid.get(player.getName());
-//                    if(tagsaved.equals(checked)) {
-//                        return;
-//                    }
-//                } else {
-//                    CuboidStuff.playersenteredcuboid.put(player.getName(), checked);
-//                }
-//                for(UUID memeber : sg.getMembers()) {
-//                    Player p = Bukkit.getPlayer(memeber);
-//                    if(p != null) {
-//                        if(GenConf.cubNotifyMem) {
-//                            p.sendMessage(MsgManager.get("entercubmemsnoguild").replace("{PLAYER}", player.getName()));
-//                        }
-//                        if(GenConf.cubNotifySound) {
-//                            p.playSound(p.getLocation(), GenConf.cubNotifySoundType, 10, 5);
-//                        }
-//                    }
-//                }
-//                player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", checked));
-//            } else {
-//                CuboidStuff.playersenteredcuboid.remove(player.getName());
-//            }
-//        }
+        Iterator<Map.Entry<String, SimpleCuboid>> it = plugin.getGuildHelper().getCuboids().entrySet().iterator();
 
-        
+        if(plugin.getGuildHelper().hasGuild(player)) {
+            String tag = plugin.getGuildHelper().getPlayerGuild(player.getUniqueId()).getTag();
+            String check = checkIfInOtherCuboid(it, player, tag);
+
+            if(check != null) {
+                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
+                    String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
+                    if(tagSaved.equals(check)) {
+                        return;
+                    }
+                } else {
+                    CuboidStuff.playersenteredcuboid.put(player.getName(), check);
+                }
+
+                SimpleGuild guild = plugin.getGuildHelper().getGuilds().get(check);
+
+                for(UUID mem : guild.getMembers()) {
+                    OfflinePlayer op = plugin.getServer().getOfflinePlayer(mem);
+                    if(op.isOnline()) {
+                        if(GenConf.cubNotifyMem) {
+                            op.getPlayer().sendMessage(MsgManager.get("entercubmems").replace("{PLAYER}", player.getName()).replace("{GUILD}", tag));
+                        }
+
+                        if(GenConf.cubNotifySound) {
+                            op.getPlayer().playSound(op.getPlayer().getLocation(), GenConf.cubNotifySoundType, 10f, 5f);
+                        }
+                    }
+                }
+            } else {
+                CuboidStuff.playersenteredcuboid.remove(player.getName());
+            }
+        } else {
+            String tag = "";
+            String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
+
+            if(checked != null) {
+                SimpleGuild guild = plugin.getGuildHelper().getGuilds().get(checked);
+                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
+                    String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
+                    if(tagSaved.equals(checked)) {
+                        return;
+                    }
+                } else {
+                    CuboidStuff.playersenteredcuboid.put(player.getName(), checked);
+                }
+
+                for(UUID mem : guild.getMembers()) {
+                    OfflinePlayer op = plugin.getServer().getOfflinePlayer(mem);
+                    if(op.isOnline()) {
+                        if(GenConf.cubNotifyMem) {
+                            op.getPlayer().sendMessage(MsgManager.get("entercubmemsnoguild").replace("{PLAYER}", player.getName()));
+                        }
+
+                        if(GenConf.cubNotifySound) {
+                            op.getPlayer().playSound(op.getPlayer().getLocation(), GenConf.cubNotifySoundType, 10f, 5f);
+                        }
+                    }
+                }
+
+                player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", checked));
+            } else {
+                CuboidStuff.playersenteredcuboid.remove(player.getName());
+            }
+        }
     }
 
     public static boolean checkIfInAnyCuboid(Iterator<Map.Entry<String, SimpleCuboid>> it, Location to) {

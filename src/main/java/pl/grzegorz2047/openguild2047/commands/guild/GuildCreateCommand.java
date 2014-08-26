@@ -26,10 +26,7 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.GuildHelper;
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import pl.grzegorz2047.openguild2047.*;
 import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
@@ -96,7 +93,16 @@ public class GuildCreateCommand extends CommandHandler {
             }
         }
 
-        SimpleGuild guild = new SimpleGuild(tag);
+        SimpleCuboid cuboid = new SimpleCuboid();
+        cuboid.setOwner(tag);
+        cuboid.setCenter(player.getLocation());
+        cuboid.setRadius(GenConf.MIN_CUBOID_RADIUS);
+
+        guildHelper.getCuboids().put(tag, cuboid);
+
+        SimpleGuild guild = new SimpleGuild(getPlugin());
+        guild.setCuboid(cuboid);
+        guild.setTag(tag);
         guild.setDescription(description);
         guild.addMember(player.getUniqueId());
         guild.setHome(player.getLocation());

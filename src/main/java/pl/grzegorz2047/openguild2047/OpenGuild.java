@@ -234,7 +234,7 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerQuitListener(this), this);
 
         if(GenConf.cubEnabled) {
-            pm.registerEvents(new CuboidListeners(), this);
+            pm.registerEvents(new CuboidListeners(this), this);
         }
         
         if(!GenConf.teampvp) {

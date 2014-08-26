@@ -51,10 +51,15 @@ public class SimpleGuild implements Guild {
 
     private List<UUID> members = new ArrayList<UUID>();
 
+    private String alliancesString = "";
     private List<Guild> alliances = new ArrayList<Guild>();
+
+    private String enemiesString = "";
     private List<Guild> enemies = new ArrayList<Guild>();
 
     private List<UUID> pendingInvitations = new ArrayList<UUID>();
+
+    private SimpleCuboid cuboid;
 
     public SimpleGuild(OpenGuild plugin) {
         this.plugin = plugin;
@@ -105,9 +110,17 @@ public class SimpleGuild implements Guild {
         return members;
     }
 
+    public void setAlliances(List<Guild> alliances) {
+        this.alliances = alliances;
+    }
+
     @Override
     public List<Guild> getAlliances() {
         return alliances;
+    }
+
+    public void setEnemies(List<Guild> enemies) {
+        this.enemies = enemies;
     }
 
     @Override
@@ -161,5 +174,29 @@ public class SimpleGuild implements Guild {
         if(members.contains(member)) {
             members.remove(member);
         }
+    }
+
+    public void setCuboid(SimpleCuboid cuboid) {
+        this.cuboid = cuboid;
+    }
+
+    public SimpleCuboid getCuboid() {
+        return cuboid;
+    }
+
+    public void setAlliancesString(String alliancesString) {
+        this.alliancesString = alliancesString;
+    }
+
+    public String getAlliancesString() {
+        return alliancesString;
+    }
+
+    public void setEnemiesString(String enemiesString) {
+        this.enemiesString = enemiesString;
+    }
+
+    public String getEnemiesString() {
+        return enemiesString;
     }
 }

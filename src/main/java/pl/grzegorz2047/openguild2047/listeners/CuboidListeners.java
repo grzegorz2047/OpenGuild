@@ -26,6 +26,7 @@ package pl.grzegorz2047.openguild2047.listeners;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -40,10 +41,18 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class CuboidListeners implements Listener {
+
+    private OpenGuild plugin;
+
+    public CuboidListeners(OpenGuild plugin) {
+        this.plugin = plugin;
+    }
 
     private static List<Material> breakingItems;
 
@@ -144,20 +153,20 @@ public class CuboidListeners implements Listener {
     }
 
     private boolean isAllowed(Player player, Location location) {
-//        if(CuboidStuff.checkIfInAnyCuboid(GuildHelper.getInstance().cuboids.entrySet().iterator(), location)) {
-//            if(GuildHelper.getInstance().isPlayerInGuild(player.getUniqueId())) {
-//                String tag = GuildHelper.getInstance().getPlayersGuild(player.getUniqueId()).getTag();
-//                if(GuildHelper.getInstance().cuboids.get(tag).isinCuboid(location)) {
-//                    return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
-//                }
-//                else if(player.hasPermission("openguild.cuboid.bypassplace")) {
-//                    player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
-//                    return false;
-//                }
-//            } else {
-//                return false;
-//            }
-//        }
+        if(CuboidStuff.checkIfInAnyCuboid(plugin.getGuildHelper().getCuboids().entrySet().iterator(), location)) {
+            if(plugin.getGuildHelper().hasGuild(player.getUniqueId())) {
+                String tag = plugin.getGuildHelper().getPlayerGuild(player.getUniqueId()).getTag();
+                if(plugin.getGuildHelper().getCuboids().get(tag).isinCuboid(location)) {
+                    return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
+                }
+                else if(player.hasPermission("openguild.cuboid.bypassplace")) {
+                    player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
         return true;
     }
 

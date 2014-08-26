@@ -32,6 +32,8 @@ import pl.grzegorz2047.openguild2047.SimpleGuild;
 public class GuildHelper {
     private Map<String, SimpleGuild> guilds = new HashMap<String, SimpleGuild>();
     private Map<UUID, SimpleGuild> players = new HashMap<UUID, SimpleGuild>();
+
+    private Map<String, SimpleCuboid> cuboids = new HashMap<String, SimpleCuboid>();
     
     /**
      * @param uuid uuid of player, who guild should be returned
@@ -90,5 +92,12 @@ public class GuildHelper {
     public Map<UUID, SimpleGuild> getPlayers() {
         return players;
     }
-    
+
+    public Map<String, SimpleCuboid> getCuboids() {
+        return cuboids;
+    }
+
+    public void setCuboids(Map<String, SimpleCuboid> cuboids) {
+        this.cuboids = cuboids;
+    }
 }
