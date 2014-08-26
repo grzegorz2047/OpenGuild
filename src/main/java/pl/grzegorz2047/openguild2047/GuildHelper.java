@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.SimpleGuild;
 
 public class GuildHelper {
     private Map<String, SimpleGuild> guilds = new HashMap<String, SimpleGuild>();

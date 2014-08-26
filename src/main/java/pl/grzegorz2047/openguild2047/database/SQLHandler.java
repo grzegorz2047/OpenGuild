@@ -159,7 +159,8 @@ public class SQLHandler {
                 int homeZ = result.getInt("home_z");
                 int cuboidRadius = result.getInt("cuboid_radius");
                 
-                SimpleGuild guild = new SimpleGuild(tag);
+                SimpleGuild guild = new SimpleGuild(plugin);
+                guild.setTag(tag);
                 guild.setDescription(description);
                 guild.setHome(new Location(plugin.getServer().getWorld(homeWorld), homeX, homeY, homeZ));
                 guild.setLeader(leaderUUID);

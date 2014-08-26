@@ -24,9 +24,17 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.GuildHelper;
 import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.api.Guild;
 import pl.grzegorz2047.openguild2047.commands.CommandHandler;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Command used to accept invitation to guild.
@@ -41,7 +49,39 @@ public class GuildInvitationAcceptCommand extends CommandHandler {
 
     @Override
     public void executeCommand(CommandSender sender, String[] args) {
-        // TODO
+        if(!(sender instanceof Player)) {
+            sender.sendMessage(MsgManager.cmdonlyforplayer);
+            return;
+        }
+
+        List<Guild> invitationsFrom = new ArrayList<Guild>();
+        GuildHelper guildHelper = getPlugin().getGuildHelper();
+        for (Guild guild : guildHelper.getGuilds().values()) {
+            if (guild.getPendingInvitations().contains(((Player) sender).getUniqueId())) {
+                invitationsFrom.add(guild);
+            }
+        }
+
+        if(args.length == 1) {
+            if (invitationsFrom.size() > 1) {
+                // TODO: move to language file
+                sender.sendMessage("You have more than 1 invitation!");
+                sender.sendMessage("Type /guild accept <tag> to accept invitation.");
+                sender.sendMessage("-------------------");
+
+                for (Guild guild : invitationsFrom) {
+                    sender.sendMessage(ChatColor.BOLD + guild.getTag().toUpperCase() + ChatColor.GRAY + " - " + guild.getDescription());
+                }
+            }
+        } else if(args.length >= 2) {
+            String tag = args[1];
+            if(guildHelper.getGuilds().containsKey(tag)) {
+                if(invitationsFrom.contains(guildHelper.getGuilds().get(tag))) {
+                    guildHelper.getGuilds().get(tag).acceptInvitation((Player) sender);
+                    getPlugin().getTagManager().setTag(((Player) sender).getUniqueId());
+                }
+            }
+        }
     }
 
     @Override

@@ -31,97 +31,33 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import pl.grzegorz2047.openguild2047.api.Guild;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class SimpleGuild implements Guild {
 
+    private OpenGuild plugin;
+
     private String tag;
     private String description;
+
     private Location home;
+
     private UUID leader;
-    private List<UUID> members;
-    private List<UUID> invitedplayers;
-    private List<String> allyguilds;
-    private List<String> enemyguilds;
 
-    private Map<Player, Player> pendingInvitations = new HashMap<Player, Player>();
-    
-    public SimpleGuild(String tag) {
-        this.members = new ArrayList<UUID>();
-        this.invitedplayers = new ArrayList<UUID>();
-        this.allyguilds = new ArrayList<String>();
-        this.enemyguilds = new ArrayList<String>();
-        this.tag = tag;
-    }
-    
-    public void invitePlayer(Player toInvite, Player whoInvited) {
-        if(!pendingInvitations.containsValue(toInvite)) {
-            pendingInvitations.put(whoInvited, toInvite);
-            
-            /** @TODO Complete. */
-        }
-    }
+    private List<UUID> members = new ArrayList<UUID>();
 
-    @Override
-    public String getDescription() {
-        return this.description;
-    }
+    private List<Guild> alliances = new ArrayList<Guild>();
+    private List<Guild> enemies = new ArrayList<Guild>();
 
-    @Override
-    public Location getHome() {
-        return this.home;
-    }
+    private List<UUID> pendingInvitations = new ArrayList<UUID>();
 
-    @Override
-    public List<UUID> getInvitedPlayers() {
-        return this.invitedplayers;
-    }
-
-    @Override
-    public UUID getLeader() {
-        return this.leader;
-    }
-
-    @Override
-    public List<UUID> getMembers() {
-        return this.members;
-    }
-
-    @Override
-    public String getTag() {
-        return this.tag;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public void setHome(Location home) {
-        this.home = home;
-    }
-
-    @Override
-    public void setInvitedPlayers(List<UUID> invitedPlayers) {
-        this.invitedplayers = invitedPlayers;
-    }
-
-    @Override
-    public void setLeader(UUID leader) {
-        this.leader = Bukkit.getOfflinePlayer(leader).getUniqueId();
-    }
-
-    @Override
-    public void addMember(UUID member) {
-        if(!this.members.contains(member)) {
-            this.members.add(member);
-        }
-    }
-
-    @Override
-    public void removeMember(UUID member) {
-        this.members.remove(member);
+    public SimpleGuild(OpenGuild plugin) {
+        this.plugin = plugin;
     }
 
     @Override
@@ -130,23 +66,100 @@ public class SimpleGuild implements Guild {
     }
 
     @Override
-    public boolean containsMember(UUID member) {
-        return this.members.contains(member);
+    public String getTag() {
+        return tag;
     }
 
     @Override
-    public List<String> getAllyGuilds() {
-        return this.allyguilds;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
-    public List<String> getEnemyGuilds() {
-        return this.enemyguilds;
+    public String getDescription() {
+        return description;
     }
 
     @Override
-    public void setMembers(List<UUID> members) {
-        this.members = members;
+    public void setHome(Location home) {
+        this.home = home;
     }
 
+    @Override
+    public Location getHome() {
+        return home;
+    }
+
+    @Override
+    public void setLeader(UUID leader) {
+        this.leader = leader;
+    }
+
+    @Override
+    public UUID getLeader() {
+        return leader;
+    }
+
+    @Override
+    public List<UUID> getMembers() {
+        return members;
+    }
+
+    @Override
+    public List<Guild> getAlliances() {
+        return alliances;
+    }
+
+    @Override
+    public List<Guild> getEnemies() {
+        return enemies;
+    }
+
+    @Override
+    public List<UUID> getPendingInvitations() {
+        return pendingInvitations;
+    }
+
+    public void acceptInvitation(Player player) {
+        if(pendingInvitations.contains(player.getUniqueId())) {
+            pendingInvitations.remove(player.getUniqueId());
+
+            this.plugin.getGuildHelper().getPlayers().put(player.getUniqueId(), this);
+            this.plugin.getSQLHandler().updatePlayer(player.getUniqueId());
+            this.members.add(player.getUniqueId());
+        }
+    }
+
+    public void invitePlayer(final Player player, Player who) {
+        final UUID uuid = player.getUniqueId();
+
+        if(!pendingInvitations.contains(uuid)) {
+            pendingInvitations.add(uuid);
+
+            player.sendMessage(MsgManager.get("guild-invitation").replace("{WHO}", who.getName()).replace("{TAG}", getTag().toUpperCase()));
+
+            new BukkitRunnable() {
+                public void run() {
+                    if(pendingInvitations.contains(uuid)) {
+                        pendingInvitations.remove(uuid);
+                        player.sendMessage(MsgManager.get("guild-invitation-expired"));
+                    }
+                }
+            }.runTaskLater(this.plugin, 0L * 20);
+        }
+    }
+
+    @Override
+    public void addMember(UUID member) {
+        if(!members.contains(member)) {
+            members.add(member);
+        }
+    }
+
+    @Override
+    public void removeMember(UUID member) {
+        if(members.contains(member)) {
+            members.remove(member);
+        }
+    }
 }

@@ -28,6 +28,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public interface Guild {
 
@@ -35,34 +36,32 @@ public interface Guild {
 
     @Nonnull Location getHome();
 
-    @Nullable List<UUID> getInvitedPlayers();
-
     @Nonnull UUID getLeader();
 
     @Nullable List<UUID> getMembers();
 
     @Nonnull String getTag();
 
-    @Nonnull List<String> getAllyGuilds();
+    @Nonnull List<Guild> getAlliances();
 
-    @Nonnull List<String> getEnemyGuilds();
+    @Nonnull List<Guild> getEnemies();
 
     void setDescription(@Nonnull String description);
 
     void setHome(@Nonnull Location home);
 
-    void setInvitedPlayers(@Nullable List<UUID> invitedPlayers);
-
     void setLeader(@Nonnull UUID leader);
 
     void addMember(@Nonnull UUID member);
 
-    void setMembers(@Nonnull List<UUID> members);
-
-    boolean containsMember(@Nonnull UUID member);
-
     void removeMember(@Nonnull UUID member);
 
     void setTag(@Nonnull String tag);
+
+    void acceptInvitation(Player player);
+
+    void invitePlayer(Player player, Player who);
+
+    List<UUID> getPendingInvitations();
 
 }
