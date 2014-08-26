@@ -97,8 +97,10 @@ public class GuildCreateCommand extends CommandHandler {
         }
 
         SimpleGuild guild = new SimpleGuild(tag);
+        guild.setDescription(description);
         guild.addMember(player.getUniqueId());
         guild.setHome(player.getLocation());
+        guild.setLeader(player.getUniqueId());
         guildHelper.getGuilds().put(tag, guild);
         guildHelper.getPlayers().put(player.getUniqueId(), guild);
         
@@ -110,11 +112,12 @@ public class GuildCreateCommand extends CommandHandler {
         
         /**
          @TODO:
-         - add guild to database
          - cuboids
          - call GuildCreateEvent and MessageBroadcastEvent
         */
-        
+        getPlugin().getSQLHandler().addGuild(guild);
+        getPlugin().getSQLHandler().updatePlayer(player.getUniqueId());
+
         this.getPlugin().broadcastMessage(MsgManager.get("broadcast-create").replace("{TAG}", tag.toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
     }
 

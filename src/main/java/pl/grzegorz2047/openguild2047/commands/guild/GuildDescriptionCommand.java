@@ -64,14 +64,15 @@ public class GuildDescriptionCommand extends CommandHandler {
         }
         
         SimpleGuild guild = guildHelper.getPlayerGuild(player.getUniqueId());
-        if(!guild.getLeader().equals(player.getUniqueId())) {
-            player.sendMessage(MsgManager.get("playernotleader"));
-            return;
-        }
         
-        if(args.length > 3) {
-            String subCommand = args[2];
+        if(args.length > 2) {
+            String subCommand = args[1];
             if(subCommand.equalsIgnoreCase("set") || subCommand.equalsIgnoreCase("ustaw")) {
+                if(!guild.getLeader().equals(player.getUniqueId())) {
+                    player.sendMessage(MsgManager.get("playernotleader"));
+                    return;
+                }
+
                 String newDescription = GenUtil.argsToString(args, 2, args.length);
                 if(newDescription.length() > 32) {
                     player.sendMessage(MsgManager.get("desctoolong"));
@@ -79,7 +80,8 @@ public class GuildDescriptionCommand extends CommandHandler {
                 }
                 
                 guild.setDescription(newDescription);
-                
+                getPlugin().getSQLHandler().updateGuildDescription(guild);
+
                 for(UUID uuid : guild.getMembers()) {
                     OfflinePlayer offlineMember = Bukkit.getOfflinePlayer(uuid);
                     if(offlineMember.isOnline()) {

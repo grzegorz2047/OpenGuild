@@ -64,7 +64,9 @@ public class GuildDisbandCommand extends CommandHandler {
             player.sendMessage(MsgManager.get("playernotleader"));
             return;
         }
-        
+
+        getPlugin().getSQLHandler().removeGuild(guild.getTag().toUpperCase());
+
         for(UUID uuid : guild.getMembers()) {
             this.getPlugin().getTagManager().removeTag(uuid);
             guildHelper.getPlayers().remove(uuid);

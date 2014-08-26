@@ -85,6 +85,8 @@ public class GuildKickCommand extends CommandHandler {
                 opp.getPlayer().sendMessage(MsgManager.get("broadcast-kick").replace("{PLAYER}", player.getDisplayName()).replace("{MEMBER}", op.getName()).replace("{TAG}", guild.getTag().toUpperCase()));
             }
         }
+
+        getPlugin().getSQLHandler().updatePlayer(op.getUniqueId());
         
         player.sendMessage(MsgManager.playerkicksuccess);
     }

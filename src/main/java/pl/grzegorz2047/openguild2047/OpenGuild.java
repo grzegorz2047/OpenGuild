@@ -25,11 +25,9 @@
 package pl.grzegorz2047.openguild2047;
 
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
-import com.github.grzegorz2047.openguild.command.CommandDescription;
-import com.github.grzegorz2047.openguild.command.CommandInfo;
+
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -45,12 +43,7 @@ import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
-import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
-import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntity;
-import pl.grzegorz2047.openguild2047.listeners.Monitors;
-import pl.grzegorz2047.openguild2047.listeners.PlayerChat;
-import pl.grzegorz2047.openguild2047.listeners.PlayerMove;
-import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.listeners.*;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
@@ -67,6 +60,8 @@ public class OpenGuild extends JavaPlugin {
     private GuildHelper guildHelper;
     
     private TagManager tagManager;
+    
+    private SQLHandler sqlHandler;
 
     @Override
     public void onEnable() {
@@ -146,12 +141,7 @@ public class OpenGuild extends JavaPlugin {
     @Override
     public void onDisable() {
         instance = null;
-        
-        try {
-            SQLHandler.getConnection().close();
-        } catch(SQLException ex) {
-            getOGLogger().exceptionThrown(ex);
-        }
+        this.sqlHandler.closeConnection();
         
         int deletedFiles = 0;
         
@@ -216,8 +206,6 @@ public class OpenGuild extends JavaPlugin {
         getCommand("team").setExecutor(new TeamCommand(this));
         getCommand("guild").setExecutor(new GuildCommand(this));
         
-        CommandDescription cmdDesc = new CommandDescription();
-        
         OpenCommandManager.registerPluginCommands(this);
     }
 
@@ -232,18 +220,7 @@ public class OpenGuild extends JavaPlugin {
         String pass = getConfig().getString("mysql.password");
         String name = getConfig().getString("mysql.database");
         
-        switch(GenConf.DATABASE) {
-            case FILE:
-                new SQLHandler(this, host, port, name, user, pass).createFirstConnectionSQLite();
-                break;
-            case MYSQL:
-                new SQLHandler(this, host, port, name, user, pass).createFirstConnection();
-                break;
-            default:
-                Guilds.getLogger().severe("Could not load database type! Please fix it in your config.yml file!");
-                getServer().getPluginManager().disablePlugin(this);
-                break;
-        }
+        this.sqlHandler = new SQLHandler(this, host, port, name, user, pass);
     }
 
     /**
@@ -251,19 +228,21 @@ public class OpenGuild extends JavaPlugin {
      */
     private void loadAllListeners() {
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new PlayerChat(this), this);
-        pm.registerEvents(new Monitors(this), this);
-        
+
+        pm.registerEvents(new PlayerJoinListener(this), this);
+        pm.registerEvents(new PlayerChatListener(this), this);
+        pm.registerEvents(new PlayerQuitListener(this), this);
+
         if(GenConf.cubEnabled) {
             pm.registerEvents(new CuboidListeners(), this);
         }
         
         if(!GenConf.teampvp) {
-            pm.registerEvents(new EntityDamageByEntity(this), this);
+            pm.registerEvents(new EntityDamageByEntityListener(this), this);
         }
         
         if(GenConf.playerMoveEvent) {
-            pm.registerEvents(new PlayerMove(), this);
+            pm.registerEvents(new PlayerMoveListener(this), this);
         }
     }
 
@@ -272,9 +251,11 @@ public class OpenGuild extends JavaPlugin {
      * them to their guild's member list.
      */
     private void loadPlayers() {
-        for(SimpleGuild guild : this.guildHelper.getGuilds().values()) { // Pobieranie gildii
-            for(UUID member : SQLHandler.getGuildMembers(guild.getTag())) { // Pobieranie graczy w gildii
-                guild.addMember(member); // Dodawanie gracza do listy
+        for(SimpleGuild guild : this.guildHelper.getGuilds().values()) {
+            for(UUID player : this.guildHelper.getPlayers().keySet()) {
+                if(this.guildHelper.getPlayers().get(player) != null && this.guildHelper.getPlayers().get(player).equals(guild)) {
+                    guild.addMember(player);
+                }
             }
         }
     }
@@ -371,6 +352,13 @@ public class OpenGuild extends JavaPlugin {
      */
     public TagManager getTagManager() {
         return tagManager;
+    }
+
+    /**
+     * @return instance of SQLHandler class.
+     */
+    public SQLHandler getSQLHandler() {
+        return sqlHandler;
     }
     
 }

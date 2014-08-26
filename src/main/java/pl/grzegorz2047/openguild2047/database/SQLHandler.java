@@ -28,503 +28,297 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import pl.grzegorz2047.openguild2047.GuildHelper;
+import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.SimplePlayerGuild;
-import pl.grzegorz2047.openguild2047.api.Guild;
-import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.api.Logger;
 
-/**
- *
- * @author Grzegorz
- */
 public class SQLHandler {
     
-    private static OpenGuild plugin;
+    private OpenGuild plugin;
     
-    private static Connection con = null;
-    private static Statement stat;
-    private static String driver = "com.mysql.jdbc.Driver";
-    private static String tableGuilds = "openguild_guilds";
-    private static String tablePlayers = "openguild_players";
-    private static Logger log = Guilds.getLogger();
-
-    private String address;
-    private String database;
-    private String login;
-    private String password;
+    private Connection connection;
+    private Statement statement;
     
-    private static final String DRIVERSQLite = "org.sqlite.JDBC";
-    private static final String DB_URLQLite = "jdbc:sqlite:" + GenConf.FILE_DIR;
-
-    public SQLHandler(OpenGuild plugin, String address, int dbPort, String database, String login, String password) {
+    public SQLHandler(OpenGuild plugin, String host, int port, String user, String password, String name) {
         this.plugin = plugin;
-        this.address = address + ":" + dbPort;
-        this.database = database;
+        
         switch(GenConf.DATABASE) {
             case FILE:
-                //Guilds.getLogger().warning("We are so sorry! Files database system doesn't work now! Connecting via MySQL...");
-                //createConnectionSQLite();//Buguje
+                plugin.getOGLogger().info("[SQLite] Connecting to SQLite database ...");
+                try {
+                    Class.forName("org.sqlite.JDBC").newInstance();
+                    this.connection = DriverManager.getConnection("jdbc:sqlite:" + GenConf.FILE_DIR);
+                    if(this.connection != null) {
+                        plugin.getOGLogger().info("[SQLite] Connected to SQLite successfully!");
+                        this.startWork();
+                    }
+                } catch(ClassNotFoundException ex) {
+                    plugin.getOGLogger().info("[SQLite] Connecting with SQLite failed! We were unable to load driver 'org.sqlite.JDBC'.");
+                } catch(SQLException ex) {
+                    plugin.getOGLogger().exceptionThrown(ex);
+                } catch(InstantiationException ex) {
+                    plugin.getOGLogger().exceptionThrown(ex);
+                } catch(IllegalAccessException ex) {
+                    plugin.getOGLogger().info("[SQLite] Connecting with SQLite failed! Permission error: " + ex.getMessage());
+                }
                 break;
             case MYSQL:
-                createConnection(login, password);
+                plugin.getOGLogger().info("[MySQL] Connecting to MySQL database ...");
+                
+                try {
+                    Class.forName("com.mysql.jdbc.Driver");
+                    this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + name + "?autoReconnect=true", user, password);
+                    this.statement = this.connection.createStatement();
+                    
+                    plugin.getOGLogger().info("[MySQL] Connected to MySQL successfully!");
+                    this.startWork();
+                } catch(SQLException ex) {
+                    plugin.getOGLogger().exceptionThrown(ex);
+                } catch(ClassNotFoundException ex) {
+                    plugin.getOGLogger().info("[MySQL] Connecting with MySQL failed! We were unable to load driver 'com.mysql.jdbc.Driver'.");
+                }
                 break;
             default:
-                Guilds.getLogger().severe("Could not load database type! Please fix it in your config.yml file!");
-                Bukkit.getServer().getPluginManager().disablePlugin(OpenGuild.getInstance());
+                plugin.getOGLogger().severe("[MySQL] Invalid database type '" + GenConf.DATABASE.name() + "'!");
                 break;
         }
     }
-
-    public enum Type {
-        TAG,
-        DESCRIPTION,
-        LEADER,
-        SOJUSZE,
-        HOME_X,
-        HOME_Y,
-        HOME_Z,
-        CUBOID_RADIUS
-    }
-
-    public enum PType {
-        GUILD,
-        KILLS,
-        DEADS,
-        ISLEADER,
-        UUID,
-        BAN_TIME
-    }
-
-    void loadDatabase() {
-        //Data.getInstance().guildsplayers = null;
-        //Data.getInstance().guilds = null;
-        //Data.getInstance().ClansTag = null;
-        //Data.getInstance().cuboids = null;
+    
+    private void startWork() {
+        // Create table is they doesn't exists
+        this.createTables();
         
-        plugin.getGuildHelper().setGuilds(SQLHandler.getAllGuildswithCuboids());
-        plugin.getGuildHelper().setPlayers(SQLHandler.getAllPlayers());
-    }
-    public static Connection getConnection(){
-        return con;
+        // Load guilds and players from database
+        plugin.getGuildHelper().setGuilds(this.loadGuilds());
+        plugin.getGuildHelper().setPlayers(this.loadPlayers());
+        
+        plugin.getOGLogger().info("Loaded " + plugin.getGuildHelper().getGuilds().size() + " from database.");
     }
     
-    void checkIfConnIsClosed() {
+    private void createTables() {
+        plugin.getOGLogger().info("[DB] Creating tables if not exists ...");
+        
         try {
-            if(con == null || con.isClosed())
-                createConnection(login, password);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private static void log(String query) {
-        if(GenConf.SQL_DEBUG) {
-            Guilds.getLogger().log(Level.INFO, "[Server -> Database] " + query);
-        }
-    }
-
-    public void createFirstConnection() {
-        log.info("[MySQL] Connecting to MySQL database...");
-        try {
-            Class.forName(driver).newInstance();
-            con = DriverManager.getConnection("jdbc:mysql://" + address + "/" + database, login, password);
-            if(con != null) {
-                log.info("[MySQL] Connected with MySQL!");
-                createTables();
-            }
-        } catch(ClassNotFoundException ex) {
-            Guilds.getLogger().severe("[MySQL] Could not connect to MySQL: Could not load driver " + driver + " to MySQL database!");
-        } catch(InstantiationException ex) {
-            ex.printStackTrace();
-        } catch(IllegalAccessException ex) {
-            log.info("[MySQL] Could not connect to MySQL: Permission error: " + ex.getMessage());
-            ex.printStackTrace();
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        if(con != null) {
-            loadDatabase();
-        } else {
-            log.info("En error occured while connecting to MySQL.");
-        }
-    }
-    public void createFirstConnectionSQLite() {
-        log.info("[SQLite] Connecting to SQLite database...");
-        try {
-            Class.forName(DRIVERSQLite).newInstance();
-            con = DriverManager.getConnection(DB_URLQLite);
-            if(con != null) {
-                log.info("[SQLite] Connected with SQLite.");
-                createTables();
-            }
-        } catch(ClassNotFoundException ex) {
-            Guilds.getLogger().severe("[SQLite] Could not connect to SQLite: Could not load driver " + DRIVERSQLite + " to SQLite database!");
-        } catch(InstantiationException ex) {
-            ex.printStackTrace();
-        } catch(IllegalAccessException ex) {
-            log.info("[SQLite] Could not connect to SQLite: Permission error: " + ex.getMessage());
-            ex.printStackTrace();
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        if(con != null) {
-            loadDatabase();
-        } else {
-            log.info("En error occured while connecting to MySQL.");
-        }
-    }
-
-    public void createConnection(String login, String password) {
-        log.info("[MySQL] Connecting to MySQL database...");
-        try {
-            Class.forName(driver).newInstance();
-            con = DriverManager.getConnection("jdbc:mysql://" + address + "/" + database, login, password);
-            log.info("[MySQL] Connected with MySQL.");
-            createTables();
-        } catch(ClassNotFoundException ex) {
-            Guilds.getLogger().severe("[MySQL] Could not connect to MySQL: Could not load driver " + driver + " to MySQL database!");
-        } catch(InstantiationException ex) {
-            ex.printStackTrace();
-        } catch(IllegalAccessException ex) {
-            log.info("[MySQL] Could not connect to MySQL: Permission error: " + ex.getMessage());
-            ex.printStackTrace();
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-        loadDatabase();
-    }
-    public void createConnectionSQLite() {
-        log.info("[SQLite] Laczenie z baza SQLite...");
-        try {
-            Class.forName(DRIVERSQLite).newInstance();
-            con = DriverManager.getConnection(DB_URLQLite);
-            log.info("[SQLite] Connection success!");
-            createTables();
-        } catch(ClassNotFoundException ex) {
-            Guilds.getLogger().severe("[SQLite] Could not connect to SQLite: Could not load driver " + DRIVERSQLite + " to SQLite database!");
-        } catch(InstantiationException ex) {
-            ex.printStackTrace();
-        } catch(IllegalAccessException ex) {
-            log.info("[SQLite] Could not connect to SQLite: Permission error: " + ex.getMessage());
-            ex.printStackTrace();
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-        loadDatabase();
-    }
-
-    public void createTables() {
-        // Tabela z gildiami
-        log.info("[Database] Creating table " + tableGuilds + " if not exists...");
-        try {
-            String query = "CREATE TABLE IF NOT EXISTS " + tableGuilds
+            String query = "CREATE TABLE IF NOT EXISTS `openguild_guilds`"
                     + "(id INT AUTO_INCREMENT,"
                     + "tag VARCHAR(11),"
                     + "description VARCHAR(100),"
                     + "leader VARCHAR(37),"
-                    + "sojusze VARCHAR(255),"
+                    + "alliances VARCHAR(255),"
+                    + "enemies VARCHAR(255),"
                     + "home_x INT,"
                     + "home_y INT,"
                     + "home_z INT,"
-                    + "home_w VARCHAR(16),"
+                    + "home_world VARCHAR(16),"
                     + "cuboid_radius INT,"
                     + "PRIMARY KEY(id,tag));";
-            stat = con.createStatement();
-            log(query);
-            stat.execute(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        // Tabela z graczami
-        log.info("[Database] Creating table " + tablePlayers + " if not exists...");
-        try {
-            String query = "CREATE TABLE IF NOT EXISTS " + tablePlayers
+            statement = this.connection.createStatement();
+            statement.execute(query);
+            
+            query = "CREATE TABLE IF NOT EXISTS `openguild_players`"
                     + "(id INT AUTO_INCREMENT,"
                     + "guild VARCHAR(11),"
-                    + "isleader VARCHAR(5),"
                     + "kills INT,"
-                    + "deads INT,"
+                    + "deaths INT,"
                     + "uuid VARCHAR(37)," // UUID gracza z myślnikami ma 35 znaków? Więc dla pewności dam 37
                     + "ban_time BIGINT,"
                     + "PRIMARY KEY(id,uuid));";
-            stat = con.createStatement();
-            log(query);
-            stat.execute(query);
+            statement = this.connection.createStatement();
+            statement.execute(query);
         } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void delete(Guild guild) {
-        try {
-            String query = "DELETE FROM " + tableGuilds + " WHERE tag='" + guild.getTag() + "';";
-            stat = con.createStatement();
-            log(query);
-            stat.execute(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void delete(UUID uuid) {
-        try {
-            String query = "DELETE FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
-            stat = con.createStatement();
-            log(query);
-            stat.execute(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void insert(String tag, String description, UUID leader, String sojusze, int homeX, int homeY, int homeZ, String homeW, int cuboidRadius) {
-        try {
-            String query = "INSERT INTO " + tableGuilds + " VALUES(NULL,"
-                    + "'" + tag + "',"
-                    + "'" + description + "',"
-                    + "'" + leader.toString() + "',"
-                    + "'" + sojusze + "',"
-                    + homeX + ","
-                    + homeY + ","
-                    + homeZ + ","
-                    + "'" + homeW + "',"
-                    + cuboidRadius + ");";
-            stat = con.createStatement();
-            log(query);
-            stat.execute(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void insert(Guild guild, String isLeader, int kills, int deads, UUID uuid) {
-        try {
-            String tag;
-            if (guild == null) {
-                tag = "";
-            } else {
-                tag = guild.getTag();
-            }
-
-            String query = "INSERT INTO " + tablePlayers + " VALUES(NULL,"
-                    + "'" + tag + "',"
-                    + "'" + isLeader + "',"
-                    + kills + ","
-                    + deads + ","
-                    + "'" + uuid.toString() + "',"
-                    + "NULL);";
-            stat = con.createStatement();
-            log(query);
-            stat.execute(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void update(Guild guild, Type type, int value) {
-        try {
-            String query = "UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE tag='" + guild.getTag() + "';";
-            stat = con.createStatement();
-            log(query);
-            stat.executeUpdate(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void update(Guild guild, Type type, String value) {
-        try {
-            String query = "UPDATE " + tableGuilds + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE tag='" + guild.getTag() + "';";
-            stat = con.createStatement();
-            log(query);
-            stat.executeUpdate(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void update(UUID uuid, PType type, int value) {
-        try {
-            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE uuid='" + uuid.toString() + "';";
-            stat = con.createStatement();
-            log(query);
-            stat.executeUpdate(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
+            plugin.getOGLogger().exceptionThrown(ex);
         }
     }
     
-    public static void update(UUID uuid, PType type, long value) {
+    private Map<String, SimpleGuild> loadGuilds() {
+        Map<String, SimpleGuild> guilds = new HashMap<String, SimpleGuild>();
+        
         try {
-            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "=" + value + " WHERE uuid='" + uuid.toString() + "';";
-            stat = con.createStatement();
-            log(query);
-            stat.executeUpdate(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void update(UUID uuid, PType type, String value) {
-        try {
-            String query = "UPDATE " + tablePlayers + " SET " + type.toString().toLowerCase() + "='" + value + "' WHERE uuid='" + uuid.toString() + "';";
-            stat = con.createStatement();
-            log(query);
-            stat.executeUpdate(query);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static HashMap<String, SimpleGuild> getAllGuildswithCuboids() {
-        HashMap hm = new HashMap<String, SimpleGuild>();
-        try {
-            String query = "SELECT * FROM " + tableGuilds;
-            stat = con.createStatement();
-            log(query);
-            ResultSet rs = stat.executeQuery(query);
-            while(rs.next()) {
-                String tag = rs.getString("tag");
-               // GuildHelper.getInstance().ClansTag.add(tag);
-                SimpleGuild g = new SimpleGuild(tag);
-                g.setLeader(UUID.fromString(rs.getString("leader")));
-                g.setDescription(rs.getString("description"));
-                g.setMembers(getGuildMembers(tag));
-                Location loc = new Location(Bukkit.getWorld(rs.getString("home_w")), rs.getInt("home_x"), rs.getInt("home_y"), rs.getInt("home_z"));
-                SimpleCuboid sc = new SimpleCuboid();
-                sc.setCenter(loc);
-                sc.setOwner(tag);
-                sc.setRadius(rs.getInt("cuboid_radius"));
-                //GuildHelper.getInstance().cuboids.put(tag, sc);
-                g.setHome(loc);
-                System.out.println("Wczytalem "+tag);
-                hm.put(g.getTag(), g);
+            statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery("SELECT * FROM `openguild_guilds`");
+            while(result.next()) {
+                String tag = result.getString("tag");
+                String description = result.getString("description");
+                UUID leaderUUID = UUID.fromString(result.getString("leader"));
+                String alliances = result.getString("alliances");
+                String enemies = result.getString("enemies");
+                
+                String homeWorld = result.getString("home_world");
+                if(plugin.getServer().getWorld(homeWorld) == null) {
+                    plugin.getOGLogger().warning("World '" + homeWorld + "' does not exists! Skipping guild '" + tag + "'!");
+                    continue;
+                }
+                
+                int homeX = result.getInt("home_x");
+                int homeY = result.getInt("home_y");
+                int homeZ = result.getInt("home_z");
+                int cuboidRadius = result.getInt("cuboid_radius");
+                
+                SimpleGuild guild = new SimpleGuild(tag);
+                guild.setDescription(description);
+                guild.setHome(new Location(plugin.getServer().getWorld(homeWorld), homeX, homeY, homeZ));
+                guild.setLeader(leaderUUID);
+                
+                guilds.put(tag, guild);
             }
         } catch(SQLException ex) {
-            ex.printStackTrace();
+            plugin.getOGLogger().exceptionThrown(ex);
         }
-        return hm;
+        
+        return guilds;
     }
-
-    public static long getBan(UUID uuid) {
-        long result = 0;
+    
+    private Map<UUID, SimpleGuild> loadPlayers() {
+        Map<UUID, SimpleGuild> players = new HashMap<UUID, SimpleGuild>();
+        
         try {
-            String query = "SELECT ban_time FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
-            stat = con.createStatement();
-            log(query);
-            ResultSet rs = stat.executeQuery(query);
-            while(rs.next()) {
-                long l = rs.getLong("ban_time");
-                result = l;
+            statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery("SELECT * FROM `openguild_players`");
+            while(result.next()) {
+                String guildTag = result.getString("guild");
+                int kills = result.getInt("kills");
+                int deaths = result.getInt("deaths");
+                UUID uuid = UUID.fromString(result.getString("uuid"));
+                
+                /** @TODO: Move to own table. */
+                int hcModuleBantime = result.getInt("ban_time");
+                
+                if(plugin.getGuildHelper().doesGuildExists(guildTag)) {
+                    players.put(uuid, plugin.getGuildHelper().getGuilds().get(guildTag));
+                } else {
+                    players.put(uuid, null);
+
+                    if(!guildTag.isEmpty()) {
+                        plugin.getOGLogger().warning("Guild '" + guildTag.toUpperCase() + "' does not exist! Skipping player '" + uuid.toString() + "'");
+                    }
+                }
             }
         } catch(SQLException ex) {
-            ex.printStackTrace();
+            plugin.getOGLogger().exceptionThrown(ex);
         }
-        return result;
+        
+        return players;
     }
-
-    public static List<UUID> getGuildMembers(String tag) {
+    
+    /**
+     * Adds player to database.
+     * It does not check if player already is in database!
+     * 
+     * @param player instance of Player class.
+     */
+    public void addPlayer(Player player) {
+        String uuid = player.getUniqueId().toString();
+        
         try {
-            String query = "SELECT uuid FROM " + tablePlayers + " WHERE guild='" + tag + "';";
-            List<UUID> members = new ArrayList<UUID>();
-            stat = con.createStatement();
-            log(query);
-            ResultSet rs = stat.executeQuery(query);
-            while(rs.next()) {
-                String p = rs.getString("uuid");
-                members.add(UUID.fromString(p));
-            }
-            return members;
+            statement = this.connection.createStatement();
+            statement.execute("INSERT INTO `openguild_players` VALUES(0, '', 0, 0, '" + uuid + "', 0);");
         } catch(SQLException ex) {
-            ex.printStackTrace();
-            return null;
+            plugin.getOGLogger().exceptionThrown(ex);
         }
     }
 
-    public static HashMap<UUID, SimpleGuild> getAllPlayers() {
-        HashMap hm = new HashMap<UUID, SimpleGuild>();
+    /**
+     * Updates player's guild tag in database.
+     *
+     * @param uuid uuid of player.
+     */
+    public void updatePlayer(UUID uuid) {
+        String guildTag = "";
+        if(plugin.getGuildHelper().getPlayers().containsKey(uuid) &&
+                plugin.getGuildHelper().getPlayers().get(uuid) != null) {
+            guildTag = plugin.getGuildHelper().getPlayers().get(uuid).getTag().toUpperCase();
+        }
+
         try {
-            String query = "SELECT * FROM " + tablePlayers;
-            stat = con.createStatement();
-            log(query);
-            ResultSet rs = stat.executeQuery(query);
-            while (rs.next()) {
-                String player = rs.getString("uuid");
-                String tag = rs.getString("guild");
-                boolean isleader = Boolean.parseBoolean(rs.getString("isleader"));
-                SimplePlayerGuild sg = new SimplePlayerGuild(UUID.fromString(player), tag, isleader);
-                hm.put(UUID.fromString(player), plugin.getGuildHelper().getGuilds().get(tag));
-            }
+            statement = this.connection.createStatement();
+            statement.executeUpdate("UPDATE `openguild_players` SET `guild` = '" + guildTag + "' WHERE `uuid` = '" + uuid.toString() + "'");
         } catch(SQLException ex) {
-            ex.printStackTrace();
-            return null;
+            plugin.getOGLogger().exceptionThrown(ex);
         }
-        return hm;
     }
-    public static String getPlayer(UUID uuid) {//BROKEN Popsulem funkcjonalnosc tej metody, wiec mozna to potem ogarnac
-        String player = null;
+
+    /**
+     * Adds guild to database.
+     * It does not check if guild is already in database!
+     *
+     * @param guild instance of SimpleGuild class.
+     */
+    public void addGuild(SimpleGuild guild) {
+        Location homeLocation = guild.getHome();
+
         try {
-            String query = "SELECT player FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
-            stat = con.createStatement();
-            log(query);
-            ResultSet rs = stat.executeQuery(query);
-            while(rs.next()) {
-                player = rs.getString(1);
-            }
+            statement = this.connection.createStatement();
+            statement.execute("INSERT INTO `openguild_guilds` VALUES(" +
+                    "0," +
+                    "'" + guild.getTag().toUpperCase() + "'," +
+                    "'" + guild.getDescription() + "'," +
+                    "'" + guild.getLeader().toString() + "'," +
+                    "''," +
+                    "''," +
+                    "'" + (int) homeLocation.getX() + "'," +
+                    "'" + (int) homeLocation.getY() + "'," +
+                    "'" + (int) homeLocation.getZ() + "'," +
+                    "'" + homeLocation.getWorld().getName() + "'," +
+                    "'" + GenConf.MIN_CUBOID_RADIUS + "');");
         } catch(SQLException ex) {
-            ex.printStackTrace();
+            plugin.getOGLogger().exceptionThrown(ex);
         }
-        return null;//Na razie wywala null, zeby bylo wiadomo ze niedziala xd
     }
 
-    public static boolean existsPlayer(UUID uuid) {
+    /**
+     * Updates guild's description in database.
+     *
+     * @param guild instance of SimpleGuild class.
+     */
+    public void updateGuildDescription(SimpleGuild guild) {
         try {
-            String query = "SELECT COUNT(*) FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
-            stat = con.createStatement();
-            log(query);
-            ResultSet rs = stat.executeQuery(query);
-            while (rs.next()) {
-                return rs.getInt(1) != 0;
-            }
+            statement = this.connection.createStatement();
+            statement.executeUpdate("UPDATE `openguild_guilds` SET `description` = '" + guild.getDescription() + "' WHERE `tag` = '" + guild.getTag().toUpperCase() + "'");
         } catch(SQLException ex) {
-            ex.printStackTrace();
+            plugin.getOGLogger().exceptionThrown(ex);
         }
-        return false;
     }
 
-    public static void increaseValue(UUID uuid, PType typ, int value) {
+    /**
+     * Removes guild from database.
+     *
+     * @param tag tag of guild, which should be deleted.
+     */
+    public void removeGuild(String tag) {
         try {
-            String query = "SELECT " + typ + " FROM " + tablePlayers + " WHERE uuid='" + uuid.toString() + "';";
-            stat = con.createStatement();
-            log(query);
-            ResultSet rs = stat.executeQuery(query);
-            int receivedvalue = 0;
-            while(rs.next()) {
-                receivedvalue = rs.getInt(typ.toString().toLowerCase());
-            }
-            receivedvalue += value;
-            String query2 = "UPDATE " + tablePlayers + " SET " + typ + "=" + receivedvalue + " WHERE uuid=" + uuid.toString() + ";";
-            log(query2);
-            stat.execute(query2);
+            statement = this.connection.createStatement();
+            statement.execute("DELETE FROM `openguild_guilds` WHERE `tag` = '" + tag + "'");
 
+            for(UUID member : plugin.getGuildHelper().getGuilds().get(tag).getMembers()) {
+                statement = this.connection.createStatement();
+                statement.executeUpdate("UPDATE `openguild_players` SET `guild` = '' WHERE `uuid` = '" + member.toString() + "'");
+            }
         } catch(SQLException ex) {
-            ex.printStackTrace();
+            plugin.getOGLogger().exceptionThrown(ex);
         }
     }
-
+    
+    public boolean isConnectionClosed() {
+        try {
+            return this.connection == null || this.connection.isClosed();
+        } catch(SQLException ex) {
+            return true;
+        }
+    }
+    
+    public void closeConnection() {
+        try {
+            if(!isConnectionClosed()) {
+                this.connection.close();
+            }
+        } catch(SQLException ex) {
+            plugin.getOGLogger().exceptionThrown(ex);
+        }
+    }
 }
+

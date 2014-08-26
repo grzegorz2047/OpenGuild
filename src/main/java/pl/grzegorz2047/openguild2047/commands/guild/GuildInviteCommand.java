@@ -59,7 +59,7 @@ public class GuildInviteCommand extends CommandHandler {
         }
         
         SimpleGuild guild = guildHelper.getPlayerGuild(player.getUniqueId());
-        if(guild.getLeader().equals(player.getUniqueId())) {
+        if(!guild.getLeader().equals(player.getUniqueId())) {
             player.sendMessage(MsgManager.get("playernotleader"));
             return;
         }

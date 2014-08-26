@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.modules.hardcore.ModuleHardcore;
 import pl.grzegorz2047.openguild2047.modules.randomtp.ModuleRandomTP;
 import pl.grzegorz2047.openguild2047.modules.spawn.ModuleSpawn;
 
@@ -89,7 +88,6 @@ public class OpenModuleManager implements ModuleManager {
     
     private void defaultModules() {
         modules = new HashMap<String, Module>();
-        this.registerModule("hardcore", new ModuleHardcore());
         this.registerModule("random-tp", new ModuleRandomTP());
         this.registerModule("spawn", new ModuleSpawn());
     }

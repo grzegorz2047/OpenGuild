@@ -101,7 +101,7 @@ public class GenUtil {
         StringBuilder sb = new StringBuilder();
         for(int i = minindex; i < maxindex; i++) {
             sb.append(args[i]);
-            sb.append("");
+            sb.append(" ");
         }
         return sb.toString();
     }

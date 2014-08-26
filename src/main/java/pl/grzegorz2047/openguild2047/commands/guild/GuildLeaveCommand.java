@@ -61,6 +61,11 @@ public class GuildLeaveCommand extends CommandHandler {
         }
         
         SimpleGuild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+        if(guild.getLeader().equals(player.getUniqueId())) {
+            player.sendMessage(MsgManager.get("kickleader"));
+            return;
+        }
+
         guild.removeMember(player.getUniqueId());
         
         for(UUID member : guild.getMembers()) {
@@ -69,6 +74,8 @@ public class GuildLeaveCommand extends CommandHandler {
                 opp.getPlayer().sendMessage(MsgManager.get("broadcast-leave").replace("{PLAYER}", player.getDisplayName()).replace("{TAG}", guild.getTag().toUpperCase()));
             }
         }
+
+        getPlugin().getSQLHandler().updatePlayer(player.getUniqueId());
         
         player.sendMessage(MsgManager.leaveguildsuccess);
     }
