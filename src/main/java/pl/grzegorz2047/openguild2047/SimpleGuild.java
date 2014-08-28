@@ -199,4 +199,9 @@ public class SimpleGuild implements Guild {
     public String getEnemiesString() {
         return enemiesString;
     }
+
+    public boolean containsMember(UUID member) {
+        return members.contains(member);
+        
+    }
 }
