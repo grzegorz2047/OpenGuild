@@ -39,6 +39,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
@@ -133,6 +134,12 @@ public class CuboidListeners implements Listener {
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent e) {
         if(GenConf.EXTRA_PROTECTION /*&& !isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())*/) {
+            if(e.getInventory().getType().equals(InventoryType.PLAYER)){
+               return; 
+            }
+            if(e.getInventory().getType().equals(InventoryType.CRAFTING)){
+               return; 
+            }
             if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
                 // I am not sure, but I think there should be an 'if' checking if inventory type is chest/enderchest etc.
                 

@@ -72,9 +72,12 @@ public class GuildKickCommand extends CommandHandler {
             sender.sendMessage(MsgManager.playernotinthisguild);
             return;
         }
-        
+        if(guild.getLeader().equals(op.getUniqueId())) {
+            sender.sendMessage(MsgManager.get("cantkickleader", "You cant kick yourself from your own guild!"));
+            return;
+        }
         guild.removeMember(op.getUniqueId());
-        
+        guildHelper.getPlayers().remove(op.getUniqueId());
         if(op.isOnline()) {
             op.getPlayer().sendMessage(MsgManager.playerkicked);
         }
