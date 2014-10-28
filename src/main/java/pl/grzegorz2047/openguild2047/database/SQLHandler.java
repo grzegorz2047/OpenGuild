@@ -29,6 +29,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -352,6 +354,37 @@ public class SQLHandler {
             plugin.getOGLogger().exceptionThrown(ex);
         }
     }
+    public ResultSet executeQuery(String query){
+        try {
+            statement = this.connection.createStatement();
+            return statement.executeQuery(query);
+        }
+        catch (SQLException ex) {
+            plugin.getOGLogger().exceptionThrown(ex);
+            return null;
+        }
+    }
+    public int executeUpdate(String query){
+        try {
+            statement = this.connection.createStatement();
+            return statement.executeUpdate(query);
+        }
+        catch (SQLException ex) {
+            plugin.getOGLogger().exceptionThrown(ex);
+            return -1;
+        }
+    }
+    public boolean execute(String query){
+        try {
+            statement = this.connection.createStatement();
+            return statement.execute(query);
+        }
+        catch (SQLException ex) {
+            plugin.getOGLogger().exceptionThrown(ex);
+            return false;
+        }
+    }
 }
+
 
 

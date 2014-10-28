@@ -55,6 +55,10 @@ public class ModuleHardcore implements Module {
                     new Unban(),
                     "openguild.hardcore.unban",
                     "<player>"));
+        }else{
+            /*if(Truncate_table)
+                Truncate_IT
+            */
         }
     }
     

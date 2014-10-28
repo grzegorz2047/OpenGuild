@@ -34,6 +34,7 @@ import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler.COLUMN;
 
 public class Unban implements Command {
     
@@ -51,9 +52,9 @@ public class Unban implements Command {
             throw new CommandException(MsgManager.get("notplayedbefore").replace("{PLAYER}", args[1]));
         }
         
-        long banned = SQLHandler.getBan(player.getUniqueId());
+        long banned = HardcoreSQLHandler.getBan(player.getUniqueId());
         if(banned != 0) {
-            SQLHandler.update(player.getUniqueId(), SQLHandler.PType.BAN_TIME, 0);
+            HardcoreSQLHandler.update(player.getUniqueId(), COLUMN.BAN_TIME, "0");
             Guilds.getLogger().info("Player " + player.getName() + " (" + player.getUniqueId() + ") was unbanned by " + sender.getName());
             sender.sendMessage(MsgManager.get("hcub").replace("{PLAYER}", player.getName()));
         } else {

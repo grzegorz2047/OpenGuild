@@ -34,7 +34,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.database.SQLHandler;
+import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler.COLUMN;
 
 public class HardcoreListeners implements Listener {
     
@@ -44,12 +44,12 @@ public class HardcoreListeners implements Listener {
             return;
         }
         
-        if(GenConf.hcLightninh) {
+        if(GenConf.hcLightning) {
             e.getEntity().getWorld().strikeLightningEffect(e.getEntity().getLocation());
         }
         
         long ban = System.currentTimeMillis() + GenConf.hcBantime;
-        SQLHandler.update(e.getEntity().getUniqueId(), SQLHandler.PType.BAN_TIME, ban);
+        HardcoreSQLHandler.update(e.getEntity().getUniqueId(), COLUMN.BAN_TIME, String.valueOf(ban));
     }
     
     @EventHandler
@@ -61,7 +61,7 @@ public class HardcoreListeners implements Listener {
             return;
         }
         
-        long ban = SQLHandler.getBan(e.getPlayer().getUniqueId());
+        long ban = HardcoreSQLHandler.getBan(e.getPlayer().getUniqueId());
         if(System.currentTimeMillis() < ban) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy HH:mm");
             Date date = new Date(ban);
@@ -75,7 +75,7 @@ public class HardcoreListeners implements Listener {
             return;
         }
         
-        final long ban = SQLHandler.getBan(e.getPlayer().getUniqueId());
+        final long ban = HardcoreSQLHandler.getBan(e.getPlayer().getUniqueId());
         if(ban == 0) {
             return;
         }

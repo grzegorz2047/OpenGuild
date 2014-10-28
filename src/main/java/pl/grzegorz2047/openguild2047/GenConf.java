@@ -80,7 +80,7 @@ public class GenConf {
     public static boolean updater;
     public static String nicknameTag;
     public static boolean cubEnabled;
-    public static boolean hcLightninh;
+    public static boolean hcLightning;
     public static boolean newCmdApi;
     public static boolean ranTpEnabled;
     public static boolean ranTpButton;
@@ -196,7 +196,7 @@ public class GenConf {
         }
         playerprefixenabled = config.getBoolean("playerprefixtag", true);
         guildprefixinchat = config.getBoolean("guildprefixinchat", true);
-        hcLightninh = config.getBoolean("hardcore-bans.lightning", true);
+        hcLightning = config.getBoolean("hardcore-bans.lightning", true);
         newCmdApi = config.getBoolean("use-new-command-api", false);
         ranTpEnabled = config.getBoolean("random-tp.enabled", false);
         ranTpButton = config.getBoolean("random-tp.button", true);

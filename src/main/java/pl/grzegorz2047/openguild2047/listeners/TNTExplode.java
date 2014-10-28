@@ -49,7 +49,7 @@ public class TNTExplode implements Listener {
             long end = blocked.get(guild.getTag()) + 100 * 30;
             if(end > System.currentTimeMillis()) {
                 e.setCancelled(true);
-                long seconds = (System.currentTimeMillis()  end) / 100;
+                long seconds = (System.currentTimeMillis() - end) / 100;
                 e.getPlayer().sendMessage(MsgManager.get("tntex").replace("{SEC}", String.valueOf(seconds)));
             }
         }
