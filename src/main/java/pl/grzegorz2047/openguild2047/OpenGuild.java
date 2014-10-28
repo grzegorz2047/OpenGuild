@@ -68,12 +68,12 @@ public class OpenGuild extends JavaPlugin {
         // We use UUID, which were not available in Bukkit < 1.7.5.
         try {
             if(getServer().getOfflinePlayer("Notch").getUniqueId() == null) {
-                Guilds.getLogger().severe("Your Minecraft server version is smaller than 1.7.5!");
+                Guilds.getLogger().severe("Your Minecraft server version is lower than 1.7.5!");
                 Guilds.getLogger().severe("This plugin is not compatibile with your version of Minecraft server!");
                 getServer().getPluginManager().disablePlugin(this);
             }
         } catch(Exception e) {
-            Guilds.getLogger().severe("Your Minecraft server version is smaller than 1.7.5!");
+            Guilds.getLogger().severe("Your Minecraft server version is lower than 1.7.5!");
             Guilds.getLogger().severe("This plugin is not compatibile with your version of Minecraft server!");
             getServer().getPluginManager().disablePlugin(this);
         }

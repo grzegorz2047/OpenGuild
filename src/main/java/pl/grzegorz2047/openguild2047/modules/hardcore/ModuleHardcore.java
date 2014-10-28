@@ -42,9 +42,10 @@ public class ModuleHardcore implements Module {
     
     @Override
     public void enable(String id) throws ModuleLoadException {
+        System.out.println("Enable sie wykonuje tutaj! a hcBans to "+GenConf.hcBans);
         if(GenConf.hcBans) {
+            System.out.println("Enable sie wykonuje tutaj i tutaj!");
             Bukkit.getPluginManager().registerEvents(new HardcoreListeners(), OpenGuild.getBukkit());
-            
             CommandDescription desc = new CommandDescription();
             desc.set("EN", "Unban a player from the dead");
             desc.set("PL", "Odbanuj gracza ze smierci");
