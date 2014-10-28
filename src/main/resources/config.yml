@@ -54,5 +54,7 @@ nickname-tag: '&6[{TAG}] '
 guildprefixinchat: true
 forbiddenguildnames:
 use-new-command-api: true
+join-msg: ''
+quit-msg: ''
 required-items:
 - 'WOOL:1:2:1'
