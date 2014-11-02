@@ -13,6 +13,10 @@
         <upload.dbo.slug>OpenGuild2047</upload.dbo.slug>
     </properties>
   <url>http://maven.apache.org</url>
+    <ciManagement>
+        <system>hudson</system>
+        <url>http://5.231.53.149:8080/job/OpenGuild/</url>
+    </ciManagement>
     <build>
         <plugins>
             <plugin>
