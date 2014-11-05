@@ -24,6 +24,8 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.*;
@@ -113,13 +115,17 @@ public class GuildCreateCommand extends CommandHandler {
         if(GenConf.playerprefixenabled) {
             this.getPlugin().getTagManager().setTag(player.getUniqueId());
         }
-        
+        GuildCreateEvent gce = new GuildCreateEvent(tag, description, player,player.getLocation());
+        Bukkit.getServer().getPluginManager().callEvent(gce);
+        if(gce.isCancelled()){
+            return;
+        }
         this.getPlugin().getOGLogger().info("Player '" + player.getName() + "' successfully created new guild '" + tag.toUpperCase() + "'.");
         
         /**
          @TODO:
          - cuboids
-         - call GuildCreateEvent and MessageBroadcastEvent
+         - call MessageBroadcastEvent
         */
         getPlugin().getSQLHandler().addGuild(guild);
         getPlugin().getSQLHandler().updatePlayer(player.getUniqueId());

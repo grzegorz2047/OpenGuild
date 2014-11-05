@@ -95,11 +95,11 @@ public class GuildCommand implements CommandExecutor {
                         CommandHandler handler = this.commands.get(aliases);
                         if(args.length >= handler.getMinimumArguments()) {
                             handler.executeCommand(sender, args);
-                            subCommandFound = true;
                         }else{
                             sender.sendMessage(MsgManager.get("cmdsyntaxerr"));
                             sender.sendMessage(MsgManager.get("seehelp"));
                         }
+                        subCommandFound = true;
                     }
                 }
             }
