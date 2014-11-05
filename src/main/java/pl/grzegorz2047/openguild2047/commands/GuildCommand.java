@@ -25,6 +25,7 @@ package pl.grzegorz2047.openguild2047.commands;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -88,13 +89,16 @@ public class GuildCommand implements CommandExecutor {
             String subCommand = args[0];
 
             boolean subCommandFound = false;
-            for(String[] alises : this.commands.keySet()) {
-                for(String alias : alises) {
+            for(String[] aliases : this.commands.keySet()) {
+                for(String alias : aliases) {
                     if(subCommand.equalsIgnoreCase(alias)) {
-                        CommandHandler handler = this.commands.get(alises);
+                        CommandHandler handler = this.commands.get(aliases);
                         if(args.length >= handler.getMinimumArguments()) {
                             handler.executeCommand(sender, args);
                             subCommandFound = true;
+                        }else{
+                            sender.sendMessage(MsgManager.get("cmdsyntaxerr"));
+                            sender.sendMessage(MsgManager.get("seehelp"));
                         }
                     }
                 }
