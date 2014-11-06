@@ -5,13 +5,17 @@ OpenGuild2047 to publiczny, open source plugin na gildie tworzony przez Grzegorz
 Kod możecie dowolnie użytkować itd.
 Każde błędy, poprawki, propozycje piszcie w zakładce issues (po prawej stronie).
 
+Testowanie
+-----------
+Aby przetestować plugin wystarczy wejść na serwer: mc.kraft.czest.pl
+
 Zobacz [instalacje](https://github.com/grzegorz2047/OpenGuild2047/wiki/Pobieranie-oraz-instalacja) pluginu oraz jego [konfigurację](https://github.com/grzegorz2047/OpenGuild2047/wiki/Konfiguracja).
 
 Pobieranie
 -----------
 
 Oficjalne wersje pluginu dostępne są [__tutaj__](https://github.com/grzegorz2047/OpenGuild2047/releases).
-Wersje dev - czyli najnowsze lecz prawdopodobnie mocno zbugowane są dostępne na [__Jenkins__](https://openguild.kraft.czest.pl).
+Wersje dev - na dzień dzisiejszy, niedostępne
 
 Plugin dostepny także na stronie [__BukkitDev__](http://dev.bukkit.org/bukkit-plugins/openguild/).
 
