@@ -27,7 +27,7 @@ Każdy uznany i znaleziony bug/propozycje prosimy kierować w zakładcę [Issues
 Kontakt
 -----------
 Jeżeli chcesz się ze mną skontaktować to napisz mi na maila: grzegorz2047@gmail.com
-Jeżeli chcesz ze mną pogadać to wbij na mój prywatny mini serwer TeamSpeak3: ts.kraft.czest.pl
+Jeżeli chcesz ze mną pogadać to wbij na mój prywatny mini serwer [__TeamSpeak3 - ts.kraft.czest.pl__](ts3server://ts.kraft.czest.pl?port=41144) (kliknięcie wykonuje połączenie).
 Kompilacja
 -----------
 
