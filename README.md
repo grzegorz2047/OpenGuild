@@ -24,6 +24,10 @@ Bugi oraz propozycje
 
 Każdy uznany i znaleziony bug/propozycje prosimy kierować w zakładcę [Issues](https://github.com/grzegorz2047/OpenGuild2047/issues). Jedak przed jego złożeniem prosimy przeczytać wszystkie inne zgłoszenia, pomoże w tym wyszukiwarka na górze strony.
 
+Kontakt
+-----------
+Jeżeli chcesz się ze mną skontaktować to napisz mi na maila: grzegorz2047@gmail.com
+Jeżeli chcesz ze mną pogadać to wbij na mój prywatny mini serwer TeamSpeak3: ts.kraft.czest.pl
 Kompilacja
 -----------
 
