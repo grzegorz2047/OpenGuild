@@ -133,7 +133,7 @@ public class CuboidListeners implements Listener {
     
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent e) {
-        if(GenConf.EXTRA_PROTECTION /*&& !isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())*/) {
+        if(GenConf.EXTRA_PROTECTION && !isAllowed((Player) e.getPlayer(), e.getPlayer().getLocation())) {
             if(e.getInventory().getType().equals(InventoryType.PLAYER)){
                return; 
             }
