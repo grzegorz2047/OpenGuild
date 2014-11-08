@@ -158,7 +158,7 @@ public class SimpleGuild implements Guild {
                         player.sendMessage(MsgManager.get("guild-invitation-expired"));
                     }
                 }
-            }.runTaskLater(this.plugin, 0L * 20);
+            }.runTaskLater(this.plugin, 20L * 25);
         }
     }
 

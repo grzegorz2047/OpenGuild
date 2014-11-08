@@ -219,8 +219,6 @@ public class SQLHandler {
                 int deaths = result.getInt("deaths");
                 UUID uuid = UUID.fromString(result.getString("uuid"));
                 
-                /** @TODO: Move to own table. */
-                int hcModuleBantime = result.getInt("ban_time");
                 
                 if(plugin.getGuildHelper().doesGuildExists(guildTag)) {
                     players.put(uuid, plugin.getGuildHelper().getGuilds().get(guildTag));
