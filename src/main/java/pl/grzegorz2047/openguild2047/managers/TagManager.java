@@ -108,6 +108,7 @@ public class TagManager {
                 }
             }else{
                 Bukkit.getPlayer(player).setScoreboard(TagManager.getScoreboard());
+                updateBoard();
             }
         }else{
             //System.out.println("Nie zainicjalizowano tag managera");
