@@ -120,6 +120,7 @@ public class GenConf {
         playerMoveEvent = config.getBoolean("player-move-event", false);
         cubNotify = config.getBoolean("cuboid.notify-enter", true);
         cubNotifyMem = config.getBoolean("cuboid.notify-enter-members", false);
+       // System.out.print("Pobral cubnotifymem "+config.getBoolean("cuboid.notify-enter-members")+" a jest "+cubNotifyMem);
         cubNotifySound = config.getBoolean("cuboid.notify-enter-sound", false);
         try {
             cubNotifySoundType = Sound.valueOf(config.getString("cuboid.notify-enter-sound-type", "ENDERMAN_DEATH"));

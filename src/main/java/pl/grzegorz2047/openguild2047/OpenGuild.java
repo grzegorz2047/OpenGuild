@@ -42,6 +42,7 @@ import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.*;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
@@ -112,7 +113,7 @@ public class OpenGuild extends JavaPlugin {
         
         // Intialize guild helper class
         this.guildHelper = new GuildHelper();
-        
+        CuboidStuff cs = new CuboidStuff(this);
         // Load database
         loadDB();
         loadPlayers();

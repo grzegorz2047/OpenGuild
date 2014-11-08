@@ -70,13 +70,21 @@ public class GuildInvitationAcceptCommand extends CommandHandler {
         if(args.length == 1) {
             if (invitationsFrom.size() > 1) {
                 // TODO: move to language file
-                sender.sendMessage("You have more than 1 invitation!");
-                sender.sendMessage("Type /guild accept <tag> to accept invitation.");
+                sender.sendMessage("You have more than 1 invitation!/Masz wiecej niz 1 zaproszenie!");
+                sender.sendMessage("Type/Wpisz /guild accept <tag> to accept invitation./Aby akceptowac.");
                 sender.sendMessage("-------------------");
 
                 for (Guild guild : invitationsFrom) {
                     sender.sendMessage(ChatColor.BOLD + guild.getTag().toUpperCase() + ChatColor.GRAY + " - " + guild.getDescription());
                 }
+            }else if(invitationsFrom.size() == 1 ){
+                Guild g = invitationsFrom.get(0);
+                g.acceptInvitation((Player) sender);
+                getPlugin().getTagManager().setTag(((Player) sender).getUniqueId());
+                sender.sendMessage(ChatColor.GREEN+"Guild join Accepted!/Dolaczono do gildii!");
+            }else{
+                sender.sendMessage(ChatColor.RED+"No invitation available!");
+                sender.sendMessage(ChatColor.RED+"Brak zaproszen!");
             }
         } else if(args.length >= 2) {
             String tag = args[1];
