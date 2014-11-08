@@ -262,7 +262,7 @@ public class SQLHandler {
     public void updatePlayer(UUID uuid) {
         String guildTag = "";
         if(plugin.getGuildHelper().getPlayers().containsKey(uuid) &&
-                plugin.getGuildHelper().getPlayers().get(uuid) != null) {
+            plugin.getGuildHelper().getPlayers().get(uuid) != null) {
             guildTag = plugin.getGuildHelper().getPlayers().get(uuid).getTag().toUpperCase();
         }
 
