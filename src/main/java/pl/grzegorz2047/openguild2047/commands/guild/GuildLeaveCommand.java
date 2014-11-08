@@ -67,8 +67,8 @@ public class GuildLeaveCommand extends CommandHandler {
         }
 
         guild.removeMember(player.getUniqueId());
-        guildHelper.getPlayers().replace(player.getUniqueId(), guild, null);
-        
+        guildHelper.getPlayers().remove(player.getUniqueId());
+        guildHelper.getPlayers().put(player.getUniqueId(), null);
         for(UUID member : guild.getMembers()) {
             OfflinePlayer opp = this.getPlugin().getServer().getOfflinePlayer(member);
             if(opp.isOnline()) {
