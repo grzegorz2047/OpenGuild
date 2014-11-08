@@ -78,6 +78,7 @@ public class GuildKickCommand extends CommandHandler {
         }
         guild.removeMember(op.getUniqueId());
         guildHelper.getPlayers().remove(op.getUniqueId());
+        guildHelper.getPlayers().put(op.getUniqueId(), null);
         if(op.isOnline()) {
             op.getPlayer().sendMessage(MsgManager.playerkicked);
         }
