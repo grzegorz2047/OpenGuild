@@ -30,7 +30,7 @@ cuboid:
     item-types: [DIAMOND_PICKAXE]
     damage: 0
 hardcore-bans:
-  enabled: true
+  enabled: false
   ban-time: 1h
   kick-message: '&4You are dead! &7The revival will occur &6%TIME&7!'
   login-message: '&7You are banned for death to &6%TIME'
