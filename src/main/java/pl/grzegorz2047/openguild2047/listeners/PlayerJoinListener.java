@@ -47,14 +47,14 @@ public class PlayerJoinListener implements Listener {
     public void handleEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        
+
         if(!plugin.getGuildHelper().getPlayers().containsKey(uuid)) {
             plugin.getSQLHandler().addPlayer(player);
         }
         
         if(plugin.getGuildHelper().hasGuild(player)) {
             plugin.getTagManager().setTag(uuid);
-            
+            plugin.getTagManager().updateBoard();
             SimpleGuild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
             for(UUID mem : guild.getMembers()) {
                 OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);

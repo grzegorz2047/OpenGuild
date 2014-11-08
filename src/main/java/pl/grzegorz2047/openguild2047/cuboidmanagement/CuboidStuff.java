@@ -61,7 +61,11 @@ public class CuboidStuff {
         }
     }
     public static void notifyGuildWhenPlMoves(Player player){
-        Iterator<Map.Entry<String, SimpleCuboid>> it = plugin.getGuildHelper().getCuboids().entrySet().iterator();
+        Iterator<Map.Entry<String, SimpleCuboid>> it = plugin.
+                getGuildHelper().
+                getCuboids().
+                entrySet().
+                iterator();
 
         if(plugin.getGuildHelper().hasGuild(player)) {
             String tag = plugin.getGuildHelper().getPlayerGuild(player.getUniqueId()).getTag();

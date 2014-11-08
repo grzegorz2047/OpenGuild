@@ -59,13 +59,13 @@ public class TagManager {
     public static Scoreboard getScoreboard(){
         return TagManager.sc;
     }
-    public static void updateBoard(){
+    public void updateBoard(){
             for(Player p : Bukkit.getOnlinePlayers()){
                 p.setScoreboard(TagManager.getScoreboard());
             }
     }
     
-    private static boolean registerTeamTag(SimpleGuild sg){
+    private boolean registerTeamTag(SimpleGuild sg){
         if(!TagManager.isInitialised()){
             System.out.println("Scoreboard nie jest zainicjowany!");
             return false;
@@ -93,7 +93,7 @@ public class TagManager {
                 Team t = sc.getTeam(g.getTag().toUpperCase());
                 if(t == null){
                     //System.out.println("Brak team pref");
-                    TagManager.registerTeamTag(g);
+                    registerTeamTag(g);
                     return true;
                 }else{
                     //System.out.println("gracz w gildii team pref istnieje");
