@@ -25,26 +25,14 @@ package com.github.grzegorz2047.openguild;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import pl.grzegorz2047.openguild2047.managers.MsgManager;
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleCuboid;
 
-public class Guild {
-
-    private final OpenGuild plugin;
+public class Guild extends GuildMembers {
 
     private String tag;
     private String description;
 
     private Location home;
-
-    private UUID leader;
-
-    private final List<UUID> members = new ArrayList<UUID>();
 
     private String alliancesString = "";
     private List<Guild> alliances = new ArrayList<Guild>();
@@ -52,12 +40,11 @@ public class Guild {
     private String enemiesString = "";
     private List<Guild> enemies = new ArrayList<Guild>();
 
-    private final List<UUID> pendingInvitations = new ArrayList<UUID>();
+    private Cuboid cuboid;
 
-    private SimpleCuboid cuboid;
-
-    public Guild(OpenGuild plugin) {
-        this.plugin = plugin;
+    public Guild(pl.grzegorz2047.openguild2047.OpenGuild plugin) {
+        super(plugin);
+        this.setGuild(this);
     }
 
     public void setTag(String tag) {
@@ -84,18 +71,6 @@ public class Guild {
         return home;
     }
 
-    public void setLeader(UUID leader) {
-        this.leader = leader;
-    }
-
-    public UUID getLeader() {
-        return leader;
-    }
-
-    public List<UUID> getMembers() {
-        return members;
-    }
-
     public void setAlliances(List<Guild> alliances) {
         this.alliances = alliances;
     }
@@ -112,57 +87,11 @@ public class Guild {
         return enemies;
     }
 
-    public List<UUID> getPendingInvitations() {
-        return pendingInvitations;
-    }
-
-    public void acceptInvitation(Player player) {
-        if(pendingInvitations.contains(player.getUniqueId())) {
-            pendingInvitations.remove(player.getUniqueId());
-
-            this.plugin.getGuildHelper().getPlayers().put(player.getUniqueId(), this);
-            this.plugin.getSQLHandler().updatePlayer(player.getUniqueId());
-            this.members.add(player.getUniqueId());
-        }
-    }
-
-    public void invitePlayer(final Player player, Player who) {
-        final UUID uuid = player.getUniqueId();
-
-        if(!pendingInvitations.contains(uuid)) {
-            pendingInvitations.add(uuid);
-
-            player.sendMessage(MsgManager.get("guild-invitation").replace("{WHO}", who.getName()).replace("{TAG}", getTag().toUpperCase()));
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if(pendingInvitations.contains(uuid)) {
-                        pendingInvitations.remove(uuid);
-                        player.sendMessage(MsgManager.get("guild-invitation-expired"));
-                    }
-                }
-            }.runTaskLater(this.plugin, 20L * 25);
-        }
-    }
-
-    public void addMember(UUID member) {
-        if(!members.contains(member)) {
-            members.add(member);
-        }
-    }
-
-    public void removeMember(UUID member) {
-        if(members.contains(member)) {
-            members.remove(member);
-        }
-    }
-
-    public void setCuboid(SimpleCuboid cuboid) {
+    public void setCuboid(Cuboid cuboid) {
         this.cuboid = cuboid;
     }
 
-    public SimpleCuboid getCuboid() {
+    public Cuboid getCuboid() {
         return cuboid;
     }
 
@@ -180,10 +109,5 @@ public class Guild {
 
     public String getEnemiesString() {
         return enemiesString;
-    }
-
-    public boolean containsMember(UUID member) {
-        return members.contains(member);
-        
     }
 }

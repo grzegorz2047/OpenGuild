@@ -21,64 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package pl.grzegorz2047.openguild2047;
+package com.github.grzegorz2047.openguild;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-import pl.grzegorz2047.openguild2047.api.Cuboid;
 
 /**
  *
  * @author Grzegorz
  */
-public class SimpleCuboid implements Cuboid {
+public class Cuboid {
 
     private Location center;
     private int radius;
     private String owner;
 
-    @Override
     public Location getCenter() {
         return this.center;
     }
 
-    @Override
     public int getRadius() {
         return this.radius;
     }
 
-    @Override
     public boolean isinCuboid(Location loc) {
         Vector v = loc.toVector();
         return v.isInAABB(this.getMin().toVector(), this.getMax().toVector());
     }
 
-    @Override
     public void setCenter(Location center) {
         this.center = center;
     }
 
-    @Override
     public void setRadius(int radius) {
         this.radius = radius;
     }
 
-    @Override
     public String getOwner() {
         return this.owner;
     }
 
-    @Override
     public void setOwner(String tag) {
         this.owner = tag;
     }
 
-    @Override
     public Location getMin() {
         return new Location(this.center.getWorld(), this.center.getBlockX() - this.radius, this.center.getBlockY() - this.radius, this.center.getBlockZ() - this.radius);
     }
 
-    @Override
     public Location getMax() {
         return new Location(this.center.getWorld(), this.center.getBlockX() + this.radius, this.center.getBlockY() + this.radius, this.center.getBlockZ() + this.radius);
     }

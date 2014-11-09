@@ -33,7 +33,7 @@ import java.util.*;
 import org.bukkit.Location;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleCuboid;
+import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.Guild;
 
 public class SQLHandler {
@@ -166,7 +166,7 @@ public class SQLHandler {
 
                 int cuboidRadius = result.getInt("cuboid_radius");
 
-                SimpleCuboid cuboid = new SimpleCuboid();
+                Cuboid cuboid = new Cuboid();
                 cuboid.setOwner(tag);
                 cuboid.setCenter(home);
                 cuboid.setRadius(cuboidRadius);

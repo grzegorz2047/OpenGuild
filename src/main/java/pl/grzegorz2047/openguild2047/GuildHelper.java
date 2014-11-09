@@ -23,6 +23,7 @@
  */
 package pl.grzegorz2047.openguild2047;
 
+import com.github.grzegorz2047.openguild.Cuboid;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -33,7 +34,7 @@ public class GuildHelper {
     private Map<String, Guild> guilds = new HashMap<String, Guild>();
     private Map<UUID, Guild> players = new HashMap<UUID, Guild>();
 
-    private Map<String, SimpleCuboid> cuboids = new HashMap<String, SimpleCuboid>();
+    private Map<String, Cuboid> cuboids = new HashMap<String, Cuboid>();
     
     /**
      * @param uuid uuid of player, who guild should be returned
@@ -93,11 +94,11 @@ public class GuildHelper {
         return players;
     }
 
-    public Map<String, SimpleCuboid> getCuboids() {
+    public Map<String, Cuboid> getCuboids() {
         return cuboids;
     }
 
-    public void setCuboids(Map<String, SimpleCuboid> cuboids) {
+    public void setCuboids(Map<String, Cuboid> cuboids) {
         this.cuboids = cuboids;
     }
 }
