@@ -23,8 +23,6 @@
  */
 package pl.grzegorz2047.openguild2047.cuboidmanagement;
 
-import com.github.grzegorz2047.openguild.Cuboid;
-import com.github.grzegorz2047.openguild.Guild;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -50,7 +48,7 @@ public class CuboidStuff {
     public static HashMap<String, String> playersenteredcuboid = new HashMap<String, String>();
     
     public static boolean canMove(Player player, Location from, Location to) {
-        Iterator<Map.Entry<String, Cuboid>> it = plugin.getGuildHelper().getCuboids().entrySet().iterator();
+        Iterator<Map.Entry<String, SimpleCuboid>> it = plugin.getGuildHelper().getCuboids().entrySet().iterator();
         if(plugin.getGuildHelper().hasGuild(player.getUniqueId())) {
             String tag = plugin.getGuildHelper().getPlayerGuild(player.getUniqueId()).getTag();
             if(plugin.getGuildHelper().getCuboids().get(tag).isinCuboid(to)) {
@@ -63,7 +61,7 @@ public class CuboidStuff {
         }
     }
     public static void notifyGuildWhenPlMoves(Player player){
-        Iterator<Map.Entry<String, Cuboid>> it = plugin.
+        Iterator<Map.Entry<String, SimpleCuboid>> it = plugin.
                 getGuildHelper().
                 getCuboids().
                 entrySet().
@@ -83,7 +81,7 @@ public class CuboidStuff {
                     CuboidStuff.playersenteredcuboid.put(player.getName(), check);
                 }
 
-                Guild guild = plugin.getGuildHelper().getGuilds().get(check);
+                SimpleGuild guild = plugin.getGuildHelper().getGuilds().get(check);
 
                 for(UUID mem : guild.getMembers()) {
                     OfflinePlayer op = plugin.getServer().getOfflinePlayer(mem);
@@ -105,7 +103,7 @@ public class CuboidStuff {
             String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
 
             if(checked != null) {
-                Guild guild = plugin.getGuildHelper().getGuilds().get(checked);
+                SimpleGuild guild = plugin.getGuildHelper().getGuilds().get(checked);
                 if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
                     String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
                     if(tagSaved.equals(checked)) {
@@ -135,7 +133,7 @@ public class CuboidStuff {
         }
     }
 
-    public static boolean checkIfInAnyCuboid(Iterator<Map.Entry<String, Cuboid>> it, Location to) {
+    public static boolean checkIfInAnyCuboid(Iterator<Map.Entry<String, SimpleCuboid>> it, Location to) {
         while(it.hasNext()) {
             if(it.next().getValue().isinCuboid(to)) {
                 return true;
@@ -143,9 +141,9 @@ public class CuboidStuff {
         }
         return false;
     }
-    public static String checkIfInOtherCuboid(Iterator<Map.Entry<String, Cuboid>> it, Player p, String tag) {
+    public static String checkIfInOtherCuboid(Iterator<Map.Entry<String, SimpleCuboid>> it, Player p, String tag) {
         while(it.hasNext()) {
-            Map.Entry<String, Cuboid> next = it.next();
+            Map.Entry<String, SimpleCuboid> next = it.next();
             if(next.getKey().equals(tag)){
                 return null;
             }
@@ -155,9 +153,9 @@ public class CuboidStuff {
         }
         return null;
     }
-    private static boolean checkCuboidInAnyCuboid(Iterator<Map.Entry<String, Cuboid>> it, Location loc) {
+    private static boolean checkCuboidInAnyCuboid(Iterator<Map.Entry<String, SimpleCuboid>> it, Location loc) {
         while(it.hasNext()) {
-            Cuboid c = it.next().getValue();
+            SimpleCuboid c = it.next().getValue();
             Location loc1 = c.getCenter();
             double distance = loc1.distance(loc);
             if (distance <= (c.getRadius() * 2))//Totalne uproszczenie, bo juz nie wyrabialem
@@ -169,9 +167,8 @@ public class CuboidStuff {
     }
 
     public static boolean checkIfCuboidFarForGuild(Location loc) {
-       // Iterator<Map.Entry<String, SimpleCuboid>> it = GuildHelper.getInstance().cuboids.entrySet().iterator();
-        //return !CuboidStuff.checkCuboidInAnyCuboid(it, loc);
-        return true;
+        Iterator<Map.Entry<String, SimpleCuboid>> it = plugin.getGuildHelper().getCuboids().entrySet().iterator();
+        return !CuboidStuff.checkCuboidInAnyCuboid(it, loc);
     }
 
 }
