@@ -62,7 +62,7 @@ public class GuildInviteCommand extends Command {
         
         String playerToInvite = args[1];
         if(!getPlugin().getServer().getOfflinePlayer(playerToInvite).isOnline()) {
-            // player.sendMessage(MsgManager.get("playeroffline"));
+            player.sendMessage(MsgManager.get("playeroffline"));
             return;
         }
         
@@ -73,6 +73,7 @@ public class GuildInviteCommand extends Command {
         }
         
         guild.invitePlayer(toInvite, player);
+        player.sendMessage("Successfully invited!/ Wyslano zaproszenie!");
     }
 
     @Override

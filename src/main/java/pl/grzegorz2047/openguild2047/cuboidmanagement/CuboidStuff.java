@@ -78,10 +78,12 @@ public class CuboidStuff {
                 if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
                     String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
                     if(tagSaved.equals(check)) {   
-                        player.sendMessage("You entered on your own guild!");
                         return;
                     }
                 } else {
+                    if(guild.containsMember(player.getUniqueId())){
+                        player.sendMessage("You entered on your own guild!");
+                    }
                     CuboidStuff.playersenteredcuboid.put(player.getName(), check);
                 }
 
