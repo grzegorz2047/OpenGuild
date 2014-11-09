@@ -72,16 +72,18 @@ public class CuboidStuff {
             String check = checkIfInOtherCuboid(it, player, tag);
 
             if(check != null) {
+                 SimpleGuild guild = plugin.getGuildHelper().getGuilds().get(check);
                 if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
                     String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
-                    if(tagSaved.equals(check)) {
+                    if(tagSaved.equals(check)) {   
+                        player.sendMessage("You entered on your own guild!");
                         return;
                     }
                 } else {
                     CuboidStuff.playersenteredcuboid.put(player.getName(), check);
                 }
 
-                SimpleGuild guild = plugin.getGuildHelper().getGuilds().get(check);
+               
 
                 for(UUID mem : guild.getMembers()) {
                     OfflinePlayer op = plugin.getServer().getOfflinePlayer(mem);
