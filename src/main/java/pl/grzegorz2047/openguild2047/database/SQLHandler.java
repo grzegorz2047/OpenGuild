@@ -29,12 +29,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
+import static pl.grzegorz2047.openguild2047.GenConf.DATABASE;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
 import pl.grzegorz2047.openguild2047.SimpleGuild;
@@ -46,6 +44,10 @@ public class SQLHandler {
     
     private Connection connection;
     private Statement statement;
+    
+    public String generateStringAutoInc(){
+        if(!GenConf.DATABASE.equals(Database.FILE)) return "INT PRIMARY KEY AUTO_INCREMENT"; else return "INTEGER PRIMARY KEY AUTOINCREMENT";
+    }
     
     public SQLHandler(OpenGuild plugin, String host, int port, String user, String password, String name) {
         this.plugin = plugin;
@@ -108,39 +110,32 @@ public class SQLHandler {
         
         try {
             String query = "CREATE TABLE IF NOT EXISTS `openguild_guilds`"
-                    + "(id INT AUTO_INCREMENT,"
-                    + "tag VARCHAR(11),"
+                    + "(tag VARCHAR(11),"
                     + "description VARCHAR(100),"
                     + "leader VARCHAR(37),"
-                    + "alliances VARCHAR(255),"
-                    + "enemies VARCHAR(255),"
                     + "home_x INT,"
                     + "home_y INT,"
                     + "home_z INT,"
                     + "home_world VARCHAR(16),"
                     + "cuboid_radius INT,"
-                    + "PRIMARY KEY(id,tag));";
+                    + "PRIMARY KEY(tag));";
             statement = this.connection.createStatement();
             statement.execute(query);
             
             query = "CREATE TABLE IF NOT EXISTS `openguild_players`"
-                    + "(id INT AUTO_INCREMENT,"
-                    + "guild VARCHAR(11),"
-                    + "kills INT,"
-                    + "deaths INT,"
+                    + "(guild VARCHAR(11),"
                     + "uuid VARCHAR(37)," // UUID gracza z myślnikami ma 35 znaków? Więc dla pewności dam 37
-                    + "ban_time BIGINT,"
-                    + "PRIMARY KEY(id,uuid));";
+                    + "PRIMARY KEY(uuid));";
             statement = this.connection.createStatement();
             statement.execute(query);
 
             query = "CREATE TABLE IF NOT EXISTS `openguild_allies`"
-                    + "(id INT AUTO_INCREMENT,"
+                    + "(id "+generateStringAutoInc()+","
                     + "who VARCHAR(11),"
-                    + "withwho INT,"
-                    + "uuid VARCHAR(37)," // UUID gracza z myślnikami ma 35 znaków? Więc dla pewności dam 37
-                    + "ban_time BIGINT,"
-                    + "PRIMARY KEY(id,uuid));";
+                    + "withwho VARCHAR(11),"
+                    + "status VARCHAR(5),"
+                    + "expires BIGINT"
+                    + ");";
             statement = this.connection.createStatement();
             statement.execute(query);
             
@@ -159,8 +154,6 @@ public class SQLHandler {
                 String tag = result.getString("tag");
                 String description = result.getString("description");
                 UUID leaderUUID = UUID.fromString(result.getString("leader"));
-                String alliances = result.getString("alliances");
-                String enemies = result.getString("enemies");
                 
                 String homeWorld = result.getString("home_world");
                 if(plugin.getServer().getWorld(homeWorld) == null) {
@@ -188,31 +181,13 @@ public class SQLHandler {
                 guild.setDescription(description);
                 guild.setHome(home);
                 guild.setLeader(leaderUUID);
-                guild.setAlliancesString(alliances);
-                guild.setEnemiesString(enemies);
+                //guild.setAlliancesString(alliances);
+                //guild.setEnemiesString(enemies);
 
                 guilds.put(tag, guild);
             }
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
-        }
-
-        for(SimpleGuild g : plugin.getGuildHelper().getGuilds().values()) {
-            List<Guild> a = new ArrayList<Guild>();
-            List<Guild> e = new ArrayList<Guild>();
-
-            for(SimpleGuild g2 : plugin.getGuildHelper().getGuilds().values()) {
-                if (g.getAlliancesString().contains(g.getTag())) {
-                    a.add(g2);
-                }
-
-                if (g.getEnemiesString().contains(g.getTag())) {
-                    e.add(g2);
-                }
-            }
-
-            g.setAlliances(a);
-            g.setEnemies(e);
         }
         
         return guilds;
@@ -226,8 +201,8 @@ public class SQLHandler {
             ResultSet result = statement.executeQuery("SELECT * FROM `openguild_players`");
             while(result.next()) {
                 String guildTag = result.getString("guild");
-                int kills = result.getInt("kills");
-                int deaths = result.getInt("deaths");
+                //int kills = result.getInt("kills");
+                //int deaths = result.getInt("deaths");
                 UUID uuid = UUID.fromString(result.getString("uuid"));
                 
                 
@@ -248,18 +223,19 @@ public class SQLHandler {
         return players;
     }
     
+    
     /**
      * Adds player to database.
      * It does not check if player already is in database!
      * 
-     * @param player instance of Player class.
+     * @param player instance of UUID class.
      */
-    public void addPlayer(Player player) {
-        String uuid = player.getUniqueId().toString();
+    public void addPlayer(UUID player) {
+        String uuid = player.toString();
         
         try {
             statement = this.connection.createStatement();
-            statement.execute("INSERT INTO `openguild_players` VALUES(0, '', 0, 0, '" + uuid + "', 0);");
+            statement.execute("INSERT INTO `openguild_players` VALUES( '', '" + uuid + "');");
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
@@ -297,12 +273,9 @@ public class SQLHandler {
         try {
             statement = this.connection.createStatement();
             statement.execute("INSERT INTO `openguild_guilds` VALUES(" +
-                    "0," +
                     "'" + guild.getTag().toUpperCase() + "'," +
                     "'" + guild.getDescription() + "'," +
                     "'" + guild.getLeader().toString() + "'," +
-                    "''," +
-                    "''," +
                     "'" + (int) homeLocation.getX() + "'," +
                     "'" + (int) homeLocation.getY() + "'," +
                     "'" + (int) homeLocation.getZ() + "'," +

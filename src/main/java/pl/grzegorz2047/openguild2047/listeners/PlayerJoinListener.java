@@ -49,7 +49,8 @@ public class PlayerJoinListener implements Listener {
         UUID uuid = player.getUniqueId();
 
         if(!plugin.getGuildHelper().getPlayers().containsKey(uuid)) {
-            plugin.getSQLHandler().addPlayer(player);
+            plugin.getSQLHandler().addPlayer(uuid);
+            plugin.getGuildHelper().getPlayers().put(uuid, null);
         }
         
         if(plugin.getGuildHelper().hasGuild(player)) {
