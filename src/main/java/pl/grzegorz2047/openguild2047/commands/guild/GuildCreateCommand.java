@@ -90,6 +90,10 @@ public class GuildCreateCommand extends CommandHandler {
             player.sendMessage(MsgManager.get("gildtocloseothers"));
             return;
         }
+        if(GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_RADIUS)) {
+            player.sendMessage(MsgManager.playerstooclose);
+            return;
+        }
         if(GenConf.reqitems != null && !GenConf.reqitems.isEmpty()) {
             if(!GenUtil.hasEnoughItemsForGuild(player.getInventory())) {
                 player.sendMessage(MsgManager.get("notenoughitems"));

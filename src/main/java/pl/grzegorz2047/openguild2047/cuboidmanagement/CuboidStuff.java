@@ -167,9 +167,8 @@ public class CuboidStuff {
     }
 
     public static boolean checkIfCuboidFarForGuild(Location loc) {
-       // Iterator<Map.Entry<String, SimpleCuboid>> it = GuildHelper.getInstance().cuboids.entrySet().iterator();
-        //return !CuboidStuff.checkCuboidInAnyCuboid(it, loc);
-        return true;
+        Iterator<Map.Entry<String, SimpleCuboid>> it = plugin.getGuildHelper().getCuboids().entrySet().iterator();
+        return !CuboidStuff.checkCuboidInAnyCuboid(it, loc);
     }
 
 }
