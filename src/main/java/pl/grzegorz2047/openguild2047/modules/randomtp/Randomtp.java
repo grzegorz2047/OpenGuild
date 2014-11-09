@@ -33,7 +33,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Randomtp implements Command {
+public class Randomtp extends Command {
     
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
@@ -57,4 +57,8 @@ public class Randomtp implements Command {
         }
     }
     
+    @Override
+    public int minArgs() {
+        return 1;
+    }
 }

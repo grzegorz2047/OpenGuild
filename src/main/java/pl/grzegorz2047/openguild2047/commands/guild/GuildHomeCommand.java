@@ -31,9 +31,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.GuildHelper;
-import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
-import pl.grzegorz2047.openguild2047.commands.CommandHandler;
+import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -41,14 +41,10 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * 
  * Usage: /guild home
  */
-public class GuildHomeCommand extends CommandHandler {
-
-    public GuildHomeCommand(OpenGuild plugin) {
-        super(plugin);
-    }
+public class GuildHomeCommand extends Command {
 
     @Override
-    public void executeCommand(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
@@ -104,7 +100,7 @@ public class GuildHomeCommand extends CommandHandler {
     }
 
     @Override
-    public int getMinimumArguments() {
+    public int minArgs() {
         return 1;
     }
 

@@ -25,9 +25,16 @@
 package com.github.grzegorz2047.openguild.command;
 
 import org.bukkit.command.CommandSender;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 
-public interface Command {
+public abstract class Command {
 
-    void execute(CommandSender sender, String[] args) throws CommandException;
+    public abstract void execute(CommandSender sender, String[] args) throws CommandException;
+
+    public OpenGuild getPlugin() {
+        return OpenGuild.getInstance();
+    }
+
+    public abstract int minArgs();
 
 }

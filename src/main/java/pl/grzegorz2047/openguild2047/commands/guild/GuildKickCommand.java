@@ -29,9 +29,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
-import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
-import pl.grzegorz2047.openguild2047.commands.CommandHandler;
+import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -39,14 +39,10 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * 
  * Usage: /guild kick [player name]
  */
-public class GuildKickCommand extends CommandHandler {
-
-    public GuildKickCommand(OpenGuild plugin) {
-        super(plugin);
-    }
+public class GuildKickCommand extends Command {
 
     @Override
-    public void executeCommand(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return;
@@ -96,7 +92,7 @@ public class GuildKickCommand extends CommandHandler {
     }
 
     @Override
-    public int getMinimumArguments() {
+    public int minArgs() {
         return 2;
     }
 

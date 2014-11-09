@@ -24,11 +24,11 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -36,14 +36,10 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * 
  * Usage: /guild help
  */
-public class GuildHelpCommand extends CommandHandler {
-
-    public GuildHelpCommand(OpenGuild plugin) {
-        super(plugin);
-    }
+public class GuildHelpCommand extends Command {
 
     @Override
-    public void executeCommand(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         int page = 1;
         if(args.length != 2) {
             page = 1;
@@ -132,7 +128,7 @@ public class GuildHelpCommand extends CommandHandler {
     }
 
     @Override
-    public int getMinimumArguments() {
+    public int minArgs() {
         return 1;
     }
 

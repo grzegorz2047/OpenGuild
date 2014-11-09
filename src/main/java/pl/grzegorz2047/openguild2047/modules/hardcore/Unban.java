@@ -36,7 +36,7 @@ import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler.COLUMN;
 
-public class Unban implements Command {
+public class Unban extends Command {
     
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
@@ -60,7 +60,11 @@ public class Unban implements Command {
         } else {
             throw new CommandException(MsgManager.get("notbanned").replace("{PLAYER}", player.getName()));
         }
-        
+    }
+    
+    @Override
+    public int minArgs() {
+        return 2;
     }
     
 }
