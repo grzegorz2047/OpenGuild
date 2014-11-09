@@ -30,6 +30,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.*;
 import pl.grzegorz2047.openguild2047.commands.CommandHandler;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
@@ -85,12 +86,20 @@ public class GuildCreateCommand extends CommandHandler {
             player.sendMessage(MsgManager.get("desctoolong"));
             return;
         }
-        
+        if(!CuboidStuff.checkIfCuboidFarForGuild(player.getLocation())) {
+            player.sendMessage(MsgManager.get("gildtocloseothers"));
+            return;
+        }
         if(GenConf.reqitems != null && !GenConf.reqitems.isEmpty()) {
             if(!GenUtil.hasEnoughItemsForGuild(player.getInventory())) {
                 player.sendMessage(MsgManager.get("notenoughitems"));
                 return;
             } else {
+                GuildCreateEvent gce = new GuildCreateEvent(tag, description, player,player.getLocation());
+                Bukkit.getServer().getPluginManager().callEvent(gce);
+                if(gce.isCancelled()){
+                    return;
+                }
                 GenUtil.removeRequiredItemsForGuild(player.getInventory());
             }
         }
@@ -115,11 +124,7 @@ public class GuildCreateCommand extends CommandHandler {
         if(GenConf.playerprefixenabled) {
             this.getPlugin().getTagManager().setTag(player.getUniqueId());
         }
-        GuildCreateEvent gce = new GuildCreateEvent(tag, description, player,player.getLocation());
-        Bukkit.getServer().getPluginManager().callEvent(gce);
-        if(gce.isCancelled()){
-            return;
-        }
+
         this.getPlugin().getOGLogger().info("Player '" + player.getName() + "' successfully created new guild '" + tag.toUpperCase() + "'.");
         
         /**
