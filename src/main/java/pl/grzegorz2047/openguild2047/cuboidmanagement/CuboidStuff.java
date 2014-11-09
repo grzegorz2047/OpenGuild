@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.Bukkit;
 
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -68,45 +69,45 @@ public class CuboidStuff {
                 getCuboids().
                 entrySet().
                 iterator();
-
-        if(plugin.getGuildHelper().hasGuild(player)) {
-            String tag = plugin.getGuildHelper().getPlayerGuild(player.getUniqueId()).getTag();
-            String check = checkIfInOtherCuboid(it, player, tag);
-
-            if(check != null) {
-                 Guild guild = plugin.getGuildHelper().getGuilds().get(check);
-                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
-                    String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
-                    if(tagSaved.equals(check)) {   
-                        return;
-                    }
-                } else {
-                    player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", check.toUpperCase()));
-                    CuboidStuff.playersenteredcuboid.put(player.getName(), check);
-                }
-
-               
-
-                for(UUID mem : guild.getMembers()) {
-                    OfflinePlayer op = plugin.getServer().getOfflinePlayer(mem);
-                    if(op.isOnline()) {
-                        if(GenConf.cubNotifyMem) {
-                            op.getPlayer().sendMessage(MsgManager.get("entercubmems").replace("{PLAYER}", player.getName()).replace("{GUILD}", tag.toUpperCase()));
-                        }
-
-                        if(GenConf.cubNotifySound) {
-                            op.getPlayer().playSound(op.getPlayer().getLocation(), GenConf.cubNotifySoundType, 10f, 5f);
-                        }
-                    }
+        String tag = null;
+        if(plugin.getGuildHelper().hasGuild(player.getUniqueId())){
+            tag = plugin.getGuildHelper().getPlayerGuild(player.getUniqueId()).getTag();
+        }
+        String guildscuboidtag = checkIfInOtherCuboid(it, player, tag);
+        //Bukkit.broadcastMessage("Cuboid panie "+player.getName()+" jest "+guildscuboidtag);
+        if(guildscuboidtag != null) {
+            Guild guild = plugin.getGuildHelper().getGuilds().get(guildscuboidtag);
+            if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
+                //Bukkit.broadcastMessage("User "+player.getName()+" jest w liscie!");
+                String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
+                if(tagSaved.equals(guildscuboidtag)) {   
+                    return;
                 }
             } else {
-                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
-                    String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
-                    player.sendMessage(MsgManager.get("leavecubpl").replace("{GUILD}", tagSaved.toUpperCase()));
-                    CuboidStuff.playersenteredcuboid.remove(player.getName());
+                player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", guildscuboidtag.toUpperCase()));
+                CuboidStuff.playersenteredcuboid.put(player.getName(), guildscuboidtag);
+            }
+
+            for(UUID mem : guild.getMembers()) {
+                OfflinePlayer op = plugin.getServer().getOfflinePlayer(mem);
+                if(op.isOnline()) {
+                    if(GenConf.cubNotifyMem) {
+                        op.getPlayer().sendMessage(MsgManager.get("entercubmems").replace("{PLAYER}", player.getName()).replace("{GUILD}", tag.toUpperCase()));
+                    }
+
+                    if(GenConf.cubNotifySound) {
+                        op.getPlayer().playSound(op.getPlayer().getLocation(), GenConf.cubNotifySoundType, 10f, 5f);
+                    }
                 }
             }
         } else {
+            if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
+                String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
+                player.sendMessage(MsgManager.get("leavecubpl").replace("{GUILD}", tagSaved.toUpperCase()));
+                CuboidStuff.playersenteredcuboid.remove(player.getName());
+            }
+        }
+        /*else {
             String tag = "";
             String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
 
@@ -141,7 +142,7 @@ public class CuboidStuff {
                     CuboidStuff.playersenteredcuboid.remove(player.getName());
                 }
             }
-        }
+        }*/
     }
 
     public static boolean checkIfInAnyCuboid(Iterator<Map.Entry<String, Cuboid>> it, Location to) {
