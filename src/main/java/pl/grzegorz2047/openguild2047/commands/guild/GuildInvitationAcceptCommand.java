@@ -24,13 +24,13 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.api.Guild;
-import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 import java.util.ArrayList;
@@ -41,14 +41,10 @@ import java.util.List;
  * 
  * Usage: /guild accept [optional: tag (required only if there's more than 2 invitations)]
  */
-public class GuildInvitationAcceptCommand extends CommandHandler {
-
-    public GuildInvitationAcceptCommand(OpenGuild plugin) {
-        super(plugin);
-    }
+public class GuildInvitationAcceptCommand extends Command {
 
     @Override
-    public void executeCommand(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return;
@@ -98,7 +94,7 @@ public class GuildInvitationAcceptCommand extends CommandHandler {
     }
 
     @Override
-    public int getMinimumArguments() {
+    public int minArgs() {
         return 1;
     }
 

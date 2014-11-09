@@ -33,7 +33,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import com.github.grzegorz2047.openguild.Guild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
@@ -72,7 +72,7 @@ public class TeamCommand implements CommandExecutor {
         
         String message = GenUtil.argsToString(args, 0, args.length);
         
-        SimpleGuild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+        Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
         for(UUID uuid : guild.getMembers()) {
             OfflinePlayer op = plugin.getServer().getOfflinePlayer(uuid);
             if(op.isOnline()) {

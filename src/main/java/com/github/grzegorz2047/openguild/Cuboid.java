@@ -21,44 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package pl.grzegorz2047.openguild2047;
+package com.github.grzegorz2047.openguild;
 
-import java.util.UUID;
-import pl.grzegorz2047.openguild2047.api.PlayerGuild;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 /**
  *
  * @author Grzegorz
  */
-public class SimplePlayerGuild implements PlayerGuild {
-    /*
-     Ta klasa bedzie potrzebna, ale jak to wszystko 
-     jakos logicznie ogarnac to jeszcze nie wiem xd
-     */
+public class Cuboid {
 
-    private UUID playername;
-    private String clantag;
-    private boolean leader;
+    private Location center;
+    private int radius;
+    private String owner;
 
-    public SimplePlayerGuild(UUID playername, String tag, boolean leader) {
-        this.playername = playername;
-        this.clantag = tag;
-        this.leader = leader;
+    public Location getCenter() {
+        return this.center;
     }
 
-    @Override
-    public UUID getPlayerUUID() {
-        return this.playername;
+    public int getRadius() {
+        return this.radius;
     }
 
-    @Override
-    public String getClanTag() {
-        return this.clantag;
+    public boolean isinCuboid(Location loc) {
+        Vector v = loc.toVector();
+        return v.isInAABB(this.getMin().toVector(), this.getMax().toVector());
     }
 
-    @Override
-    public boolean isLeader() {
-        return this.leader;
+    public void setCenter(Location center) {
+        this.center = center;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public String getOwner() {
+        return this.owner;
+    }
+
+    public void setOwner(String tag) {
+        this.owner = tag;
+    }
+
+    public Location getMin() {
+        return new Location(this.center.getWorld(), this.center.getBlockX() - this.radius, this.center.getBlockY() - this.radius, this.center.getBlockZ() - this.radius);
+    }
+
+    public Location getMax() {
+        return new Location(this.center.getWorld(), this.center.getBlockX() + this.radius, this.center.getBlockY() + this.radius, this.center.getBlockZ() + this.radius);
     }
 
 }

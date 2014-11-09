@@ -31,7 +31,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import com.github.grzegorz2047.openguild.Guild;
 
 public class PlayerChatListener implements Listener {
 
@@ -51,7 +51,7 @@ public class PlayerChatListener implements Listener {
         UUID uuid = player.getUniqueId();
         
         if(plugin.getGuildHelper().hasGuild(player)) {
-            SimpleGuild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
+            Guild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
             String tag = guild.getTag().toUpperCase();
             
             if(!GenConf.guildprefixinchat) {

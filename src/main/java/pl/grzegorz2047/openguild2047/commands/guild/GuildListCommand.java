@@ -27,9 +27,9 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GuildHelper;
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.commands.CommandHandler;
+import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -37,18 +37,14 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * 
  * Usage: /guild list
  */
-public class GuildListCommand extends CommandHandler {
-
-    public GuildListCommand(OpenGuild plugin) {
-        super(plugin);
-    }
+public class GuildListCommand extends Command {
 
     @Override
-    public void executeCommand(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         GuildHelper guildHelper = this.getPlugin().getGuildHelper();
         
         StringBuilder resultBuilder = new StringBuilder();
-        for(SimpleGuild guild : guildHelper.getGuilds().values()) {
+        for(Guild guild : guildHelper.getGuilds().values()) {
             String tag = guild.getTag();
             resultBuilder.append(tag).append(", ");
         }
@@ -63,7 +59,7 @@ public class GuildListCommand extends CommandHandler {
     }
 
     @Override
-    public int getMinimumArguments() {
+    public int minArgs() {
         return 1;
     }
 

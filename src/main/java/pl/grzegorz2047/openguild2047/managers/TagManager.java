@@ -30,7 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import com.github.grzegorz2047.openguild.Guild;
 
 /**
  *
@@ -65,7 +65,7 @@ public class TagManager {
             }
     }
     
-    private boolean registerTeamTag(SimpleGuild sg){
+    private boolean registerTeamTag(Guild sg){
         if(!TagManager.isInitialised()){
             System.out.println("Scoreboard nie jest zainicjowany!");
             return false;
@@ -89,7 +89,7 @@ public class TagManager {
         if(TagManager.isInitialised()){
             if(plugin.getGuildHelper().hasGuild(player)){
                 //System.out.println("gracz w gildii");
-                SimpleGuild g =plugin.getGuildHelper().getPlayerGuild(player);
+                Guild g =plugin.getGuildHelper().getPlayerGuild(player);
                 Team t = sc.getTeam(g.getTag().toUpperCase());
                 if(t == null){
                     //System.out.println("Brak team pref");
@@ -118,7 +118,7 @@ public class TagManager {
     public boolean removeTag(UUID player){
         if(TagManager.isInitialised()){
             if(plugin.getGuildHelper().hasGuild(player)){
-                SimpleGuild g = plugin.getGuildHelper().getPlayerGuild(player);
+                Guild g = plugin.getGuildHelper().getPlayerGuild(player);
                 Team t = sc.getTeam(g.getTag().toUpperCase());
                 if(t != null){
                     if(t.getPlayers().contains(Bukkit.getOfflinePlayer(player))){

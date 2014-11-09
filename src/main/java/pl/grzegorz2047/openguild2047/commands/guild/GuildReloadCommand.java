@@ -24,12 +24,12 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -37,14 +37,10 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * 
  * Usage: /guild reload
  */
-public class GuildReloadCommand extends CommandHandler {
-
-    public GuildReloadCommand(OpenGuild plugin) {
-        super(plugin);
-    }
+public class GuildReloadCommand extends Command {
 
     @Override
-    public void executeCommand(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         if(!sender.hasPermission("openguild.admin.reload") || !sender.isOp()) {
             sender.sendMessage(MsgManager.get("permission"));
             return;
@@ -66,7 +62,7 @@ public class GuildReloadCommand extends CommandHandler {
     }
 
     @Override
-    public int getMinimumArguments() {
+    public int minArgs() {
         return 1;
     }
 

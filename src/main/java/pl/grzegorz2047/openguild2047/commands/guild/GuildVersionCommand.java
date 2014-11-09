@@ -24,24 +24,20 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 
 /**
  * Command used to check version of this plugin.
  * 
  * Usage: /guild version
  */
-public class GuildVersionCommand extends CommandHandler {
-
-    public GuildVersionCommand(OpenGuild plugin) {
-        super(plugin);
-    }
+public class GuildVersionCommand extends Command {
 
     @Override
-    public void executeCommand(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " ----------------- ");
         sender.sendMessage(ChatColor.DARK_GRAY + "Version: " + ChatColor.GOLD + this.getPlugin().getDescription().getVersion());
         sender.sendMessage(ChatColor.DARK_GRAY + "Authors: " + ChatColor.GOLD + "grzegorz2047 & TheMolkaPL");
@@ -51,7 +47,7 @@ public class GuildVersionCommand extends CommandHandler {
     }
 
     @Override
-    public int getMinimumArguments() {
+    public int minArgs() {
         return 1;
     }
 

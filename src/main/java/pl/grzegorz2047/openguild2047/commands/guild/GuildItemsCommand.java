@@ -24,6 +24,8 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import java.util.Arrays;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -31,8 +33,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.ItemGUI;
 
@@ -41,14 +41,10 @@ import pl.grzegorz2047.openguild2047.utils.ItemGUI;
  * 
  * Usage: /guild items
  */
-public class GuildItemsCommand extends CommandHandler {
-
-    public GuildItemsCommand(OpenGuild plugin) {
-        super(plugin);
-    }
+public class GuildItemsCommand extends Command {
 
     @Override
-    public void executeCommand(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         if(GenConf.reqitems == null || GenConf.reqitems.isEmpty()) {
             sender.sendMessage(MsgManager.get("reqitemsoff"));
             return;
@@ -110,7 +106,7 @@ public class GuildItemsCommand extends CommandHandler {
     }
 
     @Override
-    public int getMinimumArguments() {
+    public int minArgs() {
         return 1;
     }
     

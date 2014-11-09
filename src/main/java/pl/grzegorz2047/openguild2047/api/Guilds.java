@@ -23,6 +23,7 @@
  */
 package pl.grzegorz2047.openguild2047.api;
 
+import com.github.grzegorz2047.openguild.Guild;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,7 +34,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleCuboid;
+import com.github.grzegorz2047.openguild.Cuboid;
 import pl.grzegorz2047.openguild2047.utils.PastebinWriter;
 
 /**
@@ -42,7 +43,7 @@ import pl.grzegorz2047.openguild2047.utils.PastebinWriter;
 public class Guilds {
 
     @Nonnull public static Cuboid getCuboid() {
-        Cuboid cuboid = new SimpleCuboid();
+        Cuboid cuboid = new Cuboid();
         return cuboid;
     }
 

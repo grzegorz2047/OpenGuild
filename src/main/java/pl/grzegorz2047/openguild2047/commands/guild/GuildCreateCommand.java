@@ -24,12 +24,16 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.*;
-import pl.grzegorz2047.openguild2047.commands.CommandHandler;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.GuildHelper;
+import com.github.grzegorz2047.openguild.Cuboid;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
@@ -39,14 +43,10 @@ import pl.grzegorz2047.openguild2047.utils.GenUtil;
  * 
  * Usage: /guild create [tag] [description]
  */
-public class GuildCreateCommand extends CommandHandler {
-
-    public GuildCreateCommand(OpenGuild plugin) {
-        super(plugin);
-    }
+public class GuildCreateCommand extends Command {
 
     @Override
-    public void executeCommand(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
@@ -108,14 +108,14 @@ public class GuildCreateCommand extends CommandHandler {
             }
         }
 
-        SimpleCuboid cuboid = new SimpleCuboid();
+        Cuboid cuboid = new Cuboid();
         cuboid.setOwner(tag);
         cuboid.setCenter(player.getLocation());
         cuboid.setRadius(GenConf.MIN_CUBOID_RADIUS);
 
         guildHelper.getCuboids().put(tag, cuboid);
 
-        SimpleGuild guild = new SimpleGuild(getPlugin());
+        Guild guild = new Guild(getPlugin());
         guild.setCuboid(cuboid);
         guild.setTag(tag);
         guild.setDescription(description);
@@ -143,7 +143,7 @@ public class GuildCreateCommand extends CommandHandler {
     }
 
     @Override
-    public int getMinimumArguments() {
+    public int minArgs() {
         return 2;
     }
 

@@ -32,7 +32,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import com.github.grzegorz2047.openguild.Guild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class PlayerJoinListener implements Listener {
@@ -55,7 +55,7 @@ public class PlayerJoinListener implements Listener {
         
         if(plugin.getGuildHelper().hasGuild(player)) {
             plugin.getTagManager().setTag(uuid);
-            SimpleGuild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
+            Guild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
             for(UUID mem : guild.getMembers()) {
                 OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);
                 if(om.isOnline()) {

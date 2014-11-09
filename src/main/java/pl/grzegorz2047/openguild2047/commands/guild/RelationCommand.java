@@ -24,6 +24,8 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.command.Command;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -31,9 +33,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -41,14 +40,10 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * 
  * Usage: /guild info [optional: tag (if you're member of a guild)]
  */
-public class RelationCommand extends CommandHandler {
-
-    public RelationCommand(OpenGuild plugin) {
-        super(plugin);
-    }
+public class RelationCommand extends Command {
 
     @Override
-    public void executeCommand(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
         GuildHelper guildHelper = getPlugin().getGuildHelper();
         
         if(args.length == 2) {
@@ -59,7 +54,7 @@ public class RelationCommand extends CommandHandler {
                 return;
             }
             
-            SimpleGuild guild = guildHelper.getGuilds().get(guildToCheck);
+            Guild guild = guildHelper.getGuilds().get(guildToCheck);
         } else {
             if(!(sender instanceof Player)) {
                 sender.sendMessage(MsgManager.cmdonlyforplayer);
@@ -72,7 +67,7 @@ public class RelationCommand extends CommandHandler {
                 return;
             }
             
-            SimpleGuild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+            Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
             
             sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.getIgnorePref("ginfotit").replace("{GUILD}", guild.getTag().toUpperCase()) + ChatColor.DARK_GRAY + " ----------------- ");
             sender.sendMessage(MsgManager.getIgnorePref("ginfodesc").replace("{DESCRIPTION}", guild.getDescription()));
@@ -91,7 +86,7 @@ public class RelationCommand extends CommandHandler {
     }
 
     @Override
-    public int getMinimumArguments() {
+    public int minArgs() {
         return 2;
     }
 

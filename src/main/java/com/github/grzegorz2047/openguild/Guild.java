@@ -1,7 +1,7 @@
-/*
+/**
  * The MIT License
  *
- * Copyright 2014 Aleksander.
+ * Copyright 2014 Grzegorz.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,50 +18,96 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
-
 package com.github.grzegorz2047.openguild;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.bukkit.Location;
 
-public interface Guild {
+public class Guild extends GuildMembers {
 
-    @Nullable List<Guild> getAllyGuilds();
+    private String tag;
+    private String description;
 
-    @Nullable String getDescription();
+    private Location home;
 
-    @Nullable List<Guild> getEnemyGuilds();
+    private String alliancesString = "";
+    private List<Guild> alliances = new ArrayList<Guild>();
 
-    @Nonnull Location getHome();
+    private String enemiesString = "";
+    private List<Guild> enemies = new ArrayList<Guild>();
 
-    @Nullable List<UUID> getInvitedPlayers();
+    private Cuboid cuboid;
 
-    @Nonnull UUID getLeader();
+    public Guild(pl.grzegorz2047.openguild2047.OpenGuild plugin) {
+        super(plugin);
+        this.setGuild(this);
+    }
 
-    @Nullable List<UUID> getMembers();
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
-    double getPoints();
+    public String getTag() {
+        return tag;
+    }
 
-    @Nonnull String getTag();
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    void reloadPoints();
+    public String getDescription() {
+        return description;
+    }
 
-    void setDesciption(@Nullable String description);
+    public void setHome(Location home) {
+        this.home = home;
+    }
 
-    void setHome(@Nonnull Location home);
+    public Location getHome() {
+        return home;
+    }
 
-    void setInvitedPlayers(@Nullable List<UUID> invited);
+    public void setAlliances(List<Guild> alliances) {
+        this.alliances = alliances;
+    }
 
-    void setLeader(@Nonnull UUID leader);
+    public List<Guild> getAlliances() {
+        return alliances;
+    }
 
-    void setMembers(@Nullable List<UUID> members);
+    public void setEnemies(List<Guild> enemies) {
+        this.enemies = enemies;
+    }
 
-    void setTag(@Nonnull String tag);
+    public List<Guild> getEnemies() {
+        return enemies;
+    }
 
+    public void setCuboid(Cuboid cuboid) {
+        this.cuboid = cuboid;
+    }
+
+    public Cuboid getCuboid() {
+        return cuboid;
+    }
+
+    public void setAlliancesString(String alliancesString) {
+        this.alliancesString = alliancesString;
+    }
+
+    public String getAlliancesString() {
+        return alliancesString;
+    }
+
+    public void setEnemiesString(String enemiesString) {
+        this.enemiesString = enemiesString;
+    }
+
+    public String getEnemiesString() {
+        return enemiesString;
+    }
 }

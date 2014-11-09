@@ -30,7 +30,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import com.github.grzegorz2047.openguild.Guild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class PlayerQuitListener implements Listener {
@@ -47,7 +47,7 @@ public class PlayerQuitListener implements Listener {
         UUID uuid = player.getUniqueId();
         
         if(plugin.getGuildHelper().hasGuild(player)) {
-            SimpleGuild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
+            Guild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
             for(UUID mem : guild.getMembers()) {
                 OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);
                 if(om.isOnline()) {

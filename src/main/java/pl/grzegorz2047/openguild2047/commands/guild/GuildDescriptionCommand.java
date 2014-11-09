@@ -31,9 +31,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.commands.CommandHandler;
+import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.command.Command;
+import com.github.grzegorz2047.openguild.command.CommandException;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
@@ -42,14 +42,10 @@ import pl.grzegorz2047.openguild2047.utils.GenUtil;
  * 
  * Usage: /guild desc set [new description]
  */
-public class GuildDescriptionCommand extends CommandHandler {
-
-    public GuildDescriptionCommand(OpenGuild plugin) {
-        super(plugin);
-    }
+public class GuildDescriptionCommand extends Command {
 
     @Override
-    public void executeCommand(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
@@ -63,7 +59,7 @@ public class GuildDescriptionCommand extends CommandHandler {
             return;
         }
         
-        SimpleGuild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+        Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
         
         if(args.length > 2) {
             String subCommand = args[1];
@@ -97,7 +93,7 @@ public class GuildDescriptionCommand extends CommandHandler {
     }
 
     @Override
-    public int getMinimumArguments() {
+    public int minArgs() {
         return 1;
     }
 
