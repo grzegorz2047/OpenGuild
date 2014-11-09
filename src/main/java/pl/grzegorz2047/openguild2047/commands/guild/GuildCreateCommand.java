@@ -24,15 +24,13 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
-import com.github.grzegorz2047.openguild.Guild;
-import static com.github.grzegorz2047.openguild.OpenGuild.getPlugin;
-import com.github.grzegorz2047.openguild.command.Command;
-import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.*;
+import pl.grzegorz2047.openguild2047.commands.CommandHandler;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
@@ -41,10 +39,14 @@ import pl.grzegorz2047.openguild2047.utils.GenUtil;
  * 
  * Usage: /guild create [tag] [description]
  */
-public class GuildCreateCommand extends Command {
+public class GuildCreateCommand extends CommandHandler {
+
+    public GuildCreateCommand(OpenGuild plugin) {
+        super(plugin);
+    }
 
     @Override
-    public void execute(CommandSender sender, String[] args) throws CommandException {
+    public void executeCommand(CommandSender sender, String[] args) {
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
@@ -84,12 +86,20 @@ public class GuildCreateCommand extends Command {
             player.sendMessage(MsgManager.get("desctoolong"));
             return;
         }
-        
+        if(!CuboidStuff.checkIfCuboidFarForGuild(player.getLocation())) {
+            player.sendMessage(MsgManager.get("gildtocloseothers"));
+            return;
+        }
         if(GenConf.reqitems != null && !GenConf.reqitems.isEmpty()) {
             if(!GenUtil.hasEnoughItemsForGuild(player.getInventory())) {
                 player.sendMessage(MsgManager.get("notenoughitems"));
                 return;
             } else {
+                GuildCreateEvent gce = new GuildCreateEvent(tag, description, player,player.getLocation());
+                Bukkit.getServer().getPluginManager().callEvent(gce);
+                if(gce.isCancelled()){
+                    return;
+                }
                 GenUtil.removeRequiredItemsForGuild(player.getInventory());
             }
         }
@@ -101,7 +111,7 @@ public class GuildCreateCommand extends Command {
 
         guildHelper.getCuboids().put(tag, cuboid);
 
-        Guild guild = new Guild(getPlugin());
+        SimpleGuild guild = new SimpleGuild(getPlugin());
         guild.setCuboid(cuboid);
         guild.setTag(tag);
         guild.setDescription(description);
@@ -114,11 +124,7 @@ public class GuildCreateCommand extends Command {
         if(GenConf.playerprefixenabled) {
             this.getPlugin().getTagManager().setTag(player.getUniqueId());
         }
-        GuildCreateEvent gce = new GuildCreateEvent(tag, description, player,player.getLocation());
-        Bukkit.getServer().getPluginManager().callEvent(gce);
-        if(gce.isCancelled()){
-            return;
-        }
+
         this.getPlugin().getOGLogger().info("Player '" + player.getName() + "' successfully created new guild '" + tag.toUpperCase() + "'.");
         
         /**
@@ -133,7 +139,7 @@ public class GuildCreateCommand extends Command {
     }
 
     @Override
-    public int minArgs() {
+    public int getMinimumArguments() {
         return 2;
     }
 
