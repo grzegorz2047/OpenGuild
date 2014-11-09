@@ -44,7 +44,7 @@ public class CuboidStuff {
     private static OpenGuild plugin;
     
     public CuboidStuff(OpenGuild plugin) {
-        this.plugin = plugin;
+        CuboidStuff.plugin = plugin;
     }
 
     public static HashMap<String, String> playersenteredcuboid = new HashMap<String, String>();
