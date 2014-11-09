@@ -33,6 +33,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
+import org.bukkit.entity.Snowball;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class EntityDamageByEntityListener implements Listener {
@@ -77,7 +78,33 @@ public class EntityDamageByEntityListener implements Listener {
                     if(plugin.getGuildHelper().hasGuild(attacked) && plugin.getGuildHelper().hasGuild(attacker)) {
                         Guild attackerGuild = plugin.getGuildHelper().getPlayerGuild(attacker.getUniqueId());
                         if(attackerGuild.containsMember(attacked.getUniqueId())) {
-                            event.setCancelled(true);
+                            if(!attacker.equals(attacked)){
+                                event.setCancelled(true);
+                            }
+
+                            if(GenConf.TEAMPVP_MSG) {
+                                attacker.sendMessage(MsgManager.get("pvpguildmember", "&cNie mozesz uderzyc gracza sojuszniczej gildii"));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if(event.getDamager() instanceof Snowball) {
+            if(event.getEntity() instanceof Player) {
+                Player attacked = (Player) event.getEntity();
+                ProjectileSource attackerEntity = ((Snowball) event.getDamager()).getShooter();
+                
+                if(attackerEntity instanceof Player) {
+                    Player attacker = (Player) attackerEntity;
+                    
+                    if(plugin.getGuildHelper().hasGuild(attacked) && plugin.getGuildHelper().hasGuild(attacker)) {
+                        Guild attackerGuild = plugin.getGuildHelper().getPlayerGuild(attacker.getUniqueId());
+                        if(attackerGuild.containsMember(attacked.getUniqueId())) {
+                            if(!attacker.equals(attacked)){
+                                event.setCancelled(true);
+                            }
+                            
 
                             if(GenConf.TEAMPVP_MSG) {
                                 attacker.sendMessage(MsgManager.get("pvpguildmember", "&cNie mozesz uderzyc gracza sojuszniczej gildii"));

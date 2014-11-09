@@ -81,9 +81,7 @@ public class CuboidStuff {
                         return;
                     }
                 } else {
-                    if(guild.containsMember(player.getUniqueId())){
-                        player.sendMessage("You entered on your own guild!");
-                    }
+                    player.sendMessage("You entered cuboid who owns "+check);
                     CuboidStuff.playersenteredcuboid.put(player.getName(), check);
                 }
 
@@ -93,7 +91,7 @@ public class CuboidStuff {
                     OfflinePlayer op = plugin.getServer().getOfflinePlayer(mem);
                     if(op.isOnline()) {
                         if(GenConf.cubNotifyMem) {
-                            op.getPlayer().sendMessage(MsgManager.get("entercubmems").replace("{PLAYER}", player.getName()).replace("{GUILD}", tag));
+                            op.getPlayer().sendMessage(MsgManager.get("entercubmems").replace("{PLAYER}", player.getName()).replace("{GUILD}", tag.toUpperCase()));
                         }
 
                         if(GenConf.cubNotifySound) {
@@ -102,7 +100,11 @@ public class CuboidStuff {
                     }
                 }
             } else {
-                CuboidStuff.playersenteredcuboid.remove(player.getName());
+                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
+                    String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
+                    player.sendMessage("You leaved cuboid who owns "+tagSaved);
+                    CuboidStuff.playersenteredcuboid.remove(player.getName());
+                }
             }
         } else {
             String tag = "";

@@ -173,7 +173,7 @@ public class CuboidListeners implements Listener {
                 if(plugin.getGuildHelper().getCuboids().get(tag).isinCuboid(location)) {
                     return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
                 }
-                else if(player.hasPermission("openguild.cuboid.bypassplace")) {
+                else if(!player.hasPermission("openguild.cuboid.bypassplace")) {
                     player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
                     return false;
                 }
