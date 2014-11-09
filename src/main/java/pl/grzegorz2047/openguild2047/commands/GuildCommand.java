@@ -84,8 +84,8 @@ public class GuildCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
         if(args.length == 0) {
-            GuildHelpCommand helpCommand = new GuildHelpCommand(plugin);
-            helpCommand.executeCommand(sender, args);
+            GuildHelpCommand helpCommand = new GuildHelpCommand();
+            helpCommand.execute(sender, args);
         } else {
             String subCommand = args[0];
 
