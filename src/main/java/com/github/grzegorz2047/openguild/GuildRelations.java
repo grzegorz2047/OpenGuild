@@ -1,7 +1,7 @@
-/**
+/*
  * The MIT License
  *
- * Copyright 2014 Grzegorz.
+ * Copyright 2014 Aleksander.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,55 +18,43 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.github.grzegorz2047.openguild;
 
-import org.bukkit.Location;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Guild extends GuildMembers {
+public class GuildRelations {
+    
+    protected final pl.grzegorz2047.openguild2047.OpenGuild plugin;
+    private Guild guild;
 
-    private String tag;
-    private String description;
+    private List<Guild> alliances = new ArrayList<Guild>();
+    private List<Guild> enemies = new ArrayList<Guild>();
 
-    private Location home;
-    private Cuboid cuboid;
-
-    public Guild(pl.grzegorz2047.openguild2047.OpenGuild plugin) {
-        super(plugin);
-        this.setMembersGuild(this);
+    public GuildRelations(pl.grzegorz2047.openguild2047.OpenGuild plugin) {
+        this.plugin = plugin;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    protected void setRelationsGuild(Guild guild) {
+        this.guild = guild;
     }
 
-    public String getTag() {
-        return tag;
+    public void setAlliances(List<Guild> alliances) {
+        this.alliances = alliances;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public List<Guild> getAlliances() {
+        return alliances;
     }
 
-    public String getDescription() {
-        return description;
+    public void setEnemies(List<Guild> enemies) {
+        this.enemies = enemies;
     }
 
-    public void setHome(Location home) {
-        this.home = home;
-    }
-
-    public Location getHome() {
-        return home;
-    }
-
-    public void setCuboid(Cuboid cuboid) {
-        this.cuboid = cuboid;
-    }
-
-    public Cuboid getCuboid() {
-        return cuboid;
+    public List<Guild> getEnemies() {
+        return enemies;
     }
 }

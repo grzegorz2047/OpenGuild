@@ -49,7 +49,7 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class CuboidListeners implements Listener {
 
-    private OpenGuild plugin;
+    private final OpenGuild plugin;
 
     public CuboidListeners(OpenGuild plugin) {
         this.plugin = plugin;

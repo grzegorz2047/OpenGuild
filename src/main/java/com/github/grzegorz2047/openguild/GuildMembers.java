@@ -30,7 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
-public class GuildMembers {
+public class GuildMembers extends GuildRelations {
 
     protected final pl.grzegorz2047.openguild2047.OpenGuild plugin;
     private Guild guild;
@@ -41,10 +41,12 @@ public class GuildMembers {
     private final List<UUID> pendingInvitations = new ArrayList<UUID>();
 
     public GuildMembers(pl.grzegorz2047.openguild2047.OpenGuild plugin) {
+        super(plugin);
         this.plugin = plugin;
+        this.setRelationsGuild(guild);
     }
 
-    protected void setGuild(Guild guild) {
+    protected void setMembersGuild(Guild guild) {
         this.guild = guild;
     }
 
