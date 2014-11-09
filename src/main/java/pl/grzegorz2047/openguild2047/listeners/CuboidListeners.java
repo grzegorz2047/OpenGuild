@@ -69,6 +69,7 @@ public class CuboidListeners implements Listener {
                 if(breakingItems.contains(e.getPlayer().getItemInHand().getType())) {
                     e.getPlayer().getItemInHand().setDurability((short) (e.getPlayer().getItemInHand().getDurability() - GenConf.BREAKING_DAMAGE));
                 } else {
+                    e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
                     e.setCancelled(true);
                 }
             }
@@ -90,6 +91,7 @@ public class CuboidListeners implements Listener {
             return;
         }
         if(!isAllowed(e.getPlayer(), e.getBlock().getLocation())) {
+            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
             e.setCancelled(true);
         }
     }
@@ -108,7 +110,7 @@ public class CuboidListeners implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(e.getClickedBlock() != null) {
-            /*if(GenConf.EXTRA_PROTECTION && !isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())) {
+            if(GenConf.EXTRA_PROTECTION && !isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())) {
                 if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
                     Location block = e.getPlayer().getLocation();
                     Guilds.getLogger().info("Player " + e.getPlayer().getName() + " (" + e.getPlayer().getUniqueId() +
@@ -122,9 +124,10 @@ public class CuboidListeners implements Listener {
                             .replace("{Z}", String.valueOf(block.getBlockZ())));
                     return;
                 } else {
+                    e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
                     e.setCancelled(true);
                 }
-            }*/
+            }
             if(e.getClickedBlock().getType().equals(Material.DRAGON_EGG)){
                 e.setCancelled(true); 
             }
@@ -174,7 +177,6 @@ public class CuboidListeners implements Listener {
                     return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
                 }
                 else if(!player.hasPermission("openguild.cuboid.bypassplace")) {
-                    player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
                     return false;
                 }
             } else {

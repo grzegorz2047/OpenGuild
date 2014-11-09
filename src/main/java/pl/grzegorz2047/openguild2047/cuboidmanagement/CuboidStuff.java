@@ -118,7 +118,8 @@ public class CuboidStuff {
                         return;
                     }
                 } else {
-                    CuboidStuff.playersenteredcuboid.put(player.getName(), checked);
+                    player.sendMessage("You entered cuboid who owns "+check);
+                    CuboidStuff.playersenteredcuboid.put(player.getName(), check);
                 }
 
                 for(UUID mem : guild.getMembers()) {
@@ -136,7 +137,11 @@ public class CuboidStuff {
 
                 player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", checked));
             } else {
-                CuboidStuff.playersenteredcuboid.remove(player.getName());
+                if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
+                    String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
+                    player.sendMessage("You leaved cuboid who owns "+tagSaved);
+                    CuboidStuff.playersenteredcuboid.remove(player.getName());
+                }
             }
         }
     }

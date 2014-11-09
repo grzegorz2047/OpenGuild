@@ -59,7 +59,10 @@ public class PlayerJoinListener implements Listener {
             for(UUID mem : guild.getMembers()) {
                 OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);
                 if(om.isOnline()) {
-                    om.getPlayer().sendMessage(MsgManager.get("guildmemberjoined").replace("{PLAYER}", player.getDisplayName()));
+                    if(!player.getUniqueId().equals(om.getUniqueId())){
+                        om.getPlayer().sendMessage(MsgManager.get("guildmemberjoined").replace("{PLAYER}", player.getDisplayName()));
+                    }
+                    
                 }
             }
         }
