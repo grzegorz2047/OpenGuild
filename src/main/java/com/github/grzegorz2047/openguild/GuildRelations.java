@@ -25,6 +25,12 @@ package com.github.grzegorz2047.openguild;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class GuildRelations {
     
@@ -33,7 +39,8 @@ public class GuildRelations {
 
     private List<Guild> alliances = new ArrayList<Guild>();
     private List<Guild> enemies = new ArrayList<Guild>();
-
+    private final List<String> pendingRelationChanges = new ArrayList<String>();
+    
     public GuildRelations(pl.grzegorz2047.openguild2047.OpenGuild plugin) {
         this.plugin = plugin;
     }
@@ -56,5 +63,29 @@ public class GuildRelations {
 
     public List<Guild> getEnemies() {
         return enemies;
+    }
+    
+    public void changeRelationRequest(Guild requestingGuild , Guild guild, final OfflinePlayer player, String status) {
+        final String tag = guild.getTag();
+        if(!pendingRelationChanges.contains(tag)) {
+            pendingRelationChanges.add(tag);
+            if(player.isOnline()){
+                Bukkit.getPlayer(player.getUniqueId()).sendMessage("Guild ally request!");
+            }
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if(pendingRelationChanges.contains(tag)) {
+                        pendingRelationChanges.remove(tag);
+                        if(player.isOnline()){
+                            Bukkit.getPlayer(player.getUniqueId()).sendMessage("Guild ally request expired!");
+                            
+                        }
+                        
+                    }
+                }
+            }.runTaskLater(this.plugin, 20L * 25);
+        }
     }
 }

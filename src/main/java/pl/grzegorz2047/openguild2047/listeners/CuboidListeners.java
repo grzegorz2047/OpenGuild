@@ -34,12 +34,15 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
@@ -84,7 +87,7 @@ public class CuboidListeners implements Listener {
             }
         }
     }
-    
+
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         if(e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
@@ -95,7 +98,26 @@ public class CuboidListeners implements Listener {
             e.setCancelled(true);
         }
     }
-    
+    @EventHandler
+    public void onBucketTake(PlayerBucketFillEvent e) {
+        if(e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
+            return;
+        }
+        if(!isAllowed(e.getPlayer(), e.getBlockClicked().getLocation())) {
+            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+            e.setCancelled(true);
+        }
+    }
+    @EventHandler
+    public void onBucketFlow(PlayerBucketEmptyEvent e) {
+        if(e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
+            return;
+        }
+        if(!isAllowed(e.getPlayer(), e.getBlockClicked().getLocation())) {
+            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+            e.setCancelled(true);
+        }
+    }
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
         if(e.getEntityType() == EntityType.PRIMED_TNT) {
@@ -124,8 +146,11 @@ public class CuboidListeners implements Listener {
                             .replace("{Z}", String.valueOf(block.getBlockZ())));
                     return;
                 } else {
-                    e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
-                    e.setCancelled(true);
+                    if(!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
+                        e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+                        e.setCancelled(true);
+                    }
+
                 }
             }
             if(e.getClickedBlock().getType().equals(Material.DRAGON_EGG)){

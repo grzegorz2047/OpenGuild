@@ -81,7 +81,7 @@ public class CuboidStuff {
                         return;
                     }
                 } else {
-                    player.sendMessage("You entered cuboid who owns "+check);
+                    player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", check.toUpperCase()));
                     CuboidStuff.playersenteredcuboid.put(player.getName(), check);
                 }
 
@@ -102,7 +102,7 @@ public class CuboidStuff {
             } else {
                 if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
                     String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
-                    player.sendMessage("You leaved cuboid who owns "+tagSaved);
+                    player.sendMessage(MsgManager.get("leavecubpl").replace("{GUILD}", tagSaved.toUpperCase()));
                     CuboidStuff.playersenteredcuboid.remove(player.getName());
                 }
             }
@@ -118,8 +118,8 @@ public class CuboidStuff {
                         return;
                     }
                 } else {
-                    player.sendMessage("You entered cuboid who owns "+check);
-                    CuboidStuff.playersenteredcuboid.put(player.getName(), check);
+                    player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", checked.toUpperCase()));
+                    CuboidStuff.playersenteredcuboid.put(player.getName(), checked);
                 }
 
                 for(UUID mem : guild.getMembers()) {
@@ -134,12 +134,10 @@ public class CuboidStuff {
                         }
                     }
                 }
-
-                player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", checked));
             } else {
                 if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
                     String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
-                    player.sendMessage("You leaved cuboid who owns "+tagSaved);
+                    player.sendMessage(MsgManager.get("leavecubpl").replace("{GUILD}", tagSaved.toUpperCase()));
                     CuboidStuff.playersenteredcuboid.remove(player.getName());
                 }
             }

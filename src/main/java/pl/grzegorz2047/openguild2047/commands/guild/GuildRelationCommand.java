@@ -25,11 +25,13 @@
 package pl.grzegorz2047.openguild2047.commands.guild;
 
 import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.OpenGuild;
 import com.github.grzegorz2047.openguild.command.Command;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
@@ -40,54 +42,44 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * 
  * Usage: /guild info [optional: tag (if you're member of a guild)]
  */
-public class RelationCommand extends Command {
+public class GuildRelationCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
         GuildHelper guildHelper = getPlugin().getGuildHelper();
         
-        if(args.length == 2) {
+        if(!(sender instanceof Player)) {
+            sender.sendMessage(MsgManager.cmdonlyforplayer);
+            return;
+        }
+        Player player = (Player) sender;
+        if(args.length == 3) {
             String guildToCheck = args[1];
-            
+            String status = args[2];
             if(!guildHelper.doesGuildExists(guildToCheck)) {
-                sender.sendMessage(MsgManager.guilddoesntexists);
+                sender.sendMessage(MsgManager.get("guilddoesntexists"));
                 return;
             }
-            
+            Guild requestingGuild = guildHelper.getPlayerGuild(player.getUniqueId());
+            if(!requestingGuild.getLeader().equals(player.getUniqueId())) {
+                player.sendMessage(MsgManager.get("playernotleader"));
+                return;
+            }
             Guild guild = guildHelper.getGuilds().get(guildToCheck);
-        } else {
-            if(!(sender instanceof Player)) {
-                sender.sendMessage(MsgManager.cmdonlyforplayer);
-                return;
+            OfflinePlayer leader = Bukkit.getOfflinePlayer(guild.getLeader());
+            
+            if(!leader.isOnline()){
+                sender.sendMessage(MsgManager.get("leadernotonline"));
             }
-            
-            Player player = (Player) sender;
-            if(!guildHelper.hasGuild(player)) {
-                player.sendMessage(MsgManager.get("notinguild"));
-                return;
-            }
-            
-            Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
-            
-            sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.getIgnorePref("ginfotit").replace("{GUILD}", guild.getTag().toUpperCase()) + ChatColor.DARK_GRAY + " ----------------- ");
-            sender.sendMessage(MsgManager.getIgnorePref("ginfodesc").replace("{DESCRIPTION}", guild.getDescription()));
-            sender.sendMessage(MsgManager.getIgnorePref("ginfoleader").replace("{LEADER}", Bukkit.getOfflinePlayer(guild.getLeader()).getName()));
-            sender.sendMessage(MsgManager.getIgnorePref("ginfomemlist").replace("{SIZE}", String.valueOf(guild.getMembers().size())).replace("{MEMBERS}", getMembers(guild.getMembers())));
+            guild.changeRelationRequest(requestingGuild, guild, leader, status.toUpperCase());
+        } else { 
+            player.sendMessage("Usage: /g relation <who> ally/enemy");
         }
-    }
-    
-    private String getMembers(List<UUID> uuids) {
-        StringBuilder builder = new StringBuilder();
-        for(UUID uuid : uuids) {
-            builder.append(Bukkit.getOfflinePlayer(uuid).getName());
-            builder.append(", ");
-        }
-        return builder.toString();
     }
 
     @Override
     public int minArgs() {
-        return 2;
+        return 1;
     }
 
 }

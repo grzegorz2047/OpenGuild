@@ -66,7 +66,8 @@ public class GuildHelpCommand extends Command {
                 sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii innemu graczowi"));
                 sender.sendMessage(help("akceptuj <gildia>", "Akceptuje dolaczenie do gildii"));
                 sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
-                sender.sendMessage(help("info [gildia]", "Informacje o gildii"));
+                sender.sendMessage(help("info <gildia>", "Informacje o gildii"));
+                sender.sendMessage(help("relacja <gildia> ally/enemy", "Ustawienie sojuszu z inna gildia"));
                 sender.sendMessage(help("zamknij", "Zamknij gildie"));
                 sender.sendMessage(help("wyrzuc <gracz>", "Wyrzuca czlonka gildii"));
                 sender.sendMessage(help("itemy", "Lista itemów na gildie"));
@@ -81,7 +82,8 @@ public class GuildHelpCommand extends Command {
                 sender.sendMessage(help("leader <gracz>", "Give leader to someone else"));
                 sender.sendMessage(help("invite", "Invite to guild (sends invite)"));
                 sender.sendMessage(help("leave", "Leave from current guild"));
-                sender.sendMessage(help("info [guild]", "Information about the guild"));
+                sender.sendMessage(help("info <guild>", "Information about the guild"));
+                sender.sendMessage(help("relation <guild> ally/enemy", "Set ally or enemy to other guild"));
                 sender.sendMessage(help("disband", "Disband your guild"));
                 sender.sendMessage(help("items", "List of required items"));
                 sender.sendMessage(help("home", "Teleport to your guild home location"));
@@ -104,9 +106,9 @@ public class GuildHelpCommand extends Command {
 
     private static String help(String usage, String desc) {
         if(GenConf.lang.equals("PL")){
-            return ChatColor.GOLD + "" + ChatColor.ITALIC + "/gildia " + usage + ChatColor.RESET + ChatColor.GRAY + " - " + desc;
+            return ChatColor.GOLD + "" + ChatColor.ITALIC +  "/gildia " + ChatColor.AQUA + usage + ChatColor.RESET + ChatColor.GRAY + " - " + desc;
         } else {
-            return ChatColor.GOLD + "" + ChatColor.ITALIC + "/guild " + usage + ChatColor.RESET + ChatColor.GRAY + " - " + desc;
+            return ChatColor.GOLD + "" + ChatColor.ITALIC + "/guild " + ChatColor.AQUA + usage + ChatColor.RESET + ChatColor.GRAY + " - " + desc;
         }
         
     }
