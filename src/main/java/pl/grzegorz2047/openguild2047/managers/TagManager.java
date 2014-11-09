@@ -120,10 +120,7 @@ public class TagManager {
             if(plugin.getGuildHelper().hasGuild(player)){
                 SimpleGuild g = plugin.getGuildHelper().getPlayerGuild(player);
                 Team t = sc.getTeam(g.getTag().toUpperCase());
-                if(t == null){
-                    updateBoard();
-                    return true;
-                }else{
+                if(t != null){
                     if(t.getPlayers().contains(Bukkit.getOfflinePlayer(player))){
                         t.removePlayer(Bukkit.getOfflinePlayer(player));
                         updateBoard();

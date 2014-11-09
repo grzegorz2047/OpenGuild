@@ -133,6 +133,17 @@ public class SQLHandler {
                     + "PRIMARY KEY(id,uuid));";
             statement = this.connection.createStatement();
             statement.execute(query);
+
+            query = "CREATE TABLE IF NOT EXISTS `openguild_allies`"
+                    + "(id INT AUTO_INCREMENT,"
+                    + "who VARCHAR(11),"
+                    + "withwho INT,"
+                    + "uuid VARCHAR(37)," // UUID gracza z myślnikami ma 35 znaków? Więc dla pewności dam 37
+                    + "ban_time BIGINT,"
+                    + "PRIMARY KEY(id,uuid));";
+            statement = this.connection.createStatement();
+            statement.execute(query);
+            
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
@@ -325,11 +336,6 @@ public class SQLHandler {
         try {
             statement = this.connection.createStatement();
             statement.execute("DELETE FROM `openguild_guilds` WHERE `tag` = '" + tag + "'");
-
-            for(UUID member : plugin.getGuildHelper().getGuilds().get(tag).getMembers()) {
-                statement = this.connection.createStatement();
-                statement.executeUpdate("UPDATE `openguild_players` SET `guild` = '' WHERE `uuid` = '" + member.toString() + "'");
-            }
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }

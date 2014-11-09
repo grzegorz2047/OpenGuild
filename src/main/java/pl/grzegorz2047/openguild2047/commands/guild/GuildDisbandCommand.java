@@ -65,15 +65,15 @@ public class GuildDisbandCommand extends CommandHandler {
             return;
         }
 
-        getPlugin().getSQLHandler().removeGuild(guild.getTag().toUpperCase());
-
         for(UUID uuid : guild.getMembers()) {
             this.getPlugin().getTagManager().removeTag(uuid);
             guildHelper.getPlayers().remove(uuid);
             getPlugin().getSQLHandler().updatePlayer(uuid);
         }
-        
+        guildHelper.getCuboids().remove(guild.getTag());
+        getPlugin().getSQLHandler().removeGuild(guild.getTag().toUpperCase());
         guildHelper.getGuilds().remove(guild.getTag());
+
         getPlugin().broadcastMessage(MsgManager.get("broadcast-disband").replace("{TAG}", guild.getTag().toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
     }
 

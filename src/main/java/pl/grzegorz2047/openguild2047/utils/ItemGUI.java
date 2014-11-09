@@ -60,7 +60,8 @@ public class ItemGUI implements Listener {
     @EventHandler
     public void handle(InventoryClickEvent event) {
         if(event.getInventory().equals(this.inventory)) {
-            int clickedSlot = event.getSlot();
+            Player player = (Player) event.getWhoClicked();
+           /* int clickedSlot = event.getSlot();
             if(!items.containsKey(clickedSlot) || clickedSlot > inventory.getSize()) {
                 return;
             }
@@ -70,8 +71,9 @@ public class ItemGUI implements Listener {
             
             ItemGUIClickEvent clickEvent = new ItemGUIClickEvent(player, clickedItem);
             items.get(clickedSlot).handle(clickEvent);
-            
+            */
             event.setCancelled(true);
+            player.closeInventory();
         }
     }
     

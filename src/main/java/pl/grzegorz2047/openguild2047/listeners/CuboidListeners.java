@@ -140,6 +140,9 @@ public class CuboidListeners implements Listener {
             if(e.getInventory().getType().equals(InventoryType.CRAFTING)){
                return; 
             }
+            if(e.getInventory().getTitle().equals(MsgManager.getIgnorePref("gui-items"))){
+               return; 
+            }
             if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
                 // I am not sure, but I think there should be an 'if' checking if inventory type is chest/enderchest etc.
                 
@@ -154,6 +157,10 @@ public class CuboidListeners implements Listener {
                         .replace("{Y}", String.valueOf(block.getBlockY()))
                         .replace("{Z}", String.valueOf(block.getBlockZ())));
             } else {
+                if(e.getPlayer() instanceof Player){
+                    Player p = (Player) e.getPlayer();
+                    p.sendMessage("Nie mozesz tego otworzyc: "+e.getInventory().getType());
+                }
                 e.setCancelled(true);
             }
         }

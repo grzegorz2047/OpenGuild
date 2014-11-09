@@ -64,18 +64,18 @@ public class GuildCommand implements CommandExecutor {
         this.plugin = plugin;
         
         // Register 'guild' command sub-commands.
-        this.commands.put(new String[]{ "create", "zaloz" }, new GuildCreateCommand(plugin));
+        this.commands.put(new String[]{ "create", "zaloz", "stworz"}, new GuildCreateCommand(plugin));
         this.commands.put(new String[]{ "accept", "akceptuj" }, new GuildInvitationAcceptCommand(plugin));
         this.commands.put(new String[]{ "help", "pomoc" }, new GuildHelpCommand(plugin));
-        this.commands.put(new String[]{ "info" }, new GuildInfoCommand(plugin));
+        this.commands.put(new String[]{ "info", "informacja" }, new GuildInfoCommand(plugin));
         this.commands.put(new String[]{ "invite", "zapros" }, new GuildInviteCommand(plugin));
         this.commands.put(new String[]{ "kick", "wyrzuc" }, new GuildKickCommand(plugin));
-        this.commands.put(new String[]{ "reload" }, new GuildReloadCommand(plugin));
-        this.commands.put(new String[]{ "items", "itemy" }, new GuildItemsCommand(plugin));
-        this.commands.put(new String[]{ "version", "wersja" }, new GuildVersionCommand(plugin));
-        this.commands.put(new String[]{ "leave", "opusc" }, new GuildLeaveCommand(plugin));
+        this.commands.put(new String[]{ "reload", "przeladuj" }, new GuildReloadCommand(plugin));
+        this.commands.put(new String[]{ "items", "itemy", "przedmioty" }, new GuildItemsCommand(plugin));
+        this.commands.put(new String[]{ "version", "wersja", "ver" }, new GuildVersionCommand(plugin));
+        this.commands.put(new String[]{ "leave", "opusc", "wyjdz" }, new GuildLeaveCommand(plugin));
         this.commands.put(new String[]{ "disband", "rozwiaz", "zamknij" }, new GuildDisbandCommand(plugin));
-        this.commands.put(new String[]{ "dom", "home" }, new GuildHomeCommand(plugin));
+        this.commands.put(new String[]{ "dom", "home", "house" }, new GuildHomeCommand(plugin));
         this.commands.put(new String[]{ "list", "lista" }, new GuildListCommand(plugin));
         this.commands.put(new String[]{ "description", "desc", "opis" }, new GuildDescriptionCommand(plugin));
     }
