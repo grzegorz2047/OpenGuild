@@ -132,25 +132,30 @@ public class CuboidListeners implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(e.getClickedBlock() != null) {
-            if(GenConf.EXTRA_PROTECTION && !isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())) {
-                if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
-                    Location block = e.getPlayer().getLocation();
-                    Guilds.getLogger().info("Player " + e.getPlayer().getName() + " (" + e.getPlayer().getUniqueId() +
-                            ") interacted in guilds cuboid at X:" + block.getBlockX() + ", Y:" + block.getBlockY() +
-                            ", Z:" + block.getBlockZ() + " in world " + block.getWorld().getName() + " (" +
-                            block.getBlock().getType().name() + ")");
-                    e.getPlayer().sendMessage(MsgManager.get("interinguild")
-                            .replace("{WORLD}", block.getWorld().getName())
-                            .replace("{X}", String.valueOf(block.getBlockX()))
-                            .replace("{Y}", String.valueOf(block.getBlockY()))
-                            .replace("{Z}", String.valueOf(block.getBlockZ())));
-                    return;
-                } else {
+            if(!isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())){
+                if(GenConf.EXTRA_PROTECTION) {
+                    if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
+                        Location block = e.getPlayer().getLocation();
+                        Guilds.getLogger().info("Player " + e.getPlayer().getName() + " (" + e.getPlayer().getUniqueId() +
+                                ") interacted in guilds cuboid at X:" + block.getBlockX() + ", Y:" + block.getBlockY() +
+                                ", Z:" + block.getBlockZ() + " in world " + block.getWorld().getName() + " (" +
+                                block.getBlock().getType().name() + ")");
+                        e.getPlayer().sendMessage(MsgManager.get("interinguild")
+                                .replace("{WORLD}", block.getWorld().getName())
+                                .replace("{X}", String.valueOf(block.getBlockX()))
+                                .replace("{Y}", String.valueOf(block.getBlockY()))
+                                .replace("{Z}", String.valueOf(block.getBlockZ())));
+                        return;
+                    }else{
+                        e.getPlayer().sendMessage(MsgManager.get("cantdoitonsomeonearea"));
+                        e.setCancelled(true);
+                        return;
+                    }  
+                }else{
                     if(!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
                         e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
                         e.setCancelled(true);
                     }
-
                 }
             }
             if(e.getClickedBlock().getType().equals(Material.DRAGON_EGG)){
