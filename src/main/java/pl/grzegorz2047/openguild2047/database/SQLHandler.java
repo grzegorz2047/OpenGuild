@@ -32,11 +32,9 @@ import java.util.*;
 
 import org.bukkit.Location;
 import pl.grzegorz2047.openguild2047.GenConf;
-import static pl.grzegorz2047.openguild2047.GenConf.DATABASE;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.SimpleCuboid;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
-import pl.grzegorz2047.openguild2047.api.Guild;
+import com.github.grzegorz2047.openguild.Guild;
 
 public class SQLHandler {
     
@@ -144,8 +142,8 @@ public class SQLHandler {
         }
     }
     
-    private Map<String, SimpleGuild> loadGuilds() {
-        Map<String, SimpleGuild> guilds = new HashMap<String, SimpleGuild>();
+    private Map<String, Guild> loadGuilds() {
+        Map<String, Guild> guilds = new HashMap<String, Guild>();
         
         try {
             statement = this.connection.createStatement();
@@ -175,7 +173,7 @@ public class SQLHandler {
 
                 plugin.getGuildHelper().getCuboids().put(tag, cuboid);
 
-                SimpleGuild guild = new SimpleGuild(plugin);
+                Guild guild = new Guild(plugin);
                 guild.setCuboid(cuboid);
                 guild.setTag(tag);
                 guild.setDescription(description);
@@ -193,8 +191,8 @@ public class SQLHandler {
         return guilds;
     }
     
-    private Map<UUID, SimpleGuild> loadPlayers() {
-        Map<UUID, SimpleGuild> players = new HashMap<UUID, SimpleGuild>();
+    private Map<UUID, Guild> loadPlayers() {
+        Map<UUID, Guild> players = new HashMap<UUID, Guild>();
         
         try {
             statement = this.connection.createStatement();
@@ -267,7 +265,7 @@ public class SQLHandler {
      *
      * @param guild instance of SimpleGuild class.
      */
-    public void addGuild(SimpleGuild guild) {
+    public void addGuild(Guild guild) {
         Location homeLocation = guild.getHome();
 
         try {
@@ -291,7 +289,7 @@ public class SQLHandler {
      *
      * @param guild instance of SimpleGuild class.
      */
-    public void updateGuildDescription(SimpleGuild guild) {
+    public void updateGuildDescription(Guild guild) {
         try {
             statement = this.connection.createStatement();
             statement.executeUpdate("UPDATE `openguild_guilds` SET `description` = '" + guild.getDescription() + "' WHERE `tag` = '" + guild.getTag().toUpperCase() + "'");

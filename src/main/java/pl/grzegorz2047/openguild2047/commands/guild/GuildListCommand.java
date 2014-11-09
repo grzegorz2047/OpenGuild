@@ -28,7 +28,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GuildHelper;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import com.github.grzegorz2047.openguild.Guild;
 import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -48,7 +48,7 @@ public class GuildListCommand extends CommandHandler {
         GuildHelper guildHelper = this.getPlugin().getGuildHelper();
         
         StringBuilder resultBuilder = new StringBuilder();
-        for(SimpleGuild guild : guildHelper.getGuilds().values()) {
+        for(Guild guild : guildHelper.getGuilds().values()) {
             String tag = guild.getTag();
             resultBuilder.append(tag).append(", ");
         }

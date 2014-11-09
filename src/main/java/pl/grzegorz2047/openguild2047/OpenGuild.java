@@ -24,6 +24,7 @@
 
 package pl.grzegorz2047.openguild2047;
 
+import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
 
 import java.io.File;
@@ -252,7 +253,7 @@ public class OpenGuild extends JavaPlugin {
      * them to their guild's member list.
      */
     private void loadPlayers() {
-        for(SimpleGuild guild : this.guildHelper.getGuilds().values()) {
+        for(Guild guild : this.guildHelper.getGuilds().values()) {
             for(UUID player : this.guildHelper.getPlayers().keySet()) {
                 if(this.guildHelper.getPlayers().get(player) != null && this.guildHelper.getPlayers().get(player).equals(guild)) {
                     guild.addMember(player);

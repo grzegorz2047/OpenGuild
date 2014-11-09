@@ -32,7 +32,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import com.github.grzegorz2047.openguild.Guild;
 import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
@@ -63,7 +63,7 @@ public class GuildDescriptionCommand extends CommandHandler {
             return;
         }
         
-        SimpleGuild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+        Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
         
         if(args.length > 2) {
             String subCommand = args[1];

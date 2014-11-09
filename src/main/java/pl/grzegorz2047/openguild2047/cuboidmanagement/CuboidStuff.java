@@ -23,6 +23,7 @@
  */
 package pl.grzegorz2047.openguild2047.cuboidmanagement;
 
+import com.github.grzegorz2047.openguild.Guild;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -81,7 +82,7 @@ public class CuboidStuff {
                     CuboidStuff.playersenteredcuboid.put(player.getName(), check);
                 }
 
-                SimpleGuild guild = plugin.getGuildHelper().getGuilds().get(check);
+                Guild guild = plugin.getGuildHelper().getGuilds().get(check);
 
                 for(UUID mem : guild.getMembers()) {
                     OfflinePlayer op = plugin.getServer().getOfflinePlayer(mem);
@@ -103,7 +104,7 @@ public class CuboidStuff {
             String checked = CuboidStuff.checkIfInOtherCuboid(it, player, tag);
 
             if(checked != null) {
-                SimpleGuild guild = plugin.getGuildHelper().getGuilds().get(checked);
+                Guild guild = plugin.getGuildHelper().getGuilds().get(checked);
                 if(CuboidStuff.playersenteredcuboid.containsKey(player.getName())) {
                     String tagSaved = CuboidStuff.playersenteredcuboid.get(player.getName());
                     if(tagSaved.equals(checked)) {

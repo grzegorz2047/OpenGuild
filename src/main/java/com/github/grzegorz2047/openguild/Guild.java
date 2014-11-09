@@ -1,7 +1,7 @@
-/*
+/**
  * The MIT License
  *
- * Copyright 2014 Aleksander.
+ * Copyright 2014 Grzegorz.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,50 +18,172 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
-
 package com.github.grzegorz2047.openguild;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.SimpleCuboid;
 
-public interface Guild {
+public class Guild {
 
-    @Nullable List<Guild> getAllyGuilds();
+    private final OpenGuild plugin;
 
-    @Nullable String getDescription();
+    private String tag;
+    private String description;
 
-    @Nullable List<Guild> getEnemyGuilds();
+    private Location home;
 
-    @Nonnull Location getHome();
+    private UUID leader;
 
-    @Nullable List<UUID> getInvitedPlayers();
+    private final List<UUID> members = new ArrayList<UUID>();
 
-    @Nonnull UUID getLeader();
+    private String alliancesString = "";
+    private List<Guild> alliances = new ArrayList<Guild>();
 
-    @Nullable List<UUID> getMembers();
+    private String enemiesString = "";
+    private List<Guild> enemies = new ArrayList<Guild>();
 
-    double getPoints();
+    private final List<UUID> pendingInvitations = new ArrayList<UUID>();
 
-    @Nonnull String getTag();
+    private SimpleCuboid cuboid;
 
-    void reloadPoints();
+    public Guild(OpenGuild plugin) {
+        this.plugin = plugin;
+    }
 
-    void setDesciption(@Nullable String description);
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
-    void setHome(@Nonnull Location home);
+    public String getTag() {
+        return tag;
+    }
 
-    void setInvitedPlayers(@Nullable List<UUID> invited);
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    void setLeader(@Nonnull UUID leader);
+    public String getDescription() {
+        return description;
+    }
 
-    void setMembers(@Nullable List<UUID> members);
+    public void setHome(Location home) {
+        this.home = home;
+    }
 
-    void setTag(@Nonnull String tag);
+    public Location getHome() {
+        return home;
+    }
 
+    public void setLeader(UUID leader) {
+        this.leader = leader;
+    }
+
+    public UUID getLeader() {
+        return leader;
+    }
+
+    public List<UUID> getMembers() {
+        return members;
+    }
+
+    public void setAlliances(List<Guild> alliances) {
+        this.alliances = alliances;
+    }
+
+    public List<Guild> getAlliances() {
+        return alliances;
+    }
+
+    public void setEnemies(List<Guild> enemies) {
+        this.enemies = enemies;
+    }
+
+    public List<Guild> getEnemies() {
+        return enemies;
+    }
+
+    public List<UUID> getPendingInvitations() {
+        return pendingInvitations;
+    }
+
+    public void acceptInvitation(Player player) {
+        if(pendingInvitations.contains(player.getUniqueId())) {
+            pendingInvitations.remove(player.getUniqueId());
+
+            this.plugin.getGuildHelper().getPlayers().put(player.getUniqueId(), this);
+            this.plugin.getSQLHandler().updatePlayer(player.getUniqueId());
+            this.members.add(player.getUniqueId());
+        }
+    }
+
+    public void invitePlayer(final Player player, Player who) {
+        final UUID uuid = player.getUniqueId();
+
+        if(!pendingInvitations.contains(uuid)) {
+            pendingInvitations.add(uuid);
+
+            player.sendMessage(MsgManager.get("guild-invitation").replace("{WHO}", who.getName()).replace("{TAG}", getTag().toUpperCase()));
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if(pendingInvitations.contains(uuid)) {
+                        pendingInvitations.remove(uuid);
+                        player.sendMessage(MsgManager.get("guild-invitation-expired"));
+                    }
+                }
+            }.runTaskLater(this.plugin, 20L * 25);
+        }
+    }
+
+    public void addMember(UUID member) {
+        if(!members.contains(member)) {
+            members.add(member);
+        }
+    }
+
+    public void removeMember(UUID member) {
+        if(members.contains(member)) {
+            members.remove(member);
+        }
+    }
+
+    public void setCuboid(SimpleCuboid cuboid) {
+        this.cuboid = cuboid;
+    }
+
+    public SimpleCuboid getCuboid() {
+        return cuboid;
+    }
+
+    public void setAlliancesString(String alliancesString) {
+        this.alliancesString = alliancesString;
+    }
+
+    public String getAlliancesString() {
+        return alliancesString;
+    }
+
+    public void setEnemiesString(String enemiesString) {
+        this.enemiesString = enemiesString;
+    }
+
+    public String getEnemiesString() {
+        return enemiesString;
+    }
+
+    public boolean containsMember(UUID member) {
+        return members.contains(member);
+        
+    }
 }

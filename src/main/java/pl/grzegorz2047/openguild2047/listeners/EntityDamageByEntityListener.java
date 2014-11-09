@@ -32,7 +32,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.projectiles.ProjectileSource;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import com.github.grzegorz2047.openguild.Guild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class EntityDamageByEntityListener implements Listener {
@@ -55,7 +55,7 @@ public class EntityDamageByEntityListener implements Listener {
                 Player attacker = (Player) event.getDamager();
                 
                 if(plugin.getGuildHelper().hasGuild(attacked) && plugin.getGuildHelper().hasGuild(attacker)) {
-                    SimpleGuild attackerGuild = plugin.getGuildHelper().getPlayerGuild(attacker.getUniqueId());
+                    Guild attackerGuild = plugin.getGuildHelper().getPlayerGuild(attacker.getUniqueId());
                     if(attackerGuild.containsMember(attacked.getUniqueId())) {
                         event.setCancelled(true);
                         
@@ -75,7 +75,7 @@ public class EntityDamageByEntityListener implements Listener {
                     Player attacker = (Player) attackerEntity;
                     
                     if(plugin.getGuildHelper().hasGuild(attacked) && plugin.getGuildHelper().hasGuild(attacker)) {
-                        SimpleGuild attackerGuild = plugin.getGuildHelper().getPlayerGuild(attacker.getUniqueId());
+                        Guild attackerGuild = plugin.getGuildHelper().getPlayerGuild(attacker.getUniqueId());
                         if(attackerGuild.containsMember(attacked.getUniqueId())) {
                             event.setCancelled(true);
 

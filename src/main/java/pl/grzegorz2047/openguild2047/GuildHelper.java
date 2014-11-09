@@ -27,11 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import com.github.grzegorz2047.openguild.Guild;
 
 public class GuildHelper {
-    private Map<String, SimpleGuild> guilds = new HashMap<String, SimpleGuild>();
-    private Map<UUID, SimpleGuild> players = new HashMap<UUID, SimpleGuild>();
+    private Map<String, Guild> guilds = new HashMap<String, Guild>();
+    private Map<UUID, Guild> players = new HashMap<UUID, Guild>();
 
     private Map<String, SimpleCuboid> cuboids = new HashMap<String, SimpleCuboid>();
     
@@ -39,7 +39,7 @@ public class GuildHelper {
      * @param uuid uuid of player, who guild should be returned
      * @return instance of specified player's guild, or null.
      */
-    public SimpleGuild getPlayerGuild(UUID uuid) {
+    public Guild getPlayerGuild(UUID uuid) {
         if(this.hasGuild(uuid)) {
             return players.get(uuid);
         }
@@ -71,25 +71,25 @@ public class GuildHelper {
         return guilds.containsKey(tag);
     }
 
-    public void setGuilds(Map<String, SimpleGuild> guilds) {
+    public void setGuilds(Map<String, Guild> guilds) {
         this.guilds = guilds;
     }
     
     /**
      * @return map which contains all guilds and their tags.
      */
-    public Map<String, SimpleGuild> getGuilds() {
+    public Map<String, Guild> getGuilds() {
         return guilds;
     }
     
-    public void setPlayers(Map<UUID, SimpleGuild> players) {
+    public void setPlayers(Map<UUID, Guild> players) {
         this.players = players;
     }
 
     /**
      * @return map which contains all players, who are members of guilds.
      */
-    public Map<UUID, SimpleGuild> getPlayers() {
+    public Map<UUID, Guild> getPlayers() {
         return players;
     }
 

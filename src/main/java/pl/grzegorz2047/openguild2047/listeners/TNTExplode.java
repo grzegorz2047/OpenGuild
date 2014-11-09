@@ -24,7 +24,6 @@
 
 package pl.grzegorz2047.openguild2047.listeners;
 
-import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.OpenGuild;
 import java.util.HashMap;
 import org.bukkit.entity.EntityType;
@@ -32,12 +31,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import com.github.grzegorz2047.openguild.Guild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class TNTExplode implements Listener {
     
-    private static HashMap<String, Long> blocked = new HashMap<String, Long>();
+    private static final HashMap<String, Long> blocked = new HashMap<String, Long>();
     
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
@@ -58,7 +57,7 @@ public class TNTExplode implements Listener {
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
         if(e.getEntityType() == EntityType.PRIMED_TNT) {
-            SimpleGuild guild = null;
+            Guild guild = null;
             if(guild != null) {
                 blocked.put(guild.getTag(), System.currentTimeMillis());
             }

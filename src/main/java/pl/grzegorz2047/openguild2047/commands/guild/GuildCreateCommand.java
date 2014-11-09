@@ -24,6 +24,7 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -102,7 +103,7 @@ public class GuildCreateCommand extends CommandHandler {
 
         guildHelper.getCuboids().put(tag, cuboid);
 
-        SimpleGuild guild = new SimpleGuild(getPlugin());
+        Guild guild = new Guild(getPlugin());
         guild.setCuboid(cuboid);
         guild.setTag(tag);
         guild.setDescription(description);

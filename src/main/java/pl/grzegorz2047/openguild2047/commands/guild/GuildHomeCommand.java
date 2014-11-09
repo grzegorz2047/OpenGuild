@@ -32,7 +32,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.GuildHelper;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.SimpleGuild;
+import com.github.grzegorz2047.openguild.Guild;
 import pl.grzegorz2047.openguild2047.commands.CommandHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -67,7 +67,7 @@ public class GuildHomeCommand extends CommandHandler {
             getPlugin().getOGLogger().warning("Teleport cooldown is smaller than 1 second! Change it in your config.yml");
         }
         
-        SimpleGuild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+        Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
         final Location home = guild.getHome();
         final Location startLocation = player.getLocation();
         
