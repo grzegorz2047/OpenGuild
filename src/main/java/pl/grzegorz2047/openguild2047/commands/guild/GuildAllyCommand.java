@@ -32,6 +32,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -68,6 +69,25 @@ public class GuildAllyCommand extends Command{
                 sender.sendMessage(MsgManager.get("leadernotonline"));
                 return;
             }
+            if(guild.getPendingRelationChanges().contains(requestingGuild.getTag())){
+                if(!requestingGuild.getLeader().equals(player.getUniqueId())){
+                    player.sendMessage(MsgManager.get("playernotleader"));
+                    return;
+                }
+                guild.getPendingRelationChanges().remove(requestingGuild.getTag());
+                Relation r = new Relation();
+                r.setWho(guild.getTag());
+                r.setWithWho(requestingGuild.getTag());
+                r.setState(Relation.STATUS.ALLY);
+                boolean result = OpenGuild.getInstance().getSQLHandler().addAlliance(guild, requestingGuild, Relation.STATUS.ALLY);
+                if(result != true){
+                    System.out.println("Nie udalo sie dodac rekordu!");
+                }
+                guild.getAlliances().add(r);
+                requestingGuild.getAlliances().add(r);             
+                Bukkit.broadcastMessage("Gildia "+guild.getTag()+" zawarla sojusz z "+requestingGuild.getTag());
+                return;
+            }
             requestingGuild.changeRelationRequest(requestingGuild, guild, leader, Relation.STATUS.ALLY);
         }
         
@@ -75,7 +95,7 @@ public class GuildAllyCommand extends Command{
 
     @Override
     public int minArgs() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return 1;
     }
     
 }

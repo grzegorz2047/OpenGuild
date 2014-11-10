@@ -151,13 +151,7 @@ public class CuboidListeners implements Listener {
                         e.setCancelled(true);
                         return;
                     }  
-                }
-                
-            }else{
-                if(!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
-                    e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
-                    e.setCancelled(true);
-                }
+                } 
             }
         }
     }

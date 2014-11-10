@@ -25,6 +25,8 @@ package pl.grzegorz2047.openguild2047.cuboidmanagement;
 
 import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.Relation;
+import com.github.grzegorz2047.openguild.Relation.STATUS;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -88,13 +90,22 @@ public class CuboidStuff {
         }
         player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", guildscuboidtag.toUpperCase()));
         CuboidStuff.playersenteredcuboid.put(player.getName(), guildscuboidtag);
+        Guild cuboidowner = plugin.getGuildHelper().getGuilds().get(guildscuboidtag);
         if(guildscuboidtag.equals(tag)){
             return;
+        }
+        for(Relation r : cuboidowner.getAlliances()){
+            if(!r.getState().equals(STATUS.ALLY)){
+                continue;
+            }
+            if(r.getWho().equals(tag) || r.getWithWho().equals(tag)){
+                return;
+            }
         }
         Guild guild = plugin.getGuildHelper().getGuilds().get(guildscuboidtag);
         if(tag == null){
             if(GenConf.lang.equals("PL")){
-                tag = "bez guildii";
+                tag = "bez gildii";
             }else{
                 tag = "without guild";
             }

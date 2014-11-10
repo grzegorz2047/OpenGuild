@@ -87,18 +87,19 @@ public class GuildRelations {
         for(Relation r : requestingGuild.getAlliances()){
             if(r.getWithWho().equals(guild.getTag()) || r.getWho().equals(guild.getTag())){
                 if(r.getState().equals(status)){
-                    Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("status "+status.toString()+" is already set!");
+                    Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Sojusz juz jest zawarty!");
                     return;
                 }
             }
         }
         if(!pendingRelationChanges.contains(tag)) {
             pendingRelationChanges.add(tag);
-            Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Ally request sent!");
+            Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Wyslano prosbe o sojusz!");
             if(requestedLeader.isOnline()){
-                Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage("Guild ally request from "+requestingGuild.getTag());
+                Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage("Prosba o sojusz od "+requestingGuild.getTag());
+                Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage("Wpisz /g sojusz "+requestingGuild.getTag()+" aby zaakceptowac!");
             }else{
-                Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Leader who owns "+guild.getTag()+" is not online!");
+                Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Lider gildii "+guild.getTag()+" nie jest online!");
                 return;
             }
 
@@ -108,7 +109,7 @@ public class GuildRelations {
                     if(pendingRelationChanges.contains(tag)) {
                         pendingRelationChanges.remove(tag);
                         if(requestedLeader.isOnline()){
-                            Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage("Guild ally request expired from "+requestingTag);                            
+                            Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage("Prosba o zawarcie sojuszu z "+requestingTag+" wygasla!");                            
                         }
                         
                     }

@@ -47,7 +47,6 @@ import pl.grzegorz2047.openguild2047.commands.guild.GuildLeaveCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildListCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildReloadCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildVersionCommand;
-import pl.grzegorz2047.openguild2047.commands.guild.GuildRelationCommand;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -82,7 +81,6 @@ public class GuildCommand implements CommandExecutor {
         this.commands.put(new String[]{ "dom", "home", "house" }, new GuildHomeCommand());
         this.commands.put(new String[]{ "list", "lista" }, new GuildListCommand());
         this.commands.put(new String[]{ "description", "desc", "opis" }, new GuildDescriptionCommand());
-        this.commands.put(new String[]{ "relation", "relacja", "stosunek", "stosunki" }, new GuildRelationCommand());
         this.commands.put(new String[]{ "ally", "sojusz", }, new GuildAllyCommand());
         this.commands.put(new String[]{ "enemy", "wrog", }, new GuildEnemyCommand());
 

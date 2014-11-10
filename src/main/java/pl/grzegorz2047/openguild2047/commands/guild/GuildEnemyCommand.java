@@ -78,7 +78,7 @@ public class GuildEnemyCommand extends Command{
                     return;
                 }
             }
-            sender.sendMessage("There is no such ally!");
+            sender.sendMessage("Nie masz takiego sojusznika!");
         }
     }
 
