@@ -71,8 +71,7 @@ public class GuildRelationCommand extends Command {
                         r.setState(Relation.STATUS.ALLY);
                         OpenGuild.getInstance().getSQLHandler().addAlliance(whoWant, wanted, Relation.STATUS.ALLY);
                         whoWant.getAlliances().add(r);
-                        wanted.getAlliances().add(r);
-                        
+                        wanted.getAlliances().add(r);             
                         Bukkit.broadcastMessage("Gildia "+whoWant.getTag()+" zawarla sojusz z "+wanted.getTag());
                     }else{
                         sender.sendMessage("Gildia "+wanted.getTag()+" nie wyslala zapytania o sojusz!");
