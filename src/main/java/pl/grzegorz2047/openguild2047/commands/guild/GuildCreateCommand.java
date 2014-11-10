@@ -126,7 +126,10 @@ public class GuildCreateCommand extends Command {
         guildHelper.getPlayers().put(player.getUniqueId(), guild);
         
         if(GenConf.playerprefixenabled) {
-            this.getPlugin().getTagManager().setTag(player.getUniqueId());
+            this.getPlugin().
+                    getTagManager().
+                    setTag(player.
+                            getUniqueId());
         }
 
         this.getPlugin().getOGLogger().info("Player '" + player.getName() + "' successfully created new guild '" + tag.toUpperCase() + "'.");

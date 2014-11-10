@@ -63,7 +63,10 @@ public class GuildDisbandCommand extends Command {
             }
 
             for(UUID uuid : guild.getMembers()) {
-                this.getPlugin().getTagManager().removeTag(uuid);
+                this.
+                    getPlugin().
+                    getTagManager().
+                    removeTag(uuid);
                 guildHelper.getPlayers().remove(uuid);
                 getPlugin().getSQLHandler().updatePlayer(uuid);
             }

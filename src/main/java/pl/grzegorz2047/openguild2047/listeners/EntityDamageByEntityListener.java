@@ -86,13 +86,14 @@ public class EntityDamageByEntityListener implements Listener {
                         Guild attackerGuild = plugin.getGuildHelper().getPlayerGuild(attacker.getUniqueId());
                         Guild attackedGuild = plugin.getGuildHelper().getPlayerGuild(attacked.getUniqueId());
                         if(attackerGuild.containsMember(attacked.getUniqueId())) {
-                            if(!attacker.equals(attacked)){
-                                event.setCancelled(true);
+                            if(attacker.equals(attacked)){
+                                return;
                             }
 
                             if(GenConf.TEAMPVP_MSG) {
                                 attacker.sendMessage(MsgManager.get("pvpguildmember", "&cNie mozesz uderzyc gracza sojuszniczej gildii"));
                             }
+                            event.setCancelled(true);
                         }else if(attackerGuild.isAlly(attackedGuild)){
                             event.setCancelled(true);
 
@@ -116,10 +117,10 @@ public class EntityDamageByEntityListener implements Listener {
                         Guild attackerGuild = plugin.getGuildHelper().getPlayerGuild(attacker.getUniqueId());
                         Guild attackedGuild = plugin.getGuildHelper().getPlayerGuild(attacked.getUniqueId());
                         if(attackerGuild.containsMember(attacked.getUniqueId())) {
-                            if(!attacker.equals(attacked)){
-                                event.setCancelled(true);
+                            if(attacker.equals(attacked)){
+                                return;
                             }
-                            
+                            event.setCancelled(true);
 
                             if(GenConf.TEAMPVP_MSG) {
                                 attacker.sendMessage(MsgManager.get("pvpguildmember", "&cNie mozesz uderzyc gracza sojuszniczej gildii"));
