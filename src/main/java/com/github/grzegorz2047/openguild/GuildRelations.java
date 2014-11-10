@@ -23,6 +23,7 @@
  */
 package com.github.grzegorz2047.openguild;
 
+import com.github.grzegorz2047.openguild.Relation.STATUS;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -68,14 +69,37 @@ public class GuildRelations {
     public List<Relation> getEnemies() {
         return enemies;
     }
+    public boolean isAlly(Guild g){
+        for(Relation r : this.getAlliances()){
+            if(!r.getState().equals(STATUS.ALLY)){
+                continue;
+            }
+            if(r.getWithWho().equals(g.getTag()) || r.getWho().equals(g.getTag())){
+                return true;
+            }
+        }
+        return false;
+    }
     
-    public void changeRelationRequest(Guild requestingGuild , Guild guild, final OfflinePlayer player, String status) {
+    public void changeRelationRequest(Guild requestingGuild , Guild guild, final OfflinePlayer requestedLeader, STATUS status) {
         final String tag = guild.getTag();
         final String requestingTag = requestingGuild.getTag();
+        for(Relation r : requestingGuild.getAlliances()){
+            if(r.getWithWho().equals(guild.getTag()) || r.getWho().equals(guild.getTag())){
+                if(r.getState().equals(status)){
+                    Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("status "+status.toString()+" is already set!");
+                    return;
+                }
+            }
+        }
         if(!pendingRelationChanges.contains(tag)) {
             pendingRelationChanges.add(tag);
-            if(player.isOnline()){
-                Bukkit.getPlayer(player.getUniqueId()).sendMessage("Guild ally request from "+requestingGuild.getTag());
+            Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Ally request sent!");
+            if(requestedLeader.isOnline()){
+                Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage("Guild ally request from "+requestingGuild.getTag());
+            }else{
+                Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Leader who owns "+guild.getTag()+" is not online!");
+                return;
             }
 
             new BukkitRunnable() {
@@ -83,8 +107,8 @@ public class GuildRelations {
                 public void run() {
                     if(pendingRelationChanges.contains(tag)) {
                         pendingRelationChanges.remove(tag);
-                        if(player.isOnline()){
-                            Bukkit.getPlayer(player.getUniqueId()).sendMessage("Guild ally request expired from "+requestingTag);                            
+                        if(requestedLeader.isOnline()){
+                            Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage("Guild ally request expired from "+requestingTag);                            
                         }
                         
                     }

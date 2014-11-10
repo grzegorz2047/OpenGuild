@@ -43,7 +43,6 @@ import pl.grzegorz2047.openguild2047.commands.guild.GuildItemsCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildKickCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildLeaveCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildListCommand;
-import pl.grzegorz2047.openguild2047.commands.guild.GuildRelationAcceptCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildReloadCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildVersionCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildRelationCommand;

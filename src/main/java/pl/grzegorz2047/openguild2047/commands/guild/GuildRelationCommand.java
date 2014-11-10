@@ -26,6 +26,7 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
+import com.github.grzegorz2047.openguild.Relation.STATUS;
 import com.github.grzegorz2047.openguild.command.Command;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -55,26 +56,30 @@ public class GuildRelationCommand extends Command {
             String guildToCheck = args[1].toUpperCase();
             String status = args[2];
             if((status.equalsIgnoreCase("accept") || status.equalsIgnoreCase("akceptuj"))){
-                String withWho = args[1].toUpperCase();   
-                Guild wanted = guildHelper.getPlayerGuild(player.getUniqueId());
-                Guild whoWant = guildHelper.getGuilds().get(withWho);
-                if(whoWant != null){
-                    if(whoWant.getPendingRelationChanges().contains(wanted.getTag())){
-                        if(!wanted.getLeader().equals(player.getUniqueId())){
+                String requesterGuildTag = args[1].toUpperCase();   
+                Guild requesterGuild = guildHelper.getGuilds().get(requesterGuildTag);
+                Guild guildWhoAccepts = guildHelper.getPlayerGuild(player.getUniqueId());
+                
+                if(requesterGuild != null){
+                    if(requesterGuild.getPendingRelationChanges().contains(guildWhoAccepts.getTag())){
+                        if(!guildWhoAccepts.getLeader().equals(player.getUniqueId())){
                             player.sendMessage(MsgManager.get("playernotleader"));
                             return;
                         }
-                        whoWant.getPendingRelationChanges().remove(wanted.getTag());
+                        requesterGuild.getPendingRelationChanges().remove(guildWhoAccepts.getTag());
                         Relation r = new Relation();
-                        r.setWho(wanted.getTag());
-                        r.setWithWho(withWho);
+                        r.setWho(requesterGuild.getTag());
+                        r.setWithWho(guildWhoAccepts.getTag());
                         r.setState(Relation.STATUS.ALLY);
-                        OpenGuild.getInstance().getSQLHandler().addAlliance(whoWant, wanted, Relation.STATUS.ALLY);
-                        whoWant.getAlliances().add(r);
-                        wanted.getAlliances().add(r);             
-                        Bukkit.broadcastMessage("Gildia "+whoWant.getTag()+" zawarla sojusz z "+wanted.getTag());
+                        boolean result = OpenGuild.getInstance().getSQLHandler().addAlliance(requesterGuild, guildWhoAccepts, Relation.STATUS.ALLY);
+                        if(result != true){
+                            System.out.println("Nie udalo sie dodac rekordu!");
+                        }
+                        requesterGuild.getAlliances().add(r);
+                        guildWhoAccepts.getAlliances().add(r);             
+                        Bukkit.broadcastMessage("Gildia "+requesterGuild.getTag()+" zawarla sojusz z "+guildWhoAccepts.getTag());
                     }else{
-                        sender.sendMessage("Gildia "+wanted.getTag()+" nie wyslala zapytania o sojusz!");
+                        sender.sendMessage("Gildia "+requesterGuild.getTag()+" nie wyslala zapytania o sojusz!");
                     }
                 }else{
                     sender.sendMessage(MsgManager.notinguild);
@@ -97,15 +102,15 @@ public class GuildRelationCommand extends Command {
                     return;
                 }
                 if(status.equalsIgnoreCase("ally")){
-                    requestingGuild.changeRelationRequest(requestingGuild, guild, leader, status.toUpperCase());
+                    requestingGuild.changeRelationRequest(requestingGuild, guild, leader, STATUS.ALLY);
                 }else{
                     for(Relation r : requestingGuild.getAlliances()){
-                        if(r.getWithWho().equals(guild.getTag()) ){
+                        if(r.getWithWho().equals(guild.getTag()) || r.getWho().equals(guild.getTag())){
                             requestingGuild.getAlliances().remove(r);
                             guild.getAlliances().remove(r);
-                            //Ustaw lub usun z sqla jakos
-                            Bukkit.broadcastMessage("Gildia "+requestingGuild+" zerwala sojusz z "+guild.getTag());
-                            break;
+                            OpenGuild.getInstance().getSQLHandler().removeAlliance(requestingGuild, guild);
+                            Bukkit.broadcastMessage("Gildia "+requestingGuild.getTag()+" zerwala sojusz z "+guild.getTag());
+                            return;
                         }
                     }
                     sender.sendMessage("There is no such ally!");

@@ -239,7 +239,7 @@ public class SQLHandler {
                 r.setWho(who);
                 r.setWithWho(withwho);
                 r.setExpireDate(expires);
-                r.setState(STATUS.valueOf(status));
+                r.setState(STATUS.valueOf(status.toUpperCase()));
                 Guild whoGuild = plugin.getGuildHelper().getGuilds().get(who);
                 Guild withWhoGuild = plugin.getGuildHelper().getGuilds().get(withwho);
                 
@@ -346,22 +346,40 @@ public class SQLHandler {
         try {
             statement = this.connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM `openguild_allies`" +" WHERE who='"+who+"'" +"OR withwho='"+who+"';");
+            if(!rs.isFirst()){
+                statement.execute("INSERT INTO `openguild_allies` VALUES(0, '"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', 0);");
+                    return true;
+            }
             while(rs.next()){
                 String whoseguild = rs.getString("who");
                 String withwho = rs.getString("withwho");
-                if(whoseguild.equals(who.getTag()) && withwho.equals(withWho.getTag()) || whoseguild.equals(withWho.getTag()) && withwho.equals(who.getTag())){
+                if((whoseguild.equals(who.getTag()) && withwho.equals(withWho.getTag())) || (whoseguild.equals(withWho.getTag()) && withwho.equals(who.getTag()))){
                     return false;
                 }else{
-                    statement.execute("INSERT INTO `openguild_allies` VALUES(0, '"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', '"+0+"');");
+                    statement.execute("INSERT INTO `openguild_allies` VALUES(0, '"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', 0);");
                     return true;
                 }
             }
         }
         catch (SQLException ex) {
-            plugin.getOGLogger().exceptionThrown(ex);
+            ex.printStackTrace();
             return false;
         }
         return false;
+    }
+    public boolean removeAlliance(Guild who, Guild withWho){
+        try {
+            statement = this.connection.createStatement();
+            statement.execute("DELETE FROM `openguild_allies` WHERE who='"+who.getTag()+"' AND withwho='"+withWho.getTag()+"';");
+            statement.execute("DELETE FROM `openguild_allies` WHERE who='"+withWho.getTag()+"' AND withwho='"+who.getTag()+"';");
+            return true;
+                
+            
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
             
     public boolean isConnectionClosed() {
