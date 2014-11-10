@@ -132,8 +132,8 @@ public class CuboidListeners implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(e.getClickedBlock() != null) {
-            if(!isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())){
-                if(GenConf.EXTRA_PROTECTION) {
+            if(GenConf.EXTRA_PROTECTION) {
+                if(!isAllowed(e.getPlayer(), e.getClickedBlock().getLocation())){
                     if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
                         Location block = e.getPlayer().getLocation();
                         Guilds.getLogger().info("Player " + e.getPlayer().getName() + " (" + e.getPlayer().getUniqueId() +
@@ -151,15 +151,13 @@ public class CuboidListeners implements Listener {
                         e.setCancelled(true);
                         return;
                     }  
-                }else{
-                    if(!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
-                        e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
-                        e.setCancelled(true);
-                    }
                 }
-            }
-            if(e.getClickedBlock().getType().equals(Material.DRAGON_EGG)){
-                e.setCancelled(true); 
+                
+            }else{
+                if(!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
+                    e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+                    e.setCancelled(true);
+                }
             }
         }
     }

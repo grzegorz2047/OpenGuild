@@ -31,9 +31,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.commands.guild.GuildAllyCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildCreateCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildDescriptionCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildDisbandCommand;
+import pl.grzegorz2047.openguild2047.commands.guild.GuildEnemyCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildHelpCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildHomeCommand;
 import pl.grzegorz2047.openguild2047.commands.guild.GuildInfoCommand;
@@ -81,6 +83,8 @@ public class GuildCommand implements CommandExecutor {
         this.commands.put(new String[]{ "list", "lista" }, new GuildListCommand());
         this.commands.put(new String[]{ "description", "desc", "opis" }, new GuildDescriptionCommand());
         this.commands.put(new String[]{ "relation", "relacja", "stosunek", "stosunki" }, new GuildRelationCommand());
+        this.commands.put(new String[]{ "ally", "sojusz", }, new GuildAllyCommand());
+        this.commands.put(new String[]{ "enemy", "wrog", }, new GuildEnemyCommand());
 
     }
     

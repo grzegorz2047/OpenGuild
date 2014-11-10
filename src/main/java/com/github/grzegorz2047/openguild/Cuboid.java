@@ -66,11 +66,11 @@ public class Cuboid {
     }
 
     public Location getMin() {
-        return new Location(this.center.getWorld(), this.center.getBlockX() - this.radius, this.center.getBlockY() - this.radius, this.center.getBlockZ() - this.radius);
+        return new Location(this.center.getWorld(), this.center.getBlockX() - this.radius, 0, this.center.getBlockZ() - this.radius);
     }
 
     public Location getMax() {
-        return new Location(this.center.getWorld(), this.center.getBlockX() + this.radius, this.center.getBlockY() + this.radius, this.center.getBlockZ() + this.radius);
+        return new Location(this.center.getWorld(), this.center.getBlockX() + this.radius, this.center.getWorld().getMaxHeight(), this.center.getBlockZ() + this.radius);
     }
 
 }
