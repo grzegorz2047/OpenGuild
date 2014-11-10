@@ -37,8 +37,8 @@ public class GuildRelations {
     protected final pl.grzegorz2047.openguild2047.OpenGuild plugin;
     private Guild guild;
 
-    private List<Guild> alliances = new ArrayList<Guild>();
-    private List<Guild> enemies = new ArrayList<Guild>();
+    private List<Relation> alliances = new ArrayList<Relation>();
+    private List<Relation> enemies = new ArrayList<Relation>();
     private final List<String> pendingRelationChanges = new ArrayList<String>();
     
     public GuildRelations(pl.grzegorz2047.openguild2047.OpenGuild plugin) {
@@ -49,28 +49,33 @@ public class GuildRelations {
         this.guild = guild;
     }
 
-    public void setAlliances(List<Guild> alliances) {
+    public List<String> getPendingRelationChanges() {
+        return pendingRelationChanges;
+    }
+
+    public void setAlliances(List<Relation> alliances) {
         this.alliances = alliances;
     }
 
-    public List<Guild> getAlliances() {
+    public List<Relation> getAlliances() {
         return alliances;
     }
 
-    public void setEnemies(List<Guild> enemies) {
+    public void setEnemies(List<Relation> enemies) {
         this.enemies = enemies;
     }
 
-    public List<Guild> getEnemies() {
+    public List<Relation> getEnemies() {
         return enemies;
     }
     
     public void changeRelationRequest(Guild requestingGuild , Guild guild, final OfflinePlayer player, String status) {
         final String tag = guild.getTag();
+        final String requestingTag = requestingGuild.getTag();
         if(!pendingRelationChanges.contains(tag)) {
             pendingRelationChanges.add(tag);
             if(player.isOnline()){
-                Bukkit.getPlayer(player.getUniqueId()).sendMessage("Guild ally request!");
+                Bukkit.getPlayer(player.getUniqueId()).sendMessage("Guild ally request from "+requestingGuild.getTag());
             }
 
             new BukkitRunnable() {
@@ -79,13 +84,14 @@ public class GuildRelations {
                     if(pendingRelationChanges.contains(tag)) {
                         pendingRelationChanges.remove(tag);
                         if(player.isOnline()){
-                            Bukkit.getPlayer(player.getUniqueId()).sendMessage("Guild ally request expired!");
-                            
+                            Bukkit.getPlayer(player.getUniqueId()).sendMessage("Guild ally request expired from "+requestingTag);                            
                         }
                         
                     }
                 }
             }.runTaskLater(this.plugin, 20L * 25);
+        }else{
+            //already requested
         }
     }
 }

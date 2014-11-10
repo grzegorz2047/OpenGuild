@@ -35,6 +35,8 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
+import pl.grzegorz2047.openguild2047.GenConf;
 
 /**
  * Command used to accept invitation to guild.
@@ -78,16 +80,19 @@ public class GuildInvitationAcceptCommand extends Command {
                 g.acceptInvitation((Player) sender);
                 getPlugin().getTagManager().setTag(((Player) sender).getUniqueId());
                 sender.sendMessage(ChatColor.GREEN+"Guild join Accepted!/Dolaczono do gildii!");
+                Bukkit.broadcastMessage(GenConf.prefix +"Gracz "+sender.getName()+ " dolaczyl do gildii "+g.getTag());
             }else{
                 sender.sendMessage(ChatColor.RED+"No invitation available!");
                 sender.sendMessage(ChatColor.RED+"Brak zaproszen!");
             }
         } else if(args.length >= 2) {
-            String tag = args[1];
+            String tag = args[1].toUpperCase();
             if(guildHelper.getGuilds().containsKey(tag)) {
                 if(invitationsFrom.contains(guildHelper.getGuilds().get(tag))) {
                     guildHelper.getGuilds().get(tag).acceptInvitation((Player) sender);
                     getPlugin().getTagManager().setTag(((Player) sender).getUniqueId());
+                    sender.sendMessage(ChatColor.GREEN+"Guild join Accepted!/Dolaczono do gildii!");
+                    Bukkit.broadcastMessage(GenConf.prefix +"Gracz "+sender.getName()+ " dolaczyl do gildii "+tag);
                 }
             }
         }

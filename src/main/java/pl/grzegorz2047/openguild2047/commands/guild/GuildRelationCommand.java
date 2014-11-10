@@ -26,6 +26,7 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.OpenGuild;
+import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.command.Command;
 import java.util.List;
 import java.util.UUID;
@@ -53,27 +54,71 @@ public class GuildRelationCommand extends Command {
             return;
         }
         Player player = (Player) sender;
-        if(args.length == 3) {
-            String guildToCheck = args[1];
+        if(args.length >= 3) {
+            String guildToCheck = args[1].toUpperCase();
             String status = args[2];
-            if(!guildHelper.doesGuildExists(guildToCheck)) {
-                sender.sendMessage(MsgManager.get("guilddoesntexists"));
-                return;
-            }
-            Guild requestingGuild = guildHelper.getPlayerGuild(player.getUniqueId());
-            if(!requestingGuild.getLeader().equals(player.getUniqueId())) {
-                player.sendMessage(MsgManager.get("playernotleader"));
-                return;
-            }
-            Guild guild = guildHelper.getGuilds().get(guildToCheck);
-            OfflinePlayer leader = Bukkit.getOfflinePlayer(guild.getLeader());
-            
-            if(!leader.isOnline()){
-                sender.sendMessage(MsgManager.get("leadernotonline"));
-            }
-            guild.changeRelationRequest(requestingGuild, guild, leader, status.toUpperCase());
+            if((status.equalsIgnoreCase("accept") || status.equalsIgnoreCase("akceptuj"))){
+                String withWho = args[1].toUpperCase();   
+                Guild wanted = guildHelper.getPlayerGuild(player.getUniqueId());
+                Guild whoWant = guildHelper.getGuilds().get(withWho);
+                if(whoWant != null){
+                    if(whoWant.getPendingRelationChanges().contains(wanted.getTag())){
+                        if(!wanted.getLeader().equals(player.getUniqueId())){
+                            player.sendMessage(MsgManager.get("playernotleader"));
+                            return;
+                        }
+                        whoWant.getPendingRelationChanges().remove(wanted.getTag());
+                        Relation r = new Relation();
+                        r.setWho(whoWant.getTag());
+                        r.setWithWho(withWho);
+                        r.setState(Relation.STATUS.ALLY);
+                        whoWant.getAlliances().add(r);
+                        wanted.getAlliances().add(r);
+                        //Dodaj do sqla jakos
+                        Bukkit.broadcastMessage("Gildia "+whoWant.getTag()+" zawarla sojusz z "+wanted.getTag());
+                    }else{
+                        sender.sendMessage("Gildia "+wanted.getTag()+" nie wyslala zapytania o sojusz!");
+                    }
+                }else{
+                    sender.sendMessage(MsgManager.notinguild);
+                }
+            }else if(status.equalsIgnoreCase("ally") || status.equalsIgnoreCase("enemy")){
+                if(!guildHelper.doesGuildExists(guildToCheck)) {
+                    sender.sendMessage(MsgManager.get("guilddoesntexists"));
+                    return;
+                }
+                Guild requestingGuild = guildHelper.getPlayerGuild(player.getUniqueId());
+                if(!requestingGuild.getLeader().equals(player.getUniqueId())) {
+                    player.sendMessage(MsgManager.get("playernotleader"));
+                    return;
+                }
+                Guild guild = guildHelper.getGuilds().get(guildToCheck);
+                OfflinePlayer leader = Bukkit.getOfflinePlayer(guild.getLeader());
+
+                if(!leader.isOnline()){
+                    sender.sendMessage(MsgManager.get("leadernotonline"));
+                    return;
+                }
+                if(status.equalsIgnoreCase("ally")){
+                    requestingGuild.changeRelationRequest(requestingGuild, guild, leader, status.toUpperCase());
+                }else{
+                    for(Relation r : requestingGuild.getAlliances()){
+                        if(r.getWho().equals(guild.getTag()) || r.getWithWho().equals(guild.getTag()) ){
+                            requestingGuild.getAlliances().remove(r);
+                            guild.getAlliances().remove(r);
+                            //Ustaw lub usun z sqla jakos
+                            Bukkit.broadcastMessage("Gildia "+requestingGuild+" zerwala sojusz z "+guild.getTag());
+                            break;
+                        }
+                    }
+                    sender.sendMessage("There is no such ally!");
+                }
+                
+            }else{
+                player.sendMessage("incorrect status");
+            } 
         } else { 
-            player.sendMessage("Usage: /g relation <who> ally/enemy");
+            player.sendMessage("Usage: /g relation <who> ally/enemy/accept");
         }
     }
 

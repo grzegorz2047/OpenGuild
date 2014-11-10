@@ -52,9 +52,8 @@ public class PlayerJoinListener implements Listener {
             plugin.getSQLHandler().addPlayer(uuid);
             plugin.getGuildHelper().getPlayers().put(uuid, null);
         }
-        
+        plugin.getTagManager().setTag(uuid);
         if(plugin.getGuildHelper().hasGuild(player)) {
-            plugin.getTagManager().setTag(uuid);
             Guild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
             for(UUID mem : guild.getMembers()) {
                 OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);
@@ -62,7 +61,6 @@ public class PlayerJoinListener implements Listener {
                     if(!player.getUniqueId().equals(om.getUniqueId())){
                         om.getPlayer().sendMessage(MsgManager.get("guildmemberjoined").replace("{PLAYER}", player.getDisplayName()));
                     }
-                    
                 }
             }
         }

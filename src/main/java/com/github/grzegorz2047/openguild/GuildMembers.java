@@ -89,7 +89,7 @@ public class GuildMembers extends GuildRelations {
                 public void run() {
                     if(pendingInvitations.contains(uuid)) {
                         pendingInvitations.remove(uuid);
-                        player.sendMessage(MsgManager.get("guild-invitation-expired"));
+                        player.sendMessage(MsgManager.get("guild-invitation-expired").replace("{TAG}", guild.getTag().toUpperCase()));
                     }
                 }
             }.runTaskLater(this.plugin, 20L * 25);
