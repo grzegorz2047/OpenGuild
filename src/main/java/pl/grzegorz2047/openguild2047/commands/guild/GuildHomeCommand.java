@@ -82,7 +82,7 @@ public class GuildHomeCommand extends Command {
                 
                 Location currentLocation = player.getLocation();
                 if(currentLocation.distance(startLocation) > 1) {
-                    player.sendMessage(ChatColor.RED + "Teleportacja zostala przerwana, poniewaz sie poruszyles!");
+                    player.sendMessage(MsgManager.get("tpcan"));
                     cancel();
                 } else {
                     if(timeElapsed == GenConf.TELEPORT_COOLDOWN) {

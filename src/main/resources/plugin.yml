@@ -1,8 +1,8 @@
 name: OpenGuild2047
 description: OpenGuild2047 is good, public, open source guild plugin
-authors: [grzegorz2047, TheMolkaPL]
+authors: [grzegorz2047, shooly, TheMolkaPL]
 website: https://www.github.com/grzegorz2047/OpenGuild2047
-version: 0.6.3
+version: '${project.version}'
 prefix: 'OpenGuild'
 main: pl.grzegorz2047.openguild2047.OpenGuild
 commands:

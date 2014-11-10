@@ -116,8 +116,6 @@ public class GenUtil {
             if(distance <= radius) {
                 System.out.println(distance);
                 return true;
-            } else {
-                System.out.println("Player Daleko/far enough: " + distance);
             }
         }
         return false;

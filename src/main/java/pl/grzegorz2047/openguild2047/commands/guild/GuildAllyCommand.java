@@ -24,6 +24,7 @@
 package pl.grzegorz2047.openguild2047.commands.guild;
 
 import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.OpenGuildPlugin;
 import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
@@ -81,11 +82,13 @@ public class GuildAllyCommand extends Command{
                 r.setState(Relation.STATUS.ALLY);
                 boolean result = OpenGuild.getInstance().getSQLHandler().addAlliance(guild, requestingGuild, Relation.STATUS.ALLY);
                 if(result != true){
-                    System.out.println("Nie udalo sie dodac rekordu!");
+                    this.getPlugin().getOGLogger().warning("Could not register the ally for " + guild.getTag() + " guild!");
                 }
                 guild.getAlliances().add(r);
-                requestingGuild.getAlliances().add(r);             
-                Bukkit.broadcastMessage("Gildia "+guild.getTag()+" zawarla sojusz z "+requestingGuild.getTag());
+                requestingGuild.getAlliances().add(r);
+                Bukkit.broadcastMessage(MsgManager.get("broadcast-ally")
+                        .replace("{GUILD1}", guild.getTag())
+                        .replace("{GUILD2}", requestingGuild.getTag()));
                 return;
             }
             requestingGuild.changeRelationRequest(requestingGuild, guild, leader, Relation.STATUS.ALLY);

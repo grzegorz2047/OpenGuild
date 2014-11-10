@@ -67,11 +67,7 @@ public class GuildInvitationAcceptCommand extends Command {
 
         if(args.length == 1) {
             if (invitationsFrom.size() > 1) {
-                // TODO: move to language file
-                sender.sendMessage("You have more than 1 invitation!/Masz wiecej niz 1 zaproszenie!");
-                sender.sendMessage("Type/Wpisz /guild accept <tag> to accept invitation./Aby akceptowac.");
-                sender.sendMessage("-------------------");
-
+                sender.sendMessage(MsgManager.get("invmore"));
                 for (Guild guild : invitationsFrom) {
                     sender.sendMessage(ChatColor.BOLD + guild.getTag().toUpperCase() + ChatColor.GRAY + " - " + guild.getDescription());
                 }
@@ -79,11 +75,11 @@ public class GuildInvitationAcceptCommand extends Command {
                 Guild g = invitationsFrom.get(0);
                 g.acceptInvitation((Player) sender);
                 getPlugin().getTagManager().setTag(((Player) sender).getUniqueId());
-                sender.sendMessage(ChatColor.GREEN+"Guild join Accepted!/Dolaczono do gildii!");
-                Bukkit.broadcastMessage(GenConf.prefix +"Gracz "+sender.getName()+ " dolaczyl do gildii "+g.getTag());
+                Bukkit.broadcastMessage(MsgManager.get("broadcast-join")
+                            .replace("{PLAYER}", sender.getName())
+                            .replace("{TAG}", g.getTag()));
             }else{
-                sender.sendMessage(ChatColor.RED+"No invitation available!");
-                sender.sendMessage(ChatColor.RED+"Brak zaproszen!");
+                sender.sendMessage(MsgManager.get("noinv"));
             }
         } else if(args.length >= 2) {
             String tag = args[1].toUpperCase();
@@ -91,8 +87,9 @@ public class GuildInvitationAcceptCommand extends Command {
                 if(invitationsFrom.contains(guildHelper.getGuilds().get(tag))) {
                     guildHelper.getGuilds().get(tag).acceptInvitation((Player) sender);
                     getPlugin().getTagManager().setTag(((Player) sender).getUniqueId());
-                    sender.sendMessage(ChatColor.GREEN+"Guild join Accepted!/Dolaczono do gildii!");
-                    Bukkit.broadcastMessage(GenConf.prefix +"Gracz "+sender.getName()+ " dolaczyl do gildii "+tag);
+                    Bukkit.broadcastMessage(MsgManager.get("broadcast-join")
+                            .replace("{PLAYER}", sender.getName())
+                            .replace("{TAG}", tag));
                 }
             }
         }

@@ -73,7 +73,7 @@ public class GuildInviteCommand extends Command {
         }
         
         guild.invitePlayer(toInvite, player);
-        player.sendMessage("Successfully invited!/ Wyslano zaproszenie!");
+        player.sendMessage(MsgManager.get("invitesent").replace("{PLAYER}", toInvite.getName()));
     }
 
     @Override

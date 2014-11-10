@@ -74,11 +74,13 @@ public class GuildEnemyCommand extends Command{
                     requestingGuild.getAlliances().remove(r);
                     guild.getAlliances().remove(r);
                     OpenGuild.getInstance().getSQLHandler().removeAlliance(requestingGuild, guild);
-                    Bukkit.broadcastMessage("Gildia "+requestingGuild.getTag()+" zerwala sojusz z "+guild.getTag());
+                    Bukkit.broadcastMessage(MsgManager.getIgnorePref("broadcast-enemy")
+                            .replace("{GUILD1}", requestingGuild.getTag())
+                            .replace("{GUILD2}", guild.getTag()));
                     return;
                 }
             }
-            sender.sendMessage("Nie masz takiego sojusznika!");
+            sender.sendMessage(MsgManager.get("enemynotfound"));
         }
     }
 

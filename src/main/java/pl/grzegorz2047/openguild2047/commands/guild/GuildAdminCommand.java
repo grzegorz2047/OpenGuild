@@ -43,7 +43,7 @@ public class GuildAdminCommand extends Command {
         }
         Player player = (Player) sender;
         if(args.length == 1){
-            player.sendMessage("Usage: /g admin <arg> <value>");
+            player.sendMessage(MsgManager.get("cmdhelp-us") + "/g admin <arg> <value>");
         }
     }
 
