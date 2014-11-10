@@ -1,6 +1,6 @@
 - [ ] Czasowe zablokowanie możliwości niszczenia specjalnym itemem bloków wrogiej gildii
 - [x] Jakiś prosty system nagradzania za zabicia (pisane KD)
-- [ ] Zablokowanie wybuchanie tnt na czyjejś gildii (itd. bo wystrzeli ktos i spadnie i bum xd)
+- [ ] Zablokowanie wybuchanie tnt na czyjejś gildii czasowo od x h do x h
 - [x] Naprawic ustalanie czy gildia ma byc ally czy enem
   - [x] Kolorowanie tagów ze względu na sojusz czy wojne
 - [ ] Możliwość otrzymania specjalnego przedmiotu z jakąś niestandardową mocą
