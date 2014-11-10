@@ -118,6 +118,7 @@ public class OpenGuild extends JavaPlugin {
         // Load database
         loadDB();
         loadPlayers();
+        this.getSQLHandler().loadRelations();
         
         // Setup Tag Manager
         this.tagManager = new TagManager(this);

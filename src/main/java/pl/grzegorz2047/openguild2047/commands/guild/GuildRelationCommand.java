@@ -25,17 +25,14 @@
 package pl.grzegorz2047.openguild2047.commands.guild;
 
 import com.github.grzegorz2047.openguild.Guild;
-import com.github.grzegorz2047.openguild.OpenGuild;
 import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.command.Command;
-import java.util.List;
-import java.util.UUID;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -69,16 +66,13 @@ public class GuildRelationCommand extends Command {
                         }
                         whoWant.getPendingRelationChanges().remove(wanted.getTag());
                         Relation r = new Relation();
+                        r.setWho(wanted.getTag());
                         r.setWithWho(withWho);
                         r.setState(Relation.STATUS.ALLY);
-                        
-                        Relation r2 = new Relation();
-                        r.setWithWho(wanted.getTag());
-                        r.setState(Relation.STATUS.ALLY);
-                        
+                        OpenGuild.getInstance().getSQLHandler().addAlliance(whoWant, wanted, Relation.STATUS.ALLY);
                         whoWant.getAlliances().add(r);
-                        wanted.getAlliances().add(r2);
-                        //Dodaj do sqla jakos
+                        wanted.getAlliances().add(r);
+                        
                         Bukkit.broadcastMessage("Gildia "+whoWant.getTag()+" zawarla sojusz z "+wanted.getTag());
                     }else{
                         sender.sendMessage("Gildia "+wanted.getTag()+" nie wyslala zapytania o sojusz!");

@@ -29,9 +29,18 @@ package com.github.grzegorz2047.openguild;
  */
 public class Relation {
     
+    private String who;
     private String withWho;
     private long startDate;
     private long expireDate;
+
+    public String getWho() {
+        return who;
+    }
+
+    public void setWho(String who) {
+        this.who = who;
+    }
     
     public enum STATUS { ALLY, ENEMY };
     private STATUS state;

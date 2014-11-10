@@ -35,6 +35,7 @@ import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.Relation.STATUS;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -223,7 +224,32 @@ public class SQLHandler {
         
         return players;
     }
-    
+    public void loadRelations(){
+        try {
+            statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery("SELECT * FROM `openguild_allies`");
+            while(result.next()) {
+                String who = result.getString("who");
+                //int kills = result.getInt("kills");
+                //int deaths = result.getInt("deaths");
+                String status = result.getString("status");
+                String withwho = result.getString("withwho");
+                long expires = result.getInt("expires");
+                Relation r = new Relation();
+                r.setWho(who);
+                r.setWithWho(withwho);
+                r.setExpireDate(expires);
+                r.setState(STATUS.valueOf(status));
+                Guild whoGuild = plugin.getGuildHelper().getGuilds().get(who);
+                Guild withWhoGuild = plugin.getGuildHelper().getGuilds().get(withwho);
+                
+                whoGuild.getAlliances().add(r);
+                withWhoGuild.getAlliances().add(r);
+            }
+        } catch(SQLException ex) {
+            plugin.getOGLogger().exceptionThrown(ex);
+        }
+    }
     
     /**
      * Adds player to database.
