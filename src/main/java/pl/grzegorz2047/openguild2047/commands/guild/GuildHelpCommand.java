@@ -83,7 +83,7 @@ public class GuildHelpCommand extends Command {
                 sender.sendMessage(help("invite", "Invite to guild (sends invite)"));
                 sender.sendMessage(help("leave", "Leave from current guild"));
                 sender.sendMessage(help("info <guild>", "Information about the guild"));
-                sender.sendMessage(help("relation <guild> ally/enemy", "Set ally or enemy to other guild"));
+                sender.sendMessage(help("relation <guild> ally/enemy/accept", "Set ally,enemy to other guild or accept alliance"));
                 sender.sendMessage(help("disband", "Disband your guild"));
                 sender.sendMessage(help("items", "List of required items"));
                 sender.sendMessage(help("home", "Teleport to your guild home location"));
