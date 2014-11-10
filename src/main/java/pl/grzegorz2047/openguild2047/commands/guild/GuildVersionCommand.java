@@ -38,7 +38,8 @@ public class GuildVersionCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + "OpenGuild2047" + ChatColor.DARK_GRAY + " ----------------- ");
+        String label = ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "---------------" + ChatColor.RESET;
+        sender.sendMessage(label + ChatColor.GOLD + " OpenGuild2047 " + label);
         sender.sendMessage(ChatColor.DARK_GRAY + "Version: " + ChatColor.GOLD + this.getPlugin().getDescription().getVersion());
         sender.sendMessage(ChatColor.DARK_GRAY + "Authors: " + ChatColor.GOLD + "grzegorz2047 & TheMolkaPL");
         sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild2047");

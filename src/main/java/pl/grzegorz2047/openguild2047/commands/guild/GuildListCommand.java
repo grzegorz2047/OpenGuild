@@ -51,7 +51,8 @@ public class GuildListCommand extends Command {
         
         String result = resultBuilder.toString();
         
-        sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.getIgnorePref("titleguildlist") + ChatColor.DARK_GRAY + " ----------------- ");
+        String label = ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "---------------" + ChatColor.RESET;
+        sender.sendMessage(label + " " + ChatColor.GOLD + MsgManager.getIgnorePref("titleguildlist") + " " + label);
         resultBuilder.append(MsgManager.get("numguilds")).append(this.getPlugin().getGuildHelper().getGuilds().size());
         resultBuilder.append("\n");
         

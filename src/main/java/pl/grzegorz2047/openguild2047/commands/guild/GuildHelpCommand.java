@@ -97,11 +97,13 @@ public class GuildHelpCommand extends Command {
     }
     
     private static String getTitleAdmin() {
-        return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help Admin" + ChatColor.DARK_GRAY + " --------------- ";
+        String label = ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "---------------" + ChatColor.RESET;
+        return label + ChatColor.GOLD + " Help Admin " + label;
     }
 
     private static String getTitle(int page) {
-        return ChatColor.DARK_GRAY + " --------------- " + ChatColor.GOLD + "Help (" + page + "/1)" + ChatColor.DARK_GRAY + " --------------- ";
+        String label = ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "---------------" + ChatColor.RESET;
+        return label + ChatColor.GOLD + " Help (" + page + "/1) " + label;
     }
 
     private static String help(String usage, String desc) {
