@@ -144,7 +144,10 @@ public class OpenGuild extends JavaPlugin {
     @Override
     public void onDisable() {
         instance = null;
+        
         this.sqlHandler.closeConnection();
+        this.sqlHandler = null;
+        this.tagManager = null;
         
         int deletedFiles = 0;
         
