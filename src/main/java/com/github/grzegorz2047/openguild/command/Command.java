@@ -24,6 +24,7 @@
 
 package com.github.grzegorz2047.openguild.command;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 
@@ -33,6 +34,11 @@ public abstract class Command {
 
     public OpenGuild getPlugin() {
         return OpenGuild.getInstance();
+    }
+
+    public String getTitle(String title) {
+        String label = ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "--------------------" + ChatColor.RESET;
+        return label + " " + title + ChatColor.RESET + " " + label;
     }
 
     public abstract int minArgs();

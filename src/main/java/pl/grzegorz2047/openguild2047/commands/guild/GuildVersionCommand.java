@@ -26,6 +26,8 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -35,13 +37,18 @@ import org.bukkit.command.CommandSender;
  * Usage: /guild version
  */
 public class GuildVersionCommand extends Command {
+    private final List<Author> authors;
+
+    public GuildVersionCommand() {
+        this.authors = new ArrayList<Author>();
+        this.loadAuthors();
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        String label = ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "---------------" + ChatColor.RESET;
-        sender.sendMessage(label + ChatColor.GOLD + " OpenGuild2047 " + label);
+        sender.sendMessage(this.getTitle(ChatColor.GOLD + "OpenGuild2047"));
         sender.sendMessage(ChatColor.DARK_GRAY + "Version: " + ChatColor.GOLD + this.getPlugin().getDescription().getVersion());
-        sender.sendMessage(ChatColor.DARK_GRAY + "Authors: " + ChatColor.GOLD + "grzegorz2047 & TheMolkaPL");
+        sender.sendMessage(ChatColor.DARK_GRAY + "Authors: " + this.getAuthors());
         sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild2047");
         sender.sendMessage(ChatColor.DARK_GRAY + "BukkitDev: " + ChatColor.GOLD + "http://dev.bukkit.org/bukkit-plugins/openguild");
         sender.sendMessage(ChatColor.DARK_GRAY + "MCStats: " + ChatColor.GOLD + "http://mcstats.org/plugin/OpenGuild2047");
@@ -52,4 +59,40 @@ public class GuildVersionCommand extends Command {
         return 1;
     }
 
+    private String getAuthors() {
+        StringBuilder builder = new StringBuilder();
+        for (Author author : this.authors) {
+            builder.append(author.getMessage()).append("\n");
+        }
+        return builder.toString();
+    }
+
+    private void loadAuthors() {
+        this.authors.add(new Author("filippop1", "Tester"));
+        this.authors.add(new Author("grzegorz2047", "Project leader"));
+        this.authors.add(new Author("shooly", "Coder"));
+        this.authors.add(new Author("TheMolkaPL", "Coder"));
+    }
+
+    private class Author {
+        private final String author;
+        private final String description;
+
+        public Author(String author, String description) {
+            this.author = author;
+            this.description = description;
+        }
+
+        public String getAuthor() {
+            return this.author;
+        }
+
+        public String getDescription() {
+            return this.description;
+        }
+
+        public String getMessage() {
+            return ChatColor.GREEN + "@" + this.getAuthor() + ChatColor.GRAY + " - " + this.getDescription() + ChatColor.RESET;
+        }
+    }
 }

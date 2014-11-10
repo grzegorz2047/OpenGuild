@@ -55,7 +55,7 @@ public class GuildHelpCommand extends Command {
             }
         }
         
-        sender.sendMessage(getTitle(page));
+        sender.sendMessage(getHelpTitle(page));
         
         if(page == 1) {
             if(GenConf.lang.equals("PL")) {
@@ -95,18 +95,12 @@ public class GuildHelpCommand extends Command {
             sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze {NUMBER} nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
         }
     }
-    
-    private static String getTitleAdmin() {
-        String label = ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "---------------" + ChatColor.RESET;
-        return label + ChatColor.GOLD + " Help Admin " + label;
+
+    private String getHelpTitle(int page) {
+        return this.getTitle(ChatColor.GOLD + "Help (" + page + "/1)");
     }
 
-    private static String getTitle(int page) {
-        String label = ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "---------------" + ChatColor.RESET;
-        return label + ChatColor.GOLD + " Help (" + page + "/1) " + label;
-    }
-
-    private static String help(String usage, String desc) {
+    private String help(String usage, String desc) {
         if(GenConf.lang.equals("PL")){
             return ChatColor.GOLD + "" + ChatColor.ITALIC +  "/gildia " + ChatColor.AQUA + usage + ChatColor.RESET + ChatColor.GRAY + " - " + desc;
         } else {
@@ -115,9 +109,9 @@ public class GuildHelpCommand extends Command {
         
     }
 
-    private static void admin(CommandSender sender) {
+    private void admin(CommandSender sender) {
         int hide = 0;
-        sender.sendMessage(getTitleAdmin());
+        sender.sendMessage(this.getTitle(ChatColor.GOLD + "Help Admin"));
         sender.sendMessage(help("reload", "Przeladuj konfiguracje pluginu"));
         if(GenConf.hcBans) {
             sender.sendMessage(help("unban <player>", "Odbanuj gracza"));
