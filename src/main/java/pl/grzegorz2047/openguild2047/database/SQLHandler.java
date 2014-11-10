@@ -35,6 +35,9 @@ import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.Relation.STATUS;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SQLHandler {
     
@@ -312,6 +315,29 @@ public class SQLHandler {
         }
     }
     
+    public boolean addAlliance(Guild who, Guild withWho, STATUS status){
+        
+        try {
+            statement = this.connection.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM `openguild_allies`" +" WHERE who='"+who+"'" +"OR withwho='"+who+"';");
+            while(rs.next()){
+                String whoseguild = rs.getString("who");
+                String withwho = rs.getString("withwho");
+                if(whoseguild.equals(who.getTag()) && withwho.equals(withWho.getTag()) || whoseguild.equals(withWho.getTag()) && withwho.equals(who.getTag())){
+                    return false;
+                }else{
+                    statement.execute("INSERT INTO `openguild_allies` VALUES(0, '"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', '"+0+"');");
+                    return true;
+                }
+            }
+        }
+        catch (SQLException ex) {
+            plugin.getOGLogger().exceptionThrown(ex);
+            return false;
+        }
+        return false;
+    }
+            
     public boolean isConnectionClosed() {
         try {
             return this.connection == null || this.connection.isClosed();

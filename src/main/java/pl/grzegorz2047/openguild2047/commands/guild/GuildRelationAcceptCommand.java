@@ -67,11 +67,16 @@ public class GuildRelationAcceptCommand extends Command {
                     }
                     whoWant.getPendingRelationChanges().remove(wanted.getTag());
                     Relation r = new Relation();
-                    r.setWho(whoWant.getTag());
                     r.setWithWho(withWho);
                     r.setState(STATUS.ALLY);
+                    
+                    Relation r2 = new Relation();
+                    r.setWithWho(wanted.getTag());
+                    r.setState(STATUS.ALLY);
+                    
                     whoWant.getAlliances().add(r);
-                    wanted.getAlliances().add(r);
+                    wanted.getAlliances().add(r2);
+                    
                     Bukkit.broadcastMessage("Gildia "+whoWant.getTag()+" zawarla sojusz z "+wanted.getTag());
                 }
                

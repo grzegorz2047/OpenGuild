@@ -69,11 +69,15 @@ public class GuildRelationCommand extends Command {
                         }
                         whoWant.getPendingRelationChanges().remove(wanted.getTag());
                         Relation r = new Relation();
-                        r.setWho(whoWant.getTag());
                         r.setWithWho(withWho);
                         r.setState(Relation.STATUS.ALLY);
+                        
+                        Relation r2 = new Relation();
+                        r.setWithWho(wanted.getTag());
+                        r.setState(Relation.STATUS.ALLY);
+                        
                         whoWant.getAlliances().add(r);
-                        wanted.getAlliances().add(r);
+                        wanted.getAlliances().add(r2);
                         //Dodaj do sqla jakos
                         Bukkit.broadcastMessage("Gildia "+whoWant.getTag()+" zawarla sojusz z "+wanted.getTag());
                     }else{
@@ -103,7 +107,7 @@ public class GuildRelationCommand extends Command {
                     requestingGuild.changeRelationRequest(requestingGuild, guild, leader, status.toUpperCase());
                 }else{
                     for(Relation r : requestingGuild.getAlliances()){
-                        if(r.getWho().equals(guild.getTag()) || r.getWithWho().equals(guild.getTag()) ){
+                        if(r.getWithWho().equals(guild.getTag()) ){
                             requestingGuild.getAlliances().remove(r);
                             guild.getAlliances().remove(r);
                             //Ustaw lub usun z sqla jakos

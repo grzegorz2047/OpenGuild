@@ -67,7 +67,7 @@ public class GuildHelpCommand extends Command {
                 sender.sendMessage(help("akceptuj <gildia>", "Akceptuje dolaczenie do gildii"));
                 sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
                 sender.sendMessage(help("info <gildia>", "Informacje o gildii"));
-                sender.sendMessage(help("relacja <gildia> ally/enemy", "Ustawienie sojuszu z inna gildia"));
+                sender.sendMessage(help("relacja <gildia> ally/enemy/akceptuj", "Ustawienie sojuszu z inna gildia badz jej akceptacja"));
                 sender.sendMessage(help("zamknij", "Zamknij gildie"));
                 sender.sendMessage(help("wyrzuc <gracz>", "Wyrzuca czlonka gildii"));
                 sender.sendMessage(help("itemy", "Lista itemów na gildie"));

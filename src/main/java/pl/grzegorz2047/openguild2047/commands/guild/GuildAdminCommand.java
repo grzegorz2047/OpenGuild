@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Adam.
+ * Copyright 2014 Grzegorz.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,24 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.grzegorz2047.openguild2047.commands.guild;
 
-import java.util.UUID;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GuildHelper;
-import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
- * Command used by guild's leaders to disband their guild.
- * 
- * Usage: /guild disband
+ *
+ * @author Grzegorz
  */
-public class GuildDisbandCommand extends Command {
+public class GuildAdminCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
@@ -46,39 +41,15 @@ public class GuildDisbandCommand extends Command {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
-        
-        GuildHelper guildHelper = this.getPlugin().getGuildHelper();
-        
         Player player = (Player) sender;
         if(args.length == 1){
-            if(!guildHelper.hasGuild(player)) {
-                player.sendMessage(MsgManager.get("notinguild"));
-                return;
-            }
-
-            Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
-            if(!guild.getLeader().equals(player.getUniqueId())) {
-                player.sendMessage(MsgManager.get("playernotleader"));
-                return;
-            }
-
-            for(UUID uuid : guild.getMembers()) {
-                this.getPlugin().getTagManager().removeTag(uuid);
-                guildHelper.getPlayers().remove(uuid);
-                getPlugin().getSQLHandler().updatePlayer(uuid);
-            }
-            guildHelper.getCuboids().remove(guild.getTag());
-            getPlugin().getSQLHandler().removeGuild(guild.getTag().toUpperCase());
-            guildHelper.getGuilds().remove(guild.getTag());
-
-            getPlugin().broadcastMessage(MsgManager.get("broadcast-disband").replace("{TAG}", guild.getTag().toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
+            player.sendMessage("Usage: /g admin <arg> <value>");
         }
-        
     }
 
     @Override
     public int minArgs() {
-        return 1;
+       return 1;
     }
-
+    
 }
