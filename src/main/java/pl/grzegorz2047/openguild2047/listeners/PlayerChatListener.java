@@ -59,10 +59,14 @@ public class PlayerChatListener implements Listener {
             
             if(event.getMessage().startsWith("!") && event.getMessage().length()>=2){
                 message = message.split("!")[1];
+                String format = MsgManager.getIgnorePref("guildchat")
+                        .replace("{GUILD}", guild.getTag())
+                        .replace("{PLAYER}", player.getName())
+                        .replace("{MESSAGE}", message);
                 for(UUID memuuid : guild.getMembers()) {
                     OfflinePlayer op = plugin.getServer().getOfflinePlayer(memuuid);
                     if(op.isOnline()) {//guildchat: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
-                        op.getPlayer().sendMessage(MsgManager.getIgnorePref("guildchat").replace("{GUILD}", guild.getTag()).replace("{PLAYER}", player.getName()).replace("{MESSAGE}", message));
+                        op.getPlayer().sendMessage(format);
                     }
                 }   
                 event.setCancelled(true);
@@ -79,10 +83,14 @@ public class PlayerChatListener implements Listener {
                         ally = plugin.getGuildHelper().getGuilds().get(r.getWho()); 
                     }
                     if(ally != null){
+                        String format = MsgManager.getIgnorePref("guildchatally")
+                                .replace("{GUILD}", guild.getTag())
+                                .replace("{PLAYER}", player.getName())
+                                .replace("{MESSAGE}", message);
                         for(UUID memuuid : ally.getMembers()) {
                             OfflinePlayer op = plugin.getServer().getOfflinePlayer(memuuid);
                             if(op.isOnline()) {//guildchat: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
-                                op.getPlayer().sendMessage(MsgManager.getIgnorePref("guildchatally").replace("{GUILD}", guild.getTag()).replace("{PLAYER}", player.getName()).replace("{MESSAGE}", message));
+                                op.getPlayer().sendMessage(format);
                             }
                         }
                     }
