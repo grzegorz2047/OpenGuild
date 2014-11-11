@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
@@ -75,8 +76,8 @@ public class TeamCommand implements CommandExecutor {
         Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
         for(UUID uuid : guild.getMembers()) {
             OfflinePlayer op = plugin.getServer().getOfflinePlayer(uuid);
-            if(op.isOnline()) {
-                op.getPlayer().sendMessage(ChatColor.GRAY + "[Guild] " + ChatColor.BLUE + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + message);
+            if(op.isOnline()) {//guildchat: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
+                op.getPlayer().sendMessage(MsgManager.get("guildchat").replace("{GUILD}", guild.getTag()).replace("{PLAYER}", player.getName()).replace("{MESSAGE}", message));
             }
         }
         
