@@ -128,3 +128,4 @@ guild-invitation: 'Player {WHO}, wants you to join his guild {TAG} - type /guild
 guild-invitation-expired: 'Invitation from guild {TAG} has expired!'
 cantkickleader: 'You cant kick yourself from guild!'
 playeroffline: 'This player is offline!'
+usageinfo: '&aUsage: &7/guild info [tag]'
