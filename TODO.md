@@ -1,9 +1,9 @@
-- [ ] Czasowe zablokowanie możliwości niszczenia specjalnym itemem bloków wrogiej gildii
-- [x] Jakiś prosty system nagradzania za zabicia (pisane KD)
+- [ ] Jakiś prosty system nagradzania za zabicia (pisane KD)
 - [ ] Zablokowanie wybuchanie tnt na czyjejś gildii czasowo od x h do x h
-- [x] Naprawic ustalanie czy gildia ma byc ally czy enem
-  - [x] Kolorowanie tagów ze względu na sojusz czy wojne
-- [ ] Możliwość otrzymania specjalnego przedmiotu z jakąś niestandardową mocą
+- [x] Kolorowanie tagów ze względu na sojusz czy wojne
+- [ ] Blokada czasowa budowania po wybuchu tnt
+- [ ] Tablista
+- [ ] Ranking gildii i graczy
 - [ ] Może podpiąć stoniarkę co napisałem, bądź stworzyć coś lepszego
 - [ ] Moduł - niszczenie obsidianu
 - [ ] Dokończenie modułu blokowania powrotu na spawn przez określony czas
