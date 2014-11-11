@@ -67,7 +67,8 @@ public class GuildHelpCommand extends Command {
                 sender.sendMessage(help("akceptuj <gildia>", "Akceptuje dolaczenie do gildii"));
                 sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
                 sender.sendMessage(help("info <gildia>", "Informacje o gildii"));
-                sender.sendMessage(help("relacja <gildia> ally/enemy/akceptuj", "Ustawienie sojuszu z inna gildia badz jej akceptacja"));
+                sender.sendMessage(help("sojusz <gildia>", "Ustawienie sojuszu z inna gildia"));
+                sender.sendMessage(help("wrog <gildia>", "Zerwanie z inna gildia"));
                 sender.sendMessage(help("zamknij", "Zamknij gildie"));
                 sender.sendMessage(help("wyrzuc <gracz>", "Wyrzuca czlonka gildii"));
                 sender.sendMessage(help("itemy", "Lista itemów na gildie"));
@@ -83,7 +84,8 @@ public class GuildHelpCommand extends Command {
                 sender.sendMessage(help("invite", "Invite to guild (sends invite)"));
                 sender.sendMessage(help("leave", "Leave from current guild"));
                 sender.sendMessage(help("info <guild>", "Information about the guild"));
-                sender.sendMessage(help("relation <guild> ally/enemy/accept", "Set ally,enemy to other guild or accept alliance"));
+                sender.sendMessage(help("ally <guild>", "Create an alliance"));
+                sender.sendMessage(help("enemy <guild>", "Broke an alliance"));
                 sender.sendMessage(help("disband", "Disband your guild"));
                 sender.sendMessage(help("items", "List of required items"));
                 sender.sendMessage(help("home", "Teleport to your guild home location"));
