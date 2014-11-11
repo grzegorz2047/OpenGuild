@@ -116,15 +116,11 @@ public class TagManager {
         return false;
     }
     public boolean removeTag(UUID player){
-        System.out.print("wykonam");
         if(TagManager.isInitialised()){
-            System.out.print("TagManager.isInitialised()");
             if(plugin.getGuildHelper().hasGuild(player)){
-                System.out.print("hasGuild");
                 Guild g = plugin.getGuildHelper().getPlayerGuild(player);
                 Team t = sc.getTeam(g.getTag().toUpperCase());
                 if(t != null){
-                    System.out.print("t jest nullem");
                     if(t.getPlayers().contains(Bukkit.getOfflinePlayer(player))){
                         t.removePlayer(Bukkit.getOfflinePlayer(player));
                         updateBoard();
