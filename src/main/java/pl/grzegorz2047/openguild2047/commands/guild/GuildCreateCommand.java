@@ -60,7 +60,7 @@ public class GuildCreateCommand extends Command {
             return;
         }
         
-        String tag = args[1];
+        String tag = args[1].toUpperCase();
         if(!tag.matches("[0-9a-zA-Z]*")) {
             player.sendMessage(MsgManager.unsupportedchars);
             return;

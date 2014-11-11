@@ -69,6 +69,7 @@ public class GuildHelper {
      * @return boolean
      */
     public boolean doesGuildExists(String tag) {
+        System.out.println("Sprawdzam istnienie gildii "+tag);
         return guilds.containsKey(tag);
     }
 
