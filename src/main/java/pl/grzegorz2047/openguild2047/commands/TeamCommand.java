@@ -58,7 +58,7 @@ public class TeamCommand implements CommandExecutor {
         }
         
         if(args.length == 0) {
-            sender.sendMessage(MsgManager.get("cmdsyntaxerr"));
+            sender.sendMessage(MsgManager.get("usage").replace("{USAGE}", "/t <msg>"));
             return true;
         }
         

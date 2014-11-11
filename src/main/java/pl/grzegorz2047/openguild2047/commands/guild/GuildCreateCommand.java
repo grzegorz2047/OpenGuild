@@ -124,11 +124,6 @@ public class GuildCreateCommand extends Command {
         guild.setLeader(player.getUniqueId());
         guildHelper.getGuilds().put(tag, guild);
         guildHelper.getPlayers().put(player.getUniqueId(), guild);
-        if(guildHelper.doesGuildExists(tag)){
-            System.out.println("Jest gildia w guilds");
-        }else{
-            System.out.println("Nie ma gildii w guilds");
-        }
         if(GenConf.playerprefixenabled) {
             this.getPlugin().
                     getTagManager().

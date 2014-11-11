@@ -208,14 +208,14 @@ public class SQLHandler {
                 UUID uuid = UUID.fromString(result.getString("uuid"));
                 
                 
-                if(plugin.getGuildHelper().doesGuildExists(guildTag)) {
+                if(!(guildTag.isEmpty()) && plugin.getGuildHelper().doesGuildExists(guildTag)) {
                     players.put(uuid, plugin.getGuildHelper().getGuilds().get(guildTag));
                 } else {
                     players.put(uuid, null);
 
-                    if(!guildTag.isEmpty()) {
-                        plugin.getOGLogger().warning("Guild '" + guildTag.toUpperCase() + "' does not exist! Skipping player '" + uuid.toString() + "'");
-                    }
+                    ///if(!guildTag.isEmpty()) {
+                    //    plugin.getOGLogger().warning("Guild '" + guildTag.toUpperCase() + "' does not exist! Skipping player '" + uuid.toString() + "'");
+                    //}
                 }
             }
         } catch(SQLException ex) {

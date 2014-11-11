@@ -128,3 +128,4 @@ guild-invitation: '&aPlayer &7{WHO}&a, wants you to join his guild &7{TAG}&a - t
 guild-invitation-expired: '&cInvitation from guild &7{TAG} &ahas expired!'
 cantkickleader: '&cYou cant kick yourself from guild!'
 playeroffline: '&cThis player is offline!'
+usage: '&aUsage:&7 {USAGE}'
