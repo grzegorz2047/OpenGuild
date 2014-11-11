@@ -55,7 +55,6 @@ public class PlayerJoinListener implements Listener {
         plugin.getTagManager().setTag(uuid);
         if(plugin.getGuildHelper().hasGuild(player)) {
             Guild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
-            player.sendMessage("Aktualnie posiadasz "+guild.getAlliances().size()+" relacji!");
             for(UUID mem : guild.getMembers()) {
                 OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);
                 if(om.isOnline()) {

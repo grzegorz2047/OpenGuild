@@ -87,14 +87,14 @@ public class GuildRelations {
         for(Relation r : requestingGuild.getAlliances()){
             if(r.getWithWho().equals(guild.getTag()) || r.getWho().equals(guild.getTag())){
                 if(r.getState().equals(status)){
-                    Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Sojusz juz jest zawarty!");
+                    Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage(MsgManager.get("allyexists"));
                     return;
                 }
             }
         }
         if(!pendingRelationChanges.contains(tag)) {
             pendingRelationChanges.add(tag);
-            Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Wyslano prosbe o sojusz!");
+            Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage(MsgManager.get("sentallyrequest"));
             if(requestedLeader.isOnline()){
                 Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage("Prosba o sojusz od "+requestingGuild.getTag());
                 Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage("Wpisz /g sojusz "+requestingGuild.getTag()+" aby zaakceptowac!");
