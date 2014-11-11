@@ -68,13 +68,13 @@ public class GuildInfoCommand extends Command {
             
             Player player = (Player) sender;
             if(!guildHelper.hasGuild(player)) {
-                player.sendMessage(MsgManager.get("notinguild"));
+                player.sendMessage(MsgManager.get("usageinfo"));
                 return;
             }
             
             Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
             
-            sender.sendMessage(ChatColor.DARK_GRAY + " ----------------- " + ChatColor.GOLD + MsgManager.getIgnorePref("ginfotit").replace("{GUILD}", guild.getTag().toUpperCase()) + ChatColor.DARK_GRAY + " ----------------- ");
+            sender.sendMessage(this.getTitle(MsgManager.getIgnorePref("ginfotit").replace("{GUILD}", guild.getTag().toUpperCase())));
             sender.sendMessage(MsgManager.getIgnorePref("ginfodesc").replace("{DESCRIPTION}", guild.getDescription()));
             sender.sendMessage(MsgManager.getIgnorePref("ginfoleader").replace("{LEADER}", Bukkit.getOfflinePlayer(guild.getLeader()).getName()));
             sender.sendMessage(MsgManager.getIgnorePref("ginfomemlist").replace("{SIZE}", String.valueOf(guild.getMembers().size())).replace("{MEMBERS}", getMembers(guild.getMembers())));

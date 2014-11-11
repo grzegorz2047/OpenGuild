@@ -76,7 +76,7 @@ public class GuildLeaveCommand extends Command {
                 this.
                     getPlugin().
                     getTagManager().
-                    removeTag(player.getUniqueId());
+                    prepareTag(player.getUniqueId());
         player.sendMessage(MsgManager.leaveguildsuccess);
     }
 

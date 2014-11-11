@@ -179,7 +179,7 @@ public class SQLHandler {
 
                 Guild guild = new Guild(plugin);
                 guild.setCuboid(cuboid);
-                guild.setTag(tag);
+                guild.prepareTag(tag);
                 guild.setDescription(description);
                 guild.setHome(home);
                 guild.setLeader(leaderUUID);

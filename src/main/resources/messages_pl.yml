@@ -119,3 +119,4 @@ guild-invitation: '&aGracz &7{WHO}&a, chce abys dolaczyl do jego gildii &7{TAG}&
 guild-invitation-expired: '&aZaproszenie do gildii &7{TAG}&a wygaslo!'
 cantkickleader: '&aNie mozesz wyrzucic samego siebie!'
 playeroffline: '&aTen gracz jest offline!'
+usageinfo: '&aUzycie: &7/gildia info [tag]'

@@ -117,7 +117,7 @@ public class GuildCreateCommand extends Command {
 
         Guild guild = new Guild(getPlugin());
         guild.setCuboid(cuboid);
-        guild.setTag(tag);
+        guild.prepareTag(tag);
         guild.setDescription(description);
         guild.addMember(player.getUniqueId());
         guild.setHome(player.getLocation());
@@ -128,7 +128,7 @@ public class GuildCreateCommand extends Command {
         if(GenConf.playerprefixenabled) {
             this.getPlugin().
                     getTagManager().
-                    setTag(player.
+                    prepareTag(player.
                             getUniqueId());
         }
 
