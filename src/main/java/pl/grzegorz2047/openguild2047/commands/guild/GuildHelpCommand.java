@@ -104,9 +104,9 @@ public class GuildHelpCommand extends Command {
 
     private String help(String usage, String desc) {
         if(GenConf.lang.equals("PL")){
-            return ChatColor.GREEN +  "/gildia " + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
+            return ChatColor.GREEN +  "/gildia " + ChatColor.AQUA + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
         } else {
-            return ChatColor.GREEN + "/guild " + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
+            return ChatColor.GREEN + "/guild " + ChatColor.AQUA + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
         }
         
     }
