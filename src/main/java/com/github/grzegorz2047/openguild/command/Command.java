@@ -37,8 +37,9 @@ public abstract class Command {
     }
 
     public String getTitle(String title) {
-        String label = ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "--------------------" + ChatColor.RESET;
-        return label + " " + title + ChatColor.RESET + " " + label;
+        String label = ChatColor.GRAY + "---------------------" + ChatColor.DARK_GRAY + "[" + ChatColor.RESET;
+        String label2 = ChatColor.DARK_GRAY + "]" +  ChatColor.GRAY + "---------------------" + ChatColor.RESET;
+        return label + " " + title + ChatColor.RESET + " " + label2;
     }
 
     public abstract int minArgs();
