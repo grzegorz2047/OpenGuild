@@ -48,7 +48,7 @@ public class GuildVersionCommand extends Command {
     public void execute(CommandSender sender, String[] args) throws CommandException {
         sender.sendMessage(this.getTitle(ChatColor.GOLD + "OpenGuild2047"));
         sender.sendMessage(ChatColor.DARK_GRAY + "Version: " + ChatColor.GOLD + this.getPlugin().getDescription().getVersion());
-        sender.sendMessage(ChatColor.DARK_GRAY + "Authors: \n" + this.getAuthors());
+        sender.sendMessage(ChatColor.DARK_GRAY + "Authors: " + this.getAuthors());
         sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild2047");
         sender.sendMessage(ChatColor.DARK_GRAY + "BukkitDev: " + ChatColor.GOLD + "http://dev.bukkit.org/bukkit-plugins/openguild");
         sender.sendMessage(ChatColor.DARK_GRAY + "MCStats: " + ChatColor.GOLD + "http://mcstats.org/plugin/OpenGuild2047");
@@ -68,10 +68,10 @@ public class GuildVersionCommand extends Command {
     }
 
     private void loadAuthors() {
-        this.authors.add(new Author("grzegorz2047", "Project leader, Coder"));
+        this.authors.add(new Author("filippop1", "Tester"));
+        this.authors.add(new Author("grzegorz2047", "Project leader"));
         this.authors.add(new Author("shooly", "Coder"));
         this.authors.add(new Author("TheMolkaPL", "Coder"));
-        this.authors.add(new Author("filippop1", "Tester"));
     }
 
     private class Author {

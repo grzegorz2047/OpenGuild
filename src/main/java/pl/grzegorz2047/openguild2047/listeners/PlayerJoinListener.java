@@ -52,7 +52,7 @@ public class PlayerJoinListener implements Listener {
             plugin.getSQLHandler().addPlayer(uuid);
             plugin.getGuildHelper().getPlayers().put(uuid, null);
         }
-        plugin.getTagManager().prepareTag(uuid);
+        plugin.getTagManager().setTag(uuid);
         if(plugin.getGuildHelper().hasGuild(player)) {
             Guild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
             player.sendMessage("Aktualnie posiadasz "+guild.getAlliances().size()+" relacji!");

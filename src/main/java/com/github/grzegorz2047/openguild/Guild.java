@@ -38,7 +38,7 @@ public class Guild extends GuildMembers {
         this.setMembersGuild(this);
     }
 
-    public void prepareTag(String tag) {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 

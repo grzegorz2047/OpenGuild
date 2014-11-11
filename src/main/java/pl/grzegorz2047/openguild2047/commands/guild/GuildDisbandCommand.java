@@ -66,7 +66,7 @@ public class GuildDisbandCommand extends Command {
                 this.
                     getPlugin().
                     getTagManager().
-                    prepareTag(uuid);
+                    removeTag(uuid);
                 guildHelper.getPlayers().remove(uuid);
                 getPlugin().getSQLHandler().updatePlayer(uuid);
             }

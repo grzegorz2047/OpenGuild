@@ -124,7 +124,7 @@ public class OpenGuild extends JavaPlugin {
         this.tagManager = new TagManager(this);
         
         for(Player player : getServer().getOnlinePlayers()) {
-            this.tagManager.prepareTag(player.getUniqueId());
+            this.tagManager.setTag(player.getUniqueId());
         }
         
         // Load required items section.
