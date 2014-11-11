@@ -103,22 +103,20 @@ public class CuboidStuff {
             }
         }
         Guild guild = plugin.getGuildHelper().getGuilds().get(guildscuboidtag);
-        if(tag == null){
-            if(GenConf.lang.equals("PL")){
-                tag = "bez gildii";
-            }else{
-                tag = "without guild";
-            }
-        }
         for(UUID mem : guild.getMembers()) {
             OfflinePlayer op = plugin.getServer().getOfflinePlayer(mem);
             if(op.isOnline()) {
                 if(GenConf.cubNotifyMem) {
-                    op.
-                        getPlayer().
-                        sendMessage(MsgManager.get("entercubmems").
-                        replace("{PLAYER}", player.getName()).
-                        replace("{GUILD}", tag.toUpperCase()));
+                    if(tag == null){
+                        
+                        op.getPlayer().sendMessage(MsgManager.get("entercubmemsnoguild").
+                        replace("{PLAYER}", player.getName()));
+                    }else{
+                        op.getPlayer().sendMessage(MsgManager.get("entercubmems").
+                            replace("{PLAYER}", player.getName()).
+                            replace("{GUILD}", tag.toUpperCase()));
+                    }
+
                 }
 
                 if(GenConf.cubNotifySound) {
