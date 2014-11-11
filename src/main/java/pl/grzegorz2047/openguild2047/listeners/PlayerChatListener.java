@@ -58,9 +58,8 @@ public class PlayerChatListener implements Listener {
             String tag = guild.getTag().toUpperCase();
             
             if(event.getMessage().startsWith("!") && event.getMessage().length()>=2){
-                message = message.substring(1, message.length());
+                message = message.substring(1);
                 String format = MsgManager.getIgnorePref("guildchat")
-                        .replace("{GUILD}", guild.getTag())
                         .replace("{PLAYER}", player.getName())
                         .replace("{MESSAGE}", message);
                 for(UUID memuuid : guild.getMembers()) {
@@ -72,7 +71,7 @@ public class PlayerChatListener implements Listener {
                 event.setCancelled(true);
                 return;
             }else if(event.getMessage().startsWith("@") && event.getMessage().length()>=2){
-                message = message.substring(1, message.length());
+                message = message.substring(1);
                 for(Relation r : guild.getAlliances()){
                     Guild ally = null;
                     if(guild.equals(plugin.getGuildHelper().getGuilds().get(r.getWho()))){
@@ -97,7 +96,7 @@ public class PlayerChatListener implements Listener {
                 for(UUID memuuid : guild.getMembers()) {
                     OfflinePlayer op = plugin.getServer().getOfflinePlayer(memuuid);
                     if(op.isOnline()) {//guildchat: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
-                        op.getPlayer().sendMessage(MsgManager.getIgnorePref("guildchat").replace("{GUILD}", guild.getTag()).replace("{PLAYER}", player.getName()).replace("{MESSAGE}", message));
+                        op.getPlayer().sendMessage(MsgManager.getIgnorePref("guildchat").replace("{PLAYER}", player.getName()).replace("{MESSAGE}", message));
                     }
                 }   
                 event.setCancelled(true);
