@@ -47,10 +47,12 @@ public class SQLHandler {
     private Connection connection;
     private Statement statement;
     
-    public String generateStringAutoInc(){
-        if(!GenConf.DATABASE.equals(Database.FILE)) return "INT PRIMARY KEY AUTO_INCREMENT"; else return "INTEGER PRIMARY KEY AUTOINCREMENT";
-    }
-    
+   // public String generateStringAutoInc(){
+   //     if(!GenConf.DATABASE.equals(Database.FILE)) return "INT PRIMARY KEY AUTO_INCREMENT"; else return "INTEGER PRIMARY KEY AUTOINCREMENT";
+   // }
+    //public String generateDefVal(){
+   //     if(!GenConf.DATABASE.equals(Database.FILE)) return "0"; else return "null";
+   // }
     public SQLHandler(OpenGuild plugin, String host, int port, String user, String password, String name) {
         this.plugin = plugin;
         
@@ -132,11 +134,12 @@ public class SQLHandler {
             statement.execute(query);
 
             query = "CREATE TABLE IF NOT EXISTS `openguild_allies`"
-                    + "(id "+generateStringAutoInc()+","
+                    + "("
                     + "who VARCHAR(11),"
                     + "withwho VARCHAR(11),"
                     + "status VARCHAR(5),"
-                    + "expires BIGINT"
+                    + "expires BIGINT,"
+                    + "PRIMARY KEY(who,withwho)" 
                     + ");";
             statement = this.connection.createStatement();
             statement.execute(query);
@@ -347,7 +350,7 @@ public class SQLHandler {
             statement = this.connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM `openguild_allies`" +" WHERE who='"+who+"'" +"OR withwho='"+who+"';");
             if(!rs.isFirst()){
-                statement.execute("INSERT INTO `openguild_allies` VALUES(0, '"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', 0);");
+                statement.execute("INSERT INTO `openguild_allies` VALUES('"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', 0);");
                     return true;
             }
             while(rs.next()){
@@ -356,7 +359,7 @@ public class SQLHandler {
                 if((whoseguild.equals(who.getTag()) && withwho.equals(withWho.getTag())) || (whoseguild.equals(withWho.getTag()) && withwho.equals(who.getTag()))){
                     return false;
                 }else{
-                    statement.execute("INSERT INTO `openguild_allies` VALUES(0, '"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', 0);");
+                    statement.execute("INSERT INTO `openguild_allies` VALUES('"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', 0);");
                     return true;
                 }
             }

@@ -89,6 +89,7 @@ public class GenConf {
     public static int blockEnterTime;
     public static String joinMsg;
     public static String quitMsg;
+    public static boolean FORCE_DESC;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
@@ -106,7 +107,7 @@ public class GenConf {
         FILE_DIR = OpenGuild.getInstance().getConfig().getString("file-dir", "plugins/OpenGuild2047/og.db");
         SNOOPER = OpenGuild.getInstance().getConfig().getBoolean("snooper", true);
         TEAMPVP_MSG = OpenGuild.getInstance().getConfig().getBoolean("teampvp-msg", false);
-
+        FORCE_DESC = OpenGuild.getInstance().getConfig().getBoolean("forcedesc", false);
         lang = OpenGuild.getInstance().getConfig().getString("language").toUpperCase();
 
         loadBans();

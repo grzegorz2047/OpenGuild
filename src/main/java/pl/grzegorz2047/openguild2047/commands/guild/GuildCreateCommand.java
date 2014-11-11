@@ -51,10 +51,15 @@ public class GuildCreateCommand extends Command {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
-        
         GuildHelper guildHelper = this.getPlugin().getGuildHelper();
         
         Player player = (Player) sender;
+        if(GenConf.FORCE_DESC){
+            if(args.length<3){
+                player.sendMessage(MsgManager.get("descrequired"));
+                return;
+            }
+        }
         if(guildHelper.hasGuild(player)) {
             player.sendMessage(MsgManager.get("alreadyinguild"));
             return;

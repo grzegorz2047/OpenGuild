@@ -56,5 +56,6 @@ forbiddenguildnames:
 use-new-command-api: true
 join-msg: ''
 quit-msg: ''
+forcedesc: false
 required-items:
 - 'WOOL:1:2:1'
