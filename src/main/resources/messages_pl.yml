@@ -50,9 +50,9 @@ hcub: '&aGracz &7{PLAYER} &azostal odbanowany!'
 skipped: '&9Pominieto {HELP} temat(ów) pomocy.'
 notplayedbefore: '&cGracz &7{PLAYER} &cjeszcze nie gral na tym serwerze!'
 invitesendsuccess: '&aWyslano zaproszenie do gildii.'
-kickplayernotinguild: '&cGracz &7{PLAYER} &cnie jest w zadnej gildii.' #TODO zmienna
-playernotinthisguild: '&cGracz &7{PLAYER} &cnie jest w Twojej gildii.' #TODO zmienna
-playerkicked: '&9Zostales wyrzucony z gildii {GUILD}!' #TODO zmienna
+kickplayernotinguild: '&cPodany gracz nie jest w zadnej gildii.'
+playernotinthisguild: '&cPodany gracz nie jest w Twojej gildii.'
+playerkicked: '&9Zostales wyrzucony z gildii {GUILD}!' #TODO ZMIENNA
 playerkicksuccess: '&aGracz zostal pomyslnie wyrzucony z gildii!'
 titleguildlist: '&7Lista gildii'
 titleitems: 'Przedmioty na gildie'
