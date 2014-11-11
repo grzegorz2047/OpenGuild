@@ -61,7 +61,10 @@ public class GuildLeaveCommand extends Command {
             player.sendMessage(MsgManager.get("kickleader"));
             return;
         }
-
+        this.
+            getPlugin().
+            getTagManager().
+            removeTag(player.getUniqueId());
         guild.removeMember(player.getUniqueId());
         guildHelper.getPlayers().remove(player.getUniqueId());
         guildHelper.getPlayers().put(player.getUniqueId(), null);
@@ -73,10 +76,6 @@ public class GuildLeaveCommand extends Command {
         }
 
         getPlugin().getSQLHandler().updatePlayer(player.getUniqueId());
-                this.
-                    getPlugin().
-                    getTagManager().
-                    removeTag(player.getUniqueId());
         player.sendMessage(MsgManager.leaveguildsuccess);
     }
 
