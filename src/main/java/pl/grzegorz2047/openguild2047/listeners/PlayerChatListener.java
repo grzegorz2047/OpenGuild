@@ -58,7 +58,7 @@ public class PlayerChatListener implements Listener {
             String tag = guild.getTag().toUpperCase();
             
             if(event.getMessage().startsWith("!") && event.getMessage().length()>=2){
-                message = message.split("!")[1];
+                message = message.substring(1, message.length());
                 String format = MsgManager.getIgnorePref("guildchat")
                         .replace("{GUILD}", guild.getTag())
                         .replace("{PLAYER}", player.getName())
@@ -72,14 +72,12 @@ public class PlayerChatListener implements Listener {
                 event.setCancelled(true);
                 return;
             }else if(event.getMessage().startsWith("@") && event.getMessage().length()>=2){
-                message = message.split("@")[1];
+                message = message.substring(1, message.length());
                 for(Relation r : guild.getAlliances()){
                     Guild ally = null;
                     if(guild.equals(plugin.getGuildHelper().getGuilds().get(r.getWho()))){
-                        System.out.print("guild "+guild.getTag()+" equals "+r.getWho());
                         ally = plugin.getGuildHelper().getGuilds().get(r.getWithWho());
                     }else{
-                        System.out.print("guild "+guild.getTag()+" equals "+r.getWho());
                         ally = plugin.getGuildHelper().getGuilds().get(r.getWho()); 
                     }
                     if(ally != null){
