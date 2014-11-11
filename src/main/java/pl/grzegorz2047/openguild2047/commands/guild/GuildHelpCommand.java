@@ -94,7 +94,7 @@ public class GuildHelpCommand extends Command {
                 sender.sendMessage(help("help [admin|page]", "Show help [admin/page]"));
             }
         } else {
-            sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze {NUMBER} nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
+            sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze &7{NUMBER}&c nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
         }
     }
 
@@ -104,9 +104,9 @@ public class GuildHelpCommand extends Command {
 
     private String help(String usage, String desc) {
         if(GenConf.lang.equals("PL")){
-            return ChatColor.GOLD + "" + ChatColor.ITALIC +  "/gildia " + ChatColor.AQUA + usage + ChatColor.RESET + ChatColor.GRAY + " - " + desc;
+            return ChatColor.GREEN +  "/gildia " + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
         } else {
-            return ChatColor.GOLD + "" + ChatColor.ITALIC + "/guild " + ChatColor.AQUA + usage + ChatColor.RESET + ChatColor.GRAY + " - " + desc;
+            return ChatColor.GREEN + "/guild " + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
         }
         
     }
