@@ -95,8 +95,9 @@ public class PlayerChatListener implements Listener {
                 }
                 for(UUID memuuid : guild.getMembers()) {
                     OfflinePlayer op = plugin.getServer().getOfflinePlayer(memuuid);
+                    String format = MsgManager.getIgnorePref("guildchat").replace("{PLAYER}", player.getName()).replace("{MESSAGE}", message);
                     if(op.isOnline()) {//guildchat: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
-                        op.getPlayer().sendMessage(MsgManager.getIgnorePref("guildchat").replace("{PLAYER}", player.getName()).replace("{MESSAGE}", message));
+                        op.getPlayer().sendMessage(format);
                     }
                 }   
                 event.setCancelled(true);
