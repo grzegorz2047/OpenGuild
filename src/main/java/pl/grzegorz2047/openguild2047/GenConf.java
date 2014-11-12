@@ -94,6 +94,8 @@ public class GenConf {
     public static String guildChatFormat;
     public static String allyChatKey;
     public static String allyChatFormat;
+    
+    public static int defaultTNTBlockTime;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
@@ -215,6 +217,8 @@ public class GenConf {
         guildChatFormat = config.getString("chat.guild-format", "&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}");
         allyChatKey = config.getString("chat.ally-key", "allies:");
         allyChatFormat = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}");
+        
+        defaultTNTBlockTime = config.getInt("listener.tnt-block-time", 30);
     }
 
     private static void loadBans() {
