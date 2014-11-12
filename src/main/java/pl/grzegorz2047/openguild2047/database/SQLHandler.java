@@ -39,6 +39,7 @@ import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.Relation.STATUS;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 
 public class SQLHandler {
     
@@ -129,6 +130,7 @@ public class SQLHandler {
             query = "CREATE TABLE IF NOT EXISTS `openguild_players`"
                     + "(guild VARCHAR(11),"
                     + "uuid VARCHAR(37)," // UUID gracza z myślnikami ma 35 znaków? Więc dla pewności dam 37
+                    + "lastseenname VARCHAR(16),"
                     + "PRIMARY KEY(uuid));";
             statement = this.connection.createStatement();
             statement.execute(query);
@@ -265,7 +267,7 @@ public class SQLHandler {
         
         try {
             statement = this.connection.createStatement();
-            statement.execute("INSERT INTO `openguild_players` VALUES( '', '" + uuid + "');");
+            statement.execute("INSERT INTO `openguild_players` VALUES( '', '"+Bukkit.getOfflinePlayer(uuid).getName()+"' '" + uuid + "');");
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
