@@ -64,3 +64,5 @@ chat:
   ally-key: 'allies:'
 required-items:
 - 'WOOL:1:2:1'
+listener:
+    tnt-block-time: 30

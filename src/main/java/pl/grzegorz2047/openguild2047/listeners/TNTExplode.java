@@ -35,6 +35,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.EnhancedRunnable;
+import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class TNTExplode implements Listener {
@@ -74,7 +75,7 @@ public class TNTExplode implements Listener {
                         /**
                          * Time left to 'free' guild.
                          */
-                        private int blockTime = 30;
+                        private int blockTime = GenConf.defaultTNTBlockTime;
                         
                         @Override
                         public void run() {
