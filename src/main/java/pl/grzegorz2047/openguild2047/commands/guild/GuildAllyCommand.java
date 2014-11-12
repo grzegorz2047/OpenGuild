@@ -66,6 +66,11 @@ public class GuildAllyCommand extends Command{
             Guild guild = guildHelper.getGuilds().get(guildToCheck);
             OfflinePlayer leader = Bukkit.getOfflinePlayer(guild.getLeader());
 
+            if(guild.getTag().equals(requestingGuild.getTag())){
+                sender.sendMessage(MsgManager.get("allyyourselferror"));
+                return;
+            }
+            
             if(!leader.isOnline()){
                 sender.sendMessage(MsgManager.get("leadernotonline"));
                 return;
