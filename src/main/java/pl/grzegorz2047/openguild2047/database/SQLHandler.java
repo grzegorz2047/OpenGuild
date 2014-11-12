@@ -267,7 +267,7 @@ public class SQLHandler {
         
         try {
             statement = this.connection.createStatement();
-            statement.execute("INSERT INTO `openguild_players` VALUES( '', '"+Bukkit.getOfflinePlayer(uuid).getName()+"' '" + uuid + "');");
+            statement.execute("INSERT INTO `openguild_players` VALUES( '', '" + uuid + "', '"+Bukkit.getOfflinePlayer(uuid).getName()+"');");
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
