@@ -48,24 +48,26 @@ public class TNTExplode implements Listener {
     }
     
     public void handle(BlockPlaceEvent event) {
-        Player player = event.getPlayer();
-        
-        if(player.hasPermission("openguild.cuboid.bypassplace")) {
-            return;
-        }
-        
-        Guild guild = plugin.getGuild(event.getBlock().getLocation());
-        if(guild != null) {
-            if(blockedGuilds.containsKey(guild.getTag())) {
-                player.sendMessage(MsgManager.get("tntex").replace("{SEC}", String.valueOf(blockedGuilds.get(guild.getTag()))));
-                event.setCancelled(true);
+        if(GenConf.enableTNTExplodeListener) {
+            Player player = event.getPlayer();
+
+            if(player.hasPermission("openguild.cuboid.bypassplace")) {
+                return;
+            }
+
+            Guild guild = plugin.getGuild(event.getBlock().getLocation());
+            if(guild != null) {
+                if(blockedGuilds.containsKey(guild.getTag())) {
+                    player.sendMessage(MsgManager.get("tntex").replace("{SEC}", String.valueOf(blockedGuilds.get(guild.getTag()))));
+                    event.setCancelled(true);
+                }
             }
         }
     }
     
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
-        if(event.getEntityType().equals(EntityType.PRIMED_TNT)) {
+        if(event.getEntityType().equals(EntityType.PRIMED_TNT) && GenConf.enableTNTExplodeListener) {
             Location location = event.getLocation();
             final Guild guild = plugin.getGuild(location);
             
