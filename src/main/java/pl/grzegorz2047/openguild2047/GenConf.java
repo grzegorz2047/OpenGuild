@@ -90,6 +90,10 @@ public class GenConf {
     public static String joinMsg;
     public static String quitMsg;
     public static boolean FORCE_DESC;
+    public static String guildChatKey;
+    public static String guildChatFormat;
+    public static String allyChatKey;
+    public static String allyChatFormat;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
@@ -207,6 +211,10 @@ public class GenConf {
         blockEnterTime = config.getInt("spawn.block-enter-time", 10);
         joinMsg = config.getString("join-msg","").replace("&", "§");
         quitMsg = config.getString("quit-msg","").replace("&", "§");
+        guildChatKey = config.getString("chat.guild-key", "guild:");
+        guildChatFormat = config.getString("chat.guild-format", "&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}");
+        allyChatKey = config.getString("chat.ally-key", "allies:");
+        allyChatFormat = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}");
     }
 
     private static void loadBans() {

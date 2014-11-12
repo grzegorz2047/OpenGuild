@@ -57,9 +57,9 @@ public class PlayerChatListener implements Listener {
             Guild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
             String tag = guild.getTag().toUpperCase();
             
-            if(event.getMessage().startsWith("!") && event.getMessage().length()>=2){
+            if(event.getMessage().startsWith(GenConf.guildChatKey) && event.getMessage().length()>=2){
                 message = message.substring(1);
-                String format = MsgManager.getIgnorePref("guildchat")
+                String format = GenConf.guildChatFormat
                         .replace("{PLAYER}", player.getName())
                         .replace("{MESSAGE}", message);
                 for(UUID memuuid : guild.getMembers()) {
@@ -70,7 +70,7 @@ public class PlayerChatListener implements Listener {
                 }   
                 event.setCancelled(true);
                 return;
-            }else if(event.getMessage().startsWith("@") && event.getMessage().length()>=2){
+            }else if(event.getMessage().startsWith(GenConf.allyChatKey) && event.getMessage().length()>=2){
                 message = message.substring(1);
                 for(Relation r : guild.getAlliances()){
                     Guild ally = null;
@@ -80,7 +80,7 @@ public class PlayerChatListener implements Listener {
                         ally = plugin.getGuildHelper().getGuilds().get(r.getWho()); 
                     }
                     if(ally != null){
-                        String format = MsgManager.getIgnorePref("guildchatally")
+                        String format = GenConf.allyChatFormat
                                 .replace("{GUILD}", guild.getTag())
                                 .replace("{PLAYER}", player.getName())
                                 .replace("{MESSAGE}", message);
@@ -91,11 +91,12 @@ public class PlayerChatListener implements Listener {
                             }
                         }
                     }
-                        
                 }
                 for(UUID memuuid : guild.getMembers()) {
                     OfflinePlayer op = plugin.getServer().getOfflinePlayer(memuuid);
-                    String format = MsgManager.getIgnorePref("guildchat").replace("{PLAYER}", player.getName()).replace("{MESSAGE}", message);
+                    String format = GenConf.guildChatFormat
+                            .replace("{PLAYER}", player.getName())
+                            .replace("{MESSAGE}", message);
                     if(op.isOnline()) {//guildchat: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
                         op.getPlayer().sendMessage(format);
                     }

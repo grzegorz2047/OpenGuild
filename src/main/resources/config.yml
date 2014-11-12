@@ -57,5 +57,10 @@ use-new-command-api: true
 join-msg: ''
 quit-msg: ''
 forcedesc: false
+chat:
+  guild-format: '&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}'
+  guild-key: 'guild:'
+  ally-format: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
+  ally-key: 'allies:'
 required-items:
 - 'WOOL:1:2:1'

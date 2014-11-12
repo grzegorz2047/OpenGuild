@@ -74,10 +74,14 @@ public class TeamCommand implements CommandExecutor {
         String message = GenUtil.argsToString(args, 0, args.length);
         
         Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+        String format = GenConf.guildChatFormat
+                .replace("{GUILD}", guild.getTag())
+                .replace("{PLAYER}", player.getName())
+                .replace("{MESSAGE}", message);
         for(UUID uuid : guild.getMembers()) {
             OfflinePlayer op = plugin.getServer().getOfflinePlayer(uuid);
-            if(op.isOnline()) {//guildchat: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
-                op.getPlayer().sendMessage(MsgManager.get("guildchat").replace("{GUILD}", guild.getTag()).replace("{PLAYER}", player.getName()).replace("{MESSAGE}", message));
+            if(op.isOnline()) {
+                op.getPlayer().sendMessage(format);
             }
         }
         
