@@ -50,7 +50,6 @@ mysql:
   password: password
   debug: false
 playerprefixtag: true
-nickname-tag: '&6[{TAG}] '
 guildprefixinchat: true
 forbiddenguildnames:
 use-new-command-api: true
@@ -58,6 +57,7 @@ join-msg: ''
 quit-msg: ''
 forcedesc: false
 chat:
+  prefix: '&6[{TAG}] '
   guild-format: '&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}'
   guild-key: 'guild:'
   ally-format: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'

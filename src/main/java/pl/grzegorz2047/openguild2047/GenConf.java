@@ -135,7 +135,7 @@ public class GenConf {
         }
         cubNotifyPerm = config.getBoolean("cuboid.notify-permission", false);
         updater = config.getBoolean("updater", false);
-        nicknameTag = config.getString("nickname-tag", "&6[{TAG}] ");
+        nicknameTag = config.getString("chat.prefix", "&6[{TAG}] ");
         cubEnabled = config.getBoolean("cuboid.enabled", true);
         teampvp = config.getBoolean("teampvp", false);
         homecommand = config.getBoolean("home-command", true);
