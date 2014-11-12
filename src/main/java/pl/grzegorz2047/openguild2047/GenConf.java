@@ -96,6 +96,7 @@ public class GenConf {
     public static String allyChatFormat;
     
     public static int defaultTNTBlockTime;
+    public static boolean enableTNTExplodeListener;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
@@ -219,6 +220,7 @@ public class GenConf {
         allyChatFormat = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}");
         
         defaultTNTBlockTime = config.getInt("listener.tnt-block-time", 30);
+        enableTNTExplodeListener = config.getBoolean("listener.tnt-block-enabled", true);
     }
 
     private static void loadBans() {
