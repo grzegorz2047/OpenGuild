@@ -74,7 +74,7 @@ public class OpenGuild extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        Guilds.getLogger().log(Level.INFO,"Wersja CraftBukkita to "+Bukkit.getVersion());
+        Guilds.getLogger().log(Level.INFO,"Bukkit version are " + Bukkit.getVersion());
         long startTime = System.currentTimeMillis();
         
         instance = this;
