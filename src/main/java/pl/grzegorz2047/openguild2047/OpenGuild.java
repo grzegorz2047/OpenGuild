@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -64,13 +66,15 @@ public class OpenGuild extends JavaPlugin {
                 Guilds.getLogger().severe("Your Minecraft server version is lower than 1.7.5!");
                 Guilds.getLogger().severe("This plugin is not compatibile with your version of Minecraft server!");
                 getServer().getPluginManager().disablePlugin(this);
+                return;
             }
         } catch(Exception e) {
             Guilds.getLogger().severe("Your Minecraft server version is lower than 1.7.5!");
             Guilds.getLogger().severe("This plugin is not compatibile with your version of Minecraft server!");
             getServer().getPluginManager().disablePlugin(this);
+            return;
         }
-        
+        Guilds.getLogger().log(Level.INFO,"Wersja CraftBukkita to "+Bukkit.getVersion());
         long startTime = System.currentTimeMillis();
         
         instance = this;
