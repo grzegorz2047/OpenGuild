@@ -1,4 +1,5 @@
 - [ ] Mozliwosc ustawienia 'Gracz [{GUILDKILLER}] {KILLER} zabil gracza [{GUILDVICTIM}] {VICTIM}'
+- [ ] Powiekszanie cuboida gildii
 - [ ] Jakiś prosty system nagradzania za zabicia (pisane KD)
 - [ ] Zablokowanie wybuchanie tnt na czyjejś gildii czasowo od x h do x h
 - [x] Kolorowanie tagów ze względu na sojusz czy wojne
@@ -12,7 +13,6 @@
 - [ ] Można dać prosty system levelowania w gildii
 - [ ] Można dać prosty system ekonomii wspierany przez vaulta
 - [ ] Platne dolaczanie do gildi
-- [ ] Dokończenie komendy /g cuboid expand
 - [ ] Blokada tworzenia gildii na niektórych światach
 - [x] Komendy dla admina pozwalająca na przejrzenie info o danej gildii, usuniecie jej, wywalenie kogos z jakiejs gildii, tymczasowe zbanowanie calej gildii na dany czas
   - [x] Zarządzanie gildiami poprzez /g admin np. delete, deleteall, banguild, 
