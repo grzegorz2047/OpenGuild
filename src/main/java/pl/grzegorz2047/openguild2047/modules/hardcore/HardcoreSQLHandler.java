@@ -51,12 +51,12 @@ public class HardcoreSQLHandler {
             try {
                 return (long) rs.getDouble(1);
             } catch (SQLException ex) {
-                return -1;
+                return 0;
             }
         }else{
             String query = "INSERT INTO "+TABLENAME+" VALUES("+uniqueId+","+Bukkit.getOfflinePlayer(uniqueId).getName()+","+0+")";
             boolean answer = OpenGuild.getInstance().getSQLHandler().execute(query);
-            return -1;
+            return 0;
         }
     }
 
