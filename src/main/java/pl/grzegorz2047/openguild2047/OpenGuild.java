@@ -17,13 +17,11 @@ package pl.grzegorz2047.openguild2047;
 
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -34,6 +32,7 @@ import org.mcstats.Metrics;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
+import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
@@ -88,10 +87,9 @@ public class OpenGuild extends JavaPlugin {
         checkForUpdates();
         
         // Setup API
-        com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(new OpenGuildBukkitPlugin());
-        
         OpenGuildBukkitPlugin ogBP = new OpenGuildBukkitPlugin();
-        this.ogAPI = ogBP.getPlugin();
+        com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(ogBP);
+        OpenGuild.ogAPI = ogBP.getPlugin();
         
         // Validate files
         validateFile("config");
@@ -108,6 +106,9 @@ public class OpenGuild extends JavaPlugin {
         
         // Register events
         loadAllListeners();
+        
+        // Load default plugin-modules
+        ((OpenModuleManager) ogAPI.getModules()).defaultModules();
         
         // Intialize guild helper class
         this.guildHelper = new GuildHelper();

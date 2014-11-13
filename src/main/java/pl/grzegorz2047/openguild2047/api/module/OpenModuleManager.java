@@ -33,10 +33,6 @@ public class OpenModuleManager implements ModuleManager {
     
     private HashMap<String, Module> modules;
     
-    public OpenModuleManager() {
-        defaultModules();
-    }
-    
     @Override
     public Module getModule(String id) {
         return modules.get(id.toLowerCase());
@@ -79,7 +75,7 @@ public class OpenModuleManager implements ModuleManager {
         }
     }
     
-    private void defaultModules() {
+    public void defaultModules() {
         modules = new HashMap<String, Module>();
         this.registerModule("random-tp", new ModuleRandomTP());
         this.registerModule("spawn", new ModuleSpawn());
