@@ -26,7 +26,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler.COLUMN;
 
 public class HardcoreListeners implements Listener {
     
@@ -41,7 +40,7 @@ public class HardcoreListeners implements Listener {
         }
         
         long ban = System.currentTimeMillis() + GenConf.hcBantime;
-        HardcoreSQLHandler.update(e.getEntity().getUniqueId(), COLUMN.BAN_TIME, String.valueOf(ban));
+        HardcoreSQLHandler.update(e.getEntity().getUniqueId(), HardcoreSQLHandler.Column.BAN_TIME, String.valueOf(ban));
     }
     
     @EventHandler

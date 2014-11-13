@@ -34,9 +34,8 @@ public class ModuleHardcore implements Module {
     
     @Override
     public void enable(String id) throws ModuleLoadException {
-        System.out.println("Enable sie wykonuje tutaj! a hcBans to "+GenConf.hcBans);
         if(GenConf.hcBans) {
-            System.out.println("Enable sie wykonuje tutaj i tutaj!");
+            HardcoreSQLHandler.createTables();
             Bukkit.getPluginManager().registerEvents(new HardcoreListeners(), OpenGuild.getBukkit());
             CommandDescription desc = new CommandDescription();
             desc.set("EN", "Unban a player from the dead");
@@ -48,10 +47,6 @@ public class ModuleHardcore implements Module {
                     new Unban(),
                     "openguild.hardcore.unban",
                     "<player>"));
-        }else{
-            /*if(Truncate_table)
-                Truncate_IT
-            */
         }
     }
     
