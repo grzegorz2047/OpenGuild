@@ -46,7 +46,7 @@ public class HardcoreSQLHandler {
 
     public static long getBan(UUID uniqueId) {
         if(playerExists(uniqueId)){
-            String query = "Select "+Column.BAN_TIME+" FROM "+TABLENAME+" WHERE "+Column.UUID+"='"+uniqueId+"'";
+            String query = "SELECT "+Column.BAN_TIME+" FROM "+TABLENAME+" WHERE "+Column.UUID+"='"+uniqueId+"'";
             ResultSet rs = OpenGuild.getInstance().getSQLHandler().executeQuery(query);
             try {
                 double value = rs.getDouble(1);

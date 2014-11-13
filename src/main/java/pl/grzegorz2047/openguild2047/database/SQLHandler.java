@@ -456,7 +456,8 @@ public class SQLHandler {
     public ResultSet executeQuery(String query){
         try {
             statement = this.connection.createStatement();
-            return statement.executeQuery(query);
+            ResultSet result = statement.executeQuery(query);
+            return result;
         }
         catch (SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
