@@ -23,6 +23,7 @@ import pl.grzegorz2047.openguild2047.GuildHelper;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -57,8 +58,7 @@ public class GuildDisbandCommand extends Command {
             for(UUID uuid : guild.getMembers()) {
                 this.
                     getPlugin().
-                    getTagManager().
-                    removeTag(uuid);
+                    getTagManager().playerLeaveGuild(Bukkit.getOfflinePlayer(uuid));
                 guildHelper.getPlayers().remove(uuid);
                 getPlugin().getSQLHandler().updatePlayer(uuid);
             }

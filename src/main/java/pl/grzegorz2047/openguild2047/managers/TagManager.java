@@ -23,6 +23,9 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.Relation;
+import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 
 /**
  *
@@ -32,13 +35,13 @@ public class TagManager {
     
     private OpenGuild plugin;
    
-    private static Scoreboard sc;//Mozna trzymac w pamieci tej klasy, zeby nie bawic sie tym za bardzo.
+    private static Scoreboard guildExistsInfoScoreboard;//Mozna trzymac tu defaultowe prefixy gildii dla bezgildyjnych
     
     public TagManager(OpenGuild plugin){
         this.plugin = plugin;
         
         if(!TagManager.isInitialised()){//Kiedy trzeba to mozna zainicjowac scoreboard np. przy onEnable()
-            sc = Bukkit.getScoreboardManager().getNewScoreboard();
+            guildExistsInfoScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         }
     }
     /*
@@ -48,7 +51,7 @@ public class TagManager {
     
       A ponizej przykladowa metoda rejestracji teamtagu
     */
-    public static Scoreboard getScoreboard(){
+   /* public static Scoreboard getScoreboard(){
         return TagManager.sc;
     }
     public void updateBoard(){
@@ -126,9 +129,155 @@ public class TagManager {
         }
         return false;
     }
-    
+     */
     public static boolean isInitialised(){
-        return sc!= null; 
+        return guildExistsInfoScoreboard!= null; 
+    }
+   
+    public void guildBrokeAlliance(Guild guild, Guild tobrokewith){
+        for(Relation r : guild.getAlliances()){
+            if(r.getWho().equals(tobrokewith.getTag()) || r.getWithWho().equals(tobrokewith.getTag())){//Trzeba to odzielic jakos na 2 przypadki (else if) zamiast ||
+                Guild enemy = tobrokewith;
+                Scoreboard sc = enemy.getSc();
+                sc.getTeam(guild.getTag()).unregister();
+                for(UUID allypl : enemy.getMembers()){
+                    Player plon = Bukkit.getPlayer(allypl);
+                    if(plon != null){
+                        plon.setScoreboard(sc);
+                    }
+                }
+                
+                Guild enemy2 = guild;
+                Scoreboard sc2 = enemy2.getSc();
+                if(sc2.getTeam(tobrokewith.getTag()) == null){
+                    System.out.print("tag "+tobrokewith.getTag()+" nie rejestruje i wywala null");
+                    Bukkit.broadcastMessage("Wystapil blad, bo Grzegorz(Ja) nie dokonczyl tego! Wstyd!");
+                    return;
+                }
+                sc2.getTeam(tobrokewith.getTag()).unregister();
+                for(UUID allypl : enemy2.getMembers()){
+                    Player plon = Bukkit.getPlayer(allypl);
+                    if(plon != null){
+                        plon.setScoreboard(sc2);
+                    }
+                }
+            }
+        } 
+    }
+    public void guildMakeAlliance(Relation r){
+        
+        String who = r.getWho();
+        String withwho = r.getWithWho();
+        
+        Guild whoGuild = plugin.getGuildHelper().getGuilds().get(who);
+
+        Scoreboard whoSc = whoGuild.getSc();
+
+        Guild withWhoGuild = plugin.getGuildHelper().getGuilds().get(withwho);
+
+        Scoreboard withWhoSc = withWhoGuild.getSc();
+
+        Team whoT;
+
+        whoT = withWhoSc.registerNewTeam(who);
+        whoT.setPrefix(ChatColor.BLUE+who);
+        whoT.setDisplayName(ChatColor.BLUE+who);
+        for(UUID whop : whoGuild.getMembers()){
+            whoT.addPlayer(Bukkit.getOfflinePlayer(whop));
+        }
+
+
+        Team withWhoT;
+
+        withWhoT = whoSc.registerNewTeam(withwho);
+        withWhoT.setPrefix(ChatColor.BLUE+withwho);
+        withWhoT.setDisplayName(ChatColor.BLUE+withwho);
+        for(UUID whop : withWhoGuild.getMembers()){
+            withWhoT.addPlayer(Bukkit.getOfflinePlayer(whop));
+        }
     }
     
+    public void playerJoinGuild(OfflinePlayer joiner){
+        Guild joinerGuild = plugin.getGuildHelper().getPlayerGuild(joiner.getUniqueId());
+            Scoreboard sc = joinerGuild.getSc();
+            Team t = sc.getTeam(joinerGuild.getTag());
+            if(t != null){
+                t.addPlayer(joiner);
+            }else{
+                Guild whoGuild = joinerGuild;
+                Scoreboard whoSc = whoGuild.getSc();
+                String who = joinerGuild.getTag();
+                Team whoT;
+                
+                whoT = whoSc.registerNewTeam(who);
+                whoT.setPrefix(ChatColor.GREEN+who);
+                whoT.setDisplayName(ChatColor.GREEN+who);
+                System.out.print("whoT to "+whoT.getName()+" z dn "+whoT.getDisplayName());
+
+                whoT = whoSc.getTeam(joinerGuild.getTag());
+                whoT.addPlayer(joiner);
+
+                
+            }
+            for(UUID member : joinerGuild.getMembers()){
+                Player memon = Bukkit.getPlayer(member);
+                if(memon != null){
+                    memon.setScoreboard(sc);
+                }
+            }
+        for(Relation r : joinerGuild.getAlliances()){
+            if(r.getWho().equals(joinerGuild.getTag())){
+                Guild ally = plugin.getGuildHelper().getGuilds().get(r.getWithWho());
+                Scoreboard sca = ally.getSc();
+                sca.getTeam(joinerGuild.getTag()).removePlayer(joiner);
+                for(UUID allypl : ally.getMembers()){
+                    Player plon = Bukkit.getPlayer(allypl);
+                    if(plon != null){
+                        plon.setScoreboard(sca);
+                    }
+                }
+            }
+        } 
+    }
+    public void playerLeaveGuild(OfflinePlayer joiner){
+        Guild joinerGuild = plugin.getGuildHelper().getPlayerGuild(joiner.getUniqueId());
+        for(Relation r : joinerGuild.getAlliances()){
+            if(r.getWho().equals(joinerGuild.getTag())){
+                Guild ally = plugin.getGuildHelper().getGuilds().get(r.getWithWho());
+                Scoreboard sc = ally.getSc();
+                sc.getTeam(joinerGuild.getTag()).removePlayer(joiner);
+                for(UUID allypl : ally.getMembers()){
+                    Player plon = Bukkit.getPlayer(allypl);
+                    if(plon != null){
+                        plon.setScoreboard(sc);
+                    }
+                }
+            }
+        } 
+    }
+    
+    public void playerJoinServer(Player joiner){
+        Guild joinerGuild = plugin.getGuildHelper().getPlayerGuild(joiner.getUniqueId());
+        if(joinerGuild == null){
+            Scoreboard sc = joiner.getScoreboard();
+            for(Team t : sc.getTeams()){
+                t.unregister();
+            }
+        }else{
+            joiner.setScoreboard(joinerGuild.getSc());
+            System.out.println("Liczba obiektow team "+joinerGuild.getSc().getTeams().size());
+            for (Team t : joiner.getScoreboard().getTeams()) {
+                System.out.print("Nazwa "+t.getName()+" displayname "+t.getDisplayName()+" prefix "+t.getPrefix());
+            }
+        }
+    }
+    /*
+    login
+    usuwanie /g zamknij
+    join /g akceptuj
+    left /g opusc
+    sojusz /g sojusz
+    enemy /g wrog
+    + TODO MA WYSWIETLAC NORMALNIE TAGI GILDII JAK NIE MA SOJUSZU!!!!!!! JAKOS
+    */
 }

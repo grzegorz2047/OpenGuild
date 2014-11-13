@@ -16,6 +16,7 @@
 package com.github.grzegorz2047.openguild;
 
 import org.bukkit.Location;
+import org.bukkit.scoreboard.Scoreboard;
 
 public class Guild extends GuildMembers {
 
@@ -24,7 +25,8 @@ public class Guild extends GuildMembers {
 
     private Location home;
     private Cuboid cuboid;
-
+    private Scoreboard sc;
+    
     public Guild(pl.grzegorz2047.openguild2047.OpenGuild plugin) {
         super(plugin);
         this.setMembersGuild(this);
@@ -60,5 +62,13 @@ public class Guild extends GuildMembers {
 
     public Cuboid getCuboid() {
         return cuboid;
+    }
+
+    public Scoreboard getSc() {
+        return sc;
+    }
+
+    public void setSc(Scoreboard sc) {
+        this.sc = sc;
     }
 }

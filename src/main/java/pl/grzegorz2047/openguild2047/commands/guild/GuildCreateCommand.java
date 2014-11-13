@@ -121,11 +121,10 @@ public class GuildCreateCommand extends Command {
         guild.setLeader(player.getUniqueId());
         guildHelper.getGuilds().put(tag, guild);
         guildHelper.getPlayers().put(player.getUniqueId(), guild);
+        guild.setSc(Bukkit.getScoreboardManager().getNewScoreboard());
         if(GenConf.playerprefixenabled) {
             this.getPlugin().
-                    getTagManager().
-                    setTag(player.
-                            getUniqueId());
+                    getTagManager().playerJoinGuild(player);
         }
 
         this.getPlugin().getOGLogger().info("Player '" + player.getName() + "' successfully created new guild '" + tag.toUpperCase() + "'.");

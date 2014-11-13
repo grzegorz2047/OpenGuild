@@ -74,7 +74,7 @@ public class OpenGuild extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        Guilds.getLogger().log(Level.INFO,"Wersja CraftBukkita to "+Bukkit.getVersion());
+        System.out.print("Craftbukkit version is "+Bukkit.getVersion());
         long startTime = System.currentTimeMillis();
         
         instance = this;
@@ -119,7 +119,7 @@ public class OpenGuild extends JavaPlugin {
         this.tagManager = new TagManager(this);
         
         for(Player player : getServer().getOnlinePlayers()) {
-            this.tagManager.setTag(player.getUniqueId());
+            this.tagManager.playerJoinServer(player);
         }
         
         // Load required items section.
@@ -252,13 +252,14 @@ public class OpenGuild extends JavaPlugin {
      * them to their guild's member list.
      */
     private void loadPlayers() {
-        for(Guild guild : this.guildHelper.getGuilds().values()) {
+        //for(Guild guild : this.guildHelper.getGuilds().values()) {
             for(UUID player : this.guildHelper.getPlayers().keySet()) {
-                if(this.guildHelper.getPlayers().get(player) != null && this.guildHelper.getPlayers().get(player).equals(guild)) {
+                Guild guild = this.guildHelper.getPlayerGuild(player);
+                if(guild != null){
                     guild.addMember(player);
                 }
             }
-        }
+    //    }
     }
     
     /**

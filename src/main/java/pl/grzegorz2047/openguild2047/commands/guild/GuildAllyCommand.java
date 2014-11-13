@@ -81,6 +81,7 @@ public class GuildAllyCommand extends Command{
                 if(result != true){
                     this.getPlugin().getOGLogger().warning("Could not register the ally for " + guild.getTag() + " guild!");
                 }
+                OpenGuild.getInstance().getTagManager().guildMakeAlliance(r);
                 guild.getAlliances().add(r);
                 requestingGuild.getAlliances().add(r);
                 Bukkit.broadcastMessage(MsgManager.get("broadcast-ally")

@@ -61,8 +61,13 @@ public class GuildEnemyCommand extends Command{
                 sender.sendMessage(MsgManager.get("leadernotonline"));
                 return;
             }
+            if(guild.getTag().equals(requestingGuild.getTag())){
+                sender.sendMessage(MsgManager.get("enemyyourselferror"));
+                return;
+            }
             for(Relation r : requestingGuild.getAlliances()){
                 if(r.getWithWho().equals(guild.getTag()) || r.getWho().equals(guild.getTag())){
+                    OpenGuild.getInstance().getTagManager().guildBrokeAlliance(requestingGuild, guild);
                     requestingGuild.getAlliances().remove(r);
                     guild.getAlliances().remove(r);
                     OpenGuild.getInstance().getSQLHandler().removeAlliance(requestingGuild, guild);

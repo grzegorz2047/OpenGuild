@@ -66,8 +66,7 @@ public class GuildKickCommand extends Command {
         }
                 this.
             getPlugin().
-            getTagManager().
-            removeTag(op.getUniqueId());
+            getTagManager().playerLeaveGuild(op);
         guild.removeMember(op.getUniqueId());
         guildHelper.getPlayers().remove(op.getUniqueId());
         guildHelper.getPlayers().put(op.getUniqueId(), null);
