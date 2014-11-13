@@ -74,7 +74,9 @@ public class OpenGuild extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        System.out.print("Craftbukkit version is "+Bukkit.getVersion());
+        
+        Guilds.getLogger().log(Level.INFO, "Your Minecraft server version is " + Bukkit.getVersion());
+        
         long startTime = System.currentTimeMillis();
         
         instance = this;
