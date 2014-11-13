@@ -75,7 +75,7 @@ public class OpenGuild extends JavaPlugin {
             return;
         }
         
-        Guilds.getLogger().log(Level.INFO, "Your Minecraft server version is " + Bukkit.getVersion());
+        System.out.print("Your Minecraft server version is " + Bukkit.getVersion());
         
         long startTime = System.currentTimeMillis();
         
