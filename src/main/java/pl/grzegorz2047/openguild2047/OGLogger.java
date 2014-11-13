@@ -83,7 +83,11 @@ public class OGLogger implements Logger {
     
     public void exceptionThrown(Exception exception) {
         log(Level.SEVERE, "---- AN EXCEPTION HAS BEEN THROWN!");
-        log(Level.SEVERE, exception.toString());
+        if (GenConf.debug) {
+            exception.printStackTrace();
+        } else {
+            log(Level.SEVERE, exception.toString());
+        }
         log(Level.SEVERE, "---- You can find entire report in log file!");
     }
     
