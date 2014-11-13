@@ -49,17 +49,14 @@ public class HardcoreSQLHandler {
             String query = "SELECT "+Column.BAN_TIME+" FROM "+TABLENAME+" WHERE "+Column.UUID+"='"+uniqueId+"'";
             ResultSet rs = OpenGuild.getInstance().getSQLHandler().executeQuery(query);
             try {
-                double value = rs.getDouble(1);
-                return (long)value;
-            }
-            catch (SQLException ex) {
-                OpenGuild.getInstance().getOGLogger().exceptionThrown(ex);
-                return -1;
+                return (long) rs.getDouble(1);
+            } catch (SQLException ex) {
+                return 0;
             }
         }else{
             String query = "INSERT INTO "+TABLENAME+" VALUES("+uniqueId+","+Bukkit.getOfflinePlayer(uniqueId).getName()+","+0+")";
             boolean answer = OpenGuild.getInstance().getSQLHandler().execute(query);
-            return -1;
+            return 0;
         }
     }
 

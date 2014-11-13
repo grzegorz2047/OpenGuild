@@ -66,17 +66,12 @@ public class HardcoreListeners implements Listener {
             return;
         }
         
-        final long ban = HardcoreSQLHandler.getBan(e.getPlayer().getUniqueId());
-        if(ban == 0) {
-            return;
-        }
-        
         Bukkit.getScheduler().runTaskLater(OpenGuild.getBukkit(), new Runnable() {
             
             @Override
             public void run() {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy HH:mm");
-                Date date = new Date(ban);
+                Date date = new Date(HardcoreSQLHandler.getBan(e.getPlayer().getUniqueId()));
                 e.getPlayer().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
             }
         }, 5 * 20L); // 5 seconds to say "Good bye"
