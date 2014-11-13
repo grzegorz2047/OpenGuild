@@ -90,6 +90,8 @@ public class GuildAllyCommand extends Command{
                 return;
             }
             requestingGuild.changeRelationRequest(requestingGuild, guild, leader, Relation.STATUS.ALLY);
+        }else{
+            sender.sendMessage("/g ally <guild>");
         }
         
     }

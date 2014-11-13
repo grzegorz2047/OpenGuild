@@ -112,7 +112,7 @@ public class GuildRelations {
                 }
             }.runTaskLater(this.plugin, 20L * 25);
         }else{
-            //already requested
+            Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Juz wyslales prosbe o sojusz do "+requestingTag);
         }
     }
 }

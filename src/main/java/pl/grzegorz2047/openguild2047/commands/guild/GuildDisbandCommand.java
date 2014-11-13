@@ -21,9 +21,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
 import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
 import org.bukkit.Bukkit;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -54,7 +56,16 @@ public class GuildDisbandCommand extends Command {
                 player.sendMessage(MsgManager.get("playernotleader"));
                 return;
             }
-
+            for(Relation r : guild.getAlliances()){
+                Guild g1 = guildHelper.getGuilds().get(r.getWho());
+                Guild g2 = guildHelper.getGuilds().get(r.getWithWho());
+                OpenGuild.getInstance().getTagManager().guildBrokeAlliance(g1, g2);
+                guild.getAlliances().remove(r);
+                guild.getAlliances().remove(r);
+                OpenGuild.getInstance().getSQLHandler().removeAlliance(g1, g2);
+                return;
+                
+            }
             for(UUID uuid : guild.getMembers()) {
                 this.
                     getPlugin().

@@ -184,6 +184,9 @@ public class SQLHandler {
                 guild.setHome(home);
                 guild.setLeader(leaderUUID);
                 guild.setSc(Bukkit.getScoreboardManager().getNewScoreboard());
+                Team t = plugin.getTagManager().getGlobalScoreboard().registerNewTeam(tag);
+                t.setPrefix(ChatColor.RED+tag+" ");
+                t.setDisplayName(ChatColor.RED+tag+" ");
                 if(guild.getSc() == null){
                     System.out.print("Scoreboard gildii "+guild.getTag()+" jest null!");
                 }
@@ -219,13 +222,22 @@ public class SQLHandler {
                         System.out.print("Gildia jest null!");
                         continue;
                     }
+                    if(plugin.getTagManager().getGlobalScoreboard().getTeam(guildTag)== null){
+                        Team t = plugin.getTagManager().getGlobalScoreboard().registerNewTeam(guildTag);
+                        t.setPrefix(ChatColor.RED+guildTag+" ");
+                        t.setDisplayName(ChatColor.RED+guildTag+" ");
+                        t.addPlayer(Bukkit.getOfflinePlayer(uuid));
+                    }else{
+                        Team t = plugin.getTagManager().getGlobalScoreboard().getTeam(guildTag);
+                        t.addPlayer(Bukkit.getOfflinePlayer(uuid));
+                    }
                     Scoreboard whoSc = whoGuild.getSc();
                     String who = guildTag;
                     Team whoT;
                     if(whoSc.getTeam(guildTag) == null){
                         whoT = whoSc.registerNewTeam(who);
-                        whoT.setPrefix(ChatColor.GREEN+who);
-                        whoT.setDisplayName(ChatColor.GREEN+who);
+                        whoT.setPrefix(ChatColor.GREEN+who+" ");
+                        whoT.setDisplayName(ChatColor.GREEN+who+" ");
                         System.out.print("whoT to "+whoT.getName()+" z dn "+whoT.getDisplayName());
                         System.out.print("Dodaje gracza "+Bukkit.getOfflinePlayer(uuid).getName());
                         whoT.addPlayer(Bukkit.getOfflinePlayer(uuid));
@@ -276,8 +288,8 @@ public class SQLHandler {
                 Team whoT;
 
                 whoT = withWhoSc.registerNewTeam(who);
-                whoT.setPrefix(ChatColor.BLUE+who);
-                whoT.setDisplayName(ChatColor.BLUE+who);
+                whoT.setPrefix(ChatColor.BLUE+who+" ");
+                whoT.setDisplayName(ChatColor.BLUE+who+" ");
                 for(UUID whop : whoGuild.getMembers()){
                     whoT.addPlayer(Bukkit.getOfflinePlayer(whop));
                 }

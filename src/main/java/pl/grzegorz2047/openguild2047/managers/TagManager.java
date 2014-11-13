@@ -35,13 +35,13 @@ public class TagManager {
     
     private OpenGuild plugin;
    
-    private static Scoreboard guildExistsInfoScoreboard;//Mozna trzymac tu defaultowe prefixy gildii dla bezgildyjnych
+    private Scoreboard guildExistsInfoScoreboard;//Mozna trzymac tu defaultowe prefixy gildii dla bezgildyjnych
     
     public TagManager(OpenGuild plugin){
         this.plugin = plugin;
         
-        if(!TagManager.isInitialised()){//Kiedy trzeba to mozna zainicjowac scoreboard np. przy onEnable()
-            guildExistsInfoScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        if(!this.isInitialised()){//Kiedy trzeba to mozna zainicjowac scoreboard np. przy onEnable()
+            this.guildExistsInfoScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         }
     }
     /*
@@ -130,8 +130,11 @@ public class TagManager {
         return false;
     }
      */
-    public static boolean isInitialised(){
+    private boolean isInitialised(){
         return guildExistsInfoScoreboard!= null; 
+    }
+    public Scoreboard getGlobalScoreboard(){
+        return guildExistsInfoScoreboard;
     }
    
     public void guildBrokeAlliance(Guild guild, Guild tobrokewith){
@@ -180,18 +183,17 @@ public class TagManager {
         Team whoT;
 
         whoT = withWhoSc.registerNewTeam(who);
-        whoT.setPrefix(ChatColor.BLUE+who);
-        whoT.setDisplayName(ChatColor.BLUE+who);
+        whoT.setPrefix(ChatColor.BLUE+who+" ");
+        whoT.setDisplayName(ChatColor.BLUE+who+" ");
         for(UUID whop : whoGuild.getMembers()){
             whoT.addPlayer(Bukkit.getOfflinePlayer(whop));
         }
 
-
         Team withWhoT;
 
         withWhoT = whoSc.registerNewTeam(withwho);
-        withWhoT.setPrefix(ChatColor.BLUE+withwho);
-        withWhoT.setDisplayName(ChatColor.BLUE+withwho);
+        withWhoT.setPrefix(ChatColor.BLUE+withwho+" ");
+        withWhoT.setDisplayName(ChatColor.BLUE+withwho+" ");
         for(UUID whop : withWhoGuild.getMembers()){
             withWhoT.addPlayer(Bukkit.getOfflinePlayer(whop));
         }
@@ -210,8 +212,8 @@ public class TagManager {
                 Team whoT;
                 
                 whoT = whoSc.registerNewTeam(who);
-                whoT.setPrefix(ChatColor.GREEN+who);
-                whoT.setDisplayName(ChatColor.GREEN+who);
+                whoT.setPrefix(ChatColor.GREEN+who+" ");
+                whoT.setDisplayName(ChatColor.GREEN+who+" ");
                 System.out.print("whoT to "+whoT.getName()+" z dn "+whoT.getDisplayName());
 
                 whoT = whoSc.getTeam(joinerGuild.getTag());
@@ -254,15 +256,20 @@ public class TagManager {
                 }
             }
         } 
+        System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
+        System.out.print("Gracz opuszcza gildie");
+        if(joiner.isOnline()){
+            System.out.println("Jest online");
+            Player p = Bukkit.getPlayer(joiner.getUniqueId());
+            p.setScoreboard(guildExistsInfoScoreboard);
+        }
     }
     
     public void playerJoinServer(Player joiner){
         Guild joinerGuild = plugin.getGuildHelper().getPlayerGuild(joiner.getUniqueId());
         if(joinerGuild == null){
-            Scoreboard sc = joiner.getScoreboard();
-            for(Team t : sc.getTeams()){
-                t.unregister();
-            }
+            joiner.setScoreboard(guildExistsInfoScoreboard);
+            System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
         }else{
             joiner.setScoreboard(joinerGuild.getSc());
             System.out.println("Liczba obiektow team "+joinerGuild.getSc().getTeams().size());

@@ -112,13 +112,14 @@ public class OpenGuild extends JavaPlugin {
         // Intialize guild helper class
         this.guildHelper = new GuildHelper();
         CuboidStuff cs = new CuboidStuff(this);
+        // Setup Tag Manager
+        this.tagManager = new TagManager(this);
         // Load database
         loadDB();
         loadPlayers();
         this.getSQLHandler().loadRelations();
         
-        // Setup Tag Manager
-        this.tagManager = new TagManager(this);
+
         
         for(Player player : getServer().getOnlinePlayers()) {
             this.tagManager.playerJoinServer(player);
