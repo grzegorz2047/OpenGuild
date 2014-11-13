@@ -22,10 +22,14 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
-import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler.COLUMN;
 
+/**
+ * We are using the new command API
+ * Command has been moved also to the new class {@link Unban}
+ * @author Aleksander
+ * @deprecated New command API
+ */
 @Deprecated
 public class UnbanCommandArg  {
     
@@ -51,7 +55,7 @@ public class UnbanCommandArg  {
         
         long banned = HardcoreSQLHandler.getBan(player.getUniqueId());
         if(banned != 0) {
-            HardcoreSQLHandler.update(player.getUniqueId(), COLUMN.BAN_TIME, "0");
+            HardcoreSQLHandler.update(player.getUniqueId(), HardcoreSQLHandler.Column.BAN_TIME, "0");
             Guilds.getLogger().info("Player " + player.getName() + " (" + player.getUniqueId() + ") was unbanned by " + sender.getName());
             sender.sendMessage(MsgManager.get("hcub").replace("{PLAYER}", player.getName()));
         } else {
