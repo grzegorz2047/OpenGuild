@@ -107,9 +107,6 @@ public class OpenGuild extends JavaPlugin {
         // Register events
         loadAllListeners();
         
-        // Load default plugin-modules
-        ((OpenModuleManager) ogAPI.getModules()).defaultModules();
-        
         // Intialize guild helper class
         this.guildHelper = new GuildHelper();
         CuboidStuff cs = new CuboidStuff(this);
@@ -128,6 +125,9 @@ public class OpenGuild extends JavaPlugin {
         
         // Load required items section.
         CuboidListeners.loadItems();
+        
+        // Load default plugin-modules
+        ((OpenModuleManager) ogAPI.getModules()).defaultModules();
         
         // Metrics
         try {
