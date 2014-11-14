@@ -20,6 +20,7 @@ import com.github.grzegorz2047.openguild.OpenGuild;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -40,6 +41,7 @@ public class HardcoreListeners implements Listener {
         }
         
         long ban = System.currentTimeMillis() + GenConf.hcBantime;
+        System.out.println("Wrzucam bana o wartosci "+String.valueOf(ban));
         HardcoreSQLHandler.update(e.getEntity().getUniqueId(), HardcoreSQLHandler.Column.BAN_TIME, String.valueOf(ban));
     }
     
@@ -53,6 +55,7 @@ public class HardcoreListeners implements Listener {
         }
         
         long ban = HardcoreSQLHandler.getBan(e.getPlayer().getUniqueId());
+        System.out.print("Ban goscia to "+ban);
         if(System.currentTimeMillis() < ban) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy HH:mm");
             Date date = new Date(ban);

@@ -201,6 +201,10 @@ public class SQLHandler {
         
         return guilds;
     }
+
+    public Connection getConnection() {
+        return connection;
+    }
     
     private Map<UUID, Guild> loadPlayers() {
         Map<UUID, Guild> players = new HashMap<UUID, Guild>();
@@ -260,6 +264,10 @@ public class SQLHandler {
         }
         
         return players;
+    }
+
+    public Statement getStatement() {
+        return statement;
     }
     public void loadRelations(){
         try {
@@ -492,6 +500,7 @@ public class SQLHandler {
             return statement.execute(query);
         }
         catch (SQLException ex) {
+            ex.printStackTrace();
             plugin.getOGLogger().exceptionThrown(ex);
             return false;
         }
