@@ -15,6 +15,9 @@
  */
 package pl.grzegorz2047.openguild2047.database;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import pl.grzegorz2047.openguild2047.GenConf;
 
 /**
@@ -22,16 +25,26 @@ import pl.grzegorz2047.openguild2047.GenConf;
  * @author Aleksander
  */
 public class SQLThread implements Runnable {
+    private Connection connection;
     private final SQLData data = GenConf.getSqlData();
     private final String query;
     
-    public SQLThread(String query) {
+    public SQLThread(Connection connection, String query) {
+        this.connection = connection;
         this.query = query;
     }
     
     @Override
     public void run() {
-        // TODO I DONT REALLY KNOW WHAT TO DO...
+        try {
+            if(connection.isClosed()) {
+                connection = data.getDriver();
+            }
+            Statement statement = connection.createStatement();
+            statement.executeQuery(query);
+        } catch (SQLException ex) {
+            
+        }
     }
     
     public SQLData getData() {

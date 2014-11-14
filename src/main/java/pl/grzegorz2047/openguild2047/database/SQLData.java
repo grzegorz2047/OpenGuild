@@ -15,10 +15,14 @@
  */
 package pl.grzegorz2047.openguild2047.database;
 
+import java.sql.Connection;
+
 /**
  *
  * @author Aleksander
  */
 public interface SQLData {
+    Connection getDriver();
+    
     String name();
 }

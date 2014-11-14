@@ -15,6 +15,10 @@
  */
 package pl.grzegorz2047.openguild2047.database;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 /**
  *
  * @author Aleksander
@@ -32,6 +36,20 @@ public class MySQLData implements SQLData {
         this.user = user;
         this.password = password;
         this.name = name;
+    }
+    
+    @Override
+    public Connection getDriver() {
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + name + "?autoReconnect=true", user, password);
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        } catch(ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return connection;
     }
     
     @Override

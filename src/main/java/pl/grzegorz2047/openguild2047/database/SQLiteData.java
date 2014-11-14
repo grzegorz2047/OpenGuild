@@ -15,6 +15,10 @@
  */
 package pl.grzegorz2047.openguild2047.database;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 /**
  *
  * @author Aleksander
@@ -24,6 +28,24 @@ public class SQLiteData implements SQLData {
     
     public SQLiteData(String dir) {
         this.dir = dir;
+    }
+    
+    @Override
+    public Connection getDriver() {
+        Connection connection = null;
+        try {
+            Class.forName("org.sqlite.JDBC").newInstance();
+            connection = DriverManager.getConnection("jdbc:sqlite:" + getDir());
+        } catch(ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        } catch(InstantiationException ex) {
+            ex.printStackTrace();
+        } catch(IllegalAccessException ex) {
+            ex.printStackTrace();
+        }
+        return connection;
     }
     
     @Override
