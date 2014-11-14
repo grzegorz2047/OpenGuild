@@ -29,8 +29,6 @@ import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.Relation.STATUS;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Scoreboard;
@@ -102,7 +100,7 @@ public class SQLHandler {
         plugin.getGuildHelper().setGuilds(this.loadGuilds());
         plugin.getGuildHelper().setPlayers(this.loadPlayers());
         
-        plugin.getOGLogger().info("Loaded " + plugin.getGuildHelper().getGuilds().size() + " from database.");
+        plugin.getOGLogger().info("Loaded " + plugin.getGuildHelper().getGuilds().size() + " guilds from database.");
     }
     
     private void createTables() {
@@ -312,11 +310,6 @@ public class SQLHandler {
                     withWhoT.addPlayer(Bukkit.getOfflinePlayer(whop));
                 }
                 
-                
-                
-                
-                
-                
                 whoGuild.getAlliances().add(r);
                 withWhoGuild.getAlliances().add(r);
             }
@@ -332,8 +325,7 @@ public class SQLHandler {
      * @param player instance of UUID class.
      */
     public void addPlayer(UUID player) {
-        String uuid = player.toString();
-        
+        final String uuid = player.toString();
         try {
             statement = this.connection.createStatement();
             statement.execute("INSERT INTO `openguild_players` VALUES( '', '" + uuid + "', '"+Bukkit.getPlayer(player).getName()+"');");

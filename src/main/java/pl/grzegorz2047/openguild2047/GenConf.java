@@ -25,6 +25,9 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import pl.grzegorz2047.openguild2047.api.Guilds;
+import pl.grzegorz2047.openguild2047.database.MySQLData;
+import pl.grzegorz2047.openguild2047.database.SQLData;
+import pl.grzegorz2047.openguild2047.database.SQLiteData;
 
 /**
  *
@@ -87,6 +90,7 @@ public class GenConf {
     public static String allyChatKey;
     public static String allyChatFormat;
     public static boolean debug;
+    public static SQLData sqlData;
     
     public static int defaultTNTBlockTime;
     public static boolean enableTNTExplodeListener;
@@ -104,6 +108,7 @@ public class GenConf {
         BREAKING_DAMAGE = Short.parseShort(OpenGuild.getInstance().getConfig().getString("cuboid.breaking-blocks.damage", "0"));
         SQL_DEBUG = OpenGuild.getInstance().getConfig().getBoolean("mysql.debug", false);
         DATABASE = Database.valueOf(OpenGuild.getInstance().getConfig().getString("database", "FILE").toUpperCase());
+        loadDatabase();
         FILE_DIR = OpenGuild.getInstance().getConfig().getString("file-dir", "plugins/OpenGuild2047/og.db");
         SNOOPER = OpenGuild.getInstance().getConfig().getBoolean("snooper", true);
         TEAMPVP_MSG = OpenGuild.getInstance().getConfig().getBoolean("teampvp-msg", false);
@@ -121,7 +126,7 @@ public class GenConf {
         playerMoveEvent = config.getBoolean("listener.player-move-event", false);
         cubNotify = config.getBoolean("cuboid.notify-enter", true);
         cubNotifyMem = config.getBoolean("cuboid.notify-enter-members", false);
-       // System.out.print("Pobral cubnotifymem "+config.getBoolean("cuboid.notify-enter-members")+" a jest "+cubNotifyMem);
+        // System.out.print("Pobral cubnotifymem "+config.getBoolean("cuboid.notify-enter-members")+" a jest "+cubNotifyMem);
         cubNotifySound = config.getBoolean("cuboid.notify-enter-sound", false);
         try {
             cubNotifySoundType = Sound.valueOf(config.getString("cuboid.notify-enter-sound-type", "ENDERMAN_DEATH"));
@@ -247,4 +252,25 @@ public class GenConf {
         hcBantime = result;
     }
 
+    private static void loadDatabase() {
+        FileConfiguration config = OpenGuild.getInstance().getConfig();
+        String host = config.getString("mysql.address");
+        int port = config.getInt("mysql.port");
+        String user = config.getString("mysql.login");
+        String pass = config.getString("mysql.password");
+        String name = config.getString("mysql.database");
+        
+        switch (DATABASE) {
+            case FILE:
+                sqlData = new SQLiteData(FILE_DIR);
+                break;
+            case MYSQL:
+                sqlData = new MySQLData(host, port, user, pass, name);
+                break;
+        }
+    }
+    
+    public static SQLData getSqlData() {
+        return sqlData;
+    }
 }
