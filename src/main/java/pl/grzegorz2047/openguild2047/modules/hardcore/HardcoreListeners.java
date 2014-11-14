@@ -61,19 +61,21 @@ public class HardcoreListeners implements Listener {
     }
     
     @EventHandler
-    public void onPlayerRespawn(final PlayerRespawnEvent e) {
+    public void onPlayerRespawn(PlayerRespawnEvent e) {
         if(!GenConf.hcBans) {
             return;
         }
         
-        HardcoreSQLHandler.getBan(e.getPlayer().getUniqueId()); // We must insert this player into the hardcore-table.
+        final Player player = e.getPlayer();
+        HardcoreSQLHandler.getBan(player.getUniqueId()); // We must insert this player into the hardcore-table.
+        final String time = new SimpleDateFormat("dd-MM-yyy HH:mm").format(new Date(System.currentTimeMillis())); // TODO Add ms from the configuration file to the currentTimeMillis
         Bukkit.getScheduler().runTaskLater(OpenGuild.getBukkit(), new Runnable() {
             
             @Override
             public void run() {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy HH:mm");
-                Date date = new Date(null); // We must get the current millis and add time from the configuration
-                e.getPlayer().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
+                if (player != null) { // If the player logout and the Player object is null, this scheduler will do nothing
+                    player.kickPlayer(GenConf.hcLoginMsg.replace("%TIME", time));
+                }
             }
         }, 5 * 20L); // 5 seconds to say "Good bye"
     }
