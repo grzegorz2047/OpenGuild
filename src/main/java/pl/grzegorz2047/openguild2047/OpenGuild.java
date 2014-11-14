@@ -39,6 +39,7 @@ import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.*;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
+import pl.grzegorz2047.openguild2047.permissionsystem.PermissionsManager;
 
 /**
  *
@@ -56,6 +57,11 @@ public class OpenGuild extends JavaPlugin {
     private TagManager tagManager;
     
     private SQLHandler sqlHandler;
+    
+    /**
+     * Instance of built-in permissions manager main class.
+     */
+    private PermissionsManager permissionsManager;
 
     @Override
     public void onEnable() {
@@ -101,6 +107,14 @@ public class OpenGuild extends JavaPlugin {
         // Validate language file
         validateFile("messages_" + GenConf.lang.toLowerCase());
         
+        /*
+         * If some server admin doesn't want to use PermissionsEX or other
+         * permission plugin - he can use our built-in permissions manager.
+         */
+        //if(GenConf.useNativePermissionsManager) {
+        //  TODO   
+        //}
+        
         // Register commands
         loadCommands();
         
@@ -116,8 +130,6 @@ public class OpenGuild extends JavaPlugin {
         loadDB();
         loadPlayers();
         this.getSQLHandler().loadRelations();
-        
-
         
         for(Player player : getServer().getOnlinePlayers()) {
             this.tagManager.playerJoinServer(player);

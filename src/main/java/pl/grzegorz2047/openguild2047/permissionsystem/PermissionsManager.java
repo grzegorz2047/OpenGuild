@@ -16,15 +16,6 @@
 
 package pl.grzegorz2047.openguild2047.permissionsystem;
 
-/**
- *
- * @author Grzegorz
- */
-public class PermissionManager {
-    /*
-    Mysle, ze nie trzeba za bardzo ogarniac API pexa czy group managera, ale jak na takie pluginy przystalo
-    to warto sie pobawic z jakims systemem uprawnien dla graczy itd.
-    
-    */
+public class PermissionsManager {
     
 }
