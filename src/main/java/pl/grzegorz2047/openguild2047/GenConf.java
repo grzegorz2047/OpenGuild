@@ -118,7 +118,7 @@ public class GenConf {
 
         spawnMessage = config.getString("spawn.message", "&4Message 'spawn.message' in config.yml file was not found! This is an error! Please notify an operator about it!").replace("&", "§");
         blockGuildCreating = config.getBoolean("spawn.block-guild-creating", true);
-        playerMoveEvent = config.getBoolean("player-move-event", false);
+        playerMoveEvent = config.getBoolean("listener.player-move-event", false);
         cubNotify = config.getBoolean("cuboid.notify-enter", true);
         cubNotifyMem = config.getBoolean("cuboid.notify-enter-members", false);
        // System.out.print("Pobral cubnotifymem "+config.getBoolean("cuboid.notify-enter-members")+" a jest "+cubNotifyMem);
