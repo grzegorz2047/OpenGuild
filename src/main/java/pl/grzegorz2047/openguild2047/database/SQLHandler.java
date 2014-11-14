@@ -500,7 +500,6 @@ public class SQLHandler {
             return statement.execute(query);
         }
         catch (SQLException ex) {
-            ex.printStackTrace();
             plugin.getOGLogger().exceptionThrown(ex);
             return false;
         }

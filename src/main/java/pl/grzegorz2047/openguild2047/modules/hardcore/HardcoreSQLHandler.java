@@ -19,8 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
@@ -36,6 +34,7 @@ public class HardcoreSQLHandler {
         UUID,
         NICK
     };
+    private static final OpenGuild plugin = OpenGuild.getInstance();
     public static final String TABLENAME = "openguild_bans";
     public static boolean createTables(){
         String query = "CREATE TABLE IF NOT EXISTS '"+TABLENAME+"' (UUID VARCHAR(36) NOT NULL primary key, NICK VARCHAR(16) NOT NULL, BAN_TIME DEC NOT NULL)";
@@ -48,25 +47,18 @@ public class HardcoreSQLHandler {
             SQLHandler sql = OpenGuild.getInstance().getSQLHandler();
             Statement st = sql.getConnection().createStatement();
             String query;
-            if(sql.isConnectionClosed()){
-                System.out.print("Polaczenie jest zamkniete?!");
+            if(sql.isConnectionClosed()) {
+                return;
             }
-            if(playerExists(uniqueId)){
+            
+            if(playerExists(uniqueId)) {
                 query = "UPDATE '"+TABLENAME+"' SET "+column.toString()+"='"+value+"' WHERE "+Column.UUID.toString()+"='"+uniqueId+"'";
-                System.out.print("prop query to "+query);
-            }else{
+            } else {
                 query = "INSERT INTO '"+TABLENAME+"' VALUES('"+uniqueId+"', '"+Bukkit.getOfflinePlayer(uniqueId).getName()+"', '"+value+"')";
-                System.out.print("prop query to "+query);
             }
-            System.out.print("query to "+query);
-            if(st.execute(query)){
-                System.out.println("Ogarnieto rekord!");
-            }else{
-                System.out.println("Nie ddodano rekordu!");
-            }
-        }
-        catch (SQLException ex) {
-            ex.printStackTrace();
+            st.execute(query);
+        } catch (SQLException ex) {
+            plugin.getOGLogger().exceptionThrown(ex);
         }
     }
 
@@ -80,7 +72,7 @@ public class HardcoreSQLHandler {
                 rs.next();
                 return (long) rs.getDouble("BAN_TIME");
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                plugin.getOGLogger().exceptionThrown(ex);
                 return 0;
             }
         }
@@ -88,26 +80,23 @@ public class HardcoreSQLHandler {
     }
 
     public static boolean playerExists(UUID uniqueId){
-        String query = "Select COUNT("+Column.UUID+") FROM "+TABLENAME+" WHERE "+Column.UUID.toString()+"='"+uniqueId+"'";
+        String query = "SELECT COUNT("+Column.UUID+") FROM "+TABLENAME+" WHERE "+Column.UUID.toString()+"='"+uniqueId+"'";
         ResultSet rs = OpenGuild.getInstance().getSQLHandler().executeQuery(query);
         int rowCount = -1;
         try {
           // get the number of rows from the result set
           rs.next();
           rowCount = rs.getInt(1);
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             OpenGuild.getInstance().getOGLogger().exceptionThrown(ex);
         } finally {
             try {
                 rs.close();
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 OpenGuild.getInstance().getOGLogger().exceptionThrown(ex);
             }
         }
         OpenGuild.getInstance().getOGLogger().debug("Counting player "+Bukkit.getOfflinePlayer(uniqueId).getName()+" with UUID "+uniqueId+" returns "+rowCount);
         return rowCount != 0 && rowCount != -1;
     }
-    
 }

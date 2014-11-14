@@ -41,7 +41,6 @@ public class HardcoreListeners implements Listener {
         }
         
         long ban = System.currentTimeMillis() + GenConf.hcBantime;
-        System.out.println("Wrzucam bana o wartosci "+String.valueOf(ban));
         HardcoreSQLHandler.update(e.getEntity().getUniqueId(), HardcoreSQLHandler.Column.BAN_TIME, String.valueOf(ban));
     }
     
@@ -55,9 +54,8 @@ public class HardcoreListeners implements Listener {
         }
         
         long ban = HardcoreSQLHandler.getBan(e.getPlayer().getUniqueId());
-        System.out.print("Ban goscia to "+ban);
         if(System.currentTimeMillis() < ban) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy HH:mm");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
             Date date = new Date(ban);
             e.disallow(PlayerLoginEvent.Result.KICK_OTHER, GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
         }
