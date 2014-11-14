@@ -58,7 +58,9 @@ public class OGLogger implements Logger {
 
     @Override
     public void debug(String debug) {
-        log(Level.INFO, debug);
+        if (GenConf.debug) {
+            log(Level.INFO, debug);
+        }
     }
 
     @Override
