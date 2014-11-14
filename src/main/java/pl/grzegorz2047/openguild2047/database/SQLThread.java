@@ -26,7 +26,7 @@ import pl.grzegorz2047.openguild2047.utils.Callback;
  * 
  * How to use:
  * 
- * Thread thread = new Thread(new SQLThread(connection, "COS TAM", new Callback<Object>() {
+ * Thread thread = new Thread(new SQLThread(connection, "Query", new Callback<Object>() {
  *     @Override
  *     public void call(Object result, Exception exception) {
  *         if(exception == null) // Everything went fine!
@@ -65,7 +65,7 @@ public class SQLThread implements Runnable {
             
             Statement statement = connection.createStatement();
             
-            // Update query can only user statement.execute() method
+            // Update query can only use statement.execute() method
             // Otherwise - it will throw an error.
             if(query.startsWith("UPDATE")) {
                 callback.call(statement.execute(query), null);
