@@ -68,7 +68,7 @@ public class HardcoreListeners implements Listener {
         
         final Player player = e.getPlayer();
         HardcoreSQLHandler.getBan(player.getUniqueId()); // We must insert this player into the hardcore-table.
-        final String time = new SimpleDateFormat("dd-MM-yyy HH:mm").format(new Date(System.currentTimeMillis())); // TODO Add ms from the configuration file to the currentTimeMillis
+        final String time = new SimpleDateFormat("dd-MM-yyy HH:mm").format(new Date(System.currentTimeMillis() + GenConf.hcBantime));
         Bukkit.getScheduler().runTaskLater(OpenGuild.getBukkit(), new Runnable() {
             
             @Override
