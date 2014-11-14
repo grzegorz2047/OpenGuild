@@ -66,12 +66,13 @@ public class HardcoreListeners implements Listener {
             return;
         }
         
+        HardcoreSQLHandler.getBan(e.getPlayer().getUniqueId()); // We must insert this player into the hardcore-table.
         Bukkit.getScheduler().runTaskLater(OpenGuild.getBukkit(), new Runnable() {
             
             @Override
             public void run() {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy HH:mm");
-                Date date = new Date(HardcoreSQLHandler.getBan(e.getPlayer().getUniqueId()));
+                Date date = new Date(null); // We must get the current millis and add time from the configuration
                 e.getPlayer().kickPlayer(GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
             }
         }, 5 * 20L); // 5 seconds to say "Good bye"
