@@ -6,7 +6,6 @@ teampvp: false
 teampvp-msg: false
 home-command: true
 teleport-cooldown: 10
-player-move-event: false
 spawn:
   location-max: [world, 50, 50]
   location-min: [world, -50, -50]
@@ -66,5 +65,6 @@ chat:
 required-items:
 - 'WOOL:1:2:1'
 listener:
-    tnt-block-enabled: true
-    tnt-block-time: 30
+  player-move-event: false
+  tnt-block-enabled: true
+  tnt-block-time: 30
