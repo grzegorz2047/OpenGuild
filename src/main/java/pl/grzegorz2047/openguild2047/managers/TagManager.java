@@ -240,6 +240,13 @@ public class TagManager {
                 }
             }
         } 
+        for(Player players : Bukkit.getOnlinePlayers()){
+            if(joiner.equals(players)){
+                continue;
+            }
+            Team t2 = players.getScoreboard().getTeam(joinerGuild.getTag());
+            t2.addPlayer(joiner);
+        }
     }
     public void playerLeaveGuild(OfflinePlayer joiner){
         Guild joinerGuild = plugin.getGuildHelper().getPlayerGuild(joiner.getUniqueId());
@@ -271,11 +278,36 @@ public class TagManager {
             joiner.setScoreboard(guildExistsInfoScoreboard);
             System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
         }else{
-            joiner.setScoreboard(joinerGuild.getSc());
+            joiner.setScoreboard(guildExistsInfoScoreboard);
+            for(Team t : joinerGuild.getSc().getTeams()){
+                Team tcheck = joiner.getScoreboard().getTeam(t.getName());
+                if( tcheck != null){
+                    tcheck.unregister();
+                }
+                Team tnew = joiner.getScoreboard().registerNewTeam(t.getName());
+                tnew.setPrefix(t.getPrefix());
+                tnew.setDisplayName(t.getDisplayName());
+            }
             System.out.println("Liczba obiektow team "+joinerGuild.getSc().getTeams().size());
             for (Team t : joiner.getScoreboard().getTeams()) {
                 System.out.print("Nazwa "+t.getName()+" displayname "+t.getDisplayName()+" prefix "+t.getPrefix());
             }
+        }
+    }
+    public void playerMakeGuild(Guild g, Player p){
+        Team t = this.getGlobalScoreboard().registerNewTeam(g.getTag());
+        System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
+        t.setPrefix(ChatColor.RED+g.getTag()+" ");
+        t.setDisplayName(ChatColor.RED+g.getTag()+" ");
+        for(Player players : Bukkit.getOnlinePlayers()){
+            if(p.getScoreboard().getTeam(g.getTag())!= null){
+                continue;
+            }
+            System.out.println("Liczba obiektow team "+players.getScoreboard().getTeams().size());
+            System.out.println("Gracz "+players.getName()+" dostaje team "+g.getTag());
+            Team t2 = players.getScoreboard().registerNewTeam(g.getTag());
+            t2.setPrefix(ChatColor.RED+g.getTag()+" ");
+            t2.setDisplayName(ChatColor.RED+g.getTag()+" ");
         }
     }
     /*

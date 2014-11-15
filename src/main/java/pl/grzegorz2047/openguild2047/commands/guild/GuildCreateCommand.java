@@ -123,6 +123,7 @@ public class GuildCreateCommand extends Command {
         guildHelper.getPlayers().put(player.getUniqueId(), guild);
         guild.setSc(Bukkit.getScoreboardManager().getNewScoreboard());
         if(GenConf.playerprefixenabled) {
+            this.getPlugin().getTagManager().playerMakeGuild(guild, player);
             this.getPlugin().
                     getTagManager().playerJoinGuild(player);
         }
