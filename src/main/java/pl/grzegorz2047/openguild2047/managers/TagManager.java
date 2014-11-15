@@ -24,8 +24,10 @@ import org.bukkit.scoreboard.Team;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
+import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import pl.grzegorz2047.openguild2047.api.Guilds;
 
 /**
  *
@@ -136,34 +138,31 @@ public class TagManager {
     public Scoreboard getGlobalScoreboard(){
         return guildExistsInfoScoreboard;
     }
-   
+    public void playerDisbandGuild(Guild guild){
+        this.getGlobalScoreboard().getTeam(guild.getTag()).unregister();
+        for(Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()){
+            if(gs.getValue().getTag().equals(guild.getTag())){
+                continue;
+            }
+            Team t = gs.getValue().getSc().getTeam(guild.getTag());
+            if(t != null){
+                t.unregister();
+            }
+        }
+    }
     public void guildBrokeAlliance(Guild guild, Guild tobrokewith){
         for(Relation r : guild.getAlliances()){
             if(r.getWho().equals(tobrokewith.getTag()) || r.getWithWho().equals(tobrokewith.getTag())){//Trzeba to odzielic jakos na 2 przypadki (else if) zamiast ||
                 Guild enemy = tobrokewith;
                 Scoreboard sc = enemy.getSc();
-                sc.getTeam(guild.getTag()).unregister();
-                for(UUID allypl : enemy.getMembers()){
-                    Player plon = Bukkit.getPlayer(allypl);
-                    if(plon != null){
-                        plon.setScoreboard(sc);
-                    }
-                }
+                sc.getTeam(guild.getTag()).setPrefix(ChatColor.RED+guild.getTag()+"");
+                sc.getTeam(guild.getTag()).setDisplayName(ChatColor.RED+guild.getTag()+"");
+                
                 
                 Guild enemy2 = guild;
                 Scoreboard sc2 = enemy2.getSc();
-                if(sc2.getTeam(tobrokewith.getTag()) == null){
-                    System.out.print("tag "+tobrokewith.getTag()+" nie rejestruje i wywala null");
-                    Bukkit.broadcastMessage("Wystapil blad, bo Grzegorz(Ja) nie dokonczyl tego! Wstyd!");
-                    return;
-                }
-                sc2.getTeam(tobrokewith.getTag()).unregister();
-                for(UUID allypl : enemy2.getMembers()){
-                    Player plon = Bukkit.getPlayer(allypl);
-                    if(plon != null){
-                        plon.setScoreboard(sc2);
-                    }
-                }
+                sc2.getTeam(tobrokewith.getTag()).setPrefix(ChatColor.RED+tobrokewith.getTag()+"");
+                sc2.getTeam(tobrokewith.getTag()).setDisplayName(ChatColor.RED+tobrokewith.getTag()+"");
             }
         } 
     }
@@ -182,7 +181,7 @@ public class TagManager {
 
         Team whoT;
 
-        whoT = withWhoSc.registerNewTeam(who);
+        whoT = withWhoSc.getTeam(who);
         whoT.setPrefix(ChatColor.BLUE+who+" ");
         whoT.setDisplayName(ChatColor.BLUE+who+" ");
         for(UUID whop : whoGuild.getMembers()){
@@ -191,7 +190,7 @@ public class TagManager {
 
         Team withWhoT;
 
-        withWhoT = whoSc.registerNewTeam(withwho);
+        withWhoT = whoSc.getTeam(withwho);
         withWhoT.setPrefix(ChatColor.BLUE+withwho+" ");
         withWhoT.setDisplayName(ChatColor.BLUE+withwho+" ");
         for(UUID whop : withWhoGuild.getMembers()){
@@ -217,17 +216,16 @@ public class TagManager {
                 System.out.print("whoT to "+whoT.getName()+" z dn "+whoT.getDisplayName());
 
                 whoT = whoSc.getTeam(joinerGuild.getTag());
-                whoT.addPlayer(joiner);
-
-                
+                whoT.addPlayer(joiner);    
             }
-            for(UUID member : joinerGuild.getMembers()){
+           /* for(UUID member : joinerGuild.getMembers()){
                 Player memon = Bukkit.getPlayer(member);
                 if(memon != null){
                     memon.setScoreboard(sc);
                 }
-            }
-        for(Relation r : joinerGuild.getAlliances()){
+            }*/
+            
+        /*for(Relation r : joinerGuild.getAlliances()){
             if(r.getWho().equals(joinerGuild.getTag())){
                 Guild ally = plugin.getGuildHelper().getGuilds().get(r.getWithWho());
                 Scoreboard sca = ally.getSc();
@@ -246,11 +244,20 @@ public class TagManager {
             }
             Team t2 = players.getScoreboard().getTeam(joinerGuild.getTag());
             t2.addPlayer(joiner);
+        }*/
+        for(Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()){
+            if(gs.getValue().getTag().equals(joinerGuild.getTag())){
+                continue;
+            }
+            Team t2 = gs.getValue().getSc().getTeam(joinerGuild.getTag());
+            if(t2 != null){
+                t2.addPlayer(joiner);
+            }
         }
     }
     public void playerLeaveGuild(OfflinePlayer joiner){
         Guild joinerGuild = plugin.getGuildHelper().getPlayerGuild(joiner.getUniqueId());
-        for(Relation r : joinerGuild.getAlliances()){
+        /*for(Relation r : joinerGuild.getAlliances()){
             if(r.getWho().equals(joinerGuild.getTag())){
                 Guild ally = plugin.getGuildHelper().getGuilds().get(r.getWithWho());
                 Scoreboard sc = ally.getSc();
@@ -262,7 +269,17 @@ public class TagManager {
                     }
                 }
             }
-        } 
+        } */
+        for(Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()){
+            if(gs.getValue().getTag().equals(joinerGuild.getTag())){
+                continue;
+            }
+            Team t2 = gs.getValue().getSc().getTeam(joinerGuild.getTag());
+            if(t2 != null){
+                t2.removePlayer(joiner);
+            }
+        }
+        plugin.getTagManager().getGlobalScoreboard().getTeam(joinerGuild.getTag()).removePlayer(joiner);
         System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
         System.out.print("Gracz opuszcza gildie");
         if(joiner.isOnline()){
@@ -278,34 +295,23 @@ public class TagManager {
             joiner.setScoreboard(guildExistsInfoScoreboard);
             System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
         }else{
-            joiner.setScoreboard(guildExistsInfoScoreboard);
-            for(Team t : joinerGuild.getSc().getTeams()){
-                Team tcheck = joiner.getScoreboard().getTeam(t.getName());
-                if( tcheck != null){
-                    tcheck.unregister();
-                }
-                Team tnew = joiner.getScoreboard().registerNewTeam(t.getName());
-                tnew.setPrefix(t.getPrefix());
-                tnew.setDisplayName(t.getDisplayName());
-            }
-            System.out.println("Liczba obiektow team "+joinerGuild.getSc().getTeams().size());
-            for (Team t : joiner.getScoreboard().getTeams()) {
-                System.out.print("Nazwa "+t.getName()+" displayname "+t.getDisplayName()+" prefix "+t.getPrefix());
-            }
+            joiner.setScoreboard(joinerGuild.getSc());
         }
     }
     public void playerMakeGuild(Guild g, Player p){
+        Team tg = g.getSc().registerNewTeam(g.getTag());
+        tg.setPrefix(ChatColor.GREEN+g.getTag()+" ");
+        tg.setDisplayName(ChatColor.GREEN+g.getTag()+" ");
+        //***********
         Team t = this.getGlobalScoreboard().registerNewTeam(g.getTag());
         System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
         t.setPrefix(ChatColor.RED+g.getTag()+" ");
         t.setDisplayName(ChatColor.RED+g.getTag()+" ");
-        for(Player players : Bukkit.getOnlinePlayers()){
-            if(p.getScoreboard().getTeam(g.getTag())!= null){
+        for(Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()){
+            if(gs.getValue().getTag().equals(g.getTag())){
                 continue;
             }
-            System.out.println("Liczba obiektow team "+players.getScoreboard().getTeams().size());
-            System.out.println("Gracz "+players.getName()+" dostaje team "+g.getTag());
-            Team t2 = players.getScoreboard().registerNewTeam(g.getTag());
+            Team t2 = gs.getValue().getSc().registerNewTeam(g.getTag());
             t2.setPrefix(ChatColor.RED+g.getTag()+" ");
             t2.setDisplayName(ChatColor.RED+g.getTag()+" ");
         }
