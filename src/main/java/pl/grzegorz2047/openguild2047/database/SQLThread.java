@@ -19,19 +19,41 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.utils.Callback;
 
 /**
+ * All SQL statements are executed in threads.
+ * 
+ * How to use:
+ * 
+ * Thread thread = new Thread(new SQLThread(connection, "Query", new Callback<Object>() {
+ *     @Override
+ *     public void call(Object result, Exception exception) {
+ *         if(exception == null) // Everything went fine!
+ *             if(result instanceof Boolean) { // update statement
  *
- * @author Aleksander
+ *             } else if(result instanceof ResultSet) { // other statements
+ *
+ *             } else {
+ *                 // unknown result type.
+ *             }
+ *         } else {
+ *             // show (or not) error.
+ *         }
+ *     }
+ * })).start();
  */
 public class SQLThread implements Runnable {
     private Connection connection;
     private final SQLData data = GenConf.getSqlData();
     private final String query;
     
-    public SQLThread(Connection connection, String query) {
+    private Callback<Object> callback;
+    
+    public SQLThread(Connection connection, String query, Callback<Object> callback) {
         this.connection = connection;
         this.query = query;
+        this.callback = callback;
     }
     
     @Override
@@ -40,11 +62,21 @@ public class SQLThread implements Runnable {
             if(connection.isClosed()) {
                 connection = data.getDriver();
             }
-            Statement statement = connection.createStatement();
-            statement.executeQuery(query);
-        } catch (SQLException ex) {
             
+            Statement statement = connection.createStatement();
+            
+            // Update query can only use statement.execute() method
+            // Otherwise - it will throw an error.
+            if(query.startsWith("UPDATE")) {
+                callback.call(statement.execute(query), null);
+            } else {
+                callback.call(statement.executeQuery(query), null);
+            }
+        } catch (SQLException ex) {
+            callback.call(null, ex);
         }
+        
+        callback.call(null, null);
     }
     
     public SQLData getData() {
@@ -54,4 +86,5 @@ public class SQLThread implements Runnable {
     public String getQuery() {
         return this.query;
     }
+    
 }
