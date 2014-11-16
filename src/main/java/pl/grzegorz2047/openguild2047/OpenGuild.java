@@ -129,7 +129,9 @@ public class OpenGuild extends JavaPlugin {
         // Load database
         loadDB();
         loadPlayers();
+        this.getSQLHandler().loadTags();
         this.getSQLHandler().loadRelations();
+
         
         for(Player player : getServer().getOnlinePlayers()) {
             this.tagManager.playerJoinServer(player);

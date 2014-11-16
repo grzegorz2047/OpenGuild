@@ -155,14 +155,14 @@ public class TagManager {
             if(r.getWho().equals(tobrokewith.getTag()) || r.getWithWho().equals(tobrokewith.getTag())){//Trzeba to odzielic jakos na 2 przypadki (else if) zamiast ||
                 Guild enemy = tobrokewith;
                 Scoreboard sc = enemy.getSc();
-                sc.getTeam(guild.getTag()).setPrefix(ChatColor.RED+guild.getTag()+"");
-                sc.getTeam(guild.getTag()).setDisplayName(ChatColor.RED+guild.getTag()+"");
+                sc.getTeam(guild.getTag()).setPrefix(ChatColor.RED+guild.getTag()+" ");
+                sc.getTeam(guild.getTag()).setDisplayName(ChatColor.RED+guild.getTag()+" ");
                 
                 
                 Guild enemy2 = guild;
                 Scoreboard sc2 = enemy2.getSc();
-                sc2.getTeam(tobrokewith.getTag()).setPrefix(ChatColor.RED+tobrokewith.getTag()+"");
-                sc2.getTeam(tobrokewith.getTag()).setDisplayName(ChatColor.RED+tobrokewith.getTag()+"");
+                sc2.getTeam(tobrokewith.getTag()).setPrefix(ChatColor.RED+tobrokewith.getTag()+" ");
+                sc2.getTeam(tobrokewith.getTag()).setDisplayName(ChatColor.RED+tobrokewith.getTag()+" ");
             }
         } 
     }
@@ -302,11 +302,14 @@ public class TagManager {
         Team tg = g.getSc().registerNewTeam(g.getTag());
         tg.setPrefix(ChatColor.GREEN+g.getTag()+" ");
         tg.setDisplayName(ChatColor.GREEN+g.getTag()+" ");
+        g.getSc().getTeam(g.getTag()).addPlayer(p);
+        p.setScoreboard(g.getSc());
         //***********
         Team t = this.getGlobalScoreboard().registerNewTeam(g.getTag());
         System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
         t.setPrefix(ChatColor.RED+g.getTag()+" ");
         t.setDisplayName(ChatColor.RED+g.getTag()+" ");
+        t.addPlayer(p);
         for(Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()){
             if(gs.getValue().getTag().equals(g.getTag())){
                 continue;
@@ -314,6 +317,14 @@ public class TagManager {
             Team t2 = gs.getValue().getSc().registerNewTeam(g.getTag());
             t2.setPrefix(ChatColor.RED+g.getTag()+" ");
             t2.setDisplayName(ChatColor.RED+g.getTag()+" ");
+            t2.addPlayer(p);
+            
+            Team t3 = g.getSc().registerNewTeam(gs.getKey());
+            t3.setPrefix(ChatColor.RED+gs.getKey()+" ");
+            t3.setDisplayName(ChatColor.RED+gs.getKey()+" ");
+            for(UUID member : gs.getValue().getMembers()){
+                t3.addPlayer(Bukkit.getOfflinePlayer(member));
+            }
         }
     }
     /*

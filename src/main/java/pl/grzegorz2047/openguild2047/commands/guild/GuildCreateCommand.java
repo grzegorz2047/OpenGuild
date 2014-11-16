@@ -124,8 +124,6 @@ public class GuildCreateCommand extends Command {
         guild.setSc(Bukkit.getScoreboardManager().getNewScoreboard());
         if(GenConf.playerprefixenabled) {
             this.getPlugin().getTagManager().playerMakeGuild(guild, player);
-            this.getPlugin().
-                    getTagManager().playerJoinGuild(player);
         }
 
         this.getPlugin().getOGLogger().info("Player '" + player.getName() + "' successfully created new guild '" + tag.toUpperCase() + "'.");
