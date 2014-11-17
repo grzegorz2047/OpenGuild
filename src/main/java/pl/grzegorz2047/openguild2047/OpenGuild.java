@@ -17,6 +17,7 @@ package pl.grzegorz2047.openguild2047;
 
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
+import com.github.grzegorz2047.openguild.hook.Hooks;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -37,9 +38,15 @@ import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
-import pl.grzegorz2047.openguild2047.listeners.*;
+import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
+import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntityListener;
+import pl.grzegorz2047.openguild2047.listeners.PlayerChatListener;
+import pl.grzegorz2047.openguild2047.listeners.PlayerJoinListener;
+import pl.grzegorz2047.openguild2047.listeners.PlayerMoveListener;
+import pl.grzegorz2047.openguild2047.listeners.PlayerQuitListener;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
 import pl.grzegorz2047.openguild2047.permissionsystem.PermissionsManager;
+
 
 /**
  *
@@ -142,6 +149,9 @@ public class OpenGuild extends JavaPlugin {
         
         // Load default plugin-modules
         ((OpenModuleManager) ogAPI.getModules()).defaultModules();
+        
+        // Register all hooks to this plugin
+        Hooks.registerDefaults();
         
         // Metrics
         try {

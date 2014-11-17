@@ -45,10 +45,10 @@
     <id>bukkit-repo</id>
     <url>http://maven.sk89q.com/repo/</url>
   </repository>
-    <repository>
-      <id>njol-repo</id>
-      <url>http://maven.njol.ch/repo/</url>
-    </repository>
+  <repository>
+    <id>njol-repo</id>
+    <url>http://maven.njol.ch/repo/</url>
+  </repository>
 </repositories>
   <dependencies>
     <dependency>
