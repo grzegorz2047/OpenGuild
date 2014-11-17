@@ -41,16 +41,27 @@
     </plugins>
 </build>
  <repositories>
+  <repository>
+    <id>bukkit-repo</id>
+    <url>http://maven.sk89q.com/repo/</url>
+  </repository>
     <repository>
-      <id>bukkit-repo</id>
-      <url>http://maven.sk89q.com/repo/</url>
+      <id>njol-repo</id>
+      <url>http://maven.njol.ch/repo/</url>
     </repository>
+</repositories>
   </repositories>
   <dependencies>
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
       <version>1.7.10-R0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.njol</groupId>
+      <artifactId>skript</artifactId>
+      <version>2.0.1</version><!-- Use whatever version you want to depend on -->
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>
