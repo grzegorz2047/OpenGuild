@@ -49,10 +49,10 @@ mysql:
   password: password
   debug: false
 tags:
-    enabled: true
-    ally: '&1[{TAG}] '
-    enemy: '&4[{TAG}] '
-    guild: '&2[{TAG}] '
+  enabled: true
+  ally: '&1[{TAG}] '
+  enemy: '&4[{TAG}] '
+  guild: '&2[{TAG}] '
 guildprefixinchat: true
 forbiddenguildnames:
 use-new-command-api: true
