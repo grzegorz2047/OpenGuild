@@ -50,7 +50,6 @@
       <url>http://maven.njol.ch/repo/</url>
     </repository>
 </repositories>
-  </repositories>
   <dependencies>
     <dependency>
       <groupId>org.bukkit</groupId>
