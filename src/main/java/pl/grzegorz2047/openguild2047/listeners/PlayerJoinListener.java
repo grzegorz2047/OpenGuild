@@ -41,7 +41,7 @@ public class PlayerJoinListener implements Listener {
     public void handleEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        System.out.print("Wykonuje playerJoinEvent!");
+        //System.out.print("Wykonuje playerJoinEvent!");
         
         if(!plugin.getGuildHelper().getPlayers().containsKey(uuid)) {
             plugin.getSQLHandler().addPlayer(uuid);

@@ -94,6 +94,9 @@ public class GenConf {
     
     public static int defaultTNTBlockTime;
     public static boolean enableTNTExplodeListener;
+    public static String allyTag;
+    public static String enemyTag;
+    public static String guildTag;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
@@ -201,7 +204,10 @@ public class GenConf {
         } else {
             reqitems = new ArrayList<ItemStack>();
         }
-        playerprefixenabled = config.getBoolean("playerprefixtag", true);
+        playerprefixenabled = config.getBoolean("tags.enabled", true);
+        enemyTag = config.getString("tags.enemy", "{TAG}").replace("&", "§");
+        allyTag = config.getString("tags.ally", "{TAG}").replace("&", "§");
+        guildTag = config.getString("tags.guild", "{TAG}").replace("&", "§");
         guildprefixinchat = config.getBoolean("guildprefixinchat", true);
         hcLightning = config.getBoolean("hardcore-bans.lightning", true);
         newCmdApi = config.getBoolean("use-new-command-api", false);

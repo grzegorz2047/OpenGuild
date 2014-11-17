@@ -149,19 +149,15 @@ public class SQLHandler {
                 if(gs.getValue().getTag().equals(gs2.getValue().getTag())){
                     continue;
                 }
-                System.out.print("rejestruje tag g1 to "+gs.getKey()+" g2 to "+gs2.getKey());
                 Team t;
                 if(sc.getTeam(gs2.getKey()) == null){
                     t = sc.registerNewTeam(gs2.getValue().getTag());
                 }else{
                     t = sc.getTeam(gs2.getValue().getTag());
                 }
-                
-                t.setPrefix(ChatColor.RED+gs2.getValue().getTag()+" ");
-                t.setDisplayName(ChatColor.RED+gs2.getValue().getTag()+" ");
-                System.out.println("Members to "+gs2.getValue().getMembers().size());
+                t.setPrefix(GenConf.allyTag.replace("{TAG}", gs2.getValue().getTag()));
+                t.setDisplayName(GenConf.allyTag.replace("{TAG}", gs2.getValue().getTag()));
                 for(UUID member : gs2.getValue().getMembers()){
-                    System.out.println("Dodaje gracza do gildii "+gs.getKey()+" gracza "+Bukkit.getOfflinePlayer(member));
                     t.addPlayer(Bukkit.getOfflinePlayer(member));
                 }
             }
@@ -214,10 +210,10 @@ public class SQLHandler {
                 guild.setLeader(leaderUUID);
                 guild.setSc(Bukkit.getScoreboardManager().getNewScoreboard());
                 Team t = plugin.getTagManager().getGlobalScoreboard().registerNewTeam(tag);
-                t.setPrefix(ChatColor.RED+tag+" ");
+                t.setPrefix(GenConf.allyTag.replace("{TAG}", tag));
                 t.setDisplayName(ChatColor.RED+tag+" ");
                 if(guild.getSc() == null){
-                    System.out.print("Scoreboard gildii "+guild.getTag()+" jest null!");
+                    //System.out.print("Scoreboard gildii "+guild.getTag()+" jest null!");
                 }
                 //guild.setAlliancesString(alliances);
                 //guild.setEnemiesString(enemies);
@@ -252,13 +248,13 @@ public class SQLHandler {
                     players.put(uuid, plugin.getGuildHelper().getGuilds().get(guildTag));
                     Guild whoGuild = plugin.getGuildHelper().getGuilds().get(guildTag);
                     if(whoGuild == null){
-                        System.out.print("Gildia jest null!");
+                        //System.out.print("Gildia jest null!");
                         continue;
                     }
                     if(plugin.getTagManager().getGlobalScoreboard().getTeam(guildTag)== null){
                         Team t = plugin.getTagManager().getGlobalScoreboard().registerNewTeam(guildTag);
-                        t.setPrefix(ChatColor.RED+guildTag+" ");
-                        t.setDisplayName(ChatColor.RED+guildTag+" ");
+                        t.setPrefix(GenConf.enemyTag.replace("{TAG}", guildTag));
+                        t.setDisplayName(GenConf.enemyTag.replace("{TAG}", guildTag));
                         t.addPlayer(Bukkit.getOfflinePlayer(uuid));
                     }else{
                         Team t = plugin.getTagManager().getGlobalScoreboard().getTeam(guildTag);
@@ -269,14 +265,14 @@ public class SQLHandler {
                     Team whoT;
                     if(whoSc.getTeam(guildTag) == null){
                         whoT = whoSc.registerNewTeam(guildTag);
-                        whoT.setPrefix(ChatColor.GREEN+guildTag+" ");
-                        whoT.setDisplayName(ChatColor.GREEN+guildTag+" ");
-                        System.out.print("whoT to "+whoT.getName()+" z dn "+whoT.getDisplayName());
-                        System.out.print("Dodaje gracza "+Bukkit.getOfflinePlayer(uuid).getName());
+                        whoT.setPrefix(GenConf.guildTag.replace("{TAG}", guildTag));
+                        whoT.setDisplayName(GenConf.guildTag.replace("{TAG}", guildTag));
+                        //System.out.print("whoT to "+whoT.getName()+" z dn "+whoT.getDisplayName());
+                        //System.out.print("Dodaje gracza "+Bukkit.getOfflinePlayer(uuid).getName());
                         whoT.addPlayer(Bukkit.getOfflinePlayer(uuid));
                     }else{
                         whoT = whoSc.getTeam(guildTag);
-                        System.out.print("Dodaje gracza "+Bukkit.getOfflinePlayer(uuid).getName());
+                        //System.out.print("Dodaje gracza "+Bukkit.getOfflinePlayer(uuid).getName());
                         whoT.addPlayer(Bukkit.getOfflinePlayer(uuid));
                         
                     }
@@ -316,14 +312,14 @@ public class SQLHandler {
                 r.setState(STATUS.valueOf(status.toUpperCase()));
                 Guild whoGuild = plugin.getGuildHelper().getGuilds().get(who);
                 if(whoGuild == null){
-                System.out.print("gildia "+who+" nie istnieje!");
+                //System.out.print("gildia "+who+" nie istnieje!");
                     continue;
                 }
                 Scoreboard whoSc = whoGuild.getSc();
                 
                 Guild withWhoGuild = plugin.getGuildHelper().getGuilds().get(withwho);
                 if(withWhoGuild == null){
-                    System.out.print("gildia "+withwho+" nie istnieje!");
+                    //System.out.print("gildia "+withwho+" nie istnieje!");
                     continue;
                 }
                 Scoreboard withWhoSc = withWhoGuild.getSc();
@@ -334,8 +330,8 @@ public class SQLHandler {
                 }else{
                     whoT = withWhoSc.getTeam(who);
                 }
-                whoT.setPrefix(ChatColor.BLUE+who+" ");
-                whoT.setDisplayName(ChatColor.BLUE+who+" ");
+                whoT.setPrefix(GenConf.allyTag.replace("{TAG}", who));
+                whoT.setDisplayName(GenConf.allyTag.replace("{TAG}", who));
                 for(UUID whop : whoGuild.getMembers()){
                     whoT.addPlayer(Bukkit.getOfflinePlayer(whop));
                 }
@@ -347,8 +343,8 @@ public class SQLHandler {
                 }else{
                     withWhoT = whoSc.getTeam(withwho);
                 }
-                withWhoT.setPrefix(ChatColor.BLUE+withwho+" ");
-                withWhoT.setDisplayName(ChatColor.BLUE+withwho+" ");
+                withWhoT.setPrefix(GenConf.allyTag.replace("{TAG}", withwho));
+                withWhoT.setDisplayName(GenConf.allyTag.replace("{TAG}", withwho));
                 for(UUID whop : withWhoGuild.getMembers()){
                     
                     withWhoT.addPlayer(Bukkit.getOfflinePlayer(whop));

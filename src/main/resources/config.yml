@@ -48,7 +48,11 @@ mysql:
   login: user
   password: password
   debug: false
-playerprefixtag: true
+tags:
+    enabled: true
+    ally: '&1[{TAG}] '
+    enemy: '&4[{TAG}] '
+    guild: '&2[{TAG}] '
 guildprefixinchat: true
 forbiddenguildnames:
 use-new-command-api: true

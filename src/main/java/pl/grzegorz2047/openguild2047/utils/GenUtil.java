@@ -106,7 +106,7 @@ public class GenUtil {
             }
             double distance = l.distance(player.getLocation());
             if(distance <= radius) {
-                System.out.println(distance);
+                //System.out.println(distance);
                 return true;
             }
         }

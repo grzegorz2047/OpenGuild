@@ -27,6 +27,7 @@ import com.github.grzegorz2047.openguild.Relation;
 import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 
 /**
@@ -155,14 +156,14 @@ public class TagManager {
             if(r.getWho().equals(tobrokewith.getTag()) || r.getWithWho().equals(tobrokewith.getTag())){//Trzeba to odzielic jakos na 2 przypadki (else if) zamiast ||
                 Guild enemy = tobrokewith;
                 Scoreboard sc = enemy.getSc();
-                sc.getTeam(guild.getTag()).setPrefix(ChatColor.RED+guild.getTag()+" ");
-                sc.getTeam(guild.getTag()).setDisplayName(ChatColor.RED+guild.getTag()+" ");
+                sc.getTeam(guild.getTag()).setPrefix(GenConf.enemyTag.replace("{TAG}", guild.getTag()));
+                sc.getTeam(guild.getTag()).setDisplayName(GenConf.enemyTag.replace("{TAG}", guild.getTag()));
                 
                 
                 Guild enemy2 = guild;
-                Scoreboard sc2 = enemy2.getSc();
-                sc2.getTeam(tobrokewith.getTag()).setPrefix(ChatColor.RED+tobrokewith.getTag()+" ");
-                sc2.getTeam(tobrokewith.getTag()).setDisplayName(ChatColor.RED+tobrokewith.getTag()+" ");
+                Scoreboard sc2 = enemy2.getSc();//GenConf.enemyTag.replace("{TAG}", guild.getTag())
+                sc2.getTeam(tobrokewith.getTag()).setPrefix(GenConf.enemyTag.replace("{TAG}", tobrokewith.getTag()));
+                sc2.getTeam(tobrokewith.getTag()).setDisplayName(GenConf.enemyTag.replace("{TAG}", tobrokewith.getTag()));
             }
         } 
     }
@@ -182,8 +183,8 @@ public class TagManager {
         Team whoT;
 
         whoT = withWhoSc.getTeam(who);
-        whoT.setPrefix(ChatColor.BLUE+who+" ");
-        whoT.setDisplayName(ChatColor.BLUE+who+" ");
+        whoT.setPrefix(GenConf.allyTag.replace("{TAG}", who));
+        whoT.setDisplayName(GenConf.allyTag.replace("{TAG}", who));
         for(UUID whop : whoGuild.getMembers()){
             whoT.addPlayer(Bukkit.getOfflinePlayer(whop));
         }
@@ -191,8 +192,8 @@ public class TagManager {
         Team withWhoT;
 
         withWhoT = whoSc.getTeam(withwho);
-        withWhoT.setPrefix(ChatColor.BLUE+withwho+" ");
-        withWhoT.setDisplayName(ChatColor.BLUE+withwho+" ");
+        withWhoT.setPrefix(GenConf.allyTag.replace("{TAG}", withwho));
+        withWhoT.setDisplayName(GenConf.allyTag.replace("{TAG}", withwho));
         for(UUID whop : withWhoGuild.getMembers()){
             withWhoT.addPlayer(Bukkit.getOfflinePlayer(whop));
         }
@@ -211,9 +212,8 @@ public class TagManager {
                 Team whoT;
                 
                 whoT = whoSc.registerNewTeam(who);
-                whoT.setPrefix(ChatColor.GREEN+who+" ");
-                whoT.setDisplayName(ChatColor.GREEN+who+" ");
-                System.out.print("whoT to "+whoT.getName()+" z dn "+whoT.getDisplayName());
+                whoT.setPrefix(GenConf.guildTag.replace("{TAG}", who));
+                whoT.setDisplayName(GenConf.guildTag.replace("{TAG}", who));
 
                 whoT = whoSc.getTeam(joinerGuild.getTag());
                 whoT.addPlayer(joiner);    
@@ -280,10 +280,10 @@ public class TagManager {
             }
         }
         plugin.getTagManager().getGlobalScoreboard().getTeam(joinerGuild.getTag()).removePlayer(joiner);
-        System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
-        System.out.print("Gracz opuszcza gildie");
+        //System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
+        //System.out.print("Gracz opuszcza gildie");
         if(joiner.isOnline()){
-            System.out.println("Jest online");
+            //System.out.println("Jest online");
             Player p = Bukkit.getPlayer(joiner.getUniqueId());
             p.setScoreboard(guildExistsInfoScoreboard);
         }
@@ -293,35 +293,35 @@ public class TagManager {
         Guild joinerGuild = plugin.getGuildHelper().getPlayerGuild(joiner.getUniqueId());
         if(joinerGuild == null){
             joiner.setScoreboard(guildExistsInfoScoreboard);
-            System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
+            //System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
         }else{
             joiner.setScoreboard(joinerGuild.getSc());
         }
     }
     public void playerMakeGuild(Guild g, Player p){
         Team tg = g.getSc().registerNewTeam(g.getTag());
-        tg.setPrefix(ChatColor.GREEN+g.getTag()+" ");
-        tg.setDisplayName(ChatColor.GREEN+g.getTag()+" ");
+        tg.setPrefix(GenConf.guildTag.replace("{TAG}", g.getTag()));
+        tg.setDisplayName(GenConf.guildTag.replace("{TAG}", g.getTag()));
         g.getSc().getTeam(g.getTag()).addPlayer(p);
         p.setScoreboard(g.getSc());
         //***********
         Team t = this.getGlobalScoreboard().registerNewTeam(g.getTag());
-        System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
-        t.setPrefix(ChatColor.RED+g.getTag()+" ");
-        t.setDisplayName(ChatColor.RED+g.getTag()+" ");
+        //System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
+        t.setPrefix(GenConf.enemyTag.replace("{TAG}", g.getTag()));
+        t.setDisplayName(GenConf.enemyTag.replace("{TAG}", g.getTag()));
         t.addPlayer(p);
         for(Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()){
             if(gs.getValue().getTag().equals(g.getTag())){
                 continue;
             }
             Team t2 = gs.getValue().getSc().registerNewTeam(g.getTag());
-            t2.setPrefix(ChatColor.RED+g.getTag()+" ");
-            t2.setDisplayName(ChatColor.RED+g.getTag()+" ");
+            t2.setPrefix(GenConf.enemyTag.replace("{TAG}", g.getTag()));
+            t2.setDisplayName(GenConf.enemyTag.replace("{TAG}", g.getTag()));
             t2.addPlayer(p);
             
             Team t3 = g.getSc().registerNewTeam(gs.getKey());
-            t3.setPrefix(ChatColor.RED+gs.getKey()+" ");
-            t3.setDisplayName(ChatColor.RED+gs.getKey()+" ");
+            t3.setPrefix(GenConf.enemyTag.replace("{TAG}", gs.getKey()));
+            t3.setDisplayName(GenConf.enemyTag.replace("{TAG}", gs.getKey()));
             for(UUID member : gs.getValue().getMembers()){
                 t3.addPlayer(Bukkit.getOfflinePlayer(member));
             }
