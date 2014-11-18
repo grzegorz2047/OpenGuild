@@ -15,6 +15,7 @@
  */
 package com.github.grzegorz2047.openguild.hook;
 
+import com.github.grzegorz2047.openguild.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -24,10 +25,12 @@ import org.bukkit.plugin.Plugin;
  */
 public abstract class Hook {
     private final Plugin bukkit;
+    private final Logger logger;
     private final String plugin;
     
     public Hook(String plugin) {
         this.bukkit = Bukkit.getPluginManager().getPlugin(plugin);
+        this.logger = new HookLogger(this);
         this.plugin = plugin;
     }
     
@@ -35,6 +38,10 @@ public abstract class Hook {
     
     public Plugin getBukkitPlugin() {
         return bukkit;
+    }
+    
+    public Logger getLogger() {
+        return logger;
     }
     
     public String getPlugin() {
