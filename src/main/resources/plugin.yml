@@ -4,6 +4,7 @@ authors: [grzegorz2047, shooly, TheMolkaPL]
 website: https://www.github.com/grzegorz2047/OpenGuild2047
 version: '${project.version}'
 prefix: 'OpenGuild'
+softdepend: [Skript]
 main: pl.grzegorz2047.openguild2047.OpenGuild
 commands:
   guild:

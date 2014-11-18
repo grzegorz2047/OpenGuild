@@ -49,6 +49,6 @@ public abstract class Hook {
     }
     
     public boolean isEnabled() {
-        return bukkit != null && Bukkit.getPluginManager().isPluginEnabled(bukkit);
+        return bukkit != null && bukkit.isEnabled();
     }
 }

@@ -16,6 +16,7 @@
 package pl.grzegorz2047.openguild2047;
 
 import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.Logger;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
 import com.github.grzegorz2047.openguild.hook.Hooks;
 import java.io.File;
@@ -73,14 +74,14 @@ public class OpenGuild extends JavaPlugin {
         // We use UUID, which were not available in Bukkit < 1.7.5.
         try {
             if(getServer().getOfflinePlayer("Notch").getUniqueId() == null) {
-                Guilds.getLogger().severe("Your Minecraft server version is lower than 1.7.5!");
-                Guilds.getLogger().severe("This plugin is not compatibile with your version of Minecraft server!");
+                Bukkit.getLogger().warning("Your Minecraft server version is lower than 1.7.5!");
+                Bukkit.getLogger().warning("This plugin is not compatibile with your version of Minecraft server!");
                 getServer().getPluginManager().disablePlugin(this);
                 return;
             }
         } catch(Exception e) {
-            Guilds.getLogger().severe("Your Minecraft server version is lower than 1.7.5!");
-            Guilds.getLogger().severe("This plugin is not compatibile with your version of Minecraft server!");
+            Bukkit.getLogger().warning("Your Minecraft server version is lower than 1.7.5!");
+            Bukkit.getLogger().warning("This plugin is not compatibile with your version of Minecraft server!");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -88,17 +89,17 @@ public class OpenGuild extends JavaPlugin {
         System.out.print("Your Minecraft server version is " + Bukkit.getVersion());
         
         long startTime = System.currentTimeMillis();
-        
+
         instance = this;
 
-        // Check for updates
-        checkForUpdates();
-        
         // Setup API
         OpenGuildBukkitPlugin ogBP = new OpenGuildBukkitPlugin();
         com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(ogBP);
         OpenGuild.ogAPI = ogBP.getPlugin();
-        
+
+        // Check for updates
+        checkForUpdates();
+
         // Validate files
         validateFile("config");
         validateFile("commands");
@@ -361,8 +362,8 @@ public class OpenGuild extends JavaPlugin {
     /**
      * @return instance of OGLogger class.
      */
-    public OGLogger getOGLogger() {
-        return (OGLogger) com.github.grzegorz2047.openguild.OpenGuild.getLogger();
+    public Logger getOGLogger() {
+        return com.github.grzegorz2047.openguild.OpenGuild.getLogger();
     }
 
     /**

@@ -38,7 +38,7 @@ public class SkriptHook extends Hook {
         Skript.registerAddon(OpenGuild.getInstance());
         new SkriptEventRegistration().defaults();
         loadExpressions();
-        OpenGuild.getInstance().getOGLogger().log(Level.INFO,
+        getLogger().log(Level.INFO,
                 "Hooked with Skript v" + plugin.getDescription().getVersion() + ".");
     }
     
@@ -47,10 +47,19 @@ public class SkriptHook extends Hook {
     }
     
     private class SkriptEventRegistration {
-        private final String prefix = "[open]guild";
+        private final String guild = "[open]guild";
         
         private void defaults() {
-            register("Guild create", "1.6.4", GuildCreateEvent.class, prefix + " creat(e|ing)");
+            register("Guild create", "1.6.5", GuildCreateEvent.class, guild + " creat(e|ing)");
+            register("Guild disband", "1.6.5", null, guild + " disband");
+            register("Guild home", "1.6.5", null, guild + " home [teleport[ing]]");
+            register("Guild player invite", "1.6.5", null, guild + " [player] invit(e|ation)");
+            register("Guild player invite accept", "1.6.5", null, guild + " [player] invit(e|ation)-accept");
+            register("Guild player join", "1.6.5", null, guild + "[player] join[ing]");
+            register("Guild player kick", "1.6.5", null, guild + " [player] kick[ing]");
+            register("Guild leave", "1.6.5", null, guild + " [player] leave[ing]");
+            register("Guild relation", "1.6.5", null, guild + " relation [chang(e|ing)]");
+            register("Plugin reload", "1.6.5", null, guild + "reload[ing]");
             // TODO We need to add new Bukkit events first!
         }
         
