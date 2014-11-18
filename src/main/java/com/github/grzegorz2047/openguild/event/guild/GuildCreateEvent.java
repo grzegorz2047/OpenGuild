@@ -25,18 +25,17 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class GuildCreateEvent extends Event implements Cancellable {
-
     private static final HandlerList handlers = new HandlerList();
     private final String tag;
-    private final String desc;
-    private final Player owner;
+    private final String description;
+    private final Player leader;
     private final Location home;
     private boolean cancel;
 
-    public GuildCreateEvent(@Nonnull String tag, @Nullable String desc, @Nonnull Player owner, @Nonnull Location home) {
+    public GuildCreateEvent(@Nonnull String tag, @Nullable String description, @Nonnull Player leader, @Nonnull Location home) {
         this.tag = tag;
-        this.desc = desc;
-        this.owner = owner;
+        this.description = description;
+        this.leader = leader;
         this.home = home;
     }
     
@@ -64,16 +63,14 @@ public class GuildCreateEvent extends Event implements Cancellable {
     }
 
     @Nullable public String getDescription() {
-        return desc;
+        return description;
     }
 
-    @Deprecated // User soon
-    @Nonnull public Player getOwner() {
-        return owner;
+    @Nonnull public Player getLeader() {
+        return leader;
     }
 
     @Nonnull public Location getHome() {
         return home;
     }
-
 }

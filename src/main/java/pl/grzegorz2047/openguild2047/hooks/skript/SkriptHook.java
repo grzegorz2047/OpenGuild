@@ -18,11 +18,11 @@ package pl.grzegorz2047.openguild2047.hooks.skript;
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.util.SimpleEvent;
 import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
-import com.github.grzegorz2047.openguild.event.guild.GuildsChatMessageEvent;
 import java.util.logging.Level;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.hook.Hook;
+import org.bukkit.event.Event;
 
 /**
  *
@@ -35,18 +35,27 @@ public class SkriptHook extends Hook {
     
     @Override
     public void enable(Plugin plugin) {
-        loadEvents();
+        Skript.registerAddon(OpenGuild.getInstance());
+        new SkriptEventRegistration().defaults();
         loadExpressions();
         OpenGuild.getInstance().getOGLogger().log(Level.INFO,
                 "Hooked with Skript v" + plugin.getDescription().getVersion() + ".");
     }
     
-    private void loadEvents() {
-        Skript.registerEvent("Guild create", SimpleEvent.class, GuildCreateEvent.class,
-                new String[] {"guild create", "openguild create"});
-    }
-    
     private void loadExpressions() {
         
+    }
+    
+    private class SkriptEventRegistration {
+        private final String prefix = "[open]guild";
+        
+        private void defaults() {
+            register("Guild create", "1.6.4", GuildCreateEvent.class, prefix + " creat(e|ing)");
+            // TODO We need to add new Bukkit events first!
+        }
+        
+        private void register(String name, String since, Class<? extends Event> event, String... patterns) {
+            Skript.registerEvent(name, SimpleEvent.class, event, patterns).since(since);
+        }
     }
 }

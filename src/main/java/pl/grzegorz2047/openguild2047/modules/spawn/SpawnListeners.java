@@ -34,7 +34,7 @@ public class SpawnListeners implements Listener {
     public void onGuildCreate(GuildCreateEvent e) {
         if(GenConf.blockGuildCreating && SpawnChecker.isSpawnExtra(e.getHome())) {
             e.setCancelled(true);
-            e.getOwner().sendMessage(GenConf.prefix + ChatColor.RED + GenConf.spawnMessage);
+            e.getLeader().sendMessage(GenConf.prefix + ChatColor.RED + GenConf.spawnMessage);
         }
     }
     
