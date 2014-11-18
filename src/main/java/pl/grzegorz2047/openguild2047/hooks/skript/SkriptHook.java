@@ -15,6 +15,10 @@
  */
 package pl.grzegorz2047.openguild2047.hooks.skript;
 
+import ch.njol.skript.Skript;
+import ch.njol.skript.lang.util.SimpleEvent;
+import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
+import com.github.grzegorz2047.openguild.event.guild.GuildsChatMessageEvent;
 import java.util.logging.Level;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.OpenGuild;
@@ -38,7 +42,8 @@ public class SkriptHook extends Hook {
     }
     
     private void loadEvents() {
-        
+        Skript.registerEvent("Guild create", SimpleEvent.class, GuildCreateEvent.class,
+                new String[] {"guild create", "openguild create"});
     }
     
     private void loadExpressions() {
