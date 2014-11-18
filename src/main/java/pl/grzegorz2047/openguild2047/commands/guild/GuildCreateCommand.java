@@ -96,13 +96,14 @@ public class GuildCreateCommand extends Command {
                 player.sendMessage(MsgManager.get("notenoughitems"));
                 return;
             } else {
-                GuildCreateEvent gce = new GuildCreateEvent(tag, description, player,player.getLocation());
-                Bukkit.getServer().getPluginManager().callEvent(gce);
-                if(gce.isCancelled()){
-                    return;
-                }
                 GenUtil.removeRequiredItemsForGuild(player.getInventory());
             }
+        }
+        
+        GuildCreateEvent event = new GuildCreateEvent(tag, description, player, player.getLocation());
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if(event.isCancelled()) {
+            return;
         }
 
         Cuboid cuboid = new Cuboid();
