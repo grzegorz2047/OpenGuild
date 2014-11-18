@@ -91,12 +91,12 @@ public class GuildCreateCommand extends Command {
             player.sendMessage(MsgManager.playerstooclose);
             return;
         }
+        boolean reqitems = false;
         if(GenConf.reqitems != null && !GenConf.reqitems.isEmpty()) {
+            reqitems = true;
             if(!GenUtil.hasEnoughItemsForGuild(player.getInventory())) {
                 player.sendMessage(MsgManager.get("notenoughitems"));
                 return;
-            } else {
-                GenUtil.removeRequiredItemsForGuild(player.getInventory());
             }
         }
         
@@ -104,6 +104,8 @@ public class GuildCreateCommand extends Command {
         Bukkit.getServer().getPluginManager().callEvent(event);
         if(event.isCancelled()) {
             return;
+        } else if(reqitems) {
+            GenUtil.removeRequiredItemsForGuild(player.getInventory());
         }
 
         Cuboid cuboid = new Cuboid();
