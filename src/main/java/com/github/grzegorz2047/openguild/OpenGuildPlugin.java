@@ -55,6 +55,8 @@ public interface OpenGuildPlugin {
 
     @Nonnull List<Guild> getGuilds();
 
+    @Nonnull Logger getLogger();
+
     @Nonnull Messages getMessages();
 
     @Nonnull ModuleManager getModules();

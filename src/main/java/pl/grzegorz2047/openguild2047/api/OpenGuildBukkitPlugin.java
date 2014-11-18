@@ -18,6 +18,7 @@ package pl.grzegorz2047.openguild2047.api;
 
 import com.github.grzegorz2047.openguild.Configuration;
 import com.github.grzegorz2047.openguild.GuildManager;
+import com.github.grzegorz2047.openguild.Logger;
 import com.github.grzegorz2047.openguild.Messages;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
 import com.github.grzegorz2047.openguild.PluginUpdater;
@@ -36,6 +37,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import pl.grzegorz2047.openguild2047.OGLogger;
 import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 
@@ -45,6 +47,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     private static final CommandManager cmdManager = new OpenCommandManager();
     private static final HashMap<String, CommandInfo> commands = new HashMap<String, CommandInfo>();
     private static final Configuration configuration = new OpenConfiguration();
+    private static final Logger logger = new OGLogger();
     private static final GuildManager manager = new OpenGuildManager();
     private static final Messages messages = new OpenMessages();
     private static final ModuleManager modules = new OpenModuleManager();
@@ -119,6 +122,11 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     @Override
     public List<com.github.grzegorz2047.openguild.Guild> getGuilds() {
         return null; // TODO
+    }
+    
+    @Override
+    public Logger getLogger() {
+        return logger;
     }
     
     @Override

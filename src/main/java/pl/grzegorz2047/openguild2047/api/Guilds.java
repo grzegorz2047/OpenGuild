@@ -15,6 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047.api;
 
+import com.github.grzegorz2047.openguild.Logger;
 import com.github.grzegorz2047.openguild.Guild;
 import java.net.URL;
 import java.text.SimpleDateFormat;

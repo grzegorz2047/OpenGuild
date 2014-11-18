@@ -23,7 +23,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import pl.grzegorz2047.openguild2047.api.Logger;
+import com.github.grzegorz2047.openguild.Logger;
 
 public class OGLogger implements Logger {
     
@@ -82,7 +82,8 @@ public class OGLogger implements Logger {
     public void warning(String warning) {
         log(Level.WARNING, warning);
     }
-    
+
+    @Override
     public void exceptionThrown(Exception exception) {
         log(Level.SEVERE, "---- AN EXCEPTION HAS BEEN THROWN!");
         if (GenConf.debug) {
@@ -93,6 +94,7 @@ public class OGLogger implements Logger {
         log(Level.SEVERE, "---- You can find entire report in log file!");
     }
     
+    @Override
     public File getLoggingDirectory() {
         return logFile.getParentFile();
     }

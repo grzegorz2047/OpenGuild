@@ -57,8 +57,6 @@ public class OpenGuild extends JavaPlugin {
     private static OpenGuildPlugin ogAPI;
     private static OpenGuild instance;
     
-    private OGLogger ogLogger;
-    
     private GuildHelper guildHelper;
     
     private TagManager tagManager;
@@ -92,9 +90,6 @@ public class OpenGuild extends JavaPlugin {
         long startTime = System.currentTimeMillis();
         
         instance = this;
-        
-        // Intialize logger
-        this.ogLogger = new OGLogger();
 
         // Check for updates
         checkForUpdates();
@@ -367,7 +362,7 @@ public class OpenGuild extends JavaPlugin {
      * @return instance of OGLogger class.
      */
     public OGLogger getOGLogger() {
-        return ogLogger;
+        return (OGLogger) com.github.grzegorz2047.openguild.OpenGuild.getLogger();
     }
 
     /**

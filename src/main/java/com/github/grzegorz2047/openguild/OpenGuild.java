@@ -81,6 +81,10 @@ public class OpenGuild {
         return guild.getGuilds();
     }
 
+    @Nonnull public static Logger getLogger() {
+        return guild.getLogger();
+    }
+
     @Nonnull public static Messages getMessages() {
         return guild.getMessages();
     }

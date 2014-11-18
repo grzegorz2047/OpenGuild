@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.grzegorz2047.openguild2047.api;
+package com.github.grzegorz2047.openguild;
 
+import java.io.File;
 import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
@@ -29,5 +30,9 @@ public interface Logger {
     void severe(@Nonnull String severe);
 
     void warning(@Nonnull String warning);
+
+    void exceptionThrown(Exception exception);
+
+    File getLoggingDirectory();
 
 }
