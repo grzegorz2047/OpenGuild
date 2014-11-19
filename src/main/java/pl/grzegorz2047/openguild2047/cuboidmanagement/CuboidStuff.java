@@ -18,17 +18,16 @@ package pl.grzegorz2047.openguild2047.cuboidmanagement;
 import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
-import com.github.grzegorz2047.openguild.Relation.STATUS;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
-import org.bukkit.Bukkit;
 
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.*;
+import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -87,7 +86,7 @@ public class CuboidStuff {
             return;
         }
         for(Relation r : cuboidowner.getAlliances()){
-            if(!r.getState().equals(STATUS.ALLY)){
+            if(!r.getState().equals(Relation.Status.ALLY)){
                 continue;
             }
             if(r.getWho().equals(tag) || r.getWithWho().equals(tag)){

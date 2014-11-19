@@ -28,7 +28,6 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
-import com.github.grzegorz2047.openguild.Relation.STATUS;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Scoreboard;
@@ -309,7 +308,7 @@ public class SQLHandler {
                 r.setWho(who);
                 r.setWithWho(withwho);
                 r.setExpireDate(expires);
-                r.setState(STATUS.valueOf(status.toUpperCase()));
+                r.setState(Relation.Status.valueOf(status.toUpperCase()));
                 Guild whoGuild = plugin.getGuildHelper().getGuilds().get(who);
                 if(whoGuild == null){
                 //System.out.print("gildia "+who+" nie istnieje!");
@@ -447,7 +446,7 @@ public class SQLHandler {
         }
     }
     
-    public boolean addAlliance(Guild who, Guild withWho, STATUS status){
+    public boolean addAlliance(Guild who, Guild withWho, Relation.Status status){
         
         try {
             statement = this.connection.createStatement();

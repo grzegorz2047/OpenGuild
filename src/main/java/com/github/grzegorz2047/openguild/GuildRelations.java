@@ -15,13 +15,11 @@
  */
 package com.github.grzegorz2047.openguild;
 
-import com.github.grzegorz2047.openguild.Relation.STATUS;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -63,7 +61,7 @@ public class GuildRelations {
     }
     public boolean isAlly(Guild g){
         for(Relation r : this.getAlliances()){
-            if(!r.getState().equals(STATUS.ALLY)){
+            if(!r.getState().equals(Relation.Status.ALLY)){
                 continue;
             }
             if(r.getWithWho().equals(g.getTag()) || r.getWho().equals(g.getTag())){
@@ -73,7 +71,7 @@ public class GuildRelations {
         return false;
     }
     
-    public void changeRelationRequest(Guild requestingGuild , Guild guild, final OfflinePlayer requestedLeader, STATUS status) {
+    public void changeRelationRequest(Guild requestingGuild , Guild guild, final OfflinePlayer requestedLeader, Relation.Status status) {
         final String tag = guild.getTag();
         final String requestingTag = requestingGuild.getTag();
         final UUID requestingLeader = requestingGuild.getLeader();

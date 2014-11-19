@@ -16,7 +16,6 @@
 package pl.grzegorz2047.openguild2047.commands.guild;
 
 import com.github.grzegorz2047.openguild.Guild;
-import com.github.grzegorz2047.openguild.OpenGuildPlugin;
 import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
@@ -76,8 +75,8 @@ public class GuildAllyCommand extends Command{
                 Relation r = new Relation();
                 r.setWho(guild.getTag());
                 r.setWithWho(requestingGuild.getTag());
-                r.setState(Relation.STATUS.ALLY);
-                boolean result = OpenGuild.getInstance().getSQLHandler().addAlliance(guild, requestingGuild, Relation.STATUS.ALLY);
+                r.setState(Relation.Status.ALLY);
+                boolean result = OpenGuild.getInstance().getSQLHandler().addAlliance(guild, requestingGuild, Relation.Status.ALLY);
                 if(result != true){
                     this.getPlugin().getOGLogger().warning("Could not register the ally for " + guild.getTag() + " guild!");
                 }
@@ -89,7 +88,7 @@ public class GuildAllyCommand extends Command{
                         .replace("{GUILD2}", requestingGuild.getTag()));
                 return;
             }
-            requestingGuild.changeRelationRequest(requestingGuild, guild, leader, Relation.STATUS.ALLY);
+            requestingGuild.changeRelationRequest(requestingGuild, guild, leader, Relation.Status.ALLY);
         }else{
             sender.sendMessage("/g ally <guild>");
         }

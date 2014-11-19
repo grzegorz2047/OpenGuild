@@ -34,8 +34,8 @@ public class Relation {
         this.who = who;
     }
     
-    public enum STATUS { ALLY, ENEMY };
-    private STATUS state;
+    public enum Status { ALLY, ENEMY };
+    private Status state;
     
     public String getWithWho() {
         return withWho;
@@ -61,11 +61,11 @@ public class Relation {
         this.expireDate = expireDate;
     }
 
-    public STATUS getState() {
+    public Status getState() {
         return state;
     }
 
-    public void setState(STATUS state) {
+    public void setState(Status state) {
         this.state = state;
     }
     

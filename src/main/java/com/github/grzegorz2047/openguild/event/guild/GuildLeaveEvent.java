@@ -1,5 +1,5 @@
 /*
- * Copyright 2014
+ * Copyright 2014 Aleksander.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,41 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.grzegorz2047.openguild.event.guild;
 
-package com.github.grzegorz2047.openguild.event;
-
-import javax.annotation.Nonnull;
-import org.bukkit.command.CommandSender;
-import org.bukkit.event.Event;
+import com.github.grzegorz2047.openguild.Guild;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-public class OpenGuildReloadedEvent extends Event {
-
+/**
+ *
+ * @author Aleksander
+ */
+public class GuildLeaveEvent extends GuildEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-    public CommandSender sender;
-    public boolean success;
-
-    public OpenGuildReloadedEvent(@Nonnull CommandSender sender,
-            boolean success) {
-        this.sender = sender;
-        this.success = success;
+    private boolean cancel;
+    
+    public GuildLeaveEvent(Guild guild) {
+        super(guild);
     }
-
-    @Nonnull public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
+    
     @Override
-    @Nonnull public HandlerList getHandlers() {
+    public HandlerList getHandlers() {
         return handlers;
     }
-
-    @Nonnull public CommandSender getSender() {
-        return sender;
+    
+    @Override
+    public boolean isCancelled() {
+        return cancel;
     }
-
-    public boolean isSuccess() {
-        return success;
+    
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancel = cancel;
     }
-
 }
