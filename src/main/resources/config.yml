@@ -72,3 +72,5 @@ listener:
   player-move-event: false
   tnt-block-enabled: true
   tnt-block-time: 30
+forbidden-worlds:
+  - myforbbidenworld
