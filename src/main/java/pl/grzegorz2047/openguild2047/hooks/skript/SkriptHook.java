@@ -23,6 +23,7 @@ import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.hook.Hook;
 import org.bukkit.event.Event;
+import pl.grzegorz2047.openguild2047.hooks.skript.expression.DescriptionExpression;
 
 /**
  *
@@ -43,7 +44,7 @@ public class SkriptHook extends Hook {
     }
     
     private void loadExpressions() {
-        
+        new DescriptionExpression();
     }
     
     private class SkriptEventRegistration {
@@ -54,12 +55,11 @@ public class SkriptHook extends Hook {
             register("Guild disband", "1.6.5", null, guild + " disband");
             register("Guild home", "1.6.5", null, guild + " home [teleport[ing]]");
             register("Guild player invite", "1.6.5", null, guild + " [player] invit(e|ation)");
-            register("Guild player invite accept", "1.6.5", null, guild + " [player] invit(e|ation)-accept");
             register("Guild player join", "1.6.5", null, guild + "[player] join[ing]");
             register("Guild player kick", "1.6.5", null, guild + " [player] kick[ing]");
             register("Guild leave", "1.6.5", null, guild + " [player] leave[ing]");
             register("Guild relation", "1.6.5", null, guild + " relation [chang(e|ing)]");
-            register("Plugin reload", "1.6.5", null, guild + "reload[ing]");
+            register("Plugin reload", "1.6.5", null, guild + " reload[ing]");
             // TODO We need to add new Bukkit events first!
         }
         
