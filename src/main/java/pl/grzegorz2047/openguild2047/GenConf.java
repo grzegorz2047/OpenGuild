@@ -97,10 +97,10 @@ public class GenConf {
     public static String allyTag;
     public static String enemyTag;
     public static String guildTag;
-
+    public static List<String> forbiddenworlds;
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
-
+        forbiddenworlds = OpenGuild.getInstance().getConfig().getStringList("forbidden-worlds");
         badwords = OpenGuild.getInstance().getConfig().getStringList("forbiddenguildnames");
         MIN_CUBOID_RADIUS = OpenGuild.getInstance().getConfig().getInt("cuboid.min-radius", 15);
         MAX_CUBOID_RADIUS = OpenGuild.getInstance().getConfig().getInt("cuboid.max-radius", 50);
