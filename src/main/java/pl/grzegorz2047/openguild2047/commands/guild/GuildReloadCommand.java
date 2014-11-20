@@ -18,8 +18,10 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.event.OpenGuildReloadEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
@@ -39,7 +41,13 @@ public class GuildReloadCommand extends Command {
         }
         
         try {
+            OpenGuildReloadEvent begining = new OpenGuildReloadEvent(sender, OpenGuildReloadEvent.Status.BEGINING);
+            Bukkit.getPluginManager().callEvent(begining);
+            
             this.getPlugin().getConfig().load(this.getPlugin().getConfig().getCurrentPath());
+            
+            OpenGuildReloadEvent ending = new OpenGuildReloadEvent(sender, OpenGuildReloadEvent.Status.ENDING);
+            Bukkit.getPluginManager().callEvent(ending);
             sender.sendMessage(MsgManager.get("configreloaded"));
         } catch (FileNotFoundException ex) {
             this.getPlugin().getOGLogger().exceptionThrown(ex);

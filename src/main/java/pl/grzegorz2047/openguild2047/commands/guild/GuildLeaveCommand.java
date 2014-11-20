@@ -24,6 +24,8 @@ import pl.grzegorz2047.openguild2047.GuildHelper;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.event.guild.GuildLeaveEvent;
+import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -53,6 +55,13 @@ public class GuildLeaveCommand extends Command {
             player.sendMessage(MsgManager.get("kickleader"));
             return;
         }
+        
+        GuildLeaveEvent event = new GuildLeaveEvent(guild);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled()) {
+            return;
+        }
+        
         this.getPlugin().getTagManager().playerLeaveGuild(player);
         guild.removeMember(player.getUniqueId());
         guildHelper.getPlayers().remove(player.getUniqueId());

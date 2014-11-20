@@ -15,21 +15,19 @@
  */
 package com.github.grzegorz2047.openguild.event.guild;
 
-import com.github.grzegorz2047.openguild.Guild;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
  *
  * @author Aleksander
  */
-public class GuildJoinEvent extends GuildEvent implements Cancellable {
+public class GuildJoinEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancel;
     
-    public GuildJoinEvent(Guild guild) {
-        super(guild);
-    }
+    public GuildJoinEvent() {}
     
     @Override
     public HandlerList getHandlers() {

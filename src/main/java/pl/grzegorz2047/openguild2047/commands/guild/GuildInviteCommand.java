@@ -22,6 +22,8 @@ import pl.grzegorz2047.openguild2047.GuildHelper;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.event.guild.GuildInvitationEvent;
+import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -61,6 +63,12 @@ public class GuildInviteCommand extends Command {
         Player toInvite = getPlugin().getServer().getPlayer(playerToInvite);
         if(guildHelper.hasGuild(toInvite)) {
             player.sendMessage(MsgManager.playerhasguild);
+            return;
+        }
+        
+        GuildInvitationEvent event = new GuildInvitationEvent(guild);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled()) {
             return;
         }
         

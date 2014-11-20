@@ -24,6 +24,7 @@ import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.event.guild.GuildDisbandEvent;
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
@@ -56,6 +57,13 @@ public class GuildDisbandCommand extends Command {
                 player.sendMessage(MsgManager.get("playernotleader"));
                 return;
             }
+            
+            GuildDisbandEvent event = new GuildDisbandEvent(guild);
+            Bukkit.getPluginManager().callEvent(event);
+            if(event.isCancelled()) {
+                return;
+            }
+            
             for(Relation r : guild.getAlliances()){
                 Guild g1 = guildHelper.getGuilds().get(r.getWho());
                 Guild g2 = guildHelper.getGuilds().get(r.getWithWho());

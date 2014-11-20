@@ -19,6 +19,7 @@ import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.event.guild.GuildRelationEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -65,6 +66,13 @@ public class GuildEnemyCommand extends Command{
                 sender.sendMessage(MsgManager.get("enemyyourselferror"));
                 return;
             }
+            
+            GuildRelationEvent event = new GuildRelationEvent(requestingGuild, guild, Relation.Status.ENEMY);
+            Bukkit.getPluginManager().callEvent(event);
+            if(event.isCancelled()) {
+                return;
+            }
+            
             for(Relation r : requestingGuild.getAlliances()){
                 if(r.getWithWho().equals(guild.getTag()) || r.getWho().equals(guild.getTag())){
                     OpenGuild.getInstance().getTagManager().guildBrokeAlliance(requestingGuild, guild);

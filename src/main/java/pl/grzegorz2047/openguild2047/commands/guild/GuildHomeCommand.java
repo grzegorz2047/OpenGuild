@@ -26,6 +26,8 @@ import pl.grzegorz2047.openguild2047.GuildHelper;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.event.guild.GuildHomeTeleportEvent;
+import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -58,6 +60,12 @@ public class GuildHomeCommand extends Command {
         Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
         final Location home = guild.getHome();
         final Location startLocation = player.getLocation();
+        
+        GuildHomeTeleportEvent event = new GuildHomeTeleportEvent(guild);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled()) {
+            return;
+        }
         
         player.sendMessage(ChatColor.GRAY + MsgManager.timetotpnotify.replace("{GUILD}", guild.getTag().toUpperCase()).replace("{HOMETPSECONDS}", String.valueOf(GenConf.TELEPORT_COOLDOWN)));
         

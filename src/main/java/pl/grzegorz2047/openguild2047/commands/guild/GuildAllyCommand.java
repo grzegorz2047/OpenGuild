@@ -19,6 +19,7 @@ import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.event.guild.GuildRelationEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -71,6 +72,13 @@ public class GuildAllyCommand extends Command{
                     player.sendMessage(MsgManager.get("playernotleader"));
                     return;
                 }
+                
+                GuildRelationEvent event = new GuildRelationEvent(requestingGuild, guild, Relation.Status.ALLY);
+                Bukkit.getPluginManager().callEvent(event);
+                if(event.isCancelled()) {
+                    return;
+                }
+                
                 guild.getPendingRelationChanges().remove(requestingGuild.getTag());
                 Relation r = new Relation();
                 r.setWho(guild.getTag());

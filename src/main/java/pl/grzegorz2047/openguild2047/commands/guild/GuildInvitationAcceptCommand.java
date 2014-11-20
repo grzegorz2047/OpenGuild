@@ -19,6 +19,7 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.event.guild.GuildJoinEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -49,6 +50,12 @@ public class GuildInvitationAcceptCommand extends Command {
             sender.sendMessage(MsgManager.alreadyinguild);
             return;
         }
+
+        GuildJoinEvent event = new GuildJoinEvent();
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled()) {
+            return;
+        }    
 
         List<Guild> invitationsFrom = new ArrayList<Guild>();
         for (Guild guild : guildHelper.getGuilds().values()) {

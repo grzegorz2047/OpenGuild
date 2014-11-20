@@ -24,6 +24,8 @@ import pl.grzegorz2047.openguild2047.GuildHelper;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.event.guild.GuildKickEvent;
+import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -64,9 +66,14 @@ public class GuildKickCommand extends Command {
             sender.sendMessage(MsgManager.get("cantkickleader", "You cant kick yourself from your own guild!"));
             return;
         }
-                this.
-            getPlugin().
-            getTagManager().playerLeaveGuild(op);
+        
+        GuildKickEvent event = new GuildKickEvent(guild);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled()) {
+            return;
+        }
+            
+        this.getPlugin().getTagManager().playerLeaveGuild(op);
         guild.removeMember(op.getUniqueId());
         guildHelper.getPlayers().remove(op.getUniqueId());
         guildHelper.getPlayers().put(op.getUniqueId(), null);
