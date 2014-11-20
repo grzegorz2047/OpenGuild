@@ -17,6 +17,7 @@ package pl.grzegorz2047.openguild2047.hooks.skript;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.util.SimpleEvent;
+import com.github.grzegorz2047.openguild.event.ModuleLoadEvent;
 import com.github.grzegorz2047.openguild.event.OpenGuildReloadEvent;
 import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
 import com.github.grzegorz2047.openguild.event.guild.GuildDisbandEvent;
@@ -67,6 +68,7 @@ public class SkriptHook extends Hook {
             register("Guild player kick", "1.6.5", GuildKickEvent.class, guild + " [player] kick[ing]");
             register("Guild leave", "1.6.5", GuildLeaveEvent.class, guild + " [player] leave[ing]");
             register("Guild relation", "1.6.5", GuildRelationEvent.class, guild + " relation [status] [(chang(e|ing)]");
+            register("OpenGuild's module load", "1.6.5", ModuleLoadEvent.class, "openguild[[']s] module[s] load[ing][s]");
             register("OpenPlugin reload", "1.6.5", OpenGuildReloadEvent.class, "openguild [plugin] reload[ing]");
             // TODO We need to add new Bukkit events first!
         }
