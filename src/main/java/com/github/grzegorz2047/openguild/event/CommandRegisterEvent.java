@@ -17,12 +17,15 @@
 package com.github.grzegorz2047.openguild.event;
 
 import com.github.grzegorz2047.openguild.command.CommandInfo;
-import com.github.grzegorz2047.openguild.module.Module;
 import javax.annotation.Nonnull;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * @deprecated NOT WORKING YET!
+ */
+@Deprecated
 public class CommandRegisterEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
@@ -33,10 +36,6 @@ public class CommandRegisterEvent extends Event implements Cancellable {
     public CommandRegisterEvent(@Nonnull CommandInfo command, boolean canCancel) {
         this.canCancel = canCancel;
         this.command = command;
-    }
-
-    @Nonnull public static HandlerList getHandlerList() {
-        return handlers;
     }
 
     @Override

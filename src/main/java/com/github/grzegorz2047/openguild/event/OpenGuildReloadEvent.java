@@ -35,10 +35,6 @@ public class OpenGuildReloadEvent extends Event {
         this.status = status;
     }
     
-    @Nonnull public static HandlerList getHandlerList() {
-        return handlers;
-    }
-    
     @Override
     @Nonnull public HandlerList getHandlers() {
         return handlers;

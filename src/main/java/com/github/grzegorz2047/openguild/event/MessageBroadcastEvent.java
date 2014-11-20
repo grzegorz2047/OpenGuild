@@ -22,6 +22,10 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * @deprecated NOT WORKING YET!
+ */
+@Deprecated
 public class MessageBroadcastEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();

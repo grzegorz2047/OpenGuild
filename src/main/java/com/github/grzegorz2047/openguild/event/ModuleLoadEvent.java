@@ -32,10 +32,6 @@ public class ModuleLoadEvent extends Event implements Cancellable {
         this.module = module;
     }
 
-    @Nonnull public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
     @Override
     @Nonnull public HandlerList getHandlers() {
         return handlers;
