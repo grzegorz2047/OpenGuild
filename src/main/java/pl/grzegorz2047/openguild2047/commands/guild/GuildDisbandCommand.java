@@ -71,7 +71,6 @@ public class GuildDisbandCommand extends Command {
                 guild.getAlliances().remove(r);
                 guild.getAlliances().remove(r);
                 OpenGuild.getInstance().getSQLHandler().removeAlliance(g1, g2);
-                return;
                 
             }
             for(UUID uuid : guild.getMembers()) {
