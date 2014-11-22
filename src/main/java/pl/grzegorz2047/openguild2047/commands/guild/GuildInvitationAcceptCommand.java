@@ -51,12 +51,6 @@ public class GuildInvitationAcceptCommand extends Command {
             return;
         }
 
-        GuildJoinEvent event = new GuildJoinEvent();
-        Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled()) {
-            return;
-        }    
-
         List<Guild> invitationsFrom = new ArrayList<Guild>();
         for (Guild guild : guildHelper.getGuilds().values()) {
             if (guild.getPendingInvitations().contains(((Player) sender).getUniqueId())) {
@@ -70,25 +64,17 @@ public class GuildInvitationAcceptCommand extends Command {
                 for (Guild guild : invitationsFrom) {
                     sender.sendMessage(ChatColor.BOLD + guild.getTag().toUpperCase() + ChatColor.GRAY + " - " + guild.getDescription());
                 }
-            }else if(invitationsFrom.size() == 1 ){
-                Guild g = invitationsFrom.get(0);
-                g.acceptInvitation((Player) sender);
-                getPlugin().getTagManager().playerJoinGuild(((Player) sender));
-                Bukkit.broadcastMessage(MsgManager.get("broadcast-join")
-                            .replace("{PLAYER}", sender.getName())
-                            .replace("{TAG}", g.getTag()));
-            }else{
+            } else if(invitationsFrom.size() == 1 ){
+                accept((Player) sender, invitationsFrom.get(0));
+            } else {
                 sender.sendMessage(MsgManager.get("noinv"));
             }
         } else if(args.length >= 2) {
             String tag = args[1].toUpperCase();
-            if(guildHelper.getGuilds().containsKey(tag)) {
-                if(invitationsFrom.contains(guildHelper.getGuilds().get(tag))) {
-                    guildHelper.getGuilds().get(tag).acceptInvitation((Player) sender);
-                    getPlugin().getTagManager().playerJoinGuild(((Player) sender));
-                    Bukkit.broadcastMessage(MsgManager.get("broadcast-join")
-                            .replace("{PLAYER}", sender.getName())
-                            .replace("{TAG}", tag));
+            Guild target = guildHelper.getGuilds().get(tag);
+            if(target != null && guildHelper.getGuilds().containsKey(tag)) {
+                if(invitationsFrom.contains(target)) {
+                    accept((Player) sender, target);
                 }
             }
         }
@@ -97,6 +83,19 @@ public class GuildInvitationAcceptCommand extends Command {
     @Override
     public int minArgs() {
         return 1;
+    }
+
+    private void accept(Player player, Guild guild) {
+        GuildJoinEvent event = new GuildJoinEvent(guild, player);
+        if(event.isCancelled()) {
+            return;
+        }
+        
+        guild.acceptInvitation(player);
+        getPlugin().getTagManager().playerJoinGuild(player);
+        Bukkit.broadcastMessage(MsgManager.get("broadcast-join")
+                .replace("{PLAYER}", player.getName())
+                .replace("{TAG}", guild.getTag().toUpperCase()));
     }
 
 }
