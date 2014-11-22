@@ -16,6 +16,7 @@
 package com.github.grzegorz2047.openguild.event.guild;
 
 import com.github.grzegorz2047.openguild.Guild;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -26,9 +27,11 @@ import org.bukkit.event.HandlerList;
 public class GuildHomeTeleportEvent extends GuildEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancel;
+    private final Player player;
     
-    public GuildHomeTeleportEvent(Guild guild) {
+    public GuildHomeTeleportEvent(Guild guild, Player player) {
         super(guild);
+        this.player = player;
     }
     
     @Override
@@ -44,5 +47,9 @@ public class GuildHomeTeleportEvent extends GuildEvent implements Cancellable {
     @Override
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
+    }
+    
+    public Player getPlayer() {
+        return player;
     }
 }

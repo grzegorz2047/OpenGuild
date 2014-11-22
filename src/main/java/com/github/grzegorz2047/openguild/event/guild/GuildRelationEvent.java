@@ -28,7 +28,7 @@ public class GuildRelationEvent extends GuildEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancel;
     private final Guild target;
-    private Relation.Status status;
+    private final Relation.Status status;
     
     public GuildRelationEvent(Guild guild, Guild target, Relation.Status status) {
         super(guild);
@@ -57,9 +57,5 @@ public class GuildRelationEvent extends GuildEvent implements Cancellable {
     
     public Relation.Status getStatus() {
         return status;
-    }
-    
-    public void setStatus(Relation.Status status) {
-        this.status = status;
     }
 }

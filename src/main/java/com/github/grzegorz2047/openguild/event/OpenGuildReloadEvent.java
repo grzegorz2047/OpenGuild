@@ -27,7 +27,7 @@ public class OpenGuildReloadEvent extends Event {
     }
     
     private static final HandlerList handlers = new HandlerList();
-    public final CommandSender sender;
+    private final CommandSender sender;
     private final Status status;
     
     public OpenGuildReloadEvent(@Nonnull CommandSender sender, @Nonnull Status status) {

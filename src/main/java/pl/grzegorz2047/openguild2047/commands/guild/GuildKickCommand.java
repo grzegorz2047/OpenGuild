@@ -67,7 +67,7 @@ public class GuildKickCommand extends Command {
             return;
         }
         
-        GuildKickEvent event = new GuildKickEvent(guild);
+        GuildKickEvent event = new GuildKickEvent(guild, op);
         Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled()) {
             return;

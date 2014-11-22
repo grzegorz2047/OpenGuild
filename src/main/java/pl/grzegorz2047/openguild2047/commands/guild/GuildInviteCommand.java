@@ -60,20 +60,21 @@ public class GuildInviteCommand extends Command {
             return;
         }
         
-        Player toInvite = getPlugin().getServer().getPlayer(playerToInvite);
-        if(guildHelper.hasGuild(toInvite)) {
-            player.sendMessage(MsgManager.playerhasguild);
-            return;
-        }
+        Player invite = getPlugin().getServer().getPlayer(playerToInvite);
         
-        GuildInvitationEvent event = new GuildInvitationEvent(guild);
+        GuildInvitationEvent event = new GuildInvitationEvent(guild, invite);
         Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled()) {
             return;
         }
         
-        guild.invitePlayer(toInvite, player);
-        player.sendMessage(MsgManager.get("invitesent").replace("{PLAYER}", toInvite.getName()));
+        if(guildHelper.hasGuild(event.getInvite())) {
+            player.sendMessage(MsgManager.playerhasguild);
+            return;
+        }
+        
+        guild.invitePlayer(event.getInvite(), player);
+        player.sendMessage(MsgManager.get("invitesent").replace("{PLAYER}", event.getInvite().getName()));
     }
 
     @Override

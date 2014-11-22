@@ -29,7 +29,6 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
-import pl.grzegorz2047.openguild2047.GenConf;
 
 /**
  * Command used to accept invitation to guild.

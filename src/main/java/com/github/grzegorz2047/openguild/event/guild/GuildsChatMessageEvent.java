@@ -24,6 +24,9 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * @deprecated NOT WORKING YET!
+ */
 @Deprecated
 public class GuildsChatMessageEvent extends Event implements Cancellable {
 

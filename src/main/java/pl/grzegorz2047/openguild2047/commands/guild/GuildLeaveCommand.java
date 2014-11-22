@@ -56,7 +56,7 @@ public class GuildLeaveCommand extends Command {
             return;
         }
         
-        GuildLeaveEvent event = new GuildLeaveEvent(guild);
+        GuildLeaveEvent event = new GuildLeaveEvent(guild, player);
         Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled()) {
             return;

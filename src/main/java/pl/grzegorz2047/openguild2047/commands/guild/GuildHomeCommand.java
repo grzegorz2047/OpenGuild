@@ -61,7 +61,7 @@ public class GuildHomeCommand extends Command {
         final Location home = guild.getHome();
         final Location startLocation = player.getLocation();
         
-        GuildHomeTeleportEvent event = new GuildHomeTeleportEvent(guild);
+        GuildHomeTeleportEvent event = new GuildHomeTeleportEvent(guild, player);
         Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled()) {
             return;
