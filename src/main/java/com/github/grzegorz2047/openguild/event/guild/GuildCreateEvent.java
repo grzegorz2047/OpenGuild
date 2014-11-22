@@ -24,6 +24,10 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * This event is calling when player creates a guild
+ * This event is calling <b>BEFORE</b> the {@link GuildCreatedEvent} and you can <b>cancel</b> it!
+ */
 public class GuildCreateEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private final String tag;

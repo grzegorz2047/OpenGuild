@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.GuildHelper;
 import com.github.grzegorz2047.openguild.Cuboid;
+import com.github.grzegorz2047.openguild.event.guild.GuildCreatedEvent;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
@@ -144,6 +145,9 @@ public class GuildCreateCommand extends Command {
         getPlugin().getSQLHandler().updatePlayer(player.getUniqueId());
 
         this.getPlugin().broadcastMessage(MsgManager.get("broadcast-create").replace("{TAG}", tag.toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
+        
+        GuildCreatedEvent createdEvent = new GuildCreatedEvent(guild);
+        Bukkit.getPluginManager().callEvent(createdEvent);
     }
 
     @Override
