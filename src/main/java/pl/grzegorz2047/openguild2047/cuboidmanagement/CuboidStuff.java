@@ -141,6 +141,9 @@ public class CuboidStuff {
         while(it.hasNext()) {
             Cuboid c = it.next().getValue();
             Location loc1 = c.getCenter();
+            if(!loc.getWorld().getName().equals(loc1.getWorld().getName())){
+                continue;
+            }
             double distance = loc1.distance(loc);
             if (distance <= (c.getRadius() * 2))//Totalne uproszczenie, bo juz nie wyrabialem
             {

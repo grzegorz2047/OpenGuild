@@ -219,9 +219,9 @@ public class GenConf {
         joinMsg = config.getString("join-msg","").replace("&", "§");
         quitMsg = config.getString("quit-msg","").replace("&", "§");
         guildChatKey = config.getString("chat.guild-key", "guild:");
-        guildChatFormat = config.getString("chat.guild-format", "&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}");
+        guildChatFormat = config.getString("chat.guild-format", "&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
         allyChatKey = config.getString("chat.ally-key", "allies:");
-        allyChatFormat = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}");
+        allyChatFormat = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
         debug = config.getBoolean("debug", false);
         
         defaultTNTBlockTime = config.getInt("listener.tnt-block-time", 30);
