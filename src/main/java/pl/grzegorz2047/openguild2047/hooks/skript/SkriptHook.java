@@ -63,7 +63,7 @@ public class SkriptHook extends Hook {
         private void defaults() {
             register("Guild create", "1.6.5", GuildCreateEvent.class, guild + " creat(e|ing)");
             register("Guild created", "1.6.5", GuildCreatedEvent.class, guild + " created");
-            register("Guild disband", "1.6.5", GuildDisbandEvent.class, guild + " disband");
+            register("Guild disband", "1.6.5", GuildDisbandEvent.class, guild + " (disband[(s|ing)]|clos(e|ing))");
             register("Guild home teleport", "1.6.5", GuildHomeTeleportEvent.class, guild + " home teleport[ing]");
             register("Guild player invite", "1.6.5", GuildInvitationEvent.class, guild + " [player] invit(e|ation)");
             register("Guild player join", "1.6.5", GuildJoinEvent.class, guild + "[player] join[ing]");
