@@ -26,6 +26,7 @@ import pl.grzegorz2047.openguild2047.GuildHelper;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
+import com.github.grzegorz2047.openguild.event.guild.GuildDescriptionChangeEvent;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
@@ -67,13 +68,19 @@ public class GuildDescriptionCommand extends Command {
                     return;
                 }
                 
-                guild.setDescription(newDescription);
+                GuildDescriptionChangeEvent event = new GuildDescriptionChangeEvent(guild, newDescription);
+                Bukkit.getPluginManager().callEvent(event);
+                if(event.isCancelled()) {
+                    return;
+                }
+                
+                guild.setDescription(event.getNewDescription());
                 getPlugin().getSQLHandler().updateGuildDescription(guild);
 
                 for(UUID uuid : guild.getMembers()) {
                     OfflinePlayer offlineMember = Bukkit.getOfflinePlayer(uuid);
                     if(offlineMember.isOnline()) {
-                        offlineMember.getPlayer().sendMessage(MsgManager.get("guild-description-changed").replace("{NEW}", newDescription));
+                        offlineMember.getPlayer().sendMessage(MsgManager.get("guild-description-changed").replace("{NEW}", event.getNewDescription()));
                     }
                 }
                 
