@@ -57,7 +57,7 @@ public class SQLThread implements Runnable {
     }
     
     @Override
-    public void run() {
+    public synchronized void run() {
         try {
             if(connection.isClosed()) {
                 connection = data.getDriver();
