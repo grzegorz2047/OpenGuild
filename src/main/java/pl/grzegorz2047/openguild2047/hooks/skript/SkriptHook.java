@@ -71,7 +71,7 @@ public class SkriptHook extends Hook {
             register("Guild leave", "1.6.5", GuildLeaveEvent.class, guild + " [player] leave[ing]");
             register("Guild relation", "1.6.5", GuildRelationEvent.class, guild + " relation [status] [(chang(e|ing)]");
             register("OpenGuild's module load", "1.6.5", ModuleLoadEvent.class, "openguild[[']s] module[s] load[ing][s]");
-            register("OpenPlugin reload", "1.6.5", OpenGuildReloadEvent.class, "openguild [plugin] reload[ing]");
+            register("OpenGuild plugin reload", "1.6.5", OpenGuildReloadEvent.class, "openguild [plugin] reload[ing]");
             // TODO We need to add new Bukkit events first!
         }
         
