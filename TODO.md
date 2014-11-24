@@ -1,3 +1,4 @@
+- [ ] Zmiana polozenia domu (/g dom)
 - [ ] Mozliwosc ustawienia 'Gracz [{GUILDKILLER}] {KILLER} zabil gracza [{GUILDVICTIM}] {VICTIM}'
 - [ ] Powiekszanie cuboida gildii
 - [ ] Jakiś prosty system nagradzania za zabicia (pisane KD)
