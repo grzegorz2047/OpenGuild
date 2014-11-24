@@ -41,6 +41,7 @@ database: FILE
 file-dir: plugins/OpenGuild2047/og.db
 snooper: true
 updater: true
+sql-table-prefix: openguild
 mysql:
   address: localhost
   port: 3306

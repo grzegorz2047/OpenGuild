@@ -91,13 +91,14 @@ public class GenConf {
     public static String allyChatFormat;
     public static boolean debug;
     public static SQLData sqlData;
-    
     public static int defaultTNTBlockTime;
     public static boolean enableTNTExplodeListener;
     public static String allyTag;
     public static String enemyTag;
     public static String guildTag;
     public static List<String> forbiddenworlds;
+    public static String sqlTablePrefix;
+    
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
         forbiddenworlds = OpenGuild.getInstance().getConfig().getStringList("forbidden-worlds");
@@ -223,6 +224,11 @@ public class GenConf {
         allyChatKey = config.getString("chat.ally-key", "allies:");
         allyChatFormat = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
         debug = config.getBoolean("debug", false);
+        sqlTablePrefix = config.getString("sql-table-prefix", "openguild");
+        if (sqlTablePrefix.length() > 10 || sqlTablePrefix.length() < 3) {
+            OpenGuild.getAPI().getLogger().warning("Could not load SQL table prefix - too low (3 chars) or too long (10 chars).");
+            sqlTablePrefix = "openguild";
+        }
         
         defaultTNTBlockTime = config.getInt("listener.tnt-block-time", 30);
         enableTNTExplodeListener = config.getBoolean("listener.tnt-block-enabled", true);

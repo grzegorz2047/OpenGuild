@@ -105,7 +105,7 @@ public class SQLHandler {
         plugin.getOGLogger().info("[DB] Creating tables if not exists ...");
         
         try {
-            String query = "CREATE TABLE IF NOT EXISTS `openguild_guilds`"
+            String query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "_guilds`"
                     + "(tag VARCHAR(11),"
                     + "description VARCHAR(100),"
                     + "leader VARCHAR(37),"
@@ -118,7 +118,7 @@ public class SQLHandler {
             statement = this.connection.createStatement();
             statement.execute(query);
             
-            query = "CREATE TABLE IF NOT EXISTS `openguild_players`"
+            query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "_players`"
                     + "(guild VARCHAR(11),"
                     + "uuid VARCHAR(37),"
                     + "kills INT,"
@@ -129,7 +129,7 @@ public class SQLHandler {
             statement = this.connection.createStatement();
             statement.execute(query);
 
-            query = "CREATE TABLE IF NOT EXISTS `openguild_allies`"
+            query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "_allies`"
                     + "("
                     + "who VARCHAR(11),"
                     + "withwho VARCHAR(11),"
