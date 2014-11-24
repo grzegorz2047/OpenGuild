@@ -109,12 +109,23 @@ public class SQLHandler {
                     + "(tag VARCHAR(11),"
                     + "description VARCHAR(100),"
                     + "leader VARCHAR(37),"
+                    + "lives INT,"
                     + "home_x INT,"
                     + "home_y INT,"
                     + "home_z INT,"
                     + "home_world VARCHAR(16),"
-                    + "cuboid_radius INT,"
                     + "PRIMARY KEY(tag));";
+            statement = this.connection.createStatement();
+            statement.execute(query);
+            
+            query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "_cuboids`"
+                    + "(id INT AUTO_INCREMENT,"
+                    + "tag VARCHAR(11),"
+                    + "home_x INT,"
+                    + "home_z INT,"
+                    + "home_world VARCHAR(16),"
+                    + "cuboid_radius INT,"
+                    + "PRIMARY KEY(id));";
             statement = this.connection.createStatement();
             statement.execute(query);
             
