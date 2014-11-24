@@ -42,6 +42,7 @@ import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntityListener;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChatListener;
+import pl.grzegorz2047.openguild2047.listeners.PlayerDeathListener;
 import pl.grzegorz2047.openguild2047.listeners.PlayerJoinListener;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMoveListener;
 import pl.grzegorz2047.openguild2047.listeners.PlayerQuitListener;
@@ -256,6 +257,7 @@ public class OpenGuild extends JavaPlugin {
 
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerChatListener(this), this);
+        pm.registerEvents(new PlayerDeathListener(), this);
         pm.registerEvents(new PlayerQuitListener(this), this);
         
         if(GenConf.cubEnabled) {
