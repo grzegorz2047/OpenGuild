@@ -21,8 +21,13 @@ import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 
 public abstract class Command {
+    private String permission;
 
     public abstract void execute(CommandSender sender, String[] args) throws CommandException;
+
+    public String getPermission() {
+        return permission;
+    }
 
     public OpenGuild getPlugin() {
         return OpenGuild.getInstance();
@@ -34,6 +39,13 @@ public abstract class Command {
         return label + " " + title + ChatColor.RESET + " " + label2;
     }
 
+    public boolean hasPermission() {
+        return permission != null;
+    }
+
     public abstract int minArgs();
 
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
 }

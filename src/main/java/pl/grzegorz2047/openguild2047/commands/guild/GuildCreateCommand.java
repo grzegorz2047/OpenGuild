@@ -37,6 +37,9 @@ import pl.grzegorz2047.openguild2047.utils.GenUtil;
  * Usage: /guild create [tag] [description]
  */
 public class GuildCreateCommand extends Command {
+    public GuildCreateCommand() {
+        setPermission("openguild.command.create");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {

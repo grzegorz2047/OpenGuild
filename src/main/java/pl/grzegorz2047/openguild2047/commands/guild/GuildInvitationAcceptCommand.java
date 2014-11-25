@@ -36,6 +36,9 @@ import org.bukkit.Bukkit;
  * Usage: /guild accept [optional: tag (required only if there's more than 2 invitations)]
  */
 public class GuildInvitationAcceptCommand extends Command {
+    public GuildInvitationAcceptCommand() {
+        setPermission("openguild.command.invitationaccept");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {

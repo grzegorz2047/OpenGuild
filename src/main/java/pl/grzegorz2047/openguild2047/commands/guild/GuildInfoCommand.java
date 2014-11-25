@@ -18,7 +18,6 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GuildHelper;
@@ -33,6 +32,9 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * Usage: /guild info [optional: tag (if you're member of a guild)]
  */
 public class GuildInfoCommand extends Command {
+    public GuildInfoCommand() {
+        setPermission("openguild.command.info");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {

@@ -36,6 +36,9 @@ import pl.grzegorz2047.openguild2047.utils.GenUtil;
  * Usage: /guild desc set [new description]
  */
 public class GuildDescriptionCommand extends Command {
+    public GuildDescriptionCommand() {
+        setPermission("openguild.command.description");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {

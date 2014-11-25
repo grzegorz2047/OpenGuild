@@ -32,11 +32,13 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  *
  * @author Grzegorz
  */
-public class GuildEnemyCommand extends Command{
+public class GuildEnemyCommand extends Command {
+    public GuildEnemyCommand() {
+        setPermission("openguild.command.enemy");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-            
         GuildHelper guildHelper = getPlugin().getGuildHelper();
         
         if(!(sender instanceof Player)) {

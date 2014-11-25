@@ -34,6 +34,9 @@ import pl.grzegorz2047.openguild2047.utils.ItemGUI;
  * Usage: /guild items
  */
 public class GuildItemsCommand extends Command {
+    public GuildItemsCommand() {
+        setPermission("openguild.command.items");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {

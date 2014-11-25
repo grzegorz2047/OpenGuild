@@ -32,9 +32,12 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * Usage: /guild invite [player name]
  */
 public class GuildInviteCommand extends Command {
+    public GuildInviteCommand() {
+        setPermission("openguild.command.invite");
+    }
 
     @Override
-    public void execute(CommandSender sender, String[] args) throws CommandException {
+    public void execute(CommandSender sender, String[] args) throws CommandException {        
         if(!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;

@@ -91,7 +91,9 @@ public class GuildCommand implements CommandExecutor {
                 for(String alias : aliases) {
                     if(subCommand.equalsIgnoreCase(alias)) {
                         Command executor = this.commands.get(aliases);
-                        if(args.length >= executor.minArgs()) {
+                        if(executor.hasPermission() && !sender.hasPermission(executor.getPermission())) {
+                            sender.sendMessage(MsgManager.get("permission"));
+                        } else if(args.length >= executor.minArgs()) {
                             try {
                                 executor.execute(sender, args);
                             } catch(CommandException ex) {

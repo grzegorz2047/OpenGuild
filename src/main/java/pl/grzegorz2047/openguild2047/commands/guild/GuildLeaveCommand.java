@@ -34,6 +34,9 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * Usage: /guild leave
  */
 public class GuildLeaveCommand extends Command {
+    public GuildLeaveCommand() {
+        setPermission("openguild.command.leave");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {

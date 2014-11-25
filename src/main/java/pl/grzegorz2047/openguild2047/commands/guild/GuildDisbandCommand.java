@@ -35,6 +35,9 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * Usage: /guild disband
  */
 public class GuildDisbandCommand extends Command {
+    public GuildDisbandCommand() {
+        setPermission("openguild.command.disband");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {

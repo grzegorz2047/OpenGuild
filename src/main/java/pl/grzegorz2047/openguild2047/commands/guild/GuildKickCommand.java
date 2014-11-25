@@ -34,6 +34,9 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * Usage: /guild kick [player name]
  */
 public class GuildKickCommand extends Command {
+    public GuildKickCommand() {
+        setPermission("openguild.command.kick");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {

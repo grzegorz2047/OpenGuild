@@ -16,7 +16,6 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.GuildHelper;
 import com.github.grzegorz2047.openguild.Guild;
@@ -30,6 +29,9 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * Usage: /guild list
  */
 public class GuildListCommand extends Command {
+    public GuildListCommand() {
+        setPermission("openguild.command.list");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {

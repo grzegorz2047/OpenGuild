@@ -36,6 +36,9 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * Usage: /guild home
  */
 public class GuildHomeCommand extends Command {
+    public GuildHomeCommand() {
+        setPermission("openguild.command.home");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {

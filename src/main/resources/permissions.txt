@@ -1,3 +1,18 @@
+openguild.command.ally - allows to make an ally with the target guild (leader only)
+openguild.command.create - allows to create a guild
+openguild.command.description - allows to show (or change) guilds description
+openguild.command.disband - allows to disband the guild (by a leader)
+openguild.command.enemy - allows to disband the ally from the target guild (by a leader)
+openguild.command.home - allows to teleport to the guild (guild members only)
+openguild.command.info - allows to show informations about the current or the target guild
+openguild.command.invitationaccept - allows to accept guild invitations to the guild (see openguild.command.invite permission bellow)
+openguild.command.invite - allows to invite player to the guild (by a leader)
+openguild.command.items - allows to show a UI that show needed items for the guild
+openguild.command.kick - allows to kick player from the guild (by a leader)
+openguild.command.leave - allows to leave from the current guild
+openguild.command.list - allows to shows all guilds on this server
+openguild.command.reload - allows to reloads plugin from the /g reload command
+
 openguild.cuboid.bypassbreak
 openguild.cuboid.bypassplace
 openguild.cuboid.bypassinteract

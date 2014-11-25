@@ -32,14 +32,12 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * Usage: /guild reload
  */
 public class GuildReloadCommand extends Command {
+    public GuildReloadCommand() {
+        setPermission("openguild.command.reload");
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        if(!sender.hasPermission("openguild.admin.reload") || !sender.isOp()) {
-            sender.sendMessage(MsgManager.get("permission"));
-            return;
-        }
-        
         try {
             OpenGuildReloadEvent begining = new OpenGuildReloadEvent(sender, OpenGuildReloadEvent.Status.BEGINING);
             Bukkit.getPluginManager().callEvent(begining);
