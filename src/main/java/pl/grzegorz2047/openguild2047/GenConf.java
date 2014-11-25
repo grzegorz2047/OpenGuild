@@ -98,6 +98,7 @@ public class GenConf {
     public static String guildTag;
     public static List<String> forbiddenworlds;
     public static String sqlTablePrefix;
+    public static boolean cuboidCheckPlayers;
     
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
@@ -229,6 +230,7 @@ public class GenConf {
             OpenGuild.getAPI().getLogger().warning("Could not load SQL table prefix - too low (3 chars) or too long (10 chars).");
             sqlTablePrefix = "openguild";
         }
+        cuboidCheckPlayers = config.getBoolean("check-players-on-create", true);
         
         defaultTNTBlockTime = config.getInt("listener.tnt-block-time", 30);
         enableTNTExplodeListener = config.getBoolean("listener.tnt-block-enabled", true);

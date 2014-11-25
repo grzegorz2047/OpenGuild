@@ -95,7 +95,7 @@ public class GuildCreateCommand extends Command {
             player.sendMessage(MsgManager.get("forbiddenworld"));
             return;
         }
-        if(GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_RADIUS)) {
+        if(GenConf.cuboidCheckPlayers && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_RADIUS)) {
             player.sendMessage(MsgManager.playerstooclose);
             return;
         }

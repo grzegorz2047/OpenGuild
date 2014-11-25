@@ -15,6 +15,7 @@ spawn:
   message: '&cYou are not allowed to do this at the servers spawn point!'
   extra: 50
 cuboid:
+  check-players-on-create: true
   enabled: true
   notify-permission: false
   min-radius: 15
