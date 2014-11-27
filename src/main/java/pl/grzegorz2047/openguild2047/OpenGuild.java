@@ -246,7 +246,7 @@ public class OpenGuild extends JavaPlugin {
         String pass = getConfig().getString("mysql.password");
         String name = getConfig().getString("mysql.database");
         
-        this.sqlHandler = new SQLHandler(this, host, port, name, user, pass);
+        this.sqlHandler = new SQLHandler(this, host, port,user, pass, name);
     }
 
     /**
