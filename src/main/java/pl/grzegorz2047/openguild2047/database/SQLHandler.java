@@ -189,7 +189,7 @@ public class SQLHandler {
         
         try {
             statement = this.connection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM `openguild_guilds`");
+            ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "guilds`");
             while(result.next()) {
                 String tag = result.getString("tag");
                 String description = result.getString("description");
@@ -249,7 +249,7 @@ public class SQLHandler {
         
         try {
             statement = this.connection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM `openguild_players`");
+            ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "players`");
             while(result.next()) {
                 String guildTag = result.getString("guild");
                 //int kills = result.getInt("kills");
@@ -310,7 +310,7 @@ public class SQLHandler {
     public void loadRelations(){
         try {
             statement = this.connection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM `openguild_allies`");
+            ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "allies`");
             while(result.next()) {
                 String who = result.getString("who");
                 //int kills = result.getInt("kills");
@@ -381,7 +381,7 @@ public class SQLHandler {
         final String uuid = player.toString();
         try {
             statement = this.connection.createStatement();
-            statement.execute("INSERT INTO `openguild_players` VALUES( '', '" + uuid + "', '"+Bukkit.getPlayer(player).getName()+"');");
+            statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "players` VALUES( '', '" + uuid + "', '"+0+"', '"+0+"', '"+0+"' , '"+Bukkit.getPlayer(player).getName()+"');");
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
@@ -401,7 +401,7 @@ public class SQLHandler {
 
         try {
             statement = this.connection.createStatement();
-            statement.executeUpdate("UPDATE `openguild_players` SET `guild` = '" + guildTag + "' WHERE `uuid` = '" + uuid.toString() + "'");
+            statement.executeUpdate("UPDATE `" + GenConf.sqlTablePrefix + "players` SET `guild` = '" + guildTag + "' WHERE `uuid` = '" + uuid.toString() + "'");
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
@@ -418,15 +418,15 @@ public class SQLHandler {
 
         try {
             statement = this.connection.createStatement();
-            statement.execute("INSERT INTO `openguild_guilds` VALUES(" +
+            statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "guilds` VALUES(" +
                     "'" + guild.getTag().toUpperCase() + "'," +
                     "'" + guild.getDescription() + "'," +
                     "'" + guild.getLeader().toString() + "'," +
+                    "'" + 0 + "'," +
                     "'" + (int) homeLocation.getX() + "'," +
                     "'" + (int) homeLocation.getY() + "'," +
                     "'" + (int) homeLocation.getZ() + "'," +
-                    "'" + homeLocation.getWorld().getName() + "'," +
-                    "'" + GenConf.MIN_CUBOID_RADIUS + "');");
+                    "'" + homeLocation.getWorld().getName() + "');");
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
@@ -440,7 +440,7 @@ public class SQLHandler {
     public void updateGuildDescription(Guild guild) {
         try {
             statement = this.connection.createStatement();
-            statement.executeUpdate("UPDATE `openguild_guilds` SET `description` = '" + guild.getDescription() + "' WHERE `tag` = '" + guild.getTag().toUpperCase() + "'");
+            statement.executeUpdate("UPDATE `" + GenConf.sqlTablePrefix + "guilds` SET `description` = '" + guild.getDescription() + "' WHERE `tag` = '" + guild.getTag().toUpperCase() + "'");
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
@@ -454,7 +454,7 @@ public class SQLHandler {
     public void removeGuild(String tag) {
         try {
             statement = this.connection.createStatement();
-            statement.execute("DELETE FROM `openguild_guilds` WHERE `tag` = '" + tag + "'");
+            statement.execute("DELETE FROM `" + GenConf.sqlTablePrefix + "guilds` WHERE `tag` = '" + tag + "'");
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
@@ -464,9 +464,9 @@ public class SQLHandler {
         
         try {
             statement = this.connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM `openguild_allies`" +" WHERE who='"+who+"'" +"OR withwho='"+who+"';");
+            ResultSet rs = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "allies`" +" WHERE who='"+who+"'" +"OR withwho='"+who+"';");
             if(!rs.isFirst()){
-                statement.execute("INSERT INTO `openguild_allies` VALUES('"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', 0);");
+                statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "allies` VALUES('"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', 0);");
                     return true;
             }
             while(rs.next()){
@@ -475,7 +475,7 @@ public class SQLHandler {
                 if((whoseguild.equals(who.getTag()) && withwho.equals(withWho.getTag())) || (whoseguild.equals(withWho.getTag()) && withwho.equals(who.getTag()))){
                     return false;
                 }else{
-                    statement.execute("INSERT INTO `openguild_allies` VALUES('"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', 0);");
+                    statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "allies` VALUES('"+who.getTag()+"', '"+withWho.getTag()+"', '"+status.ALLY.toString()+"', 0);");
                     return true;
                 }
             }
@@ -489,8 +489,8 @@ public class SQLHandler {
     public boolean removeAlliance(Guild who, Guild withWho){
         try {
             statement = this.connection.createStatement();
-            statement.execute("DELETE FROM `openguild_allies` WHERE who='"+who.getTag()+"' AND withwho='"+withWho.getTag()+"';");
-            statement.execute("DELETE FROM `openguild_allies` WHERE who='"+withWho.getTag()+"' AND withwho='"+who.getTag()+"';");
+            statement.execute("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='"+who.getTag()+"' AND withwho='"+withWho.getTag()+"';");
+            statement.execute("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='"+withWho.getTag()+"' AND withwho='"+who.getTag()+"';");
             return true;
                 
             
