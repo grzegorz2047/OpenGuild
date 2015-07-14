@@ -21,7 +21,7 @@ import pl.openguild2047.openguild.commands.GuildCommand;
 
 public class TestClass {
     
-    private static final HashMap<Object, Object> hashMap = new HashMap<>();
+    private static final HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
     
     public void testVoid(boolean arg1, String arg2, int arg3, double arg4) {
         if(arg1) {
