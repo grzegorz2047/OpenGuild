@@ -1,5 +1,8 @@
 OpenGuild2047
 =============
+Obecnie nie jest on aktualizowany. Mozliwe, ze projekt troche mnie przerosl swego czasu, dlatego robie inna wersje pluginu na gildie.
+Bazowac one bedzie czesciowo na OpenGuild, ale stawiac tam bede na wydajnosc, prostote i rozplanowane wszystko do najprostszej postaci.
+Link do nowego projektu: https://github.com/grzegorz2047/SurvivalCG
 
 OpenGuild2047 to publiczny, open source plugin na gildie tworzony przez Grzegorza2047.
 Kod możecie dowolnie użytkować itd.
