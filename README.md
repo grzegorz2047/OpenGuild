@@ -1,4 +1,4 @@
-OpenGuild2047
+OpenGuild2047 ![alt tag](https://travis-ci.org/grzegorz2047/OpenGuild2047.svg?branch=master)
 =============
 Obecnie nie jest on aktualizowany. Mozliwe, ze projekt troche mnie przerosl swego czasu, dlatego robie inna wersje pluginu na gildie.
 Bazowac one bedzie czesciowo na OpenGuild, ale stawiac tam bede na wydajnosc, prostote i rozplanowane wszystko do najprostszej postaci.
