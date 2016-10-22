@@ -2,10 +2,3 @@ language: java
 script: mvn clean install
 addons:
   artifacts: true
-deploy:
-  provider: releases
-  api_key: "a0686cc002b01436c46d2cbd702358c7e4d8a484"
-  file: "OpenGuild2047-0.6.5.jar"
-  skip_cleanup: true
-  on:
-    tags: true
