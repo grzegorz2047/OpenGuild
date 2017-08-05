@@ -17,15 +17,24 @@
 package pl.grzegorz2047.openguild2047.modules.randomtp;
 
 import com.github.grzegorz2047.openguild.OpenGuild;
+import com.github.grzegorz2047.openguild.User;
 import com.github.grzegorz2047.openguild.command.CommandDescription;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
 import com.github.grzegorz2047.openguild.module.Module;
 import com.github.grzegorz2047.openguild.module.ModuleInfo;
 import com.github.grzegorz2047.openguild.module.ModuleLoadException;
+import com.github.grzegorz2047.openguild.module.RandomTPModule;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
-public class ModuleRandomTP implements Module {
+import javax.annotation.Nonnull;
+import java.util.Random;
+
+public class ModuleRandomTP implements RandomTPModule, Module {
     
     @Override
     public ModuleInfo module() {
@@ -48,5 +57,45 @@ public class ModuleRandomTP implements Module {
                     "[player]"));
         }
     }
-    
+
+    @Override
+    public boolean isEnabled() {
+        return GenConf.ranTpEnabled;
+    }
+
+    @Override
+    public boolean isButtonEnabled() {
+        return GenConf.ranTpButton;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        GenConf.ranTpEnabled = enabled;
+    }
+
+    @Override
+    public void setButtonEnabled(boolean enabled) {
+        GenConf.ranTpButton = enabled;
+    }
+
+    @Override
+    public void teleport(Player player) {
+        Random random = new Random();
+        World world = player.getWorld();
+        int x = random.nextInt();
+        int z = random.nextInt();
+        if(random.nextBoolean())
+            x = x - (2 * x);
+        if(random.nextBoolean())
+            z = z - (2 * z);
+
+        Location location = world.getHighestBlockAt(new Location(world, x, 64, z)).getLocation();
+        player.sendMessage(MsgManager.get("rantp"));
+        player.teleport(location);
+    }
+
+    @Override
+    public void teleport(User user) {
+        teleport(user.getBukkit());
+    }
 }

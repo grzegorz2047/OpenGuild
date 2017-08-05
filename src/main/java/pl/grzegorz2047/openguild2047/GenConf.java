@@ -136,7 +136,7 @@ public class GenConf {
         try {
             cubNotifySoundType = Sound.valueOf(config.getString("cuboid.notify-enter-sound-type", "ENDERMAN_DEATH"));
         } catch(IllegalArgumentException ex) {
-            cubNotifySoundType = Sound.ENDERDRAGON_DEATH;
+            cubNotifySoundType = Sound.ENTITY_ENDERDRAGON_DEATH;
             Guilds.getLogger().warning("Sound type " + config.getString("cuboid.notify-enter-sound-type") + " is incorrect! Please visit http://jd.bukkit.org/rb/apidocs/org/bukkit/Sound.html for help.");
         }
         cubNotifyPerm = config.getBoolean("cuboid.notify-permission", false);

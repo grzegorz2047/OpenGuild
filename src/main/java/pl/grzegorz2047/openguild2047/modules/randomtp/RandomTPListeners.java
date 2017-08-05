@@ -34,7 +34,7 @@ public class RandomTPListeners implements Listener {
         RandomTPModule module = (RandomTPModule) OpenGuild.getModules().getModule("random-tp");
         if(!module.isEnabled() || !module.isButtonEnabled())
             return;
-        
+
         Block block = e.getClickedBlock();
         if(block.getType() == Material.STONE_BUTTON ||
                 block.getType() == Material.WOOD_BUTTON) {
