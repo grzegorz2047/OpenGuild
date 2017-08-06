@@ -121,7 +121,11 @@ public class SQLHandler {
             query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "cuboids`"
                     + "(id INT AUTO_INCREMENT,"
                     + "tag VARCHAR(11),"
-                    + "cuboid_radius INT,"
+                    + "cuboid_min_x INT,"
+                    + "cuboid_min_z INT,"
+                    + "cuboid_max_x INT,"
+                    + "cuboid_max_z INT,"
+                    + "cuboid_worldname VARCHAR(60),"
                     + "PRIMARY KEY(id));";
             statement = this.connection.createStatement();
             statement.execute(query);
@@ -219,9 +223,13 @@ public class SQLHandler {
             int homeZ = result.getInt("home_z");
             Location home = new Location(plugin.getServer().getWorld(homeWorld), homeX, homeY, homeZ);
 
-            int cuboidRadius = result.getInt("cuboid_radius");
+            int cuboidMinX = result.getInt("cuboid_min_x");
+            int cuboidMinZ = result.getInt("cuboid_min_z");
+            int cuboidMaxX = result.getInt("cuboid_max_x");
+            int cuboidMaxZ = result.getInt("cuboid_max_z");
+            String worldname = result.getString("cuboid_worldname");
 
-            Cuboid cuboid = prepareGuildCuboid(tag, home, cuboidRadius);
+            Cuboid cuboid = prepareGuildCuboid(tag, home, cuboidMinX, cuboidMinZ, cuboidMaxX, cuboidMaxZ, worldname);
 
             Guild guild = prepareGuild(tag, description, leaderUUID, home, cuboid);
 
@@ -248,11 +256,12 @@ public class SQLHandler {
         return guild;
     }
 
-    private Cuboid prepareGuildCuboid(String tag, Location home, int cuboidRadius) {
+    private Cuboid prepareGuildCuboid(String tag, Location home, int cuboidMinX, int cuboidMinZ, int cuboidMaxX, int cuboidMaxZ, String worldname) {
         Cuboid cuboid = new Cuboid();
         cuboid.setOwner(tag);
         cuboid.setCenter(home);
-        cuboid.setRadius(cuboidRadius);
+        cuboid.setMin(new Location(Bukkit.getWorld(worldname), cuboidMinX, Integer.MIN_VALUE, cuboidMinZ));
+        cuboid.setMax(new Location(Bukkit.getWorld(worldname), cuboidMaxX, Integer.MAX_VALUE, cuboidMaxZ));
 
         plugin.getGuildHelper().getCuboids().put(tag, cuboid);
         return cuboid;
@@ -578,7 +587,8 @@ public class SQLHandler {
     public void addGuildCuboid(Cuboid cuboid) {
         try {
             statement = this.connection.createStatement();
-            statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "guilds` VALUES(" +
+            statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "cuboids` VALUES(" +
+                    "''," +
                     "'" + cuboid.getOwner().toUpperCase() + "'," +
                     "'" + cuboid.getMin().getBlockX() + "'," +
                     "'" + cuboid.getMin().getBlockZ() + "'," +

@@ -19,7 +19,6 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 /**
- *
  * @author Grzegorz
  */
 public class Cuboid {
@@ -27,6 +26,8 @@ public class Cuboid {
     private Location center;
     private int radius;
     private String owner;
+    private Location min;
+    private Location max;
 
     public Location getCenter() {
         return this.center;
@@ -58,11 +59,18 @@ public class Cuboid {
     }
 
     public Location getMin() {
-        return new Location(this.center.getWorld(), this.center.getBlockX() - this.radius, 0, this.center.getBlockZ() - this.radius);
+        return this.min;
     }
 
     public Location getMax() {
-        return new Location(this.center.getWorld(), this.center.getBlockX() + this.radius, this.center.getWorld().getMaxHeight(), this.center.getBlockZ() + this.radius);
+        return this.max;
     }
 
+    public void setMin(Location min) {
+        this.min = min;
+    }
+
+    public void setMax(Location max) {
+        this.max = max;
+    }
 }
