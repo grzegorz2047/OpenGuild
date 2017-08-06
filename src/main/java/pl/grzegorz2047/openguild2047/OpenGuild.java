@@ -30,7 +30,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.Metrics;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
@@ -47,7 +46,6 @@ import pl.grzegorz2047.openguild2047.listeners.PlayerJoinListener;
 import pl.grzegorz2047.openguild2047.listeners.PlayerMoveListener;
 import pl.grzegorz2047.openguild2047.listeners.PlayerQuitListener;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
-import pl.grzegorz2047.openguild2047.permissionsystem.PermissionsManager;
 
 
 /**
@@ -68,8 +66,6 @@ public class OpenGuild extends JavaPlugin {
     /**
      * Instance of built-in permissions manager main class.
      */
-    private PermissionsManager permissionsManager;
-
     @Override
     public void onEnable() {
         // We use UUID, which were not available in Bukkit < 1.7.5.
@@ -149,14 +145,6 @@ public class OpenGuild extends JavaPlugin {
         
         // Register all hooks to this plugin
         Hooks.registerDefaults();
-        
-        // Metrics
-        try {
-            Metrics metrics = new Metrics(this);
-            metrics.start();
-        } catch(IOException ex) {
-            // Failed to submit the stats :-(
-        }
         
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!");
     }

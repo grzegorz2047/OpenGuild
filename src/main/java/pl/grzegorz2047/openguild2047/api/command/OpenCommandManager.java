@@ -99,7 +99,6 @@ public class OpenCommandManager implements CommandManager {
         if(cmds == null) {
             return;
         }
-        
         Guilds.getLogger().log(Level.INFO, "Loaded " + loadedCmds + " commands.");
     }
     

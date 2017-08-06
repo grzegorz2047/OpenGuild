@@ -109,6 +109,9 @@ public class SQLHandler {
                     + "(tag VARCHAR(11),"
                     + "description VARCHAR(100),"
                     + "leader VARCHAR(37),"
+                    + "home_x INT,"
+                    + "home_z INT,"
+                    + "home_world VARCHAR(16),"
                     + "PRIMARY KEY(tag));";
             statement = this.connection.createStatement();
             statement.execute(query);
@@ -116,9 +119,6 @@ public class SQLHandler {
             query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "cuboids`"
                     + "(id INT AUTO_INCREMENT,"
                     + "tag VARCHAR(11),"
-                    + "home_x INT,"
-                    + "home_z INT,"
-                    + "home_world VARCHAR(16),"
                     + "cuboid_radius INT,"
                     + "PRIMARY KEY(id));";
             statement = this.connection.createStatement();
@@ -546,8 +546,7 @@ public class SQLHandler {
     public ResultSet executeQuery(String query) {
         try {
             statement = this.connection.createStatement();
-            ResultSet result = statement.executeQuery(query);
-            return result;
+            return statement.executeQuery(query);
         } catch (SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
             return null;
@@ -572,6 +571,22 @@ public class SQLHandler {
             plugin.getOGLogger().exceptionThrown(ex);
             return false;
         }
+    }
+
+    public void addGuildCuboid(Cuboid cuboid) {
+        try {
+            statement = this.connection.createStatement();
+            statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "guilds` VALUES(" +
+                    "'" + cuboid.getOwner().toUpperCase() + "'," +
+                    "'" + cuboid.getMin().getBlockX() + "'," +
+                    "'" + cuboid.getMin().getBlockZ() + "'," +
+                    "'" + cuboid.getMax().getBlockX() + "'," +
+                    "'" + cuboid.getMax().getBlockZ() + "'," +
+                    "'" + cuboid.getMin().getWorld().getName() + "');");
+        } catch (SQLException ex) {
+            plugin.getOGLogger().exceptionThrown(ex);
+        }
+
     }
 }
 

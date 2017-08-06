@@ -17,8 +17,6 @@
 package pl.grzegorz2047.openguild2047.modules.hardcore;
 
 import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.command.CommandDescription;
-import com.github.grzegorz2047.openguild.command.CommandInfo;
 import com.github.grzegorz2047.openguild.module.Module;
 import com.github.grzegorz2047.openguild.module.ModuleInfo;
 import com.github.grzegorz2047.openguild.module.ModuleLoadException;
@@ -37,16 +35,6 @@ public class ModuleHardcore implements Module {
         if(GenConf.hcBans) {
             HardcoreSQLHandler.createTables();
             Bukkit.getPluginManager().registerEvents(new HardcoreListeners(), OpenGuild.getBukkit());
-            CommandDescription desc = new CommandDescription();
-            desc.set("EN", "Unban a player from the dead");
-            desc.set("PL", "Odbanuj gracza ze smierci");
-            OpenGuild.registerCommand(new CommandInfo(
-                    new String[] {"ub"},
-                    "unban",
-                    desc,
-                    new Unban(),
-                    "openguild.hardcore.unban",
-                    "<player>"));
         }
     }
     

@@ -50,6 +50,7 @@ public class GuildCreateCommand extends Command {
         GuildHelper guildHelper = this.getPlugin().getGuildHelper();
         
         Player player = (Player) sender;
+
         if(GenConf.FORCE_DESC){
             if(args.length<3){
                 player.sendMessage(MsgManager.get("descrequired"));
@@ -116,23 +117,10 @@ public class GuildCreateCommand extends Command {
             GenUtil.removeRequiredItemsForGuild(player.getInventory());
         }
 
-        Cuboid cuboid = new Cuboid();
-        cuboid.setOwner(tag);
-        cuboid.setCenter(player.getLocation());
-        cuboid.setRadius(GenConf.MIN_CUBOID_RADIUS);
+        Cuboid cuboid = addCuboidToMemory(guildHelper, player, tag);
 
-        guildHelper.getCuboids().put(tag, cuboid);
-
-        Guild guild = new Guild(getPlugin());
-        guild.setCuboid(cuboid);
-        guild.setTag(tag);
-        guild.setDescription(description);
-        guild.addMember(player.getUniqueId());
-        guild.setHome(player.getLocation());
-        guild.setLeader(player.getUniqueId());
-        guildHelper.getGuilds().put(tag, guild);
+        Guild guild = addGuildToMemory(guildHelper, player, tag, description, cuboid);
         guildHelper.getPlayers().put(player.getUniqueId(), guild);
-        guild.setSc(Bukkit.getScoreboardManager().getNewScoreboard());
         if(GenConf.playerprefixenabled) {
             this.getPlugin().getTagManager().playerMakeGuild(guild, player);
         }
@@ -145,12 +133,36 @@ public class GuildCreateCommand extends Command {
          - call MessageBroadcastEvent
         */
         getPlugin().getSQLHandler().addGuild(guild);
+        getPlugin().getSQLHandler().addGuildCuboid(cuboid);
         getPlugin().getSQLHandler().updatePlayer(player.getUniqueId());
 
         this.getPlugin().broadcastMessage(MsgManager.get("broadcast-create").replace("{TAG}", tag.toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
         
         GuildCreatedEvent createdEvent = new GuildCreatedEvent(guild);
         Bukkit.getPluginManager().callEvent(createdEvent);
+    }
+
+    private Cuboid addCuboidToMemory(GuildHelper guildHelper, Player player, String tag) {
+        Cuboid cuboid = new Cuboid();
+        cuboid.setOwner(tag);
+        cuboid.setCenter(player.getLocation());
+        cuboid.setRadius(GenConf.MIN_CUBOID_RADIUS);
+
+        guildHelper.getCuboids().put(tag, cuboid);
+        return cuboid;
+    }
+
+    private Guild addGuildToMemory(GuildHelper guildHelper, Player player, String tag, String description, Cuboid cuboid) {
+        Guild guild = new Guild(getPlugin());
+        guild.setCuboid(cuboid);
+        guild.setTag(tag);
+        guild.setDescription(description);
+        guild.addMember(player.getUniqueId());
+        guild.setHome(player.getLocation());
+        guild.setLeader(player.getUniqueId());
+        guild.setSc(Bukkit.getScoreboardManager().getNewScoreboard());
+        guildHelper.getGuilds().put(tag, guild);
+        return guild;
     }
 
     @Override

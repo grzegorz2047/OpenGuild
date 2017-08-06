@@ -26,7 +26,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Randomtp extends Command {
-    
+
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         if(args.length == 2) {

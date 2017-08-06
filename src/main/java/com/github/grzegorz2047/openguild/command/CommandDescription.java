@@ -33,10 +33,7 @@ public class CommandDescription {
     }
 
     public boolean has(@Nonnull String lang) {
-        if(desc != null)
-            return true;
-        else
-            return list.containsKey(lang.toUpperCase());
+        return desc != null || list.containsKey(lang.toUpperCase());
     }
 
     public void set(@Nullable String description) {

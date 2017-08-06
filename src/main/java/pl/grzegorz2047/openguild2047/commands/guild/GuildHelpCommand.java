@@ -25,7 +25,7 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  * This command shows list of 'guild' command sub-commands.
- * 
+ * <p>
  * Usage: /guild help
  */
 public class GuildHelpCommand extends Command {
@@ -33,24 +33,24 @@ public class GuildHelpCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         int page = 1;
-        if(args.length != 2) {
+        if (args.length != 2) {
             page = 1;
         } else {
-            if(args[1].equalsIgnoreCase("admin") || args[1].equalsIgnoreCase("a")) {
+            if (args[1].equalsIgnoreCase("admin") || args[1].equalsIgnoreCase("a")) {
                 admin(sender);
                 return;
             }
             try {
                 page = Integer.parseInt(args[1]);
-            } catch(NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 sender.sendMessage(MsgManager.get("pagenotnumber"));
             }
         }
-        
+
         sender.sendMessage(getHelpTitle(page));
-        
-        if(page == 1) {
-            if(GenConf.lang.equals("PL")) {
+
+        if (page == 1) {
+            if (GenConf.lang.equals("PL")) {
                 sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
                 sender.sendMessage(help("zapros <gracz>", "Zapros gracza do gildii"));
                 sender.sendMessage(help("akceptuj <tag>", "Akceptuj zaproszenie od gildii"));
@@ -85,6 +85,9 @@ public class GuildHelpCommand extends Command {
                 sender.sendMessage(help("kick <player>", "Kicks member of guild"));
                 sender.sendMessage(help("help [admin|page]", "Show help [admin/page]"));
             }
+        } else if (page == 2) {
+            sender.sendMessage(help("unbanplayer <player>", "Unbans banned player for death"));
+            sender.sendMessage(help("randomtp or random <player>", "Teleports you on random location"));
         } else {
             sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze &7{NUMBER}&c nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
         }
@@ -95,26 +98,26 @@ public class GuildHelpCommand extends Command {
     }
 
     private String help(String usage, String desc) {
-        if(GenConf.lang.equals("PL")){
-            return ChatColor.GREEN +  "/gildia " + ChatColor.AQUA + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
+        if (GenConf.lang.equals("PL")) {
+            return ChatColor.GREEN + "/gildia " + ChatColor.AQUA + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
         } else {
             return ChatColor.GREEN + "/guild " + ChatColor.AQUA + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
         }
-        
+
     }
 
     private void admin(CommandSender sender) {
         int hide = 0;
         sender.sendMessage(this.getTitle(ChatColor.GOLD + "Help Admin"));
         sender.sendMessage(help("reload", "Przeladuj konfiguracje pluginu"));
-        if(GenConf.hcBans) {
+        if (GenConf.hcBans) {
             sender.sendMessage(help("unban <player>", "Odbanuj gracza"));
         } else {
             hide++;
         }
         sender.sendMessage(help("version", "Informacje o plugine OpenGuild2047"));
-        
-        if(hide > 0) {
+
+        if (hide > 0) {
             sender.sendMessage(MsgManager.get("skipped").replace("{HELP}", String.valueOf(hide)));
         }
     }
