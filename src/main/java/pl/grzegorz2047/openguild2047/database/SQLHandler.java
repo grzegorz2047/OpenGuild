@@ -109,11 +109,6 @@ public class SQLHandler {
                     + "(tag VARCHAR(11),"
                     + "description VARCHAR(100),"
                     + "leader VARCHAR(37),"
-                    + "lives INT,"
-                    + "home_x INT,"
-                    + "home_y INT,"
-                    + "home_z INT,"
-                    + "home_world VARCHAR(16),"
                     + "PRIMARY KEY(tag));";
             statement = this.connection.createStatement();
             statement.execute(query);
@@ -186,15 +181,21 @@ public class SQLHandler {
     }
     private Map<String, Guild> loadGuilds() {
         Map<String, Guild> guilds = new HashMap<String, Guild>();
-        
+
+        loadGuildsFromDB(guilds);
+
+        return guilds;
+    }
+
+    private void loadGuildsFromDB(Map<String, Guild> guilds) {
         try {
             statement = this.connection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "guilds`");
+            ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "guilds` JOIN `"+ GenConf.sqlTablePrefix + "cuboids` USING(tag)");
             while(result.next()) {
                 String tag = result.getString("tag");
                 String description = result.getString("description");
                 UUID leaderUUID = UUID.fromString(result.getString("leader"));
-                
+
                 String homeWorld = result.getString("home_world");
                 if(plugin.getServer().getWorld(homeWorld) == null) {
                     plugin.getOGLogger().warning("World '" + homeWorld + "' does not exists! Skipping guild '" + tag + "'!");
@@ -236,8 +237,6 @@ public class SQLHandler {
         } catch(SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
-        
-        return guilds;
     }
 
     public Connection getConnection() {
