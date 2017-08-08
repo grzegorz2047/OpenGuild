@@ -19,12 +19,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 
 /**
- *
  * @author Grzegorz
  */
 public class HardcoreSQLHandler {
@@ -33,28 +33,31 @@ public class HardcoreSQLHandler {
         BAN_TIME,
         UUID,
         NICK
-    };
+    }
+
+    ;
     private static final OpenGuild plugin = OpenGuild.getInstance();
     public static final String TABLENAME = "openguild_bans";
-    public static boolean createTables(){
-        String query = "CREATE TABLE IF NOT EXISTS '"+TABLENAME+"' (UUID VARCHAR(36) NOT NULL primary key, NICK VARCHAR(16) NOT NULL, BAN_TIME DEC NOT NULL)";
+
+    public static boolean createTables() {
+        String query = "CREATE TABLE IF NOT EXISTS `" + TABLENAME + "` (UUID VARCHAR(36) NOT NULL primary key, NICK VARCHAR(16) NOT NULL, BAN_TIME DEC NOT NULL)";
         OpenGuild.getInstance().getOGLogger().debug(query);
         return OpenGuild.getInstance().getSQLHandler().execute(query);
     }
-    
+
     public static void update(UUID uniqueId, Column column, String value) {
         try {
             SQLHandler sql = OpenGuild.getInstance().getSQLHandler();
             Statement st = sql.getConnection().createStatement();
             String query;
-            if(sql.isConnectionClosed()) {
+            if (sql.isConnectionClosed()) {
                 return;
             }
-            
-            if(playerExists(uniqueId)) {
-                query = "UPDATE '"+TABLENAME+"' SET "+column.toString()+"='"+value+"' WHERE "+Column.UUID.toString()+"='"+uniqueId+"'";
+
+            if (playerExists(uniqueId)) {
+                query = "UPDATE '" + TABLENAME + "' SET " + column.toString() + "='" + value + "' WHERE " + Column.UUID.toString() + "='" + uniqueId + "'";
             } else {
-                query = "INSERT INTO '"+TABLENAME+"' VALUES('"+uniqueId+"', '"+Bukkit.getOfflinePlayer(uniqueId).getName()+"', '"+value+"')";
+                query = "INSERT INTO '" + TABLENAME + "' VALUES('" + uniqueId + "', '" + Bukkit.getOfflinePlayer(uniqueId).getName() + "', '" + value + "')";
             }
             st.execute(query);
         } catch (SQLException ex) {
@@ -63,8 +66,8 @@ public class HardcoreSQLHandler {
     }
 
     public static long getBan(UUID uniqueId) {
-        if(playerExists(uniqueId)){
-            String query = "SELECT "+Column.BAN_TIME.toString()+" FROM "+TABLENAME+" WHERE "+Column.UUID.toString()+"='"+uniqueId+"'";
+        if (playerExists(uniqueId)) {
+            String query = "SELECT " + Column.BAN_TIME.toString() + " FROM " + TABLENAME + " WHERE " + Column.UUID.toString() + "='" + uniqueId + "'";
             SQLHandler sql = OpenGuild.getInstance().getSQLHandler();
             try {
                 Statement st = sql.getConnection().createStatement();
@@ -79,14 +82,14 @@ public class HardcoreSQLHandler {
         return 0;
     }
 
-    public static boolean playerExists(UUID uniqueId){
-        String query = "SELECT COUNT("+Column.UUID+") FROM "+TABLENAME+" WHERE "+Column.UUID.toString()+"='"+uniqueId+"'";
+    public static boolean playerExists(UUID uniqueId) {
+        String query = "SELECT COUNT(" + Column.UUID + ") FROM " + TABLENAME + " WHERE " + Column.UUID.toString() + "='" + uniqueId + "'";
         ResultSet rs = OpenGuild.getInstance().getSQLHandler().executeQuery(query);
         int rowCount = -1;
         try {
-          // get the number of rows from the result set
-          rs.next();
-          rowCount = rs.getInt(1);
+            // get the number of rows from the result set
+            rs.next();
+            rowCount = rs.getInt(1);
         } catch (SQLException ex) {
             OpenGuild.getInstance().getOGLogger().exceptionThrown(ex);
         } finally {
@@ -96,7 +99,7 @@ public class HardcoreSQLHandler {
                 OpenGuild.getInstance().getOGLogger().exceptionThrown(ex);
             }
         }
-        OpenGuild.getInstance().getOGLogger().debug("Counting player "+Bukkit.getOfflinePlayer(uniqueId).getName()+" with UUID "+uniqueId+" returns "+rowCount);
+        OpenGuild.getInstance().getOGLogger().debug("Counting player " + Bukkit.getOfflinePlayer(uniqueId).getName() + " with UUID " + uniqueId + " returns " + rowCount);
         return rowCount != 0 && rowCount != -1;
     }
 }

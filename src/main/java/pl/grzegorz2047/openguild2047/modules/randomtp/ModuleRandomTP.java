@@ -26,27 +26,31 @@ import com.github.grzegorz2047.openguild.module.ModuleLoadException;
 import com.github.grzegorz2047.openguild.module.RandomTPModule;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class ModuleRandomTP implements RandomTPModule, Module {
-    
+
     @Override
     public ModuleInfo module() {
         return new ModuleInfo("Random Teleport", "Teleporting to random coordinates", "1.0");
     }
-    
+
     @Override
     public void enable(String id) throws ModuleLoadException {
-        if(GenConf.ranTpEnabled) {
+        if (GenConf.ranTpEnabled) {
             Bukkit.getPluginManager().registerEvents(new RandomTPListeners(), OpenGuild.getBukkit());
             
-            CommandDescription desc = new CommandDescription();
+/*            CommandDescription desc = new CommandDescription();
             desc.set("EN", "Teleport to the random location");
             desc.set("PL", "Teleport do losowej lokalizacji");
             OpenGuild.registerCommand(new CommandInfo(null,
@@ -55,6 +59,7 @@ public class ModuleRandomTP implements RandomTPModule, Module {
                     new Randomtp(),
                     "openguild.randomtp",
                     "[player]"));
+        */
         }
     }
 
@@ -80,18 +85,34 @@ public class ModuleRandomTP implements RandomTPModule, Module {
 
     @Override
     public void teleport(Player player) {
-        Random random = new Random();
-        World world = player.getWorld();
-        int x = random.nextInt();
-        int z = random.nextInt();
-        if(random.nextBoolean())
-            x = x - (2 * x);
-        if(random.nextBoolean())
-            z = z - (2 * z);
+        Location location = null;
+        try {
+            location = findSaveSpot(player);
+            player.teleport(location);
+        } catch (Exception e) {
+            player.sendMessage(MsgManager.get("nosafertp"));
+        }
+    }
 
-        Location location = world.getHighestBlockAt(new Location(world, x, 64, z)).getLocation();
-        player.sendMessage(MsgManager.get("rantp"));
-        player.teleport(location);
+    private static Random random = new Random();
+    private List<Material> unsafeMaterials = Arrays.asList(Material.LAVA, Material.WATER);
+
+    private Location findSaveSpot(Player player) throws Exception {
+        for (int i = 0; i < 10; i++) {
+            World world = player.getWorld();
+            int x = random.nextInt(GenConf.ranTpRange);
+            int z = random.nextInt(GenConf.ranTpRange);
+            if (random.nextBoolean())
+                x = x - (2 * x);
+            if (random.nextBoolean())
+                z = z - (2 * z);
+            Location location = world.getHighestBlockAt(new Location(world, x, 64, z)).getLocation();
+            player.sendMessage(MsgManager.get("rantp"));
+            if (!unsafeMaterials.contains(location.getBlock().getType())) {
+                return location;
+            }
+        }
+        throw new Exception("No safe place found");
     }
 
     @Override

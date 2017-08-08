@@ -38,6 +38,7 @@ hardcore-bans:
 random-tp:
   enabled: false
   button: true
+  range: 3000
 database: FILE
 file-dir: plugins/OpenGuild2047/og.db
 snooper: true

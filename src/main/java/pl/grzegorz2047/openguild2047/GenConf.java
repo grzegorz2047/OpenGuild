@@ -16,8 +16,10 @@
 package pl.grzegorz2047.openguild2047;
 
 import pl.grzegorz2047.openguild2047.database.Database;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,7 +32,6 @@ import pl.grzegorz2047.openguild2047.database.SQLData;
 import pl.grzegorz2047.openguild2047.database.SQLiteData;
 
 /**
- *
  * @author Grzegorz
  */
 public class GenConf {
@@ -99,7 +100,8 @@ public class GenConf {
     public static List<String> forbiddenworlds;
     public static String sqlTablePrefix;
     public static boolean cuboidCheckPlayers;
-    
+    public static int ranTpRange;
+
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
         forbiddenworlds = OpenGuild.getInstance().getConfig().getStringList("forbidden-worlds");
@@ -123,8 +125,8 @@ public class GenConf {
         loadBans();
         List listMax = config.getList("spawn.location-max");
         List listMin = config.getList("spawn.location-min");
-        spawnMax = new Location(Bukkit.getWorld((String) listMax.get(0)), (Integer )listMax.get(1), 0, (Integer) listMax.get(2));
-        spawnMin = new Location(Bukkit.getWorld((String) listMin.get(0)), (Integer )listMin.get(1), 0, (Integer) listMin.get(2));
+        spawnMax = new Location(Bukkit.getWorld((String) listMax.get(0)), (Integer) listMax.get(1), 0, (Integer) listMax.get(2));
+        spawnMin = new Location(Bukkit.getWorld((String) listMin.get(0)), (Integer) listMin.get(1), 0, (Integer) listMin.get(2));
 
         spawnMessage = config.getString("spawn.message", "&4Message 'spawn.message' in config.yml file was not found! This is an error! Please notify an operator about it!").replace("&", "§");
         blockGuildCreating = config.getBoolean("spawn.block-guild-creating", true);
@@ -135,7 +137,7 @@ public class GenConf {
         cubNotifySound = config.getBoolean("cuboid.notify-enter-sound", false);
         try {
             cubNotifySoundType = Sound.valueOf(config.getString("cuboid.notify-enter-sound-type", "ENDERMAN_DEATH"));
-        } catch(IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             cubNotifySoundType = Sound.ENTITY_ENDERDRAGON_DEATH;
             Guilds.getLogger().warning("Sound type " + config.getString("cuboid.notify-enter-sound-type") + " is incorrect! Please visit http://jd.bukkit.org/rb/apidocs/org/bukkit/Sound.html for help.");
         }
@@ -145,26 +147,26 @@ public class GenConf {
         cubEnabled = config.getBoolean("cuboid.enabled", true);
         teampvp = config.getBoolean("teampvp", false);
         homecommand = config.getBoolean("home-command", true);
-        if(config.getStringList("required-items") != null || !config.getStringList("required-items").isEmpty()) {
+        if (config.getStringList("required-items") != null || !config.getStringList("required-items").isEmpty()) {
             List<String> reqItems = config.getStringList("required-items");
             reqitems = new ArrayList<ItemStack>();
-            if(reqItems.size() > 54) {
+            if (reqItems.size() > 54) {
                 Guilds.getLogger().warning("Too many specified items (required-items)! Maximum size is 54!");
             } else {
-                for(String s : reqItems) {
+                for (String s : reqItems) {
                     String[] info = s.split(":");
-                    if(info.length != 4) {
-                        Guilds.getLogger().warning("Oops! It looks like you're using an old configuration file!/You have made mistake with required-items section! We changed pattern of required-items section. Now it looks like this: Material:Durability:Data:Amount (old was: Material:Amount) - please update your config.yml Exact line is "+s);
+                    if (info.length != 4) {
+                        Guilds.getLogger().warning("Oops! It looks like you're using an old configuration file!/You have made mistake with required-items section! We changed pattern of required-items section. Now it looks like this: Material:Durability:Data:Amount (old was: Material:Amount) - please update your config.yml Exact line is " + s);
                         break;
                     }
                     Material material = Material.valueOf(info[0]);
-                    if(material == null) {
+                    if (material == null) {
                         Guilds.getLogger().warning("Invalid material: " + info[0] + "! Check your configuration file!");
                         continue;
                     }
-                    
-                    for(ItemStack i : reqitems) {
-                        if(i.getType().equals(material)) {
+
+                    for (ItemStack i : reqitems) {
+                        if (i.getType().equals(material)) {
                             Guilds.getLogger().warning("Duplicate item found! Skipping ...");
                             continue;
                         }
@@ -174,28 +176,27 @@ public class GenConf {
                     short durability = 0;
                     try {
                         durability = Short.valueOf(info[1]);
-                    } catch(NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         Guilds.getLogger().warning("Durability must be a number! Please fix 'required-items' section in your config.yml");
                     }
 
                     byte data = 0;
                     try {
                         data = Byte.valueOf(info[2]);
-                    } catch(NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         Guilds.getLogger().warning("Data must be a number! Please fix 'required-items' section in your config.yml");
                     }
 
                     int amount = 1;
                     try {
                         amount = Integer.valueOf(info[3]);
-                        
-                        if(amount > 64) {
+
+                        if (amount > 64) {
                             amount = 64;
-                        }
-                        else if(amount < 0) {
+                        } else if (amount < 0) {
                             continue;
                         }
-                    } catch(NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         Guilds.getLogger().warning("Amount must be a number! Please fix 'required-items' section in your config.yml");
                     }
 
@@ -215,11 +216,12 @@ public class GenConf {
         newCmdApi = config.getBoolean("use-new-command-api", false);
         ranTpEnabled = config.getBoolean("random-tp.enabled", false);
         ranTpButton = config.getBoolean("random-tp.button", true);
+        ranTpRange = config.getInt("random-tp.range", 3000);
         spawnExtra = config.getInt("spawn.extra", 50);
         blockEnter = config.getBoolean("spawn.block-enter", false);
         blockEnterTime = config.getInt("spawn.block-enter-time", 10);
-        joinMsg = config.getString("join-msg","").replace("&", "§");
-        quitMsg = config.getString("quit-msg","").replace("&", "§");
+        joinMsg = config.getString("join-msg", "").replace("&", "§");
+        quitMsg = config.getString("quit-msg", "").replace("&", "§");
         guildChatKey = config.getString("chat.guild-key", "guild:");
         guildChatFormat = config.getString("chat.guild-format", "&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
         allyChatKey = config.getString("chat.ally-key", "allies:");
@@ -231,7 +233,7 @@ public class GenConf {
             sqlTablePrefix = "openguild";
         }
         cuboidCheckPlayers = config.getBoolean("check-players-on-create", true);
-        
+
         defaultTNTBlockTime = config.getInt("listener.tnt-block-time", 30);
         enableTNTExplodeListener = config.getBoolean("listener.tnt-block-enabled", true);
     }
@@ -246,23 +248,21 @@ public class GenConf {
         long result;
         try {
             result = Long.parseLong(length);
-        } catch(NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             Guilds.getLogger().warning("Could not load ban time, defaults using 1 minute. Check your ban-time in config.yml file.");
             hcBantime = 60 * 1000;
             return;
         }
-        if(time.endsWith("s")) { // Seconds
+        if (time.endsWith("s")) { // Seconds
             result = result * 1000;
-        }
-        else if(time.endsWith("m")) { // Minutes
+        } else if (time.endsWith("m")) { // Minutes
             result = result * 60 * 1000;
-        }
-        else if(time.endsWith("h")) { // Hours
+        } else if (time.endsWith("h")) { // Hours
             result = result * 60 * 60 * 1000;
-        }
-        else if(time.endsWith("d")) { // Days
+        } else if (time.endsWith("d")) { // Days
             result = result * 60 * 24 * 60 * 1000;
-        } else {} // Ticks or null
+        } else {
+        } // Ticks or null
         hcBantime = result;
     }
 
@@ -273,7 +273,7 @@ public class GenConf {
         String user = config.getString("mysql.login");
         String pass = config.getString("mysql.password");
         String name = config.getString("mysql.database");
-        
+
         switch (DATABASE) {
             case FILE:
                 sqlData = new SQLiteData(FILE_DIR);
@@ -283,7 +283,7 @@ public class GenConf {
                 break;
         }
     }
-    
+
     public static SQLData getSqlData() {
         return sqlData;
     }
