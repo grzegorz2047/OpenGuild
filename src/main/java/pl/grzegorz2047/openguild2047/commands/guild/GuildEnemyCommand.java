@@ -29,7 +29,6 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
- *
  * @author Grzegorz
  */
 public class GuildEnemyCommand extends Command {
@@ -40,43 +39,43 @@ public class GuildEnemyCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         GuildHelper guildHelper = getPlugin().getGuildHelper();
-        
-        if(!(sender instanceof Player)) {
+
+        if (!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return;
         }
         Player player = (Player) sender;
-        if(args.length>=2){
+        if (args.length >= 2) {
             String guildToCheck = args[1].toUpperCase();
-            if(!guildHelper.doesGuildExists(guildToCheck)) {
+            if (!guildHelper.doesGuildExists(guildToCheck)) {
                 sender.sendMessage(MsgManager.get("guilddoesntexists"));
                 return;
             }
             Guild requestingGuild = guildHelper.getPlayerGuild(player.getUniqueId());
-            if(!requestingGuild.getLeader().equals(player.getUniqueId())) {
+            if (!requestingGuild.getLeader().equals(player.getUniqueId())) {
                 player.sendMessage(MsgManager.get("playernotleader"));
                 return;
             }
             Guild guild = guildHelper.getGuilds().get(guildToCheck);
             OfflinePlayer leader = Bukkit.getOfflinePlayer(guild.getLeader());
 
-            if(!leader.isOnline()){
+            if (!leader.isOnline()) {
                 sender.sendMessage(MsgManager.get("leadernotonline"));
                 return;
             }
-            if(guild.getTag().equals(requestingGuild.getTag())){
+            if (guild.getTag().equals(requestingGuild.getTag())) {
                 sender.sendMessage(MsgManager.get("enemyyourselferror"));
                 return;
             }
-            
+
             GuildRelationEvent event = new GuildRelationEvent(requestingGuild, guild, Relation.Status.ENEMY);
             Bukkit.getPluginManager().callEvent(event);
-            if(event.isCancelled()) {
+            if (event.isCancelled()) {
                 return;
             }
-            
-            for(Relation r : requestingGuild.getAlliances()){
-                if(r.getWithWho().equals(guild.getTag()) || r.getWho().equals(guild.getTag())){
+
+            for (Relation r : requestingGuild.getAlliances()) {
+                if (r.getWithWho().equals(guild.getTag()) || r.getWho().equals(guild.getTag())) {
                     OpenGuild.getInstance().getTagManager().guildBrokeAlliance(requestingGuild, guild);
                     requestingGuild.getAlliances().remove(r);
                     guild.getAlliances().remove(r);
@@ -95,5 +94,5 @@ public class GuildEnemyCommand extends Command {
     public int minArgs() {
         return 1;
     }
-    
+
 }

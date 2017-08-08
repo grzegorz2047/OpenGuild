@@ -352,7 +352,7 @@ public class OpenGuild extends JavaPlugin {
     /**
      * @return instance of OGLogger class.
      */
-    public Logger getOGLogger() {
+    public static Logger getOGLogger() {
         return com.github.grzegorz2047.openguild.OpenGuild.getLogger();
     }
 
