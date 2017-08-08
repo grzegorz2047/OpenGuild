@@ -79,7 +79,7 @@ public class GuildDisbandCommand extends Command {
             for(UUID uuid : guild.getMembers()) {
                 guildHelper.getPlayers().remove(uuid);
                 guildHelper.getPlayers().put(uuid, null);
-                getPlugin().getSQLHandler().updatePlayer(uuid);
+                getPlugin().getSQLHandler().updatePlayerTag(uuid);
                 if(Bukkit.getPlayer(uuid) != null){
                     Bukkit.getPlayer(uuid).setScoreboard(OpenGuild.getInstance().getTagManager().getGlobalScoreboard());
                 }

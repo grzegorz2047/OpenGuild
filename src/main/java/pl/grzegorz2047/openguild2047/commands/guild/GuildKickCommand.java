@@ -91,7 +91,7 @@ public class GuildKickCommand extends Command {
             }
         }
 
-        getPlugin().getSQLHandler().updatePlayer(op.getUniqueId());
+        getPlugin().getSQLHandler().updatePlayerTag(op.getUniqueId());
         
         player.sendMessage(MsgManager.playerkicksuccess);
     }

@@ -74,7 +74,7 @@ public class TagManager {
             teamtag.setPrefix(com.github.grzegorz2047.openguild.OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag().toUpperCase()));
             teamtag.setDisplayName(com.github.grzegorz2047.openguild.OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getTag().toUpperCase()));
             for(UUID uuid : sg.getMembers()){
-                teamtag.addPlayer(Bukkit.getOfflinePlayer(uuid));
+                teamtag.insertPlayer(Bukkit.getOfflinePlayer(uuid));
             }
             updateBoard();
             return true;
@@ -96,7 +96,7 @@ public class TagManager {
                 }else{
                     //System.out.println("gracz w gildii team pref istnieje");
                     if(!t.getPlayers().contains(Bukkit.getOfflinePlayer(player))){
-                        t.addPlayer(Bukkit.getOfflinePlayer(player));
+                        t.insertPlayer(Bukkit.getOfflinePlayer(player));
                         updateBoard();
                         return true;
                     }else{
@@ -243,7 +243,7 @@ public class TagManager {
                 continue;
             }
             Team t2 = players.getScoreboard().getTeam(joinerGuild.getTag());
-            t2.addPlayer(joiner);
+            t2.insertPlayer(joiner);
         }*/
         for(Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()){
             if(gs.getValue().getTag().equals(joinerGuild.getTag())){

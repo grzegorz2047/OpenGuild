@@ -25,8 +25,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
-import java.util.Iterator;
-import org.bukkit.scoreboard.Team;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class PlayerJoinListener implements Listener {
@@ -44,7 +42,7 @@ public class PlayerJoinListener implements Listener {
         //System.out.print("Wykonuje playerJoinEvent!");
         
         if(!plugin.getGuildHelper().getPlayers().containsKey(uuid)) {
-            plugin.getSQLHandler().addPlayer(uuid);
+            plugin.getSQLHandler().insertPlayer(uuid);
             plugin.getGuildHelper().getPlayers().put(uuid, null);
         }
         plugin.getTagManager().playerJoinServer(player);

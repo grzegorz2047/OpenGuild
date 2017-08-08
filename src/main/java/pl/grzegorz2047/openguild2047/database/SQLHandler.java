@@ -121,8 +121,8 @@ public class SQLHandler {
             query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "cuboids`"
                     + "(id INT AUTO_INCREMENT,"
                     + "tag VARCHAR(11),"
-                    + "cuboid_x INT,"
-                    + "cuboid_z INT,"
+                    + "cuboid_center_x INT,"
+                    + "cuboid_center_z INT,"
                     + "cuboid_size INT,"
                     + "cuboid_worldname VARCHAR(60),"
                     + "PRIMARY KEY(id));";
@@ -180,7 +180,7 @@ public class SQLHandler {
             //}
             // Team t2 = gs.getValue().getSc().getTeam(joinerGuild.getTag());
             //  if(t2 != null){
-            //      t2.addPlayer(joiner);
+            //      t2.insertPlayer(joiner);
             ///  }
         }
 
@@ -207,30 +207,52 @@ public class SQLHandler {
 
     private void loopTroughGuildAndCuboidResults(Map<String, Guild> guilds, ResultSet result) throws SQLException {
         while (result.next()) {
-            String tag = result.getString("tag");
-            String description = result.getString("description");
-            UUID leaderUUID = UUID.fromString(result.getString("leader"));
-
-            String homeWorld = result.getString("home_world");
-            if (plugin.getServer().getWorld(homeWorld) == null) {
-                plugin.getOGLogger().warning("World '" + homeWorld + "' does not exists! Skipping guild '" + tag + "'!");
-                continue;
-            }
-
-            int homeX = result.getInt("home_x");
-            int homeY = result.getInt("home_y");
-            int homeZ = result.getInt("home_z");
-            Location home = new Location(plugin.getServer().getWorld(homeWorld), homeX, homeY, homeZ);
-
-            int cuboidSize = result.getInt("cuboid_size");
-            String worldname = result.getString("cuboid_worldname");
-
-            Cuboid cuboid = prepareGuildCuboid(tag, home,cuboidSize, worldname);
-
-            Guild guild = prepareGuild(tag, description, leaderUUID, home, cuboid);
-
-            guilds.put(tag, guild);
+            readGuildDataFromResult(guilds, result);
         }
+    }
+
+    private void readGuildDataFromResult(Map<String, Guild> guilds, ResultSet result) throws SQLException {
+        String tag = result.getString("tag");
+        String description = result.getString("description");
+        UUID leaderUUID = UUID.fromString(result.getString("leader"));
+
+        String homeWorld = result.getString("home_world");
+        if (hasGuildValidWorldNameHome(homeWorld)) {
+            plugin.getOGLogger().warning("World '" + homeWorld + "' does not exists! Skipping guild '" + tag + "'!");
+            return;
+        }
+
+        Location home = getCuboidHome(result, homeWorld);
+
+        String cuboidWorldName = getCuboidCenter(result);
+
+        int cuboidSize = result.getInt("cuboid_size");
+
+        Cuboid cuboid = prepareGuildCuboid(tag, home, cuboidSize, cuboidWorldName);
+
+        Guild guild = prepareGuild(tag, description, leaderUUID, home, cuboid);
+
+        guilds.put(tag, guild);
+    }
+
+    private boolean hasGuildValidWorldNameHome(String homeWorld) {
+        return plugin.getServer().getWorld(homeWorld) == null;
+    }
+
+    private Location getCuboidHome(ResultSet result, String homeWorld) throws SQLException {
+        int homeX = result.getInt("home_x");
+        int homeY = result.getInt("home_y");
+        int homeZ = result.getInt("home_z");
+        return new Location(plugin.getServer().getWorld(homeWorld), homeX, homeY, homeZ);
+    }
+
+    private String getCuboidCenter(ResultSet result) throws SQLException {
+        int cuboidCenterX = result.getInt("cuboid_center_x");
+        int cuboidCenterZ = result.getInt("cuboid_center_z");
+        String cuboidWorldName = result.getString("cuboid_worldname");
+
+        Location cuboidCenter = new Location(Bukkit.getWorld(cuboidWorldName), cuboidCenterX, 0, cuboidCenterZ);
+        return cuboidWorldName;
     }
 
     private Guild prepareGuild(String tag, String description, UUID leaderUUID, Location home, Cuboid cuboid) {
@@ -269,7 +291,7 @@ public class SQLHandler {
         try {
             statement = this.connection.createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "players`");
-            processPlayersDBResults(players, result);
+            readPlayersDataFromResult(players, result);
         } catch (SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
@@ -277,7 +299,7 @@ public class SQLHandler {
         return players;
     }
 
-    private void processPlayersDBResults(Map<UUID, Guild> players, ResultSet result) throws SQLException {
+    private void readPlayersDataFromResult(Map<UUID, Guild> players, ResultSet result) throws SQLException {
         while (result.next()) {
             String guildTag = result.getString("guild");
             //int kills = result.getInt("kills");
@@ -405,7 +427,7 @@ public class SQLHandler {
      *
      * @param player instance of UUID class.
      */
-    public void addPlayer(UUID player) {
+    public void insertPlayer(UUID player) {
         final String uuid = player.toString();
         try {
             statement = this.connection.createStatement();
@@ -420,7 +442,7 @@ public class SQLHandler {
      *
      * @param uuid uuid of player.
      */
-    public void updatePlayer(UUID uuid) {
+    public void updatePlayerTag(UUID uuid) {
         String guildTag = "";
         if (plugin.getGuildHelper().getPlayers().containsKey(uuid) &&
                 plugin.getGuildHelper().getPlayers().get(uuid) != null) {
@@ -439,22 +461,23 @@ public class SQLHandler {
      * Adds guild to database.
      * It does not check if guild is already in database!
      *
-     * @param guild instance of SimpleGuild class.
+     *
      */
-    public void addGuild(Guild guild) {
-        Location homeLocation = guild.getHome();
+    public void insertGuild(String tag, String description, String leader, Location guildHome, String homeWorld) {
 
         try {
             statement = this.connection.createStatement();
             statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "guilds` VALUES(" +
-                    "'" + guild.getTag().toUpperCase() + "'," +
-                    "'" + guild.getDescription() + "'," +
-                    "'" + guild.getLeader().toString() + "'," +
+                    "'" + tag.toUpperCase() + "'," +
+                    "'" + description + "'," +
+                    "'" + leader + "'," +
                     "'" + 0 + "'," +
-                    "'" + (int) homeLocation.getX() + "'," +
-                    "'" + (int) homeLocation.getY() + "'," +
-                    "'" + (int) homeLocation.getZ() + "'," +
-                    "'" + homeLocation.getWorld().getName() + "');");
+                    "'" + guildHome.getX() + "'," +
+                    "'" + guildHome.getY() + "'," +
+                    "'" + guildHome.getZ() + "'," +
+                    "'" + guildHome.getPitch() + "'," +
+                    "'" + guildHome.getYaw() + "'," +
+                    "'" + homeWorld + "');");
         } catch (SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
@@ -581,12 +604,12 @@ public class SQLHandler {
             statement = this.connection.createStatement();
             statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "cuboids` " +
                     "VALUES(" +
-                        "''," +
-                        "'" + owner + "'," +
-                        "'" + loc.getBlockX() + "'," +
-                        "'" + loc.getBlockZ() + "'," +
-                        "'" + size + "'," +
-                        "'" + worldName + "');");
+                    "''," +
+                    "'" + owner + "'," +
+                    "'" + loc.getBlockX() + "'," +
+                    "'" + loc.getBlockZ() + "'," +
+                    "'" + size + "'," +
+                    "'" + worldName + "');");
         } catch (SQLException ex) {
             plugin.getOGLogger().exceptionThrown(ex);
         }
