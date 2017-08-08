@@ -40,7 +40,7 @@ public class HardcoreSQLHandler {
     public static final String TABLENAME = "openguild_bans";
 
     public static boolean createTables() {
-        String query = "CREATE TABLE IF NOT EXISTS `" + TABLENAME + "` (UUID VARCHAR(36) NOT NULL primary key, NICK VARCHAR(16) NOT NULL, BAN_TIME DEC NOT NULL)";
+        String query = "CREATE TABLE IF NOT EXISTS `" + TABLENAME + "` (UUID VARCHAR(36) NOT NULL primary key, NICK VARCHAR(16) NOT NULL, BAN_TIME BIGINT NOT NULL)";
         OpenGuild.getInstance().getOGLogger().debug(query);
         return OpenGuild.getInstance().getSQLHandler().execute(query);
     }
