@@ -55,9 +55,9 @@ public class HardcoreSQLHandler {
             }
 
             if (playerExists(uniqueId)) {
-                query = "UPDATE '" + TABLENAME + "' SET " + column.toString() + "='" + value + "' WHERE " + Column.UUID.toString() + "='" + uniqueId + "'";
+                query = "UPDATE `" + TABLENAME + "` SET " + column.toString() + "='" + value + "' WHERE " + Column.UUID.toString() + "='" + uniqueId + "'";
             } else {
-                query = "INSERT INTO '" + TABLENAME + "' VALUES('" + uniqueId + "', '" + Bukkit.getOfflinePlayer(uniqueId).getName() + "', '" + value + "')";
+                query = "INSERT INTO `" + TABLENAME + "` VALUES('" + uniqueId + "', '" + Bukkit.getOfflinePlayer(uniqueId).getName() + "', '" + value + "')";
             }
             st.execute(query);
         } catch (SQLException ex) {
