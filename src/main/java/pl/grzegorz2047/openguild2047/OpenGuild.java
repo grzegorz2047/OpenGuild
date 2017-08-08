@@ -38,7 +38,7 @@ import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
-import pl.grzegorz2047.openguild2047.listeners.CuboidListeners;
+import pl.grzegorz2047.openguild2047.listeners.CuboidAndSpawnManipulationListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntityListener;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChatListener;
 import pl.grzegorz2047.openguild2047.listeners.PlayerDeathListener;
@@ -138,7 +138,7 @@ public class OpenGuild extends JavaPlugin {
         }
         
         // Load required items section.
-        CuboidListeners.loadItems();
+        CuboidAndSpawnManipulationListeners.loadItems();
         
         // Load default plugin-modules
         ((OpenModuleManager) ogAPI.getModules()).defaultModules();
@@ -249,7 +249,7 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerQuitListener(this), this);
         
         if(GenConf.cubEnabled) {
-            pm.registerEvents(new CuboidListeners(this), this);
+            pm.registerEvents(new CuboidAndSpawnManipulationListeners(this), this);
         }
         
         if(!GenConf.teampvp) {

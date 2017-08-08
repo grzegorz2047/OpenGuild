@@ -21,6 +21,7 @@ import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
@@ -29,6 +30,7 @@ import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.event.guild.GuildCreatedEvent;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
 /**
@@ -61,7 +63,12 @@ public class GuildCreateCommand extends Command {
             player.sendMessage(MsgManager.get("alreadyinguild"));
             return;
         }
-        
+
+        if(SpawnChecker.isSpawn(player.getLocation()) && !player.hasPermission("openguild.spawn.bypass")){
+            player.sendMessage(ChatColor.RED + MsgManager.get("CantDoItOnSpawn"));
+            return;
+        }
+
         String tag = args[1].toUpperCase();
         if(!tag.matches("[0-9a-zA-Z]*")) {
             player.sendMessage(MsgManager.unsupportedchars);
@@ -96,7 +103,7 @@ public class GuildCreateCommand extends Command {
             player.sendMessage(MsgManager.get("forbiddenworld"));
             return;
         }
-        if(GenConf.cuboidCheckPlayers && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_RADIUS)) {
+        if(GenConf.cuboidCheckPlayers && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE)) {
             player.sendMessage(MsgManager.playerstooclose);
             return;
         }
@@ -133,7 +140,7 @@ public class GuildCreateCommand extends Command {
          - call MessageBroadcastEvent
         */
         getPlugin().getSQLHandler().addGuild(guild);
-        getPlugin().getSQLHandler().addGuildCuboid(cuboid);
+        getPlugin().getSQLHandler().addGuildCuboid(cuboid.getCenter(),cuboid.getCuboidSize(), cuboid.getOwner(), cuboid.getWorldName());
         getPlugin().getSQLHandler().updatePlayer(player.getUniqueId());
 
         this.getPlugin().broadcastMessage(MsgManager.get("broadcast-create").replace("{TAG}", tag.toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
@@ -143,11 +150,7 @@ public class GuildCreateCommand extends Command {
     }
 
     private Cuboid addCuboidToMemory(GuildHelper guildHelper, Player player, String tag) {
-        Cuboid cuboid = new Cuboid();
-        cuboid.setOwner(tag);
-        cuboid.setCenter(player.getLocation());
-        cuboid.setRadius(GenConf.MIN_CUBOID_RADIUS);
-
+        Cuboid cuboid = new Cuboid(player.getLocation(),tag,GenConf.MIN_CUBOID_SIZE);
         guildHelper.getCuboids().put(tag, cuboid);
         return cuboid;
     }

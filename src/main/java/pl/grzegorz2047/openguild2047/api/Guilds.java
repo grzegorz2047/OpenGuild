@@ -35,11 +35,6 @@ import pl.grzegorz2047.openguild2047.utils.PastebinWriter;
  */
 public class Guilds {
 
-    @Nonnull public static Cuboid getCuboid() {
-        Cuboid cuboid = new Cuboid();
-        return cuboid;
-    }
-
     @Nullable public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
         //SimplePlayerGuild guildPlayer = GuildHelper.getInstance().guildsplayers.get(player.getUniqueId());
         //SimpleGuild guild = GuildHelper.getInstance().guilds.get(guildPlayer.getClanTag());

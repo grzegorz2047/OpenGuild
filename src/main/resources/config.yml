@@ -15,11 +15,11 @@ spawn:
   message: '&cYou are not allowed to do this at the servers spawn point!'
   extra: 50
 cuboid:
-  check-players-on-create: true
+  block-guild-creation-when-players-are-too-close: false
   enabled: true
   notify-permission: false
-  min-radius: 15
-  max-radius: 50
+  min-cube-size: 15
+  max-cube-size: 50
   canenterarea: true
   notify-enter: true
   notify-enter-members: false

@@ -17,6 +17,7 @@ package com.github.grzegorz2047.openguild;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+import pl.grzegorz2047.openguild2047.GenConf;
 
 /**
  * @author Grzegorz
@@ -28,6 +29,13 @@ public class Cuboid {
     private String owner;
     private Location min;
     private Location max;
+    private int cuboidSize;
+
+    public Cuboid(Location center, String owner, int size) {
+        this.center = center;
+        this.owner = owner;
+        this.cuboidSize = size;
+    }
 
     public Location getCenter() {
         return this.center;
@@ -42,20 +50,8 @@ public class Cuboid {
         return v.isInAABB(this.getMin().toVector(), this.getMax().toVector());
     }
 
-    public void setCenter(Location center) {
-        this.center = center;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
     public String getOwner() {
         return this.owner;
-    }
-
-    public void setOwner(String tag) {
-        this.owner = tag;
     }
 
     public Location getMin() {
@@ -66,11 +62,11 @@ public class Cuboid {
         return this.max;
     }
 
-    public void setMin(Location min) {
-        this.min = min;
+    public int getCuboidSize() {
+        return cuboidSize;
     }
 
-    public void setMax(Location max) {
-        this.max = max;
+    public String getWorldName() {
+        return center.getWorld().getName();
     }
 }

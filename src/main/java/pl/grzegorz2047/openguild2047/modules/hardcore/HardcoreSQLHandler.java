@@ -35,7 +35,6 @@ public class HardcoreSQLHandler {
         NICK
     }
 
-    ;
     private static final OpenGuild plugin = OpenGuild.getInstance();
     public static final String TABLENAME = "openguild_bans";
 

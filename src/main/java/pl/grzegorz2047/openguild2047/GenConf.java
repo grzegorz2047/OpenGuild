@@ -46,7 +46,7 @@ public class GenConf {
     public static int minclantag = 4;
     public static List<String> badwords;
     public static List<ItemStack> reqitems;
-    public static int MIN_CUBOID_RADIUS;
+    public static int MIN_CUBOID_SIZE;
     public static int MAX_CUBOID_RADIUS;
     public static int TELEPORT_COOLDOWN;
     public static boolean EXTRA_PROTECTION;
@@ -106,8 +106,8 @@ public class GenConf {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
         forbiddenworlds = OpenGuild.getInstance().getConfig().getStringList("forbidden-worlds");
         badwords = OpenGuild.getInstance().getConfig().getStringList("forbiddenguildnames");
-        MIN_CUBOID_RADIUS = OpenGuild.getInstance().getConfig().getInt("cuboid.min-radius", 15);
-        MAX_CUBOID_RADIUS = OpenGuild.getInstance().getConfig().getInt("cuboid.max-radius", 50);
+        MIN_CUBOID_SIZE = OpenGuild.getInstance().getConfig().getInt("cuboid.min-cube-size", 15);
+        MAX_CUBOID_RADIUS = OpenGuild.getInstance().getConfig().getInt("cuboid.max-cube-size", 50);
         TELEPORT_COOLDOWN = OpenGuild.getInstance().getConfig().getInt("teleport-cooldown", 10);
         EXTRA_PROTECTION = OpenGuild.getInstance().getConfig().getBoolean("cuboid.extra-protection", false);
         CANENTERAREA = OpenGuild.getInstance().getConfig().getBoolean("cuboid.canenterarea", true);
@@ -232,7 +232,7 @@ public class GenConf {
             OpenGuild.getAPI().getLogger().warning("Could not load SQL table prefix - too low (3 chars) or too long (10 chars).");
             sqlTablePrefix = "openguild";
         }
-        cuboidCheckPlayers = config.getBoolean("check-players-on-create", true);
+        cuboidCheckPlayers = config.getBoolean("cuboid.block-guild-creation-when-players-are-too-close", false);
 
         defaultTNTBlockTime = config.getInt("listener.tnt-block-time", 30);
         enableTNTExplodeListener = config.getBoolean("listener.tnt-block-enabled", true);
