@@ -152,7 +152,7 @@ public class GuildCreateCommand extends Command {
          - cuboids
          - call MessageBroadcastEvent
          */
-        getPlugin().getSQLHandler().insertGuild(tag, description, player.getName(), player.getLocation(), player.getLocation().getWorld().getName());
+        getPlugin().getSQLHandler().insertGuild(tag, description, player.getUniqueId(), player.getLocation(), player.getLocation().getWorld().getName());
         getPlugin().getSQLHandler().addGuildCuboid(cuboid.getCenter(), cuboid.getCuboidSize(), cuboid.getOwner(), cuboid.getWorldName());
         getPlugin().getSQLHandler().updatePlayerTag(player.getUniqueId());
 

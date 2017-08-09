@@ -37,6 +37,8 @@ public class Cuboid {
         this.center = center;
         this.owner = owner;
         this.cuboidSize = size;
+        this.min = new Location(center.getWorld(), center.getBlockX() - size, Integer.MIN_VALUE, center.getBlockZ() - size);
+        this.max = new Location(center.getWorld(), center.getBlockX() + size, Integer.MAX_VALUE, center.getBlockZ() + size);
     }
 
     public Location getCenter() {

@@ -470,7 +470,7 @@ public class SQLHandler {
      * Adds guild to database.
      * It does not check if guild is already in database!
      */
-    public void insertGuild(String tag, String description, String leader, Location guildHome, String homeWorld) {
+    public void insertGuild(String tag, String description, UUID leader, Location guildHome, String homeWorld) {
         try {
             createStatement();
             statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "guilds` VALUES(" +
@@ -617,7 +617,7 @@ public class SQLHandler {
             createStatement();
             statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "cuboids` " +
                     "VALUES(" +
-                    "''," +
+                    "'0'," +
                     "'" + owner + "'," +
                     "'" + loc.getBlockX() + "'," +
                     "'" + loc.getBlockZ() + "'," +
