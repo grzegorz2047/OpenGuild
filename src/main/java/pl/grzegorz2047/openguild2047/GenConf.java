@@ -125,8 +125,8 @@ public class GenConf {
         loadBans();
         List listMax = config.getList("spawn.location-max");
         List listMin = config.getList("spawn.location-min");
-        spawnMax = new Location(Bukkit.getWorld((String) listMax.get(0)), (Integer) listMax.get(1), 0, (Integer) listMax.get(2));
-        spawnMin = new Location(Bukkit.getWorld((String) listMin.get(0)), (Integer) listMin.get(1), 0, (Integer) listMin.get(2));
+        spawnMin = new Location(Bukkit.getWorld((String) listMin.get(0)), (Integer) listMin.get(1), Integer.MIN_VALUE, (Integer) listMin.get(2));
+        spawnMax = new Location(Bukkit.getWorld((String) listMax.get(0)), (Integer) listMax.get(1), Integer.MAX_VALUE, (Integer) listMax.get(2));
 
         spawnMessage = config.getString("spawn.message", "&4Message 'spawn.message' in config.yml file was not found! This is an error! Please notify an operator about it!").replace("&", "§");
         blockGuildCreating = config.getBoolean("spawn.block-guild-creating", true);

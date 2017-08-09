@@ -27,8 +27,8 @@ public class OpenMessages implements Messages {
     private static List<String> langs;
     
     @Override
-    public String getErrorMessage(String lang) {
-        return MsgManager.getNullMessage(lang.toUpperCase());
+    public String getErrorMessage(String lang, String path) {
+        return MsgManager.getNullMessage(lang.toUpperCase(), path);
     }
     
     @Override

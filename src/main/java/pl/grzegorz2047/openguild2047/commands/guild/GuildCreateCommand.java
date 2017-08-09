@@ -69,7 +69,7 @@ public class GuildCreateCommand extends Command {
             player.sendMessage(MsgManager.get("alreadyinguild"));
             return;
         }
-
+        //Bukkit.broadcastMessage("Is on Spawn = " + SpawnChecker.isSpawn(player.getLocation()));
         if (SpawnChecker.isSpawn(player.getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
             player.sendMessage(ChatColor.RED + MsgManager.get("CantDoItOnSpawn"));
             return;
@@ -101,8 +101,8 @@ public class GuildCreateCommand extends Command {
             player.sendMessage(MsgManager.get("desctoolong"));
             return;
         }
-        if (!cuboids.isCuboidInThisLocation(player.getLocation())) {
-            player.sendMessage(MsgManager.get("gildtocloseothers"));
+        if (cuboids.isCuboidInterferingWithOtherCuboid(player.getLocation())) {
+            player.sendMessage(MsgManager.get("guildtocloseothers"));
             return;
         }
         if (GenConf.forbiddenworlds.contains(player.getWorld().getName())) {
@@ -114,8 +114,8 @@ public class GuildCreateCommand extends Command {
             return;
         }
         Cuboid cuboid = cuboids.previewCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
-        if (!cuboids.isCuboidInThoseLocations(cuboid.getEdges())) {
-            player.sendMessage(MsgManager.get("gildtocloseothers"));
+        if (cuboids.isCuboidInterferingWithOtherCuboid(cuboid.getEdges())) {
+            player.sendMessage(MsgManager.get("guildtocloseothers"));
             return;
         }
         boolean reqitems = false;

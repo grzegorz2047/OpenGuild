@@ -24,8 +24,10 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.commands.guild.*;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -35,18 +37,19 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  */
 public class GuildCommand implements CommandExecutor {
 
-    private final OpenGuild plugin;
-
     /**
      * This map stores all sub-commands (and their aliases) and their handlers.
      */
     private final Map<String[], Command> commands = new HashMap<String[], Command>();
+    private final Cuboids cuboids;
+    private final Guilds guilds;
 
-    public GuildCommand(OpenGuild plugin) {
-        this.plugin = plugin;
+    public GuildCommand(Cuboids cuboids, Guilds guilds) {
+        this.cuboids = cuboids;
+        this.guilds = guilds;
 
         // Register 'guild' command sub-commands.
-        this.commands.put(new String[]{"create", "zaloz", "stworz"}, new GuildCreateCommand(plugin.getCuboids(), plugin.getGuilds()));
+        this.commands.put(new String[]{"create", "zaloz", "stworz"}, new GuildCreateCommand(cuboids, guilds));
         this.commands.put(new String[]{"accept", "akceptuj"}, new GuildInvitationAcceptCommand());
         this.commands.put(new String[]{"help", "pomoc"}, new GuildHelpCommand());
         this.commands.put(new String[]{"info", "informacja"}, new GuildInfoCommand());

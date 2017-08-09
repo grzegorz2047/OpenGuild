@@ -82,11 +82,11 @@ public class MsgManager {
     }
 
     public static String getIgnorePref(String path) {
-        return getIgnorePref(path, getNullMessage(GenConf.lang));
+        return getIgnorePref(path, getNullMessage(GenConf.lang, path));
     }
 
     public static String get(String path, String def) {
-        return GenConf.prefix + getIgnorePref(path, getNullMessage(GenConf.lang));
+        return GenConf.prefix + getIgnorePref(path, getNullMessage(GenConf.lang, path));
     }
     
     public static String getIgnorePref(String path, String def) {
@@ -107,7 +107,7 @@ public class MsgManager {
         }
     }
 
-    public static String getNullMessage(String lang) {
+    public static String getNullMessage(String lang, String path) {
         String result = "";
         
         if(lang.equalsIgnoreCase("PL"))
@@ -117,7 +117,7 @@ public class MsgManager {
         else
             result = "Message not found";
         
-        return ChatColor.RED + result + " :(";
+        return ChatColor.RED + result + " :( MSG: " + path;
     }
 
 }

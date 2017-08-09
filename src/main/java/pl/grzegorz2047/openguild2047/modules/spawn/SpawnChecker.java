@@ -20,35 +20,39 @@ import org.bukkit.Location;
 import pl.grzegorz2047.openguild2047.GenConf;
 
 public class SpawnChecker {
-    
+
     private static int extra = 50;
-    
-    public static boolean isSpawn(Location location) {
-        Location l = location;
+
+    public static boolean isSpawn(Location l) {
+        String worldName = l.getWorld().getName();
         Location c1 = GenConf.spawnMax;
         Location c2 = GenConf.spawnMin;
-        if(l.getWorld().getName().equals(c1.getWorld().getName())) {
-            if(l.getBlockX() > c2.getBlockX() && l.getBlockX() < c1.getBlockX()) {
-                if(l.getBlockZ() > c2.getBlockZ() && l.getBlockZ() < c1.getBlockZ()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return worldName.equals(c1.getWorld().getName()) &&
+                isWithinXCords(l, c1, c2) &&
+                isWithinZCords(l, c1, c2);
+    }
+
+    private static boolean isWithinZCords(Location l, Location c1, Location c2) {
+        return l.getBlockZ() > Math.min(c1.getBlockZ(), c2.getBlockZ()) && l.getBlockZ() < Math.max(c1.getBlockZ(), c2.getBlockZ());
+    }
+
+    private static boolean isWithinXCords(Location l, Location c1, Location c2) {
+        return l.getBlockX() > Math.min(c1.getBlockX(), c2.getBlockX()) && l.getBlockX() < Math.max(c1.getBlockX(), c2.getBlockX());
     }
     
+    @Deprecated
     public static boolean isSpawnExtra(Location location) {
         Location l = location;
         Location c1 = GenConf.spawnMax;
         Location c2 = GenConf.spawnMin;
-        if(l.getWorld().getName().equals(c1.getWorld().getName())) {
-            if(l.getBlockX() > c2.getBlockX() - extra && l.getBlockX() < c1.getBlockX() + extra) {
-                if(l.getBlockZ() > c2.getBlockZ() - extra && l.getBlockZ() < c1.getBlockZ() + extra) {
+        if (l.getWorld().getName().equals(c1.getWorld().getName())) {
+            if (l.getBlockX() > c2.getBlockX() - extra && l.getBlockX() < c1.getBlockX() + extra) {
+                if (l.getBlockZ() > c2.getBlockZ() - extra && l.getBlockZ() < c1.getBlockZ() + extra) {
                     return true;
                 }
             }
         }
         return false;
     }
-    
+
 }

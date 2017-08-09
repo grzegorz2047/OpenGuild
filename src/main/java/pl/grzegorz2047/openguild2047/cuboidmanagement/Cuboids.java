@@ -207,19 +207,19 @@ public class Cuboids {
         return next.getValue().isinCuboid(loc);
     }
 
-    private boolean isCuboidInterferingWithOtherCuboid(Iterator<Map.Entry<String, Cuboid>> it, Location loc) {
-        while (it.hasNext()) {
-            Cuboid c = it.next().getValue();
-            Location loc1 = c.getCenter();
-            Boolean withinCuboid = checkIfLocationWithinCuboid(c, loc1, loc);
+    public boolean isCuboidInterferingWithOtherCuboid(Location loc) {
+        for (Map.Entry<String, Cuboid> entry : cuboids.entrySet()) {
+            Cuboid cuboid = entry.getValue();
+            Location loc1 = cuboid.getCenter();
+            Boolean withinCuboid = checkIfLocationWithinCuboid(cuboid, loc1, loc);
             if (withinCuboid) return true;
         }
         return false;
     }
 
-    private boolean isCuboidInterferingWithOtherCuboid(Iterator<Map.Entry<String, Cuboid>> it, ArrayList<Location> egdes) {
-        while (it.hasNext()) {
-            Cuboid c = it.next().getValue();
+    public boolean isCuboidInterferingWithOtherCuboid(ArrayList<Location> egdes) {
+        for (Map.Entry<String, Cuboid> stringCuboidEntry : cuboids.entrySet()) {
+            Cuboid c = stringCuboidEntry.getValue();
             Location loc1 = c.getCenter();
             for (Location loc : egdes) {
                 Boolean withinCuboid = checkIfLocationWithinCuboid(c, loc1, loc);
@@ -239,15 +239,6 @@ public class Cuboids {
         return isTheSame(loc1.getWorld().getName(), loc.getWorld().getName()) && c.isinCuboid(loc);
     }
 
-    public boolean isCuboidInThisLocation(Location loc) {
-        Iterator<Map.Entry<String, Cuboid>> it = cuboids.entrySet().iterator();
-        return isCuboidInterferingWithOtherCuboid(it, loc);
-    }
-
-    public boolean isCuboidInThoseLocations(ArrayList<Location> locations) {
-        Iterator<Map.Entry<String, Cuboid>> it = cuboids.entrySet().iterator();
-        return isCuboidInterferingWithOtherCuboid(it, locations);
-    }
 
     public Map<String, Cuboid> getCuboids() {
         return cuboids;

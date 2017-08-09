@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 public interface Messages {
 
-    @Nullable String getErrorMessage(@Nonnull String lang);
+    @Nullable String getErrorMessage(@Nonnull String lang, @Nonnull String path);
 
     @Nonnull List<String> getLangList();
 
