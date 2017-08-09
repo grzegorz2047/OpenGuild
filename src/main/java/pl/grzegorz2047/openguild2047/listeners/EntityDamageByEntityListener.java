@@ -47,9 +47,9 @@ public class EntityDamageByEntityListener implements Listener {
                 Player attacked = (Player) event.getEntity();
                 Player attacker = (Player) event.getDamager();
                 
-                if(plugin.getGuildHelper().hasGuild(attacked) && plugin.getGuildHelper().hasGuild(attacker)) {
-                    Guild attackerGuild = plugin.getGuildHelper().getPlayerGuild(attacker.getUniqueId());
-                    Guild attackedGuild = plugin.getGuildHelper().getPlayerGuild(attacked.getUniqueId());
+                if(plugin.getGuilds().hasGuild(attacked) && plugin.getGuilds().hasGuild(attacker)) {
+                    Guild attackerGuild = plugin.getGuilds().getPlayerGuild(attacker.getUniqueId());
+                    Guild attackedGuild = plugin.getGuilds().getPlayerGuild(attacked.getUniqueId());
                     if(attackerGuild.containsMember(attacked.getUniqueId())) {
                         event.setCancelled(true);
                         
@@ -74,9 +74,9 @@ public class EntityDamageByEntityListener implements Listener {
                 if(attackerEntity instanceof Player) {
                     Player attacker = (Player) attackerEntity;
                     
-                    if(plugin.getGuildHelper().hasGuild(attacked) && plugin.getGuildHelper().hasGuild(attacker)) {
-                        Guild attackerGuild = plugin.getGuildHelper().getPlayerGuild(attacker.getUniqueId());
-                        Guild attackedGuild = plugin.getGuildHelper().getPlayerGuild(attacked.getUniqueId());
+                    if(plugin.getGuilds().hasGuild(attacked) && plugin.getGuilds().hasGuild(attacker)) {
+                        Guild attackerGuild = plugin.getGuilds().getPlayerGuild(attacker.getUniqueId());
+                        Guild attackedGuild = plugin.getGuilds().getPlayerGuild(attacked.getUniqueId());
                         if(attackerGuild.containsMember(attacked.getUniqueId())) {
                             if(attacker.equals(attacked)){
                                 return;
@@ -105,9 +105,9 @@ public class EntityDamageByEntityListener implements Listener {
                 if(attackerEntity instanceof Player) {
                     Player attacker = (Player) attackerEntity;
                     
-                    if(plugin.getGuildHelper().hasGuild(attacked) && plugin.getGuildHelper().hasGuild(attacker)) {
-                        Guild attackerGuild = plugin.getGuildHelper().getPlayerGuild(attacker.getUniqueId());
-                        Guild attackedGuild = plugin.getGuildHelper().getPlayerGuild(attacked.getUniqueId());
+                    if(plugin.getGuilds().hasGuild(attacked) && plugin.getGuilds().hasGuild(attacker)) {
+                        Guild attackerGuild = plugin.getGuilds().getPlayerGuild(attacker.getUniqueId());
+                        Guild attackedGuild = plugin.getGuilds().getPlayerGuild(attacked.getUniqueId());
                         if(attackerGuild.containsMember(attacked.getUniqueId())) {
                             if(attacker.equals(attacked)){
                                 return;

@@ -20,7 +20,7 @@ import java.util.UUID;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.Guilds;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
@@ -45,15 +45,15 @@ public class GuildKickCommand extends Command {
             return;
         }
         
-        GuildHelper guildHelper = this.getPlugin().getGuildHelper();
+        Guilds guilds = this.getPlugin().getGuilds();
         
         Player player = (Player) sender;
-        if(!guildHelper.hasGuild(player)) {
+        if(!guilds.hasGuild(player)) {
             sender.sendMessage(MsgManager.notinguild);
             return;
         }
         
-        Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+        Guild guild = guilds.getPlayerGuild(player.getUniqueId());
         if(!guild.getLeader().equals(player.getUniqueId())) {
             sender.sendMessage(MsgManager.playernotleader);
             return;
@@ -78,8 +78,8 @@ public class GuildKickCommand extends Command {
             
         this.getPlugin().getTagManager().playerLeaveGuild(op);
         guild.removeMember(op.getUniqueId());
-        guildHelper.getPlayers().remove(op.getUniqueId());
-        guildHelper.getPlayers().put(op.getUniqueId(), null);
+        guilds.getPlayers().remove(op.getUniqueId());
+        guilds.getPlayers().put(op.getUniqueId(), null);
         if(op.isOnline()) {
             op.getPlayer().sendMessage(MsgManager.playerkicked.replace("{GUILD}", guild.getTag()));
         }

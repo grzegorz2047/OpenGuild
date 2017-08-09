@@ -19,6 +19,8 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import pl.grzegorz2047.openguild2047.GenConf;
 
+import java.util.ArrayList;
+
 /**
  * @author Grzegorz
  */
@@ -68,5 +70,12 @@ public class Cuboid {
 
     public String getWorldName() {
         return center.getWorld().getName();
+    }
+
+    public ArrayList<Location> getEdges() {
+        ArrayList<Location> edges = new ArrayList<Location>();
+
+        return edges;
+
     }
 }

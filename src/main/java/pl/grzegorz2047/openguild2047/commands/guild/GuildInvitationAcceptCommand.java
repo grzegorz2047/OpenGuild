@@ -23,7 +23,7 @@ import com.github.grzegorz2047.openguild.event.guild.GuildJoinEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 import java.util.ArrayList;
@@ -47,14 +47,14 @@ public class GuildInvitationAcceptCommand extends Command {
             return;
         }
 
-        GuildHelper guildHelper = getPlugin().getGuildHelper();
-        if(guildHelper.hasGuild(((Player) sender).getUniqueId())) {
+        Guilds guilds = getPlugin().getGuilds();
+        if(guilds.hasGuild(((Player) sender).getUniqueId())) {
             sender.sendMessage(MsgManager.alreadyinguild);
             return;
         }
 
         List<Guild> invitationsFrom = new ArrayList<Guild>();
-        for (Guild guild : guildHelper.getGuilds().values()) {
+        for (Guild guild : guilds.getGuilds().values()) {
             if (guild.getPendingInvitations().contains(((Player) sender).getUniqueId())) {
                 invitationsFrom.add(guild);
             }
@@ -73,8 +73,8 @@ public class GuildInvitationAcceptCommand extends Command {
             }
         } else if(args.length >= 2) {
             String tag = args[1].toUpperCase();
-            Guild target = guildHelper.getGuilds().get(tag);
-            if(target != null && guildHelper.getGuilds().containsKey(tag)) {
+            Guild target = guilds.getGuilds().get(tag);
+            if(target != null && guilds.getGuilds().containsKey(tag)) {
                 if(invitationsFrom.contains(target)) {
                     accept((Player) sender, target);
                 }

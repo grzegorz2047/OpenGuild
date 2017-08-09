@@ -30,13 +30,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
-import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.listeners.CuboidAndSpawnManipulationListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntityListener;
@@ -57,12 +56,13 @@ public class OpenGuild extends JavaPlugin {
     private static OpenGuildPlugin ogAPI;
     private static OpenGuild instance;
     
-    private GuildHelper guildHelper;
+    private Guilds guilds;
     
     private TagManager tagManager;
     
     private SQLHandler sqlHandler;
-    
+    private Cuboids cuboids;
+
     /**
      * Instance of built-in permissions manager main class.
      */
@@ -122,14 +122,14 @@ public class OpenGuild extends JavaPlugin {
         loadAllListeners();
         
         // Intialize guild helper class
-        this.guildHelper = new GuildHelper();
-        CuboidStuff cs = new CuboidStuff(this);
+        this.guilds = new Guilds();
+        this.cuboids  = new Cuboids(this);
         // Setup Tag Manager
         this.tagManager = new TagManager(this);
         // Load database
         loadDB();
         loadPlayers();
-        this.getSQLHandler().loadTags();
+        this.getSQLHandler().loadTags(guilds);
         this.getSQLHandler().loadRelations();
 
         
@@ -176,17 +176,17 @@ public class OpenGuild extends JavaPlugin {
      */
     private void checkForUpdates() {
         if(!GenConf.updater) {
-            Guilds.getLogger().warning("Updater is disabled.");
+            pl.grzegorz2047.openguild2047.api.Guilds.getLogger().warning("Updater is disabled.");
         } else {
             if(com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isAvailable()) {
-                Guilds.getLogger().info(" ");
-                Guilds.getLogger().info(" ==================== UPDATER ==================== ");
-                Guilds.getLogger().info("Update found! Please update your plugin to the newest version!");
-                Guilds.getLogger().info("Download it from https://github.com/grzegorz2047/OpenGuild2047/releases");
-                Guilds.getLogger().info(" ==================== UPDATER ==================== ");
-                Guilds.getLogger().info(" ");
+                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info(" ");
+                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info(" ==================== UPDATER ==================== ");
+                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info("Update found! Please update your plugin to the newest version!");
+                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info("Download it from https://github.com/grzegorz2047/OpenGuild2047/releases");
+                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info(" ==================== UPDATER ==================== ");
+                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info(" ");
             } else {
-                Guilds.getLogger().info("No updates found! Good job! :D");
+                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info("No updates found! Good job! :D");
             }
         }
     }
@@ -267,8 +267,8 @@ public class OpenGuild extends JavaPlugin {
      */
     private void loadPlayers() {
         //for(Guild guild : this.guildHelper.getGuilds().values()) {
-            for(UUID player : this.guildHelper.getPlayers().keySet()) {
-                Guild guild = this.guildHelper.getPlayerGuild(player);
+            for(UUID player : this.guilds.getPlayers().keySet()) {
+                Guild guild = this.guilds.getPlayerGuild(player);
                 if(guild != null){
                     guild.addMember(player);
                 }
@@ -359,8 +359,8 @@ public class OpenGuild extends JavaPlugin {
     /**
      * @return instance of GuildHelper class.
      */
-    public GuildHelper getGuildHelper() {
-        return guildHelper;
+    public Guilds getGuilds() {
+        return guilds;
     }
     
     /**
@@ -376,5 +376,8 @@ public class OpenGuild extends JavaPlugin {
     public SQLHandler getSQLHandler() {
         return sqlHandler;
     }
-    
+
+    public Cuboids getCuboids() {
+        return cuboids;
+    }
 }

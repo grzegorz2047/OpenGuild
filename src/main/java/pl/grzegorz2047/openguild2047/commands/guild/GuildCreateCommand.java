@@ -25,10 +25,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.Guilds;
 import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.event.guild.GuildCreatedEvent;
-import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
+import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
@@ -39,8 +40,13 @@ import pl.grzegorz2047.openguild2047.utils.GenUtil;
  * Usage: /guild create [tag] [description]
  */
 public class GuildCreateCommand extends Command {
-    public GuildCreateCommand() {
+    private final Cuboids cuboids;
+    private final Guilds guilds;
+
+    public GuildCreateCommand(Cuboids cuboids, Guilds guilds) {
         setPermission("openguild.command.create");
+        this.cuboids = cuboids;
+        this.guilds = guilds;
     }
 
     @Override
@@ -49,7 +55,7 @@ public class GuildCreateCommand extends Command {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
-        GuildHelper guildHelper = this.getPlugin().getGuildHelper();
+        Guilds guilds = this.getPlugin().getGuilds();
 
         Player player = (Player) sender;
 
@@ -59,7 +65,7 @@ public class GuildCreateCommand extends Command {
                 return;
             }
         }
-        if (guildHelper.hasGuild(player)) {
+        if (guilds.hasGuild(player)) {
             player.sendMessage(MsgManager.get("alreadyinguild"));
             return;
         }
@@ -85,7 +91,7 @@ public class GuildCreateCommand extends Command {
             return;
         }
 
-        if (this.getPlugin().getGuildHelper().doesGuildExists(tag)) {
+        if (this.getPlugin().getGuilds().doesGuildExists(tag)) {
             player.sendMessage(MsgManager.get("guildexists"));
             return;
         }
@@ -95,7 +101,7 @@ public class GuildCreateCommand extends Command {
             player.sendMessage(MsgManager.get("desctoolong"));
             return;
         }
-        if (!CuboidStuff.checkIfCuboidFarForGuild(player.getLocation())) {
+        if (!cuboids.isCuboidInThisLocation(player.getLocation())) {
             player.sendMessage(MsgManager.get("gildtocloseothers"));
             return;
         }
@@ -105,6 +111,11 @@ public class GuildCreateCommand extends Command {
         }
         if (GenConf.cuboidCheckPlayers && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE)) {
             player.sendMessage(MsgManager.playerstooclose);
+            return;
+        }
+        Cuboid cuboid = cuboids.previewCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
+        if (!cuboids.isCuboidInThoseLocations(cuboid.getEdges())) {
+            player.sendMessage(MsgManager.get("gildtocloseothers"));
             return;
         }
         boolean reqitems = false;
@@ -124,15 +135,17 @@ public class GuildCreateCommand extends Command {
             GenUtil.removeRequiredItemsForGuild(player.getInventory());
         }
 
-        Cuboid cuboid = addCuboidToMemory(guildHelper, player, tag);
 
-        Guild guild = addGuildToMemory(guildHelper, player, tag, description, cuboid);
-        guildHelper.getPlayers().put(player.getUniqueId(), guild);
+        cuboids.addCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
+        Guild guild = guilds.addGuild(getPlugin(), player.getLocation(), player.getUniqueId(), tag, description);
+        guilds.updatePlayerGuild(player.getUniqueId(), guild);
+
+
         if (GenConf.playerprefixenabled) {
             this.getPlugin().getTagManager().playerMakeGuild(guild, player);
         }
 
-        this.getPlugin().getOGLogger().info("Player '" + player.getName() + "' successfully created new guild '" + tag.toUpperCase() + "'.");
+        OpenGuild.getOGLogger().info("Player '" + player.getName() + "' successfully created new guild '" + tag.toUpperCase() + "'.");
 
         /**
          @TODO:
@@ -149,28 +162,6 @@ public class GuildCreateCommand extends Command {
         Bukkit.getPluginManager().callEvent(createdEvent);
     }
 
-    private Cuboid addCuboidToMemory(GuildHelper guildHelper, Player player, String tag) {
-        Cuboid cuboid = new Cuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
-        guildHelper.getCuboids().put(tag, cuboid);
-        return cuboid;
-    }
-
-    private Guild addGuildToMemory(GuildHelper guildHelper, Player player, String tag, String description, Cuboid cuboid) {
-        Guild guild =
-                new Guild(
-                        getPlugin(),
-                        tag,
-                        description,
-                        player.getLocation(),
-                        player.getUniqueId(),
-                        cuboid,
-                        Bukkit.getScoreboardManager().getNewScoreboard());
-        guild.setCuboid(cuboid);
-
-        guild.addMember(player.getUniqueId());
-        guildHelper.getGuilds().put(tag, guild);
-        return guild;
-    }
 
     @Override
     public int minArgs() {

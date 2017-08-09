@@ -21,7 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 
 public class PlayerMoveListener implements Listener {
     
@@ -35,12 +35,14 @@ public class PlayerMoveListener implements Listener {
     public void handleEvent(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        CuboidStuff.notifyGuildWhenPlMoves(player);
+        plugin.
+                getCuboids().
+                notifyGuildWhenPlayerEntersCuboid(player);
         if(event.isCancelled() || GenConf.CANENTERAREA || player.hasPermission("openguild.cuboid.bypassenterflag")) {
             return;
         }
 
-        if(!CuboidStuff.canMove(player, event.getFrom(), event.getTo())) {
+        if(!plugin.getCuboids().canMove(player, event.getFrom(), event.getTo())) {
             event.setTo(event.getFrom());
         }
     }

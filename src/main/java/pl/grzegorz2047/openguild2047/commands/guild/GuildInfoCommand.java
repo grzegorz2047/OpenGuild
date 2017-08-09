@@ -20,7 +20,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.Guilds;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
@@ -38,17 +38,17 @@ public class GuildInfoCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        GuildHelper guildHelper = getPlugin().getGuildHelper();
+        Guilds guilds = getPlugin().getGuilds();
         
         if(args.length == 2) {
             String guildToCheck = args[1].toUpperCase();
             
-            if(!guildHelper.doesGuildExists(guildToCheck)) {
+            if(!guilds.doesGuildExists(guildToCheck)) {
                 sender.sendMessage(MsgManager.guilddoesntexists);
                 return;
             }
             
-            Guild guild = guildHelper.getGuilds().get(guildToCheck);
+            Guild guild = guilds.getGuilds().get(guildToCheck);
             sender.sendMessage(this.getTitle(MsgManager.getIgnorePref("ginfotit").replace("{GUILD}", guild.getTag().toUpperCase())));
             sender.sendMessage(MsgManager.getIgnorePref("ginfodesc").replace("{DESCRIPTION}", guild.getDescription()));
             sender.sendMessage(MsgManager.getIgnorePref("ginfoleader").replace("{LEADER}", Bukkit.getOfflinePlayer(guild.getLeader()).getName()));
@@ -60,12 +60,12 @@ public class GuildInfoCommand extends Command {
             }
             
             Player player = (Player) sender;
-            if(!guildHelper.hasGuild(player)) {
+            if(!guilds.hasGuild(player)) {
                 player.sendMessage(MsgManager.get("usageinfo"));
                 return;
             }
             
-            Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+            Guild guild = guilds.getPlayerGuild(player.getUniqueId());
             
             sender.sendMessage(this.getTitle(MsgManager.getIgnorePref("ginfotit").replace("{GUILD}", guild.getTag().toUpperCase())));
             sender.sendMessage(MsgManager.getIgnorePref("ginfodesc").replace("{DESCRIPTION}", guild.getDescription()));

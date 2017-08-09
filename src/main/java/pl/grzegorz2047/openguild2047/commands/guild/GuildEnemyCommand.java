@@ -24,7 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -38,7 +38,7 @@ public class GuildEnemyCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        GuildHelper guildHelper = getPlugin().getGuildHelper();
+        Guilds guilds = getPlugin().getGuilds();
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
@@ -47,16 +47,16 @@ public class GuildEnemyCommand extends Command {
         Player player = (Player) sender;
         if (args.length >= 2) {
             String guildToCheck = args[1].toUpperCase();
-            if (!guildHelper.doesGuildExists(guildToCheck)) {
+            if (!guilds.doesGuildExists(guildToCheck)) {
                 sender.sendMessage(MsgManager.get("guilddoesntexists"));
                 return;
             }
-            Guild requestingGuild = guildHelper.getPlayerGuild(player.getUniqueId());
+            Guild requestingGuild = guilds.getPlayerGuild(player.getUniqueId());
             if (!requestingGuild.getLeader().equals(player.getUniqueId())) {
                 player.sendMessage(MsgManager.get("playernotleader"));
                 return;
             }
-            Guild guild = guildHelper.getGuilds().get(guildToCheck);
+            Guild guild = guilds.getGuilds().get(guildToCheck);
             OfflinePlayer leader = Bukkit.getOfflinePlayer(guild.getLeader());
 
             if (!leader.isOnline()) {

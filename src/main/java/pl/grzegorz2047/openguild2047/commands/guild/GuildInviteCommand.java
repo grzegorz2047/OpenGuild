@@ -18,7 +18,7 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.Guilds;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
@@ -43,15 +43,15 @@ public class GuildInviteCommand extends Command {
             return;
         }
         
-        GuildHelper guildHelper = this.getPlugin().getGuildHelper();
+        Guilds guilds = this.getPlugin().getGuilds();
         
         Player player = (Player) sender;
-        if(!guildHelper.hasGuild(player)) {
+        if(!guilds.hasGuild(player)) {
             sender.sendMessage(MsgManager.get("notinguild"));
             return;
         }
         
-        Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+        Guild guild = guilds.getPlayerGuild(player.getUniqueId());
         if(!guild.getLeader().equals(player.getUniqueId())) {
             player.sendMessage(MsgManager.get("playernotleader"));
             return;
@@ -71,7 +71,7 @@ public class GuildInviteCommand extends Command {
             return;
         }
         
-        if(guildHelper.hasGuild(event.getInvite())) {
+        if(guilds.hasGuild(event.getInvite())) {
             player.sendMessage(MsgManager.playerhasguild);
             return;
         }

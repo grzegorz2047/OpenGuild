@@ -25,10 +25,9 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import java.util.Map;
-import org.bukkit.ChatColor;
+
 import org.bukkit.OfflinePlayer;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.api.Guilds;
 
 /**
  *
@@ -141,7 +140,7 @@ public class TagManager {
     }
     public void playerDisbandGuild(Guild guild){
         this.getGlobalScoreboard().getTeam(guild.getTag()).unregister();
-        for(Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()){
+        for(Map.Entry<String, Guild> gs : plugin.getGuilds().getGuilds().entrySet()){
             if(gs.getValue().getTag().equals(guild.getTag())){
                 continue;
             }
@@ -151,19 +150,17 @@ public class TagManager {
             }
         }
     }
-    public void guildBrokeAlliance(Guild guild, Guild tobrokewith){
-        for(Relation r : guild.getAlliances()){
-            if(r.getWho().equals(tobrokewith.getTag()) || r.getWithWho().equals(tobrokewith.getTag())){//Trzeba to odzielic jakos na 2 przypadki (else if) zamiast ||
-                Guild enemy = tobrokewith;
-                Scoreboard sc = enemy.getSc();
-                sc.getTeam(guild.getTag()).setPrefix(GenConf.enemyTag.replace("{TAG}", guild.getTag()));
-                sc.getTeam(guild.getTag()).setDisplayName(GenConf.enemyTag.replace("{TAG}", guild.getTag()));
-                
-                
-                Guild enemy2 = guild;
-                Scoreboard sc2 = enemy2.getSc();//GenConf.enemyTag.replace("{TAG}", guild.getTag())
-                sc2.getTeam(tobrokewith.getTag()).setPrefix(GenConf.enemyTag.replace("{TAG}", tobrokewith.getTag()));
-                sc2.getTeam(tobrokewith.getTag()).setDisplayName(GenConf.enemyTag.replace("{TAG}", tobrokewith.getTag()));
+    public void guildBrokeAlliance(Guild firstGuild, Guild secondGuild){
+        for(Relation r : firstGuild.getAlliances()){
+            if(r.getWho().equals(secondGuild.getTag()) || r.getWithWho().equals(secondGuild.getTag())){//Trzeba to odzielic jakos na 2 przypadki (else if) zamiast ||
+                Scoreboard sc = secondGuild.getSc();
+                sc.getTeam(firstGuild.getTag()).setPrefix(GenConf.enemyTag.replace("{TAG}", firstGuild.getTag()));
+                sc.getTeam(firstGuild.getTag()).setDisplayName(GenConf.enemyTag.replace("{TAG}", firstGuild.getTag()));
+
+
+                Scoreboard sc2 = firstGuild.getSc();//GenConf.enemyTag.replace("{TAG}", firstGuild.getTag())
+                sc2.getTeam(secondGuild.getTag()).setPrefix(GenConf.enemyTag.replace("{TAG}", secondGuild.getTag()));
+                sc2.getTeam(secondGuild.getTag()).setDisplayName(GenConf.enemyTag.replace("{TAG}", secondGuild.getTag()));
             }
         } 
     }
@@ -172,11 +169,11 @@ public class TagManager {
         String who = r.getWho();
         String withwho = r.getWithWho();
         
-        Guild whoGuild = plugin.getGuildHelper().getGuilds().get(who);
+        Guild whoGuild = plugin.getGuilds().getGuilds().get(who);
 
         Scoreboard whoSc = whoGuild.getSc();
 
-        Guild withWhoGuild = plugin.getGuildHelper().getGuilds().get(withwho);
+        Guild withWhoGuild = plugin.getGuilds().getGuilds().get(withwho);
 
         Scoreboard withWhoSc = withWhoGuild.getSc();
 
@@ -200,7 +197,7 @@ public class TagManager {
     }
     
     public void playerJoinGuild(OfflinePlayer joiner){
-        Guild joinerGuild = plugin.getGuildHelper().getPlayerGuild(joiner.getUniqueId());
+        Guild joinerGuild = plugin.getGuilds().getPlayerGuild(joiner.getUniqueId());
             Scoreboard sc = joinerGuild.getSc();
             Team t = sc.getTeam(joinerGuild.getTag());
             if(t != null){
@@ -245,7 +242,7 @@ public class TagManager {
             Team t2 = players.getScoreboard().getTeam(joinerGuild.getTag());
             t2.insertPlayer(joiner);
         }*/
-        for(Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()){
+        for(Map.Entry<String, Guild> gs : plugin.getGuilds().getGuilds().entrySet()){
             if(gs.getValue().getTag().equals(joinerGuild.getTag())){
                 continue;
             }
@@ -256,7 +253,7 @@ public class TagManager {
         }
     }
     public void playerLeaveGuild(OfflinePlayer joiner){
-        Guild joinerGuild = plugin.getGuildHelper().getPlayerGuild(joiner.getUniqueId());
+        Guild joinerGuild = plugin.getGuilds().getPlayerGuild(joiner.getUniqueId());
         /*for(Relation r : joinerGuild.getAlliances()){
             if(r.getWho().equals(joinerGuild.getTag())){
                 Guild ally = plugin.getGuildHelper().getGuilds().get(r.getWithWho());
@@ -270,7 +267,7 @@ public class TagManager {
                 }
             }
         } */
-        for(Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()){
+        for(Map.Entry<String, Guild> gs : plugin.getGuilds().getGuilds().entrySet()){
             if(gs.getValue().getTag().equals(joinerGuild.getTag())){
                 continue;
             }
@@ -290,7 +287,7 @@ public class TagManager {
     }
     
     public void playerJoinServer(Player joiner){
-        Guild joinerGuild = plugin.getGuildHelper().getPlayerGuild(joiner.getUniqueId());
+        Guild joinerGuild = plugin.getGuilds().getPlayerGuild(joiner.getUniqueId());
         if(joinerGuild == null){
             joiner.setScoreboard(guildExistsInfoScoreboard);
             //System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
@@ -310,7 +307,7 @@ public class TagManager {
         t.setPrefix(GenConf.enemyTag.replace("{TAG}", g.getTag()));
         t.setDisplayName(GenConf.enemyTag.replace("{TAG}", g.getTag()));
         t.addPlayer(p);
-        for(Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()){
+        for(Map.Entry<String, Guild> gs : plugin.getGuilds().getGuilds().entrySet()){
             if(gs.getValue().getTag().equals(g.getTag())){
                 continue;
             }

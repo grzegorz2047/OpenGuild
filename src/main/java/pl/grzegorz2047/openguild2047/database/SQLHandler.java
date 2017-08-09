@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.bukkit.Location;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.Guild;
@@ -32,6 +33,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 
 public class SQLHandler {
 
@@ -96,9 +98,9 @@ public class SQLHandler {
         this.createTables();
 
         // Load guilds and players from database
-        plugin.getGuildHelper().setGuilds(this.loadGuilds());
-        plugin.getGuildHelper().setPlayers(this.loadPlayers());
-        OpenGuild.getOGLogger().info("Loaded " + plugin.getGuildHelper().getGuilds().size() + " guilds from database.");
+        loadGuildsFromDB(plugin.getCuboids(), plugin.getGuilds());
+        plugin.getGuilds().setPlayers(this.loadPlayers());
+        OpenGuild.getOGLogger().info("Loaded " + plugin.getGuilds().getNumberOfGuilds() + " guilds from database.");
     }
 
     private void createTables() {
@@ -156,10 +158,10 @@ public class SQLHandler {
         }
     }
 
-    public void loadTags() {
-        for (Map.Entry<String, Guild> gs : plugin.getGuildHelper().getGuilds().entrySet()) {
+    public void loadTags(Guilds guilds) {
+        for (Map.Entry<String, Guild> gs : guilds.getGuilds().entrySet()) {
             Scoreboard sc = gs.getValue().getSc();
-            for (Map.Entry<String, Guild> gs2 : plugin.getGuildHelper().getGuilds().entrySet()) {
+            for (Map.Entry<String, Guild> gs2 : guilds.getGuilds().entrySet()) {
                 if (gs.getValue().getTag().equals(gs2.getValue().getTag())) {
                     continue;
                 }
@@ -184,19 +186,11 @@ public class SQLHandler {
 
     }
 
-    private Map<String, Guild> loadGuilds() {
-        Map<String, Guild> guilds = new HashMap<String, Guild>();
-
-        loadGuildsFromDB(guilds);
-
-        return guilds;
-    }
-
-    private void loadGuildsFromDB(Map<String, Guild> guilds) {
+    private void loadGuildsFromDB(Cuboids cuboids, Guilds guilds) {
         try {
             createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "guilds` JOIN `" + GenConf.sqlTablePrefix + "cuboids` USING(tag)");
-            loopTroughGuildAndCuboidResults(guilds, result);
+            loopTroughGuildAndCuboidResults(cuboids, guilds, result);
             result.close();
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
@@ -207,13 +201,13 @@ public class SQLHandler {
         statement = this.connection.createStatement();
     }
 
-    private void loopTroughGuildAndCuboidResults(Map<String, Guild> guilds, ResultSet result) throws SQLException {
+    private void loopTroughGuildAndCuboidResults(Cuboids cuboids, Guilds guilds, ResultSet result) throws SQLException {
         while (anotherRecord(result)) {
-            readGuildDataFromResult(guilds, result);
+            readGuildDataFromResult(cuboids, guilds, result);
         }
     }
 
-    private void readGuildDataFromResult(Map<String, Guild> guilds, ResultSet result) throws SQLException {
+    private void readGuildDataFromResult(Cuboids cuboids, Guilds guilds, ResultSet result) throws SQLException {
         String tag = result.getString("tag");
         String description = result.getString("description");
         UUID leaderUUID = UUID.fromString(result.getString("leader"));
@@ -230,11 +224,9 @@ public class SQLHandler {
 
         int cuboidSize = result.getInt("cuboid_size");
 
-        Cuboid cuboid = prepareGuildCuboid(tag, cuboidCenter, cuboidSize, cuboidCenter.getWorld().getName());
-
-        Guild guild = prepareGuild(tag, description, leaderUUID, home, cuboid);
-
-        guilds.put(tag, guild);
+        cuboids.addCuboid(cuboidCenter, tag, cuboidSize);
+        guilds.addGuild(plugin, home, leaderUUID, tag, description);
+        registerGuildTag(tag);
     }
 
     private boolean hasGuildValidWorldNameHome(String homeWorld) {
@@ -253,16 +245,7 @@ public class SQLHandler {
         int cuboidCenterZ = result.getInt("cuboid_center_z");
         String cuboidWorldName = result.getString("cuboid_worldname");
 
-        Location cuboidCenter = new Location(Bukkit.getWorld(cuboidWorldName), cuboidCenterX, 0, cuboidCenterZ);
-        return cuboidCenter;
-    }
-
-    private Guild prepareGuild(String tag, String description, UUID leaderUUID, Location home, Cuboid cuboid) {
-        Guild guild = new Guild(plugin, tag, description, home, leaderUUID, cuboid, Bukkit.getScoreboardManager().getNewScoreboard());
-        registerGuildTag(tag);
-        //guild.setAlliancesString(alliances);
-        //guild.setEnemiesString(enemies);
-        return guild;
+        return new Location(Bukkit.getWorld(cuboidWorldName), cuboidCenterX, 0, cuboidCenterZ);
     }
 
     private void registerGuildTag(String tag) {
@@ -271,11 +254,6 @@ public class SQLHandler {
         t.setDisplayName(ChatColor.RED + tag + " ");
     }
 
-    private Cuboid prepareGuildCuboid(String tag, Location home, int size, String worldname) {
-        Cuboid cuboid = new Cuboid(home, tag, size);
-        plugin.getGuildHelper().getCuboids().put(tag, cuboid);
-        return cuboid;
-    }
 
     public Connection getConnection() {
         return connection;
@@ -307,7 +285,7 @@ public class SQLHandler {
                 addPlayerWithoutGuild(players, uuid);
                 continue;
             }
-            Guild playersGuild = plugin.getGuildHelper().getGuilds().get(guildTag);
+            Guild playersGuild = plugin.getGuilds().getGuilds().get(guildTag);
             players.put(uuid, playersGuild);
             if (guildDoesntExist(playersGuild)) {
                 continue;
@@ -366,7 +344,7 @@ public class SQLHandler {
     }
 
     private boolean canTagBeRendered(String guildTag) {
-        return !guildTag.isEmpty() && plugin.getGuildHelper().doesGuildExists(guildTag);
+        return !guildTag.isEmpty() && plugin.getGuilds().doesGuildExists(guildTag);
     }
 
     public Statement getStatement() {
@@ -387,11 +365,11 @@ public class SQLHandler {
                 Relation.Status relationStatus = Relation.Status.valueOf(status.toUpperCase());
                 Relation relation = createRelation(who, withwho, expires, relationStatus);
 
-                Guild whoGuild = plugin.getGuildHelper().getGuilds().get(who);
+                Guild whoGuild = plugin.getGuilds().getGuilds().get(who);
                 if (guildDoesntExist(whoGuild)) continue;
                 Scoreboard whoSc = whoGuild.getSc();
 
-                Guild withWhoGuild = plugin.getGuildHelper().getGuilds().get(withwho);
+                Guild withWhoGuild = plugin.getGuilds().getGuilds().get(withwho);
                 if (guildDoesntExist(withWhoGuild)) {
                     continue;
                 }
@@ -473,9 +451,9 @@ public class SQLHandler {
      */
     public void updatePlayerTag(UUID uuid) {
         String guildTag = "";
-        if (plugin.getGuildHelper().getPlayers().containsKey(uuid) &&
-                plugin.getGuildHelper().getPlayers().get(uuid) != null) {
-            guildTag = plugin.getGuildHelper().getPlayers().get(uuid).getTag().toUpperCase();
+        if (plugin.getGuilds().getPlayers().containsKey(uuid) &&
+                plugin.getGuilds().getPlayers().get(uuid) != null) {
+            guildTag = plugin.getGuilds().getPlayers().get(uuid).getTag().toUpperCase();
         }
 
         try {

@@ -26,8 +26,6 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import org.bukkit.OfflinePlayer;
-import pl.grzegorz2047.openguild2047.managers.MsgManager;
-import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
 public class PlayerChatListener implements Listener {
 
@@ -45,8 +43,8 @@ public class PlayerChatListener implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         String message = event.getMessage();
-        if(plugin.getGuildHelper().hasGuild(player)) {
-            Guild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
+        if(plugin.getGuilds().hasGuild(player)) {
+            Guild guild = plugin.getGuilds().getPlayerGuild(uuid);
             String tag = guild.getTag().toUpperCase();
             
             if(event.getMessage().startsWith(GenConf.guildChatKey) && event.getMessage().length()>=2){
@@ -66,10 +64,10 @@ public class PlayerChatListener implements Listener {
                 message = message.substring(1);
                 for(Relation r : guild.getAlliances()){
                     Guild ally = null;
-                    if(guild.equals(plugin.getGuildHelper().getGuilds().get(r.getWho()))){
-                        ally = plugin.getGuildHelper().getGuilds().get(r.getWithWho());
+                    if(guild.equals(plugin.getGuilds().getGuilds().get(r.getWho()))){
+                        ally = plugin.getGuilds().getGuilds().get(r.getWithWho());
                     }else{
-                        ally = plugin.getGuildHelper().getGuilds().get(r.getWho()); 
+                        ally = plugin.getGuilds().getGuilds().get(r.getWho());
                     }
                     if(ally != null){
                         String format = GenConf.allyChatFormat

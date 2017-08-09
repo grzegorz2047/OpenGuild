@@ -26,17 +26,15 @@ public class Guild extends GuildMembers {
     private String description;
 
     private Location home;
-    private Cuboid cuboid;
     private Scoreboard sc;
     
-    public Guild(pl.grzegorz2047.openguild2047.OpenGuild plugin, String tag, String description, Location home, UUID leaderUUID, Cuboid cuboid, Scoreboard scoreboard) {
+    public Guild(pl.grzegorz2047.openguild2047.OpenGuild plugin, String tag, String description, Location home, UUID leaderUUID, Scoreboard scoreboard) {
         super(plugin);
         this.setMembersGuild(this);
         this.tag = tag;
         this.description = description;
         this.home = home;
         this.leader = leaderUUID;
-        this.cuboid = cuboid;
         this.sc = scoreboard;
     }
 
@@ -64,13 +62,6 @@ public class Guild extends GuildMembers {
         return home;
     }
 
-    public void setCuboid(Cuboid cuboid) {
-        this.cuboid = cuboid;
-    }
-
-    public Cuboid getCuboid() {
-        return cuboid;
-    }
 
     public Scoreboard getSc() {
         return sc;

@@ -41,13 +41,13 @@ public class PlayerJoinListener implements Listener {
         UUID uuid = player.getUniqueId();
         //System.out.print("Wykonuje playerJoinEvent!");
         
-        if(!plugin.getGuildHelper().getPlayers().containsKey(uuid)) {
+        if(!plugin.getGuilds().getPlayers().containsKey(uuid)) {
             plugin.getSQLHandler().insertPlayer(uuid);
-            plugin.getGuildHelper().getPlayers().put(uuid, null);
+            plugin.getGuilds().getPlayers().put(uuid, null);
         }
         plugin.getTagManager().playerJoinServer(player);
-        if(plugin.getGuildHelper().hasGuild(player)) {
-            Guild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
+        if(plugin.getGuilds().hasGuild(player)) {
+            Guild guild = plugin.getGuilds().getPlayerGuild(uuid);
             for(UUID mem : guild.getMembers()) {
                 OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);
                 if(om.isOnline()) {

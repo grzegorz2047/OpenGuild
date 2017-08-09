@@ -17,13 +17,13 @@
 package pl.grzegorz2047.openguild2047.commands;
 
 import java.util.UUID;
-import org.bukkit.ChatColor;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
 import pl.grzegorz2047.openguild2047.GenConf;
@@ -55,17 +55,17 @@ public class TeamCommand implements CommandExecutor {
             return true;
         }
         
-        GuildHelper guildHelper = plugin.getGuildHelper();
+        Guilds guilds = plugin.getGuilds();
         
         Player player = (Player) sender;
-        if(!guildHelper.hasGuild(player)) {
+        if(!guilds.hasGuild(player)) {
             player.sendMessage(MsgManager.notinguild);
             return true;
         }
         
         String message = GenUtil.argsToString(args, 0, args.length);
         
-        Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+        Guild guild = guilds.getPlayerGuild(player.getUniqueId());
         String format = GenConf.guildChatFormat
                 .replace("{GUILD}", guild.getTag())
                 .replace("{PLAYER}", player.getName())

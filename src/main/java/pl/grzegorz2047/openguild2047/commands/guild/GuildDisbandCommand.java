@@ -19,7 +19,7 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 import java.util.UUID;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GuildHelper;
+import pl.grzegorz2047.openguild2047.Guilds;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.command.Command;
@@ -46,16 +46,16 @@ public class GuildDisbandCommand extends Command {
             return;
         }
         
-        GuildHelper guildHelper = this.getPlugin().getGuildHelper();
+        Guilds guilds = this.getPlugin().getGuilds();
         
         Player player = (Player) sender;
         if(args.length == 1){
-            if(!guildHelper.hasGuild(player)) {
+            if(!guilds.hasGuild(player)) {
                 player.sendMessage(MsgManager.get("notinguild"));
                 return;
             }
 
-            Guild guild = guildHelper.getPlayerGuild(player.getUniqueId());
+            Guild guild = guilds.getPlayerGuild(player.getUniqueId());
             if(!guild.getLeader().equals(player.getUniqueId())) {
                 player.sendMessage(MsgManager.get("playernotleader"));
                 return;
@@ -68,8 +68,8 @@ public class GuildDisbandCommand extends Command {
             }
             
             for(Relation r : guild.getAlliances()){
-                Guild g1 = guildHelper.getGuilds().get(r.getWho());
-                Guild g2 = guildHelper.getGuilds().get(r.getWithWho());
+                Guild g1 = guilds.getGuilds().get(r.getWho());
+                Guild g2 = guilds.getGuilds().get(r.getWithWho());
                 OpenGuild.getInstance().getTagManager().guildBrokeAlliance(g1, g2);
                 guild.getAlliances().remove(r);
                 guild.getAlliances().remove(r);
@@ -77,16 +77,16 @@ public class GuildDisbandCommand extends Command {
                 
             }
             for(UUID uuid : guild.getMembers()) {
-                guildHelper.getPlayers().remove(uuid);
-                guildHelper.getPlayers().put(uuid, null);
+                guilds.getPlayers().remove(uuid);
+                guilds.getPlayers().put(uuid, null);
                 getPlugin().getSQLHandler().updatePlayerTag(uuid);
                 if(Bukkit.getPlayer(uuid) != null){
                     Bukkit.getPlayer(uuid).setScoreboard(OpenGuild.getInstance().getTagManager().getGlobalScoreboard());
                 }
             }
-            guildHelper.getCuboids().remove(guild.getTag());
+            getPlugin().getCuboids().removeGuildCuboid(guild.getTag());
             getPlugin().getSQLHandler().removeGuild(guild.getTag().toUpperCase());
-            guildHelper.getGuilds().remove(guild.getTag());
+            guilds.getGuilds().remove(guild.getTag());
             getPlugin().getTagManager().playerDisbandGuild(guild);
             getPlugin().broadcastMessage(MsgManager.get("broadcast-disband").replace("{TAG}", guild.getTag().toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
         }

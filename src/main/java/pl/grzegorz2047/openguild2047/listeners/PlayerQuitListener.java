@@ -23,7 +23,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
-import pl.grzegorz2047.openguild2047.cuboidmanagement.CuboidStuff;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class PlayerQuitListener implements Listener {
@@ -38,9 +38,9 @@ public class PlayerQuitListener implements Listener {
     public void handleEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        CuboidStuff.playersenteredcuboid.remove(player.getName());
-        if(plugin.getGuildHelper().hasGuild(player)) {
-            Guild guild = plugin.getGuildHelper().getPlayerGuild(uuid);
+        plugin.getCuboids().playersenteredcuboid.remove(player.getName());
+        if(plugin.getGuilds().hasGuild(player)) {
+            Guild guild = plugin.getGuilds().getPlayerGuild(uuid);
             for(UUID mem : guild.getMembers()) {
                 OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);
                 if(om.isOnline()) {
