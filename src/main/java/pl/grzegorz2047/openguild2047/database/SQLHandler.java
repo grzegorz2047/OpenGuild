@@ -115,6 +115,8 @@ public class SQLHandler {
                     + "home_x INT,"
                     + "home_y INT,"
                     + "home_z INT,"
+                    + "home_pitch INT,"
+                    + "home_yaw INT,"
                     + "home_world VARCHAR(16),"
                     + "PRIMARY KEY(tag));";
             createStatement();

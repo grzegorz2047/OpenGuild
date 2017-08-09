@@ -39,7 +39,7 @@ public class SpawnChecker {
     private static boolean isWithinXCords(Location l, Location c1, Location c2) {
         return l.getBlockX() > Math.min(c1.getBlockX(), c2.getBlockX()) && l.getBlockX() < Math.max(c1.getBlockX(), c2.getBlockX());
     }
-    
+
     @Deprecated
     public static boolean isSpawnExtra(Location location) {
         Location l = location;
