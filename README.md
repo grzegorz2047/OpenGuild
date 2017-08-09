@@ -1,8 +1,5 @@
 OpenGuild2047 ![alt tag](https://travis-ci.org/grzegorz2047/OpenGuild2047.svg?branch=master)
 =============
-Obecnie nie jest on aktualizowany. Mozliwe, ze projekt troche mnie przerosl swego czasu, dlatego robie inna wersje pluginu na gildie.
-Bazowac one bedzie czesciowo na OpenGuild, ale stawiac tam bede na wydajnosc, prostote i rozplanowane wszystko do najprostszej postaci.
-Link do nowego projektu: https://github.com/grzegorz2047/SurvivalCG
 
 OpenGuild2047 to publiczny, open source plugin na gildie tworzony przez Grzegorza2047.
 Kod możecie dowolnie użytkować itd.
@@ -10,7 +7,7 @@ Każde błędy, poprawki, propozycje piszcie w zakładce issues (po prawej stron
 
 Testowanie
 -----------
-Aby przetestować plugin wystarczy wejść na serwer: mc.kraft.czest.pl
+Aby przetestować plugin wystarczy wejść na serwer: s2.klepahc.pl
 
 Zobacz [instalacje](https://github.com/grzegorz2047/OpenGuild2047/wiki/Pobieranie-oraz-instalacja) pluginu oraz jego [konfigurację](https://github.com/grzegorz2047/OpenGuild2047/wiki/Konfiguracja).
 
@@ -30,7 +27,7 @@ Każdy uznany i znaleziony bug/propozycje prosimy kierować w zakładcę [Issues
 Kontakt
 -----------
 Jeżeli chcesz się ze mną skontaktować to napisz mi na maila: grzegorz2047@gmail.com
-Jeżeli chcesz ze mną pogadać to wbij na mój prywatny mini serwer TeamSpeak3 - ts.kraft.czest.pl
+Jeżeli chcesz ze mną pogadać to wbij na mój prywatny mini serwer TeamSpeak3 - ts.klepahc.pl
 Kompilacja
 -----------
 
