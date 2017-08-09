@@ -29,7 +29,6 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
- *
  * @author Grzegorz
  */
 public class GuildAllyCommand extends Command {
@@ -40,55 +39,53 @@ public class GuildAllyCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         GuildHelper guildHelper = getPlugin().getGuildHelper();
-        
-        if(!(sender instanceof Player)) {
+
+        if (!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return;
         }
         Player player = (Player) sender;
-        if(args.length>=2){
+        if (args.length >= 2) {
             String guildToCheck = args[1].toUpperCase();
-            if(!guildHelper.doesGuildExists(guildToCheck)) {
+            if (!guildHelper.doesGuildExists(guildToCheck)) {
                 sender.sendMessage(MsgManager.get("guilddoesntexists"));
                 return;
             }
             Guild requestingGuild = guildHelper.getPlayerGuild(player.getUniqueId());
-            if(!requestingGuild.getLeader().equals(player.getUniqueId())) {
+            if (!requestingGuild.getLeader().equals(player.getUniqueId())) {
                 player.sendMessage(MsgManager.get("playernotleader"));
                 return;
             }
             Guild guild = guildHelper.getGuilds().get(guildToCheck);
             OfflinePlayer leader = Bukkit.getOfflinePlayer(guild.getLeader());
 
-            if(guild.getTag().equals(requestingGuild.getTag())){
+            if (guild.getTag().equals(requestingGuild.getTag())) {
                 sender.sendMessage(MsgManager.get("allyyourselferror"));
                 return;
             }
-            
-            if(!leader.isOnline()){
+
+            if (!leader.isOnline()) {
                 sender.sendMessage(MsgManager.get("leadernotonline"));
                 return;
             }
-            if(guild.getPendingRelationChanges().contains(requestingGuild.getTag())){
-                if(!requestingGuild.getLeader().equals(player.getUniqueId())){
+            if (guild.getPendingRelationChanges().contains(requestingGuild.getTag())) {
+                if (!requestingGuild.getLeader().equals(player.getUniqueId())) {
                     player.sendMessage(MsgManager.get("playernotleader"));
                     return;
                 }
-                
+
                 GuildRelationEvent event = new GuildRelationEvent(requestingGuild, guild, Relation.Status.ALLY);
                 Bukkit.getPluginManager().callEvent(event);
-                if(event.isCancelled()) {
+                if (event.isCancelled()) {
                     return;
                 }
-                
+
                 guild.getPendingRelationChanges().remove(requestingGuild.getTag());
-                Relation r = new Relation();
-                r.setWho(guild.getTag());
-                r.setWithWho(requestingGuild.getTag());
-                r.setState(Relation.Status.ALLY);
-                boolean result = OpenGuild.getInstance().getSQLHandler().addAlliance(guild, requestingGuild, Relation.Status.ALLY);
-                if(result != true){
-                    this.getPlugin().getOGLogger().warning("Could not register the ally for " + guild.getTag() + " guild!");
+                Relation r = new Relation(guild.getTag(), requestingGuild.getTag(), 0, Relation.Status.ALLY);
+                boolean result = OpenGuild.getInstance().getSQLHandler().insertAlliance(guild, requestingGuild);
+                if (!result) {
+                    this.getPlugin();
+                    OpenGuild.getOGLogger().warning("Could not register the ally for " + guild.getTag() + " guild!");
                 }
                 OpenGuild.getInstance().getTagManager().guildMakeAlliance(r);
                 guild.getAlliances().add(r);
@@ -99,15 +96,15 @@ public class GuildAllyCommand extends Command {
                 return;
             }
             requestingGuild.changeRelationRequest(requestingGuild, guild, leader, Relation.Status.ALLY);
-        }else{
+        } else {
             sender.sendMessage("/g ally <guild>");
         }
-        
+
     }
 
     @Override
     public int minArgs() {
         return 1;
     }
-    
+
 }

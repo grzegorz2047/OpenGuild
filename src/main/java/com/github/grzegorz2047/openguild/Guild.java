@@ -18,6 +18,8 @@ package com.github.grzegorz2047.openguild;
 import org.bukkit.Location;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.UUID;
+
 public class Guild extends GuildMembers {
 
     private String tag;
@@ -27,9 +29,15 @@ public class Guild extends GuildMembers {
     private Cuboid cuboid;
     private Scoreboard sc;
     
-    public Guild(pl.grzegorz2047.openguild2047.OpenGuild plugin) {
+    public Guild(pl.grzegorz2047.openguild2047.OpenGuild plugin, String tag, String description, Location home, UUID leaderUUID, Cuboid cuboid, Scoreboard scoreboard) {
         super(plugin);
         this.setMembersGuild(this);
+        this.tag = tag;
+        this.description = description;
+        this.home = home;
+        this.leader = leaderUUID;
+        this.cuboid = cuboid;
+        this.sc = scoreboard;
     }
 
     public void setTag(String tag) {

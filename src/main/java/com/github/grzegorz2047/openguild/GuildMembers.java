@@ -27,7 +27,7 @@ public class GuildMembers extends GuildRelations {
     protected final pl.grzegorz2047.openguild2047.OpenGuild plugin;
     private Guild guild;
 
-    private UUID leader;
+    protected UUID leader;
 
     private final List<UUID> members = new ArrayList<UUID>();
     private final List<UUID> pendingInvitations = new ArrayList<UUID>();

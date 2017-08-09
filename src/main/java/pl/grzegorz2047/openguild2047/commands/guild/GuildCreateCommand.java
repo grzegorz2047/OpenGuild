@@ -156,14 +156,18 @@ public class GuildCreateCommand extends Command {
     }
 
     private Guild addGuildToMemory(GuildHelper guildHelper, Player player, String tag, String description, Cuboid cuboid) {
-        Guild guild = new Guild(getPlugin());
+        Guild guild =
+                new Guild(
+                        getPlugin(),
+                        tag,
+                        description,
+                        player.getLocation(),
+                        player.getUniqueId(),
+                        cuboid,
+                        Bukkit.getScoreboardManager().getNewScoreboard());
         guild.setCuboid(cuboid);
-        guild.setTag(tag);
-        guild.setDescription(description);
+
         guild.addMember(player.getUniqueId());
-        guild.setHome(player.getLocation());
-        guild.setLeader(player.getUniqueId());
-        guild.setSc(Bukkit.getScoreboardManager().getNewScoreboard());
         guildHelper.getGuilds().put(tag, guild);
         return guild;
     }
