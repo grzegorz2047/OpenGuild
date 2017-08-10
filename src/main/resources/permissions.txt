@@ -1,3 +1,4 @@
+Here you have all available permissions:
 openguild.command.ally - allows to make an ally with the target guild (leader only)
 openguild.command.create - allows to create a guild
 openguild.command.description - allows to show (or change) guilds description
@@ -12,11 +13,16 @@ openguild.command.kick - allows to kick player from the guild (by a leader)
 openguild.command.leave - allows to leave from the current guild
 openguild.command.list - allows to shows all guilds on this server
 openguild.command.reload - allows to reloads plugin from the /g reload command
+openguild.command.hardcore.unban - allows you to unban player
+
 
 openguild.cuboid.bypassbreak
 openguild.cuboid.bypassplace
 openguild.cuboid.bypassinteract
 openguild.cuboid.bypassmove
+openguild.cuboid.bypassenterflag
+openguild.spawn.bypass
 
 openguild.hardcore.bypass
-openguild.hardcore.unban
+ 
+openguild.randomtp.other
