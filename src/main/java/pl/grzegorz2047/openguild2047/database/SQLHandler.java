@@ -37,6 +37,11 @@ import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 
 public class SQLHandler {
 
+    private final String host;
+    private final int port;
+    private final String user;
+    private final String password;
+    private final String name;
     private OpenGuild plugin;
 
     private Connection connection;
@@ -50,6 +55,11 @@ public class SQLHandler {
     // }
     public SQLHandler(OpenGuild plugin, String host, int port, String user, String password, String name) {
         this.plugin = plugin;
+        this.host = host;
+        this.port = port;
+        this.user = user;
+        this.password = password;
+        this.name = name;
 
         switch (GenConf.DATABASE) {
             case FILE:
@@ -76,7 +86,7 @@ public class SQLHandler {
 
                 try {
                     Class.forName("com.mysql.jdbc.Driver");
-                    this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + name + "?autoReconnect=true", user, password);
+                    initConnection(host, port, user, password, name);
                     createStatement();
 
                     OpenGuild.getOGLogger().info("[MySQL] Connected to MySQL successfully!");
@@ -91,6 +101,10 @@ public class SQLHandler {
                 OpenGuild.getOGLogger().severe("[MySQL] Invalid database type '" + GenConf.DATABASE.name() + "'!");
                 break;
         }
+    }
+
+    private void initConnection(String host, int port, String user, String password, String name) throws SQLException {
+        this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + name + "?connectTimeout=0&socketTimeout=0&autoReconnect=true", user, password);
     }
 
     private void startWork() {
@@ -200,7 +214,7 @@ public class SQLHandler {
     }
 
     private void createStatement() throws SQLException {
-        statement = this.connection.createStatement();
+        statement = this.getConnection().createStatement();
     }
 
     private void loopTroughGuildAndCuboidResults(Cuboids cuboids, Guilds guilds, ResultSet result) throws SQLException {
@@ -258,6 +272,17 @@ public class SQLHandler {
 
 
     public Connection getConnection() {
+        try {
+            if (isConnectionClosed()) {
+                initConnection(host, port, user, password, name);
+            }
+        } catch (SQLException e) {
+            try {
+                initConnection(host, port, user, password, name);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
         return connection;
     }
 

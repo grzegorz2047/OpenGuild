@@ -101,20 +101,23 @@ public class GuildCreateCommand extends Command {
             player.sendMessage(MsgManager.get("desctoolong"));
             return;
         }
+
         if (cuboids.isCuboidInterferingWithOtherCuboid(player.getLocation())) {
             player.sendMessage(MsgManager.get("guildtocloseothers"));
             return;
         }
+
         if (GenConf.forbiddenworlds.contains(player.getWorld().getName())) {
             player.sendMessage(MsgManager.get("forbiddenworld"));
             return;
         }
+
         if (GenConf.cuboidCheckPlayers && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE)) {
             player.sendMessage(MsgManager.playerstooclose);
             return;
         }
         Cuboid cuboid = cuboids.previewCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
-        if (cuboids.isCuboidInterferingWithOtherCuboid(cuboid.getEdges())) {
+        if (cuboids.isCuboidInterferingWithOtherCuboid(cuboid)) {
             player.sendMessage(MsgManager.get("guildtocloseothers"));
             return;
         }

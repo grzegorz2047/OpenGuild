@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class Cuboid {
 
     private Location center;
-    private int radius;
     private String owner;
     private Location min;
     private Location max;
@@ -43,10 +42,6 @@ public class Cuboid {
 
     public Location getCenter() {
         return this.center;
-    }
-
-    public int getRadius() {
-        return this.radius;
     }
 
     public boolean isinCuboid(Location loc) {
@@ -74,10 +69,27 @@ public class Cuboid {
         return center.getWorld().getName();
     }
 
-    public ArrayList<Location> getEdges() {
-        ArrayList<Location> edges = new ArrayList<Location>();
+    public boolean isColliding(Cuboid cuboid) {
+        if (!cuboid.getWorldName().equals(getWorldName())) {
+            return false;
+        }
 
-        return edges;
+        int localMinX = Math.min(this.min.getBlockX(), max.getBlockX());
+        int localMaxX = Math.max(this.min.getBlockX(), max.getBlockX());
+        int localMinZ = Math.min(this.min.getBlockZ(), this.max.getBlockZ());
+        int localMaxZ = Math.max(this.min.getBlockZ(), this.max.getBlockZ());
 
+        int foreignMinX = Math.min(this.getMin().getBlockX(), this.getMax().getBlockX());
+        int foreignMaxX = Math.max(this.getMin().getBlockX(), this.getMax().getBlockX());
+        int foreignMinZ = Math.min(this.getMin().getBlockZ(), this.getMax().getBlockZ());
+        int foreignMaxZ = Math.max(this.getMin().getBlockZ(), this.getMax().getBlockZ());
+
+        if (foreignMinX > localMinX && foreignMaxX < localMaxX) {
+            if (foreignMinZ > localMinZ && foreignMaxZ < localMaxZ) {
+                return true;
+            }
+        }
+        return false;
     }
+
 }

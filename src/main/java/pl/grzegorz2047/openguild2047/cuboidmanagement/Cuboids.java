@@ -46,9 +46,9 @@ public class Cuboids {
         return new Cuboid(home, tag, size);
     }
 
-    public Cuboid addCuboid(Location home, String tag, int size) {
+    public void addCuboid(Location home, String tag, int size) {
         Cuboid cuboid = new Cuboid(home, tag, size);
-        return cuboids.put(tag, cuboid);
+        cuboids.put(tag, cuboid);
     }
 
     public boolean allowedToDoItHere(Player player, Location location) {
@@ -217,23 +217,15 @@ public class Cuboids {
         return false;
     }
 
-    public boolean isCuboidInterferingWithOtherCuboid(ArrayList<Location> egdes) {
-        for (Map.Entry<String, Cuboid> stringCuboidEntry : cuboids.entrySet()) {
-            Cuboid c = stringCuboidEntry.getValue();
-            Location loc1 = c.getCenter();
-            for (Location loc : egdes) {
-                Boolean withinCuboid = checkIfLocationWithinCuboid(c, loc1, loc);
-                if (withinCuboid) return true;
-                //double distance = loc1.distance(loc);
-                //if (distance <= (c.getRadius() * 2))//Ten sposob po lewej to dziala na okragle cuboidy
-                //{ //Sprawdź czy krawędzie cuboidów (ich lokacje) zawierają się w którymś cuboidzie
-                //czyli przelec cuboidy i zobacz czy lokaliacja zawiera sie w cuboidzie jak tak, to nachodzi.
-
-                //}
-            }
+    public boolean isCuboidInterferingWithOtherCuboid(Cuboid potential) {
+        for (Map.Entry<String, Cuboid> entry : cuboids.entrySet()) {
+            Cuboid cuboid = entry.getValue();
+            Boolean withinCuboid = cuboid.isColliding(potential);
+            if (withinCuboid) return true;
         }
         return false;
     }
+
 
     private Boolean checkIfLocationWithinCuboid(Cuboid c, Location loc1, Location loc) {
         return isTheSame(loc1.getWorld().getName(), loc.getWorld().getName()) && c.isinCuboid(loc);
