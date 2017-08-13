@@ -2,6 +2,9 @@ package pl.grzegorz2047.openguild2047.database;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  * Created by grzeg on 13.08.2017.
  */
@@ -13,6 +16,7 @@ public class MySQLImplementationStrategy implements SQLImplementationStrategy {
     private final String user;
     private final String password;
     private final String dbName;
+    HikariDataSource hikari = new HikariDataSource();
 
     public MySQLImplementationStrategy(String host, int port, String user, String password, String dbName) {
         this.host = host;
@@ -20,11 +24,6 @@ public class MySQLImplementationStrategy implements SQLImplementationStrategy {
         this.user = user;
         this.password = password;
         this.dbName = dbName;
-    }
-
-    @Override
-    public HikariDataSource getDataSource() {
-        HikariDataSource hikari = new HikariDataSource();
         hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
         hikari.addDataSourceProperty("serverName", host);
         hikari.addDataSourceProperty("port", port);
@@ -34,7 +33,17 @@ public class MySQLImplementationStrategy implements SQLImplementationStrategy {
         hikari.addDataSourceProperty("cachePrepStmts", true);
         hikari.addDataSourceProperty("prepStmtCacheSize", 250);
         hikari.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
-        return hikari;
+    }
+
+    @Override
+    public Connection getConnection() throws Exception {
+
+        try {
+            return hikari.getConnection();
+        } catch (SQLException e) {
+            throw new Exception("Connection error");
+        }
+
     }
 
 }

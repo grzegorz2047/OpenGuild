@@ -170,7 +170,7 @@ public class OpenGuild extends JavaPlugin {
         this.watcher.cancel();
         try {
             this.sqlHandler.getConnection().close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         this.sqlHandler = null;

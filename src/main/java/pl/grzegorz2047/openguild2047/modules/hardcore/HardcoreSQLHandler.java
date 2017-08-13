@@ -40,7 +40,7 @@ public class HardcoreSQLHandler {
 
     public static boolean createTables() {
         String query = "CREATE TABLE IF NOT EXISTS `" + TABLENAME + "` (UUID VARCHAR(36) NOT NULL primary key, NICK VARCHAR(16) NOT NULL, BAN_TIME BIGINT NOT NULL)";
-        OpenGuild.getInstance().getOGLogger().debug(query);
+        OpenGuild.getOGLogger().debug(query);
         return OpenGuild.getInstance().getSQLHandler().execute(query);
     }
 
@@ -56,8 +56,8 @@ public class HardcoreSQLHandler {
                 query = "INSERT INTO `" + TABLENAME + "` VALUES('" + uniqueId + "', '" + Bukkit.getOfflinePlayer(uniqueId).getName() + "', '" + value + "')";
             }
             st.execute(query);
-        } catch (SQLException ex) {
-            plugin.getOGLogger().exceptionThrown(ex);
+        } catch (Exception ex) {
+            OpenGuild.getOGLogger().exceptionThrown(ex);
         }
     }
 
@@ -70,8 +70,8 @@ public class HardcoreSQLHandler {
                 ResultSet rs = st.executeQuery(query);
                 rs.next();
                 return (long) rs.getDouble("BAN_TIME");
-            } catch (SQLException ex) {
-                plugin.getOGLogger().exceptionThrown(ex);
+            } catch (Exception ex) {
+                OpenGuild.getOGLogger().exceptionThrown(ex);
                 return 0;
             }
         }
@@ -87,15 +87,15 @@ public class HardcoreSQLHandler {
             rs.next();
             rowCount = rs.getInt(1);
         } catch (SQLException ex) {
-            OpenGuild.getInstance().getOGLogger().exceptionThrown(ex);
+            OpenGuild.getOGLogger().exceptionThrown(ex);
         } finally {
             try {
                 rs.close();
             } catch (SQLException ex) {
-                OpenGuild.getInstance().getOGLogger().exceptionThrown(ex);
+                OpenGuild.getOGLogger().exceptionThrown(ex);
             }
         }
-        OpenGuild.getInstance().getOGLogger().debug("Counting player " + Bukkit.getOfflinePlayer(uniqueId).getName() + " with UUID " + uniqueId + " returns " + rowCount);
+        OpenGuild.getOGLogger().debug("Counting player " + Bukkit.getOfflinePlayer(uniqueId).getName() + " with UUID " + uniqueId + " returns " + rowCount);
         return rowCount != 0 && rowCount != -1;
     }
 }

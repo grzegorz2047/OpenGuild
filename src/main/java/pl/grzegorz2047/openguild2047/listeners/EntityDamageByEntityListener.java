@@ -70,10 +70,7 @@ public class EntityDamageByEntityListener implements Listener {
         }
         if (attacker != null && attacked != null) {
             teamPVPCheck(event, attacked, attacker);
-            if (GenConf.ANTI_LOGOUT) {
-                logout.updatePlayersFight(attacker, attacked);
 
-            }
         }
     }
 
@@ -93,6 +90,14 @@ public class EntityDamageByEntityListener implements Listener {
             processTeamPVP(event, attacker);
         } else if (attackerGuild.isAlly(attackedGuild)) {
             processTeamPVP(event, attacker);
+        }else {
+            checkAntilogout(attacked, attacker);
+        }
+    }
+
+    private void checkAntilogout(Player attacked, Player attacker) {
+        if (GenConf.ANTI_LOGOUT) {
+            logout.updatePlayersFight(attacker, attacked);
         }
     }
 

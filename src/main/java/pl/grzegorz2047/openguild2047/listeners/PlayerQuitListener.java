@@ -17,6 +17,7 @@ package pl.grzegorz2047.openguild2047.listeners;
 
 import java.util.UUID;
 
+import com.github.grzegorz2047.openguild.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -56,12 +57,14 @@ public class PlayerQuitListener implements Listener {
         String playerName = player.getName();
         if (logout.isPlayerDuringFight(playerName)) {
             Player potentialKiller = Bukkit.getPlayer(logout.getPotentialKillerName(playerName));
-            if (potentialKiller != null) {
-                player.damage(400, potentialKiller);
-                player.getInventory().clear();
-                player.getInventory().setArmorContents(new ItemStack[4]);
-            }
+            player.damage(400, potentialKiller);
+            player.getInventory().clear();
+            player.getInventory().setArmorContents(new ItemStack[4]);
             logout.removePlayerFromFight(playerName);
+            if (potentialKiller != null) {
+
+            }
+            Bukkit.broadcastMessage(MsgManager.get("playerlogoutduringfight").replace("%player", playerName));
         }
     }
 

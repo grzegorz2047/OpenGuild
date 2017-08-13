@@ -1,11 +1,12 @@
 package pl.grzegorz2047.openguild2047.database;
 
-import com.zaxxer.hikari.HikariDataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Created by grzeg on 13.08.2017.
  */
 public interface SQLImplementationStrategy {
 
-    HikariDataSource getDataSource();
+    Connection getConnection() throws Exception;
 }

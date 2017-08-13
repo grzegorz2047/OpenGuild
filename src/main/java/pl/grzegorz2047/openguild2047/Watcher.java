@@ -21,6 +21,7 @@ public class Watcher implements Runnable {
         }
         if (GenConf.ANTI_LOGOUT) {
             logout.updatePlayerActionBar();
+            logout.checkExpiredFights();
         }
     }
 
