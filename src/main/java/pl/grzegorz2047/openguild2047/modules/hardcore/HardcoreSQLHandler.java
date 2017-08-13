@@ -49,9 +49,6 @@ public class HardcoreSQLHandler {
             SQLHandler sql = OpenGuild.getInstance().getSQLHandler();
             Statement st = sql.getConnection().createStatement();
             String query;
-            if (sql.isConnectionClosed()) {
-                return;
-            }
 
             if (playerExists(uniqueId)) {
                 query = "UPDATE `" + TABLENAME + "` SET " + column.toString() + "='" + value + "' WHERE " + Column.UUID.toString() + "='" + uniqueId + "'";

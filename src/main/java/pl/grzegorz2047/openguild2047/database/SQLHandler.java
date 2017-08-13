@@ -22,11 +22,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Location;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import org.bukkit.Bukkit;
@@ -41,11 +42,11 @@ public class SQLHandler {
     private final int port;
     private final String user;
     private final String password;
-    private final String name;
+    private final String dbName;
     private OpenGuild plugin;
 
-    private Connection connection;
     private Statement statement;
+    private HikariDataSource hikari;
 
     // public String generateStringAutoInc(){
     //     if(!GenConf.DATABASE.equals(Database.FILE)) return "INT PRIMARY KEY AUTO_INCREMENT"; else return "INTEGER PRIMARY KEY AUTOINCREMENT";
@@ -53,48 +54,31 @@ public class SQLHandler {
     //public String generateDefVal(){
     //     if(!GenConf.DATABASE.equals(Database.FILE)) return "0"; else return "null";
     // }
-    public SQLHandler(OpenGuild plugin, String host, int port, String user, String password, String name) {
+    public SQLHandler(OpenGuild plugin, String host, int port, String user, String password, String dbName) {
         this.plugin = plugin;
         this.host = host;
         this.port = port;
         this.user = user;
         this.password = password;
-        this.name = name;
-
+        this.dbName = dbName;
         switch (GenConf.DATABASE) {
             case FILE:
                 OpenGuild.getOGLogger().info("[SQLite] Connecting to SQLite database ...");
-                try {
-                    Class.forName("org.sqlite.JDBC").newInstance();
-                    this.connection = DriverManager.getConnection("jdbc:sqlite:" + GenConf.FILE_DIR);
-                    if (this.connection != null) {
-                        OpenGuild.getOGLogger().info("[SQLite] Connected to SQLite successfully!");
-                        this.startWork();
-                    }
-                } catch (ClassNotFoundException ex) {
-                    OpenGuild.getOGLogger().info("[SQLite] Connecting with SQLite failed! We were unable to load driver 'org.sqlite.JDBC'.");
-                } catch (SQLException ex) {
-                    OpenGuild.getOGLogger().exceptionThrown(ex);
-                } catch (InstantiationException ex) {
-                    OpenGuild.getOGLogger().exceptionThrown(ex);
-                } catch (IllegalAccessException ex) {
-                    OpenGuild.getOGLogger().info("[SQLite] Connecting with SQLite failed! Permission error: " + ex.getMessage());
-                }
+                //Class.forName("org.sqlite.JDBC").newInstance();
+                //this.connection = DriverManager.getConnection("jdbc:sqlite:" + GenConf.FILE_DIR);
+                connectDBSQLite();
+                this.startWork();
+                OpenGuild.getOGLogger().info("[SQLite] Connected to SQLite successfully!");
                 break;
             case MYSQL:
                 OpenGuild.getOGLogger().info("[MySQL] Connecting to MySQL database ...");
-
                 try {
-                    Class.forName("com.mysql.jdbc.Driver");
-                    initConnection(host, port, user, password, name);
+                    connectDBMysql();
                     createStatement();
-
                     OpenGuild.getOGLogger().info("[MySQL] Connected to MySQL successfully!");
                     this.startWork();
                 } catch (SQLException ex) {
                     OpenGuild.getOGLogger().exceptionThrown(ex);
-                } catch (ClassNotFoundException ex) {
-                    OpenGuild.getOGLogger().info("[MySQL] Connecting with MySQL failed! We were unable to load driver 'com.mysql.jdbc.Driver'.");
                 }
                 break;
             default:
@@ -103,8 +87,34 @@ public class SQLHandler {
         }
     }
 
-    private void initConnection(String host, int port, String user, String password, String name) throws SQLException {
-        this.connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + name + "?connectTimeout=0&socketTimeout=0&autoReconnect=true", user, password);
+    private void connectDBMysql() {
+        hikari = new HikariDataSource();
+        hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+        hikari.addDataSourceProperty("serverName", host);
+        hikari.addDataSourceProperty("port", port);
+        hikari.addDataSourceProperty("databaseName", dbName);
+        hikari.addDataSourceProperty("user", user);
+        hikari.addDataSourceProperty("password", password);
+        hikari.addDataSourceProperty("cachePrepStmts", true);
+        hikari.addDataSourceProperty("prepStmtCacheSize", 250);
+        hikari.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+    }
+
+    private void connectDBSQLite() {
+        hikari = new HikariDataSource();
+        HikariConfig config = new HikariConfig();
+        config.setPoolName("OpenGUildSQLitePool");
+        config.setDriverClassName("org.sqlite.JDBC");
+        config.setJdbcUrl("jdbc:sqlite:" + GenConf.FILE_DIR);
+        config.setConnectionTestQuery("SELECT 1");
+        config.setMaxLifetime(60000); // 60 Sec
+        config.setIdleTimeout(45000); // 45 Sec
+        config.setMaximumPoolSize(50); // 50 Connections (including idle connections)
+        hikari = new HikariDataSource(config);
+    }
+
+    public Connection getConnection() throws SQLException {
+        return hikari.getConnection();
     }
 
     private void startWork() {
@@ -121,6 +131,7 @@ public class SQLHandler {
         OpenGuild.getOGLogger().info("[DB] Creating tables if not exists ...");
 
         try {
+            createStatement();
             String query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "guilds`"
                     + "(tag VARCHAR(11),"
                     + "description VARCHAR(100),"
@@ -133,8 +144,7 @@ public class SQLHandler {
                     + "home_yaw INT,"
                     + "home_world VARCHAR(16),"
                     + "PRIMARY KEY(tag));";
-            createStatement();
-            statement.execute(query);
+            statement.addBatch(query);
 
             query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "cuboids`"
                     + "(id INT AUTO_INCREMENT,"
@@ -144,8 +154,7 @@ public class SQLHandler {
                     + "cuboid_size INT,"
                     + "cuboid_worldname VARCHAR(60),"
                     + "PRIMARY KEY(id));";
-            createStatement();
-            statement.execute(query);
+            statement.addBatch(query);
 
             query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "players`"
                     + "(guild VARCHAR(11),"
@@ -155,8 +164,7 @@ public class SQLHandler {
                     + "points INT,"
                     + "lastseenname VARCHAR(16),"
                     + "PRIMARY KEY(uuid));";
-            createStatement();
-            statement.execute(query);
+            statement.addBatch(query);
 
             query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "allies`"
                     + "("
@@ -166,9 +174,9 @@ public class SQLHandler {
                     + "expires BIGINT,"
                     + "PRIMARY KEY(who,withwho)"
                     + ");";
-            createStatement();
-            statement.execute(query);
-
+            statement.addBatch(query);
+            statement.executeBatch();
+            statement.close();
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -208,8 +216,10 @@ public class SQLHandler {
             ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "guilds` JOIN `" + GenConf.sqlTablePrefix + "cuboids` USING(tag)");
             loopTroughGuildAndCuboidResults(cuboids, guilds, result);
             result.close();
+            statement.close();
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
+
         }
     }
 
@@ -271,21 +281,6 @@ public class SQLHandler {
     }
 
 
-    public Connection getConnection() {
-        try {
-            if (isConnectionClosed()) {
-                initConnection(host, port, user, password, name);
-            }
-        } catch (SQLException e) {
-            try {
-                initConnection(host, port, user, password, name);
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        }
-        return connection;
-    }
-
     private Map<UUID, Guild> loadPlayers() {
         Map<UUID, Guild> players = new HashMap<UUID, Guild>();
 
@@ -293,6 +288,9 @@ public class SQLHandler {
             createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "players`");
             readPlayersDataFromResult(players, result);
+            result.close();
+            statement.close();
+            getConnection().close();
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -411,10 +409,15 @@ public class SQLHandler {
 
                 addGuildAlly(relation, whoGuild);
                 addGuildAlly(relation, withWhoGuild);
+
             }
+            result.close();
+            statement.close();
+            getConnection().close();
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
+
     }
 
     private Relation createRelation(String who, String withwho, long expires, Relation.Status relationStatus) {
@@ -466,6 +469,8 @@ public class SQLHandler {
         try {
             createStatement();
             statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "players` VALUES( '', '" + uuid + "', '" + 0 + "', '" + 0 + "', '" + 0 + "' , '" + Bukkit.getPlayer(player).getName() + "');");
+            statement.close();
+            getConnection().close();
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -486,9 +491,12 @@ public class SQLHandler {
         try {
             createStatement();
             statement.executeUpdate("UPDATE `" + GenConf.sqlTablePrefix + "players` SET `guild` = '" + guildTag + "' WHERE `uuid` = '" + uuid.toString() + "'");
+            statement.close();
+            getConnection().close();
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
+
     }
 
     /**
@@ -509,6 +517,9 @@ public class SQLHandler {
                     "'" + guildHome.getPitch() + "'," +
                     "'" + guildHome.getYaw() + "'," +
                     "'" + homeWorld + "');");
+
+            statement.close();
+            getConnection().close();
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -523,6 +534,9 @@ public class SQLHandler {
         try {
             createStatement();
             statement.executeUpdate("UPDATE `" + GenConf.sqlTablePrefix + "guilds` SET `description` = '" + guild.getDescription() + "' WHERE `tag` = '" + guild.getTag().toUpperCase() + "'");
+
+            statement.close();
+            getConnection().close();
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -537,6 +551,9 @@ public class SQLHandler {
         try {
             createStatement();
             statement.execute("DELETE FROM `" + GenConf.sqlTablePrefix + "guilds` WHERE `tag` = '" + tag + "'");
+
+            statement.close();
+            getConnection().close();
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -560,6 +577,9 @@ public class SQLHandler {
                     return true;
                 }
             }
+            rs.close();
+            statement.close();
+            getConnection().close();
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
@@ -578,10 +598,13 @@ public class SQLHandler {
     public boolean removeAlliance(Guild who, Guild withWho) {
         try {
             createStatement();
-            statement.execute("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='" + who.getTag() + "' AND withwho='" + withWho.getTag() + "';");
-            statement.execute("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='" + withWho.getTag() + "' AND withwho='" + who.getTag() + "';");
-            return true;
+            statement.addBatch("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='" + who.getTag() + "' AND withwho='" + withWho.getTag() + "';");
+            statement.addBatch("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='" + withWho.getTag() + "' AND withwho='" + who.getTag() + "';");
+            statement.executeBatch();
 
+            statement.close();
+            getConnection().close();
+            return true;
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -589,23 +612,6 @@ public class SQLHandler {
         }
     }
 
-    public boolean isConnectionClosed() {
-        try {
-            return this.connection == null || this.connection.isClosed();
-        } catch (SQLException ex) {
-            return true;
-        }
-    }
-
-    public void closeConnection() {
-        try {
-            if (!isConnectionClosed()) {
-                this.connection.close();
-            }
-        } catch (SQLException ex) {
-            OpenGuild.getOGLogger().exceptionThrown(ex);
-        }
-    }
 
     public ResultSet executeQuery(String query) {
         try {
@@ -648,6 +654,9 @@ public class SQLHandler {
                     "'" + loc.getBlockZ() + "'," +
                     "'" + size + "'," +
                     "'" + worldName + "');");
+
+            statement.close();
+            getConnection().close();
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }

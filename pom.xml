@@ -1,63 +1,95 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>pl.grzegorz2047</groupId>
-  <artifactId>OpenGuild2047</artifactId>
-  <version>0.6.7</version>
-  <packaging>jar</packaging>
-  <name>OpenGuild2047</name>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <upload.dbo.category>server-mods</upload.dbo.category>
-    <upload.dbo.slug>OpenGuild2047</upload.dbo.slug>
-  </properties>
-  <url>http://maven.apache.org</url>
+    <groupId>pl.grzegorz2047</groupId>
+    <artifactId>OpenGuild2047</artifactId>
+    <version>0.6.8</version>
+    <packaging>jar</packaging>
+    <name>OpenGuild2047</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <upload.dbo.category>server-mods</upload.dbo.category>
+        <upload.dbo.slug>OpenGuild2047</upload.dbo.slug>
+    </properties>
+    <url>http://maven.apache.org</url>
 
-  <build>
-    <resources>
-        <resource>
-            <directory>src/main/resources</directory>
-            <filtering>true</filtering>
-        </resource>
-    </resources>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.3</version>
-            <configuration>
-                <source>1.7</source>
-                <target>1.7</target>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
- <repositories>
-  <repository>
-    <id>bukkit-repo</id>
-    <url>http://maven.sk89q.com/repo/</url>
-  </repository>
-  <repository>
-    <id>njol-repo</id>
-    <url>http://maven.njol.ch/repo/</url>
-  </repository>
-    <repository>
-        <id>spigot-repo</id>
-        <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
-    </repository>
-</repositories>
-  <dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.spigotmc:spigot-api</exclude>
+                                </excludes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <repositories>
+        <repository>
+            <id>bukkit-repo</id>
+            <url>http://maven.sk89q.com/repo/</url>
+        </repository>
+        <repository>
+            <id>njol-repo</id>
+            <url>http://maven.njol.ch/repo/</url>
+        </repository>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>2.4.5</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.11.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
-    <dependency>
-      <groupId>ch.njol</groupId>
-      <artifactId>skript</artifactId>
-      <version>2.0.1</version><!-- Use whatever version you want to depend on -->
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>ch.njol</groupId>
+            <artifactId>skript</artifactId>
+            <version>2.0.1</version><!-- Use whatever version you want to depend on -->
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

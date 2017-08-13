@@ -22,6 +22,7 @@ import com.github.grzegorz2047.openguild.hook.Hooks;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -154,7 +155,11 @@ public class OpenGuild extends JavaPlugin {
     public void onDisable() {
         instance = null;
 
-        this.sqlHandler.closeConnection();
+        try {
+            this.sqlHandler.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         this.sqlHandler = null;
         this.tagManager = null;
 
