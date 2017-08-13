@@ -22,6 +22,8 @@ import com.github.grzegorz2047.openguild.hook.Hooks;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -335,8 +337,9 @@ public class OpenGuild extends JavaPlugin {
                 file.delete();
                 return;
             }
+            Reader targetReader = new InputStreamReader(getResource(name + ".yml"));
 
-            configInside.load(getResource(name + ".yml"));
+            configInside.load(targetReader);
 
             for (String k : configInside.getKeys(true)) {
                 if (!c.contains(k)) {
@@ -345,6 +348,7 @@ public class OpenGuild extends JavaPlugin {
             }
 
             c.save(file);
+            targetReader.close();
         } catch (IOException e) {
             getOGLogger().exceptionThrown(e);
         } catch (InvalidConfigurationException e) {
