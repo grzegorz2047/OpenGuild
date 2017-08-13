@@ -33,6 +33,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
@@ -69,6 +70,7 @@ public class OpenGuild extends JavaPlugin {
     private SQLHandler sqlHandler;
     private Cuboids cuboids;
     private AntiLogoutManager logout;
+    private BukkitTask watcher;
 
     /**
      * Instance of built-in permissions manager main class.
@@ -153,6 +155,7 @@ public class OpenGuild extends JavaPlugin {
 
         // Register all hooks to this plugin
         Hooks.registerDefaults();
+        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout), 0, 20);
 
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!");
     }
@@ -161,6 +164,8 @@ public class OpenGuild extends JavaPlugin {
     public void onDisable() {
         instance = null;
 
+        this.logout.dispose();
+        this.watcher.cancel();
         try {
             this.sqlHandler.getConnection().close();
         } catch (SQLException e) {

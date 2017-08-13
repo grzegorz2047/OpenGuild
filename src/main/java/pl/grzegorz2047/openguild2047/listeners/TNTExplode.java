@@ -16,6 +16,7 @@
 package pl.grzegorz2047.openguild2047.listeners;
 
 import java.util.HashMap;
+
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,72 +24,78 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.OpenGuildPlugin;
+
 import java.util.Map;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.EnhancedRunnable;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
 
 public class TNTExplode implements Listener {
-    
+
     private final OpenGuildPlugin plugin;
     private final Map<String, Integer> blockedGuilds = new HashMap<String, Integer>();
-    
+
     public TNTExplode(OpenGuildPlugin plugin) {
         this.plugin = plugin;
     }
-    
+
     public void handle(BlockPlaceEvent event) {
-        if(GenConf.enableTNTExplodeListener) {
+        if (GenConf.enableTNTExplodeListener) {
             Player player = event.getPlayer();
 
-            if(player.hasPermission("openguild.cuboid.bypassplace")) {
+            if (player.hasPermission("openguild.cuboid.bypassplace")) {
                 return;
             }
 
             Guild guild = plugin.getGuild(event.getBlock().getLocation());
-            if(guild != null) {
-                if(blockedGuilds.containsKey(guild.getTag())) {
+            if (guild != null) {
+                if (blockedGuilds.containsKey(guild.getTag())) {
                     player.sendMessage(MsgManager.get("tntex").replace("{SEC}", String.valueOf(blockedGuilds.get(guild.getTag()))));
                     event.setCancelled(true);
                 }
             }
         }
     }
-    
+
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
-        if(event.getEntityType().equals(EntityType.PRIMED_TNT) && GenConf.enableTNTExplodeListener) {
+        if (SpawnChecker.isSpawn(event.getLocation())) {
+            event.setCancelled(true);
+        }
+        if (event.getEntityType().equals(EntityType.PRIMED_TNT) && GenConf.enableTNTExplodeListener) {
             Location location = event.getLocation();
             final Guild guild = plugin.getGuild(location);
-            
-            if(guild != null) {
-                if(!blockedGuilds.containsKey(guild.getTag())) {
-                    EnhancedRunnable.startTask(plugin.getBukkit(), new EnhancedRunnable(){
+
+            if (guild != null) {
+                if (!blockedGuilds.containsKey(guild.getTag())) {
+                    EnhancedRunnable.startTask(plugin.getBukkit(), new EnhancedRunnable() {
                         /**
                          * Time left to 'free' guild.
                          */
                         private int blockTime = GenConf.defaultTNTBlockTime;
-                        
+
                         @Override
                         public void run() {
                             blockTime = blockedGuilds.get(guild.getTag());
-                            
-                            if(blockTime == 0) {
+
+                            if (blockTime == 0) {
                                 blockedGuilds.remove(guild.getTag());
                                 this.stopTask();
                                 return;
                             }
-                            
+
                             blockedGuilds.put(guild.getTag(), blockTime--);
                         }
                     }, 5L, 20L);
                 }
-                
+
                 blockedGuilds.put(guild.getTag(), 30);
             }
         }
     }
-    
+
 }
