@@ -101,6 +101,7 @@ public class GenConf {
     public static String sqlTablePrefix;
     public static boolean cuboidCheckPlayers;
     public static int ranTpRange;
+    public static boolean ANTI_LOGOUT;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
@@ -118,6 +119,7 @@ public class GenConf {
         loadDatabase();
         FILE_DIR = OpenGuild.getInstance().getConfig().getString("file-dir", "plugins/OpenGuild2047/og.db");
         SNOOPER = OpenGuild.getInstance().getConfig().getBoolean("snooper", true);
+        ANTI_LOGOUT = OpenGuild.getInstance().getConfig().getBoolean("fight-antilogout", true);
         TEAMPVP_MSG = OpenGuild.getInstance().getConfig().getBoolean("teampvp-msg", false);
         FORCE_DESC = OpenGuild.getInstance().getConfig().getBoolean("forcedesc", false);
         lang = OpenGuild.getInstance().getConfig().getString("language").toUpperCase();

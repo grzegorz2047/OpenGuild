@@ -16,37 +16,69 @@
 package pl.grzegorz2047.openguild2047.listeners;
 
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class PlayerQuitListener implements Listener {
-    
-    private OpenGuild plugin;
-    
-    public PlayerQuitListener(OpenGuild plugin) {
-        this.plugin = plugin;
+
+
+    private final Guilds guilds;
+    private final Cuboids cuboids;
+    private final AntiLogoutManager logout;
+
+    public PlayerQuitListener(Guilds guilds, Cuboids cuboids, AntiLogoutManager logout) {
+        this.guilds = guilds;
+        this.cuboids = cuboids;
+        this.logout = logout;
     }
-    
+
     @EventHandler
     public void handleEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        plugin.getCuboids().playersenteredcuboid.remove(player.getName());
-        if(plugin.getGuilds().hasGuild(player)) {
-            Guild guild = plugin.getGuilds().getPlayerGuild(uuid);
-            for(UUID mem : guild.getMembers()) {
-                OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);
-                if(om.isOnline()) {
-                    om.getPlayer().sendMessage(MsgManager.get("guildmemberleft").replace("{PLAYER}", player.getDisplayName()));
-                }
+        clearCuboidEnterNotification(player);
+        if (isPlayerInGuild(player)) {
+            Guild guild = guilds.getPlayerGuild(uuid);
+            notifyGuildThatMemberLeft(player, guild);
+        }
+        String playerName = player.getName();
+        if (logout.isPlayerDuringFight(playerName)) {
+            Player potentialKiller = Bukkit.getPlayer(logout.getPotentialKillerName(playerName));
+            if (potentialKiller != null) {
+                player.damage(400, potentialKiller);
+                player.getInventory().clear();
+                player.getInventory().setArmorContents(new ItemStack[4]);
+            }
+            logout.removePlayerFromFight(playerName);
+        }
+    }
+
+    private void notifyGuildThatMemberLeft(Player player, Guild guild) {
+        for (UUID mem : guild.getMembers()) {
+            OfflinePlayer om = Bukkit.getOfflinePlayer(mem);
+            if (om.isOnline()) {
+                om.getPlayer().sendMessage(MsgManager.get("guildmemberleft").replace("{PLAYER}", player.getDisplayName()));
             }
         }
+    }
+
+    private void clearCuboidEnterNotification(Player player) {
+        cuboids.playersenteredcuboid.remove(player.getName());
+    }
+
+    private boolean isPlayerInGuild(Player player) {
+        return guilds.hasGuild(player);
     }
 }

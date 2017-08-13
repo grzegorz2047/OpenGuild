@@ -38,11 +38,6 @@ import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 
 public class SQLHandler {
 
-    private final String host;
-    private final int port;
-    private final String user;
-    private final String password;
-    private final String dbName;
     private OpenGuild plugin;
 
     private Statement statement;
@@ -54,50 +49,10 @@ public class SQLHandler {
     //public String generateDefVal(){
     //     if(!GenConf.DATABASE.equals(Database.FILE)) return "0"; else return "null";
     // }
-    public SQLHandler(OpenGuild plugin, String host, int port, String user, String password, String dbName) {
+    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation) {
         this.plugin = plugin;
-        this.host = host;
-        this.port = port;
-        this.user = user;
-        this.password = password;
-        this.dbName = dbName;
-        switch (GenConf.DATABASE) {
-            case FILE:
-                OpenGuild.getOGLogger().info("[SQLite] Connecting to SQLite database ...");
-                //Class.forName("org.sqlite.JDBC").newInstance();
-                //this.connection = DriverManager.getConnection("jdbc:sqlite:" + GenConf.FILE_DIR);
-                connectDBSQLite();
-                this.startWork();
-                OpenGuild.getOGLogger().info("[SQLite] Connected to SQLite successfully!");
-                break;
-            case MYSQL:
-                OpenGuild.getOGLogger().info("[MySQL] Connecting to MySQL database ...");
-                try {
-                    connectDBMysql();
-                    createStatement();
-                    OpenGuild.getOGLogger().info("[MySQL] Connected to MySQL successfully!");
-                    this.startWork();
-                } catch (SQLException ex) {
-                    OpenGuild.getOGLogger().exceptionThrown(ex);
-                }
-                break;
-            default:
-                OpenGuild.getOGLogger().severe("[MySQL] Invalid database type '" + GenConf.DATABASE.name() + "'!");
-                break;
-        }
-    }
-
-    private void connectDBMysql() {
-        hikari = new HikariDataSource();
-        hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
-        hikari.addDataSourceProperty("serverName", host);
-        hikari.addDataSourceProperty("port", port);
-        hikari.addDataSourceProperty("databaseName", dbName);
-        hikari.addDataSourceProperty("user", user);
-        hikari.addDataSourceProperty("password", password);
-        hikari.addDataSourceProperty("cachePrepStmts", true);
-        hikari.addDataSourceProperty("prepStmtCacheSize", 250);
-        hikari.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+        this.hikari = implementation.getDataSource();
+        this.startWork();
     }
 
     private void connectDBSQLite() {

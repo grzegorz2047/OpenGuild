@@ -33,13 +33,17 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
+import pl.grzegorz2047.openguild2047.database.MySQLImplementationStrategy;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
+import pl.grzegorz2047.openguild2047.database.SQLImplementationStrategy;
+import pl.grzegorz2047.openguild2047.database.SQLiteImplementationStrategy;
 import pl.grzegorz2047.openguild2047.listeners.CuboidAndSpawnManipulationListeners;
 import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntityListener;
 import pl.grzegorz2047.openguild2047.listeners.PlayerChatListener;
@@ -64,6 +68,7 @@ public class OpenGuild extends JavaPlugin {
 
     private SQLHandler sqlHandler;
     private Cuboids cuboids;
+    private AntiLogoutManager logout;
 
     /**
      * Instance of built-in permissions manager main class.
@@ -118,6 +123,7 @@ public class OpenGuild extends JavaPlugin {
         //}
         this.guilds = new Guilds();
         this.cuboids = new Cuboids(this);
+        this.logout = new AntiLogoutManager();
         // Setup Tag Manager
         this.tagManager = new TagManager(this);
 
@@ -240,7 +246,24 @@ public class OpenGuild extends JavaPlugin {
         String pass = getConfig().getString("mysql.password");
         String name = getConfig().getString("mysql.database");
 
-        this.sqlHandler = new SQLHandler(this, host, port, user, pass, name);
+        SQLImplementationStrategy sqlImplementation;
+        switch (GenConf.DATABASE) {
+            case FILE:
+                OpenGuild.getOGLogger().info("[SQLite] Connecting to SQLite database ...");
+                sqlImplementation = new SQLiteImplementationStrategy();
+                OpenGuild.getOGLogger().info("[SQLite] Connected to SQLite successfully!");
+                break;
+            case MYSQL:
+                sqlImplementation = new MySQLImplementationStrategy(host, port, user, pass, name);
+                break;
+            default:
+                OpenGuild.getOGLogger().severe("[MySQL] Invalid database type '" + GenConf.DATABASE.name() + "'!");
+                sqlImplementation = new SQLiteImplementationStrategy();
+                OpenGuild.getOGLogger().severe("[MySQL] Invalid database type! Setting db to SQLite!");
+                break;
+        }
+
+        this.sqlHandler = new SQLHandler(this, sqlImplementation);
     }
 
     /**
@@ -252,15 +275,13 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerChatListener(this), this);
         pm.registerEvents(new PlayerDeathListener(), this);
-        pm.registerEvents(new PlayerQuitListener(this), this);
+        pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout), this);
 
         if (GenConf.cubEnabled) {
             pm.registerEvents(new CuboidAndSpawnManipulationListeners(this), this);
         }
 
-        if (!GenConf.teampvp) {
-            pm.registerEvents(new EntityDamageByEntityListener(this), this);
-        }
+        pm.registerEvents(new EntityDamageByEntityListener(logout, guilds), this);
 
         if (GenConf.playerMoveEvent) {
             pm.registerEvents(new PlayerMoveListener(this), this);

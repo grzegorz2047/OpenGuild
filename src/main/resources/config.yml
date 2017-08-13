@@ -6,6 +6,7 @@ teampvp: false
 teampvp-msg: false
 home-command: true
 teleport-cooldown: 10
+fight-antilogout: true
 spawn:
   location-max: [world, 50, 50]
   location-min: [world, -50, -50]
