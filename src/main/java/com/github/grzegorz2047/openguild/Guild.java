@@ -15,8 +15,12 @@
  */
 package com.github.grzegorz2047.openguild;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 import java.util.UUID;
 
@@ -69,5 +73,14 @@ public class Guild extends GuildMembers {
 
     public void setSc(Scoreboard sc) {
         this.sc = sc;
+    }
+
+    public void notifyGuildThatMemberLeft(Player player) {
+        for (UUID mem : this.getMembers()) {
+            OfflinePlayer om = Bukkit.getOfflinePlayer(mem);
+            if (om.isOnline()) {
+                om.getPlayer().sendMessage(MsgManager.get("guildmemberleft").replace("{PLAYER}", player.getDisplayName()));
+            }
+        }
     }
 }

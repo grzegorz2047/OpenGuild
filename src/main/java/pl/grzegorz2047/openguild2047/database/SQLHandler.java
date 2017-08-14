@@ -236,7 +236,7 @@ public class SQLHandler {
             readPlayersDataFromResult(players, result);
             result.close();
             statement.close();
-            getConnection().close();
+            statement.getConnection().close();
         } catch (Exception ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -359,7 +359,7 @@ public class SQLHandler {
             }
             result.close();
             statement.close();
-            getConnection().close();
+            statement.getConnection().close();
         } catch (Exception ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -416,7 +416,7 @@ public class SQLHandler {
             createStatement();
             statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "players` VALUES( '', '" + uuid + "', '" + 0 + "', '" + 0 + "', '" + 0 + "' , '" + Bukkit.getPlayer(player).getName() + "');");
             statement.close();
-            getConnection().close();
+            statement.getConnection().close();
         } catch (Exception ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -438,7 +438,7 @@ public class SQLHandler {
             createStatement();
             statement.executeUpdate("UPDATE `" + GenConf.sqlTablePrefix + "players` SET `guild` = '" + guildTag + "' WHERE `uuid` = '" + uuid.toString() + "'");
             statement.close();
-            getConnection().close();
+            statement.getConnection().close();
         } catch (Exception ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -465,7 +465,7 @@ public class SQLHandler {
                     "'" + homeWorld + "');");
 
             statement.close();
-            getConnection().close();
+            statement.getConnection().close();
         } catch (Exception ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -482,7 +482,7 @@ public class SQLHandler {
             statement.executeUpdate("UPDATE `" + GenConf.sqlTablePrefix + "guilds` SET `description` = '" + guild.getDescription() + "' WHERE `tag` = '" + guild.getTag().toUpperCase() + "'");
 
             statement.close();
-            getConnection().close();
+            statement.getConnection().close();
         } catch (Exception ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -499,7 +499,7 @@ public class SQLHandler {
             statement.execute("DELETE FROM `" + GenConf.sqlTablePrefix + "guilds` WHERE `tag` = '" + tag + "'");
 
             statement.close();
-            getConnection().close();
+            statement.getConnection().close();
         } catch (Exception ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -525,7 +525,7 @@ public class SQLHandler {
             }
             rs.close();
             statement.close();
-            getConnection().close();
+            statement.getConnection().close();
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
@@ -549,7 +549,7 @@ public class SQLHandler {
             statement.executeBatch();
 
             statement.close();
-            getConnection().close();
+            statement.getConnection().close();
             return true;
 
         } catch (Exception ex) {
@@ -557,7 +557,26 @@ public class SQLHandler {
             return false;
         }
     }
+    public void updateStats(UUID uuid, String column) {
+        try {
+            createStatement();
+            ResultSet result = statement.executeQuery("SELECT '" + column + "' FROM '" +
+                    GenConf.sqlTablePrefix + "_players'" + " WHERE uuid='" + uuid.toString() + "';");
+            try {
+                int value = result.getInt(column);
+                value++;
+                statement.execute("UPDATE '" + GenConf.sqlTablePrefix + "' SET '" + column +
+                        "'=" + value + " WHERE uuid='" + uuid.toString() + "';");
+                statement.close();
+                statement.getConnection().close();
+            } catch (SQLException ex) {
+                OpenGuild.getAPI().getLogger().exceptionThrown(ex);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+    }
 
     public ResultSet executeQuery(String query) {
         try {
@@ -601,7 +620,7 @@ public class SQLHandler {
                     "'" + worldName + "');");
 
             statement.close();
-            getConnection().close();
+            statement.getConnection().close();
         } catch (Exception ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }

@@ -37,21 +37,10 @@ public class PlayerDeathListener implements Listener {
         Player killer = player.getKiller();
         if(killer != null) {
             SQLHandler handler = OpenGuild.getInstance().getSQLHandler();
-            this.update(handler, player.getUniqueId(), "deaths");
-            this.update(handler, killer.getUniqueId(), "kills");
+            handler.updateStats( player.getUniqueId(), "deaths");
+            handler.updateStats(killer.getUniqueId(), "kills");
         }
     }
     
-    private void update(SQLHandler handler, UUID uuid, String column) {
-        ResultSet result = handler.executeQuery("SELECT '" + column + "' FROM '" +
-                GenConf.sqlTablePrefix + "_players'" + " WHERE uuid='" + uuid.toString() + "';");
-        try {
-            int value = result.getInt(column);
-            value++;
-            handler.execute("UPDATE '" + GenConf.sqlTablePrefix + "' SET '" + column +
-                    "'=" + value + " WHERE uuid='" + uuid.toString() + "';");
-        } catch (SQLException ex) {
-            OpenGuild.getAPI().getLogger().exceptionThrown(ex);
-        }
-    }
+
 }

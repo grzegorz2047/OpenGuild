@@ -15,9 +15,6 @@
  */
 package pl.grzegorz2047.openguild2047.listeners;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -41,6 +38,9 @@ import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CuboidAndSpawnManipulationListeners implements Listener {
 
     private final OpenGuild plugin;
@@ -55,7 +55,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     public void onBlockBreak(BlockBreakEvent e) {
         if(SpawnChecker.isSpawn(e.getBlock().getLocation()) && !e.getPlayer().hasPermission("openguild.spawn.bypass")){
             e.setCancelled(true);
-            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("CantDoItOnSpawn"));
+            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
             return;
         }
         if(e.getPlayer().hasPermission("openguild.cuboid.bypassbreak")) {
@@ -70,7 +70,6 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
                 } else {
                     e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
                     e.setCancelled(true);
-                    return;
                 }
             }
         }
@@ -90,7 +89,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     public void onBlockPlace(BlockPlaceEvent e) {
         if(SpawnChecker.isSpawn(e.getBlock().getLocation()) && !e.getPlayer().hasPermission("openguild.spawn.bypass")){
             e.setCancelled(true);
-            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("CantDoItOnSpawn"));
+            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
             return;
         }
         if(e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
@@ -106,7 +105,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
 
         if(SpawnChecker.isSpawn(e.getBlockClicked().getLocation()) && !e.getPlayer().hasPermission("openguild.spawn.bypass")){
             e.setCancelled(true);
-            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("CantDoItOnSpawn"));
+            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
             return;
         }
         if(e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
@@ -121,7 +120,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     public void onBucketFlow(PlayerBucketEmptyEvent e) {
         if(SpawnChecker.isSpawn(e.getBlockClicked().getLocation()) && !e.getPlayer().hasPermission("openguild.spawn.bypass")){
             e.setCancelled(true);
-            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("CantDoItOnSpawn"));
+            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
             return;
         }
         if(e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
@@ -146,38 +145,33 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(e.getClickedBlock() != null) {
-            if(SpawnChecker.isSpawn(e.getClickedBlock().getLocation()) && !e.getPlayer().hasPermission("openguild.spawn.bypass")){
+            Player player = e.getPlayer();
+            if(SpawnChecker.isSpawn(e.getClickedBlock().getLocation()) && !player.hasPermission("openguild.spawn.bypass")){
                 e.setCancelled(true);
-                e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("CantDoItOnSpawn"));
+                player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
                 return;
             }
             if(GenConf.EXTRA_PROTECTION) {
-                if(!plugin.getCuboids().allowedToDoItHere(e.getPlayer(), e.getClickedBlock().getLocation())){
-                    if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
-                        Location block = e.getPlayer().getLocation();
-                        Guilds.getLogger().info("Player " + e.getPlayer().getName() + " (" + e.getPlayer().getUniqueId() +
-                                ") interacted in guilds cuboid at X:" + block.getBlockX() + ", Y:" + block.getBlockY() +
-                                ", Z:" + block.getBlockZ() + " in world " + block.getWorld().getName() + " (" +
-                                block.getBlock().getType().name() + ")");
-                        e.getPlayer().sendMessage(MsgManager.get("interinguild")
-                                .replace("{WORLD}", block.getWorld().getName())
-                                .replace("{X}", String.valueOf(block.getBlockX()))
-                                .replace("{Y}", String.valueOf(block.getBlockY()))
-                                .replace("{Z}", String.valueOf(block.getBlockZ())));
-                        return;
+                if(!plugin.getCuboids().allowedToDoItHere(player, e.getClickedBlock().getLocation())){
+                    if(player.hasPermission("openguild.cuboid.bypassinteract")) {
+                        Location block = player.getLocation();
+                        String interactionConsoleMsg = createConsoleInteractionMsg(player, block);
+                        Guilds.getLogger().info(interactionConsoleMsg);
+                        String interactionMsg = createInteractionMsg(block);
+                        player.sendMessage(interactionMsg);
                     }else{
-                        e.getPlayer().sendMessage(MsgManager.get("cantdoitonsomeonearea"));
+                        player.sendMessage(MsgManager.get("cantdoitonsomeonearea"));
                         e.setCancelled(true);
-                        return;
-                    }  
+                    }
                 } 
             }
         }
     }
-    
+
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent e) {
-        if(GenConf.EXTRA_PROTECTION && !plugin.getCuboids().allowedToDoItHere((Player) e.getPlayer(), e.getPlayer().getLocation())) {
+        Player player = (Player) e.getPlayer();
+        if(GenConf.EXTRA_PROTECTION && !plugin.getCuboids().allowedToDoItHere(player, player.getLocation())) {
             if(e.getInventory().getType().equals(InventoryType.PLAYER)){
                return; 
             }
@@ -187,27 +181,34 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
             if(e.getInventory().getTitle().equals(MsgManager.getIgnorePref("gui-items"))){
                return; 
             }
-            if(e.getPlayer().hasPermission("openguild.cuboid.bypassinteract")) {
+            if(player.hasPermission("openguild.cuboid.bypassinteract")) {
                 // I am not sure, but I think there should be an 'if' checking if inventory type is chest/enderchest etc.
                 
-                Location block = e.getPlayer().getLocation();
-                Guilds.getLogger().info("Player " + e.getPlayer().getName() + " (" + e.getPlayer().getUniqueId() +
-                        ") interacted in guilds cuboid at X:" + block.getBlockX() + ", Y:" + block.getBlockY() +
-                        ", Z:" + block.getBlockZ() + " in world " + block.getWorld().getName() + " (" +
-                        block.getBlock().getType().name() + ")");
-                ((Player) e.getPlayer()).sendMessage(MsgManager.get("interinguild")
-                        .replace("{WORLD}", block.getWorld().getName())
-                        .replace("{X}", String.valueOf(block.getBlockX()))
-                        .replace("{Y}", String.valueOf(block.getBlockY()))
-                        .replace("{Z}", String.valueOf(block.getBlockZ())));
+                Location block = player.getLocation();
+                String interactionConsoleMsg = createConsoleInteractionMsg(player, block);
+                Guilds.getLogger().info(interactionConsoleMsg);
+                String interactionMsg = createInteractionMsg(block);
+                player.sendMessage(interactionMsg);
             } else {
-                if(e.getPlayer() instanceof Player){
-                    Player p = (Player) e.getPlayer();
-                    p.sendMessage("Nie mozesz tego otworzyc: "+e.getInventory().getType());
-                }
+                 player.sendMessage("Nie mozesz tego otworzyc: "+e.getInventory().getType());
                 e.setCancelled(true);
             }
         }
+    }
+
+    private String createConsoleInteractionMsg(Player player, Location block) {
+        return "Player " + player.getName() + " (" + player.getUniqueId() +
+                            ") interacted in guilds cuboid at X:" + block.getBlockX() + ", Y:" + block.getBlockY() +
+                            ", Z:" + block.getBlockZ() + " in world " + block.getWorld().getName() + " (" +
+                            block.getBlock().getType().name() + ")";
+    }
+
+    private String createInteractionMsg(Location block) {
+        return MsgManager.get("interinguild")
+                            .replace("{WORLD}", block.getWorld().getName())
+                            .replace("{X}", String.valueOf(block.getBlockX()))
+                            .replace("{Y}", String.valueOf(block.getBlockY()))
+                            .replace("{Z}", String.valueOf(block.getBlockZ()));
     }
 
 

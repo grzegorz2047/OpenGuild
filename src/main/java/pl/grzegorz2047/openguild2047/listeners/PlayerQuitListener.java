@@ -25,6 +25,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import pl.grzegorz2047.openguild2047.GuildHomeTeleporter;
 import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
@@ -38,21 +39,22 @@ public class PlayerQuitListener implements Listener {
     private final Guilds guilds;
     private final Cuboids cuboids;
     private final AntiLogoutManager logout;
+    private final GuildHomeTeleporter teleporter;
 
-    public PlayerQuitListener(Guilds guilds, Cuboids cuboids, AntiLogoutManager logout) {
+    public PlayerQuitListener(Guilds guilds, Cuboids cuboids, AntiLogoutManager logout, GuildHomeTeleporter teleporter) {
         this.guilds = guilds;
         this.cuboids = cuboids;
         this.logout = logout;
+        this.teleporter = teleporter;
     }
 
     @EventHandler
     public void handleEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        clearCuboidEnterNotification(player);
         if (isPlayerInGuild(player)) {
             Guild guild = guilds.getPlayerGuild(uuid);
-            notifyGuildThatMemberLeft(player, guild);
+            guild.notifyGuildThatMemberLeft(player);
         }
         String playerName = player.getName();
         if (logout.isPlayerDuringFight(playerName)) {
@@ -66,19 +68,8 @@ public class PlayerQuitListener implements Listener {
             }
             Bukkit.broadcastMessage(MsgManager.get("playerlogoutduringfight").replace("%player", playerName));
         }
-    }
-
-    private void notifyGuildThatMemberLeft(Player player, Guild guild) {
-        for (UUID mem : guild.getMembers()) {
-            OfflinePlayer om = Bukkit.getOfflinePlayer(mem);
-            if (om.isOnline()) {
-                om.getPlayer().sendMessage(MsgManager.get("guildmemberleft").replace("{PLAYER}", player.getDisplayName()));
-            }
-        }
-    }
-
-    private void clearCuboidEnterNotification(Player player) {
-        cuboids.playersenteredcuboid.remove(player.getName());
+        cuboids.clearCuboidEnterNotification(player);
+        teleporter.removeRequest(uuid);
     }
 
     private boolean isPlayerInGuild(Player player) {

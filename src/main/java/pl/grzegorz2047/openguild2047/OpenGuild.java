@@ -47,13 +47,7 @@ import pl.grzegorz2047.openguild2047.database.MySQLImplementationStrategy;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.database.SQLImplementationStrategy;
 import pl.grzegorz2047.openguild2047.database.SQLiteImplementationStrategy;
-import pl.grzegorz2047.openguild2047.listeners.CuboidAndSpawnManipulationListeners;
-import pl.grzegorz2047.openguild2047.listeners.EntityDamageByEntityListener;
-import pl.grzegorz2047.openguild2047.listeners.PlayerChatListener;
-import pl.grzegorz2047.openguild2047.listeners.PlayerDeathListener;
-import pl.grzegorz2047.openguild2047.listeners.PlayerJoinListener;
-import pl.grzegorz2047.openguild2047.listeners.PlayerMoveListener;
-import pl.grzegorz2047.openguild2047.listeners.PlayerQuitListener;
+import pl.grzegorz2047.openguild2047.listeners.*;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 
@@ -73,6 +67,7 @@ public class OpenGuild extends JavaPlugin {
     private Cuboids cuboids;
     private AntiLogoutManager logout;
     private BukkitTask watcher;
+    private GuildHomeTeleporter teleporter;
 
     /**
      * Instance of built-in permissions manager main class.
@@ -130,9 +125,9 @@ public class OpenGuild extends JavaPlugin {
         this.logout = new AntiLogoutManager();
         // Setup Tag Manager
         this.tagManager = new TagManager(this);
-
+        teleporter = new GuildHomeTeleporter();
         // Register commands
-        loadCommands(cuboids, guilds);
+        loadCommands(cuboids, guilds, teleporter);
 
         // Register events
         loadAllListeners();
@@ -157,7 +152,7 @@ public class OpenGuild extends JavaPlugin {
 
         // Register all hooks to this plugin
         Hooks.registerDefaults();
-        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout), 0, 20);
+        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter), 0, 20);
 
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!");
     }
@@ -235,9 +230,9 @@ public class OpenGuild extends JavaPlugin {
      * This method sets executors of all commands, and
      * registers them in our API.
      */
-    private void loadCommands(Cuboids cuboids, Guilds guilds) {
+    private void loadCommands(Cuboids cuboids, Guilds guilds, GuildHomeTeleporter teleporter) {
         getCommand("team").setExecutor(new TeamCommand(this));
-        getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds));
+        getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter));
 
         OpenCommandManager.registerPluginCommands(this);
     }
@@ -282,7 +277,8 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerChatListener(this), this);
         pm.registerEvents(new PlayerDeathListener(), this);
-        pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout), this);
+        pm.registerEvents(new PlayerKickListener(teleporter, cuboids), this);
+        pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter), this);
 
         if (GenConf.cubEnabled) {
             pm.registerEvents(new CuboidAndSpawnManipulationListeners(this), this);
@@ -291,7 +287,7 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new EntityDamageByEntityListener(logout, guilds), this);
 
         if (GenConf.playerMoveEvent) {
-            pm.registerEvents(new PlayerMoveListener(this), this);
+            pm.registerEvents(new PlayerMoveListener(cuboids), this);
         }
     }
 

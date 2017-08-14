@@ -7,10 +7,12 @@ import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
  */
 public class Watcher implements Runnable {
     private final AntiLogoutManager logout;
+    private final GuildHomeTeleporter teleporter;
     private int seconds;
 
-    public Watcher(AntiLogoutManager logout) {
+    public Watcher(AntiLogoutManager logout, GuildHomeTeleporter teleporter) {
         this.logout = logout;
+        this.teleporter = teleporter;
     }
 
     @Override
@@ -22,6 +24,9 @@ public class Watcher implements Runnable {
         if (GenConf.ANTI_LOGOUT) {
             logout.updatePlayerActionBar();
             logout.checkExpiredFights();
+        }
+        if(GenConf.TELEPORT_COOLDOWN > 0) {
+            teleporter.checkHomeRequests();
         }
     }
 

@@ -24,25 +24,23 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 
 public class PlayerMoveListener implements Listener {
-    
-    private OpenGuild plugin;
-    
-    public PlayerMoveListener(OpenGuild plugin) {
-        this.plugin = plugin;
+
+
+    private final Cuboids cuboids;
+
+    public PlayerMoveListener(Cuboids cuboids) {
+         this.cuboids = cuboids;
     }
     
     @EventHandler
     public void handleEvent(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        plugin.
-                getCuboids().
-                notifyGuildWhenPlayerEntersCuboid(player);
+        cuboids.notifyGuildWhenPlayerEntersCuboid(player);
         if(event.isCancelled() || GenConf.CANENTERAREA || player.hasPermission("openguild.cuboid.bypassenterflag")) {
             return;
         }
-
-        if(!plugin.getCuboids().canMove(player, event.getFrom(), event.getTo())) {
+        if(!cuboids.canMove(player, event.getFrom(), event.getTo())) {
             event.setTo(event.getFrom());
         }
     }

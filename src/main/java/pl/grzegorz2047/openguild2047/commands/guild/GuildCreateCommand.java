@@ -71,7 +71,7 @@ public class GuildCreateCommand extends Command {
         }
         //Bukkit.broadcastMessage("Is on Spawn = " + SpawnChecker.isSpawn(player.getLocation()));
         if (SpawnChecker.isSpawn(player.getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
-            player.sendMessage(ChatColor.RED + MsgManager.get("CantDoItOnSpawn"));
+            player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
             return;
         }
 

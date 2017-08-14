@@ -51,6 +51,10 @@ public class Cuboids {
         cuboids.put(tag, cuboid);
     }
 
+    public void clearCuboidEnterNotification(Player player) {
+        playersenteredcuboid.remove(player.getName());
+    }
+
     public boolean allowedToDoItHere(Player player, Location location) {
         if (plugin.getCuboids().checkIfInAnyCuboid(cuboids.entrySet().iterator(), location)) {
             if (plugin.getGuilds().hasGuild(player.getUniqueId())) {

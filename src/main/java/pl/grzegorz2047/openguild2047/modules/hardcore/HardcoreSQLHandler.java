@@ -56,6 +56,8 @@ public class HardcoreSQLHandler {
                 query = "INSERT INTO `" + TABLENAME + "` VALUES('" + uniqueId + "', '" + Bukkit.getOfflinePlayer(uniqueId).getName() + "', '" + value + "')";
             }
             st.execute(query);
+            st.close();
+            st.getConnection().close();
         } catch (Exception ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
@@ -69,7 +71,11 @@ public class HardcoreSQLHandler {
                 Statement st = sql.getConnection().createStatement();
                 ResultSet rs = st.executeQuery(query);
                 rs.next();
-                return (long) rs.getDouble("BAN_TIME");
+                long ban_time = (long) rs.getDouble("BAN_TIME");
+                rs.close();
+                st.close();
+                st.getConnection().close();
+                return ban_time;
             } catch (Exception ex) {
                 OpenGuild.getOGLogger().exceptionThrown(ex);
                 return 0;
@@ -86,11 +92,14 @@ public class HardcoreSQLHandler {
             // get the number of rows from the result set
             rs.next();
             rowCount = rs.getInt(1);
+
         } catch (SQLException ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         } finally {
             try {
                 rs.close();
+                rs.getStatement().close();
+                rs.getStatement().getConnection().close();
             } catch (SQLException ex) {
                 OpenGuild.getOGLogger().exceptionThrown(ex);
             }

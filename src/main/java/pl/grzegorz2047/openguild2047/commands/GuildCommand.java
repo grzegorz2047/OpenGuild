@@ -15,6 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047.commands;
 
+import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
 
@@ -24,6 +25,7 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import pl.grzegorz2047.openguild2047.GuildHomeTeleporter;
 import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.commands.guild.*;
@@ -44,7 +46,7 @@ public class GuildCommand implements CommandExecutor {
     private final Cuboids cuboids;
     private final Guilds guilds;
 
-    public GuildCommand(Cuboids cuboids, Guilds guilds) {
+    public GuildCommand(Cuboids cuboids, Guilds guilds, GuildHomeTeleporter teleporter) {
         this.cuboids = cuboids;
         this.guilds = guilds;
 
@@ -60,7 +62,7 @@ public class GuildCommand implements CommandExecutor {
         this.commands.put(new String[]{"version", "wersja", "ver", "about"}, new GuildVersionCommand());
         this.commands.put(new String[]{"leave", "opusc", "wyjdz"}, new GuildLeaveCommand());
         this.commands.put(new String[]{"disband", "rozwiaz", "zamknij"}, new GuildDisbandCommand());
-        this.commands.put(new String[]{"dom", "home", "house"}, new GuildHomeCommand());
+        this.commands.put(new String[]{"dom", "home", "house"}, new GuildHomeCommand(teleporter));
         this.commands.put(new String[]{"list", "lista"}, new GuildListCommand());
         this.commands.put(new String[]{"description", "desc", "opis"}, new GuildDescriptionCommand());
         this.commands.put(new String[]{"ally", "sojusz",}, new GuildAllyCommand());
