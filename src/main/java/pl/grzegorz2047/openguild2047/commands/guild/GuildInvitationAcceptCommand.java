@@ -73,7 +73,7 @@ public class GuildInvitationAcceptCommand extends Command {
             }
         } else if(args.length >= 2) {
             String tag = args[1].toUpperCase();
-            Guild target = guilds.getGuilds().get(tag);
+            Guild target = guilds.getGuild(tag);
             if(target != null && guilds.getGuilds().containsKey(tag)) {
                 if(invitationsFrom.contains(target)) {
                     accept((Player) sender, target);
@@ -94,7 +94,7 @@ public class GuildInvitationAcceptCommand extends Command {
         }
         
         guild.acceptInvitation(player);
-        getPlugin().getTagManager().playerJoinGuild(player);
+        getPlugin().getTagManager().playerJoinGuild(player, guild);
         Bukkit.broadcastMessage(MsgManager.get("broadcast-join")
                 .replace("{PLAYER}", player.getName())
                 .replace("{TAG}", guild.getTag().toUpperCase()));

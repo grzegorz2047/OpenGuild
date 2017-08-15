@@ -17,17 +17,14 @@ package pl.grzegorz2047.openguild2047.listeners;
 
 import java.util.UUID;
 
-import com.github.grzegorz2047.openguild.Messages;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import pl.grzegorz2047.openguild2047.GuildHomeTeleporter;
+import pl.grzegorz2047.openguild2047.Teleporter;
 import pl.grzegorz2047.openguild2047.Guilds;
-import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
 import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
@@ -39,9 +36,9 @@ public class PlayerQuitListener implements Listener {
     private final Guilds guilds;
     private final Cuboids cuboids;
     private final AntiLogoutManager logout;
-    private final GuildHomeTeleporter teleporter;
+    private final Teleporter teleporter;
 
-    public PlayerQuitListener(Guilds guilds, Cuboids cuboids, AntiLogoutManager logout, GuildHomeTeleporter teleporter) {
+    public PlayerQuitListener(Guilds guilds, Cuboids cuboids, AntiLogoutManager logout, Teleporter teleporter) {
         this.guilds = guilds;
         this.cuboids = cuboids;
         this.logout = logout;

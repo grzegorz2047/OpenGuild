@@ -17,19 +17,16 @@
 package pl.grzegorz2047.openguild2047.commands.guild;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.GuildHomeTeleporter;
+import pl.grzegorz2047.openguild2047.Teleporter;
 import pl.grzegorz2047.openguild2047.Guilds;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.event.guild.GuildHomeTeleportEvent;
 import org.bukkit.Bukkit;
-import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -39,10 +36,10 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  */
 public class GuildHomeCommand extends Command {
 
-    private GuildHomeTeleporter teleporter;
+    private Teleporter teleporter;
 
 
-    public GuildHomeCommand(GuildHomeTeleporter teleporter) {
+    public GuildHomeCommand(Teleporter teleporter) {
         setPermission("openguild.command.home");
         this.teleporter = teleporter;
     }

@@ -16,8 +16,8 @@
 package pl.grzegorz2047.openguild2047.listeners;
 
 import java.util.UUID;
+
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,46 +25,39 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
-import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class PlayerJoinListener implements Listener {
-    
+
     private OpenGuild plugin;
-    
+
     public PlayerJoinListener(OpenGuild plugin) {
         this.plugin = plugin;
     }
-    
+
     @EventHandler
     public void handleEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         //System.out.print("Wykonuje playerJoinEvent!");
-        
-        if(!plugin.getGuilds().getPlayers().containsKey(uuid)) {
+
+        if (!plugin.getGuilds().getMappedPlayersToGuilds().containsKey(uuid)) {
             plugin.getSQLHandler().insertPlayer(uuid);
-            plugin.getGuilds().getPlayers().put(uuid, null);
+            plugin.getGuilds().addPlayer(uuid, null);
         }
-        plugin.getTagManager().playerJoinServer(player);
-        if(plugin.getGuilds().hasGuild(player)) {
+
+        if (plugin.getGuilds().hasGuild(player)) {
             Guild guild = plugin.getGuilds().getPlayerGuild(uuid);
-            for(UUID mem : guild.getMembers()) {
-                OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);
-                if(om.isOnline()) {
-                    if(!player.getUniqueId().equals(om.getUniqueId())){
-                        om.getPlayer().sendMessage(MsgManager.get("guildmemberjoined").replace("{PLAYER}", player.getDisplayName()));
-                    }
-                }
-            }
+            guild.notifyMembersJoinedGame(player);
+            plugin.getTagManager().assignScoreboardToPlayer(player, guild.getSc());
         }
-        
-        if(player.isOp() && com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isEnabled() && com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isAvailable()) {
+        plugin.getTagManager().assignScoreboardToPlayer(player);
+
+        if (player.isOp() && com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isEnabled() && com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isAvailable()) {
             player.sendMessage(ChatColor.RED + " =============== OpenGuild UPDATER =============== ");
-            if(GenConf.lang.equalsIgnoreCase("PL")) {
+            if (GenConf.lang.equalsIgnoreCase("PL")) {
                 player.sendMessage(ChatColor.YELLOW + "Znaleziono aktualizacje! Prosze zaktualizowac Twój plugin do najnowszej wersji!");
                 player.sendMessage(ChatColor.YELLOW + "Pobierz go z https://github.com/grzegorz2047/OpenGuild2047/releases");
-            }
-            else if(GenConf.lang.equalsIgnoreCase("SV")) {
+            } else if (GenConf.lang.equalsIgnoreCase("SV")) {
                 player.sendMessage(ChatColor.YELLOW + "Uppdatering hittas! Uppdatera ditt plugin till den senaste version!");
                 player.sendMessage(ChatColor.YELLOW + "Ladda ner det från https://github.com/grzegorz2047/OpenGuild2047/releases");
             } else {
@@ -74,4 +67,6 @@ public class PlayerJoinListener implements Listener {
             player.sendMessage(ChatColor.RED + " =============== OpenGuild UPDATER =============== ");
         }
     }
+
+
 }

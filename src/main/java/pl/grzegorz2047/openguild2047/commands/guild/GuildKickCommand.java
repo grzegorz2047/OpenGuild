@@ -78,8 +78,8 @@ public class GuildKickCommand extends Command {
             
         this.getPlugin().getTagManager().playerLeaveGuild(op);
         guild.removeMember(op.getUniqueId());
-        guilds.getPlayers().remove(op.getUniqueId());
-        guilds.getPlayers().put(op.getUniqueId(), null);
+        guilds.getMappedPlayersToGuilds().remove(op.getUniqueId());
+        guilds.getMappedPlayersToGuilds().put(op.getUniqueId(), null);
         if(op.isOnline()) {
             op.getPlayer().sendMessage(MsgManager.playerkicked.replace("{GUILD}", guild.getTag()));
         }
@@ -91,7 +91,7 @@ public class GuildKickCommand extends Command {
             }
         }
 
-        getPlugin().getSQLHandler().updatePlayerTag(op.getUniqueId());
+        getPlugin().getSQLHandler().updatePlayerTag(op.getUniqueId(), "");
         
         player.sendMessage(MsgManager.playerkicksuccess);
     }

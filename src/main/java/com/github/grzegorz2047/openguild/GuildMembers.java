@@ -62,8 +62,8 @@ public class GuildMembers extends GuildRelations {
         if(pendingInvitations.contains(player.getUniqueId())) {
             pendingInvitations.remove(player.getUniqueId());
 
-            this.plugin.getGuilds().getPlayers().put(player.getUniqueId(), guild);
-            this.plugin.getSQLHandler().updatePlayerTag(player.getUniqueId());
+            this.plugin.getGuilds().addPlayer(player.getUniqueId(), guild);
+            this.plugin.getSQLHandler().updatePlayerTag(player.getUniqueId(), guild.getTag());
             this.members.add(player.getUniqueId());
         }
     }

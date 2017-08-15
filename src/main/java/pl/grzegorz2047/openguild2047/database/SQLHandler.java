@@ -21,8 +21,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Location;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.Guilds;
@@ -30,27 +28,22 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 public class SQLHandler {
 
+    private final TagManager tagManager;
+    private final Guilds guilds;
     private OpenGuild plugin;
 
     private Statement statement;
-    private Connection connection;
     private SQLImplementationStrategy implementation;
 
-    // public String generateStringAutoInc(){
-    //     if(!GenConf.DATABASE.equals(Database.FILE)) return "INT PRIMARY KEY AUTO_INCREMENT"; else return "INTEGER PRIMARY KEY AUTOINCREMENT";
-    // }
-    //public String generateDefVal(){
-    //     if(!GenConf.DATABASE.equals(Database.FILE)) return "0"; else return "null";
-    // }
-    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation) {
+    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation, TagManager tagManager, Guilds guilds) {
         this.plugin = plugin;
+        this.tagManager = tagManager;
+        this.guilds = guilds;
         try {
             this.implementation = implementation;
         } catch (Exception e) {
@@ -68,9 +61,9 @@ public class SQLHandler {
         this.createTables();
 
         // Load guilds and players from database
-        loadGuildsFromDB(plugin.getCuboids(), plugin.getGuilds());
-        plugin.getGuilds().setPlayers(this.loadPlayers());
-        OpenGuild.getOGLogger().info("Loaded " + plugin.getGuilds().getNumberOfGuilds() + " guilds from database.");
+        loadGuildsFromDB(plugin.getCuboids(), guilds);
+        this.loadPlayers();
+        OpenGuild.getOGLogger().info("Loaded " + guilds.getNumberOfGuilds() + " guilds from database.");
     }
 
     private void createTables() {
@@ -128,34 +121,6 @@ public class SQLHandler {
         }
     }
 
-    public void loadTags(Guilds guilds) {
-        for (Map.Entry<String, Guild> gs : guilds.getGuilds().entrySet()) {
-            Scoreboard sc = gs.getValue().getSc();
-            for (Map.Entry<String, Guild> gs2 : guilds.getGuilds().entrySet()) {
-                if (gs.getValue().getTag().equals(gs2.getValue().getTag())) {
-                    continue;
-                }
-                Team t;
-                if (tagForWhoDoesntExists(gs2.getKey(), sc)) {
-                    t = sc.registerNewTeam(gs2.getValue().getTag());
-                } else {
-                    t = sc.getTeam(gs2.getValue().getTag());
-                }
-                t.setPrefix(GenConf.allyTag.replace("{TAG}", gs2.getValue().getTag()));
-                t.setDisplayName(GenConf.allyTag.replace("{TAG}", gs2.getValue().getTag()));
-                setTagsForMembers(gs2.getValue(), t);
-            }
-            //if(gs.getValue().getTag().equals(joinerGuild.getTag())){
-            //     continue;
-            //}
-            // Team t2 = gs.getValue().getSc().getTeam(joinerGuild.getTag());
-            //  if(t2 != null){
-            //      t2.insertPlayer(joiner);
-            ///  }
-        }
-
-    }
-
     private void loadGuildsFromDB(Cuboids cuboids, Guilds guilds) {
         try {
             createStatement();
@@ -198,18 +163,18 @@ public class SQLHandler {
 
         cuboids.addCuboid(cuboidCenter, tag, cuboidSize);
         guilds.addGuild(plugin, home, leaderUUID, tag, description);
-        registerGuildTag(tag);
+        tagManager.registerGuildTag(tag);
     }
 
     private boolean hasGuildValidWorldNameHome(String homeWorld) {
-        return plugin.getServer().getWorld(homeWorld) == null;
+        return Bukkit.getWorld(homeWorld) == null;
     }
 
     private Location getCuboidHome(ResultSet result, String homeWorld) throws SQLException {
         int homeX = result.getInt("home_x");
         int homeY = result.getInt("home_y");
         int homeZ = result.getInt("home_z");
-        return new Location(plugin.getServer().getWorld(homeWorld), homeX, homeY, homeZ);
+        return new Location(Bukkit.getWorld(homeWorld), homeX, homeY, homeZ);
     }
 
     private Location getCuboidCenter(ResultSet result) throws SQLException {
@@ -220,31 +185,20 @@ public class SQLHandler {
         return new Location(Bukkit.getWorld(cuboidWorldName), cuboidCenterX, 0, cuboidCenterZ);
     }
 
-    private void registerGuildTag(String tag) {
-        Team t = plugin.getTagManager().getGlobalScoreboard().registerNewTeam(tag);
-        t.setPrefix(GenConf.allyTag.replace("{TAG}", tag));
-        t.setDisplayName(ChatColor.RED + tag + " ");
-    }
-
-
-    private Map<UUID, Guild> loadPlayers() {
-        Map<UUID, Guild> players = new HashMap<UUID, Guild>();
-
+    private void loadPlayers() {
         try {
             createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "players`");
-            readPlayersDataFromResult(players, result);
+            readPlayersDataFromResult(result);
             result.close();
             statement.close();
             statement.getConnection().close();
         } catch (Exception ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
-
-        return players;
     }
 
-    private void readPlayersDataFromResult(Map<UUID, Guild> players, ResultSet result) throws SQLException {
+    private void readPlayersDataFromResult(ResultSet result) throws SQLException {
         while (anotherRecord(result)) {
             String guildTag = result.getString("guild");
             //int kills = result.getInt("kills");
@@ -252,74 +206,26 @@ public class SQLHandler {
             UUID uuid = UUID.fromString(result.getString("uuid"));
 
 
-            if (!canTagBeRendered(guildTag)) {
-                addPlayerWithoutGuild(players, uuid);
+            if (!hasPlayerGuildTag(guildTag)) {
+                addPlayerWithoutGuild(uuid);
                 continue;
             }
-            Guild playersGuild = plugin.getGuilds().getGuilds().get(guildTag);
-            players.put(uuid, playersGuild);
+            Guild playersGuild = guilds.getGuild(guildTag);
+            guilds.addPlayer(uuid, playersGuild);
             if (guildDoesntExist(playersGuild)) {
                 continue;
             }
-            if (!isGuildTagRenederedAlready(guildTag)) {
-                renderGuildTag(guildTag, uuid);
-            } else {
-                addGuildTagToPlayer(guildTag, uuid);
-            }
-            Scoreboard whoSc = playersGuild.getSc();
-
-            Team whoT;
-            if (tagForWhoDoesntExists(guildTag, whoSc)) {
-                whoT = createGuildTag(guildTag, whoSc);
-                //System.out.print("whoT to "+whoT.getName()+" z dn "+whoT.getDisplayName());
-                //System.out.print("Dodaje gracza "+Bukkit.getOfflinePlayer(uuid).getName());
-                addPlayerToGuildTag(uuid, whoT);
-            } else {
-                whoT = whoSc.getTeam(guildTag);
-                //System.out.print("Dodaje gracza "+Bukkit.getOfflinePlayer(uuid).getName());
-                addPlayerToGuildTag(uuid, whoT);
-            }
+            tagManager.preparePlayerTag(guildTag, uuid, playersGuild);
         }
     }
 
-    private void addPlayerWithoutGuild(Map<UUID, Guild> players, UUID uuid) {
-        players.put(uuid, null);
+
+    private void addPlayerWithoutGuild(UUID uuid) {
+        guilds.addPlayer(uuid, null);
     }
 
-    private void addPlayerToGuildTag(UUID uuid, Team whoT) {
-        whoT.addPlayer(Bukkit.getOfflinePlayer(uuid));
-    }
-
-    private Team createGuildTag(String guildTag, Scoreboard whoSc) {
-        Team whoT;
-        whoT = whoSc.registerNewTeam(guildTag);
-        whoT.setPrefix(GenConf.guildTag.replace("{TAG}", guildTag));
-        whoT.setDisplayName(GenConf.guildTag.replace("{TAG}", guildTag));
-        return whoT;
-    }
-
-    private void addGuildTagToPlayer(String guildTag, UUID uuid) {
-        Team t = plugin.getTagManager().getGlobalScoreboard().getTeam(guildTag);
-        addPlayerToGuildTag(uuid, t);
-    }
-
-    private void renderGuildTag(String guildTag, UUID uuid) {
-        Team t = plugin.getTagManager().getGlobalScoreboard().registerNewTeam(guildTag);
-        t.setPrefix(GenConf.enemyTag.replace("{TAG}", guildTag));
-        t.setDisplayName(GenConf.enemyTag.replace("{TAG}", guildTag));
-        addPlayerToGuildTag(uuid, t);
-    }
-
-    private boolean isGuildTagRenederedAlready(String guildTag) {
-        return plugin.getTagManager().getGlobalScoreboard().getTeam(guildTag) != null;
-    }
-
-    private boolean canTagBeRendered(String guildTag) {
-        return !guildTag.isEmpty() && plugin.getGuilds().doesGuildExists(guildTag);
-    }
-
-    public Statement getStatement() {
-        return statement;
+    private boolean hasPlayerGuildTag(String guildTag) {
+        return !guildTag.isEmpty() && guilds.doesGuildExists(guildTag);
     }
 
     public void loadRelations() {
@@ -336,26 +242,18 @@ public class SQLHandler {
                 Relation.Status relationStatus = Relation.Status.valueOf(status.toUpperCase());
                 Relation relation = createRelation(who, withwho, expires, relationStatus);
 
-                Guild whoGuild = plugin.getGuilds().getGuilds().get(who);
+                Guild whoGuild = guilds.getGuild(who);
                 if (guildDoesntExist(whoGuild)) continue;
-                Scoreboard whoSc = whoGuild.getSc();
 
-                Guild withWhoGuild = plugin.getGuilds().getGuilds().get(withwho);
+
+                Guild withWhoGuild = guilds.getGuild(withwho);
                 if (guildDoesntExist(withWhoGuild)) {
                     continue;
                 }
-                Scoreboard withWhoSc = withWhoGuild.getSc();
-
-                Team whoScoreboardTeamTag = prepareGuildTag(who, withWhoSc);
-                setTagsForMembers(whoGuild, whoScoreboardTeamTag);
-
-
-                Team withWhoScoreboardTag = prepareGuildTag(withwho, whoSc);
-                setTagsForMembers(withWhoGuild, withWhoScoreboardTag);
+                tagManager.setTagsForGuildRelations(who, withwho, whoGuild, withWhoGuild);
 
                 addGuildAlly(relation, whoGuild);
                 addGuildAlly(relation, withWhoGuild);
-
             }
             result.close();
             statement.close();
@@ -382,28 +280,6 @@ public class SQLHandler {
         return guild == null;
     }
 
-    private Team prepareGuildTag(String guildTag, Scoreboard guildScoreboard) {
-        Team scoreboardTeamTag;
-        if (tagForWhoDoesntExists(guildTag, guildScoreboard)) {
-            scoreboardTeamTag = guildScoreboard.registerNewTeam(guildTag);
-        } else {
-            scoreboardTeamTag = guildScoreboard.getTeam(guildTag);
-        }
-        scoreboardTeamTag.setPrefix(GenConf.allyTag.replace("{TAG}", guildTag));
-        scoreboardTeamTag.setDisplayName(GenConf.allyTag.replace("{TAG}", guildTag));
-        return scoreboardTeamTag;
-    }
-
-    private void setTagsForMembers(Guild guild, Team team) {
-        for (UUID member : guild.getMembers()) {
-            addPlayerToGuildTag(member, team);
-        }
-    }
-
-    private boolean tagForWhoDoesntExists(String who, Scoreboard withWhoSc) {
-        return withWhoSc.getTeam(who) == null;
-    }
-
     /**
      * Adds player to database.
      * It does not check if player already is in database!
@@ -427,13 +303,7 @@ public class SQLHandler {
      *
      * @param uuid uuid of player.
      */
-    public void updatePlayerTag(UUID uuid) {
-        String guildTag = "";
-        if (plugin.getGuilds().getPlayers().containsKey(uuid) &&
-                plugin.getGuilds().getPlayers().get(uuid) != null) {
-            guildTag = plugin.getGuilds().getPlayers().get(uuid).getTag().toUpperCase();
-        }
-
+    public void updatePlayerTag(UUID uuid, String guildTag) {
         try {
             createStatement();
             statement.executeUpdate("UPDATE `" + GenConf.sqlTablePrefix + "players` SET `guild` = '" + guildTag + "' WHERE `uuid` = '" + uuid.toString() + "'");
@@ -557,11 +427,12 @@ public class SQLHandler {
             return false;
         }
     }
+
     public void updateStats(UUID uuid, String column) {
         try {
             createStatement();
             ResultSet result = statement.executeQuery("SELECT '" + column + "' FROM '" +
-                    GenConf.sqlTablePrefix + "_players'" + " WHERE uuid='" + uuid.toString() + "';");
+                    GenConf.sqlTablePrefix + "players'" + " WHERE uuid='" + uuid.toString() + "';");
             try {
                 int value = result.getInt(column);
                 value++;

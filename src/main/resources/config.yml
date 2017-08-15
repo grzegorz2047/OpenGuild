@@ -5,6 +5,8 @@ language: PL
 teampvp: false
 teampvp-msg: false
 home-command: true
+spawn-command: false
+prevent-macro-ghost-block-placing: false
 teleport-cooldown: 10
 fight-antilogout: true
 spawn:

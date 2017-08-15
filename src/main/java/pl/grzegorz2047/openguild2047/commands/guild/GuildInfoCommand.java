@@ -48,7 +48,7 @@ public class GuildInfoCommand extends Command {
                 return;
             }
             
-            Guild guild = guilds.getGuilds().get(guildToCheck);
+            Guild guild = guilds.getGuild(guildToCheck);
             sender.sendMessage(this.getTitle(MsgManager.getIgnorePref("ginfotit").replace("{GUILD}", guild.getTag().toUpperCase())));
             sender.sendMessage(MsgManager.getIgnorePref("ginfodesc").replace("{DESCRIPTION}", guild.getDescription()));
             sender.sendMessage(MsgManager.getIgnorePref("ginfoleader").replace("{LEADER}", Bukkit.getOfflinePlayer(guild.getLeader()).getName()));

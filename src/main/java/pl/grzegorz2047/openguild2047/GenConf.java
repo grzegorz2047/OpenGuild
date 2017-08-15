@@ -102,6 +102,8 @@ public class GenConf {
     public static boolean cuboidCheckPlayers;
     public static int ranTpRange;
     public static boolean ANTI_LOGOUT;
+    public static boolean SPAWN_COMMAND_ENABLED;
+    public static boolean PREVENT_GHOST_BLOCK_PLACE;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
@@ -111,7 +113,9 @@ public class GenConf {
         MAX_CUBOID_RADIUS = OpenGuild.getInstance().getConfig().getInt("cuboid.max-cube-size", 50);
         TELEPORT_COOLDOWN = OpenGuild.getInstance().getConfig().getInt("teleport-cooldown", 10);
         EXTRA_PROTECTION = OpenGuild.getInstance().getConfig().getBoolean("cuboid.extra-protection", false);
+        SPAWN_COMMAND_ENABLED = OpenGuild.getInstance().getConfig().getBoolean("spawn-command", false);
         CANENTERAREA = OpenGuild.getInstance().getConfig().getBoolean("cuboid.canenterarea", true);
+        PREVENT_GHOST_BLOCK_PLACE = OpenGuild.getInstance().getConfig().getBoolean("prevent-macro-ghost-block-placing", false);
         BREAKING_ITEMS = OpenGuild.getInstance().getConfig().getStringList("cuboid.breaking-blocks.item-types");
         BREAKING_DAMAGE = Short.parseShort(OpenGuild.getInstance().getConfig().getString("cuboid.breaking-blocks.damage", "0"));
         SQL_DEBUG = OpenGuild.getInstance().getConfig().getBoolean("mysql.debug", false);

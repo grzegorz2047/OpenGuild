@@ -25,8 +25,9 @@ import org.bukkit.entity.Player;
 import com.github.grzegorz2047.openguild.Guild;
 
 public class Guilds {
+
     private Map<String, Guild> guilds = new HashMap<String, Guild>();
-    private Map<UUID, Guild> players = new HashMap<UUID, Guild>();
+    private Map<UUID, Guild> mappedPlayersToGuilds = new HashMap<UUID, Guild>();
 
 
     /**
@@ -35,10 +36,13 @@ public class Guilds {
      */
     public Guild getPlayerGuild(UUID uuid) {
         if (this.hasGuild(uuid)) {
-            return players.get(uuid);
+            return mappedPlayersToGuilds.get(uuid);
         }
-
         return null;
+    }
+
+    public Guild getGuild(String guildTag) {
+        return guilds.get(guildTag);
     }
 
     public Map<String, Guild> getGuilds() {
@@ -50,7 +54,7 @@ public class Guilds {
      * @return boolean
      */
     public boolean hasGuild(UUID uuid) {
-        return players.containsKey(uuid) && players.get(uuid) != null;
+        return mappedPlayersToGuilds.containsKey(uuid) && mappedPlayersToGuilds.get(uuid) != null;
     }
 
     /**
@@ -74,15 +78,15 @@ public class Guilds {
     }
 
 
-    public void setPlayers(Map<UUID, Guild> players) {
-        this.players = players;
+    public void setMappedPlayersToGuilds(Map<UUID, Guild> mappedPlayersToGuilds) {
+        this.mappedPlayersToGuilds = mappedPlayersToGuilds;
     }
 
     /**
      * @return map which contains all players, who are members of guilds.
      */
-    public Map<UUID, Guild> getPlayers() {
-        return players;
+    public Map<UUID, Guild> getMappedPlayersToGuilds() {
+        return mappedPlayersToGuilds;
     }
 
     public Guild addGuild(OpenGuild plugin, Location home, UUID owner, String tag, String description) {
@@ -100,10 +104,14 @@ public class Guilds {
     }
 
     public void updatePlayerGuild(UUID uniqueId, Guild guild) {
-        players.put(uniqueId, guild);
+        mappedPlayersToGuilds.put(uniqueId, guild);
     }
 
     public int getNumberOfGuilds() {
         return guilds.size();
+    }
+
+    public void addPlayer(UUID uuid, Guild playersGuild) {
+        mappedPlayersToGuilds.put(uuid, playersGuild);
     }
 }

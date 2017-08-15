@@ -7,10 +7,10 @@ import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
  */
 public class Watcher implements Runnable {
     private final AntiLogoutManager logout;
-    private final GuildHomeTeleporter teleporter;
+    private final Teleporter teleporter;
     private int seconds;
 
-    public Watcher(AntiLogoutManager logout, GuildHomeTeleporter teleporter) {
+    public Watcher(AntiLogoutManager logout, Teleporter teleporter) {
         this.logout = logout;
         this.teleporter = teleporter;
     }

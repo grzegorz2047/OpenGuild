@@ -67,8 +67,8 @@ public class GuildLeaveCommand extends Command {
         
         this.getPlugin().getTagManager().playerLeaveGuild(player);
         guild.removeMember(player.getUniqueId());
-        guilds.getPlayers().remove(player.getUniqueId());
-        guilds.getPlayers().put(player.getUniqueId(), null);
+        guilds.getMappedPlayersToGuilds().remove(player.getUniqueId());
+        guilds.getMappedPlayersToGuilds().put(player.getUniqueId(), null);
         for(UUID member : guild.getMembers()) {
             OfflinePlayer opp = this.getPlugin().getServer().getOfflinePlayer(member);
             if(opp.isOnline()) {
@@ -76,7 +76,7 @@ public class GuildLeaveCommand extends Command {
             }
         }
 
-        getPlugin().getSQLHandler().updatePlayerTag(player.getUniqueId());
+        getPlugin().getSQLHandler().updatePlayerTag(player.getUniqueId(), "");
         player.sendMessage(MsgManager.leaveguildsuccess);
     }
 

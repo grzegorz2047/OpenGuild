@@ -68,8 +68,8 @@ public class GuildDisbandCommand extends Command {
             }
             
             for(Relation r : guild.getAlliances()){
-                Guild g1 = guilds.getGuilds().get(r.getWho());
-                Guild g2 = guilds.getGuilds().get(r.getWithWho());
+                Guild g1 = guilds.getGuild(r.getWho());
+                Guild g2 = guilds.getGuild(r.getWithWho());
                 OpenGuild.getInstance().getTagManager().guildBrokeAlliance(g1, g2);
                 guild.getAlliances().remove(r);
                 guild.getAlliances().remove(r);
@@ -77,9 +77,9 @@ public class GuildDisbandCommand extends Command {
                 
             }
             for(UUID uuid : guild.getMembers()) {
-                guilds.getPlayers().remove(uuid);
-                guilds.getPlayers().put(uuid, null);
-                getPlugin().getSQLHandler().updatePlayerTag(uuid);
+                guilds.getMappedPlayersToGuilds().remove(uuid);
+                guilds.getMappedPlayersToGuilds().put(uuid, null);
+                getPlugin().getSQLHandler().updatePlayerTag(uuid, "");
                 if(Bukkit.getPlayer(uuid) != null){
                     Bukkit.getPlayer(uuid).setScoreboard(OpenGuild.getInstance().getTagManager().getGlobalScoreboard());
                 }

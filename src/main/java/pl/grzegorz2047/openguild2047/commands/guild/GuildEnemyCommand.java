@@ -56,7 +56,7 @@ public class GuildEnemyCommand extends Command {
                 player.sendMessage(MsgManager.get("playernotleader"));
                 return;
             }
-            Guild guild = guilds.getGuilds().get(guildToCheck);
+            Guild guild = guilds.getGuild(guildToCheck);
             OfflinePlayer leader = Bukkit.getOfflinePlayer(guild.getLeader());
 
             if (!leader.isOnline()) {

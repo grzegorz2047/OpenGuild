@@ -31,7 +31,7 @@ public class Guild extends GuildMembers {
 
     private Location home;
     private Scoreboard sc;
-    
+
     public Guild(pl.grzegorz2047.openguild2047.OpenGuild plugin, String tag, String description, Location home, UUID leaderUUID, Scoreboard scoreboard) {
         super(plugin);
         this.setMembersGuild(this);
@@ -79,8 +79,27 @@ public class Guild extends GuildMembers {
         for (UUID mem : this.getMembers()) {
             OfflinePlayer om = Bukkit.getOfflinePlayer(mem);
             if (om.isOnline()) {
-                om.getPlayer().sendMessage(MsgManager.get("guildmemberleft").replace("{PLAYER}", player.getDisplayName()));
+                if (!player.getUniqueId().equals(om.getUniqueId())) {
+                    String msg = MsgManager.get("guildmemberleft");
+                    notifyPlayer(player, om, msg);
+                }
             }
         }
+    }
+
+    public void notifyMembersJoinedGame(Player player) {
+        for (UUID mem : this.getMembers()) {
+            OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);
+            if (om.isOnline()) {
+                if (!player.getUniqueId().equals(om.getUniqueId())) {
+                    String msg = MsgManager.get("guildmemberjoined");
+                    notifyPlayer(player, om, msg);
+                }
+            }
+        }
+    }
+
+    private void notifyPlayer(Player player, OfflinePlayer om, String msg) {
+        om.getPlayer().sendMessage(msg.replace("{PLAYER}", player.getDisplayName()));
     }
 }

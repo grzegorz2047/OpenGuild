@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -41,6 +40,7 @@ import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
 import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
+import pl.grzegorz2047.openguild2047.commands.SpawnCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.database.MySQLImplementationStrategy;
@@ -67,7 +67,7 @@ public class OpenGuild extends JavaPlugin {
     private Cuboids cuboids;
     private AntiLogoutManager logout;
     private BukkitTask watcher;
-    private GuildHomeTeleporter teleporter;
+    private Teleporter teleporter;
 
     /**
      * Instance of built-in permissions manager main class.
@@ -124,8 +124,8 @@ public class OpenGuild extends JavaPlugin {
         this.cuboids = new Cuboids(this);
         this.logout = new AntiLogoutManager();
         // Setup Tag Manager
-        this.tagManager = new TagManager(this);
-        teleporter = new GuildHomeTeleporter();
+        this.tagManager = new TagManager(guilds);
+        teleporter = new Teleporter();
         // Register commands
         loadCommands(cuboids, guilds, teleporter);
 
@@ -136,12 +136,12 @@ public class OpenGuild extends JavaPlugin {
         // Load database
         loadDB();
         loadPlayers();
-        this.getSQLHandler().loadTags(guilds);
+        this.tagManager.loadTags(guilds);
         this.getSQLHandler().loadRelations();
 
 
         for (Player player : getServer().getOnlinePlayers()) {
-            this.tagManager.playerJoinServer(player);
+            this.tagManager.assignScoreboardToPlayer(player);
         }
 
         // Load required items section.
@@ -230,10 +230,12 @@ public class OpenGuild extends JavaPlugin {
      * This method sets executors of all commands, and
      * registers them in our API.
      */
-    private void loadCommands(Cuboids cuboids, Guilds guilds, GuildHomeTeleporter teleporter) {
+    private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter) {
         getCommand("team").setExecutor(new TeamCommand(this));
         getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter));
-
+        if(GenConf.SPAWN_COMMAND_ENABLED) {
+            getCommand("spawn").setExecutor(new SpawnCommand(teleporter));
+        }
         OpenCommandManager.registerPluginCommands(this);
     }
 
@@ -265,7 +267,7 @@ public class OpenGuild extends JavaPlugin {
                 break;
         }
 
-        this.sqlHandler = new SQLHandler(this, sqlImplementation);
+        this.sqlHandler = new SQLHandler(this, sqlImplementation, tagManager, guilds);
     }
 
     /**
@@ -281,7 +283,7 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter), this);
 
         if (GenConf.cubEnabled) {
-            pm.registerEvents(new CuboidAndSpawnManipulationListeners(this), this);
+            pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids), this);
         }
 
         pm.registerEvents(new EntityDamageByEntityListener(logout, guilds), this);
@@ -297,7 +299,7 @@ public class OpenGuild extends JavaPlugin {
      */
     private void loadPlayers() {
         //for(Guild guild : this.guildHelper.getGuilds().values()) {
-        for (UUID player : this.guilds.getPlayers().keySet()) {
+        for (UUID player : this.guilds.getMappedPlayersToGuilds().keySet()) {
             Guild guild = this.guilds.getPlayerGuild(player);
             if (guild != null) {
                 guild.addMember(player);

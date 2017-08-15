@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class GuildHomeTeleporter {
+public class Teleporter {
 
 
     HashMap<UUID, TeleportRequest> requests = new HashMap<UUID, TeleportRequest>();
@@ -36,7 +36,7 @@ public class GuildHomeTeleporter {
                     p.teleport(request.getDestination());
                     strings.remove(p.getUniqueId());
                 } else {
-                    if (p.getLocation().distance(request.getSource()) <= 1) {
+                    if (p.getLocation().distance(request.getSource()) >= 1) {
                         requests.remove(p.getUniqueId());
                         p.sendMessage(MsgManager.get("tpcan"));
                     }
