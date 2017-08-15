@@ -19,3 +19,6 @@ commands:
     description: Spawn command
     aliases: [s]
     usage: /spawn
+  tpa:
+    description: Tpa command
+    usage: /tpa <nick>, /tpa accept <nick>, /tpa deny <nick>

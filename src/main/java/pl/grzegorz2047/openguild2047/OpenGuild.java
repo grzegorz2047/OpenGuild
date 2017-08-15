@@ -42,6 +42,7 @@ import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.SpawnCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
+import pl.grzegorz2047.openguild2047.commands.TpaCommand;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.database.MySQLImplementationStrategy;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
@@ -68,6 +69,7 @@ public class OpenGuild extends JavaPlugin {
     private AntiLogoutManager logout;
     private BukkitTask watcher;
     private Teleporter teleporter;
+    private TpaRequester tpaRequester;
 
     /**
      * Instance of built-in permissions manager main class.
@@ -126,6 +128,7 @@ public class OpenGuild extends JavaPlugin {
         // Setup Tag Manager
         this.tagManager = new TagManager(guilds);
         teleporter = new Teleporter();
+        tpaRequester = new TpaRequester();
         // Register commands
         loadCommands(cuboids, guilds, teleporter);
 
@@ -152,7 +155,7 @@ public class OpenGuild extends JavaPlugin {
 
         // Register all hooks to this plugin
         Hooks.registerDefaults();
-        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter), 0, 20);
+        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester), 0, 20);
 
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!");
     }
@@ -236,6 +239,7 @@ public class OpenGuild extends JavaPlugin {
         if(GenConf.SPAWN_COMMAND_ENABLED) {
             getCommand("spawn").setExecutor(new SpawnCommand(teleporter));
         }
+        getCommand("tpa").setExecutor(new TpaCommand(teleporter, tpaRequester));
         OpenCommandManager.registerPluginCommands(this);
     }
 
@@ -279,8 +283,8 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerChatListener(this), this);
         pm.registerEvents(new PlayerDeathListener(), this);
-        pm.registerEvents(new PlayerKickListener(teleporter, cuboids), this);
-        pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter), this);
+        pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester), this);
+        pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), this);
 
         if (GenConf.cubEnabled) {
             pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids), this);

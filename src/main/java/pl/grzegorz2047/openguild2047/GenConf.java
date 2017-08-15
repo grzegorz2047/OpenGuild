@@ -104,12 +104,15 @@ public class GenConf {
     public static boolean ANTI_LOGOUT;
     public static boolean SPAWN_COMMAND_ENABLED;
     public static boolean PREVENT_GHOST_BLOCK_PLACE;
+    public static int TPA_EXPIRE_TIME;
+    public static boolean TPA_ENABLED;
 
     protected static void loadConfiguration() {
         FileConfiguration config = OpenGuild.getInstance().getConfig();
         forbiddenworlds = OpenGuild.getInstance().getConfig().getStringList("forbidden-worlds");
         badwords = OpenGuild.getInstance().getConfig().getStringList("forbiddenguildnames");
         MIN_CUBOID_SIZE = OpenGuild.getInstance().getConfig().getInt("cuboid.min-cube-size", 15);
+        TPA_EXPIRE_TIME = OpenGuild.getInstance().getConfig().getInt("tpa-expire-time", 15);
         MAX_CUBOID_RADIUS = OpenGuild.getInstance().getConfig().getInt("cuboid.max-cube-size", 50);
         TELEPORT_COOLDOWN = OpenGuild.getInstance().getConfig().getInt("teleport-cooldown", 10);
         EXTRA_PROTECTION = OpenGuild.getInstance().getConfig().getBoolean("cuboid.extra-protection", false);
@@ -119,6 +122,7 @@ public class GenConf {
         BREAKING_ITEMS = OpenGuild.getInstance().getConfig().getStringList("cuboid.breaking-blocks.item-types");
         BREAKING_DAMAGE = Short.parseShort(OpenGuild.getInstance().getConfig().getString("cuboid.breaking-blocks.damage", "0"));
         SQL_DEBUG = OpenGuild.getInstance().getConfig().getBoolean("mysql.debug", false);
+        TPA_ENABLED = OpenGuild.getInstance().getConfig().getBoolean("tpa-command", false);
         DATABASE = Database.valueOf(OpenGuild.getInstance().getConfig().getString("database", "FILE").toUpperCase());
         loadDatabase();
         FILE_DIR = OpenGuild.getInstance().getConfig().getString("file-dir", "plugins/OpenGuild2047/og.db");

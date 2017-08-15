@@ -26,6 +26,8 @@ import org.bukkit.inventory.ItemStack;
 import pl.grzegorz2047.openguild2047.Teleporter;
 import pl.grzegorz2047.openguild2047.Guilds;
 import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.TpaRequest;
+import pl.grzegorz2047.openguild2047.TpaRequester;
 import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
@@ -37,12 +39,14 @@ public class PlayerQuitListener implements Listener {
     private final Cuboids cuboids;
     private final AntiLogoutManager logout;
     private final Teleporter teleporter;
+    private final TpaRequester tpaRequester;
 
-    public PlayerQuitListener(Guilds guilds, Cuboids cuboids, AntiLogoutManager logout, Teleporter teleporter) {
+    public PlayerQuitListener(Guilds guilds, Cuboids cuboids, AntiLogoutManager logout, Teleporter teleporter, TpaRequester tpaRequester) {
         this.guilds = guilds;
         this.cuboids = cuboids;
         this.logout = logout;
         this.teleporter = teleporter;
+        this.tpaRequester = tpaRequester;
     }
 
     @EventHandler
@@ -67,6 +71,7 @@ public class PlayerQuitListener implements Listener {
         }
         cuboids.clearCuboidEnterNotification(player);
         teleporter.removeRequest(uuid);
+        tpaRequester.removeRequest(event.getPlayer().getName());
     }
 
     private boolean isPlayerInGuild(Player player) {

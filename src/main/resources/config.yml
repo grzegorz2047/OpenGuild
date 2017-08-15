@@ -8,6 +8,8 @@ home-command: true
 spawn-command: false
 prevent-macro-ghost-block-placing: false
 teleport-cooldown: 10
+tpa-command: false
+tpa-expire-time: 15
 fight-antilogout: true
 spawn:
   location-max: [world, 50, 50]

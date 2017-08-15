@@ -25,7 +25,9 @@ public class SpawnCommand implements CommandExecutor {
         Player p = (Player) commandSender;
         if (command.getName().equalsIgnoreCase("spawn")) {
             teleporter.addRequest(p.getUniqueId(), p.getLocation(), p.getWorld().getSpawnLocation(), GenConf.TELEPORT_COOLDOWN);
-            p.sendMessage(MsgManager.get("hometpdontmove").replace("%TIME%", String.valueOf(GenConf.TELEPORT_COOLDOWN)));
+            String hometpdontmoveMsg = MsgManager.get("hometpdontmove");
+            String homedontMoveMsgUpdated = hometpdontmoveMsg.replace("%TIME%", String.valueOf(GenConf.TELEPORT_COOLDOWN));
+            p.sendMessage(homedontMoveMsgUpdated);
         }
         return true;
     }
