@@ -58,7 +58,7 @@ mysql:
   debug: false
 tags:
   enabled: true
-  ally: '&1[{TAG}] '
+  ally: '&b[{TAG}] '
   enemy: '&4[{TAG}] '
   guild: '&2[{TAG}] '
 guildprefixinchat: true
