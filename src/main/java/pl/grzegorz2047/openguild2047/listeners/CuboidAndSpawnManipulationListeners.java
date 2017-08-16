@@ -18,7 +18,9 @@ package pl.grzegorz2047.openguild2047.listeners;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,53 +34,73 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
+import pl.grzegorz2047.openguild2047.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CuboidAndSpawnManipulationListeners implements Listener {
 
 
     private final Cuboids cuboids;
+    private final DropFromBlocks drop;
 
-    public CuboidAndSpawnManipulationListeners(Cuboids cuboids) {
+    public CuboidAndSpawnManipulationListeners(Cuboids cuboids, DropFromBlocks drop) {
         this.cuboids = cuboids;
+        this.drop = drop;
     }
 
     private static List<Material> breakingItems;
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
         Player player = e.getPlayer();
-        if (SpawnChecker.isSpawn(e.getBlock().getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
+        Block brokenBlock = e.getBlock();
+        if (checkIfOnSpawn(e, player, brokenBlock)) return;
+        if (processBreakingBlockInEnemyArea(e, player, brokenBlock)) return;
+        if (GenConf.DROP_ENABLED) {
+            drop.processDropFromBlocks(player, brokenBlock);
+            e.setCancelled(true);
+        }
+    }
+
+    private boolean checkIfOnSpawn(BlockBreakEvent e, Player player, Block brokenBlock) {
+        if (SpawnChecker.isSpawn(brokenBlock.getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
             e.setCancelled(true);
             player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
-            return;
+            return true;
         }
+        return false;
+    }
+
+    private boolean processBreakingBlockInEnemyArea(BlockBreakEvent e, Player player, Block brokenBlock) {
         if (player.hasPermission("openguild.cuboid.bypassbreak")) {
-            return;
-        }
-        if (cuboids.allowedToDoItHere(player, e.getBlock().getLocation())) {
-            return;
-        }
-        if (!canbreakEnemyBlock()) {
-            e.setCancelled(true); // Damage jest rowny 0; niszczenie blokow jest wylaczone
-            return;
-        }
-        PlayerInventory inventory = player.getInventory();
-         if (!hasSpecialBreakingitem(inventory)) {
-            player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+            return false;
+        } else if (!cuboids.allowedToDoItHere(player, brokenBlock.getLocation()) && !canbreakEnemyBlock()) {// Damage jest rowny 0; niszczenie blokow jest wylaczone
             e.setCancelled(true);
-            return;
+            return true;
+        } else {
+
+            PlayerInventory inventory = player.getInventory();
+            if (!hasSpecialBreakingitem(inventory)) {
+                player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+                e.setCancelled(true);
+                return true;
+            }
+            inventory.getItemInMainHand().setDurability((short) (inventory.getItemInMainHand().getDurability() + GenConf.BREAKING_DAMAGE));
+            return false;
         }
-        inventory.getItemInMainHand().setDurability((short) (inventory.getItemInMainHand().getDurability() + GenConf.BREAKING_DAMAGE));
     }
 
     @EventHandler
@@ -106,7 +128,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
                         player.sendMessage(MsgManager.get("cantdoitonsomeonearea"));
                         return;
                     }
-                    if(!hasSpecialBreakingitem(player.getInventory())) {
+                    if (!hasSpecialBreakingitem(player.getInventory())) {
                         player.sendMessage(MsgManager.get("cantdoitonsomeonearea"));
                     }
                 }

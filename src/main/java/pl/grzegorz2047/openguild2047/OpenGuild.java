@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -48,6 +49,8 @@ import pl.grzegorz2047.openguild2047.database.MySQLImplementationStrategy;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.database.SQLImplementationStrategy;
 import pl.grzegorz2047.openguild2047.database.SQLiteImplementationStrategy;
+import pl.grzegorz2047.openguild2047.dropstone.DropFromBlocks;
+import pl.grzegorz2047.openguild2047.dropstone.DropProperties;
 import pl.grzegorz2047.openguild2047.listeners.*;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
 
@@ -70,6 +73,7 @@ public class OpenGuild extends JavaPlugin {
     private BukkitTask watcher;
     private Teleporter teleporter;
     private TpaRequester tpaRequester;
+    private DropFromBlocks drop;
 
     /**
      * Instance of built-in permissions manager main class.
@@ -122,6 +126,8 @@ public class OpenGuild extends JavaPlugin {
         //if(GenConf.useNativePermissionsManager) {
         //  TODO   
         //}
+        List<DropProperties> loadedDrops = new ArrayList<>();
+        this.drop = new DropFromBlocks(GenConf.ELIGIBLE_DROP_BLOCKS, loadedDrops);
         this.guilds = new Guilds();
         this.cuboids = new Cuboids(this);
         this.logout = new AntiLogoutManager();
@@ -236,7 +242,7 @@ public class OpenGuild extends JavaPlugin {
     private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter) {
         getCommand("team").setExecutor(new TeamCommand(this));
         getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter));
-        if(GenConf.SPAWN_COMMAND_ENABLED) {
+        if (GenConf.SPAWN_COMMAND_ENABLED) {
             getCommand("spawn").setExecutor(new SpawnCommand(teleporter));
         }
         getCommand("tpa").setExecutor(new TpaCommand(teleporter, tpaRequester));
@@ -287,7 +293,7 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), this);
 
         if (GenConf.cubEnabled) {
-            pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids), this);
+            pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop), this);
         }
 
         pm.registerEvents(new EntityDamageByEntityListener(logout, guilds), this);

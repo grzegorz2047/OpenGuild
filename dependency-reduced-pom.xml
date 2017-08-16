@@ -4,7 +4,7 @@
   <groupId>pl.grzegorz2047</groupId>
   <artifactId>OpenGuild2047</artifactId>
   <name>OpenGuild2047</name>
-  <version>0.6.8</version>
+  <version>0.6.9</version>
   <url>http://maven.apache.org</url>
   <build>
     <resources>

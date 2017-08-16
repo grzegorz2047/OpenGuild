@@ -216,7 +216,6 @@ public class TagManager {
         Team whoScoreboardTeamTag = prepareGuildTag(who, withWhoSc);
         setTagsForGuildMembers(whoGuild, whoScoreboardTeamTag);
 
-
         Team withWhoScoreboardTag = prepareGuildTag(withwho, whoSc);
         setTagsForGuildMembers(withWhoGuild, withWhoScoreboardTag);
     }

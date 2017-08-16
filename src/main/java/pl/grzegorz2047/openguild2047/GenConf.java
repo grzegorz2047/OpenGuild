@@ -106,31 +106,50 @@ public class GenConf {
     public static boolean PREVENT_GHOST_BLOCK_PLACE;
     public static int TPA_EXPIRE_TIME;
     public static boolean TPA_ENABLED;
+    public static boolean NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK;
+    public static boolean DROP_ENABLED;
+    public static boolean DROP_TO_EQ;
+    public static List<Material> ELIGIBLE_DROP_BLOCKS;
 
     protected static void loadConfiguration() {
-        FileConfiguration config = OpenGuild.getInstance().getConfig();
-        forbiddenworlds = OpenGuild.getInstance().getConfig().getStringList("forbidden-worlds");
-        badwords = OpenGuild.getInstance().getConfig().getStringList("forbiddenguildnames");
-        MIN_CUBOID_SIZE = OpenGuild.getInstance().getConfig().getInt("cuboid.min-cube-size", 15);
-        TPA_EXPIRE_TIME = OpenGuild.getInstance().getConfig().getInt("tpa-expire-time", 15);
-        MAX_CUBOID_RADIUS = OpenGuild.getInstance().getConfig().getInt("cuboid.max-cube-size", 50);
-        TELEPORT_COOLDOWN = OpenGuild.getInstance().getConfig().getInt("teleport-cooldown", 10);
-        EXTRA_PROTECTION = OpenGuild.getInstance().getConfig().getBoolean("cuboid.extra-protection", false);
-        SPAWN_COMMAND_ENABLED = OpenGuild.getInstance().getConfig().getBoolean("spawn-command", false);
-        CANENTERAREA = OpenGuild.getInstance().getConfig().getBoolean("cuboid.canenterarea", true);
-        PREVENT_GHOST_BLOCK_PLACE = OpenGuild.getInstance().getConfig().getBoolean("prevent-macro-ghost-block-placing", false);
-        BREAKING_ITEMS = OpenGuild.getInstance().getConfig().getStringList("cuboid.breaking-blocks.item-types");
-        BREAKING_DAMAGE = Short.parseShort(OpenGuild.getInstance().getConfig().getString("cuboid.breaking-blocks.damage", "0"));
-        SQL_DEBUG = OpenGuild.getInstance().getConfig().getBoolean("mysql.debug", false);
-        TPA_ENABLED = OpenGuild.getInstance().getConfig().getBoolean("tpa-command", false);
-        DATABASE = Database.valueOf(OpenGuild.getInstance().getConfig().getString("database", "FILE").toUpperCase());
+        OpenGuild openGuild = OpenGuild.getInstance();
+        FileConfiguration config = openGuild.getConfig();
+        forbiddenworlds = config.getStringList("forbidden-worlds");
+        badwords = config.getStringList("forbiddenguildnames");
+        MIN_CUBOID_SIZE = config.getInt("cuboid.min-cube-size", 15);
+        TPA_EXPIRE_TIME = config.getInt("tpa-expire-time", 15);
+        MAX_CUBOID_RADIUS = config.getInt("cuboid.max-cube-size", 50);
+        TELEPORT_COOLDOWN = config.getInt("teleport-cooldown", 10);
+        EXTRA_PROTECTION = config.getBoolean("cuboid.extra-protection", false);
+        NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK = config.getBoolean("drop.notify-cant-drop-from-not-eligible-block", false);
+
+        List<String> blockList = config.getStringList("blocks-from-where-item-drops");
+        ELIGIBLE_DROP_BLOCKS = new ArrayList<>();
+        for (String dropMat : blockList) {
+            try {
+                ELIGIBLE_DROP_BLOCKS.add(Material.valueOf(dropMat));
+            } catch (IllegalArgumentException ex) {
+                System.out.println("Incorrect drop block " + dropMat + ". Check Material bukkit google it!");
+            }
+
+        }
+        DROP_ENABLED = config.getBoolean("drop.enabled", false);
+        DROP_TO_EQ = config.getBoolean("drop.drop-to-eq", false);
+        SPAWN_COMMAND_ENABLED = config.getBoolean("spawn-command", false);
+        CANENTERAREA = config.getBoolean("cuboid.canenterarea", true);
+        PREVENT_GHOST_BLOCK_PLACE = config.getBoolean("prevent-macro-ghost-block-placing", false);
+        BREAKING_ITEMS = config.getStringList("cuboid.breaking-blocks.item-types");
+        BREAKING_DAMAGE = Short.parseShort(config.getString("cuboid.breaking-blocks.damage", "0"));
+        SQL_DEBUG = config.getBoolean("mysql.debug", false);
+        TPA_ENABLED = config.getBoolean("tpa-command", false);
+        DATABASE = Database.valueOf(config.getString("database", "FILE").toUpperCase());
         loadDatabase();
-        FILE_DIR = OpenGuild.getInstance().getConfig().getString("file-dir", "plugins/OpenGuild2047/og.db");
-        SNOOPER = OpenGuild.getInstance().getConfig().getBoolean("snooper", true);
-        ANTI_LOGOUT = OpenGuild.getInstance().getConfig().getBoolean("fight-antilogout", true);
-        TEAMPVP_MSG = OpenGuild.getInstance().getConfig().getBoolean("teampvp-msg", false);
-        FORCE_DESC = OpenGuild.getInstance().getConfig().getBoolean("forcedesc", false);
-        lang = OpenGuild.getInstance().getConfig().getString("language").toUpperCase();
+        FILE_DIR = config.getString("file-dir", "plugins/OpenGuild2047/og.db");
+        SNOOPER = config.getBoolean("snooper", true);
+        ANTI_LOGOUT = config.getBoolean("fight-antilogout", true);
+        TEAMPVP_MSG = config.getBoolean("teampvp-msg", false);
+        FORCE_DESC = config.getBoolean("forcedesc", false);
+        lang = config.getString("language").toUpperCase();
 
         loadBans();
         List listMax = config.getList("spawn.location-max");

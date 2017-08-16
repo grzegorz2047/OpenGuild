@@ -146,3 +146,4 @@ tparequestsentfailed: 'Nie udalo sie wyslac prosby o tpa! Poczekaj na zaakceptow
 usagetpa: 'Uzycie: /tpa <nick>, /tpa accept <nick>, /tpa deny <nick>'
 usagetpaaccept: 'Uzycie: /tpa accept <nick>'
 usagetpadeny: 'Uzycie: /tpa deny <nick>'
+notifynodropfromthistypeofblock: 'Nie mozesz dropic z tego typu bloku!'
