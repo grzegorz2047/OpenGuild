@@ -33,6 +33,10 @@ public class DropFromBlocks {
     public DropFromBlocks(List<Material> eligibleBlocks, List<DropProperties> loadedDrops) {
         this.eligibleBlocks = eligibleBlocks;
         this.loadedDrops = loadedDrops;
+        if (loadedDrops.size() == 0) {
+            System.out.println("Nie wczytalo dropu! wylaczam drop z blockow!");
+            GenConf.DROP_ENABLED = false;
+        }
     }
 
     private boolean isEligible(Material type) {
@@ -40,7 +44,8 @@ public class DropFromBlocks {
     }
 
     private DropProperties getDropRandomProperties() {
-        int dropIndex = r.nextInt(loadedDrops.size() - 1);
+        int dropIndex = r.nextInt(loadedDrops.size());
+        //System.out.println("Wylosowany drop to " + dropIndex + " z size " + loadedDrops.size());
         return loadedDrops.get(dropIndex);
     }
 
@@ -65,13 +70,29 @@ public class DropFromBlocks {
         }
         World playerWorld = player.getWorld();
         DropProperties dropProperties = getDropRandomProperties();
-        ItemStack receivedDrop = dropProperties.getDrop(blockHeight, itemInHandType, itemEnchantmens);
+        ItemStack receivedDrop = dropProperties.getDrop();
+        if (itemEnchantmens.containsKey(Enchantment.SILK_TOUCH)) {
+            receivedDrop = new ItemStack(receivedDrop.getType(), 1);
+        }
+        // System.out.println(dropProperties.toString());
+        if (!dropProperties.isInGoodHeight(blockHeight) || !dropProperties.usedProperItemToDestroyBlock(itemInHandType)) {
+            receivedDrop = new ItemStack(Material.COBBLESTONE, 1);
+            //System.out.println("zla wysokosc lub item");
+        }
+        if (!dropProperties.isLucky()) {
+            receivedDrop = new ItemStack(Material.COBBLESTONE, 1);
+            //System.out.println("So unlucky");
+        }
+
         Material receivedDropType = receivedDrop.getType();
         if (GenConf.DROP_TO_EQ) {
             int firstFreeSlot = playerInventory.firstEmpty();
             if (hasDroppedBlockTypeInInventory(playerInventory, receivedDropType)) {
                 boolean canAddToItemStack = false;
                 for (ItemStack itInEq : playerInventory.getContents()) {
+                    if (itInEq == null) {
+                        continue;
+                    }
                     Material itInEqType = itInEq.getType();
                     if (!isTheSameType(brokenBlockType, itInEqType)) {
                         continue;
@@ -85,19 +106,20 @@ public class DropFromBlocks {
                     break;
                 }
                 if (canAddToItemStack) {
-                    processDropToEq(player, playerInventory, dropProperties, receivedDrop);
+                    processDropToEq(player, playerInventory, dropProperties, receivedDrop, brokenBlock);
                     return;
                 }
                 if (hasFreeSlot(firstFreeSlot)) {
-                    processDropToEq(player, playerInventory, dropProperties, receivedDrop);
+                    processDropToEq(player, playerInventory, dropProperties, receivedDrop, brokenBlock);
                 }
             } else if (hasFreeSlot(firstFreeSlot)) {
-                processDropToEq(player, playerInventory, dropProperties, receivedDrop);
+                processDropToEq(player, playerInventory, dropProperties, receivedDrop, brokenBlock);
             } else {
-                processDropNaturally(player, blockLocation, playerWorld, dropProperties, receivedDrop);
+
+                processDropNaturally(player, blockLocation, playerWorld, dropProperties, receivedDrop, brokenBlock);
             }
         } else {
-            processDropNaturally(player, blockLocation, playerWorld, dropProperties, receivedDrop);
+            processDropNaturally(player, blockLocation, playerWorld, dropProperties, receivedDrop, brokenBlock);
         }
     }
 
@@ -117,14 +139,18 @@ public class DropFromBlocks {
         return firstFreeSlot != -1;
     }
 
-    private void processDropToEq(Player player, PlayerInventory playerInventory, DropProperties dropProperties, ItemStack receivedDrop) {
+    private void processDropToEq(Player player, PlayerInventory playerInventory, DropProperties dropProperties, ItemStack receivedDrop, Block b) {
         addItemToEq(playerInventory, receivedDrop);
-        dropProperties.sendDropMessage(player);
+        if (!receivedDrop.getType().equals(Material.COBBLESTONE)) {
+            player.sendMessage(dropProperties.getDropMessage(receivedDrop.getAmount()));
+        }
     }
 
-    private void processDropNaturally(Player player, Location blockLocation, World playerWorld, DropProperties dropProperties, ItemStack receivedDrop) {
+    private void processDropNaturally(Player player, Location blockLocation, World playerWorld, DropProperties dropProperties, ItemStack receivedDrop, Block b) {
         dropNaturally(blockLocation, playerWorld, receivedDrop);
-        dropProperties.sendDropMessage(player);
+        if (!b.getType().equals(Material.COBBLESTONE)) {
+            player.sendMessage(dropProperties.getDropMessage(receivedDrop.getAmount()));
+        }
     }
 
     public boolean isNotUsedInDropFromBlocks(Material type) {
@@ -137,5 +163,6 @@ public class DropFromBlocks {
 
     private void dropNaturally(Location blockLocation, World playerWorld, ItemStack receivedDrop) {
         playerWorld.dropItemNaturally(blockLocation, receivedDrop);
+
     }
 }

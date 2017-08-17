@@ -22,6 +22,7 @@ import java.sql.Statement;
 import java.util.*;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
@@ -120,7 +121,13 @@ public class SQLHandler {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
     }
+    public void addKill(Player killer) {
+        updateStats(killer.getUniqueId(), "kills");
+    }
 
+    public void addDeath(Player player) {
+        updateStats( player.getUniqueId(), "deaths");
+    }
     private void loadGuildsFromDB(Cuboids cuboids, Guilds guilds) {
         try {
             createStatement();
@@ -436,7 +443,7 @@ public class SQLHandler {
             try {
                 int value = result.getInt(column);
                 value++;
-                statement.execute("UPDATE '" + GenConf.sqlTablePrefix + "' SET '" + column +
+                statement.execute("UPDATE '" + GenConf.sqlTablePrefix + "players' SET '" + column +
                         "'=" + value + " WHERE uuid='" + uuid.toString() + "';");
                 statement.close();
                 statement.getConnection().close();

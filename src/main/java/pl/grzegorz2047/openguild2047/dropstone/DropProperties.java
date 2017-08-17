@@ -14,17 +14,17 @@ public class DropProperties {
     private final Material dropType;
     private final int minQuantity;
     private final int maxQuantity;
-    private final float chance;
+    private final double chance;
     private final int minHeight;
     private final int maxHeight;
-    private final String message;
+    private String message;
     private final List<Material> items;
     private final Random r = new Random();
-    private final ItemStack cobblestone = new ItemStack(Material.COBBLESTONE, 1);
+    private boolean showMsg = true;
 
     public DropProperties(Material dropType, int minQuantity,
                           int maxQuantity,
-                          float chance,
+                          double chance,
                           int minHeight,
                           int maxHeight,
                           String message,
@@ -39,32 +39,23 @@ public class DropProperties {
         this.items = items;
     }
 
-    private boolean isInGoodHeight(int y) {
+    public boolean isInGoodHeight(int y) {
         return y >= minHeight && y <= maxHeight;
     }
 
-    private boolean usedProperItemToDestroyBlock(Material itemType) {
-        return items.contains(itemType);
+    public boolean usedProperItemToDestroyBlock(Material itemType) {
+        return items.contains(itemType) || items.size() == 0;
     }
 
     public String getDropMessage() {
         return message;
     }
 
-    private boolean isLucky() {
-        return r.nextFloat() <= chance;
+    public boolean isLucky() {
+        return r.nextDouble() <= chance;
     }
 
-    public ItemStack getDrop(int y, Material itemType, Map<Enchantment, Integer> itemEnchantmens) {
-        if (itemEnchantmens.containsKey(Enchantment.SILK_TOUCH)) {
-            return new ItemStack(Material.STONE, 1);
-        }
-        if (!isInGoodHeight(y) || !usedProperItemToDestroyBlock(itemType)) {
-            return cobblestone.clone();
-        }
-        if (!isLucky()) {
-            return cobblestone.clone();
-        }
+    public ItemStack getDrop() {
         int quantity = r.nextInt(maxQuantity) + minQuantity;
         if (quantity > maxQuantity) {
             quantity = maxQuantity;
@@ -72,7 +63,29 @@ public class DropProperties {
         return new ItemStack(dropType, quantity);
     }
 
-    public void sendDropMessage(Player player) {
-       player.sendMessage(message);
+    public void setDropMessage(String message) {
+        this.message = message;
+    }
+
+    public String getDropMessage(int quantity) {
+        return message.replace("%q", String.valueOf(quantity));
+    }
+
+    public void setShowMsg(boolean showMsg) {
+        this.showMsg = showMsg;
+    }
+
+    @Override
+    public String toString() {
+        return "[" +
+                "dropType=" + dropType.name() +
+                ", minQuantity=" + minQuantity +
+                ", maxQuantity=" + maxQuantity +
+                ", minHeight=" + minHeight +
+                ", maxHeight=" + maxHeight +
+                ", chance=" + chance +
+                ", message=" + message +
+                ", items=" + items.toString() +
+                "]";
     }
 }

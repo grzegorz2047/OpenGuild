@@ -31,16 +31,23 @@ import pl.grzegorz2047.openguild2047.database.SQLHandler;
  * @author Aleksander
  */
 public class PlayerDeathListener implements Listener {
+
+    private final SQLHandler sqlHandler;
+
+    public PlayerDeathListener(SQLHandler sqlHandler) {
+        this.sqlHandler = sqlHandler;
+    }
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
         Player killer = player.getKiller();
         if(killer != null) {
-            SQLHandler handler = OpenGuild.getInstance().getSQLHandler();
-            handler.updateStats( player.getUniqueId(), "deaths");
-            handler.updateStats(killer.getUniqueId(), "kills");
+            sqlHandler.addDeath(player);
+            sqlHandler.addKill(killer);
         }
     }
-    
+
+
+
 
 }

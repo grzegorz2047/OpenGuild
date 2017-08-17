@@ -57,9 +57,12 @@ public class Cuboids {
 
     public boolean allowedToDoItHere(Player player, Location location) {
         if (plugin.getCuboids().checkIfInAnyCuboid(cuboids.entrySet().iterator(), location)) {
+            //System.out.println("1 allowed");
             if (plugin.getGuilds().hasGuild(player.getUniqueId())) {
+                //System.out.println("2 allowed");
                 String tag = plugin.getGuilds().getPlayerGuild(player.getUniqueId()).getTag();
                 if (cuboids.get(tag).isinCuboid(location)) {
+                    //System.out.println("3 allowed");
                     return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
                 } else if (!player.hasPermission("openguild.cuboid.bypassplace")) {
                     return false;

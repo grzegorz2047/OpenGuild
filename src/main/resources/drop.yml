@@ -1,0 +1,17 @@
+drop:
+  materials:
+    STONE:
+      quantity: '2-4'
+      chance: 0.69
+      minHeight: 0
+      maxHeight: 50
+      message: '&7Znaleziono: &b[%q] Stone&7!'
+      tool:
+        - IRON_PICKAXE
+        - DIAMOND_PICKAXE
+    IRON_ORE:
+      quantity: '2-4'
+      chance: 0.69
+      minHeight: -50
+      maxHeight: 50
+      message: '&7Znaleziono: &b[%q] Stone&7!'

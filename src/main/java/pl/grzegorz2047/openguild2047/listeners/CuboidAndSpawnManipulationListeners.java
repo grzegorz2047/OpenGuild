@@ -71,7 +71,9 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
         if (processBreakingBlockInEnemyArea(e, player, brokenBlock)) return;
         if (GenConf.DROP_ENABLED) {
             drop.processDropFromBlocks(player, brokenBlock);
-            e.setCancelled(true);
+            if (!drop.isNotUsedInDropFromBlocks(brokenBlock.getType())) {
+                e.setDropItems(false);
+            }
         }
     }
 
@@ -87,11 +89,10 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     private boolean processBreakingBlockInEnemyArea(BlockBreakEvent e, Player player, Block brokenBlock) {
         if (player.hasPermission("openguild.cuboid.bypassbreak")) {
             return false;
-        } else if (!cuboids.allowedToDoItHere(player, brokenBlock.getLocation()) && !canbreakEnemyBlock()) {// Damage jest rowny 0; niszczenie blokow jest wylaczone
-            e.setCancelled(true);
-            return true;
-        } else {
-
+        } else if (!cuboids.allowedToDoItHere(player, brokenBlock.getLocation())) {// Damage jest rowny 0; niszczenie blokow jest wylaczone
+            if (!canbreakEnemyBlock()) {
+                e.setCancelled(true);
+            }
             PlayerInventory inventory = player.getInventory();
             if (!hasSpecialBreakingitem(inventory)) {
                 player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
@@ -99,8 +100,9 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
                 return true;
             }
             inventory.getItemInMainHand().setDurability((short) (inventory.getItemInMainHand().getDurability() + GenConf.BREAKING_DAMAGE));
-            return false;
+            return true;
         }
+        return false;
     }
 
     @EventHandler

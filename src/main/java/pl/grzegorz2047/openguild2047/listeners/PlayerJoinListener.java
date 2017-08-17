@@ -36,6 +36,7 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void handleEvent(PlayerJoinEvent event) {
+        event.setJoinMessage(null);
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         //System.out.print("Wykonuje playerJoinEvent!");

@@ -49,6 +49,7 @@ import pl.grzegorz2047.openguild2047.database.MySQLImplementationStrategy;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.database.SQLImplementationStrategy;
 import pl.grzegorz2047.openguild2047.database.SQLiteImplementationStrategy;
+import pl.grzegorz2047.openguild2047.dropstone.DropConfigLoader;
 import pl.grzegorz2047.openguild2047.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild2047.dropstone.DropProperties;
 import pl.grzegorz2047.openguild2047.listeners.*;
@@ -112,13 +113,14 @@ public class OpenGuild extends JavaPlugin {
         // Validate files
         validateFile("config");
         validateFile("commands");
+        validateFile("drop");
 
         // Load configuration
         GenConf.loadConfiguration();
 
         // Validate language file
         validateFile("messages_" + GenConf.lang.toLowerCase());
-        
+
         /*
          * If some server admin doesn't want to use PermissionsEX or other
          * permission plugin - he can use our built-in permissions manager.
@@ -126,7 +128,7 @@ public class OpenGuild extends JavaPlugin {
         //if(GenConf.useNativePermissionsManager) {
         //  TODO   
         //}
-        List<DropProperties> loadedDrops = new ArrayList<>();
+        List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
         this.drop = new DropFromBlocks(GenConf.ELIGIBLE_DROP_BLOCKS, loadedDrops);
         this.guilds = new Guilds();
         this.cuboids = new Cuboids(this);
@@ -288,7 +290,7 @@ public class OpenGuild extends JavaPlugin {
 
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerChatListener(this), this);
-        pm.registerEvents(new PlayerDeathListener(), this);
+        pm.registerEvents(new PlayerDeathListener(sqlHandler), this);
         pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester), this);
         pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), this);
 

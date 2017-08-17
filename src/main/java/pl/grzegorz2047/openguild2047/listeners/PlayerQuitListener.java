@@ -51,6 +51,7 @@ public class PlayerQuitListener implements Listener {
 
     @EventHandler
     public void handleEvent(PlayerQuitEvent event) {
+        event.setQuitMessage(null);
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         if (isPlayerInGuild(player)) {
