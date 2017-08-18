@@ -435,7 +435,7 @@ public class SQLHandler {
         }
     }
 
-    public void updateStats(UUID uuid, String column) {
+    private void updateStats(UUID uuid, String column) {
         try {
             createStatement();
             ResultSet result = statement.executeQuery("SELECT '" + column + "' FROM '" +

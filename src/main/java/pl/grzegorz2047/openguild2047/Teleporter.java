@@ -34,6 +34,7 @@ public class Teleporter {
                 TeleportRequest request = requests.get(p.getUniqueId());
                 if (System.currentTimeMillis() >= request.getTeleportTime()) {
                     p.teleport(request.getDestination());
+                    p.sendMessage(MsgManager.get("tptodestinationsuccess"));
                     strings.remove(p.getUniqueId());
                 } else {
                     if (p.getLocation().distance(request.getSource()) >= 1) {

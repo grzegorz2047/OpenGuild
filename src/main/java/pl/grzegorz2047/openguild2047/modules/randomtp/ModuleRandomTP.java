@@ -108,6 +108,7 @@ public class ModuleRandomTP implements RandomTPModule, Module {
                 z = z - (2 * z);
             Location location = world.getHighestBlockAt(new Location(world, x, 64, z)).getLocation();
             player.sendMessage(MsgManager.get("rantp"));
+
             if (!unsafeMaterials.contains(location.getBlock().getType())) {
                 return location;
             }

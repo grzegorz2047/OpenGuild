@@ -58,9 +58,9 @@ mysql:
   debug: false
 tags:
   enabled: true
-  ally: '&b[{TAG}] '
-  enemy: '&4[{TAG}] '
-  guild: '&2[{TAG}] '
+  ally: '&b[{TAG}]&7 '
+  enemy: '&4[{TAG}]&7 '
+  guild: '&a[{TAG}]&7 '
 guildprefixinchat: true
 forbiddenguildnames:
 use-new-command-api: true

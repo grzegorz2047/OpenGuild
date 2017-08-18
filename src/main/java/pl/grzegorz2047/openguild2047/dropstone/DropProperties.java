@@ -51,7 +51,11 @@ public class DropProperties {
         return message;
     }
 
-    public boolean isLucky() {
+    public boolean isLucky(Map<Enchantment, Integer> itemEnchantmens) {
+        if (itemEnchantmens.containsKey(Enchantment.LUCK)) {
+            Integer level = itemEnchantmens.get(Enchantment.LUCK);
+            return r.nextDouble() <= chance * level;
+        }
         return r.nextDouble() <= chance;
     }
 

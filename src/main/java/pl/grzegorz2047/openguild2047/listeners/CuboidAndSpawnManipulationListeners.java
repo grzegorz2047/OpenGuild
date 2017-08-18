@@ -52,13 +52,19 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
 
     private final Cuboids cuboids;
     private final DropFromBlocks drop;
+    private static List<Material> breakingItems;
+    private List<Material> allowedInteractItems;
 
     public CuboidAndSpawnManipulationListeners(Cuboids cuboids, DropFromBlocks drop) {
         this.cuboids = cuboids;
         this.drop = drop;
+        this.allowedInteractItems = new ArrayList<Material>();
+        this.allowedInteractItems.add(Material.CHEST);
+        this.allowedInteractItems.add(Material.ENDER_CHEST);
+        this.allowedInteractItems.add(Material.WOODEN_DOOR);
     }
 
-    private static List<Material> breakingItems;
+
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
@@ -110,6 +116,9 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
         if (e.getClickedBlock() != null) {
             Player player = e.getPlayer();
             if (SpawnChecker.isSpawn(e.getClickedBlock().getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
+                if(allowedInteractItems.contains(e.getMaterial())){
+                    return;
+                }
                 e.setCancelled(true);
                 player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
                 return;

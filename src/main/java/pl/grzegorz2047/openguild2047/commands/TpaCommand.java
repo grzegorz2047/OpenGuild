@@ -41,12 +41,16 @@ public class TpaCommand implements CommandExecutor {
                 Player sourcePlayer = Bukkit.getPlayer(sourceName);
                 if (isNotOnline(p, sourcePlayer)) return true;
                 teleporter.addRequest(sourcePlayer.getUniqueId(), sourcePlayer.getLocation(), p.getLocation(), GenConf.TELEPORT_COOLDOWN);
+                tpaRequester.removeRequest(sourceName);
+                sourcePlayer.sendMessage(MsgManager.get("tpaccepteddontmove").replace("%SECONDS%", String.valueOf(GenConf.TELEPORT_COOLDOWN)));
             }
             if (subcmd.equalsIgnoreCase("deny")) {
                 if (isNotRequesting(p, sourceName)) return true;
                 Player sourcePlayer = Bukkit.getPlayer(sourceName);
                 if (isNotOnline(p, sourcePlayer)) return true;
                 tpaRequester.removeRequest(sourcePlayer.getName());
+                sourcePlayer.sendMessage(MsgManager.get("tpadenied").replace("%PLAYER%", p.getName()));
+
             }
         }
         if (args.length == 1) {
@@ -60,7 +64,9 @@ public class TpaCommand implements CommandExecutor {
                 return true;
             }
             boolean requestSentSuccess = tpaRequester.addRequest(p.getName(), destinationName);
-            if (requestSentSuccess) {
+            Player destinationPlayer = Bukkit.getPlayer(destinationName);
+            if (requestSentSuccess && destinationPlayer.isOnline()) {
+                destinationPlayer.sendMessage(MsgManager.get("tparequested").replace("%PLAYER%", p.getName()));
                 p.sendMessage(MsgManager.get("tparequestsentsuccess").replace("%PLAYER%", destinationName));
             } else {
                 p.sendMessage(MsgManager.get("tparequestsentfailed"));

@@ -79,7 +79,7 @@ public class DropFromBlocks {
             receivedDrop = new ItemStack(Material.COBBLESTONE, 1);
             //System.out.println("zla wysokosc lub item");
         }
-        if (!dropProperties.isLucky()) {
+        if (!dropProperties.isLucky(itemEnchantmens)) {
             receivedDrop = new ItemStack(Material.COBBLESTONE, 1);
             //System.out.println("So unlucky");
         }
