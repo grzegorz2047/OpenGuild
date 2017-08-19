@@ -102,6 +102,12 @@
             <artifactId>ProtocolLib-API</artifactId>
             <version>4.3.0</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.md-5:bungeecord-chat</groupId>
+                    <artifactId>1.12-SNAPSHOT</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
