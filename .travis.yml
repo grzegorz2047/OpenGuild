@@ -1,4 +1,6 @@
 language: java
 script: mvn clean install
+jdk:
+  - oraclejdk8
 addons:
   artifacts: true
