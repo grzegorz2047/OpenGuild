@@ -18,8 +18,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.3</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -44,6 +44,10 @@
     </plugins>
   </build>
   <repositories>
+    <repository>
+      <id>dmulloy2-repo</id>
+      <url>http://repo.dmulloy2.net/content/groups/public/</url>
+    </repository>
     <repository>
       <id>bukkit-repo</id>
       <url>http://maven.sk89q.com/repo/</url>
