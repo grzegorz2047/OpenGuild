@@ -17,11 +17,13 @@
 package pl.grzegorz2047.openguild2047.listeners;
 
 import java.util.UUID;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
@@ -29,79 +31,98 @@ import org.bukkit.OfflinePlayer;
 
 public class PlayerChatListener implements Listener {
 
-    private OpenGuild plugin;
-    
-    public PlayerChatListener(OpenGuild plugin) {
-        this.plugin = plugin;
+    private final Guilds guilds;
+
+
+    public PlayerChatListener(Guilds guilds) {
+        this.guilds = guilds;
     }
-    
+
     @EventHandler
     public void handleEvent(AsyncPlayerChatEvent event) {
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             return;
         }
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         String message = event.getMessage();
-        if(plugin.getGuilds().hasGuild(player)) {
-            Guild guild = plugin.getGuilds().getPlayerGuild(uuid);
-            String tag = guild.getTag().toUpperCase();
-            
-            if(event.getMessage().startsWith(GenConf.guildChatKey) && event.getMessage().length()>=2){
-                message = message.substring(1);
-                String format = GenConf.guildChatFormat
-                        .replace("{PLAYER}", player.getName())
-                        .replace("{MESSAGE}", message);
-                for(UUID memuuid : guild.getMembers()) {
-                    OfflinePlayer op = plugin.getServer().getOfflinePlayer(memuuid);
-                    if(op.isOnline()) {//guildchat: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
-                        op.getPlayer().sendMessage(format);
-                    }
-                }   
-                event.setCancelled(true);
-                return;
-            }else if(event.getMessage().startsWith(GenConf.allyChatKey) && event.getMessage().length()>=2){
-                message = message.substring(1);
-                for(Relation r : guild.getAlliances()){
-                    Guild ally = null;
-                    if(guild.equals(plugin.getGuilds().getGuilds().get(r.getWho()))){
-                        ally = plugin.getGuilds().getGuilds().get(r.getWithWho());
-                    }else{
-                        ally = plugin.getGuilds().getGuilds().get(r.getWho());
-                    }
-                    if(ally != null){
-                        String format = GenConf.allyChatFormat
-                                .replace("{GUILD}", guild.getTag())
-                                .replace("{PLAYER}", player.getName())
-                                .replace("{MESSAGE}", message);
-                        for(UUID memuuid : ally.getMembers()) {
-                            OfflinePlayer op = plugin.getServer().getOfflinePlayer(memuuid);
-                            if(op.isOnline()) {//guildchat: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
-                                op.getPlayer().sendMessage(format);
-                            }
-                        }
-                    }
-                }
-                for(UUID memuuid : guild.getMembers()) {
-                    OfflinePlayer op = plugin.getServer().getOfflinePlayer(memuuid);
-                    String format = GenConf.guildChatFormat
-                            .replace("{PLAYER}", player.getName())
-                            .replace("{MESSAGE}", message);
-                    if(op.isOnline()) {//guildchat: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
-                        op.getPlayer().sendMessage(format);
-                    }
-                }   
-                event.setCancelled(true);
-                return;
-            }
-            
-            if(!GenConf.guildprefixinchat) {
-                if(event.getFormat().contains("%OPENGUILD_TAG%")) {
-                    event.setFormat(event.getFormat().replace("%OPENGUILD_TAG%", tag));
-                }
-            } else {
-                event.setFormat("§7[§r" + tag + "§7]§r " + event.getFormat());
-            }
+        if (!isInGuild(player)) {
+            return;
         }
+        processChatForPlayerWithGuild(event, player, uuid, message);
+    }
+
+    private void processChatForPlayerWithGuild(AsyncPlayerChatEvent event, Player player, UUID uuid, String message) {
+        Guild guild = guilds.getPlayerGuild(uuid);
+        String tag = guild.getName().toUpperCase();
+        String format = prepareMessageFormat(player, message);
+        if (isInGuildChatMode(message, GenConf.guildChatKey)) {
+            guild.notifyGuild(format);
+            event.setCancelled(true);
+            return;
+        }
+        if (isInGuildChatMode(message, GenConf.allyChatKey)) {
+            guild.notifyGuild(format);
+            event.setCancelled(true);
+            sendMessageToAllAllies(player, message, guild);
+            return;
+        }
+        String msgFormat = event.getFormat();
+        if (GenConf.guildprefixinchat) {
+            event.setFormat("§7[§r" + tag + "§7]§r " + msgFormat);
+            return;
+        }
+        if (msgFormat.contains("%OPENGUILD_TAG%")) {
+            event.setFormat(msgFormat.replace("%OPENGUILD_TAG%", tag));
+        }
+    }
+
+    private void sendMessageToAllAllies(Player player, String message, Guild guild) {
+        for (Relation r : guild.getAlliances()) {
+            sendMessageToAlly(player, message, guild, r);
+        }
+    }
+
+    private void sendMessageToAlly(Player player, String message, Guild guild, Relation r) {
+        Guild ally;
+        String whoGuildTag = r.getWho();
+        Guild whoGuild = guilds.getGuild(whoGuildTag);
+        ally = getAllyGuildFromRelation(guild, r, whoGuild);
+        if (ally != null) {
+            String format = GenConf.allyChatFormat
+                    .replace("{GUILD}", guild.getName())
+                    .replace("{PLAYER}", player.getName())
+                    .replace("{MESSAGE}", message);
+            ally.notifyGuild(format);
+        }
+    }
+
+    private Guild getAllyGuildFromRelation(Guild guild, Relation r, Guild whoGuild) {
+        Guild ally;
+        if (guild.equals(whoGuild)) {
+            String withWhoGuildTag = r.getWithWho();
+            ally = guilds.getGuild(withWhoGuildTag);
+        } else {
+            ally = whoGuild;
+        }
+        return ally;
+    }
+
+    private String getFirstLetterOfMsg(String message) {
+        return message.substring(1);
+    }
+
+    private String prepareMessageFormat(Player player, String message) {
+        return GenConf.guildChatFormat
+                .replace("{PLAYER}", player.getName())
+                .replace("{MESSAGE}", message);
+    }
+
+    private boolean isInGuildChatMode(String message, String allyChatKey) {
+        return message.startsWith(allyChatKey) && message.length() >= 2;
+    }
+
+    private boolean isInGuild(Player player) {
+        return guilds.hasGuild(player);
     }
 }

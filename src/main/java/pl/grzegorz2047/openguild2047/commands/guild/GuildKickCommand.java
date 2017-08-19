@@ -81,13 +81,13 @@ public class GuildKickCommand extends Command {
         guilds.getMappedPlayersToGuilds().remove(op.getUniqueId());
         guilds.getMappedPlayersToGuilds().put(op.getUniqueId(), null);
         if(op.isOnline()) {
-            op.getPlayer().sendMessage(MsgManager.playerkicked.replace("{GUILD}", guild.getTag()));
+            op.getPlayer().sendMessage(MsgManager.playerkicked.replace("{GUILD}", guild.getName()));
         }
         
         for(UUID member : guild.getMembers()) {
             OfflinePlayer opp = this.getPlugin().getServer().getOfflinePlayer(member);
             if(opp.isOnline()) {
-                opp.getPlayer().sendMessage(MsgManager.get("broadcast-kick").replace("{PLAYER}", player.getDisplayName()).replace("{MEMBER}", op.getName()).replace("{TAG}", guild.getTag().toUpperCase()));
+                opp.getPlayer().sendMessage(MsgManager.get("broadcast-kick").replace("{PLAYER}", player.getDisplayName()).replace("{MEMBER}", op.getName()).replace("{TAG}", guild.getName().toUpperCase()));
             }
         }
 

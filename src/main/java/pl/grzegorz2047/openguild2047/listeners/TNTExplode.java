@@ -59,8 +59,8 @@ public class TNTExplode implements Listener {
 
             Guild guild = plugin.getGuild(event.getBlock().getLocation());
             if (guild != null) {
-                if (blockedGuilds.containsKey(guild.getTag())) {
-                    player.sendMessage(MsgManager.get("tntex").replace("{SEC}", String.valueOf(blockedGuilds.get(guild.getTag()))));
+                if (blockedGuilds.containsKey(guild.getName())) {
+                    player.sendMessage(MsgManager.get("tntex").replace("{SEC}", String.valueOf(blockedGuilds.get(guild.getName()))));
                     event.setCancelled(true);
                 }
             }
@@ -78,7 +78,7 @@ public class TNTExplode implements Listener {
             final Guild guild = plugin.getGuild(location);
 
             if (guild != null) {
-                if (!blockedGuilds.containsKey(guild.getTag())) {
+                if (!blockedGuilds.containsKey(guild.getName())) {
                     EnhancedRunnable.startTask(plugin.getBukkit(), new EnhancedRunnable() {
                         /**
                          * Time left to 'free' guild.
@@ -87,19 +87,19 @@ public class TNTExplode implements Listener {
 
                         @Override
                         public void run() {
-                            blockTime = blockedGuilds.get(guild.getTag());
+                            blockTime = blockedGuilds.get(guild.getName());
                             if (blockTime == 0) {
-                                blockedGuilds.remove(guild.getTag());
+                                blockedGuilds.remove(guild.getName());
                                 this.stopTask();
                                 return;
                             }
 
-                            blockedGuilds.put(guild.getTag(), blockTime--);
+                            blockedGuilds.put(guild.getName(), blockTime--);
                         }
                     }, 5L, 20L);
                 }
 
-                blockedGuilds.put(guild.getTag(), 30);
+                blockedGuilds.put(guild.getName(), 30);
             }
         }
         if (GenConf.DROP_ENABLED) {

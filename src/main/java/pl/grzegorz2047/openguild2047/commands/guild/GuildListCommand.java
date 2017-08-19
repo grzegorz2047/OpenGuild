@@ -39,7 +39,7 @@ public class GuildListCommand extends Command {
         
         StringBuilder resultBuilder = new StringBuilder();
         for(Guild guild : guilds.getGuilds().values()) {
-            String tag = guild.getTag();
+            String tag = guild.getName();
             resultBuilder.append(tag).append(", ");
         }
         

@@ -59,7 +59,7 @@ public class GuildAllyCommand extends Command {
             Guild guild = guilds.getGuild(guildToCheck);
             OfflinePlayer leader = Bukkit.getOfflinePlayer(guild.getLeader());
 
-            if (guild.getTag().equals(requestingGuild.getTag())) {
+            if (guild.getName().equals(requestingGuild.getName())) {
                 sender.sendMessage(MsgManager.get("allyyourselferror"));
                 return;
             }
@@ -68,7 +68,7 @@ public class GuildAllyCommand extends Command {
                 sender.sendMessage(MsgManager.get("leadernotonline"));
                 return;
             }
-            if (guild.getPendingRelationChanges().contains(requestingGuild.getTag())) {
+            if (guild.getPendingRelationChanges().contains(requestingGuild.getName())) {
                 if (!requestingGuild.getLeader().equals(player.getUniqueId())) {
                     player.sendMessage(MsgManager.get("playernotleader"));
                     return;
@@ -80,19 +80,19 @@ public class GuildAllyCommand extends Command {
                     return;
                 }
 
-                guild.getPendingRelationChanges().remove(requestingGuild.getTag());
-                Relation r = new Relation(guild.getTag(), requestingGuild.getTag(), 0, Relation.Status.ALLY);
+                guild.getPendingRelationChanges().remove(requestingGuild.getName());
+                Relation r = new Relation(guild.getName(), requestingGuild.getName(), 0, Relation.Status.ALLY);
                 boolean result = OpenGuild.getInstance().getSQLHandler().insertAlliance(guild, requestingGuild);
                 if (!result) {
                     this.getPlugin();
-                    OpenGuild.getOGLogger().warning("Could not register the ally for " + guild.getTag() + " guild!");
+                    OpenGuild.getOGLogger().warning("Could not register the ally for " + guild.getName() + " guild!");
                 }
                 OpenGuild.getInstance().getTagManager().guildMakeAlliance(r);
                 guild.getAlliances().add(r);
                 requestingGuild.getAlliances().add(r);
                 Bukkit.broadcastMessage(MsgManager.get("broadcast-ally")
-                        .replace("{GUILD1}", guild.getTag())
-                        .replace("{GUILD2}", requestingGuild.getTag()));
+                        .replace("{GUILD1}", guild.getName())
+                        .replace("{GUILD2}", requestingGuild.getName()));
                 return;
             }
             requestingGuild.changeRelationRequest(requestingGuild, guild, leader, Relation.Status.ALLY);

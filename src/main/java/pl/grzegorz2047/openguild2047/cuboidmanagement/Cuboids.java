@@ -60,7 +60,7 @@ public class Cuboids {
             //System.out.println("1 allowed");
             if (plugin.getGuilds().hasGuild(player.getUniqueId())) {
                 //System.out.println("2 allowed");
-                String tag = plugin.getGuilds().getPlayerGuild(player.getUniqueId()).getTag();
+                String tag = plugin.getGuilds().getPlayerGuild(player.getUniqueId()).getName();
                 if (cuboids.get(tag).isinCuboid(location)) {
                     //System.out.println("3 allowed");
                     return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
@@ -77,7 +77,7 @@ public class Cuboids {
     public boolean canMove(Player player, Location from, Location to) {
         Iterator<Map.Entry<String, Cuboid>> it = cuboids.entrySet().iterator();
         if (isPlayerInGuild(player)) {
-            String tag = plugin.getGuilds().getPlayerGuild(player.getUniqueId()).getTag();
+            String tag = plugin.getGuilds().getPlayerGuild(player.getUniqueId()).getName();
             return cuboids.get(tag).isinCuboid(to) || !checkIfInAnyCuboid(it, to);
         } else {
             return !checkIfInAnyCuboid(it, to);
@@ -88,7 +88,7 @@ public class Cuboids {
         Iterator<Map.Entry<String, Cuboid>> it = cuboids.entrySet().iterator();
         String tag = null;
         if (isPlayerInGuild(player)) {
-            tag = plugin.getGuilds().getPlayerGuild(player.getUniqueId()).getTag();
+            tag = plugin.getGuilds().getPlayerGuild(player.getUniqueId()).getName();
         }
         String guildscuboidtag = getOwnerOfCuboidInPlayerPosition(it, player.getLocation());
         //Bukkit.broadcastMessage("Gracz "+player.getName()+" jest na "+guildscuboidtag);

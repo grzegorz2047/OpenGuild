@@ -102,7 +102,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     @Override
     public com.github.grzegorz2047.openguild.Guild getGuild(String name) {
         for(com.github.grzegorz2047.openguild.Guild guild : getGuilds()) {
-            if(guild.getTag().equalsIgnoreCase(name)) {
+            if(guild.getName().equalsIgnoreCase(name)) {
                 return guild;
             }
         }

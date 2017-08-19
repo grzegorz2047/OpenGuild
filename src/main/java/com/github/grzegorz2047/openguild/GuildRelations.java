@@ -64,7 +64,7 @@ public class GuildRelations {
             if(!r.getState().equals(Relation.Status.ALLY)){
                 continue;
             }
-            if(r.getWithWho().equals(g.getTag()) || r.getWho().equals(g.getTag())){
+            if(r.getWithWho().equals(g.getName()) || r.getWho().equals(g.getName())){
                 return true;
             }
         }
@@ -72,11 +72,11 @@ public class GuildRelations {
     }
     
     public void changeRelationRequest(Guild requestingGuild , Guild guild, final OfflinePlayer requestedLeader, Relation.Status status) {
-        final String tag = guild.getTag();
-        final String requestingTag = requestingGuild.getTag();
+        final String tag = guild.getName();
+        final String requestingTag = requestingGuild.getName();
         final UUID requestingLeader = requestingGuild.getLeader();
         for(Relation r : requestingGuild.getAlliances()){
-            if(r.getWithWho().equals(guild.getTag()) || r.getWho().equals(guild.getTag())){
+            if(r.getWithWho().equals(guild.getName()) || r.getWho().equals(guild.getName())){
                 if(r.getState().equals(status)){
                     Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage(MsgManager.get("allyexists"));
                     return;
@@ -87,10 +87,10 @@ public class GuildRelations {
             pendingRelationChanges.add(tag);
             Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage(MsgManager.get("sentallyrequest"));
             if(requestedLeader.isOnline()){
-                Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage(MsgManager.get("sentallyrequestfrom").replace("{GUILD}", requestingGuild.getTag()));
-                Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage(MsgManager.get("toacceptallymsg").replace("{GUILD}", requestingGuild.getTag()));
+                Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage(MsgManager.get("sentallyrequestfrom").replace("{GUILD}", requestingGuild.getName()));
+                Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage(MsgManager.get("toacceptallymsg").replace("{GUILD}", requestingGuild.getName()));
             }else{
-                Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage(MsgManager.get("sentallyrequestfrom").replace("{GUILD}", guild.getTag()));
+                Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage(MsgManager.get("sentallyrequestfrom").replace("{GUILD}", guild.getName()));
                 return;
             }
 

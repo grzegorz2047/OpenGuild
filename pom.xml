@@ -4,7 +4,7 @@
 
     <groupId>pl.grzegorz2047</groupId>
     <artifactId>OpenGuild2047</artifactId>
-    <version>0.6.9</version>
+    <version>0.7.0</version>
     <packaging>jar</packaging>
     <name>OpenGuild2047</name>
     <properties>
@@ -45,6 +45,8 @@
                             <artifactSet>
                                 <excludes>
                                     <exclude>org.spigotmc:spigot-api</exclude>
+                                    <exclude>com.comphenix.protocol:ProtocolLib-API</exclude>
+                                    <exclude>ch.njol:skript</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>
@@ -99,6 +101,7 @@
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib-API</artifactId>
             <version>4.3.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

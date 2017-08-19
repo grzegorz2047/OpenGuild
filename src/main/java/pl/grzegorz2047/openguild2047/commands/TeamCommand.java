@@ -67,7 +67,7 @@ public class TeamCommand implements CommandExecutor {
         
         Guild guild = guilds.getPlayerGuild(player.getUniqueId());
         String format = GenConf.guildChatFormat
-                .replace("{GUILD}", guild.getTag())
+                .replace("{GUILD}", guild.getName())
                 .replace("{PLAYER}", player.getName())
                 .replace("{MESSAGE}", message);
         for(UUID uuid : guild.getMembers()) {

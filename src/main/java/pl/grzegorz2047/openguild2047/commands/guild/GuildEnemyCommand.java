@@ -63,7 +63,7 @@ public class GuildEnemyCommand extends Command {
                 sender.sendMessage(MsgManager.get("leadernotonline"));
                 return;
             }
-            if (guild.getTag().equals(requestingGuild.getTag())) {
+            if (guild.getName().equals(requestingGuild.getName())) {
                 sender.sendMessage(MsgManager.get("enemyyourselferror"));
                 return;
             }
@@ -75,14 +75,14 @@ public class GuildEnemyCommand extends Command {
             }
 
             for (Relation r : requestingGuild.getAlliances()) {
-                if (r.getWithWho().equals(guild.getTag()) || r.getWho().equals(guild.getTag())) {
+                if (r.getWithWho().equals(guild.getName()) || r.getWho().equals(guild.getName())) {
                     OpenGuild.getInstance().getTagManager().guildBrokeAlliance(requestingGuild, guild);
                     requestingGuild.getAlliances().remove(r);
                     guild.getAlliances().remove(r);
                     OpenGuild.getInstance().getSQLHandler().removeAlliance(requestingGuild, guild);
                     Bukkit.broadcastMessage(MsgManager.getIgnorePref("broadcast-enemy")
-                            .replace("{GUILD1}", requestingGuild.getTag())
-                            .replace("{GUILD2}", guild.getTag()));
+                            .replace("{GUILD1}", requestingGuild.getName())
+                            .replace("{GUILD2}", guild.getName()));
                     return;
                 }
             }

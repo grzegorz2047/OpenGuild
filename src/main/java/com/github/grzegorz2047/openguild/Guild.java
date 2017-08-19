@@ -46,7 +46,7 @@ public class Guild extends GuildMembers {
         this.tag = tag;
     }
 
-    public String getTag() {
+    public String getName() {
         return tag;
     }
 
@@ -76,30 +76,25 @@ public class Guild extends GuildMembers {
     }
 
     public void notifyGuildThatMemberLeft(Player player) {
+        String msg = MsgManager.get("guildmemberleft");
+        notifyGuild(msg.replace("{PLAYER}", player.getDisplayName()));
+    }
+
+    public void notifyGuild(String msg) {
         for (UUID mem : this.getMembers()) {
             OfflinePlayer om = Bukkit.getOfflinePlayer(mem);
             if (om.isOnline()) {
-                if (!player.getUniqueId().equals(om.getUniqueId())) {
-                    String msg = MsgManager.get("guildmemberleft");
-                    notifyPlayer(player, om, msg);
-                }
+                notifyPlayer(om, msg);
             }
         }
     }
 
     public void notifyMembersJoinedGame(Player player) {
-        for (UUID mem : this.getMembers()) {
-            OfflinePlayer om = plugin.getServer().getOfflinePlayer(mem);
-            if (om.isOnline()) {
-                if (!player.getUniqueId().equals(om.getUniqueId())) {
-                    String msg = MsgManager.get("guildmemberjoined");
-                    notifyPlayer(player, om, msg);
-                }
-            }
-        }
+        String msg = MsgManager.get("guildmemberjoined");
+        notifyGuild(msg.replace("{PLAYER}", player.getDisplayName()));
     }
 
-    private void notifyPlayer(Player player, OfflinePlayer om, String msg) {
-        om.getPlayer().sendMessage(msg.replace("{PLAYER}", player.getDisplayName()));
+    private void notifyPlayer(OfflinePlayer om, String msg) {
+        om.getPlayer().sendMessage(msg);
     }
 }

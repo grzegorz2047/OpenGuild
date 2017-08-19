@@ -64,7 +64,7 @@ public class GuildInvitationAcceptCommand extends Command {
             if (invitationsFrom.size() > 1) {
                 sender.sendMessage(MsgManager.get("invmore"));
                 for (Guild guild : invitationsFrom) {
-                    sender.sendMessage(ChatColor.BOLD + guild.getTag().toUpperCase() + ChatColor.GRAY + " - " + guild.getDescription());
+                    sender.sendMessage(ChatColor.BOLD + guild.getName().toUpperCase() + ChatColor.GRAY + " - " + guild.getDescription());
                 }
             } else if(invitationsFrom.size() == 1 ){
                 accept((Player) sender, invitationsFrom.get(0));
@@ -97,7 +97,7 @@ public class GuildInvitationAcceptCommand extends Command {
         getPlugin().getTagManager().playerJoinGuild(player, guild);
         Bukkit.broadcastMessage(MsgManager.get("broadcast-join")
                 .replace("{PLAYER}", player.getName())
-                .replace("{TAG}", guild.getTag().toUpperCase()));
+                .replace("{TAG}", guild.getName().toUpperCase()));
     }
 
 }

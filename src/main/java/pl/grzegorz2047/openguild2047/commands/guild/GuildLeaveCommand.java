@@ -72,7 +72,7 @@ public class GuildLeaveCommand extends Command {
         for(UUID member : guild.getMembers()) {
             OfflinePlayer opp = this.getPlugin().getServer().getOfflinePlayer(member);
             if(opp.isOnline()) {
-                opp.getPlayer().sendMessage(MsgManager.get("broadcast-leave").replace("{PLAYER}", player.getDisplayName()).replace("{TAG}", guild.getTag().toUpperCase()));
+                opp.getPlayer().sendMessage(MsgManager.get("broadcast-leave").replace("{PLAYER}", player.getDisplayName()).replace("{TAG}", guild.getName().toUpperCase()));
             }
         }
 

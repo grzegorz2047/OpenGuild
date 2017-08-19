@@ -68,7 +68,7 @@ public class GuildHomeCommand extends Command {
         }
 
         teleporter.addRequest(player.getUniqueId(), player.getLocation(), guild.getHome(), GenConf.TELEPORT_COOLDOWN);
-        player.sendMessage(ChatColor.GRAY + MsgManager.timetotpnotify.replace("{GUILD}", guild.getTag().toUpperCase()).replace("{HOMETPSECONDS}", String.valueOf(GenConf.TELEPORT_COOLDOWN)));
+        player.sendMessage(ChatColor.GRAY + MsgManager.timetotpnotify.replace("{GUILD}", guild.getName().toUpperCase()).replace("{HOMETPSECONDS}", String.valueOf(GenConf.TELEPORT_COOLDOWN)));
 
     }
 

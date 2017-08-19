@@ -35,6 +35,8 @@
               <artifactSet>
                 <excludes>
                   <exclude>org.spigotmc:spigot-api</exclude>
+                  <exclude>com.comphenix.protocol:ProtocolLib-API</exclude>
+                  <exclude>ch.njol:skript</exclude>
                 </excludes>
               </artifactSet>
             </configuration>
@@ -103,6 +105,22 @@
         <exclusion>
           <artifactId>utils</artifactId>
           <groupId>ch.njol</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.comphenix.protocol</groupId>
+      <artifactId>ProtocolLib-API</artifactId>
+      <version>4.3.0</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>cglib-nodep</artifactId>
+          <groupId>cglib</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>BukkitExecutors</artifactId>
+          <groupId>com.comphenix.executors</groupId>
         </exclusion>
       </exclusions>
     </dependency>

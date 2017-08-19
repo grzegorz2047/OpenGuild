@@ -18,6 +18,8 @@ package com.github.grzegorz2047.openguild;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
@@ -31,11 +33,13 @@ public class GuildMembers extends GuildRelations {
 
     private final List<UUID> members = new ArrayList<UUID>();
     private final List<UUID> pendingInvitations = new ArrayList<UUID>();
+    private List<String> membersNames = new ArrayList<>();
 
     public GuildMembers(pl.grzegorz2047.openguild2047.OpenGuild plugin) {
         super(plugin);
         this.plugin = plugin;
         this.setRelationsGuild(guild);
+
     }
 
     protected void setMembersGuild(Guild guild) {
@@ -59,29 +63,31 @@ public class GuildMembers extends GuildRelations {
     }
 
     public void acceptInvitation(Player player) {
-        if(pendingInvitations.contains(player.getUniqueId())) {
+        if (pendingInvitations.contains(player.getUniqueId())) {
             pendingInvitations.remove(player.getUniqueId());
 
             this.plugin.getGuilds().addPlayer(player.getUniqueId(), guild);
-            this.plugin.getSQLHandler().updatePlayerTag(player.getUniqueId(), guild.getTag());
+            this.plugin.getSQLHandler().updatePlayerTag(player.getUniqueId(), guild.getName());
             this.members.add(player.getUniqueId());
+            membersNames.add(player.getName());
+
         }
     }
 
     public void invitePlayer(final Player player, Player who) {
         final UUID uuid = player.getUniqueId();
 
-        if(!pendingInvitations.contains(uuid)) {
+        if (!pendingInvitations.contains(uuid)) {
             pendingInvitations.add(uuid);
 
-            player.sendMessage(MsgManager.get("guild-invitation").replace("{WHO}", who.getName()).replace("{TAG}", guild.getTag().toUpperCase()));
+            player.sendMessage(MsgManager.get("guild-invitation").replace("{WHO}", who.getName()).replace("{TAG}", guild.getName().toUpperCase()));
 
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if(pendingInvitations.contains(uuid)) {
+                    if (pendingInvitations.contains(uuid)) {
                         pendingInvitations.remove(uuid);
-                        player.sendMessage(MsgManager.get("guild-invitation-expired").replace("{TAG}", guild.getTag().toUpperCase()));
+                        player.sendMessage(MsgManager.get("guild-invitation-expired").replace("{TAG}", guild.getName().toUpperCase()));
                     }
                 }
             }.runTaskLater(this.plugin, 20L * 25);
@@ -89,18 +95,25 @@ public class GuildMembers extends GuildRelations {
     }
 
     public void addMember(UUID member) {
-        if(!members.contains(member)) {
+        if (!members.contains(member)) {
             members.add(member);
+            membersNames.add(Bukkit.getOfflinePlayer(member).getName());
         }
     }
 
     public void removeMember(UUID member) {
-        if(members.contains(member)) {
+        if (members.contains(member)) {
             members.remove(member);
+            membersNames.remove(Bukkit.getOfflinePlayer(member).getName());
+
         }
     }
 
     public boolean containsMember(UUID member) {
         return members.contains(member);
+    }
+
+    public List<String> getMembersNames() {
+        return membersNames;
     }
 }

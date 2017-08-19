@@ -157,7 +157,7 @@ public class GuildCreateCommand extends Command {
          */
         getPlugin().getSQLHandler().insertGuild(tag, description, player.getUniqueId(), player.getLocation(), player.getLocation().getWorld().getName());
         getPlugin().getSQLHandler().addGuildCuboid(cuboid.getCenter(), cuboid.getCuboidSize(), cuboid.getOwner(), cuboid.getWorldName());
-        getPlugin().getSQLHandler().updatePlayerTag(player.getUniqueId(), guild.getTag());
+        getPlugin().getSQLHandler().updatePlayerTag(player.getUniqueId(), guild.getName());
 
         this.getPlugin().broadcastMessage(MsgManager.get("broadcast-create").replace("{TAG}", tag.toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
 

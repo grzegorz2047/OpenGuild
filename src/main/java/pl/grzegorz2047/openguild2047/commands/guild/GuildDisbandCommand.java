@@ -84,11 +84,11 @@ public class GuildDisbandCommand extends Command {
                     Bukkit.getPlayer(uuid).setScoreboard(OpenGuild.getInstance().getTagManager().getGlobalScoreboard());
                 }
             }
-            getPlugin().getCuboids().removeGuildCuboid(guild.getTag());
-            getPlugin().getSQLHandler().removeGuild(guild.getTag().toUpperCase());
-            guilds.getGuilds().remove(guild.getTag());
+            getPlugin().getCuboids().removeGuildCuboid(guild.getName());
+            getPlugin().getSQLHandler().removeGuild(guild.getName().toUpperCase());
+            guilds.getGuilds().remove(guild.getName());
             getPlugin().getTagManager().playerDisbandGuild(guild);
-            getPlugin().broadcastMessage(MsgManager.get("broadcast-disband").replace("{TAG}", guild.getTag().toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
+            getPlugin().broadcastMessage(MsgManager.get("broadcast-disband").replace("{TAG}", guild.getName().toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
         }
         
     }

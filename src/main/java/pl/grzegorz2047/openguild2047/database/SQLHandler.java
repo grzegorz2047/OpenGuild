@@ -356,7 +356,7 @@ public class SQLHandler {
     public void updateGuildDescription(Guild guild) {
         try {
             createStatement();
-            statement.executeUpdate("UPDATE `" + GenConf.sqlTablePrefix + "guilds` SET `description` = '" + guild.getDescription() + "' WHERE `tag` = '" + guild.getTag().toUpperCase() + "'");
+            statement.executeUpdate("UPDATE `" + GenConf.sqlTablePrefix + "guilds` SET `description` = '" + guild.getDescription() + "' WHERE `tag` = '" + guild.getName().toUpperCase() + "'");
 
             statement.close();
             statement.getConnection().close();
@@ -387,7 +387,7 @@ public class SQLHandler {
             createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "allies`" + " WHERE who='" + who + "'" + "OR withwho='" + who + "';");
             if (!containsAlliance(rs)) {
-                statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "allies` VALUES('" + who.getTag() + "', '" + withWho.getTag() + "', '" + Relation.Status.ALLY.toString() + "', 0);");
+                statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "allies` VALUES('" + who.getName() + "', '" + withWho.getName() + "', '" + Relation.Status.ALLY.toString() + "', 0);");
                 return true;
             }
             while (anotherRecord(rs)) {
@@ -396,7 +396,7 @@ public class SQLHandler {
                 if (isAlreadyAlliance(who, withWho, whoseguild, withwho)) {
                     return false;
                 } else {
-                    statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "allies` VALUES('" + who.getTag() + "', '" + withWho.getTag() + "', '" + Relation.Status.ALLY.toString() + "', 0);");
+                    statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "allies` VALUES('" + who.getName() + "', '" + withWho.getName() + "', '" + Relation.Status.ALLY.toString() + "', 0);");
                     return true;
                 }
             }
@@ -411,7 +411,7 @@ public class SQLHandler {
     }
 
     private boolean isAlreadyAlliance(Guild who, Guild withWho, String whoseguild, String withwho) {
-        return (whoseguild.equals(who.getTag()) && withwho.equals(withWho.getTag())) || (whoseguild.equals(withWho.getTag()) && withwho.equals(who.getTag()));
+        return (whoseguild.equals(who.getName()) && withwho.equals(withWho.getName())) || (whoseguild.equals(withWho.getName()) && withwho.equals(who.getName()));
     }
 
     private boolean containsAlliance(ResultSet rs) throws SQLException {
@@ -421,8 +421,8 @@ public class SQLHandler {
     public boolean removeAlliance(Guild who, Guild withWho) {
         try {
             createStatement();
-            statement.addBatch("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='" + who.getTag() + "' AND withwho='" + withWho.getTag() + "';");
-            statement.addBatch("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='" + withWho.getTag() + "' AND withwho='" + who.getTag() + "';");
+            statement.addBatch("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='" + who.getName() + "' AND withwho='" + withWho.getName() + "';");
+            statement.addBatch("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='" + withWho.getName() + "' AND withwho='" + who.getName() + "';");
             statement.executeBatch();
 
             statement.close();
