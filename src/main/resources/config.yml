@@ -61,7 +61,6 @@ tags:
   ally: '&b[{TAG}]&7 '
   enemy: '&4[{TAG}]&7 '
   guild: '&a[{TAG}]&7 '
-guildprefixinchat: true
 forbiddenguildnames:
 use-new-command-api: true
 join-msg: ''
@@ -74,6 +73,8 @@ chat:
   guild-key: '@'
   ally-format: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
   ally-key: '!'
+  guildprefixinchat: true
+  chatFormat: '&8[&7{GUILD}&8] &7{PLAYER}&7: &f{MESSAGE}'
 required-items:
 - 'WOOL:1:2:1'
 listener:

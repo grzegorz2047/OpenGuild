@@ -18,6 +18,7 @@ package pl.grzegorz2047.openguild2047.listeners;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,7 +28,6 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 
 /**
- *
  * @author Aleksander
  */
 public class PlayerDeathListener implements Listener {
@@ -37,17 +37,16 @@ public class PlayerDeathListener implements Listener {
     public PlayerDeathListener(SQLHandler sqlHandler) {
         this.sqlHandler = sqlHandler;
     }
+
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
         Player killer = player.getKiller();
-        if(killer != null) {
+        if (killer != null) {
             sqlHandler.addDeath(player);
             sqlHandler.addKill(killer);
         }
     }
-
-
 
 
 }

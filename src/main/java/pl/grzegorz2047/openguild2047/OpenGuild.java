@@ -131,7 +131,7 @@ public class OpenGuild extends JavaPlugin {
         List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
         this.drop = new DropFromBlocks(GenConf.ELIGIBLE_DROP_BLOCKS, loadedDrops);
         this.guilds = new Guilds();
-        this.cuboids = new Cuboids(this);
+        this.cuboids = new Cuboids(guilds);
         this.logout = new AntiLogoutManager();
         // Setup Tag Manager
         this.tagManager = new TagManager(guilds);
@@ -141,13 +141,13 @@ public class OpenGuild extends JavaPlugin {
         loadCommands(cuboids, guilds, teleporter);
 
         // Register events
-        loadAllListeners();
+
 
         // Intialize guild helper class
         // Load database
         loadDB();
+        loadAllListeners();
         loadPlayers();
-        this.tagManager.loadTags(guilds);
         this.getSQLHandler().loadRelations();
 
 
@@ -288,10 +288,10 @@ public class OpenGuild extends JavaPlugin {
     private void loadAllListeners() {
         PluginManager pm = getServer().getPluginManager();
 
-        pm.registerEvents(new PlayerJoinListener(this), this);
+        pm.registerEvents(new PlayerJoinListener(guilds, tagManager, sqlHandler), this);
         pm.registerEvents(new PlayerChatListener(guilds), this);
         pm.registerEvents(new PlayerDeathListener(sqlHandler), this);
-        pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester), this);
+        pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester, guilds), this);
         pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), this);
 
         if (GenConf.cubEnabled) {

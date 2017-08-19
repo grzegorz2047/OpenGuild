@@ -17,12 +17,16 @@ package pl.grzegorz2047.openguild2047.api;
 
 import com.github.grzegorz2047.openguild.Logger;
 import com.github.grzegorz2047.openguild.Guild;
+
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
@@ -35,28 +39,33 @@ import pl.grzegorz2047.openguild2047.utils.PastebinWriter;
  */
 public class Guilds {
 
-    @Nullable public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
+
+    @Nullable
+    public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
         //SimplePlayerGuild guildPlayer = GuildHelper.getInstance().guildsplayers.get(player.getUniqueId());
         //SimpleGuild guild = GuildHelper.getInstance().guilds.get(guildPlayer.getClanTag());
         return null;
     }
 
-    @Nullable public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
+    @Nullable
+    public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
         //Guild guild = GuildHelper.getInstance().guilds.get(tag.toLowerCase());
         return null;
     }
 
-    @Nonnull public static Logger getLogger() {
+    @Nonnull
+    public static Logger getLogger() {
         return OpenGuild.getInstance().getOGLogger();
     }
 
-    @Nullable public static PlayerGuild getPlayer(@Nonnull UUID uuid) throws NullPointerException {
+    @Nullable
+    public static PlayerGuild getPlayer(@Nonnull UUID uuid) throws NullPointerException {
         //PlayerGuild guild = GuildHelper.getInstance().guildsplayers.get(uuid);
         return null;
     }
 
     public static void report(String error) {
-        if(GenConf.SNOOPER) {
+        if (GenConf.SNOOPER) {
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
             StringBuilder builder = new StringBuilder();
             builder.append("Generated ").append(format.format(new Date()));

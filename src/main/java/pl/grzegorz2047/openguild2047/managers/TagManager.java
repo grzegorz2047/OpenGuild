@@ -16,8 +16,11 @@
 
 package pl.grzegorz2047.openguild2047.managers;
 
+import java.util.List;
 import java.util.UUID;
 
+import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
+import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam.Mode;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -31,6 +34,11 @@ import java.util.Map;
 
 import org.bukkit.OfflinePlayer;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.OGLogger;
+import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.packets.ScoreboardPackets;
+
+import static com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED;
 
 /**
  * @author Grzegorz
@@ -40,6 +48,7 @@ public class TagManager {
 
     private final Guilds guilds;
     private Scoreboard globalScoreboard;//Mozna trzymac tu defaultowe prefixy gildii dla bezgildyjnych
+    private ScoreboardPackets scoreboardPackets = new ScoreboardPackets();
 
     public TagManager(Guilds guilds) {
         this.guilds = guilds;
@@ -144,17 +153,8 @@ public class TagManager {
     }
 
     public void playerDisbandGuild(Guild guild) {
-        getGuildScoreboardTag(this.getGlobalScoreboard(), guild).unregister();
-        for (Map.Entry<String, Guild> gs : guilds.getGuilds().entrySet()) {
-            if (isTheSameTag(guild.getName(), gs.getKey())) {
-                continue;
-            }
-            Guild otherGuild = gs.getValue();
-            Scoreboard otherGuildScoreboard = otherGuild.getSc();
-            Team t = getGuildScoreboardTag(otherGuildScoreboard, guild);
-            if (t != null) {
-                t.unregister();
-            }
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            scoreboardPackets.sendDeleteTeamTag(p, guild.getName());
         }
     }
 
@@ -175,28 +175,6 @@ public class TagManager {
         return whoT;
     }
 
-
-    public void preparePlayerTag(String guildTag, UUID uuid, Guild playersGuild) {
-        if (!isGuildTagRenederedAlready(guildTag)) {
-            renderGuildTag(guildTag, uuid);
-        } else {
-            addGuildTagToPlayer(guildTag, uuid);
-        }
-        Scoreboard whoSc = playersGuild.getSc();
-
-        Team whoT;
-        if (tagForWhoDoesntExists(guildTag, whoSc)) {
-            whoT = createGuildScoreboardTag(guildTag, whoSc);
-            //System.out.print("whoT to "+whoT.getName()+" z dn "+whoT.getDisplayName());
-            //System.out.print("Dodaje gracza "+Bukkit.getOfflinePlayer(uuid).getName());
-            addPlayerToGuildTag(uuid, whoT);
-        } else {
-            whoT = whoSc.getTeam(guildTag);
-            //System.out.print("Dodaje gracza "+Bukkit.getOfflinePlayer(uuid).getName());
-            addPlayerToGuildTag(uuid, whoT);
-        }
-    }
-
     private Team prepareGuildTag(String guildTag, Scoreboard guildScoreboard) {
         Team scoreboardTeamTag;
         if (tagForWhoDoesntExists(guildTag, guildScoreboard)) {
@@ -209,15 +187,24 @@ public class TagManager {
         return scoreboardTeamTag;
     }
 
-    public void setTagsForGuildRelations(String who, String withwho, Guild whoGuild, Guild withWhoGuild) {
-        Scoreboard whoSc = whoGuild.getSc();
-        Scoreboard withWhoSc = withWhoGuild.getSc();
+    public void setTagsForGuildRelations(Guild whoGuild, Guild withWhoGuild) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (whoGuild.getMembers().contains(p.getUniqueId())) {
+                scoreboardPackets.sendCreateTeamTag(p, whoGuild, GenConf.allyTag);
+            } else if (withWhoGuild.getMembers().contains(p.getUniqueId())) {
+                scoreboardPackets.sendCreateTeamTag(p, withWhoGuild, GenConf.allyTag);
+            }
+        }
+    }
 
-        Team whoScoreboardTeamTag = prepareGuildTag(who, withWhoSc);
-        setTagsForGuildMembers(whoGuild, whoScoreboardTeamTag);
-
-        Team withWhoScoreboardTag = prepareGuildTag(withwho, whoSc);
-        setTagsForGuildMembers(withWhoGuild, withWhoScoreboardTag);
+    public void updateTagsForGuildRelations(Guild whoGuild, Guild withWhoGuild, String guildTagTemplate) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (whoGuild.getMembers().contains(p.getUniqueId())) {
+                scoreboardPackets.sendUpdateTeamTag(p, whoGuild, guildTagTemplate);
+            } else if (withWhoGuild.getMembers().contains(p.getUniqueId())) {
+                scoreboardPackets.sendUpdateTeamTag(p, withWhoGuild, guildTagTemplate);
+            }
+        }
     }
 
     private void setTagsForGuildMembers(Guild guild, Team team) {
@@ -244,14 +231,15 @@ public class TagManager {
 
     public void guildBrokeAlliance(Guild firstGuild, Guild secondGuild) {
         for (Relation r : firstGuild.getAlliances()) {
-            if (r.getWho().equals(secondGuild.getName()) || r.getWithWho().equals(secondGuild.getName())) {//Trzeba to odzielic jakos na 2 przypadki (else if) zamiast ||
-                Scoreboard sc = secondGuild.getSc();
-                getGuildScoreboardTag(sc, firstGuild).setPrefix(GenConf.enemyTag.replace("{TAG}", firstGuild.getName()));
-                getGuildScoreboardTag(sc, firstGuild).setDisplayName(GenConf.enemyTag.replace("{TAG}", firstGuild.getName()));
-
-                Scoreboard sc2 = firstGuild.getSc();//GenConf.enemyTag.replace("{TAG}", firstGuild.getName())
-                getGuildScoreboardTag(sc2, secondGuild).setPrefix(GenConf.enemyTag.replace("{TAG}", secondGuild.getName()));
-                getGuildScoreboardTag(sc2, secondGuild).setDisplayName(GenConf.enemyTag.replace("{TAG}", secondGuild.getName()));
+            if (r.getWho().equals(secondGuild.getName()) || r.getAlliedGuildTag().equals(secondGuild.getName())) {//Trzeba to odzielic jakos na 2 przypadki (else if) zamiast ||
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (firstGuild.getMembers().contains(p.getUniqueId())) {
+                        scoreboardPackets.sendUpdateTeamTag(p, secondGuild, GenConf.enemyTag);
+                    }
+                    if (secondGuild.getMembers().contains(p.getUniqueId())) {
+                        scoreboardPackets.sendUpdateTeamTag(p, firstGuild, GenConf.enemyTag);
+                    }
+                }
             }
         }
     }
@@ -259,27 +247,19 @@ public class TagManager {
     public void guildMakeAlliance(Relation r) {
 
         String who = r.getWho();
-        String withwho = r.getWithWho();
+        String withwho = r.getAlliedGuildTag();
 
         Guild whoGuild = guilds.getGuild(who);
 
-        Scoreboard whoSc = whoGuild.getSc();
-
         Guild withWhoGuild = guilds.getGuild(withwho);
-
-        Scoreboard withWhoSc = withWhoGuild.getSc();
-
-        setAllyScoreboardTag(who, withWhoSc, whoGuild);
-
-        setAllyScoreboardTag(withwho, whoSc, withWhoGuild);
-    }
-
-    private void setAllyScoreboardTag(String withwho, Scoreboard whoSc, Guild withWhoGuild) {
-        Team withWhoT = whoSc.getTeam(withwho);
-        String allyWithWhoLabelTag = GenConf.allyTag.replace("{TAG}", withwho);
-        withWhoT.setPrefix(allyWithWhoLabelTag);
-        withWhoT.setDisplayName(allyWithWhoLabelTag);
-        addMembersToScoreboardGuildTag(withWhoGuild, withWhoT);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (whoGuild.getMembers().contains(p.getUniqueId())) {
+                scoreboardPackets.sendUpdateTeamTag(p, withWhoGuild, GenConf.allyTag);
+            }
+            if (withWhoGuild.getMembers().contains(p.getUniqueId())) {
+                scoreboardPackets.sendUpdateTeamTag(p, whoGuild, GenConf.allyTag);
+            }
+        }
     }
 
     private void addMembersToScoreboardGuildTag(Guild withWhoGuild, Team withWhoT) {
@@ -288,130 +268,46 @@ public class TagManager {
         }
     }
 
-    public void playerJoinGuild(OfflinePlayer player, Guild guild) {
-        Scoreboard sc = guild.getSc();
-        Team t = getGuildScoreboardTag(sc, guild);
-        if (t != null) {
-            t.addEntry(player.getName());
-        } else {
-            Scoreboard whoSc = guild.getSc();
-            String who = guild.getName();
-            Team whoT;
-
-            whoT = whoSc.registerNewTeam(who);
-            whoT.setPrefix(GenConf.guildTag.replace("{TAG}", who));
-            whoT.setDisplayName(GenConf.guildTag.replace("{TAG}", who));
-
-            whoT = getGuildScoreboardTag(whoSc, guild);
-            whoT.addEntry(player.getName());
-        }
-           /* for(UUID member : guild.getMembers()){
-                Player memon = Bukkit.getPlayer(member);
-                if(memon != null){
-                    memon.setScoreboard(sc);
+    public void playerJoinGuild(Player player, Guild guild) {
+        scoreboardPackets.sendUpdateTeamTag(player, guild, GenConf.guildTag);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (guild.getMembers().contains(p.getUniqueId())) {
+                scoreboardPackets.sendUpdateTeamTag(p, guild, GenConf.guildTag);
+            } else {
+                for (Guild ally : guild.getAllyGuilds()) {
+                    updateTagsForGuildRelations(guild, ally, GenConf.allyTag);
                 }
-            }*/
-            
-        /*for(Relation r : guild.getAlliances()){
-            if(r.getWho().equals(guild.getName())){
-                Guild ally = plugin.getGuildHelper().getGuilds().get(r.getWithWho());
-                Scoreboard sca = ally.getSc();
-                sca.getTeam(guild.getName()).removePlayer(player);
-                for(UUID allypl : ally.getMembers()){
-                    Player plon = Bukkit.getPlayer(allypl);
-                    if(plon != null){
-                        plon.setScoreboard(sca);
-                    }
-                }
-            }
-        } 
-        for(Player players : Bukkit.getOnlinePlayers()){
-            if(player.equals(players)){
-                continue;
-            }
-            Team t2 = players.getScoreboard().getTeam(guild.getName());
-            t2.insertPlayer(player);
-        }*/
-        for (Map.Entry<String, Guild> gs : guilds.getGuilds().entrySet()) {
-            if (isTheSameTag(guild.getName(), gs.getKey())) {
-                continue;
-            }
-            Team t2 = getGuildScoreboardTag(gs.getValue().getSc(), guild);
-            if (t2 != null) {
-                t2.addEntry(player.getName());
             }
         }
     }
 
-    public void playerLeaveGuild(OfflinePlayer joiner) {
+    public void playerLeaveGuild(Player joiner, Guild guild) {
         Guild joinerGuild = guilds.getPlayerGuild(joiner.getUniqueId());
-        /*for(Relation r : joinerGuild.getAlliances()){
-            if(r.getWho().equals(joinerGuild.getName())){
-                Guild ally = plugin.getGuildHelper().getGuilds().get(r.getWithWho());
-                Scoreboard sc = ally.getSc();
-                sc.getTeam(joinerGuild.getName()).removePlayer(joiner);
-                for(UUID allypl : ally.getMembers()){
-                    Player plon = Bukkit.getPlayer(allypl);
-                    if(plon != null){
-                        plon.setScoreboard(sc);
-                    }
+        scoreboardPackets.sendDeleteTeamTag(joiner, guild.getName());
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (guild.getMembers().contains(p.getUniqueId())) {
+                scoreboardPackets.sendUpdateTeamTag(p, guild, GenConf.guildTag);
+            } else {
+                for (Guild ally : guild.getAllyGuilds()) {
+                    updateTagsForGuildRelations(guild, ally, GenConf.allyTag);
                 }
             }
-        } */
-        for (Map.Entry<String, Guild> gs : guilds.getGuilds().entrySet()) {
-            if (isTheSameTag(joinerGuild.getName(), gs.getKey())) {
-                continue;
-            }
-            Team t2 = getGuildScoreboardTag(gs.getValue().getSc(), joinerGuild);
-            if (t2 != null) {
-                t2.removeEntry(joiner.getName());
-            }
         }
-        getGuildScoreboardTag(this.getGlobalScoreboard(), joinerGuild).removeEntry(joiner.getName());
-        //System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
-        //System.out.print("Gracz opuszcza gildie");
-        if (joiner.isOnline()) {
-            //System.out.println("Jest online");
-            Player p = Bukkit.getPlayer(joiner.getUniqueId());
-            p.setScoreboard(globalScoreboard);
-        }
-    }
-
-    public void assignScoreboardToPlayer(Player player, Scoreboard sc) {
-        player.setScoreboard(sc);
     }
 
     public void assignScoreboardToPlayer(Player player) {
         player.setScoreboard(globalScoreboard);
     }
 
-    public void playerMakeGuild(Guild g, Player p) {
-        Team tg = registerGuildTag(g, g.getSc());
-        tg.setPrefix(GenConf.guildTag.replace("{TAG}", g.getName()));
-        tg.setDisplayName(GenConf.guildTag.replace("{TAG}", g.getName()));
-        getGuildScoreboardTag(g.getSc(), g).addEntry(p.getName());
-        p.setScoreboard(g.getSc());
-        //***********
-        Team t = registerGuildTag(g, this.getGlobalScoreboard());
+    public void playerCreatedGuild(Guild g, Player player) {
+        scoreboardPackets.sendCreateTeamTag(player, g, GenConf.guildTag);
         //System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
-        t.setPrefix(GenConf.enemyTag.replace("{TAG}", g.getName()));
-        t.setDisplayName(GenConf.enemyTag.replace("{TAG}", g.getName()));
-        t.addEntry(p.getName());
-        for (Map.Entry<String, Guild> gs : guilds.getGuilds().entrySet()) {
-            if (isTheSameTag(g.getName(), gs.getKey())) {
+        String enemyTagTemplate = GenConf.enemyTag;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (g.getMembers().contains(p.getUniqueId())) {
                 continue;
             }
-            Guild guild = gs.getValue();
-            Scoreboard guildScoreboard = guild.getSc();
-            Team t2 = registerGuildTag(g, guildScoreboard);
-            t2.setPrefix(GenConf.enemyTag.replace("{TAG}", g.getName()));
-            t2.setDisplayName(GenConf.enemyTag.replace("{TAG}", g.getName()));
-            t2.addEntry(p.getName());
-
-            Team t3 = g.getSc().registerNewTeam(gs.getKey());
-            t3.setPrefix(GenConf.enemyTag.replace("{TAG}", gs.getKey()));
-            t3.setDisplayName(GenConf.enemyTag.replace("{TAG}", gs.getKey()));
-            addMembersToScoreboardGuildTag(guild, t3);
+            scoreboardPackets.sendCreateTeamTag(p, g, GenConf.enemyTag);
         }
     }
 
@@ -429,37 +325,20 @@ public class TagManager {
         t.setDisplayName(ChatColor.RED + tag + " ");
     }
 
-    public void loadTags(Guilds guilds) {
-        for (Map.Entry<String, Guild> gs : guilds.getGuilds().entrySet()) {
-            Scoreboard sc = gs.getValue().getSc();
-            for (Map.Entry<String, Guild> gs2 : guilds.getGuilds().entrySet()) {
-                Guild guild = gs2.getValue();
-                if (isTheSameTag(guild.getName(), gs.getKey())) {
-                    continue;
-                }
-                Team t;
-                if (tagForWhoDoesntExists(gs2.getKey(), sc)) {
-                    t = registerGuildTag(guild, sc);
+    public void prepareScoreboardTagForPlayerOnJoin(Player p) {
+        Guild playerGuild = guilds.getPlayerGuild(p.getUniqueId());
+        for (String onlineGuildTag : guilds.getOnlineGuilds()) {
+            Guild g = guilds.getGuild(onlineGuildTag);
+            if (playerGuild != null) {
+                if (playerGuild.isAlly(g)) {
+                    scoreboardPackets.sendCreateTeamTag(p, g, GenConf.allyTag);
                 } else {
-                    t = getGuildScoreboardTag(sc, guild);
+                    scoreboardPackets.sendCreateTeamTag(p, g, GenConf.enemyTag);
                 }
-                t.setPrefix(GenConf.allyTag.replace("{TAG}", guild.getName()));
-                t.setDisplayName(GenConf.allyTag.replace("{TAG}", guild.getName()));
-                setTagsForGuildMembers(guild, t);
+            } else {
+                scoreboardPackets.sendCreateTeamTag(p, g, GenConf.enemyTag);
             }
-            //if(gs.getValue().getName().equals(joinerGuild.getName())){
-            //     continue;
-            //}
-            // Team t2 = gs.getValue().getSc().getTeam(joinerGuild.getName());
-            //  if(t2 != null){
-            //      t2.insertPlayer(joiner);
-            ///  }
         }
-
-    }
-
-    private Team getGuildScoreboardTag(Scoreboard sc, Guild guild) {
-        return sc.getTeam(guild.getName());
     }
 
     /*

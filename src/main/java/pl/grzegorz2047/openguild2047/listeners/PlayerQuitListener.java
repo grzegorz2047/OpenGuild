@@ -15,9 +15,11 @@
  */
 package pl.grzegorz2047.openguild2047.listeners;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,6 +42,7 @@ public class PlayerQuitListener implements Listener {
     private final AntiLogoutManager logout;
     private final Teleporter teleporter;
     private final TpaRequester tpaRequester;
+    private final String quitMsg;
 
     public PlayerQuitListener(Guilds guilds, Cuboids cuboids, AntiLogoutManager logout, Teleporter teleporter, TpaRequester tpaRequester) {
         this.guilds = guilds;
@@ -47,35 +50,25 @@ public class PlayerQuitListener implements Listener {
         this.logout = logout;
         this.teleporter = teleporter;
         this.tpaRequester = tpaRequester;
+        this.quitMsg = ChatColor.translateAlternateColorCodes('&', MsgManager.getIgnorePref("playerleftservermsg"));
+
     }
 
     @EventHandler
     public void handleEvent(PlayerQuitEvent event) {
-        event.setQuitMessage(null);
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        if (isPlayerInGuild(player)) {
-            Guild guild = guilds.getPlayerGuild(uuid);
-            guild.notifyGuildThatMemberLeft(player);
+        event.setQuitMessage(quitMsg.replace("%PLAYER%", player.getName()));
+        if (guilds.isPlayerInGuild(player)) {
+            guilds.guildMemberLeftServer(player, uuid);
         }
         String playerName = player.getName();
-        if (logout.isPlayerDuringFight(playerName)) {
-            Player potentialKiller = Bukkit.getPlayer(logout.getPotentialKillerName(playerName));
-            player.damage(400, potentialKiller);
-            player.getInventory().clear();
-            player.getInventory().setArmorContents(new ItemStack[4]);
-            logout.removePlayerFromFight(playerName);
-            if (potentialKiller != null) {
-
-            }
-            Bukkit.broadcastMessage(MsgManager.get("playerlogoutduringfight").replace("%player", playerName));
-        }
+        logout.handleLogoutDuringFight(player, playerName);
         cuboids.clearCuboidEnterNotification(player);
         teleporter.removeRequest(uuid);
         tpaRequester.removeRequest(event.getPlayer().getName());
     }
 
-    private boolean isPlayerInGuild(Player player) {
-        return guilds.hasGuild(player);
-    }
+
+
 }

@@ -63,9 +63,15 @@ public class TpaCommand implements CommandExecutor {
                 p.sendMessage(MsgManager.get("usagetpadeny"));
                 return true;
             }
-            boolean requestSentSuccess = tpaRequester.addRequest(p.getName(), destinationName);
+
             Player destinationPlayer = Bukkit.getPlayer(destinationName);
-            if (requestSentSuccess && destinationPlayer.isOnline()) {
+            if (destinationPlayer == null) {
+                p.sendMessage(MsgManager.get("playernotonline"));
+                return true;
+            }
+
+            boolean requestSentSuccess = tpaRequester.addRequest(p.getName(), destinationName);
+            if (requestSentSuccess) {
                 destinationPlayer.sendMessage(MsgManager.get("tparequested").replace("%PLAYER%", p.getName()));
                 p.sendMessage(MsgManager.get("tparequestsentsuccess").replace("%PLAYER%", destinationName));
             } else {

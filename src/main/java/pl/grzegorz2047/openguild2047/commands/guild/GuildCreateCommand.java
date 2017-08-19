@@ -145,7 +145,7 @@ public class GuildCreateCommand extends Command {
 
 
         if (GenConf.playerprefixenabled) {
-            this.getPlugin().getTagManager().playerMakeGuild(guild, player);
+            this.getPlugin().getTagManager().playerCreatedGuild(guild, player);
         }
 
         OpenGuild.getOGLogger().info("Player '" + player.getName() + "' successfully created new guild '" + tag.toUpperCase() + "'.");

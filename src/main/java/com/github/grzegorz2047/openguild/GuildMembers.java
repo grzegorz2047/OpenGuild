@@ -22,6 +22,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import pl.grzegorz2047.openguild2047.*;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class GuildMembers extends GuildRelations {

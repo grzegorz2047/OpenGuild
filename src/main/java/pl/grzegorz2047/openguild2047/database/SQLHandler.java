@@ -214,7 +214,6 @@ public class SQLHandler {
 
 
             if (!hasPlayerGuildTag(guildTag)) {
-                addPlayerWithoutGuild(uuid);
                 continue;
             }
             Guild playersGuild = guilds.getGuild(guildTag);
@@ -222,14 +221,9 @@ public class SQLHandler {
             if (guildDoesntExist(playersGuild)) {
                 continue;
             }
-            tagManager.preparePlayerTag(guildTag, uuid, playersGuild);
         }
     }
 
-
-    private void addPlayerWithoutGuild(UUID uuid) {
-        guilds.addPlayer(uuid, null);
-    }
 
     private boolean hasPlayerGuildTag(String guildTag) {
         return !guildTag.isEmpty() && guilds.doesGuildExists(guildTag);
@@ -257,7 +251,6 @@ public class SQLHandler {
                 if (guildDoesntExist(withWhoGuild)) {
                     continue;
                 }
-                tagManager.setTagsForGuildRelations(who, withwho, whoGuild, withWhoGuild);
 
                 addGuildAlly(relation, whoGuild);
                 addGuildAlly(relation, withWhoGuild);
@@ -388,15 +381,24 @@ public class SQLHandler {
             ResultSet rs = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "allies`" + " WHERE who='" + who + "'" + "OR withwho='" + who + "';");
             if (!containsAlliance(rs)) {
                 statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "allies` VALUES('" + who.getName() + "', '" + withWho.getName() + "', '" + Relation.Status.ALLY.toString() + "', 0);");
+                rs.close();
+                statement.close();
+                statement.getConnection().close();
                 return true;
             }
             while (anotherRecord(rs)) {
                 String whoseguild = rs.getString("who");
                 String withwho = rs.getString("withwho");
                 if (isAlreadyAlliance(who, withWho, whoseguild, withwho)) {
+                    rs.close();
+                    statement.close();
+                    statement.getConnection().close();
                     return false;
                 } else {
                     statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "allies` VALUES('" + who.getName() + "', '" + withWho.getName() + "', '" + Relation.Status.ALLY.toString() + "', 0);");
+                    rs.close();
+                    statement.close();
+                    statement.getConnection().close();
                     return true;
                 }
             }

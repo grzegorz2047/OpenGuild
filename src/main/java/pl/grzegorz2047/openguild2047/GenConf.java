@@ -86,9 +86,9 @@ public class GenConf {
     public static String joinMsg;
     public static String quitMsg;
     public static boolean FORCE_DESC;
-    public static String guildChatKey;
+    public static String channelOnlyGuildKey;
     public static String guildChatFormat;
-    public static String allyChatKey;
+    public static String channelAllyAndGuildKey;
     public static String allyChatFormat;
     public static boolean debug;
     public static SQLData sqlData;
@@ -110,6 +110,7 @@ public class GenConf {
     public static boolean DROP_ENABLED;
     public static boolean DROP_TO_EQ;
     public static List<Material> ELIGIBLE_DROP_BLOCKS;
+    public static String chatFormat;
 
     protected static void loadConfiguration() {
         OpenGuild openGuild = OpenGuild.getInstance();
@@ -240,7 +241,8 @@ public class GenConf {
         enemyTag = config.getString("tags.enemy", "{TAG}").replace("&", "§");
         allyTag = config.getString("tags.ally", "{TAG}").replace("&", "§");
         guildTag = config.getString("tags.guild", "{TAG}").replace("&", "§");
-        guildprefixinchat = config.getBoolean("guildprefixinchat", true);
+        guildprefixinchat = config.getBoolean("chat.guildprefixinchat", true);
+        chatFormat = config.getString("chat.chatFormat", "&8{&7GUILD&8} &7{PLAYER}&7: &f{MESSAGE}");
         hcLightning = config.getBoolean("hardcore-bans.lightning", true);
         newCmdApi = config.getBoolean("use-new-command-api", false);
         ranTpEnabled = config.getBoolean("random-tp.enabled", false);
@@ -251,9 +253,9 @@ public class GenConf {
         blockEnterTime = config.getInt("spawn.block-enter-time", 10);
         joinMsg = config.getString("join-msg", "").replace("&", "§");
         quitMsg = config.getString("quit-msg", "").replace("&", "§");
-        guildChatKey = config.getString("chat.guild-key", "guild:");
+        channelOnlyGuildKey = config.getString("chat.guild-key", "guild:");
         guildChatFormat = config.getString("chat.guild-format", "&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
-        allyChatKey = config.getString("chat.ally-key", "allies:");
+        channelAllyAndGuildKey = config.getString("chat.ally-key", "allies:");
         allyChatFormat = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
         debug = config.getBoolean("debug", false);
         sqlTablePrefix = config.getString("sql-table-prefix", "openguild");

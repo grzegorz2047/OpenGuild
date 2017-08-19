@@ -69,7 +69,7 @@ public class GuildDisbandCommand extends Command {
             
             for(Relation r : guild.getAlliances()){
                 Guild g1 = guilds.getGuild(r.getWho());
-                Guild g2 = guilds.getGuild(r.getWithWho());
+                Guild g2 = guilds.getGuild(r.getAlliedGuildTag());
                 OpenGuild.getInstance().getTagManager().guildBrokeAlliance(g1, g2);
                 guild.getAlliances().remove(r);
                 guild.getAlliances().remove(r);

@@ -21,13 +21,13 @@ package com.github.grzegorz2047.openguild;
 public class Relation {
 
     private String who;
-    private String withWho;
+    private String alliedGuildTag;
     private long startDate;
     private long expireDate;
 
-    public Relation(String who, String withwho, long expires, Status relationStatus) {
+    public Relation(String who, String alliedGuildTag, long expires, Status relationStatus) {
         this.who = who;
-        this.withWho = withwho;
+        this.alliedGuildTag = alliedGuildTag;
         this.expireDate = expires;
         this.state = relationStatus;
     }
@@ -45,12 +45,12 @@ public class Relation {
     ;
     private Status state;
 
-    public String getWithWho() {
-        return withWho;
+    public String getAlliedGuildTag() {
+        return alliedGuildTag;
     }
 
-    public void setWithWho(String withWho) {
-        this.withWho = withWho;
+    public void setAlliedGuildTag(String alliedGuildTag) {
+        this.alliedGuildTag = alliedGuildTag;
     }
 
     public long getStartDate() {

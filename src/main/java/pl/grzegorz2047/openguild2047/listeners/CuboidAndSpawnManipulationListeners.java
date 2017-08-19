@@ -15,6 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047.listeners;
 
+import com.github.grzegorz2047.openguild.Guild;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -63,7 +64,6 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
         this.allowedInteractItems.add(Material.ENDER_CHEST);
         this.allowedInteractItems.add(Material.WOODEN_DOOR);
     }
-
 
 
     @EventHandler
@@ -116,7 +116,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
         if (e.getClickedBlock() != null) {
             Player player = e.getPlayer();
             if (SpawnChecker.isSpawn(e.getClickedBlock().getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
-                if(allowedInteractItems.contains(e.getMaterial())){
+                if (allowedInteractItems.contains(e.getMaterial())) {
                     return;
                 }
                 e.setCancelled(true);
@@ -141,12 +141,26 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
                     }
                     if (!hasSpecialBreakingitem(player.getInventory())) {
                         player.sendMessage(MsgManager.get("cantdoitonsomeonearea"));
+                        return;
                     }
+                    Guild playerGuild = Guilds.getGuild(player);
+                    if (playerGuild != null) {
+                        for (Guild ally : playerGuild.getAllyGuilds()) {
+                            String allyGuildTag = ally.getName();
+                            boolean isinAllyCuboid = cuboids.isInCuboid(player.getLocation(), allyGuildTag);
+                            if (isinAllyCuboid) {
+                                e.setCancelled(true);
+                                return;
+                            }
+                        }
+                    }
+
                 }
             }
         }
 
     }
+
 
     private boolean hasSpecialBreakingitem(PlayerInventory inventory) {
         return breakingItems.contains(inventory.getItemInMainHand().getType());

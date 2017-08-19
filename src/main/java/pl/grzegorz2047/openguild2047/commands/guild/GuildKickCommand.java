@@ -17,6 +17,7 @@
 package pl.grzegorz2047.openguild2047.commands.guild;
 
 import java.util.UUID;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,7 +31,7 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  * Command used to kick player out of players' guild.
- * 
+ * <p>
  * Usage: /guild kick [player name]
  */
 public class GuildKickCommand extends Command {
@@ -40,59 +41,59 @@ public class GuildKickCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        if(!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return;
         }
-        
+
         Guilds guilds = this.getPlugin().getGuilds();
-        
+
         Player player = (Player) sender;
-        if(!guilds.hasGuild(player)) {
+        if (!guilds.hasGuild(player)) {
             sender.sendMessage(MsgManager.notinguild);
             return;
         }
-        
+
         Guild guild = guilds.getPlayerGuild(player.getUniqueId());
-        if(!guild.getLeader().equals(player.getUniqueId())) {
+        if (!guild.getLeader().equals(player.getUniqueId())) {
             sender.sendMessage(MsgManager.playernotleader);
             return;
         }
-        
+
         String toKick = args[1];
         OfflinePlayer op = this.getPlugin().getServer().getOfflinePlayer(toKick);
-        if(!guild.getMembers().contains(op.getUniqueId())) {
+        if (!guild.getMembers().contains(op.getUniqueId())) {
             sender.sendMessage(MsgManager.playernotinthisguild);
             return;
         }
-        if(guild.getLeader().equals(op.getUniqueId())) {
+        if (guild.getLeader().equals(op.getUniqueId())) {
             sender.sendMessage(MsgManager.get("cantkickleader", "You cant kick yourself from your own guild!"));
             return;
         }
-        
+
         GuildKickEvent event = new GuildKickEvent(guild, op);
         Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             return;
         }
-            
-        this.getPlugin().getTagManager().playerLeaveGuild(op);
+
+
         guild.removeMember(op.getUniqueId());
         guilds.getMappedPlayersToGuilds().remove(op.getUniqueId());
-        guilds.getMappedPlayersToGuilds().put(op.getUniqueId(), null);
-        if(op.isOnline()) {
+        if (op.isOnline()) {
             op.getPlayer().sendMessage(MsgManager.playerkicked.replace("{GUILD}", guild.getName()));
+            this.getPlugin().getTagManager().playerLeaveGuild(((Player) op), guild);
         }
-        
-        for(UUID member : guild.getMembers()) {
+
+        for (UUID member : guild.getMembers()) {
             OfflinePlayer opp = this.getPlugin().getServer().getOfflinePlayer(member);
-            if(opp.isOnline()) {
+            if (opp.isOnline()) {
                 opp.getPlayer().sendMessage(MsgManager.get("broadcast-kick").replace("{PLAYER}", player.getDisplayName()).replace("{MEMBER}", op.getName()).replace("{TAG}", guild.getName().toUpperCase()));
             }
         }
 
         getPlugin().getSQLHandler().updatePlayerTag(op.getUniqueId(), "");
-        
+
         player.sendMessage(MsgManager.playerkicksuccess);
     }
 

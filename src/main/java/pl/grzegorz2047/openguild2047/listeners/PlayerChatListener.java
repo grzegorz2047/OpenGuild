@@ -18,16 +18,15 @@ package pl.grzegorz2047.openguild2047.listeners;
 
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.Guilds;
-import pl.grzegorz2047.openguild2047.OpenGuild;
 import com.github.grzegorz2047.openguild.Guild;
 import com.github.grzegorz2047.openguild.Relation;
-import org.bukkit.OfflinePlayer;
 
 public class PlayerChatListener implements Listener {
 
@@ -47,6 +46,14 @@ public class PlayerChatListener implements Listener {
         UUID uuid = player.getUniqueId();
         String message = event.getMessage();
         if (!isInGuild(player)) {
+
+            if (GenConf.guildprefixinchat) {
+                event.setFormat(ChatColor.translateAlternateColorCodes('&',
+                        GenConf.chatFormat
+                                .replace("{PLAYER}", player.getName())
+                                .replace("{GUILD}", "")
+                                .replace("{MESSAGE}", message)));
+            }
             return;
         }
         processChatForPlayerWithGuild(event, player, uuid, message);
@@ -55,26 +62,35 @@ public class PlayerChatListener implements Listener {
     private void processChatForPlayerWithGuild(AsyncPlayerChatEvent event, Player player, UUID uuid, String message) {
         Guild guild = guilds.getPlayerGuild(uuid);
         String tag = guild.getName().toUpperCase();
-        String format = prepareMessageFormat(player, message);
-        if (isInGuildChatMode(message, GenConf.guildChatKey)) {
+        String format;
+        if (isInGuildChatMode(message, GenConf.channelOnlyGuildKey)) {
+            message = message.substring(1);
+            format = prepareMessageFormat(player, message);
             guild.notifyGuild(format);
             event.setCancelled(true);
             return;
         }
-        if (isInGuildChatMode(message, GenConf.allyChatKey)) {
+        if (isInGuildChatMode(message, GenConf.channelAllyAndGuildKey)) {
+            message = message.substring(1);
+            format = prepareMessageFormat(player, message);
             guild.notifyGuild(format);
             event.setCancelled(true);
             sendMessageToAllAllies(player, message, guild);
             return;
         }
         String msgFormat = event.getFormat();
-        if (GenConf.guildprefixinchat) {
-            event.setFormat("§7[§r" + tag + "§7]§r " + msgFormat);
-            return;
+
+        if (!GenConf.guildprefixinchat) {
+            if (msgFormat.contains("%OPENGUILD_TAG%")) {
+                event.setFormat(msgFormat.replace("%OPENGUILD_TAG%", tag));
+                return;
+            }
         }
-        if (msgFormat.contains("%OPENGUILD_TAG%")) {
-            event.setFormat(msgFormat.replace("%OPENGUILD_TAG%", tag));
-        }
+        event.setFormat(ChatColor.translateAlternateColorCodes('&',
+                GenConf.chatFormat
+                        .replace("{PLAYER}", player.getName())
+                        .replace("{GUILD}", guild.getName())
+                        .replace("{MESSAGE}", message)));
     }
 
     private void sendMessageToAllAllies(Player player, String message, Guild guild) {
@@ -100,7 +116,7 @@ public class PlayerChatListener implements Listener {
     private Guild getAllyGuildFromRelation(Guild guild, Relation r, Guild whoGuild) {
         Guild ally;
         if (guild.equals(whoGuild)) {
-            String withWhoGuildTag = r.getWithWho();
+            String withWhoGuildTag = r.getAlliedGuildTag();
             ally = guilds.getGuild(withWhoGuildTag);
         } else {
             ally = whoGuild;

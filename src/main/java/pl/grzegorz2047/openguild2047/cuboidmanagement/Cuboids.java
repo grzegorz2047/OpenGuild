@@ -25,6 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -32,12 +33,12 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * @author Grzegorz
  */
 public class Cuboids {
-    private OpenGuild plugin;
+    private final Guilds guilds;
     private Map<String, Cuboid> cuboids = new HashMap<String, Cuboid>();
 
 
-    public Cuboids(OpenGuild plugin) {
-        this.plugin = plugin;
+    public Cuboids(Guilds guilds) {
+        this.guilds = guilds;
     }
 
     public HashMap<String, String> playersenteredcuboid = new HashMap<String, String>();
@@ -56,12 +57,13 @@ public class Cuboids {
     }
 
     public boolean allowedToDoItHere(Player player, Location location) {
-        if (plugin.getCuboids().checkIfInAnyCuboid(cuboids.entrySet().iterator(), location)) {
+        if (this.checkIfInAnyCuboid(cuboids.entrySet().iterator(), location)) {
             //System.out.println("1 allowed");
-            if (plugin.getGuilds().hasGuild(player.getUniqueId())) {
+            if (guilds.hasGuild(player.getUniqueId())) {
                 //System.out.println("2 allowed");
-                String tag = plugin.getGuilds().getPlayerGuild(player.getUniqueId()).getName();
-                if (cuboids.get(tag).isinCuboid(location)) {
+                String tag = guilds.getPlayerGuild(player.getUniqueId()).getName();
+                Cuboid playerCuboid = cuboids.get(tag);
+                if (playerCuboid.isinCuboid(location)) {
                     //System.out.println("3 allowed");
                     return true;//Gdzies tu budowanie sojusznikow, ale na razie czarna magia
                 } else if (!player.hasPermission("openguild.cuboid.bypassplace")) {
@@ -77,7 +79,7 @@ public class Cuboids {
     public boolean canMove(Player player, Location from, Location to) {
         Iterator<Map.Entry<String, Cuboid>> it = cuboids.entrySet().iterator();
         if (isPlayerInGuild(player)) {
-            String tag = plugin.getGuilds().getPlayerGuild(player.getUniqueId()).getName();
+            String tag = guilds.getPlayerGuild(player.getUniqueId()).getName();
             return cuboids.get(tag).isinCuboid(to) || !checkIfInAnyCuboid(it, to);
         } else {
             return !checkIfInAnyCuboid(it, to);
@@ -88,7 +90,7 @@ public class Cuboids {
         Iterator<Map.Entry<String, Cuboid>> it = cuboids.entrySet().iterator();
         String tag = null;
         if (isPlayerInGuild(player)) {
-            tag = plugin.getGuilds().getPlayerGuild(player.getUniqueId()).getName();
+            tag = guilds.getPlayerGuild(player.getUniqueId()).getName();
         }
         String guildscuboidtag = getOwnerOfCuboidInPlayerPosition(it, player.getLocation());
         //Bukkit.broadcastMessage("Gracz "+player.getName()+" jest na "+guildscuboidtag);
@@ -103,7 +105,7 @@ public class Cuboids {
         if (checkIfPlayerIsStillOnCuboid(player, guildscuboidtag)) return;
         player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", guildscuboidtag.toUpperCase()));
         playersenteredcuboid.put(player.getName(), guildscuboidtag);
-        Guild cuboidowner = getGuild(guildscuboidtag);
+        Guild cuboidowner = guilds.getGuild(guildscuboidtag);
         if (isTheSame(tag, guildscuboidtag)) {
             return;
         }
@@ -115,8 +117,8 @@ public class Cuboids {
                 return;
             }
         }
-        Guild guild = getGuild(guildscuboidtag);
-        notifyMembersAboutSomeoneEnteringTheirCuboid(player, tag, guild);
+        Guild guild = guilds.getGuild(guildscuboidtag);
+        guild.notifyMembersAboutSomeoneEnteringTheirCuboid(player, tag, foundCuboid(tag));
     }
 
     private boolean foundCuboid(String guildscuboidtag) {
@@ -142,52 +144,17 @@ public class Cuboids {
         return playersenteredcuboid.containsKey(player.getName());
     }
 
-    private Guild getGuild(String guildtag) {
-        return plugin.getGuilds().getGuilds().get(guildtag);
-    }
-
-    private void notifyMembersAboutSomeoneEnteringTheirCuboid(Player player, String tag, Guild guild) {
-        for (UUID mem : guild.getMembers()) {
-            OfflinePlayer op = plugin.getServer().getOfflinePlayer(mem);
-            if (op.isOnline()) {
-                notifySomeoneEnteredCuboid(player, tag, op);
-                playSoundOnSomeoneEnteredCuboid(op);
-            }
-        }
-    }
-
-    private void playSoundOnSomeoneEnteredCuboid(OfflinePlayer op) {
-        if (GenConf.cubNotifySound) {
-            op.getPlayer().playSound(op.getPlayer().getLocation(), GenConf.cubNotifySoundType, 10f, 5f);
-        }
-    }
-
-    private void notifySomeoneEnteredCuboid(Player player, String tag, OfflinePlayer op) {
-        if (GenConf.cubNotifyMem) {
-            if (!foundCuboid(tag)) {
-
-                op.getPlayer().sendMessage(MsgManager.get("entercubmemsnoguild").
-                        replace("{PLAYER}", player.getName()));
-            } else {
-                op.getPlayer().sendMessage(MsgManager.get("entercubmems").
-                        replace("{PLAYER}", player.getName()).
-                        replace("{GUILD}", tag.toUpperCase()));
-            }
-
-        }
-    }
 
     private boolean isAlly(Relation r) {
         return r.getState().equals(Relation.Status.ALLY);
     }
 
     private boolean isInAGuildOwningThisCuboid(String tag, Relation r) {
-        return isTheSame(tag, r.getWho()) || isTheSame(tag, r.getWithWho());
+        return isTheSame(tag, r.getWho()) || isTheSame(tag, r.getAlliedGuildTag());
     }
 
     private boolean isPlayerInGuild(Player player) {
-        return plugin.
-                getGuilds().
+        return guilds.
                 hasGuild(player.getUniqueId());
     }
 
@@ -233,6 +200,9 @@ public class Cuboids {
         return false;
     }
 
+    public boolean isInCuboid(Location location, String guildTag) {
+        return cuboids.get(guildTag).isinCuboid(location);
+    }
 
     private Boolean checkIfLocationWithinCuboid(Cuboid c, Location loc1, Location loc) {
         return isTheSame(loc1.getWorld().getName(), loc.getWorld().getName()) && c.isinCuboid(loc);

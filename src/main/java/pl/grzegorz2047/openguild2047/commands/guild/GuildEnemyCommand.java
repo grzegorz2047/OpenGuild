@@ -75,7 +75,7 @@ public class GuildEnemyCommand extends Command {
             }
 
             for (Relation r : requestingGuild.getAlliances()) {
-                if (r.getWithWho().equals(guild.getName()) || r.getWho().equals(guild.getName())) {
+                if (r.getAlliedGuildTag().equals(guild.getName()) || r.getWho().equals(guild.getName())) {
                     OpenGuild.getInstance().getTagManager().guildBrokeAlliance(requestingGuild, guild);
                     requestingGuild.getAlliances().remove(r);
                     guild.getAlliances().remove(r);

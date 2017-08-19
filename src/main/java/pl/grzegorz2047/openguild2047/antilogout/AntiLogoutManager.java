@@ -4,6 +4,8 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +28,21 @@ public class AntiLogoutManager {
 
     public void clearFightList() {
         fightList.clear();
+    }
+
+
+    public void handleLogoutDuringFight(Player player, String playerName) {
+        if (isPlayerDuringFight(playerName)) {
+            Player potentialKiller = Bukkit.getPlayer(getPotentialKillerName(playerName));
+            player.damage(400, potentialKiller);
+            player.getInventory().clear();
+            player.getInventory().setArmorContents(new ItemStack[4]);
+            removePlayerFromFight(playerName);
+            if (potentialKiller != null) {
+
+            }
+            Bukkit.broadcastMessage(MsgManager.get("playerlogoutduringfight").replace("%player", playerName));
+        }
     }
 
     public void checkExpiredFights() {

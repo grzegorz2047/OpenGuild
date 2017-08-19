@@ -23,36 +23,50 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.Guilds;
 import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
+import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 public class PlayerJoinListener implements Listener {
 
-    private OpenGuild plugin;
+    private final TagManager tagManager;
+    private final Guilds guilds;
+    private final SQLHandler sqlHandler;
+    private String joinMsg;
 
-    public PlayerJoinListener(OpenGuild plugin) {
-        this.plugin = plugin;
+    public PlayerJoinListener(Guilds guilds, TagManager tagManager, SQLHandler sqlHandler) {
+        this.guilds = guilds;
+        this.tagManager = tagManager;
+        this.sqlHandler = sqlHandler;
+        this.joinMsg = ChatColor.translateAlternateColorCodes('&', MsgManager.getIgnorePref("playerjoinedservermsg"));
     }
 
     @EventHandler
     public void handleEvent(PlayerJoinEvent event) {
-        event.setJoinMessage(null);
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
+        event.setJoinMessage(joinMsg.replace("%PLAYER%", player.getName()));
         //System.out.print("Wykonuje playerJoinEvent!");
 
-        if (!plugin.getGuilds().getMappedPlayersToGuilds().containsKey(uuid)) {
-            plugin.getSQLHandler().insertPlayer(uuid);
-            plugin.getGuilds().addPlayer(uuid, null);
+        if (!guilds.getMappedPlayersToGuilds().containsKey(uuid)) {
+            if (!player.hasPlayedBefore()) {
+                return;
+            }
+            sqlHandler.insertPlayer(uuid);
         }
 
-        if (plugin.getGuilds().hasGuild(player)) {
-            Guild guild = plugin.getGuilds().getPlayerGuild(uuid);
+        if (guilds.hasGuild(player)) {
+            Guild guild = guilds.getPlayerGuild(uuid);
+            guilds.addOnlineGuild(guild.getName());
             guild.notifyMembersJoinedGame(player);
-            plugin.getTagManager().assignScoreboardToPlayer(player, guild.getSc());
         }
-        plugin.getTagManager().assignScoreboardToPlayer(player);
+        tagManager.prepareScoreboardTagForPlayerOnJoin(player);
+        notifyOpAboutUpdate(player);
+    }
 
+    private void notifyOpAboutUpdate(Player player) {
         if (player.isOp() && com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isEnabled() && com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isAvailable()) {
             player.sendMessage(ChatColor.RED + " =============== OpenGuild UPDATER =============== ");
             if (GenConf.lang.equalsIgnoreCase("PL")) {

@@ -37,7 +37,7 @@ public class Teleporter {
                     p.sendMessage(MsgManager.get("tptodestinationsuccess"));
                     strings.remove(p.getUniqueId());
                 } else {
-                    if (p.getLocation().distance(request.getSource()) >= 1) {
+                    if ((!p.getLocation().getWorld().equals(request.getSource().getWorld())) || p.getLocation().distance(request.getSource()) >= 1) {
                         requests.remove(p.getUniqueId());
                         p.sendMessage(MsgManager.get("tpcan"));
                     }

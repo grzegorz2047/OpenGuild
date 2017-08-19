@@ -15,9 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,12 +26,31 @@ public class Guilds {
 
     private Map<String, Guild> guilds = new HashMap<String, Guild>();
     private Map<UUID, Guild> mappedPlayersToGuilds = new HashMap<UUID, Guild>();
+    private List<String> onlineGuilds = new ArrayList<>();
 
 
-    /**
-     * @param uuid uuid of player, who guild should be returned
-     * @return instance of specified player's guild, or null.
-     */
+    public void guildMemberLeftServer(Player player, UUID uuid) {
+        Guild guild = getPlayerGuild(uuid);
+        guild.notifyGuildThatMemberLeft(player);
+        verifyOnlineGuild(player, guild);
+    }
+
+    public boolean isPlayerInGuild(Player player) {
+        return hasGuild(player);
+    }
+
+
+    public void verifyOnlineGuild(Player player, Guild guild) {
+        List<String> onlineMembers = guild.getOnlineMembers();
+        if (onlineMembers.size() == 0) {
+            removeOnlineGuild(guild.getName());
+        } else if (onlineMembers.size() == 1) {
+            if (onlineMembers.contains(player.getName())) {
+                removeOnlineGuild(guild.getName());
+            }
+        }
+    }
+
     public Guild getPlayerGuild(UUID uuid) {
         if (this.hasGuild(uuid)) {
             return mappedPlayersToGuilds.get(uuid);
@@ -103,6 +120,26 @@ public class Guilds {
         return guild;
     }
 
+
+    public boolean addOnlineGuild(String guild) {
+        if (onlineGuilds.contains(guild)) {
+            return false;
+        }
+        return this.onlineGuilds.add(guild);
+    }
+
+    public boolean removeOnlineGuild(String guild) {
+        if (!onlineGuilds.contains(guild)) {
+            return false;
+        }
+        return this.onlineGuilds.remove(guild);
+    }
+
+    public boolean isGuildOnline(String guild) {
+        return onlineGuilds.contains(guild);
+    }
+
+
     public void updatePlayerGuild(UUID uniqueId, Guild guild) {
         mappedPlayersToGuilds.put(uniqueId, guild);
     }
@@ -113,5 +150,9 @@ public class Guilds {
 
     public void addPlayer(UUID uuid, Guild playersGuild) {
         mappedPlayersToGuilds.put(uuid, playersGuild);
+    }
+
+    public List<String> getOnlineGuilds() {
+        return onlineGuilds;
     }
 }
