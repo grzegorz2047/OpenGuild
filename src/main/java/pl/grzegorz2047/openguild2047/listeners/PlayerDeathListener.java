@@ -25,6 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import pl.grzegorz2047.openguild2047.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 
 /**
@@ -33,9 +34,11 @@ import pl.grzegorz2047.openguild2047.database.SQLHandler;
 public class PlayerDeathListener implements Listener {
 
     private final SQLHandler sqlHandler;
+    private final AntiLogoutManager antiLogoutManager;
 
-    public PlayerDeathListener(SQLHandler sqlHandler) {
+    public PlayerDeathListener(SQLHandler sqlHandler, AntiLogoutManager antiLogoutManager) {
         this.sqlHandler = sqlHandler;
+        this.antiLogoutManager = antiLogoutManager;
     }
 
     @EventHandler
@@ -45,7 +48,9 @@ public class PlayerDeathListener implements Listener {
         if (killer != null) {
             sqlHandler.addDeath(player);
             sqlHandler.addKill(killer);
+            antiLogoutManager.removePlayerFromFight(killer.getName());
         }
+        antiLogoutManager.removePlayerFromFight(player.getName());
     }
 
 

@@ -33,6 +33,7 @@ import pl.grzegorz2047.openguild2047.TpaRequester;
 import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.packets.ScoreboardPackets;
 
 public class PlayerQuitListener implements Listener {
 
@@ -43,6 +44,7 @@ public class PlayerQuitListener implements Listener {
     private final Teleporter teleporter;
     private final TpaRequester tpaRequester;
     private final String quitMsg;
+    private final ScoreboardPackets scoreboardPackets = new ScoreboardPackets();
 
     public PlayerQuitListener(Guilds guilds, Cuboids cuboids, AntiLogoutManager logout, Teleporter teleporter, TpaRequester tpaRequester) {
         this.guilds = guilds;
@@ -50,6 +52,7 @@ public class PlayerQuitListener implements Listener {
         this.logout = logout;
         this.teleporter = teleporter;
         this.tpaRequester = tpaRequester;
+
         this.quitMsg = ChatColor.translateAlternateColorCodes('&', MsgManager.getIgnorePref("playerleftservermsg"));
 
     }
@@ -60,7 +63,11 @@ public class PlayerQuitListener implements Listener {
         UUID uuid = player.getUniqueId();
         event.setQuitMessage(quitMsg.replace("%PLAYER%", player.getName()));
         if (guilds.isPlayerInGuild(player)) {
+            Guild g = guilds.getPlayerGuild(player.getUniqueId());
             guilds.guildMemberLeftServer(player, uuid);
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                scoreboardPackets.sendDeleteTeamTag(p, g.getName());
+            }
         }
         String playerName = player.getName();
         logout.handleLogoutDuringFight(player, playerName);
@@ -68,7 +75,6 @@ public class PlayerQuitListener implements Listener {
         teleporter.removeRequest(uuid);
         tpaRequester.removeRequest(event.getPlayer().getName());
     }
-
 
 
 }

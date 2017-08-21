@@ -52,13 +52,14 @@ public class PlayerJoinListener implements Listener {
 
         if (!guilds.getMappedPlayersToGuilds().containsKey(uuid)) {
             if (!player.hasPlayedBefore()) {
+                sqlHandler.insertPlayer(uuid);
                 return;
             }
-            sqlHandler.insertPlayer(uuid);
         }
 
         if (guilds.hasGuild(player)) {
             Guild guild = guilds.getPlayerGuild(uuid);
+            tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
             guilds.addOnlineGuild(guild.getName());
             guild.notifyMembersJoinedGame(player);
         }

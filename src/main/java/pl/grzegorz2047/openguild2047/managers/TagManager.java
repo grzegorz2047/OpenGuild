@@ -58,92 +58,6 @@ public class TagManager {
         }
     }
 
-    /*
-      Uzycie tagow z teamow z Bukkit API zamiast NametagEdit API.
-      Potrzeba metoda do rejestracji, do czyszczenia teamow przy wylaczaniu pluginow
-      oraz dodawaniu/usuwaniu gracza z teamtagu.
-    
-      A ponizej przykladowa metoda rejestracji teamtagu
-    */
-   /* public static Scoreboard getScoreboard(){
-        return TagManager.sc;
-    }
-    public void updateBoard(){
-            for(Player p : Bukkit.getOnlinePlayers()){
-                p.setScoreboard(TagManager.getScoreboard());
-            }
-    }
-    
-    private boolean registerTeamTag(Guild sg){
-        if(!TagManager.isInitialised()){
-            System.out.println("Scoreboard nie jest zainicjowany!");
-            return false;
-        }
-        String tag = sg.getName().toUpperCase();
-        if(sc.getTeam(tag)== null){
-            Team teamtag = sc.registerNewTeam(tag);
-            teamtag.setPrefix(com.github.grzegorz2047.openguild.OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getName().toUpperCase()));
-            teamtag.setDisplayName(com.github.grzegorz2047.openguild.OpenGuild.getGuildManager().getNicknameTag().replace("{TAG}", sg.getName().toUpperCase()));
-            for(UUID uuid : sg.getMembers()){
-                teamtag.insertPlayer(Bukkit.getOfflinePlayer(uuid));
-            }
-            updateBoard();
-            return true;
-        }
-        updateBoard();
-        return false;
-    }
-    
-    public boolean setTag(UUID player){
-        if(TagManager.isInitialised()){
-            if(plugin.getGuildHelper().hasGuild(player)){
-                //System.out.println("gracz w gildii");
-                Guild g =plugin.getGuildHelper().getPlayerGuild(player);
-                Team t = sc.getTeam(g.getName().toUpperCase());
-                if(t == null){
-                    //System.out.println("Brak team pref");
-                    registerTeamTag(g);
-                    return true;
-                }else{
-                    //System.out.println("gracz w gildii team pref istnieje");
-                    if(!t.getPlayers().contains(Bukkit.getOfflinePlayer(player))){
-                        t.insertPlayer(Bukkit.getOfflinePlayer(player));
-                        updateBoard();
-                        return true;
-                    }else{
-                        updateBoard();
-                        return true;
-                    }
-                }
-            }else{
-                Bukkit.getPlayer(player).setScoreboard(TagManager.getScoreboard());
-                updateBoard();
-            }
-        }else{
-            //System.out.println("Nie zainicjalizowano tag managera");
-        }
-        return false;
-    }
-    public boolean removeTag(UUID player){
-        if(TagManager.isInitialised()){
-            if(plugin.getGuildHelper().hasGuild(player)){
-                Guild g = plugin.getGuildHelper().getPlayerGuild(player);
-                Team t = sc.getTeam(g.getName().toUpperCase());
-                if(t != null){
-                    if(t.getPlayers().contains(Bukkit.getOfflinePlayer(player))){
-                        t.removePlayer(Bukkit.getOfflinePlayer(player));
-                        updateBoard();
-                        return true;
-                    }else{
-                        updateBoard();
-                        return true;// moze tak
-                    }
-                }
-            }
-        }
-        return false;
-    }
-     */
     private boolean isInitialised() {
         return globalScoreboard != null;
     }
@@ -329,7 +243,15 @@ public class TagManager {
         Guild playerGuild = guilds.getPlayerGuild(p.getUniqueId());
         for (String onlineGuildTag : guilds.getOnlineGuilds()) {
             Guild g = guilds.getGuild(onlineGuildTag);
+            if (g == null) {
+                System.out.println("Gildia " + onlineGuildTag + " jest nulem! Czemu?");
+                continue;
+            }
             if (playerGuild != null) {
+                if (g.equals(playerGuild)) {
+                    scoreboardPackets
+                            .sendCreateTeamTag(p, g, GenConf.guildTag.replace("%GUILD%", g.getName()));
+                }
                 if (playerGuild.isAlly(g)) {
                     scoreboardPackets.sendCreateTeamTag(p, g, GenConf.allyTag);
                 } else {
@@ -337,6 +259,33 @@ public class TagManager {
                 }
             } else {
                 scoreboardPackets.sendCreateTeamTag(p, g, GenConf.enemyTag);
+            }
+        }
+    }
+
+    public void refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(Player player, Guild g) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (player.equals(p)) {
+                continue;
+            }
+            Guild playerGuild = guilds.getPlayerGuild(p.getUniqueId());
+            if(playerGuild == null){
+                scoreboardPackets
+                        .sendCreateTeamTag(p, g, GenConf.enemyTag.replace("%GUILD%", g.getName()));
+                continue;
+            }
+            if (!guilds.isGuildOnline(g.getName())) {
+                if (g.equals(playerGuild)) {
+                    scoreboardPackets
+                            .sendCreateTeamTag(p, g, GenConf.guildTag.replace("%GUILD%", g.getName()));
+                } else if (g.isAlly(playerGuild)) {
+                    scoreboardPackets
+                            .sendCreateTeamTag(p, g, GenConf.allyTag.replace("%GUILD%", g.getName()));
+                } else {
+                    scoreboardPackets
+                            .sendCreateTeamTag(p, g, GenConf.enemyTag.replace("%GUILD%", g.getName()));
+                }
+
             }
         }
     }

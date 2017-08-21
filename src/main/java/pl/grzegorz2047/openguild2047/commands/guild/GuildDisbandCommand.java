@@ -17,6 +17,7 @@
 package pl.grzegorz2047.openguild2047.commands.guild;
 
 import java.util.UUID;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.Guilds;
@@ -31,7 +32,7 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  * Command used by guild's leaders to disband their guild.
- * 
+ * <p>
  * Usage: /guild disband
  */
 public class GuildDisbandCommand extends Command {
@@ -41,46 +42,50 @@ public class GuildDisbandCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        if(!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
-        
+
         Guilds guilds = this.getPlugin().getGuilds();
-        
+
         Player player = (Player) sender;
-        if(args.length == 1){
-            if(!guilds.hasGuild(player)) {
+        if (args.length == 1) {
+            if (!guilds.hasGuild(player)) {
                 player.sendMessage(MsgManager.get("notinguild"));
                 return;
             }
 
             Guild guild = guilds.getPlayerGuild(player.getUniqueId());
-            if(!guild.getLeader().equals(player.getUniqueId())) {
+            if (!guild.getLeader().equals(player.getUniqueId())) {
                 player.sendMessage(MsgManager.get("playernotleader"));
                 return;
             }
-            
+
             GuildDisbandEvent event = new GuildDisbandEvent(guild);
             Bukkit.getPluginManager().callEvent(event);
-            if(event.isCancelled()) {
+            if (event.isCancelled()) {
                 return;
             }
-            
-            for(Relation r : guild.getAlliances()){
+
+            for (Relation r : guild.getAlliances()) {
                 Guild g1 = guilds.getGuild(r.getWho());
                 Guild g2 = guilds.getGuild(r.getAlliedGuildTag());
                 OpenGuild.getInstance().getTagManager().guildBrokeAlliance(g1, g2);
-                guild.getAlliances().remove(r);
-                guild.getAlliances().remove(r);
+                if (!guild.equals(g1)) {
+                    g1.getAlliances().remove(r);
+                }
+                if (!guild.equals(g2)) {
+                    g2.getAlliances().remove(r);
+                }
                 OpenGuild.getInstance().getSQLHandler().removeAlliance(g1, g2);
-                
+
             }
-            for(UUID uuid : guild.getMembers()) {
+            for (UUID uuid : guild.getMembers()) {
                 guilds.getMappedPlayersToGuilds().remove(uuid);
                 guilds.getMappedPlayersToGuilds().put(uuid, null);
                 getPlugin().getSQLHandler().updatePlayerTag(uuid, "");
-                if(Bukkit.getPlayer(uuid) != null){
+                if (Bukkit.getPlayer(uuid) != null) {
                     Bukkit.getPlayer(uuid).setScoreboard(OpenGuild.getInstance().getTagManager().getGlobalScoreboard());
                 }
             }
@@ -88,9 +93,11 @@ public class GuildDisbandCommand extends Command {
             getPlugin().getSQLHandler().removeGuild(guild.getName().toUpperCase());
             guilds.getGuilds().remove(guild.getName());
             getPlugin().getTagManager().playerDisbandGuild(guild);
+            guilds.removeOnlineGuild(guild.getName());
             getPlugin().broadcastMessage(MsgManager.get("broadcast-disband").replace("{TAG}", guild.getName().toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
+
         }
-        
+
     }
 
     @Override

@@ -121,13 +121,15 @@ public class SQLHandler {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
     }
+
     public void addKill(Player killer) {
-        updateStats(killer.getUniqueId(), "kills");
+        incrementStats(killer.getUniqueId(), "kills");
     }
 
     public void addDeath(Player player) {
-        updateStats( player.getUniqueId(), "deaths");
+        incrementStats(player.getUniqueId(), "deaths");
     }
+
     private void loadGuildsFromDB(Cuboids cuboids, Guilds guilds) {
         try {
             createStatement();
@@ -437,23 +439,19 @@ public class SQLHandler {
         }
     }
 
-    private void updateStats(UUID uuid, String column) {
+    private void incrementStats(UUID uuid, String column) {
         try {
             createStatement();
-            ResultSet result = statement.executeQuery("SELECT '" + column + "' FROM '" +
-                    GenConf.sqlTablePrefix + "players'" + " WHERE uuid='" + uuid.toString() + "';");
             try {
-                int value = result.getInt(column);
-                value++;
                 statement.execute("UPDATE '" + GenConf.sqlTablePrefix + "players' SET '" + column +
-                        "'=" + value + " WHERE uuid='" + uuid.toString() + "';");
+                        "'=" + column + "+1 WHERE uuid='" + uuid.toString() + "';");
                 statement.close();
                 statement.getConnection().close();
             } catch (SQLException ex) {
                 OpenGuild.getAPI().getLogger().exceptionThrown(ex);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            OpenGuild.getAPI().getLogger().exceptionThrown(e);
         }
 
     }

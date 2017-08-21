@@ -290,7 +290,7 @@ public class OpenGuild extends JavaPlugin {
 
         pm.registerEvents(new PlayerJoinListener(guilds, tagManager, sqlHandler), this);
         pm.registerEvents(new PlayerChatListener(guilds), this);
-        pm.registerEvents(new PlayerDeathListener(sqlHandler), this);
+        pm.registerEvents(new PlayerDeathListener(sqlHandler, logout), this);
         pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester, guilds), this);
         pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), this);
 

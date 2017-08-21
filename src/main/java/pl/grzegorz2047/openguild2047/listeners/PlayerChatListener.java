@@ -44,7 +44,7 @@ public class PlayerChatListener implements Listener {
         }
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        String message = event.getMessage();
+        String message = event.getMessage().replace("%", "");
         if (!isInGuild(player)) {
 
             if (GenConf.guildprefixinchat) {

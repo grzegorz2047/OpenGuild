@@ -54,7 +54,6 @@ public class GuildRelations {
     }
 
 
-
     public void setEnemies(List<Relation> enemies) {
         this.enemies = enemies;
     }
@@ -64,11 +63,21 @@ public class GuildRelations {
     }
 
     public boolean isAlly(Guild g) {
+        if (g == null) {
+            return false;
+        }
         for (Relation r : this.getAlliances()) {
             if (!r.getState().equals(Relation.Status.ALLY)) {
                 continue;
             }
-            if (r.getAlliedGuildTag().equals(g.getName()) || r.getWho().equals(g.getName())) {
+            if (r.
+                    getAlliedGuildTag()
+                    .equals(
+                            g.
+                                    getName()) || r.
+                    getWho().
+                    equals(g.
+                            getName())) {
                 return true;
             }
         }
