@@ -22,6 +22,7 @@ public class ScoreboardPackets {
         tagPacket.setPrefix(guildTagTemplate.replace("{TAG}", guild.getName()));
         tagPacket.setName(guild.getName());
         tagPacket.setDisplayName(tagPacket.getPrefix());
+        tagPacket.setPlayers(guild.getMembersNames());
         tagPacket.setMode(WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED);
         tagPacket.sendPacket(player);
     }

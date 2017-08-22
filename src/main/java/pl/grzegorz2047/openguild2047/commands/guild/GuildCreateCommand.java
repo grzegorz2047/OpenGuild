@@ -30,6 +30,7 @@ import com.github.grzegorz2047.openguild.Cuboid;
 import com.github.grzegorz2047.openguild.event.guild.GuildCreatedEvent;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
@@ -42,11 +43,13 @@ import pl.grzegorz2047.openguild2047.utils.GenUtil;
 public class GuildCreateCommand extends Command {
     private final Cuboids cuboids;
     private final Guilds guilds;
+    private final SQLHandler sqlHandler;
 
-    public GuildCreateCommand(Cuboids cuboids, Guilds guilds) {
+    public GuildCreateCommand(Cuboids cuboids, Guilds guilds, SQLHandler sqlHandler) {
         setPermission("openguild.command.create");
         this.cuboids = cuboids;
         this.guilds = guilds;
+        this.sqlHandler = sqlHandler;
     }
 
     @Override
@@ -55,8 +58,6 @@ public class GuildCreateCommand extends Command {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
-        Guilds guilds = this.getPlugin().getGuilds();
-
         Player player = (Player) sender;
 
         if (GenConf.FORCE_DESC) {
@@ -91,7 +92,7 @@ public class GuildCreateCommand extends Command {
             return;
         }
 
-        if (this.getPlugin().getGuilds().doesGuildExists(tag)) {
+        if (guilds.doesGuildExists(tag)) {
             player.sendMessage(MsgManager.get("guildexists"));
             return;
         }
@@ -142,7 +143,7 @@ public class GuildCreateCommand extends Command {
         cuboids.addCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
         Guild guild = guilds.addGuild(getPlugin(), player.getLocation(), player.getUniqueId(), tag, description);
         guilds.updatePlayerGuild(player.getUniqueId(), guild);
-
+        guilds.addOnlineGuild(guild.getName());
 
         if (GenConf.playerprefixenabled) {
             this.getPlugin().getTagManager().playerCreatedGuild(guild, player);
@@ -155,9 +156,9 @@ public class GuildCreateCommand extends Command {
          - cuboids
          - call MessageBroadcastEvent
          */
-        getPlugin().getSQLHandler().insertGuild(tag, description, player.getUniqueId(), player.getLocation(), player.getLocation().getWorld().getName());
-        getPlugin().getSQLHandler().addGuildCuboid(cuboid.getCenter(), cuboid.getCuboidSize(), cuboid.getOwner(), cuboid.getWorldName());
-        getPlugin().getSQLHandler().updatePlayerTag(player.getUniqueId(), guild.getName());
+        sqlHandler.insertGuild(tag, description, player.getUniqueId(), player.getLocation(), player.getLocation().getWorld().getName());
+        sqlHandler.addGuildCuboid(cuboid.getCenter(), cuboid.getCuboidSize(), cuboid.getOwner(), cuboid.getWorldName());
+        sqlHandler.updatePlayerTag(player.getUniqueId(), guild.getName());
 
         this.getPlugin().broadcastMessage(MsgManager.get("broadcast-create").replace("{TAG}", tag.toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
 

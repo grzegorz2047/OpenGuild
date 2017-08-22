@@ -65,9 +65,12 @@ public class PlayerQuitListener implements Listener {
         if (guilds.isPlayerInGuild(player)) {
             Guild g = guilds.getPlayerGuild(player.getUniqueId());
             guilds.guildMemberLeftServer(player, uuid);
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                scoreboardPackets.sendDeleteTeamTag(p, g.getName());
+            if(!guilds.isGuildOnline(g.getName())) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    scoreboardPackets.sendDeleteTeamTag(p, g.getName());
+                }
             }
+
         }
         String playerName = player.getName();
         logout.handleLogoutDuringFight(player, playerName);

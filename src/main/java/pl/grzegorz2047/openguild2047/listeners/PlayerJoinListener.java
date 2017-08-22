@@ -57,13 +57,17 @@ public class PlayerJoinListener implements Listener {
             }
         }
 
+
         if (guilds.hasGuild(player)) {
             Guild guild = guilds.getPlayerGuild(uuid);
+            //tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
             tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
+
             guilds.addOnlineGuild(guild.getName());
             guild.notifyMembersJoinedGame(player);
         }
         tagManager.prepareScoreboardTagForPlayerOnJoin(player);
+
         notifyOpAboutUpdate(player);
     }
 

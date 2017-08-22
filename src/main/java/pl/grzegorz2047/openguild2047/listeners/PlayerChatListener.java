@@ -49,7 +49,7 @@ public class PlayerChatListener implements Listener {
 
             if (GenConf.guildprefixinchat) {
                 event.setFormat(ChatColor.translateAlternateColorCodes('&',
-                        GenConf.chatFormat
+                         GenConf.chatFormat
                                 .replace("{PLAYER}", player.getName())
                                 .replace("{GUILD}", "")
                                 .replace("{MESSAGE}", message)));

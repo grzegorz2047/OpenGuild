@@ -29,6 +29,7 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  * Command used to accept invitation to guild.
@@ -36,8 +37,11 @@ import org.bukkit.Bukkit;
  * Usage: /guild accept [optional: tag (required only if there's more than 2 invitations)]
  */
 public class GuildInvitationAcceptCommand extends Command {
-    public GuildInvitationAcceptCommand() {
+    private final TagManager tagManager;
+
+    public GuildInvitationAcceptCommand(TagManager tagManager) {
         setPermission("openguild.command.invitationaccept");
+        this.tagManager = tagManager;
     }
 
     @Override
@@ -94,7 +98,7 @@ public class GuildInvitationAcceptCommand extends Command {
         }
         
         guild.acceptInvitation(player);
-        getPlugin().getTagManager().playerJoinGuild(player, guild);
+        tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
         Bukkit.broadcastMessage(MsgManager.get("broadcast-join")
                 .replace("{PLAYER}", player.getName())
                 .replace("{TAG}", guild.getName().toUpperCase()));

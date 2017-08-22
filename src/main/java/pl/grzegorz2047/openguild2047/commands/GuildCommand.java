@@ -28,7 +28,9 @@ import pl.grzegorz2047.openguild2047.Teleporter;
 import pl.grzegorz2047.openguild2047.Guilds;
 import pl.grzegorz2047.openguild2047.commands.guild.*;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  * OpenGuild's main command.
@@ -41,20 +43,19 @@ public class GuildCommand implements CommandExecutor {
      * This map stores all sub-commands (and their aliases) and their handlers.
      */
     private final Map<String[], Command> commands = new HashMap<String[], Command>();
-    private final Cuboids cuboids;
-    private final Guilds guilds;
 
-    public GuildCommand(Cuboids cuboids, Guilds guilds, Teleporter teleporter) {
-        this.cuboids = cuboids;
-        this.guilds = guilds;
+    public GuildCommand(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler) {
+        registerCommands(cuboids, guilds, teleporter, tagManager, sqlHandler);
+    }
 
+    private void registerCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler) {
         // Register 'guild' command sub-commands.
-        this.commands.put(new String[]{"create", "zaloz", "stworz"}, new GuildCreateCommand(cuboids, guilds));
-        this.commands.put(new String[]{"accept", "akceptuj"}, new GuildInvitationAcceptCommand());
+        this.commands.put(new String[]{"create", "zaloz", "stworz"}, new GuildCreateCommand(cuboids, guilds, sqlHandler));
+        this.commands.put(new String[]{"accept", "akceptuj"}, new GuildInvitationAcceptCommand(tagManager));
         this.commands.put(new String[]{"help", "pomoc"}, new GuildHelpCommand());
         this.commands.put(new String[]{"info", "informacja"}, new GuildInfoCommand());
         this.commands.put(new String[]{"invite", "zapros"}, new GuildInviteCommand());
-        this.commands.put(new String[]{"kick", "wyrzuc"}, new GuildKickCommand());
+        this.commands.put(new String[]{"kick", "wyrzuc"}, new GuildKickCommand(tagManager));
         this.commands.put(new String[]{"reload", "przeladuj"}, new GuildReloadCommand());
         this.commands.put(new String[]{"items", "itemy", "przedmioty"}, new GuildItemsCommand());
         this.commands.put(new String[]{"version", "wersja", "ver", "about"}, new GuildVersionCommand());
@@ -67,8 +68,6 @@ public class GuildCommand implements CommandExecutor {
         this.commands.put(new String[]{"enemy", "wrog",}, new GuildEnemyCommand());
         this.commands.put(new String[]{"unbanplayer", "odbanujgracza",}, new GuildUnbanPlayerCommand());
         this.commands.put(new String[]{"randomtp", "randomtp",}, new GuildRandomTPCommand());
-
-
     }
 
     @Override

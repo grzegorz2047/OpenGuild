@@ -1,5 +1,6 @@
 package pl.grzegorz2047.openguild2047.dropstone;
 
+import com.github.grzegorz2047.openguild.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 import java.util.*;
@@ -154,6 +156,7 @@ public class DropFromBlocks {
     }
 
     public boolean isNotUsedInDropFromBlocks(Material type) {
+        //OpenGuild.getOGLogger().debug("Zwraca " + (!ores.contains(type) && !eligibleBlocks.contains(type)) + "dla " + type);
         return !ores.contains(type) && !eligibleBlocks.contains(type);
     }
 
@@ -162,6 +165,7 @@ public class DropFromBlocks {
     }
 
     private void dropNaturally(Location blockLocation, World playerWorld, ItemStack receivedDrop) {
+        //OpenGuild.getOGLogger().debug("DROP: " + receivedDrop.toString());
         playerWorld.dropItemNaturally(blockLocation, receivedDrop);
 
     }

@@ -138,7 +138,6 @@ public class OpenGuild extends JavaPlugin {
         teleporter = new Teleporter();
         tpaRequester = new TpaRequester();
         // Register commands
-        loadCommands(cuboids, guilds, teleporter);
 
         // Register events
 
@@ -146,6 +145,8 @@ public class OpenGuild extends JavaPlugin {
         // Intialize guild helper class
         // Load database
         loadDB();
+        loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler);
+
         loadAllListeners();
         loadPlayers();
         this.getSQLHandler().loadRelations();
@@ -241,9 +242,9 @@ public class OpenGuild extends JavaPlugin {
      * This method sets executors of all commands, and
      * registers them in our API.
      */
-    private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter) {
+    private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandlers) {
         getCommand("team").setExecutor(new TeamCommand(this));
-        getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter));
+        getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter, tagManager, sqlHandler));
         if (GenConf.SPAWN_COMMAND_ENABLED) {
             getCommand("spawn").setExecutor(new SpawnCommand(teleporter));
         }

@@ -28,6 +28,7 @@ import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.event.guild.GuildKickEvent;
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  * Command used to kick player out of players' guild.
@@ -35,8 +36,11 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * Usage: /guild kick [player name]
  */
 public class GuildKickCommand extends Command {
-    public GuildKickCommand() {
+    private final TagManager tagManger;
+
+    public GuildKickCommand(TagManager tagManager) {
         setPermission("openguild.command.kick");
+        this.tagManger = tagManager;
     }
 
     @Override
@@ -79,6 +83,7 @@ public class GuildKickCommand extends Command {
 
 
         guild.removeMember(op.getUniqueId());
+
         guilds.getMappedPlayersToGuilds().remove(op.getUniqueId());
         if (op.isOnline()) {
             op.getPlayer().sendMessage(MsgManager.playerkicked.replace("{GUILD}", guild.getName()));
@@ -93,7 +98,7 @@ public class GuildKickCommand extends Command {
         }
 
         getPlugin().getSQLHandler().updatePlayerTag(op.getUniqueId(), "");
-
+        tagManger.playerLeaveGuild(player, guild);
         player.sendMessage(MsgManager.playerkicksuccess);
     }
 

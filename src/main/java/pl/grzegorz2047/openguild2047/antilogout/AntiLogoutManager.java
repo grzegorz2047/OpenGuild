@@ -41,7 +41,7 @@ public class AntiLogoutManager {
             if (potentialKiller != null) {
 
             }
-            Bukkit.broadcastMessage(MsgManager.get("playerlogoutduringfight").replace("%player", playerName));
+            Bukkit.broadcastMessage(MsgManager.get("playerlogoutduringfight").replace("%PLAYER%", playerName));
         }
     }
 
