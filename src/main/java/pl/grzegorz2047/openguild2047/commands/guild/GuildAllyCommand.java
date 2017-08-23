@@ -16,10 +16,10 @@
 package pl.grzegorz2047.openguild2047.commands.guild;
 
 import pl.grzegorz2047.openguild2047.guilds.Guild;
-import com.github.grzegorz2047.openguild.Relation;
-import com.github.grzegorz2047.openguild.command.Command;
-import com.github.grzegorz2047.openguild.command.CommandException;
-import com.github.grzegorz2047.openguild.event.guild.GuildRelationEvent;
+import pl.grzegorz2047.openguild2047.relations.Relation;
+import pl.grzegorz2047.openguild2047.commands.command.Command;
+import pl.grzegorz2047.openguild2047.commands.command.CommandException;
+import pl.grzegorz2047.openguild2047.events.guild.GuildRelationEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;

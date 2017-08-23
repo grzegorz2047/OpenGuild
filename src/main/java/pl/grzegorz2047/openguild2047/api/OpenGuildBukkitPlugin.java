@@ -16,17 +16,17 @@
 
 package pl.grzegorz2047.openguild2047.api;
 
-import com.github.grzegorz2047.openguild.interfaces.Configuration;
-import com.github.grzegorz2047.openguild.interfaces.GuildManager;
-import com.github.grzegorz2047.openguild.interfaces.Logger;
-import com.github.grzegorz2047.openguild.interfaces.Messages;
-import com.github.grzegorz2047.openguild.interfaces.OpenGuildPlugin;
-import com.github.grzegorz2047.openguild.interfaces.PluginUpdater;
-import com.github.grzegorz2047.openguild.interfaces.User;
-import com.github.grzegorz2047.openguild.command.CommandInfo;
-import com.github.grzegorz2047.openguild.command.CommandManager;
-import com.github.grzegorz2047.openguild.event.CommandRegisterEvent;
-import com.github.grzegorz2047.openguild.module.ModuleManager;
+import pl.grzegorz2047.openguild2047.interfaces.Configuration;
+import pl.grzegorz2047.openguild2047.interfaces.GuildManager;
+import pl.grzegorz2047.openguild2047.interfaces.Logger;
+import pl.grzegorz2047.openguild2047.interfaces.Messages;
+import pl.grzegorz2047.openguild2047.interfaces.OpenGuildPlugin;
+import pl.grzegorz2047.openguild2047.interfaces.PluginUpdater;
+import pl.grzegorz2047.openguild2047.interfaces.User;
+import pl.grzegorz2047.openguild2047.commands.command.CommandInfo;
+import pl.grzegorz2047.openguild2047.commands.command.CommandManager;
+import pl.grzegorz2047.openguild2047.events.misc.CommandRegisterEvent;
+import pl.grzegorz2047.openguild2047.modules.module.ModuleManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;

@@ -16,7 +16,7 @@
 
 package pl.grzegorz2047.openguild2047.api;
 
-import com.github.grzegorz2047.openguild.interfaces.Configuration;
+import pl.grzegorz2047.openguild2047.interfaces.Configuration;
 import java.util.HashMap;
 
 public class OpenConfiguration implements Configuration {

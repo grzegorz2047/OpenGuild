@@ -16,9 +16,9 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
-import com.github.grzegorz2047.openguild.command.Command;
-import com.github.grzegorz2047.openguild.command.CommandException;
-import com.github.grzegorz2047.openguild.event.OpenGuildReloadEvent;
+import pl.grzegorz2047.openguild2047.commands.command.Command;
+import pl.grzegorz2047.openguild2047.commands.command.CommandException;
+import pl.grzegorz2047.openguild2047.events.misc.OpenGuildReloadEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bukkit.Bukkit;

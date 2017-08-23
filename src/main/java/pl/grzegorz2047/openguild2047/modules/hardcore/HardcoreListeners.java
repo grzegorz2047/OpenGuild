@@ -16,7 +16,7 @@
 
 package pl.grzegorz2047.openguild2047.modules.hardcore;
 
-import com.github.grzegorz2047.openguild.OpenGuild;
+import pl.grzegorz2047.openguild2047.BagOfEverything;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.bukkit.Bukkit;
@@ -70,7 +70,7 @@ public class HardcoreListeners implements Listener {
         final Player player = e.getPlayer();
         HardcoreSQLHandler.getBan(player.getUniqueId()); // We must insert this player into the hardcore-table.
         final String time = new SimpleDateFormat("dd-MM-yyy HH:mm").format(new Date(System.currentTimeMillis() + GenConf.hcBantime));
-        Bukkit.getScheduler().runTaskLater(OpenGuild.getBukkit(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(BagOfEverything.getBukkit(), new Runnable() {
             
             @Override
             public void run() {

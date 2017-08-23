@@ -16,10 +16,10 @@
 
 package pl.grzegorz2047.openguild2047.api.command;
 
-import com.github.grzegorz2047.openguild.command.Command;
-import com.github.grzegorz2047.openguild.command.CommandDescription;
-import com.github.grzegorz2047.openguild.command.CommandInfo;
-import com.github.grzegorz2047.openguild.command.CommandManager;
+import pl.grzegorz2047.openguild2047.commands.command.Command;
+import pl.grzegorz2047.openguild2047.commands.command.CommandDescription;
+import pl.grzegorz2047.openguild2047.commands.command.CommandInfo;
+import pl.grzegorz2047.openguild2047.commands.command.CommandManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;

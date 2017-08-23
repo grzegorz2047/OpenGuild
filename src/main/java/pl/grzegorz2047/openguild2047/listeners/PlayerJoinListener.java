@@ -17,6 +17,7 @@ package pl.grzegorz2047.openguild2047.listeners;
 
 import java.util.UUID;
 
+import pl.grzegorz2047.openguild2047.BagOfEverything;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -72,7 +73,7 @@ public class PlayerJoinListener implements Listener {
     }
 
     private void notifyOpAboutUpdate(Player player) {
-        if (player.isOp() && com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isEnabled() && com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isAvailable()) {
+        if (player.isOp() && BagOfEverything.getUpdater().isEnabled() && BagOfEverything.getUpdater().isAvailable()) {
             player.sendMessage(ChatColor.RED + " =============== OpenGuild UPDATER =============== ");
             if (GenConf.lang.equalsIgnoreCase("PL")) {
                 player.sendMessage(ChatColor.YELLOW + "Znaleziono aktualizacje! Prosze zaktualizowac Twój plugin do najnowszej wersji!");

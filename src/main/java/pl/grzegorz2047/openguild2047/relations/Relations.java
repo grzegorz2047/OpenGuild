@@ -1,10 +1,8 @@
 package pl.grzegorz2047.openguild2047.relations;
 
-import com.github.grzegorz2047.openguild.Relation;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 

@@ -16,12 +16,12 @@
 
 package pl.grzegorz2047.openguild2047.modules.randomtp;
 
-import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.interfaces.User;
-import com.github.grzegorz2047.openguild.module.Module;
-import com.github.grzegorz2047.openguild.module.ModuleInfo;
-import com.github.grzegorz2047.openguild.module.ModuleLoadException;
-import com.github.grzegorz2047.openguild.module.RandomTPModule;
+import pl.grzegorz2047.openguild2047.BagOfEverything;
+import pl.grzegorz2047.openguild2047.interfaces.User;
+import pl.grzegorz2047.openguild2047.modules.module.Module;
+import pl.grzegorz2047.openguild2047.modules.module.ModuleInfo;
+import pl.grzegorz2047.openguild2047.modules.module.ModuleLoadException;
+import pl.grzegorz2047.openguild2047.modules.module.RandomTPModule;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -44,7 +44,7 @@ public class ModuleRandomTP implements RandomTPModule, Module {
     @Override
     public void enable(String id) throws ModuleLoadException {
         if (GenConf.ranTpEnabled) {
-            Bukkit.getPluginManager().registerEvents(new RandomTPListeners(), OpenGuild.getBukkit());
+            Bukkit.getPluginManager().registerEvents(new RandomTPListeners(), BagOfEverything.getBukkit());
             
 /*            CommandDescription desc = new CommandDescription();
             desc.set("EN", "Teleport to the random location");

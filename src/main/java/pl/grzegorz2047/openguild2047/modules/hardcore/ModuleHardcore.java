@@ -16,10 +16,10 @@
 
 package pl.grzegorz2047.openguild2047.modules.hardcore;
 
-import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.module.Module;
-import com.github.grzegorz2047.openguild.module.ModuleInfo;
-import com.github.grzegorz2047.openguild.module.ModuleLoadException;
+import pl.grzegorz2047.openguild2047.BagOfEverything;
+import pl.grzegorz2047.openguild2047.modules.module.Module;
+import pl.grzegorz2047.openguild2047.modules.module.ModuleInfo;
+import pl.grzegorz2047.openguild2047.modules.module.ModuleLoadException;
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
 
@@ -34,7 +34,7 @@ public class ModuleHardcore implements Module {
     public void enable(String id) throws ModuleLoadException {
         if(GenConf.hcBans) {
             HardcoreSQLHandler.createTables();
-            Bukkit.getPluginManager().registerEvents(new HardcoreListeners(), OpenGuild.getBukkit());
+            Bukkit.getPluginManager().registerEvents(new HardcoreListeners(), BagOfEverything.getBukkit());
         }
     }
     

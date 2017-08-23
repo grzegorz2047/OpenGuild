@@ -16,9 +16,9 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
-import com.github.grzegorz2047.openguild.command.Command;
-import com.github.grzegorz2047.openguild.command.CommandException;
-import com.github.grzegorz2047.openguild.command.UsageException;
+import pl.grzegorz2047.openguild2047.commands.command.Command;
+import pl.grzegorz2047.openguild2047.commands.command.CommandException;
+import pl.grzegorz2047.openguild2047.commands.command.UsageException;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;

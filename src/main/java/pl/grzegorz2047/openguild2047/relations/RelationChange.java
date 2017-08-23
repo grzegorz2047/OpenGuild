@@ -1,9 +1,5 @@
 package pl.grzegorz2047.openguild2047.relations;
 
-import com.github.grzegorz2047.openguild.Relation;
-import org.bukkit.OfflinePlayer;
-import pl.grzegorz2047.openguild2047.guilds.Guild;
-
 import java.util.UUID;
 
 /**

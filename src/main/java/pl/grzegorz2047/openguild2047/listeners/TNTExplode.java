@@ -25,7 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
-import com.github.grzegorz2047.openguild.interfaces.OpenGuildPlugin;
+import pl.grzegorz2047.openguild2047.interfaces.OpenGuildPlugin;
 
 import java.util.List;
 import java.util.Map;

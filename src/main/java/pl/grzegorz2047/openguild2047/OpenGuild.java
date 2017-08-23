@@ -17,9 +17,9 @@ package pl.grzegorz2047.openguild2047;
 
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
-import com.github.grzegorz2047.openguild.interfaces.Logger;
-import com.github.grzegorz2047.openguild.interfaces.OpenGuildPlugin;
-import com.github.grzegorz2047.openguild.hook.Hooks;
+import pl.grzegorz2047.openguild2047.interfaces.Logger;
+import pl.grzegorz2047.openguild2047.interfaces.OpenGuildPlugin;
+import pl.grzegorz2047.openguild2047.addons.Hooks;
 
 import java.io.File;
 import java.io.IOException;
@@ -113,7 +113,7 @@ public class OpenGuild extends JavaPlugin {
 
         // Setup API
         OpenGuildBukkitPlugin ogBP = new OpenGuildBukkitPlugin();
-        com.github.grzegorz2047.openguild.OpenGuild.setOpenGuild(ogBP);
+        BagOfEverything.setOpenGuild(ogBP);
         OpenGuild.ogAPI = ogBP.getPlugin();
 
         // Check for updates
@@ -210,7 +210,7 @@ public class OpenGuild extends JavaPlugin {
         if (!GenConf.updater) {
             pl.grzegorz2047.openguild2047.api.Guilds.getLogger().warning("Updater is disabled.");
         } else {
-            if (com.github.grzegorz2047.openguild.OpenGuild.getUpdater().isAvailable()) {
+            if (BagOfEverything.getUpdater().isAvailable()) {
                 pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info(" ");
                 pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info(" ==================== UPDATER ==================== ");
                 pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info("Update found! Please update your plugin to the newest version!");
@@ -409,7 +409,7 @@ public class OpenGuild extends JavaPlugin {
      * @return instance of OGLogger class.
      */
     public static Logger getOGLogger() {
-        return com.github.grzegorz2047.openguild.OpenGuild.getLogger();
+        return BagOfEverything.getLogger();
     }
 
     /**

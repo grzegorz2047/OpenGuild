@@ -16,7 +16,7 @@
 package pl.grzegorz2047.openguild2047.cuboidmanagement;
 
 import pl.grzegorz2047.openguild2047.guilds.Guild;
-import com.github.grzegorz2047.openguild.Relation;
+import pl.grzegorz2047.openguild2047.relations.Relation;
 
 import java.util.*;
 

@@ -17,8 +17,8 @@
 package pl.grzegorz2047.openguild2047.api;
 
 import pl.grzegorz2047.openguild2047.guilds.Guild;
-import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.interfaces.User;
+import pl.grzegorz2047.openguild2047.BagOfEverything;
+import pl.grzegorz2047.openguild2047.interfaces.User;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -39,7 +39,7 @@ public class OpenUser implements User {
     
     @Override
     public Guild getGuild() {
-        return OpenGuild.getGuild(this);
+        return BagOfEverything.getGuild(this);
     }
     
     @Override

@@ -15,7 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047.guilds;
 
-import com.github.grzegorz2047.openguild.Relation;
+import pl.grzegorz2047.openguild2047.relations.Relation;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;

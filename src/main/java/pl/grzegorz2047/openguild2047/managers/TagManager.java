@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
-import com.github.grzegorz2047.openguild.Relation;
+import pl.grzegorz2047.openguild2047.relations.Relation;
 
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;

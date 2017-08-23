@@ -15,7 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047.api;
 
-import com.github.grzegorz2047.openguild.interfaces.Logger;
+import pl.grzegorz2047.openguild2047.interfaces.Logger;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
 
 import java.net.URL;

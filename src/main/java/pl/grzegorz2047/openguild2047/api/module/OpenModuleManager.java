@@ -16,11 +16,11 @@
 
 package pl.grzegorz2047.openguild2047.api.module;
 
-import com.github.grzegorz2047.openguild.event.ModuleLoadEvent;
-import com.github.grzegorz2047.openguild.module.Module;
-import com.github.grzegorz2047.openguild.module.ModuleInfo;
-import com.github.grzegorz2047.openguild.module.ModuleLoadException;
-import com.github.grzegorz2047.openguild.module.ModuleManager;
+import pl.grzegorz2047.openguild2047.events.misc.ModuleLoadEvent;
+import pl.grzegorz2047.openguild2047.modules.module.Module;
+import pl.grzegorz2047.openguild2047.modules.module.ModuleInfo;
+import pl.grzegorz2047.openguild2047.modules.module.ModuleLoadException;
+import pl.grzegorz2047.openguild2047.modules.module.ModuleManager;
 import java.util.HashMap;
 import java.util.Set;
 import org.bukkit.Bukkit;

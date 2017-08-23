@@ -16,8 +16,8 @@
 
 package pl.grzegorz2047.openguild2047.api;
 
-import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.interfaces.PluginUpdater;
+import pl.grzegorz2047.openguild2047.BagOfEverything;
+import pl.grzegorz2047.openguild2047.interfaces.PluginUpdater;
 import java.util.List;
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.utils.Updater;
@@ -48,7 +48,7 @@ public class OpenPluginUpdater implements PluginUpdater {
     private void checkForUpdates() {
         available = true;
         for(String version : getVersions()) {
-            if(version.equals(OpenGuild.getVersion())) {
+            if(version.equals(BagOfEverything.getVersion())) {
                 available = false;
             }
         }

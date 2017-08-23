@@ -19,8 +19,8 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
-import com.github.grzegorz2047.openguild.command.Command;
-import com.github.grzegorz2047.openguild.command.CommandException;
+import pl.grzegorz2047.openguild2047.commands.command.Command;
+import pl.grzegorz2047.openguild2047.commands.command.CommandException;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**

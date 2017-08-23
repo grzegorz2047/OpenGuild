@@ -23,7 +23,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import com.github.grzegorz2047.openguild.interfaces.Logger;
+import pl.grzegorz2047.openguild2047.interfaces.Logger;
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
 
 public class OGLogger implements Logger {

@@ -16,9 +16,9 @@
 
 package pl.grzegorz2047.openguild2047.modules.spawn;
 
-import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.module.Module;
-import com.github.grzegorz2047.openguild.module.ModuleInfo;
+import pl.grzegorz2047.openguild2047.BagOfEverything;
+import pl.grzegorz2047.openguild2047.modules.module.Module;
+import pl.grzegorz2047.openguild2047.modules.module.ModuleInfo;
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
 
@@ -32,7 +32,7 @@ public class ModuleSpawn implements Module {
     @Override
     public void enable(String id) {
         if(GenConf.blockGuildCreating) {
-            Bukkit.getPluginManager().registerEvents(new SpawnListeners(), OpenGuild.getBukkit());
+            Bukkit.getPluginManager().registerEvents(new SpawnListeners(), BagOfEverything.getBukkit());
         }
     }
     

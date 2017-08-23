@@ -22,8 +22,8 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
-import com.github.grzegorz2047.openguild.event.guild.GuildEvent;
+import pl.grzegorz2047.openguild2047.events.guild.GuildCreateEvent;
+import pl.grzegorz2047.openguild2047.events.guild.GuildEvent;
 import org.bukkit.event.Event;
 
 /**

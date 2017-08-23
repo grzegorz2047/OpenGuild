@@ -16,11 +16,11 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
-import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.command.Command;
-import com.github.grzegorz2047.openguild.command.CommandException;
-import com.github.grzegorz2047.openguild.command.PermException;
-import com.github.grzegorz2047.openguild.module.RandomTPModule;
+import pl.grzegorz2047.openguild2047.BagOfEverything;
+import pl.grzegorz2047.openguild2047.commands.command.Command;
+import pl.grzegorz2047.openguild2047.commands.command.CommandException;
+import pl.grzegorz2047.openguild2047.commands.command.PermException;
+import pl.grzegorz2047.openguild2047.modules.module.RandomTPModule;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public class GuildRandomTPCommand extends Command {
                 if(Bukkit.getPlayer(target) == null) {
                     throw new CommandException("Player \"" + target + "\" is not online");
                 } else {
-                    ((RandomTPModule) OpenGuild.getModules().getModule("random-tp")).teleport(Bukkit.getPlayer(target));
+                    ((RandomTPModule) BagOfEverything.getModules().getModule("random-tp")).teleport(Bukkit.getPlayer(target));
                 }
             } else {
                 throw new PermException();
@@ -43,7 +43,7 @@ public class GuildRandomTPCommand extends Command {
         }
         
         if(sender instanceof Player) {
-            ((RandomTPModule) OpenGuild.getModules().getModule("random-tp")).teleport((Player) sender);
+            ((RandomTPModule) BagOfEverything.getModules().getModule("random-tp")).teleport((Player) sender);
         } else {
             throw new CommandException("You must be a player in-game!");
         }

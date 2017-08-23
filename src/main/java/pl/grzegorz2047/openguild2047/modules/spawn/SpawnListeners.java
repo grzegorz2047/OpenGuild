@@ -16,7 +16,7 @@
 
 package pl.grzegorz2047.openguild2047.modules.spawn;
 
-import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
+import pl.grzegorz2047.openguild2047.events.guild.GuildCreateEvent;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.ChatColor;

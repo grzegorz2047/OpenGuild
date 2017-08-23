@@ -16,8 +16,8 @@
 
 package pl.grzegorz2047.openguild2047.modules.randomtp;
 
-import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.module.RandomTPModule;
+import pl.grzegorz2047.openguild2047.BagOfEverything;
+import pl.grzegorz2047.openguild2047.modules.module.RandomTPModule;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -31,7 +31,7 @@ public class RandomTPListeners implements Listener {
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(e.getClickedBlock() == null)
             return;
-        RandomTPModule module = (RandomTPModule) OpenGuild.getModules().getModule("random-tp");
+        RandomTPModule module = (RandomTPModule) BagOfEverything.getModules().getModule("random-tp");
         if(!module.isEnabled() || !module.isButtonEnabled())
             return;
 
