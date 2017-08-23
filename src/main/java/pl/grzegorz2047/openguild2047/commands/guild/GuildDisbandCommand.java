@@ -28,7 +28,10 @@ import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.event.guild.GuildDisbandEvent;
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  * Command used by guild's leaders to disband their guild.
@@ -36,8 +39,17 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * Usage: /guild disband
  */
 public class GuildDisbandCommand extends Command {
-    public GuildDisbandCommand() {
+    private final Guilds guilds;
+    private final Cuboids cuboids;
+    private final SQLHandler sqlHandler;
+    private final TagManager tagManager;
+
+    public GuildDisbandCommand(Guilds guilds, Cuboids cuboids, SQLHandler sqlHandler, TagManager tagManager) {
         setPermission("openguild.command.disband");
+        this.guilds = guilds;
+        this.cuboids = cuboids;
+        this.sqlHandler = sqlHandler;
+        this.tagManager = tagManager;
     }
 
     @Override
@@ -47,7 +59,6 @@ public class GuildDisbandCommand extends Command {
             return;
         }
 
-        Guilds guilds = this.getPlugin().getGuilds();
 
         Player player = (Player) sender;
         if (args.length == 1) {
@@ -85,16 +96,13 @@ public class GuildDisbandCommand extends Command {
                 guilds.getMappedPlayersToGuilds().remove(uuid);
                 guilds.getMappedPlayersToGuilds().put(uuid, null);
                 getPlugin().getSQLHandler().updatePlayerTag(uuid, "");
-                if (Bukkit.getPlayer(uuid) != null) {
-                    Bukkit.getPlayer(uuid).setScoreboard(OpenGuild.getInstance().getTagManager().getGlobalScoreboard());
-                }
             }
-            getPlugin().getCuboids().removeGuildCuboid(guild.getName());
-            getPlugin().getSQLHandler().removeGuild(guild.getName().toUpperCase());
+            cuboids.removeGuildCuboid(guild.getName());
+            sqlHandler.removeGuild(guild.getName().toUpperCase());
             guilds.getGuilds().remove(guild.getName());
-            getPlugin().getTagManager().playerDisbandGuild(guild);
+            tagManager.playerDisbandGuild(guild);
             guilds.removeOnlineGuild(guild.getName());
-            getPlugin().broadcastMessage(MsgManager.get("broadcast-disband").replace("{TAG}", guild.getName().toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
+            Bukkit.broadcastMessage(MsgManager.get("broadcast-disband").replace("{TAG}", guild.getName().toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
 
         }
 

@@ -34,16 +34,14 @@ import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 public class SQLHandler {
 
-    private final TagManager tagManager;
     private final Guilds guilds;
     private OpenGuild plugin;
 
     private Statement statement;
     private SQLImplementationStrategy implementation;
 
-    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation, TagManager tagManager, Guilds guilds) {
+    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation, Guilds guilds) {
         this.plugin = plugin;
-        this.tagManager = tagManager;
         this.guilds = guilds;
         try {
             this.implementation = implementation;
@@ -172,7 +170,6 @@ public class SQLHandler {
 
         cuboids.addCuboid(cuboidCenter, tag, cuboidSize);
         guilds.addGuild(plugin, home, leaderUUID, tag, description);
-        tagManager.registerGuildTag(tag);
     }
 
     private boolean hasGuildValidWorldNameHome(String homeWorld) {
@@ -210,26 +207,15 @@ public class SQLHandler {
     private void readPlayersDataFromResult(ResultSet result) throws SQLException {
         while (anotherRecord(result)) {
             String guildTag = result.getString("guild");
-            //int kills = result.getInt("kills");
-            //int deaths = result.getInt("deaths");
             UUID uuid = UUID.fromString(result.getString("uuid"));
-
-
-            if (!hasPlayerGuildTag(guildTag)) {
+            if (!guilds.doesGuildExists(guildTag)) {
                 continue;
             }
             Guild playersGuild = guilds.getGuild(guildTag);
             guilds.addPlayer(uuid, playersGuild);
-            if (guildDoesntExist(playersGuild)) {
-                continue;
-            }
         }
     }
 
-
-    private boolean hasPlayerGuildTag(String guildTag) {
-        return !guildTag.isEmpty() && guilds.doesGuildExists(guildTag);
-    }
 
     public void loadRelations() {
         try {
@@ -243,19 +229,20 @@ public class SQLHandler {
                 String withwho = result.getString("withwho");
                 long expires = result.getInt("expires");
                 Relation.Status relationStatus = Relation.Status.valueOf(status.toUpperCase());
-                Relation relation = createRelation(who, withwho, expires, relationStatus);
-
-                Guild whoGuild = guilds.getGuild(who);
-                if (guildDoesntExist(whoGuild)) continue;
 
 
-                Guild withWhoGuild = guilds.getGuild(withwho);
-                if (guildDoesntExist(withWhoGuild)) {
+                if (guilds.doesGuildExists(who)) {
                     continue;
                 }
+                Guild whoGuild = guilds.getGuild(who);
 
-                addGuildAlly(relation, whoGuild);
-                addGuildAlly(relation, withWhoGuild);
+                if (guilds.doesGuildExists(withwho)) {
+                    continue;
+                }
+                Guild withWhoGuild = guilds.getGuild(withwho);
+
+                whoGuild.addAlly(withwho, expires, relationStatus);
+                withWhoGuild.addAlly(who, expires, relationStatus);
             }
             result.close();
             statement.close();
@@ -266,21 +253,11 @@ public class SQLHandler {
 
     }
 
-    private Relation createRelation(String who, String withwho, long expires, Relation.Status relationStatus) {
-        return new Relation(who, withwho, expires, relationStatus);
-    }
 
     private boolean anotherRecord(ResultSet result) throws SQLException {
         return result.next();
     }
 
-    private void addGuildAlly(Relation r, Guild guild) {
-        guild.getAlliances().add(r);
-    }
-
-    private boolean guildDoesntExist(Guild guild) {
-        return guild == null;
-    }
 
     /**
      * Adds player to database.

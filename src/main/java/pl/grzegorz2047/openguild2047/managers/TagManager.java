@@ -47,23 +47,10 @@ public class TagManager {
 
 
     private final Guilds guilds;
-    private Scoreboard globalScoreboard;//Mozna trzymac tu defaultowe prefixy gildii dla bezgildyjnych
     private ScoreboardPackets scoreboardPackets = new ScoreboardPackets();
 
     public TagManager(Guilds guilds) {
         this.guilds = guilds;
-
-        if (!this.isInitialised()) {//Kiedy trzeba to mozna zainicjowac scoreboard np. przy onEnable()
-            this.globalScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        }
-    }
-
-    private boolean isInitialised() {
-        return globalScoreboard != null;
-    }
-
-    public Scoreboard getGlobalScoreboard() {
-        return globalScoreboard;
     }
 
     public void playerDisbandGuild(Guild guild) {
@@ -72,17 +59,7 @@ public class TagManager {
         }
     }
 
-    public void setTagsForGuildRelations(Guild whoGuild, Guild withWhoGuild) {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (whoGuild.getMembers().contains(p.getUniqueId())) {
-                scoreboardPackets.sendCreateTeamTag(p, whoGuild, GenConf.allyTag);
-            } else if (withWhoGuild.getMembers().contains(p.getUniqueId())) {
-                scoreboardPackets.sendCreateTeamTag(p, withWhoGuild, GenConf.allyTag);
-            }
-        }
-    }
-
-    public void updateTagsForGuildRelations(Guild whoGuild, Guild withWhoGuild, String guildTagTemplate) {
+    private void updateTagsForGuildRelations(Guild whoGuild, Guild withWhoGuild, String guildTagTemplate) {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (whoGuild.getMembers().contains(p.getUniqueId())) {
                 scoreboardPackets.sendUpdateTeamTag(p, whoGuild, guildTagTemplate);
@@ -92,26 +69,8 @@ public class TagManager {
         }
     }
 
-    private void setTagsForGuildMembers(Guild guild, Team team) {
-        for (UUID member : guild.getMembers()) {
-            addPlayerToGuildTag(member, team);
-        }
-    }
-
     private void addPlayerToGuildTag(UUID uuid, Team whoT) {
         whoT.addEntry(Bukkit.getOfflinePlayer(uuid).getName());
-    }
-
-    private void addGuildTagToPlayer(String guildTag, UUID uuid) {
-        Team t = this.getGlobalScoreboard().getTeam(guildTag);
-        addPlayerToGuildTag(uuid, t);
-    }
-
-    private void renderGuildTag(String guildTag, UUID uuid) {
-        Team t = this.getGlobalScoreboard().registerNewTeam(guildTag);
-        t.setPrefix(GenConf.enemyTag.replace("{TAG}", guildTag));
-        t.setDisplayName(GenConf.enemyTag.replace("{TAG}", guildTag));
-        addPlayerToGuildTag(uuid, t);
     }
 
     public void guildBrokeAlliance(Guild firstGuild, Guild secondGuild) {
@@ -174,9 +133,6 @@ public class TagManager {
         }
     }
 
-    public void assignScoreboardToPlayer(Player player) {
-        player.setScoreboard(globalScoreboard);
-    }
 
     public void playerCreatedGuild(Guild g, Player player) {
         scoreboardPackets.sendCreateTeamTag(player, g, GenConf.guildTag);
@@ -188,12 +144,6 @@ public class TagManager {
             }
             scoreboardPackets.sendCreateTeamTag(p, g, GenConf.enemyTag);
         }
-    }
-
-    public void registerGuildTag(String tag) {
-        Team t = this.getGlobalScoreboard().registerNewTeam(tag);
-        t.setPrefix(GenConf.allyTag.replace("{TAG}", tag));
-        t.setDisplayName(ChatColor.RED + tag + " ");
     }
 
     public void prepareScoreboardTagForPlayerOnJoin(Player p) {
@@ -217,7 +167,7 @@ public class TagManager {
                             .sendCreateTeamTag(p, g, GenConf.enemyTag);
                 }
             } else {
-                System.out.println("Gosciu " +p.getName() + " nie ma gildii");
+                System.out.println("Gosciu " + p.getName() + " nie ma gildii");
                 scoreboardPackets
                         .sendCreateTeamTag(p, g, GenConf.enemyTag);
             }
@@ -256,12 +206,7 @@ public class TagManager {
     }
 
     /*
-    login
-    usuwanie /g zamknij
-    join /g akceptuj
-    left /g opusc
-    sojusz /g sojusz
-    enemy /g wrog
-    + TODO MA WYSWIETLAC NORMALNIE TAGI GILDII JAK NIE MA SOJUSZU!!!!!!! JAKOS
+
+
     */
 }

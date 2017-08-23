@@ -151,11 +151,6 @@ public class OpenGuild extends JavaPlugin {
         loadPlayers();
         this.getSQLHandler().loadRelations();
 
-
-        for (Player player : getServer().getOnlinePlayers()) {
-            this.tagManager.assignScoreboardToPlayer(player);
-        }
-
         // Load required items section.
         CuboidAndSpawnManipulationListeners.loadItems();
 

@@ -87,7 +87,7 @@ public class Guilds {
      * @return boolean
      */
     public boolean doesGuildExists(String tag) {
-        return guilds.containsKey(tag);
+        return !tag.isEmpty() && guilds.containsKey(tag);
     }
 
     public void setGuilds(Map<String, Guild> guilds) {

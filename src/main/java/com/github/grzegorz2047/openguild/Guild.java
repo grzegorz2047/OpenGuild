@@ -145,4 +145,11 @@ public class Guild extends GuildMembers {
         }
         return onlineMemebers;
     }
+    private Relation createRelation(String who, String withwho, long expires, Relation.Status relationStatus) {
+        return new Relation(who, withwho, expires, relationStatus);
+    }
+    public void addAlly(String withwho, long expires, Relation.Status relationStatus) {
+        Relation relation = createRelation(tag, withwho, expires, relationStatus);
+        getAlliances().add(relation);
+    }
 }

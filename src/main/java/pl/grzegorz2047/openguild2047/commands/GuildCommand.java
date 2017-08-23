@@ -60,7 +60,7 @@ public class GuildCommand implements CommandExecutor {
         this.commands.put(new String[]{"items", "itemy", "przedmioty"}, new GuildItemsCommand());
         this.commands.put(new String[]{"version", "wersja", "ver", "about"}, new GuildVersionCommand());
         this.commands.put(new String[]{"leave", "opusc", "wyjdz"}, new GuildLeaveCommand());
-        this.commands.put(new String[]{"disband", "rozwiaz", "zamknij"}, new GuildDisbandCommand());
+        this.commands.put(new String[]{"disband", "rozwiaz", "zamknij"}, new GuildDisbandCommand(guilds, cuboids, sqlHandler, tagManager));
         this.commands.put(new String[]{"dom", "home", "house"}, new GuildHomeCommand(teleporter));
         this.commands.put(new String[]{"list", "lista"}, new GuildListCommand());
         this.commands.put(new String[]{"description", "desc", "opis"}, new GuildDescriptionCommand());
