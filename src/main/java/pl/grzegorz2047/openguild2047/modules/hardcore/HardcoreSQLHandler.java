@@ -28,6 +28,8 @@ import pl.grzegorz2047.openguild2047.database.SQLHandler;
  * @author Grzegorz
  */
 public class HardcoreSQLHandler {
+    private final SQLHandler sqlHandler;
+
     /* Można zrobić API do dostania się na polaczenie openguilda */
     public enum Column {
         BAN_TIME,
@@ -35,19 +37,21 @@ public class HardcoreSQLHandler {
         NICK
     }
 
-    private static final OpenGuild plugin = OpenGuild.getInstance();
-    public static final String TABLENAME = "openguild_bans";
-
-    public static boolean createTables() {
-        String query = "CREATE TABLE IF NOT EXISTS `" + TABLENAME + "` (UUID VARCHAR(36) NOT NULL primary key, NICK VARCHAR(16) NOT NULL, BAN_TIME BIGINT NOT NULL)";
-        OpenGuild.getOGLogger().debug(query);
-        return OpenGuild.getInstance().getSQLHandler().execute(query);
+    public HardcoreSQLHandler(SQLHandler sqlHandler) {
+        this.sqlHandler = sqlHandler;
     }
 
-    public static void update(UUID uniqueId, Column column, String value) {
+    public  final String TABLENAME = "openguild_bans";
+
+    public  boolean createTables() {
+        String query = "CREATE TABLE IF NOT EXISTS `" + TABLENAME + "` (UUID VARCHAR(36) NOT NULL primary key, NICK VARCHAR(16) NOT NULL, BAN_TIME BIGINT NOT NULL)";
+        OpenGuild.getOGLogger().debug(query);
+        return sqlHandler.execute(query);
+    }
+
+    public  void update(UUID uniqueId, Column column, String value) {
         try {
-            SQLHandler sql = OpenGuild.getInstance().getSQLHandler();
-            Statement st = sql.getConnection().createStatement();
+             Statement st = sqlHandler.getConnection().createStatement();
             String query;
 
             if (playerExists(uniqueId)) {
@@ -63,10 +67,10 @@ public class HardcoreSQLHandler {
         }
     }
 
-    public static long getBan(UUID uniqueId) {
+    public  long getBan(UUID uniqueId) {
         if (playerExists(uniqueId)) {
             String query = "SELECT " + Column.BAN_TIME.toString() + " FROM " + TABLENAME + " WHERE " + Column.UUID.toString() + "='" + uniqueId + "'";
-            SQLHandler sql = OpenGuild.getInstance().getSQLHandler();
+            SQLHandler sql = sqlHandler;
             try {
                 Statement st = sql.getConnection().createStatement();
                 ResultSet rs = st.executeQuery(query);
@@ -84,9 +88,9 @@ public class HardcoreSQLHandler {
         return 0;
     }
 
-    public static boolean playerExists(UUID uniqueId) {
+    public  boolean playerExists(UUID uniqueId) {
         String query = "SELECT COUNT(" + Column.UUID + ") FROM " + TABLENAME + " WHERE " + Column.UUID.toString() + "='" + uniqueId + "'";
-        ResultSet rs = OpenGuild.getInstance().getSQLHandler().executeQuery(query);
+        ResultSet rs = sqlHandler.executeQuery(query);
         int rowCount = -1;
         try {
             // get the number of rows from the result set

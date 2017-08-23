@@ -36,6 +36,7 @@ import pl.grzegorz2047.openguild2047.database.interfaces.SQLTables;
 public class SQLHandler {
 
     private final Guilds guilds;
+    private final Cuboids cuboids;
     private OpenGuild plugin;
 
     private Statement statement;
@@ -47,10 +48,11 @@ public class SQLHandler {
     private String alliesTableName = "`" + GenConf.sqlTablePrefix + "allies`";
     private String guildsTableName = "`" + GenConf.sqlTablePrefix + "guilds`";
 
-    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation, SQLTables tables, Guilds guilds) {
+    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation, SQLTables tables, Guilds guilds, Cuboids cuboids) {
         this.plugin = plugin;
         this.guilds = guilds;
         this.tables = tables;
+        this.cuboids = cuboids;
         try {
             this.implementation = implementation;
         } catch (Exception e) {
@@ -68,7 +70,7 @@ public class SQLHandler {
         tables.createTables(this);
 
         // Load guilds and players from database
-        loadGuildsFromDB(plugin.getCuboids(), guilds);
+        loadGuildsFromDB(cuboids, guilds);
         this.loadPlayers();
         OpenGuild.getOGLogger().info("Loaded " + guilds.getNumberOfGuilds() + " guilds from database.");
     }
@@ -125,7 +127,7 @@ public class SQLHandler {
         int cuboidSize = result.getInt("cuboid_size");
 
         cuboids.addCuboid(cuboidCenter, tag, cuboidSize);
-        guilds.addGuild(plugin, home, leaderUUID, tag, description);
+        guilds.addGuild(home, leaderUUID, tag, description);
     }
 
     private boolean hasGuildValidWorldNameHome(String homeWorld) {

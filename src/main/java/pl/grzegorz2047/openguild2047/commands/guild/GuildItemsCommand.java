@@ -16,6 +16,7 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.commands.command.Command;
 import pl.grzegorz2047.openguild2047.commands.command.CommandException;
 import java.util.Arrays;
@@ -34,8 +35,11 @@ import pl.grzegorz2047.openguild2047.utils.ItemGUI;
  * Usage: /guild items
  */
 public class GuildItemsCommand extends Command {
-    public GuildItemsCommand() {
+    private final Plugin plugin;
+
+    public GuildItemsCommand(Plugin plugin) {
         setPermission("openguild.command.items");
+        this.plugin = plugin;
     }
 
     @Override
@@ -71,7 +75,7 @@ public class GuildItemsCommand extends Command {
                 inventorySize = 54;
             }
             
-            ItemGUI itemsGUI = new ItemGUI(MsgManager.getIgnorePref("gui-items"), inventorySize);
+            ItemGUI itemsGUI = new ItemGUI(MsgManager.getIgnorePref("gui-items"), inventorySize, plugin);
             for(ItemStack item : GenConf.reqitems) {
                 ItemStack cloned = item.clone();
                 ItemMeta meta = cloned.getItemMeta();

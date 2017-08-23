@@ -24,7 +24,14 @@ import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
 
 public class ModuleHardcore implements Module {
-    
+
+
+    private final HardcoreSQLHandler hardcoreSQLHandler;
+
+    public ModuleHardcore(HardcoreSQLHandler hardcoreSQLHandler) {
+        this.hardcoreSQLHandler = hardcoreSQLHandler;
+    }
+
     @Override
     public ModuleInfo module() {
         return new ModuleInfo("Hardcore", "Hardcore mode features", "1.0");
@@ -33,8 +40,8 @@ public class ModuleHardcore implements Module {
     @Override
     public void enable(String id) throws ModuleLoadException {
         if(GenConf.hcBans) {
-            HardcoreSQLHandler.createTables();
-            Bukkit.getPluginManager().registerEvents(new HardcoreListeners(), BagOfEverything.getBukkit());
+            hardcoreSQLHandler.createTables();
+            Bukkit.getPluginManager().registerEvents(new HardcoreListeners(hardcoreSQLHandler), BagOfEverything.getBukkit());
         }
     }
     

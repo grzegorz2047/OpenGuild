@@ -16,6 +16,7 @@
 package pl.grzegorz2047.openguild2047;
 
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
+import pl.grzegorz2047.openguild2047.files.FileValidator;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
 import pl.grzegorz2047.openguild2047.interfaces.Logger;
 import pl.grzegorz2047.openguild2047.interfaces.OpenGuildPlugin;
@@ -58,10 +59,12 @@ import pl.grzegorz2047.openguild2047.dropstone.DropProperties;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.listeners.*;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
+import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler;
 import pl.grzegorz2047.openguild2047.relations.Relations;
 import pl.grzegorz2047.openguild2047.tasks.Watcher;
 import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
 import pl.grzegorz2047.openguild2047.teleporters.TpaRequester;
+import pl.grzegorz2047.openguild2047.updater.Updater;
 
 
 /**
@@ -70,7 +73,6 @@ import pl.grzegorz2047.openguild2047.teleporters.TpaRequester;
 public class OpenGuild extends JavaPlugin {
 
     private static OpenGuildPlugin ogAPI;
-    private static OpenGuild instance;
 
     private Guilds guilds;
 
@@ -109,7 +111,6 @@ public class OpenGuild extends JavaPlugin {
 
         long startTime = System.currentTimeMillis();
 
-        instance = this;
 
         // Setup API
         OpenGuildBukkitPlugin ogBP = new OpenGuildBukkitPlugin();
@@ -117,18 +118,22 @@ public class OpenGuild extends JavaPlugin {
         OpenGuild.ogAPI = ogBP.getPlugin();
 
         // Check for updates
-        checkForUpdates();
+        Updater updater = new Updater();
+        updater.checkForUpdates();
 
         // Validate files
-        validateFile("config");
-        validateFile("commands");
-        validateFile("drop");
+        FileValidator fileValidator = new FileValidator();
+
+        fileValidator.validateFile(getResource("config.yml"), "config");
+        fileValidator.validateFile(getResource("commands.yml"), "commands");
+        fileValidator.validateFile(getResource("drop.yml"), "drop");
 
         // Load configuration
-        GenConf.loadConfiguration();
+        GenConf.loadConfiguration(getConfig());
 
         // Validate language file
-        validateFile("messages_" + GenConf.lang.toLowerCase());
+        String translation = "messages_" + GenConf.lang.toLowerCase();
+        fileValidator.validateFile(getResource(translation), translation);
 
         /*
          * If some server admin doesn't want to use PermissionsEX or other
@@ -148,6 +153,7 @@ public class OpenGuild extends JavaPlugin {
         this.tagManager = new TagManager(guilds);
         teleporter = new Teleporter();
         tpaRequester = new TpaRequester();
+        HardcoreSQLHandler hardcoreSQLHandler = new HardcoreSQLHandler(sqlHandler);
         // Register commands
 
         // Register events
@@ -156,20 +162,20 @@ public class OpenGuild extends JavaPlugin {
         // Intialize guild helper class
         // Load database
         loadDB();
-        loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations);
+        loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler);
 
         loadAllListeners();
         loadPlayers();
-        this.getSQLHandler().loadRelations();
+        sqlHandler.loadRelations();
 
         // Load required items section.
         CuboidAndSpawnManipulationListeners.loadItems();
 
         // Load default plugin-modules
-        ((OpenModuleManager) ogAPI.getModules()).defaultModules();
+        ((OpenModuleManager) ogAPI.getModules()).defaultModules(hardcoreSQLHandler);
 
         // Register all hooks to this plugin
-        Hooks.registerDefaults();
+        Hooks.registerDefaults(this);
         watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester, guilds, relations), 0, 20);
 
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!");
@@ -177,7 +183,6 @@ public class OpenGuild extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        instance = null;
 
         this.logout.dispose();
         this.watcher.cancel();
@@ -206,22 +211,7 @@ public class OpenGuild extends JavaPlugin {
      * This method checks if any update is available, and shows notification
      * if there's new version of plugin.
      */
-    private void checkForUpdates() {
-        if (!GenConf.updater) {
-            pl.grzegorz2047.openguild2047.api.Guilds.getLogger().warning("Updater is disabled.");
-        } else {
-            if (BagOfEverything.getUpdater().isAvailable()) {
-                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info(" ");
-                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info(" ==================== UPDATER ==================== ");
-                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info("Update found! Please update your plugin to the newest version!");
-                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info("Download it from https://github.com/grzegorz2047/OpenGuild2047/releases");
-                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info(" ==================== UPDATER ==================== ");
-                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info(" ");
-            } else {
-                pl.grzegorz2047.openguild2047.api.Guilds.getLogger().info("No updates found! Good job! :D");
-            }
-        }
-    }
+
 
     /**
      * This method is used to get all aliases of specified command.
@@ -248,9 +238,9 @@ public class OpenGuild extends JavaPlugin {
      * This method sets executors of all commands, and
      * registers them in our API.
      */
-    private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandlers, Relations relations) {
-        getCommand("team").setExecutor(new TeamCommand(this));
-        getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter, tagManager, sqlHandler, relations));
+    private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandlers, Relations relations, HardcoreSQLHandler hardcoreSQLHandler) {
+        getCommand("team").setExecutor(new TeamCommand(guilds));
+        getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler, this));
         if (GenConf.SPAWN_COMMAND_ENABLED) {
             getCommand("spawn").setExecutor(new SpawnCommand(teleporter));
         }
@@ -290,7 +280,7 @@ public class OpenGuild extends JavaPlugin {
                 break;
         }
 
-        this.sqlHandler = new SQLHandler(this, sqlImplementation, tables, guilds);
+        this.sqlHandler = new SQLHandler(this, sqlImplementation, tables, guilds, cuboids);
     }
 
     /**
@@ -298,23 +288,12 @@ public class OpenGuild extends JavaPlugin {
      */
     private void loadAllListeners() {
         PluginManager pm = getServer().getPluginManager();
-
-        pm.registerEvents(new PlayerJoinListener(guilds, tagManager, sqlHandler), this);
-        pm.registerEvents(new PlayerChatListener(guilds), this);
-        pm.registerEvents(new PlayerDeathListener(sqlHandler, logout), this);
-        pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester, guilds), this);
-        pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), this);
-
-        if (GenConf.cubEnabled) {
-            pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop, guilds), this);
-        }
-
-        pm.registerEvents(new EntityDamageByEntityListener(logout, guilds), this);
-
-        if (GenConf.playerMoveEvent) {
-            pm.registerEvents(new PlayerMoveListener(cuboids), this);
-        }
+        ListenerLoader listenerLoader =
+                new ListenerLoader
+                        (this, guilds, tagManager, sqlHandler, teleporter, tpaRequester, cuboids, logout, drop);
+        listenerLoader.loadListeners(pm);
     }
+
 
     /**
      * This method loads all players from database and adds
@@ -338,44 +317,7 @@ public class OpenGuild extends JavaPlugin {
      *
      * @param name name of file to validate (without extension)
      */
-    public void validateFile(String name) {
-        getOGLogger().info("Validating file '" + name + ".yml ...");
 
-        YamlConfiguration c = new YamlConfiguration();
-        try {
-            File file = new File("plugins/OpenGuild2047/" + name + ".yml");
-            if (!file.exists()) {
-                getOGLogger().info("File plugins/OpenGuild2047/" + name + ".yml does not exists - creating ...");
-                file.createNewFile();
-            }
-
-            c.load(file);
-
-            YamlConfiguration configInside = new YamlConfiguration();
-
-            if (getResource(name + ".yml") == null) {
-                getOGLogger().info("File " + name + ".yml does not exists - skipping ...");
-                file.delete();
-                return;
-            }
-            Reader targetReader = new InputStreamReader(getResource(name + ".yml"));
-
-            configInside.load(targetReader);
-
-            for (String k : configInside.getKeys(true)) {
-                if (!c.contains(k)) {
-                    c.set(k, configInside.get(k));
-                }
-            }
-
-            c.save(file);
-            targetReader.close();
-        } catch (IOException e) {
-            getOGLogger().exceptionThrown(e);
-        } catch (InvalidConfigurationException e) {
-            getOGLogger().exceptionThrown(e);
-        }
-    }
 
     /**
      * This method is used to broadcast message to all
@@ -392,13 +334,6 @@ public class OpenGuild extends JavaPlugin {
     }
 
     /**
-     * @return instance of this class.
-     */
-    public static OpenGuild getInstance() {
-        return instance;
-    }
-
-    /**
      * @return instance of OpenGuildPlugin (API) class.
      */
     public static OpenGuildPlugin getAPI() {
@@ -412,28 +347,5 @@ public class OpenGuild extends JavaPlugin {
         return BagOfEverything.getLogger();
     }
 
-    /**
-     * @return instance of GuildHelper class.
-     */
-    public Guilds getGuilds() {
-        return guilds;
-    }
 
-    /**
-     * @return instance of TagManager class.
-     */
-    public TagManager getTagManager() {
-        return tagManager;
-    }
-
-    /**
-     * @return instance of SQLHandler class.
-     */
-    public SQLHandler getSQLHandler() {
-        return sqlHandler;
-    }
-
-    public Cuboids getCuboids() {
-        return cuboids;
-    }
 }

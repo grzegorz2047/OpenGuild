@@ -36,12 +36,14 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  */
 public class GuildHomeCommand extends Command {
 
+    private final Guilds guilds;
     private Teleporter teleporter;
 
 
-    public GuildHomeCommand(Teleporter teleporter) {
+    public GuildHomeCommand(Teleporter teleporter, Guilds guilds) {
         setPermission("openguild.command.home");
         this.teleporter = teleporter;
+        this.guilds = guilds;
     }
 
     @Override
@@ -51,7 +53,6 @@ public class GuildHomeCommand extends Command {
             return;
         }
 
-        Guilds guilds = this.getPlugin().getGuilds();
 
         final Player player = (Player) sender;
         if (!guilds.hasGuild(player)) {

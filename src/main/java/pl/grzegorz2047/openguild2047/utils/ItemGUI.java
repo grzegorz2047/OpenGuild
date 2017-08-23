@@ -17,6 +17,8 @@ package pl.grzegorz2047.openguild2047.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -25,22 +27,21 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 
 public class ItemGUI implements Listener {
 
-    private OpenGuild plugin;
-    private Inventory inventory;
+     private Inventory inventory;
     
     private Map<Integer, ItemGUIClickEventHandler> items = new HashMap<Integer, ItemGUIClickEventHandler>();
     
     private int nextPosition = -1;
     
-    public ItemGUI(String title, int size) {
-        this.plugin = OpenGuild.getInstance();
-        this.inventory = this.plugin.getServer().createInventory(null, size, title);
-        
-        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+    public ItemGUI(String title, int size, Plugin plugin) {
+         this.inventory = Bukkit.createInventory(null, size, title);
+
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
     
     public void addItem(ItemStack item, ItemGUIClickEventHandler clickHandler) {

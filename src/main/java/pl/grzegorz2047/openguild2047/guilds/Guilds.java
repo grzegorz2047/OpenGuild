@@ -176,7 +176,7 @@ public class Guilds {
         return mappedPlayersToGuilds;
     }
 
-    public Guild addGuild(OpenGuild plugin, Location home, UUID owner, String tag, String description) {
+    public Guild addGuild(Location home, UUID owner, String tag, String description) {
         Guild guild =
                 new Guild(
                         tag,

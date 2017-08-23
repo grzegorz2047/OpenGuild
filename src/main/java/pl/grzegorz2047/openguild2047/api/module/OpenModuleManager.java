@@ -17,6 +17,7 @@
 package pl.grzegorz2047.openguild2047.api.module;
 
 import pl.grzegorz2047.openguild2047.events.misc.ModuleLoadEvent;
+import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler;
 import pl.grzegorz2047.openguild2047.modules.module.Module;
 import pl.grzegorz2047.openguild2047.modules.module.ModuleInfo;
 import pl.grzegorz2047.openguild2047.modules.module.ModuleLoadException;
@@ -75,11 +76,11 @@ public class OpenModuleManager implements ModuleManager {
         }
     }
     
-    public void defaultModules() {
+    public void defaultModules(HardcoreSQLHandler hardcoreSQLHandler) {
         modules = new HashMap<String, Module>();
         this.registerModule("random-tp", new ModuleRandomTP());
         this.registerModule("spawn", new ModuleSpawn());
-        this.registerModule("Hardcore", new ModuleHardcore());
+        this.registerModule("Hardcore", new ModuleHardcore(hardcoreSQLHandler));
     }
     
 }

@@ -16,11 +16,15 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.commands.command.Command;
 import pl.grzegorz2047.openguild2047.commands.command.CommandException;
 import pl.grzegorz2047.openguild2047.events.misc.OpenGuildReloadEvent;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -28,12 +32,15 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  * Command used to reload guilds.
- * 
+ * <p>
  * Usage: /guild reload
  */
 public class GuildReloadCommand extends Command {
-    public GuildReloadCommand() {
+    private FileConfiguration fileConfiguration;
+
+    public GuildReloadCommand(FileConfiguration fileConfiguration) {
         setPermission("openguild.command.reload");
+        this.fileConfiguration = fileConfiguration;
     }
 
     @Override
@@ -41,20 +48,14 @@ public class GuildReloadCommand extends Command {
         try {
             OpenGuildReloadEvent begining = new OpenGuildReloadEvent(sender, OpenGuildReloadEvent.Status.BEGINING);
             Bukkit.getPluginManager().callEvent(begining);
-            
-            this.getPlugin().getConfig().load(this.getPlugin().getConfig().getCurrentPath());
-            
+
+            fileConfiguration.load(fileConfiguration.getCurrentPath());
+
             OpenGuildReloadEvent ending = new OpenGuildReloadEvent(sender, OpenGuildReloadEvent.Status.ENDING);
             Bukkit.getPluginManager().callEvent(ending);
             sender.sendMessage(MsgManager.get("configreloaded"));
-        } catch (FileNotFoundException ex) {
-            this.getPlugin().getOGLogger().exceptionThrown(ex);
-            sender.sendMessage(MsgManager.get("cmderror"));
-        } catch (IOException ex) {
-            this.getPlugin().getOGLogger().exceptionThrown(ex);
-            sender.sendMessage(MsgManager.get("cmderror"));
-        } catch (InvalidConfigurationException ex) {
-            this.getPlugin().getOGLogger().exceptionThrown(ex);
+        } catch (IOException | InvalidConfigurationException ex) {
+            OpenGuild.getOGLogger().exceptionThrown(ex);
             sender.sendMessage(MsgManager.get("cmderror"));
         }
     }

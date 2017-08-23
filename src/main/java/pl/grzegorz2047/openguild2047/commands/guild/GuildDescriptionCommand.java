@@ -17,11 +17,13 @@
 package pl.grzegorz2047.openguild2047.commands.guild;
 
 import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
 import pl.grzegorz2047.openguild2047.commands.command.Command;
@@ -32,65 +34,65 @@ import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
 /**
  * Command used to change guilds' description.
- * 
+ * <p>
  * Usage: /guild desc set [new description]
  */
 public class GuildDescriptionCommand extends Command {
-    public GuildDescriptionCommand() {
+    private final Guilds guilds;
+    private final SQLHandler sqlHandler;
+
+    public GuildDescriptionCommand(Guilds guilds, SQLHandler sqlHandler) {
         setPermission("openguild.command.description");
+        this.guilds = guilds;
+        this.sqlHandler = sqlHandler;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        if(!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
-        
-        Guilds guilds = this.getPlugin().getGuilds();
-        
+
+
         Player player = (Player) sender;
-        if(!guilds.hasGuild(player)) {
+        if (!guilds.hasGuild(player)) {
             player.sendMessage(MsgManager.get("notinguild"));
             return;
         }
-        
+
         Guild guild = guilds.getPlayerGuild(player.getUniqueId());
-        
-        if(args.length > 2) {
+
+        if (args.length > 2) {
             String subCommand = args[1];
-            if(subCommand.equalsIgnoreCase("set") || subCommand.equalsIgnoreCase("ustaw")) {
-                if(!guild.getLeader().equals(player.getUniqueId())) {
+            if (subCommand.equalsIgnoreCase("set") || subCommand.equalsIgnoreCase("ustaw")) {
+                if (!guild.getLeader().equals(player.getUniqueId())) {
                     player.sendMessage(MsgManager.get("playernotleader"));
                     return;
                 }
 
                 String newDescription = GenUtil.argsToString(args, 2, args.length);
-                if(newDescription.length() > 32) {
+                if (newDescription.length() > 32) {
                     player.sendMessage(MsgManager.get("desctoolong"));
                     return;
                 }
-                
+
                 GuildDescriptionChangeEvent event = new GuildDescriptionChangeEvent(guild, newDescription);
                 Bukkit.getPluginManager().callEvent(event);
-                if(event.isCancelled()) {
+                if (event.isCancelled()) {
                     return;
                 }
-                
-                guild.setDescription(event.getNewDescription());
-                getPlugin().getSQLHandler().updateGuildDescription(guild);
 
-                for(UUID uuid : guild.getMembers()) {
-                    OfflinePlayer offlineMember = Bukkit.getOfflinePlayer(uuid);
-                    if(offlineMember.isOnline()) {
-                        offlineMember.getPlayer().sendMessage(MsgManager.get("guild-description-changed").replace("{NEW}", event.getNewDescription()));
-                    }
-                }
-                
+                guild.setDescription(event.getNewDescription());
+                sqlHandler.updateGuildDescription(guild);
+
+                String msg = MsgManager.get("guild-description-changed").replace("{NEW}", event.getNewDescription());
+
+                guild.notifyGuild(msg);
                 return;
             }
         }
-        
+
         player.sendMessage(ChatColor.GRAY + guild.getDescription());
     }
 

@@ -15,7 +15,9 @@
  */
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 import pl.grzegorz2047.openguild2047.relations.Relation;
 import pl.grzegorz2047.openguild2047.commands.command.Command;
 import pl.grzegorz2047.openguild2047.commands.command.CommandException;
@@ -32,13 +34,20 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * @author Grzegorz
  */
 public class GuildEnemyCommand extends Command {
-    public GuildEnemyCommand() {
+    private final Guilds guilds;
+    private final SQLHandler sqlHandler;
+    private final TagManager tagManager;
+
+    public GuildEnemyCommand(Guilds guilds, SQLHandler sqlHandler, TagManager tagManager) {
         setPermission("openguild.command.enemy");
+        this.guilds = guilds;
+        this.sqlHandler = sqlHandler;
+        this.tagManager = tagManager;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        Guilds guilds = getPlugin().getGuilds();
+
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
@@ -76,10 +85,10 @@ public class GuildEnemyCommand extends Command {
 
             for (Relation r : requestingGuild.getAlliances()) {
                 if (r.getAlliedGuildTag().equals(guild.getName()) || r.getBaseGuildTag().equals(guild.getName())) {
-                    OpenGuild.getInstance().getTagManager().guildBrokeAlliance(requestingGuild, guild);
+                    tagManager.guildBrokeAlliance(requestingGuild, guild);
                     requestingGuild.getAlliances().remove(r);
                     guild.getAlliances().remove(r);
-                    OpenGuild.getInstance().getSQLHandler().removeAlliance(requestingGuild, guild);
+                    sqlHandler.removeAlliance(requestingGuild, guild);
                     Bukkit.broadcastMessage(MsgManager.getIgnorePref("broadcast-enemy")
                             .replace("{GUILD1}", requestingGuild.getName())
                             .replace("{GUILD2}", guild.getName()));

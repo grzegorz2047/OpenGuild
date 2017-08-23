@@ -15,7 +15,9 @@
  */
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 import pl.grzegorz2047.openguild2047.relations.Relation;
 import pl.grzegorz2047.openguild2047.commands.command.Command;
 import pl.grzegorz2047.openguild2047.commands.command.CommandException;
@@ -35,16 +37,20 @@ import pl.grzegorz2047.openguild2047.relations.Relations;
  */
 public class GuildAllyCommand extends Command {
     private final Relations relations;
+    private final Guilds guilds;
+    private final TagManager tagManager;
+    private SQLHandler sqlHandler;
 
-    public GuildAllyCommand(Relations relations) {
+    public GuildAllyCommand(Relations relations, Guilds guilds, TagManager tagManager, SQLHandler sqlHandler) {
         setPermission("openguild.command.ally");
         this.relations = relations;
+        this.guilds = guilds;
+        this.tagManager = tagManager;
+        this.sqlHandler = sqlHandler;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        Guilds guilds = getPlugin().getGuilds();
-
         if (!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return;
@@ -88,11 +94,11 @@ public class GuildAllyCommand extends Command {
 
                 relations.removeRequest(request);
                 Relation r = new Relation(guild.getName(), requestingGuild.getName(), 0, Relation.Status.ALLY);
-                boolean result = OpenGuild.getInstance().getSQLHandler().insertAlliance(guild, requestingGuild);
+                boolean result = sqlHandler.insertAlliance(guild, requestingGuild);
                 if (!result) {
                     OpenGuild.getOGLogger().warning("Could not register the ally for " + guild.getName() + " guild!");
                 }
-                OpenGuild.getInstance().getTagManager().guildMakeAlliance(r);
+                tagManager.guildMakeAlliance(r);
                 guild.getAlliances().add(r);
                 requestingGuild.getAlliances().add(r);
                 Bukkit.broadcastMessage(MsgManager.get("broadcast-ally")

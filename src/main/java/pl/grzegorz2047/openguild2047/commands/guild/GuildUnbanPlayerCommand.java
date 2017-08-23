@@ -29,8 +29,11 @@ import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler;
 
 public class GuildUnbanPlayerCommand extends Command {
 
-    public GuildUnbanPlayerCommand() {
+    private final HardcoreSQLHandler hardcoreSQLHandler;
+
+    public GuildUnbanPlayerCommand(HardcoreSQLHandler hardcoreSQLHandler) {
         setPermission("openguild.command.hardcore.unban");
+        this.hardcoreSQLHandler =hardcoreSQLHandler;
     }
 
     @Override
@@ -47,9 +50,9 @@ public class GuildUnbanPlayerCommand extends Command {
             throw new CommandException(MsgManager.get("notplayedbefore").replace("{PLAYER}", args[1]));
         }
         
-        long banned = HardcoreSQLHandler.getBan(player.getUniqueId());
+        long banned = hardcoreSQLHandler.getBan(player.getUniqueId());
         if(banned != 0) {
-            HardcoreSQLHandler.update(player.getUniqueId(), HardcoreSQLHandler.Column.BAN_TIME, "0");
+            hardcoreSQLHandler.update(player.getUniqueId(), HardcoreSQLHandler.Column.BAN_TIME, "0");
             Guilds.getLogger().info("Player " + player.getName() + " (" + player.getUniqueId() + ") was unbanned by " + sender.getName());
             sender.sendMessage(MsgManager.get("hcub").replace("{PLAYER}", player.getName()));
         } else {

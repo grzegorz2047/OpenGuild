@@ -32,6 +32,7 @@ import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
@@ -44,12 +45,14 @@ public class GuildCreateCommand extends Command {
     private final Cuboids cuboids;
     private final Guilds guilds;
     private final SQLHandler sqlHandler;
+    private final TagManager tagManager;
 
-    public GuildCreateCommand(Cuboids cuboids, Guilds guilds, SQLHandler sqlHandler) {
+    public GuildCreateCommand(Cuboids cuboids, Guilds guilds, SQLHandler sqlHandler, TagManager tagManager) {
         setPermission("openguild.command.create");
         this.cuboids = cuboids;
         this.guilds = guilds;
         this.sqlHandler = sqlHandler;
+        this.tagManager = tagManager;
     }
 
     @Override
@@ -141,12 +144,12 @@ public class GuildCreateCommand extends Command {
 
 
         cuboids.addCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
-        Guild guild = guilds.addGuild(getPlugin(), player.getLocation(), player.getUniqueId(), tag, description);
+        Guild guild = guilds.addGuild(player.getLocation(), player.getUniqueId(), tag, description);
         guilds.updatePlayerGuild(player.getUniqueId(), guild);
         guilds.addOnlineGuild(guild.getName());
 
         if (GenConf.playerprefixenabled) {
-            this.getPlugin().getTagManager().playerCreatedGuild(guild, player);
+            tagManager.playerCreatedGuild(guild, player);
         }
 
         OpenGuild.getOGLogger().info("Player '" + player.getName() + "' successfully created new guild '" + tag.toUpperCase() + "'.");
@@ -160,7 +163,7 @@ public class GuildCreateCommand extends Command {
         sqlHandler.addGuildCuboid(cuboid.getCenter(), cuboid.getCuboidSize(), cuboid.getOwner(), cuboid.getWorldName());
         sqlHandler.updatePlayerTag(player.getUniqueId(), guild.getName());
 
-        this.getPlugin().broadcastMessage(MsgManager.get("broadcast-create").replace("{TAG}", tag.toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
+        Bukkit.broadcastMessage(MsgManager.get("broadcast-create").replace("{TAG}", tag.toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
 
         GuildCreatedEvent createdEvent = new GuildCreatedEvent(guild);
         Bukkit.getPluginManager().callEvent(createdEvent);

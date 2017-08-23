@@ -16,6 +16,7 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.commands.command.Command;
 import pl.grzegorz2047.openguild2047.commands.command.CommandException;
 import java.util.ArrayList;
@@ -30,16 +31,18 @@ import org.bukkit.command.CommandSender;
  */
 public class GuildVersionCommand extends Command {
     private final List<Author> authors;
+    private final Plugin plugin;
 
-    public GuildVersionCommand() {
+    public GuildVersionCommand(Plugin plugin) {
         this.authors = new ArrayList<Author>();
         this.loadAuthors();
+        this.plugin = plugin;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         sender.sendMessage(this.getTitle(ChatColor.GOLD + "OpenGuild2047"));
-        sender.sendMessage(ChatColor.DARK_GRAY + "Version: " + ChatColor.GOLD + this.getPlugin().getDescription().getVersion());
+        sender.sendMessage(ChatColor.DARK_GRAY + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion());
         sender.sendMessage(ChatColor.DARK_GRAY + "Authors: \n" + this.getAuthors());
         sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild2047");
         sender.sendMessage(ChatColor.DARK_GRAY + "BukkitDev: " + ChatColor.GOLD + "http://dev.bukkit.org/bukkit-plugins/openguild");

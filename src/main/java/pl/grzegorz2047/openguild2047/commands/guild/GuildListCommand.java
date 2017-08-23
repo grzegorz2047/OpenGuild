@@ -25,30 +25,32 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  * This command shows list of guilds.
- * 
+ * <p>
  * Usage: /guild list
  */
 public class GuildListCommand extends Command {
-    public GuildListCommand() {
+    private final Guilds guilds;
+
+    public GuildListCommand(Guilds guilds) {
         setPermission("openguild.command.list");
+        this.guilds = guilds;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        Guilds guilds = this.getPlugin().getGuilds();
-        
+
         StringBuilder resultBuilder = new StringBuilder();
-        for(Guild guild : guilds.getGuilds().values()) {
+        for (Guild guild : guilds.getGuilds().values()) {
             String tag = guild.getName();
             resultBuilder.append(tag).append(", ");
         }
-        
+
         String result = resultBuilder.toString();
-        
+
         sender.sendMessage(this.getTitle(MsgManager.getIgnorePref("titleguildlist")));
-        resultBuilder.append(MsgManager.get("numguilds")).append(this.getPlugin().getGuilds().getGuilds().size());
+        resultBuilder.append(MsgManager.get("numguilds")).append(guilds.getGuilds().size());
         resultBuilder.append("\n");
-        
+
         sender.sendMessage(result);
     }
 

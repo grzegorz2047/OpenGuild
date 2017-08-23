@@ -21,6 +21,7 @@ import java.util.UUID;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
 import pl.grzegorz2047.openguild2047.commands.command.Command;
@@ -28,6 +29,7 @@ import pl.grzegorz2047.openguild2047.commands.command.CommandException;
 import pl.grzegorz2047.openguild2047.events.guild.GuildLeaveEvent;
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  * Command used by players to leave current guild.
@@ -35,8 +37,15 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
  * Usage: /guild leave
  */
 public class GuildLeaveCommand extends Command {
-    public GuildLeaveCommand() {
+    private final Guilds guilds;
+    private final TagManager tagManager;
+    private final SQLHandler sqlHandler;
+
+    public GuildLeaveCommand(Guilds guilds, TagManager tagManager, SQLHandler sqlHandler) {
         setPermission("openguild.command.leave");
+        this.guilds = guilds;
+        this.tagManager = tagManager;
+        this.sqlHandler = sqlHandler;
     }
 
     @Override
@@ -46,7 +55,6 @@ public class GuildLeaveCommand extends Command {
             return;
         }
 
-        Guilds guilds = this.getPlugin().getGuilds();
 
         Player player = (Player) sender;
         if (!guilds.hasGuild(player)) {
@@ -70,13 +78,13 @@ public class GuildLeaveCommand extends Command {
         guilds.getMappedPlayersToGuilds().remove(player.getUniqueId());
         guilds.getMappedPlayersToGuilds().put(player.getUniqueId(), null);
         for (UUID member : guild.getMembers()) {
-            OfflinePlayer opp = this.getPlugin().getServer().getOfflinePlayer(member);
+            OfflinePlayer opp = Bukkit.getOfflinePlayer(member);
             if (opp.isOnline()) {
                 opp.getPlayer().sendMessage(MsgManager.get("broadcast-leave").replace("{PLAYER}", player.getDisplayName()).replace("{TAG}", guild.getName().toUpperCase()));
             }
         }
-        this.getPlugin().getTagManager().playerLeaveGuild(player, guild);
-        getPlugin().getSQLHandler().updatePlayerTag(player.getUniqueId(), "");
+        tagManager.playerLeaveGuild(player, guild);
+        sqlHandler.updatePlayerTag(player.getUniqueId(), "");
         player.sendMessage(MsgManager.leaveguildsuccess);
     }
 

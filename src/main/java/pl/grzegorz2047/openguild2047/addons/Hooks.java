@@ -19,8 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.hooks.skript.SkriptHook;
+import pl.grzegorz2047.openguild2047.addons.hooks.skript.SkriptHook;
 
 /**
  *
@@ -29,13 +30,13 @@ import pl.grzegorz2047.openguild2047.hooks.skript.SkriptHook;
 public class Hooks {
     private static final List<Hook> hooks = new ArrayList<Hook>();
     
-    public static void addHook(Hook hook) {
+    public static void addHook(Hook hook, JavaPlugin javaPlugin) {
         Plugin plugin = hook.getBukkitPlugin();
         if(hook.isEnabled()) {
             try {
-                hook.enable(plugin);
+                hook.enable(plugin, javaPlugin);
             } catch(Throwable ex) {
-                OpenGuild.getInstance().getOGLogger().log(Level.SEVERE,
+                OpenGuild.getOGLogger().log(Level.SEVERE,
                         "Could not load " + plugin.getName() + " hook. Error was " + ex.getMessage());
                 ex.printStackTrace();
             }
@@ -48,7 +49,7 @@ public class Hooks {
         return hooks;
     }
     
-    public static void registerDefaults() {
-        addHook(new SkriptHook()); // Skript by Njol - http://dev.bukkit.org/bukkit-plugins/skript/
+    public static void registerDefaults(JavaPlugin javaPlugin) {
+        addHook(new SkriptHook(), javaPlugin); // Skript by Njol - http://dev.bukkit.org/bukkit-plugins/skript/
     }
 }

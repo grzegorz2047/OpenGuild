@@ -20,6 +20,7 @@ import pl.grzegorz2047.openguild2047.guilds.Guild;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -36,29 +37,9 @@ import pl.grzegorz2047.openguild2047.utils.PastebinWriter;
  */
 public class Guilds {
 
-
-    @Nullable
-    public static Guild getGuild(@Nonnull Player player) throws NullPointerException {
-        //SimplePlayerGuild guildPlayer = GuildHelper.getInstance().guildsplayers.get(player.getUniqueId());
-        //SimpleGuild guild = GuildHelper.getInstance().guilds.get(guildPlayer.getClanTag());
-        return null;
-    }
-
-    @Nullable
-    public static Guild getGuild(@Nonnull String tag) throws NullPointerException {
-        //Guild guild = GuildHelper.getInstance().guilds.get(tag.toLowerCase());
-        return null;
-    }
-
     @Nonnull
     public static Logger getLogger() {
-        return OpenGuild.getInstance().getOGLogger();
-    }
-
-    @Nullable
-    public static PlayerGuild getPlayer(@Nonnull UUID uuid) throws NullPointerException {
-        //PlayerGuild guild = GuildHelper.getInstance().guildsplayers.get(uuid);
-        return null;
+        return OpenGuild.getOGLogger();
     }
 
     public static void report(String error) {
@@ -69,9 +50,9 @@ public class Guilds {
             builder.append("The following error occurred: ").append(error);
             builder.append("-------------------------");
             builder.append("Enabled plugins: ");
-            builder.append(Bukkit.getPluginManager().getPlugins().toString());
+            builder.append(Arrays.toString(Bukkit.getPluginManager().getPlugins()));
             builder.append("-------------------------");
-            builder.append("Plugin version == ").append(OpenGuild.getInstance().getDescription().getVersion());
+           // builder.append("Plugin version == ").append(OpenGuild.getInstance().getDescription().getVersion());
             builder.append("Engine (Bukkit) version == ").append(Bukkit.getBukkitVersion()).append(" (").append(Bukkit.getVersion()).append(")");
             builder.append("System.getProperty(\"os.name\") == ").append(System.getProperty("os.name"));
             builder.append("System.getProperty(\"os.version\") == ").append(System.getProperty("os.version"));

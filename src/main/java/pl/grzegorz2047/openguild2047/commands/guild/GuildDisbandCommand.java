@@ -82,20 +82,20 @@ public class GuildDisbandCommand extends Command {
             for (Relation r : guild.getAlliances()) {
                 Guild g1 = guilds.getGuild(r.getBaseGuildTag());
                 Guild g2 = guilds.getGuild(r.getAlliedGuildTag());
-                OpenGuild.getInstance().getTagManager().guildBrokeAlliance(g1, g2);
+                tagManager.guildBrokeAlliance(g1, g2);
                 if (!guild.equals(g1)) {
                     g1.getAlliances().remove(r);
                 }
                 if (!guild.equals(g2)) {
                     g2.getAlliances().remove(r);
                 }
-                OpenGuild.getInstance().getSQLHandler().removeAlliance(g1, g2);
+                sqlHandler.removeAlliance(g1, g2);
 
             }
             for (UUID uuid : guild.getMembers()) {
                 guilds.getMappedPlayersToGuilds().remove(uuid);
                 guilds.getMappedPlayersToGuilds().put(uuid, null);
-                getPlugin().getSQLHandler().updatePlayerTag(uuid, "");
+                sqlHandler.updatePlayerTag(uuid, "");
             }
             cuboids.removeGuildCuboid(guild.getName());
             sqlHandler.removeGuild(guild.getName().toUpperCase());

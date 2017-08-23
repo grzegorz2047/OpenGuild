@@ -15,6 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047.commands;
 
+import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.commands.command.Command;
 import pl.grzegorz2047.openguild2047.commands.command.CommandException;
 
@@ -24,6 +25,7 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler;
 import pl.grzegorz2047.openguild2047.relations.Relations;
 import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
@@ -45,29 +47,29 @@ public class GuildCommand implements CommandExecutor {
      */
     private final Map<String[], Command> commands = new HashMap<String[], Command>();
 
-    public GuildCommand(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations) {
-        registerCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations);
+    public GuildCommand(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler,  Plugin plugin) {
+        registerCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler, plugin);
     }
 
-    private void registerCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations) {
+    private void registerCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler, Plugin plugin) {
         // Register 'guild' command sub-commands.
-        this.commands.put(new String[]{"create", "zaloz", "stworz"}, new GuildCreateCommand(cuboids, guilds, sqlHandler));
+        this.commands.put(new String[]{"create", "zaloz", "stworz"}, new GuildCreateCommand(cuboids, guilds, sqlHandler, tagManager));
         this.commands.put(new String[]{"accept", "akceptuj"}, new GuildInvitationAcceptCommand(tagManager,guilds));
         this.commands.put(new String[]{"help", "pomoc"}, new GuildHelpCommand());
-        this.commands.put(new String[]{"info", "informacja"}, new GuildInfoCommand());
-        this.commands.put(new String[]{"invite", "zapros"}, new GuildInviteCommand());
-        this.commands.put(new String[]{"kick", "wyrzuc"}, new GuildKickCommand(tagManager));
-        this.commands.put(new String[]{"reload", "przeladuj"}, new GuildReloadCommand());
-        this.commands.put(new String[]{"items", "itemy", "przedmioty"}, new GuildItemsCommand());
-        this.commands.put(new String[]{"version", "wersja", "ver", "about"}, new GuildVersionCommand());
-        this.commands.put(new String[]{"leave", "opusc", "wyjdz"}, new GuildLeaveCommand());
+        this.commands.put(new String[]{"info", "informacja"}, new GuildInfoCommand(guilds));
+        this.commands.put(new String[]{"invite", "zapros"}, new GuildInviteCommand(guilds));
+        this.commands.put(new String[]{"kick", "wyrzuc"}, new GuildKickCommand(tagManager,guilds,sqlHandler));
+        this.commands.put(new String[]{"reload", "przeladuj"}, new GuildReloadCommand(plugin.getConfig()));
+        this.commands.put(new String[]{"items", "itemy", "przedmioty"}, new GuildItemsCommand(plugin));
+        this.commands.put(new String[]{"version", "wersja", "ver", "about"}, new GuildVersionCommand(plugin));
+        this.commands.put(new String[]{"leave", "opusc", "wyjdz"}, new GuildLeaveCommand(guilds,tagManager,sqlHandler));
         this.commands.put(new String[]{"disband", "rozwiaz", "zamknij"}, new GuildDisbandCommand(guilds, cuboids, sqlHandler, tagManager));
-        this.commands.put(new String[]{"dom", "home", "house"}, new GuildHomeCommand(teleporter));
-        this.commands.put(new String[]{"list", "lista"}, new GuildListCommand());
-        this.commands.put(new String[]{"description", "desc", "opis"}, new GuildDescriptionCommand());
-        this.commands.put(new String[]{"ally", "sojusz",}, new GuildAllyCommand(relations));
-        this.commands.put(new String[]{"enemy", "wrog",}, new GuildEnemyCommand());
-        this.commands.put(new String[]{"unbanplayer", "odbanujgracza",}, new GuildUnbanPlayerCommand());
+        this.commands.put(new String[]{"dom", "home", "house"}, new GuildHomeCommand(teleporter, guilds));
+        this.commands.put(new String[]{"list", "lista"}, new GuildListCommand(guilds));
+        this.commands.put(new String[]{"description", "desc", "opis"}, new GuildDescriptionCommand(guilds, sqlHandler));
+        this.commands.put(new String[]{"ally", "sojusz",}, new GuildAllyCommand(relations, guilds,tagManager,sqlHandler));
+        this.commands.put(new String[]{"enemy", "wrog",}, new GuildEnemyCommand(guilds,sqlHandler,tagManager));
+        this.commands.put(new String[]{"unbanplayer", "odbanujgracza",}, new GuildUnbanPlayerCommand(hardcoreSQLHandler));
         this.commands.put(new String[]{"randomtp", "randomtp",}, new GuildRandomTPCommand());
     }
 

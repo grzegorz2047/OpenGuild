@@ -17,6 +17,7 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 
 import java.util.List;
 import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,55 +29,57 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  * This command shows informations about specified or players' guild.
- * 
+ * <p>
  * Usage: /guild info [optional: tag (if you're member of a guild)]
  */
 public class GuildInfoCommand extends Command {
-    public GuildInfoCommand() {
+    private final Guilds guilds;
+
+    public GuildInfoCommand(Guilds guilds) {
         setPermission("openguild.command.info");
+        this.guilds = guilds;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        Guilds guilds = getPlugin().getGuilds();
-        
-        if(args.length == 2) {
+
+        if (args.length == 2) {
             String guildToCheck = args[1].toUpperCase();
-            
-            if(!guilds.doesGuildExists(guildToCheck)) {
+
+            if (!guilds.doesGuildExists(guildToCheck)) {
                 sender.sendMessage(MsgManager.guilddoesntexists);
                 return;
             }
-            
+
             Guild guild = guilds.getGuild(guildToCheck);
             sender.sendMessage(this.getTitle(MsgManager.getIgnorePref("ginfotit").replace("{GUILD}", guild.getName().toUpperCase())));
             sender.sendMessage(MsgManager.getIgnorePref("ginfodesc").replace("{DESCRIPTION}", guild.getDescription()));
             sender.sendMessage(MsgManager.getIgnorePref("ginfoleader").replace("{LEADER}", Bukkit.getOfflinePlayer(guild.getLeader()).getName()));
             sender.sendMessage(MsgManager.getIgnorePref("ginfomemlist").replace("{SIZE}", String.valueOf(guild.getMembers().size())).replace("{MEMBERS}", getMembers(guild.getMembers())));
         } else {
-            if(!(sender instanceof Player)) {
+            if (!(sender instanceof Player)) {
                 sender.sendMessage(MsgManager.cmdonlyforplayer);
                 return;
             }
-            
+
             Player player = (Player) sender;
-            if(!guilds.hasGuild(player)) {
+            if (!guilds.hasGuild(player)) {
                 player.sendMessage(MsgManager.get("usageinfo"));
                 return;
             }
-            
+
             Guild guild = guilds.getPlayerGuild(player.getUniqueId());
-            
+
             sender.sendMessage(this.getTitle(MsgManager.getIgnorePref("ginfotit").replace("{GUILD}", guild.getName().toUpperCase())));
             sender.sendMessage(MsgManager.getIgnorePref("ginfodesc").replace("{DESCRIPTION}", guild.getDescription()));
             sender.sendMessage(MsgManager.getIgnorePref("ginfoleader").replace("{LEADER}", Bukkit.getOfflinePlayer(guild.getLeader()).getName()));
             sender.sendMessage(MsgManager.getIgnorePref("ginfomemlist").replace("{SIZE}", String.valueOf(guild.getMembers().size())).replace("{MEMBERS}", getMembers(guild.getMembers())));
         }
     }
-    
+
     private String getMembers(List<UUID> uuids) {
         StringBuilder builder = new StringBuilder();
-        for(UUID uuid : uuids) {
+        for (UUID uuid : uuids) {
             builder.append(Bukkit.getOfflinePlayer(uuid).getName());
             builder.append(", ");
         }

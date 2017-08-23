@@ -28,54 +28,56 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
  * Command used to invite player to guild.
- * 
+ * <p>
  * Usage: /guild invite [player name]
  */
 public class GuildInviteCommand extends Command {
-    public GuildInviteCommand() {
+    private final Guilds guilds;
+
+    public GuildInviteCommand(Guilds guilds) {
         setPermission("openguild.command.invite");
+        this.guilds = guilds;
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) throws CommandException {        
-        if(!(sender instanceof Player)) {
+    public void execute(CommandSender sender, String[] args) throws CommandException {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
-        
-        Guilds guilds = this.getPlugin().getGuilds();
-        
+
+
         Player player = (Player) sender;
-        if(!guilds.hasGuild(player)) {
+        if (!guilds.hasGuild(player)) {
             sender.sendMessage(MsgManager.get("notinguild"));
             return;
         }
-        
+
         Guild guild = guilds.getPlayerGuild(player.getUniqueId());
-        if(!guild.getLeader().equals(player.getUniqueId())) {
+        if (!guild.getLeader().equals(player.getUniqueId())) {
             player.sendMessage(MsgManager.get("playernotleader"));
             return;
         }
-        
+
         String playerToInvite = args[1];
-        if(!getPlugin().getServer().getOfflinePlayer(playerToInvite).isOnline()) {
+        if (!Bukkit.getOfflinePlayer(playerToInvite).isOnline()) {
             player.sendMessage(MsgManager.get("playeroffline"));
             return;
         }
-        
-        Player invite = getPlugin().getServer().getPlayer(playerToInvite);
-        
+
+        Player invite =Bukkit.getPlayer(playerToInvite);
+
         GuildInvitationEvent event = new GuildInvitationEvent(guild, invite);
         Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             return;
         }
-        
-        if(guilds.hasGuild(event.getInvite())) {
+
+        if (guilds.hasGuild(event.getInvite())) {
             player.sendMessage(MsgManager.playerhasguild);
             return;
         }
-        
+
         guilds.invitePlayer(event.getInvite(), player, guild);
         player.sendMessage(MsgManager.get("invitesent").replace("{PLAYER}", event.getInvite().getName()));
     }

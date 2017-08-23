@@ -21,6 +21,7 @@ import java.util.UUID;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
 import pl.grzegorz2047.openguild2047.commands.command.Command;
@@ -36,11 +37,15 @@ import pl.grzegorz2047.openguild2047.managers.TagManager;
  * Usage: /guild kick [player name]
  */
 public class GuildKickCommand extends Command {
-    private final TagManager tagManger;
+    private final TagManager tagManager;
+    private final Guilds guilds;
+    private final SQLHandler sqlHandler;
 
-    public GuildKickCommand(TagManager tagManager) {
+    public GuildKickCommand(TagManager tagManager, Guilds guilds, SQLHandler sqlHandler) {
         setPermission("openguild.command.kick");
-        this.tagManger = tagManager;
+        this.tagManager = tagManager;
+        this.guilds =guilds;
+        this.sqlHandler = sqlHandler;
     }
 
     @Override
@@ -50,7 +55,6 @@ public class GuildKickCommand extends Command {
             return;
         }
 
-        Guilds guilds = this.getPlugin().getGuilds();
 
         Player player = (Player) sender;
         if (!guilds.hasGuild(player)) {
@@ -65,7 +69,7 @@ public class GuildKickCommand extends Command {
         }
 
         String toKick = args[1];
-        OfflinePlayer op = this.getPlugin().getServer().getOfflinePlayer(toKick);
+        OfflinePlayer op = Bukkit.getOfflinePlayer(toKick);
         if (!guild.getMembers().contains(op.getUniqueId())) {
             sender.sendMessage(MsgManager.playernotinthisguild);
             return;
@@ -87,18 +91,18 @@ public class GuildKickCommand extends Command {
         guilds.getMappedPlayersToGuilds().remove(op.getUniqueId());
         if (op.isOnline()) {
             op.getPlayer().sendMessage(MsgManager.playerkicked.replace("{GUILD}", guild.getName()));
-            this.getPlugin().getTagManager().playerLeaveGuild(((Player) op), guild);
+            tagManager.playerLeaveGuild(((Player) op), guild);
         }
 
         for (UUID member : guild.getMembers()) {
-            OfflinePlayer opp = this.getPlugin().getServer().getOfflinePlayer(member);
+            OfflinePlayer opp = Bukkit.getOfflinePlayer(member);
             if (opp.isOnline()) {
                 opp.getPlayer().sendMessage(MsgManager.get("broadcast-kick").replace("{PLAYER}", player.getDisplayName()).replace("{MEMBER}", op.getName()).replace("{TAG}", guild.getName().toUpperCase()));
             }
         }
 
-        getPlugin().getSQLHandler().updatePlayerTag(op.getUniqueId(), "");
-        tagManger.playerLeaveGuild(player, guild);
+        sqlHandler.updatePlayerTag(op.getUniqueId(), "");
+        tagManager.playerLeaveGuild(player, guild);
         player.sendMessage(MsgManager.playerkicksuccess);
     }
 

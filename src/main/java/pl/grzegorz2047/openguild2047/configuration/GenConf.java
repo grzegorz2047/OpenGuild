@@ -15,6 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047.configuration;
 
+import org.bukkit.configuration.Configuration;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.database.Database;
 
@@ -113,9 +114,10 @@ public class GenConf {
     public static List<Material> ELIGIBLE_DROP_BLOCKS;
     public static String chatFormat;
 
-    public static void loadConfiguration() {
-        OpenGuild openGuild = OpenGuild.getInstance();
-        FileConfiguration config = openGuild.getConfig();
+
+
+    public static void loadConfiguration(FileConfiguration config) {
+
         forbiddenworlds = config.getStringList("forbidden-worlds");
         badwords = config.getStringList("forbiddenguildnames");
         MIN_CUBOID_SIZE = config.getInt("cuboid.min-cube-size", 15);
@@ -145,7 +147,7 @@ public class GenConf {
         SQL_DEBUG = config.getBoolean("mysql.debug", false);
         TPA_ENABLED = config.getBoolean("tpa-command", false);
         DATABASE = Database.valueOf(config.getString("database", "FILE").toUpperCase());
-        loadDatabase();
+        loadDatabase(config);
         FILE_DIR = config.getString("file-dir", "plugins/OpenGuild2047/og.db");
         SNOOPER = config.getBoolean("snooper", true);
         ANTI_LOGOUT = config.getBoolean("fight-antilogout", true);
@@ -153,7 +155,7 @@ public class GenConf {
         FORCE_DESC = config.getBoolean("forcedesc", false);
         lang = config.getString("language").toUpperCase();
 
-        loadBans();
+        loadBans(config);
         List listMax = config.getList("spawn.location-max");
         List listMin = config.getList("spawn.location-min");
         spawnMin = new Location(Bukkit.getWorld((String) listMin.get(0)), (Integer) listMin.get(1), Integer.MIN_VALUE, (Integer) listMin.get(2));
@@ -270,12 +272,12 @@ public class GenConf {
         enableTNTExplodeListener = config.getBoolean("listener.tnt-block-enabled", true);
     }
 
-    private static void loadBans() {
-        hcBans = OpenGuild.getInstance().getConfig().getBoolean("hardcore-bans.enabled");
-        hcKickMsg = OpenGuild.getInstance().getConfig().getString("hardcore-bans.kick-message").replace("&", "§");
-        hcLoginMsg = OpenGuild.getInstance().getConfig().getString("hardcore-bans.login-message").replace("&", "§");
+    private static void loadBans(Configuration configuration) {
+        hcBans = configuration.getBoolean("hardcore-bans.enabled");
+        hcKickMsg = configuration.getString("hardcore-bans.kick-message").replace("&", "§");
+        hcLoginMsg = configuration.getString("hardcore-bans.login-message").replace("&", "§");
 
-        String time = OpenGuild.getInstance().getConfig().getString("hardcore-bans.ban-time");
+        String time = configuration.getString("hardcore-bans.ban-time");
         String length = time.substring(0, time.length() - 1);
         long result;
         try {
@@ -298,9 +300,8 @@ public class GenConf {
         hcBantime = result;
     }
 
-    private static void loadDatabase() {
-        FileConfiguration config = OpenGuild.getInstance().getConfig();
-        String host = config.getString("mysql.address");
+    private static void loadDatabase(FileConfiguration config) {
+         String host = config.getString("mysql.address");
         int port = config.getInt("mysql.port");
         String user = config.getString("mysql.login");
         String pass = config.getString("mysql.password");

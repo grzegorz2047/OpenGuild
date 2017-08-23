@@ -29,10 +29,6 @@ public abstract class Command {
         return permission;
     }
 
-    public OpenGuild getPlugin() {
-        return OpenGuild.getInstance();
-    }
-
     public String getTitle(String title) {
         String label = ChatColor.GRAY + "------------------" + ChatColor.DARK_GRAY + "[" + ChatColor.RESET;
         String label2 = ChatColor.DARK_GRAY + "]" +  ChatColor.GRAY + "------------------" + ChatColor.RESET;

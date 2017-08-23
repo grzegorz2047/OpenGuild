@@ -29,7 +29,13 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
 
 public class HardcoreListeners implements Listener {
-    
+
+    private final HardcoreSQLHandler hardcoreSQLHandler;
+
+    public HardcoreListeners(HardcoreSQLHandler hardcoreSQLHandler) {
+        this.hardcoreSQLHandler = hardcoreSQLHandler;
+    }
+
     @EventHandler
     public void onPlayerDead(PlayerDeathEvent e) {
         if(!GenConf.hcBans) {
@@ -41,7 +47,7 @@ public class HardcoreListeners implements Listener {
         }
         
         long ban = System.currentTimeMillis() + GenConf.hcBantime;
-        HardcoreSQLHandler.update(e.getEntity().getUniqueId(), HardcoreSQLHandler.Column.BAN_TIME, String.valueOf(ban));
+        hardcoreSQLHandler.update(e.getEntity().getUniqueId(), HardcoreSQLHandler.Column.BAN_TIME, String.valueOf(ban));
     }
     
     @EventHandler
@@ -53,7 +59,7 @@ public class HardcoreListeners implements Listener {
             return;
         }
         
-        long ban = HardcoreSQLHandler.getBan(e.getPlayer().getUniqueId());
+        long ban = hardcoreSQLHandler.getBan(e.getPlayer().getUniqueId());
         if(System.currentTimeMillis() < ban) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
             Date date = new Date(ban);
@@ -68,7 +74,7 @@ public class HardcoreListeners implements Listener {
         }
         
         final Player player = e.getPlayer();
-        HardcoreSQLHandler.getBan(player.getUniqueId()); // We must insert this player into the hardcore-table.
+        hardcoreSQLHandler.getBan(player.getUniqueId()); // We must insert this player into the hardcore-table.
         final String time = new SimpleDateFormat("dd-MM-yyy HH:mm").format(new Date(System.currentTimeMillis() + GenConf.hcBantime));
         Bukkit.getScheduler().runTaskLater(BagOfEverything.getBukkit(), new Runnable() {
             

@@ -15,6 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047.addons;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import pl.grzegorz2047.openguild2047.interfaces.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -34,7 +35,7 @@ public abstract class Hook {
         this.plugin = plugin;
     }
     
-    public abstract void enable(Plugin plugin);
+    public abstract void enable(Plugin plugin, JavaPlugin javaPlugin);
     
     public Plugin getBukkitPlugin() {
         return bukkit;
