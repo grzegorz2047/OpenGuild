@@ -21,7 +21,7 @@ import com.github.grzegorz2047.openguild.module.Module;
 import com.github.grzegorz2047.openguild.module.ModuleInfo;
 import com.github.grzegorz2047.openguild.module.ModuleLoadException;
 import org.bukkit.Bukkit;
-import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 
 public class ModuleHardcore implements Module {
     

@@ -16,13 +16,13 @@
 
 package pl.grzegorz2047.openguild2047.api;
 
-import com.github.grzegorz2047.openguild.Configuration;
-import com.github.grzegorz2047.openguild.GuildManager;
-import com.github.grzegorz2047.openguild.Logger;
-import com.github.grzegorz2047.openguild.Messages;
-import com.github.grzegorz2047.openguild.OpenGuildPlugin;
-import com.github.grzegorz2047.openguild.PluginUpdater;
-import com.github.grzegorz2047.openguild.User;
+import com.github.grzegorz2047.openguild.interfaces.Configuration;
+import com.github.grzegorz2047.openguild.interfaces.GuildManager;
+import com.github.grzegorz2047.openguild.interfaces.Logger;
+import com.github.grzegorz2047.openguild.interfaces.Messages;
+import com.github.grzegorz2047.openguild.interfaces.OpenGuildPlugin;
+import com.github.grzegorz2047.openguild.interfaces.PluginUpdater;
+import com.github.grzegorz2047.openguild.interfaces.User;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
 import com.github.grzegorz2047.openguild.command.CommandManager;
 import com.github.grzegorz2047.openguild.event.CommandRegisterEvent;
@@ -40,6 +40,7 @@ import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.OGLogger;
 import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
 import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 
 public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     
@@ -89,19 +90,19 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     }
     
     @Override
-    public com.github.grzegorz2047.openguild.Guild getGuild(Location location) {
+    public Guild getGuild(Location location) {
         return null; // TODO
     }
     
     @Override
-    public com.github.grzegorz2047.openguild.Guild getGuild(Player player) {
+    public Guild getGuild(Player player) {
         return null;
         // return getGuild(GuildHelper.getInstance().guildsplayers.get(player.getUniqueId()).getClanTag());
     }
     
     @Override
-    public com.github.grzegorz2047.openguild.Guild getGuild(String name) {
-        for(com.github.grzegorz2047.openguild.Guild guild : getGuilds()) {
+    public Guild getGuild(String name) {
+        for(Guild guild : getGuilds()) {
             if(guild.getName().equalsIgnoreCase(name)) {
                 return guild;
             }
@@ -110,7 +111,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     }
     
     @Override
-    public com.github.grzegorz2047.openguild.Guild getGuild(User user) {
+    public Guild getGuild(User user) {
         return getGuild(user.getBukkit());
     }
     
@@ -120,7 +121,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     }
     
     @Override
-    public List<com.github.grzegorz2047.openguild.Guild> getGuilds() {
+    public List<Guild> getGuilds() {
         return null; // TODO
     }
     
@@ -226,8 +227,8 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     }
     
     @Override
-    public com.github.grzegorz2047.openguild.Guild[] sortGuilds() {
-        return (com.github.grzegorz2047.openguild.Guild[]) getGuilds().toArray();
+    public Guild[] sortGuilds() {
+        return (Guild[]) getGuilds().toArray();
     }
     
 }

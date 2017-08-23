@@ -18,7 +18,8 @@ package pl.grzegorz2047.openguild2047.database;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
+import pl.grzegorz2047.openguild2047.database.interfaces.SQLData;
 import pl.grzegorz2047.openguild2047.utils.Callback;
 
 /**

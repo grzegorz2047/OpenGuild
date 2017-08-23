@@ -24,8 +24,9 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild2047.Teleporter;
-import pl.grzegorz2047.openguild2047.Guilds;
+import pl.grzegorz2047.openguild2047.relations.Relations;
+import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.commands.guild.*;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
@@ -44,14 +45,14 @@ public class GuildCommand implements CommandExecutor {
      */
     private final Map<String[], Command> commands = new HashMap<String[], Command>();
 
-    public GuildCommand(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler) {
-        registerCommands(cuboids, guilds, teleporter, tagManager, sqlHandler);
+    public GuildCommand(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations) {
+        registerCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations);
     }
 
-    private void registerCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler) {
+    private void registerCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations) {
         // Register 'guild' command sub-commands.
         this.commands.put(new String[]{"create", "zaloz", "stworz"}, new GuildCreateCommand(cuboids, guilds, sqlHandler));
-        this.commands.put(new String[]{"accept", "akceptuj"}, new GuildInvitationAcceptCommand(tagManager));
+        this.commands.put(new String[]{"accept", "akceptuj"}, new GuildInvitationAcceptCommand(tagManager,guilds));
         this.commands.put(new String[]{"help", "pomoc"}, new GuildHelpCommand());
         this.commands.put(new String[]{"info", "informacja"}, new GuildInfoCommand());
         this.commands.put(new String[]{"invite", "zapros"}, new GuildInviteCommand());
@@ -64,7 +65,7 @@ public class GuildCommand implements CommandExecutor {
         this.commands.put(new String[]{"dom", "home", "house"}, new GuildHomeCommand(teleporter));
         this.commands.put(new String[]{"list", "lista"}, new GuildListCommand());
         this.commands.put(new String[]{"description", "desc", "opis"}, new GuildDescriptionCommand());
-        this.commands.put(new String[]{"ally", "sojusz",}, new GuildAllyCommand());
+        this.commands.put(new String[]{"ally", "sojusz",}, new GuildAllyCommand(relations));
         this.commands.put(new String[]{"enemy", "wrog",}, new GuildEnemyCommand());
         this.commands.put(new String[]{"unbanplayer", "odbanujgracza",}, new GuildUnbanPlayerCommand());
         this.commands.put(new String[]{"randomtp", "randomtp",}, new GuildRandomTPCommand());

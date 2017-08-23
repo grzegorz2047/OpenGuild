@@ -15,7 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047.commands.guild;
 
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
@@ -24,16 +24,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.Guilds;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
+import pl.grzegorz2047.openguild2047.relations.RelationChange;
+import pl.grzegorz2047.openguild2047.relations.Relations;
 
 /**
  * @author Grzegorz
  */
 public class GuildAllyCommand extends Command {
-    public GuildAllyCommand() {
+    private final Relations relations;
+
+    public GuildAllyCommand(Relations relations) {
         setPermission("openguild.command.ally");
+        this.relations = relations;
     }
 
     @Override
@@ -68,7 +73,8 @@ public class GuildAllyCommand extends Command {
                 sender.sendMessage(MsgManager.get("leadernotonline"));
                 return;
             }
-            if (guild.getPendingRelationChanges().contains(requestingGuild.getName())) {
+            RelationChange request = relations.getRequest(guild.getName(), requestingGuild.getName());
+            if (request != null) {
                 if (!requestingGuild.getLeader().equals(player.getUniqueId())) {
                     player.sendMessage(MsgManager.get("playernotleader"));
                     return;
@@ -80,11 +86,10 @@ public class GuildAllyCommand extends Command {
                     return;
                 }
 
-                guild.getPendingRelationChanges().remove(requestingGuild.getName());
+                relations.removeRequest(request);
                 Relation r = new Relation(guild.getName(), requestingGuild.getName(), 0, Relation.Status.ALLY);
                 boolean result = OpenGuild.getInstance().getSQLHandler().insertAlliance(guild, requestingGuild);
                 if (!result) {
-                    this.getPlugin();
                     OpenGuild.getOGLogger().warning("Could not register the ally for " + guild.getName() + " guild!");
                 }
                 OpenGuild.getInstance().getTagManager().guildMakeAlliance(r);
@@ -95,7 +100,7 @@ public class GuildAllyCommand extends Command {
                         .replace("{GUILD2}", requestingGuild.getName()));
                 return;
             }
-            requestingGuild.changeRelationRequest(requestingGuild, guild, leader, Relation.Status.ALLY);
+            relations.changeRelationRequest(requestingGuild, guild, leader, Relation.Status.ALLY);
         } else {
             sender.sendMessage("/g ally <guild>");
         }

@@ -16,29 +16,18 @@
 
 package pl.grzegorz2047.openguild2047.managers;
 
-import java.util.List;
 import java.util.UUID;
 
-import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
-import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam.Mode;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import pl.grzegorz2047.openguild2047.Guilds;
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 
-import java.util.Map;
-
-import org.bukkit.OfflinePlayer;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.OGLogger;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.packets.ScoreboardPackets;
-
-import static com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED;
 
 /**
  * @author Grzegorz
@@ -75,7 +64,7 @@ public class TagManager {
 
     public void guildBrokeAlliance(Guild firstGuild, Guild secondGuild) {
         for (Relation r : firstGuild.getAlliances()) {
-            if (r.getWho().equals(secondGuild.getName()) || r.getAlliedGuildTag().equals(secondGuild.getName())) {//Trzeba to odzielic jakos na 2 przypadki (else if) zamiast ||
+            if (r.getBaseGuildTag().equals(secondGuild.getName()) || r.getAlliedGuildTag().equals(secondGuild.getName())) {//Trzeba to odzielic jakos na 2 przypadki (else if) zamiast ||
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (firstGuild.getMembers().contains(p.getUniqueId())) {
                         scoreboardPackets.sendUpdateTeamTag(p, secondGuild, GenConf.enemyTag);
@@ -90,7 +79,7 @@ public class TagManager {
 
     public void guildMakeAlliance(Relation r) {
 
-        String who = r.getWho();
+        String who = r.getBaseGuildTag();
         String withwho = r.getAlliedGuildTag();
 
         Guild whoGuild = guilds.getGuild(who);
@@ -113,7 +102,7 @@ public class TagManager {
                 scoreboardPackets.sendUpdateTeamTag(p, guild, GenConf.guildTag);
             } else {
                 scoreboardPackets.sendUpdateTeamTag(p, guild, GenConf.enemyTag);
-                for (Guild ally : guild.getAllyGuilds()) {
+                for (Guild ally : guilds.getAllyGuilds(guild)) {
                     updateTagsForGuildRelations(guild, ally, GenConf.allyTag);
                 }
             }
@@ -126,7 +115,7 @@ public class TagManager {
             if (guild.getMembers().contains(p.getUniqueId())) {
                 scoreboardPackets.sendUpdateTeamTag(p, guild, GenConf.guildTag);
             } else {
-                for (Guild ally : guild.getAllyGuilds()) {
+                for (Guild ally : guilds.getAllyGuilds(guild)) {
                     updateTagsForGuildRelations(guild, ally, GenConf.allyTag);
                 }
             }

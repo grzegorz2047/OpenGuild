@@ -15,13 +15,12 @@
  */
 package pl.grzegorz2047.openguild2047.listeners;
 
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,18 +34,16 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.api.Guilds;
-import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
+ import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.dropstone.DropFromBlocks;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class CuboidAndSpawnManipulationListeners implements Listener {
 
@@ -54,11 +51,13 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     private final Cuboids cuboids;
     private final DropFromBlocks drop;
     private static List<Material> breakingItems;
+    private final Guilds guilds;
     private List<Material> allowedInteractItems;
 
-    public CuboidAndSpawnManipulationListeners(Cuboids cuboids, DropFromBlocks drop) {
+    public CuboidAndSpawnManipulationListeners(Cuboids cuboids, DropFromBlocks drop, Guilds guilds) {
         this.cuboids = cuboids;
         this.drop = drop;
+        this.guilds = guilds;
         this.allowedInteractItems = new ArrayList<Material>();
         this.allowedInteractItems.add(Material.CHEST);
         this.allowedInteractItems.add(Material.ENDER_CHEST);
@@ -130,7 +129,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
                 if (player.hasPermission("openguild.cuboid.bypassinteract")) {
                     Location block = player.getLocation();
                     String interactionConsoleMsg = createConsoleInteractionMsg(player, block);
-                    Guilds.getLogger().info(interactionConsoleMsg);
+                    OpenGuild.getOGLogger().info(interactionConsoleMsg);
                     String interactionMsg = createInteractionMsg(block);
                     player.sendMessage(interactionMsg);
                 } else {
@@ -143,9 +142,9 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
                         player.sendMessage(MsgManager.get("cantdoitonsomeonearea"));
                         return;
                     }
-                    Guild playerGuild = Guilds.getGuild(player);
+                    Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
                     if (playerGuild != null) {
-                        for (Guild ally : playerGuild.getAllyGuilds()) {
+                        for (Guild ally : guilds.getAllyGuilds(playerGuild)) {
                             String allyGuildTag = ally.getName();
                             boolean isinAllyCuboid = cuboids.isInCuboid(player.getLocation(), allyGuildTag);
                             if (isinAllyCuboid) {
@@ -265,7 +264,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
 
                 Location block = player.getLocation();
                 String interactionConsoleMsg = createConsoleInteractionMsg(player, block);
-                Guilds.getLogger().info(interactionConsoleMsg);
+                OpenGuild.getOGLogger().info(interactionConsoleMsg);
                 String interactionMsg = createInteractionMsg(block);
                 player.sendMessage(interactionMsg);
             } else {
@@ -297,7 +296,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
             try {
                 breakingItems.add(Material.valueOf(item.toUpperCase()));
             } catch (IllegalArgumentException ex) {
-                Guilds.getLogger().severe("Wystapil blad podczas ladowana itemow do niszczenia blokow na teranie gildii: Nie mozna wczytac " + item.toUpperCase());
+                OpenGuild.getOGLogger().severe("Wystapil blad podczas ladowana itemow do niszczenia blokow na teranie gildii: Nie mozna wczytac " + item.toUpperCase());
             }
         }
     }

@@ -24,7 +24,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.utils.ItemGUI;
 

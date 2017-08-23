@@ -18,8 +18,8 @@ package pl.grzegorz2047.openguild2047.commands.guild;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.Guilds;
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.event.guild.GuildInvitationEvent;
@@ -76,7 +76,7 @@ public class GuildInviteCommand extends Command {
             return;
         }
         
-        guild.invitePlayer(event.getInvite(), player);
+        guilds.invitePlayer(event.getInvite(), player, guild);
         player.sendMessage(MsgManager.get("invitesent").replace("{PLAYER}", event.getInvite().getName()));
     }
 

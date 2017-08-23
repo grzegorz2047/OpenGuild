@@ -23,9 +23,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.Guilds;
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 
 public class PlayerChatListener implements Listener {
@@ -101,7 +101,7 @@ public class PlayerChatListener implements Listener {
 
     private void sendMessageToAlly(Player player, String message, Guild guild, Relation r) {
         Guild ally;
-        String whoGuildTag = r.getWho();
+        String whoGuildTag = r.getBaseGuildTag();
         Guild whoGuild = guilds.getGuild(whoGuildTag);
         ally = getAllyGuildFromRelation(guild, r, whoGuild);
         if (ally != null) {

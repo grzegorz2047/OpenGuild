@@ -1,7 +1,7 @@
 package pl.grzegorz2047.openguild2047.packets;
 
 import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import org.bukkit.entity.Player;
 
 /**

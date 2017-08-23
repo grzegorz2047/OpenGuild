@@ -15,16 +15,10 @@
  */
 package pl.grzegorz2047.openguild2047.listeners;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.UUID;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 

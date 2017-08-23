@@ -15,18 +15,14 @@
  */
 package pl.grzegorz2047.openguild2047.cuboidmanagement;
 
-import com.github.grzegorz2047.openguild.Cuboid;
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 
 import java.util.*;
 
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.Guilds;
-import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**
@@ -118,7 +114,7 @@ public class Cuboids {
             }
         }
         Guild guild = guilds.getGuild(guildscuboidtag);
-        guild.notifyMembersAboutSomeoneEnteringTheirCuboid(player, tag, foundCuboid(tag));
+        guilds.notifyMembersAboutSomeoneEnteringTheirCuboid(player,guild, tag, foundCuboid(tag));
     }
 
     private boolean foundCuboid(String guildscuboidtag) {
@@ -150,7 +146,7 @@ public class Cuboids {
     }
 
     private boolean isInAGuildOwningThisCuboid(String tag, Relation r) {
-        return isTheSame(tag, r.getWho()) || isTheSame(tag, r.getAlliedGuildTag());
+        return isTheSame(tag, r.getBaseGuildTag()) || isTheSame(tag, r.getAlliedGuildTag());
     }
 
     private boolean isPlayerInGuild(Player player) {

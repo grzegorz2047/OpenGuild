@@ -20,30 +20,23 @@ package com.github.grzegorz2047.openguild;
  */
 public class Relation {
 
-    private String who;
+    private String baseGuild;
     private String alliedGuildTag;
     private long startDate;
     private long expireDate;
+    public enum Status {ALLY, ENEMY}
+    private Status state;
 
-    public Relation(String who, String alliedGuildTag, long expires, Status relationStatus) {
-        this.who = who;
+    public Relation(String baseGuild, String alliedGuildTag, long expires, Status relationStatus) {
+        this.baseGuild = baseGuild;
         this.alliedGuildTag = alliedGuildTag;
         this.expireDate = expires;
         this.state = relationStatus;
     }
 
-    public String getWho() {
-        return who;
+    public String getBaseGuildTag() {
+        return baseGuild;
     }
-
-    public void setWho(String who) {
-        this.who = who;
-    }
-
-    public enum Status {ALLY, ENEMY}
-
-    ;
-    private Status state;
 
     public String getAlliedGuildTag() {
         return alliedGuildTag;
@@ -57,16 +50,8 @@ public class Relation {
         return startDate;
     }
 
-    public void setStartDate(long startDate) {
-        this.startDate = startDate;
-    }
-
     public long getExpireDate() {
         return expireDate;
-    }
-
-    public void setExpireDate(long expireDate) {
-        this.expireDate = expireDate;
     }
 
     public Status getState() {

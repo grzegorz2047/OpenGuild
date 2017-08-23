@@ -24,16 +24,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import com.github.grzegorz2047.openguild.Guild;
-import com.github.grzegorz2047.openguild.OpenGuildPlugin;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
+import com.github.grzegorz2047.openguild.interfaces.OpenGuildPlugin;
 
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.EnhancedRunnable;
-import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.tasks.EnhancedRunnable;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;

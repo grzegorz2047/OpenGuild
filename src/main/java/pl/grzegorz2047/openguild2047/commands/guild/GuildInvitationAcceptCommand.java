@@ -16,70 +16,74 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.event.guild.GuildJoinEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.Guilds;
+import pl.grzegorz2047.openguild2047.guilds.GuildInvitation;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
 
 /**
  * Command used to accept invitation to guild.
- * 
+ * <p>
  * Usage: /guild accept [optional: tag (required only if there's more than 2 invitations)]
  */
 public class GuildInvitationAcceptCommand extends Command {
     private final TagManager tagManager;
+    private final Guilds guilds;
 
-    public GuildInvitationAcceptCommand(TagManager tagManager) {
+    public GuildInvitationAcceptCommand(TagManager tagManager, Guilds guilds) {
         setPermission("openguild.command.invitationaccept");
         this.tagManager = tagManager;
+        this.guilds = guilds;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        if(!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.cmdonlyforplayer);
             return;
         }
 
-        Guilds guilds = getPlugin().getGuilds();
-        if(guilds.hasGuild(((Player) sender).getUniqueId())) {
+        if (guilds.hasGuild(((Player) sender).getUniqueId())) {
             sender.sendMessage(MsgManager.alreadyinguild);
             return;
         }
 
         List<Guild> invitationsFrom = new ArrayList<Guild>();
         for (Guild guild : guilds.getGuilds().values()) {
-            if (guild.getPendingInvitations().contains(((Player) sender).getUniqueId())) {
+            GuildInvitation guildInvitation = guilds.getGuildInvitation(sender.getName(), guild.getName());
+            if (guildInvitation != null) {
                 invitationsFrom.add(guild);
             }
         }
 
-        if(args.length == 1) {
+        if (args.length == 1) {
             if (invitationsFrom.size() > 1) {
                 sender.sendMessage(MsgManager.get("invmore"));
                 for (Guild guild : invitationsFrom) {
                     sender.sendMessage(ChatColor.BOLD + guild.getName().toUpperCase() + ChatColor.GRAY + " - " + guild.getDescription());
                 }
-            } else if(invitationsFrom.size() == 1 ){
+            } else if (invitationsFrom.size() == 1) {
                 accept((Player) sender, invitationsFrom.get(0));
             } else {
                 sender.sendMessage(MsgManager.get("noinv"));
             }
-        } else if(args.length >= 2) {
+        } else if (args.length >= 2) {
             String tag = args[1].toUpperCase();
             Guild target = guilds.getGuild(tag);
-            if(target != null && guilds.getGuilds().containsKey(tag)) {
-                if(invitationsFrom.contains(target)) {
+            if (target != null && guilds.getGuilds().containsKey(tag)) {
+                if (invitationsFrom.contains(target)) {
                     accept((Player) sender, target);
                 }
             }
@@ -93,11 +97,11 @@ public class GuildInvitationAcceptCommand extends Command {
 
     private void accept(Player player, Guild guild) {
         GuildJoinEvent event = new GuildJoinEvent(guild, player);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             return;
         }
-        
-        guild.acceptInvitation(player);
+
+        guilds.acceptInvitation(player, guild);
         tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
         Bukkit.broadcastMessage(MsgManager.get("broadcast-join")
                 .replace("{PLAYER}", player.getName())

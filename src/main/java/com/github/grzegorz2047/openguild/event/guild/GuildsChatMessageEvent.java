@@ -16,8 +16,8 @@
 
 package com.github.grzegorz2047.openguild.event.guild;
 
-import com.github.grzegorz2047.openguild.Guild;
-import com.github.grzegorz2047.openguild.User;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
+import com.github.grzegorz2047.openguild.interfaces.User;
 import javax.annotation.Nonnull;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Cancellable;

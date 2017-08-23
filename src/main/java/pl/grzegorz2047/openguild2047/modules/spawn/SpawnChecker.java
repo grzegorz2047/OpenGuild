@@ -17,7 +17,7 @@
 package pl.grzegorz2047.openguild2047.modules.spawn;
 
 import org.bukkit.Location;
-import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 
 public class SpawnChecker {
 

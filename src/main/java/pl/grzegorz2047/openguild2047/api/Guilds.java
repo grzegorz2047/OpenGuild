@@ -15,23 +15,20 @@
  */
 package pl.grzegorz2047.openguild2047.api;
 
-import com.github.grzegorz2047.openguild.Logger;
-import com.github.grzegorz2047.openguild.Guild;
+import com.github.grzegorz2047.openguild.interfaces.Logger;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import com.github.grzegorz2047.openguild.Cuboid;
 import pl.grzegorz2047.openguild2047.utils.PastebinWriter;
 
 /**

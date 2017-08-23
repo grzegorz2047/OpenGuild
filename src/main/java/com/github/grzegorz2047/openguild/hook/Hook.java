@@ -15,7 +15,7 @@
  */
 package com.github.grzegorz2047.openguild.hook;
 
-import com.github.grzegorz2047.openguild.Logger;
+import com.github.grzegorz2047.openguild.interfaces.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 

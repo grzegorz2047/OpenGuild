@@ -23,14 +23,15 @@ import java.util.*;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.Guilds;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
-import pl.grzegorz2047.openguild2047.managers.TagManager;
+import pl.grzegorz2047.openguild2047.database.interfaces.SQLImplementationStrategy;
+import pl.grzegorz2047.openguild2047.database.interfaces.SQLTables;
 
 public class SQLHandler {
 
@@ -39,10 +40,17 @@ public class SQLHandler {
 
     private Statement statement;
     private SQLImplementationStrategy implementation;
+    private SQLTables tables;
 
-    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation, Guilds guilds) {
+    private String cuboidsTableName = "`" + GenConf.sqlTablePrefix + "cuboids`";
+    private String playersTableName = "`" + GenConf.sqlTablePrefix + "players`";
+    private String alliesTableName = "`" + GenConf.sqlTablePrefix + "allies`";
+    private String guildsTableName = "`" + GenConf.sqlTablePrefix + "guilds`";
+
+    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation, SQLTables tables, Guilds guilds) {
         this.plugin = plugin;
         this.guilds = guilds;
+        this.tables = tables;
         try {
             this.implementation = implementation;
         } catch (Exception e) {
@@ -57,7 +65,7 @@ public class SQLHandler {
 
     private void startWork() {
         // Create tables is they doesn't exists
-        this.createTables();
+        tables.createTables(this);
 
         // Load guilds and players from database
         loadGuildsFromDB(plugin.getCuboids(), guilds);
@@ -65,60 +73,7 @@ public class SQLHandler {
         OpenGuild.getOGLogger().info("Loaded " + guilds.getNumberOfGuilds() + " guilds from database.");
     }
 
-    private void createTables() {
-        OpenGuild.getOGLogger().info("[DB] Creating tables if not exists ...");
 
-        try {
-            createStatement();
-            String query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "guilds`"
-                    + "(tag VARCHAR(11),"
-                    + "description VARCHAR(100),"
-                    + "leader VARCHAR(37),"
-                    + "lives INT,"
-                    + "home_x INT,"
-                    + "home_y INT,"
-                    + "home_z INT,"
-                    + "home_pitch INT,"
-                    + "home_yaw INT,"
-                    + "home_world VARCHAR(16),"
-                    + "PRIMARY KEY(tag));";
-            statement.addBatch(query);
-
-            query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "cuboids`"
-                    + "("
-                    + "tag VARCHAR(11),"
-                    + "cuboid_center_x INT,"
-                    + "cuboid_center_z INT,"
-                    + "cuboid_size INT,"
-                    + "cuboid_worldname VARCHAR(60),"
-                    + "PRIMARY KEY(tag));";
-            statement.addBatch(query);
-
-            query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "players`"
-                    + "(guild VARCHAR(11),"
-                    + "uuid VARCHAR(37),"
-                    + "kills INT,"
-                    + "deaths INT,"
-                    + "points INT,"
-                    + "lastseenname VARCHAR(16),"
-                    + "PRIMARY KEY(uuid));";
-            statement.addBatch(query);
-
-            query = "CREATE TABLE IF NOT EXISTS `" + GenConf.sqlTablePrefix + "allies`"
-                    + "("
-                    + "who VARCHAR(11),"
-                    + "withwho VARCHAR(11),"
-                    + "status VARCHAR(5),"
-                    + "expires BIGINT,"
-                    + "PRIMARY KEY(who,withwho)"
-                    + ");";
-            statement.addBatch(query);
-            statement.executeBatch();
-            statement.close();
-        } catch (Exception ex) {
-            OpenGuild.getOGLogger().exceptionThrown(ex);
-        }
-    }
 
     public void addKill(Player killer) {
         incrementStats(killer.getUniqueId(), "kills");
@@ -131,7 +86,7 @@ public class SQLHandler {
     private void loadGuildsFromDB(Cuboids cuboids, Guilds guilds) {
         try {
             createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "guilds` JOIN `" + GenConf.sqlTablePrefix + "cuboids` USING(tag)");
+            ResultSet result = statement.executeQuery("SELECT * FROM " + guildsTableName + " JOIN `" + GenConf.sqlTablePrefix + "cuboids` USING(tag)");
             loopTroughGuildAndCuboidResults(cuboids, guilds, result);
             result.close();
             statement.close();
@@ -141,8 +96,9 @@ public class SQLHandler {
         }
     }
 
-    private void createStatement() throws Exception {
+    public Statement createStatement() throws Exception {
         statement = this.getConnection().createStatement();
+        return statement;
     }
 
     private void loopTroughGuildAndCuboidResults(Cuboids cuboids, Guilds guilds, ResultSet result) throws SQLException {
@@ -194,7 +150,7 @@ public class SQLHandler {
     private void loadPlayers() {
         try {
             createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "players`");
+            ResultSet result = statement.executeQuery("SELECT * FROM " + playersTableName);
             readPlayersDataFromResult(result);
             result.close();
             statement.close();
@@ -220,7 +176,7 @@ public class SQLHandler {
     public void loadRelations() {
         try {
             createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "allies`");
+            ResultSet result = statement.executeQuery("SELECT * FROM " + alliesTableName);
             while (anotherRecord(result)) {
                 String who = result.getString("who");
                 //int kills = result.getInt("kills");
@@ -269,7 +225,7 @@ public class SQLHandler {
         final String uuid = player.toString();
         try {
             createStatement();
-            statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "players` VALUES( '', '" + uuid + "', '" + 0 + "', '" + 0 + "', '" + 0 + "' , '" + Bukkit.getPlayer(player).getName() + "');");
+            statement.execute("INSERT INTO " + playersTableName + " VALUES( '', '" + uuid + "', '" + 0 + "', '" + 0 + "', '" + 0 + "' , '" + Bukkit.getPlayer(player).getName() + "');");
             statement.close();
             statement.getConnection().close();
         } catch (Exception ex) {
@@ -285,7 +241,7 @@ public class SQLHandler {
     public void updatePlayerTag(UUID uuid, String guildTag) {
         try {
             createStatement();
-            statement.executeUpdate("UPDATE `" + GenConf.sqlTablePrefix + "players` SET `guild` = '" + guildTag + "' WHERE `uuid` = '" + uuid.toString() + "'");
+            statement.executeUpdate("UPDATE " + playersTableName + " SET `guild` = '" + guildTag + "' WHERE `uuid` = '" + uuid.toString() + "'");
             statement.close();
             statement.getConnection().close();
         } catch (Exception ex) {
@@ -301,7 +257,7 @@ public class SQLHandler {
     public void insertGuild(String tag, String description, UUID leader, Location guildHome, String homeWorld) {
         try {
             createStatement();
-            statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "guilds` VALUES(" +
+            statement.execute("INSERT INTO " + guildsTableName + " VALUES(" +
                     "'" + tag.toUpperCase() + "'," +
                     "'" + description + "'," +
                     "'" + leader + "'," +
@@ -328,7 +284,7 @@ public class SQLHandler {
     public void updateGuildDescription(Guild guild) {
         try {
             createStatement();
-            statement.executeUpdate("UPDATE `" + GenConf.sqlTablePrefix + "guilds` SET `description` = '" + guild.getDescription() + "' WHERE `tag` = '" + guild.getName().toUpperCase() + "'");
+            statement.executeUpdate("UPDATE " + guildsTableName + " SET `description` = '" + guild.getDescription() + "' WHERE `tag` = '" + guild.getName().toUpperCase() + "'");
 
             statement.close();
             statement.getConnection().close();
@@ -345,7 +301,7 @@ public class SQLHandler {
     public void removeGuild(String tag) {
         try {
             createStatement();
-            statement.execute("DELETE FROM `" + GenConf.sqlTablePrefix + "guilds` WHERE `tag` = '" + tag + "'");
+            statement.execute("DELETE FROM " + guildsTableName + " WHERE `tag` = '" + tag + "'");
 
             statement.close();
             statement.getConnection().close();
@@ -359,22 +315,20 @@ public class SQLHandler {
             createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "allies`" + " WHERE who='" + who + "'" + "OR withwho='" + who + "';");
             if (!containsAlliance(rs)) {
-                statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "allies` VALUES('" + who.getName() + "', '" + withWho.getName() + "', '" + Relation.Status.ALLY.toString() + "', 0);");
+                statement.execute("INSERT INTO " + alliesTableName + " VALUES('" + who.getName() + "', '" + withWho.getName() + "', '" + Relation.Status.ALLY.toString() + "', 0);");
                 rs.close();
                 statement.close();
                 statement.getConnection().close();
                 return true;
             }
             while (anotherRecord(rs)) {
-                String whoseguild = rs.getString("who");
-                String withwho = rs.getString("withwho");
-                if (isAlreadyAlliance(who, withWho, whoseguild, withwho)) {
+                if (isAlreadyAlliance(who, withWho)) {
                     rs.close();
                     statement.close();
                     statement.getConnection().close();
                     return false;
                 } else {
-                    statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "allies` VALUES('" + who.getName() + "', '" + withWho.getName() + "', '" + Relation.Status.ALLY.toString() + "', 0);");
+                    statement.execute("INSERT INTO " + alliesTableName + " VALUES('" + who.getName() + "', '" + withWho.getName() + "', '" + Relation.Status.ALLY.toString() + "', 0);");
                     rs.close();
                     statement.close();
                     statement.getConnection().close();
@@ -391,8 +345,8 @@ public class SQLHandler {
         return false;
     }
 
-    private boolean isAlreadyAlliance(Guild who, Guild withWho, String whoseguild, String withwho) {
-        return (whoseguild.equals(who.getName()) && withwho.equals(withWho.getName())) || (whoseguild.equals(withWho.getName()) && withwho.equals(who.getName()));
+    private boolean isAlreadyAlliance(Guild who, Guild withWho) {
+        return who.isAlly(withWho) || withWho.isAlly(who);
     }
 
     private boolean containsAlliance(ResultSet rs) throws SQLException {
@@ -402,8 +356,8 @@ public class SQLHandler {
     public boolean removeAlliance(Guild who, Guild withWho) {
         try {
             createStatement();
-            statement.addBatch("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='" + who.getName() + "' AND withwho='" + withWho.getName() + "';");
-            statement.addBatch("DELETE FROM `" + GenConf.sqlTablePrefix + "allies` WHERE who='" + withWho.getName() + "' AND withwho='" + who.getName() + "';");
+            statement.addBatch("DELETE FROM " + alliesTableName + " WHERE who='" + who.getName() + "' AND withwho='" + withWho.getName() + "';");
+            statement.addBatch("DELETE FROM " + alliesTableName + " WHERE who='" + withWho.getName() + "' AND withwho='" + who.getName() + "';");
             statement.executeBatch();
 
             statement.close();
@@ -420,7 +374,7 @@ public class SQLHandler {
         try {
             createStatement();
             try {
-                statement.execute("UPDATE '" + GenConf.sqlTablePrefix + "players' SET '" + column +
+                statement.execute("UPDATE " + playersTableName + "SET '" + column +
                         "'=" + column + "+1 WHERE uuid='" + uuid.toString() + "';");
                 statement.close();
                 statement.getConnection().close();
@@ -466,7 +420,7 @@ public class SQLHandler {
     public void addGuildCuboid(Location loc, int size, String owner, String worldName) {
         try {
             createStatement();
-            statement.execute("INSERT INTO `" + GenConf.sqlTablePrefix + "cuboids` " +
+            statement.execute("INSERT INTO " + cuboidsTableName +
                     "VALUES(" +
                     "'" + owner + "'," +
                     "'" + loc.getBlockX() + "'," +

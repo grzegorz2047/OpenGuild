@@ -4,8 +4,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.Teleporter;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
+import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 public class SpawnCommand implements CommandExecutor {

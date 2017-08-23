@@ -1,6 +1,5 @@
 package pl.grzegorz2047.openguild2047.dropstone;
 
-import com.github.grzegorz2047.openguild.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,8 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.OpenGuild;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 import java.util.*;

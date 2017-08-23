@@ -22,9 +22,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.Guilds;
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
@@ -64,7 +64,7 @@ public class PlayerJoinListener implements Listener {
             tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
 
             guilds.addOnlineGuild(guild.getName());
-            guild.notifyMembersJoinedGame(player);
+            guilds.notifyMembersJoinedGame(player, guild);
         }
         tagManager.prepareScoreboardTagForPlayerOnJoin(player);
 

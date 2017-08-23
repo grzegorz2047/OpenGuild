@@ -4,9 +4,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
-import pl.grzegorz2047.openguild2047.Guilds;
-import pl.grzegorz2047.openguild2047.Teleporter;
-import pl.grzegorz2047.openguild2047.TpaRequester;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
+import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
+import pl.grzegorz2047.openguild2047.teleporters.TpaRequester;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 
 import java.util.UUID;

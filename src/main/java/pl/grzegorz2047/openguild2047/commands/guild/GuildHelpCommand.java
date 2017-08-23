@@ -20,7 +20,7 @@ import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
 /**

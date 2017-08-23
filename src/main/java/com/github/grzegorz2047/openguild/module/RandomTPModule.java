@@ -16,7 +16,7 @@
 
 package com.github.grzegorz2047.openguild.module;
 
-import com.github.grzegorz2047.openguild.User;
+import com.github.grzegorz2047.openguild.interfaces.User;
 import javax.annotation.Nonnull;
 import org.bukkit.entity.Player;
 

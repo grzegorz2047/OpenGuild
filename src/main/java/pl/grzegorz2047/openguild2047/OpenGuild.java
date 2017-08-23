@@ -15,16 +15,16 @@
  */
 package pl.grzegorz2047.openguild2047;
 
-import com.github.grzegorz2047.openguild.Guild;
-import com.github.grzegorz2047.openguild.Logger;
-import com.github.grzegorz2047.openguild.OpenGuildPlugin;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
+import com.github.grzegorz2047.openguild.interfaces.Logger;
+import com.github.grzegorz2047.openguild.interfaces.OpenGuildPlugin;
 import com.github.grzegorz2047.openguild.hook.Hooks;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -45,15 +45,23 @@ import pl.grzegorz2047.openguild2047.commands.SpawnCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
 import pl.grzegorz2047.openguild2047.commands.TpaCommand;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
-import pl.grzegorz2047.openguild2047.database.MySQLImplementationStrategy;
-import pl.grzegorz2047.openguild2047.database.SQLHandler;
-import pl.grzegorz2047.openguild2047.database.SQLImplementationStrategy;
-import pl.grzegorz2047.openguild2047.database.SQLiteImplementationStrategy;
+import pl.grzegorz2047.openguild2047.database.*;
+import pl.grzegorz2047.openguild2047.database.interfaces.SQLImplementationStrategy;
+import pl.grzegorz2047.openguild2047.database.interfaces.SQLTables;
+import pl.grzegorz2047.openguild2047.database.mysql.MySQLImplementationStrategy;
+import pl.grzegorz2047.openguild2047.database.mysql.MySQLTables;
+import pl.grzegorz2047.openguild2047.database.sqlite.SQLiteImplementationStrategy;
+import pl.grzegorz2047.openguild2047.database.sqlite.SQLiteTables;
 import pl.grzegorz2047.openguild2047.dropstone.DropConfigLoader;
 import pl.grzegorz2047.openguild2047.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild2047.dropstone.DropProperties;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.listeners.*;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
+import pl.grzegorz2047.openguild2047.relations.Relations;
+import pl.grzegorz2047.openguild2047.tasks.Watcher;
+import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
+import pl.grzegorz2047.openguild2047.teleporters.TpaRequester;
 
 
 /**
@@ -75,6 +83,7 @@ public class OpenGuild extends JavaPlugin {
     private Teleporter teleporter;
     private TpaRequester tpaRequester;
     private DropFromBlocks drop;
+    private Relations relations;
 
     /**
      * Instance of built-in permissions manager main class.
@@ -130,7 +139,9 @@ public class OpenGuild extends JavaPlugin {
         //}
         List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
         this.drop = new DropFromBlocks(GenConf.ELIGIBLE_DROP_BLOCKS, loadedDrops);
-        this.guilds = new Guilds();
+
+        this.guilds = new Guilds(sqlHandler);
+        this.relations = new Relations();
         this.cuboids = new Cuboids(guilds);
         this.logout = new AntiLogoutManager();
         // Setup Tag Manager
@@ -145,7 +156,7 @@ public class OpenGuild extends JavaPlugin {
         // Intialize guild helper class
         // Load database
         loadDB();
-        loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler);
+        loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations);
 
         loadAllListeners();
         loadPlayers();
@@ -159,7 +170,7 @@ public class OpenGuild extends JavaPlugin {
 
         // Register all hooks to this plugin
         Hooks.registerDefaults();
-        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester), 0, 20);
+        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester, guilds, relations), 0, 20);
 
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!");
     }
@@ -237,9 +248,9 @@ public class OpenGuild extends JavaPlugin {
      * This method sets executors of all commands, and
      * registers them in our API.
      */
-    private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandlers) {
+    private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandlers, Relations relations) {
         getCommand("team").setExecutor(new TeamCommand(this));
-        getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter, tagManager, sqlHandler));
+        getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter, tagManager, sqlHandler, relations));
         if (GenConf.SPAWN_COMMAND_ENABLED) {
             getCommand("spawn").setExecutor(new SpawnCommand(teleporter));
         }
@@ -259,23 +270,27 @@ public class OpenGuild extends JavaPlugin {
         String name = getConfig().getString("mysql.database");
 
         SQLImplementationStrategy sqlImplementation;
+        SQLTables tables;
         switch (GenConf.DATABASE) {
             case FILE:
                 OpenGuild.getOGLogger().info("[SQLite] Connecting to SQLite database ...");
                 sqlImplementation = new SQLiteImplementationStrategy();
+                tables = new SQLiteTables();
                 OpenGuild.getOGLogger().info("[SQLite] Connected to SQLite successfully!");
                 break;
             case MYSQL:
                 sqlImplementation = new MySQLImplementationStrategy(host, port, user, pass, name);
+                tables = new MySQLTables();
                 break;
             default:
                 OpenGuild.getOGLogger().severe("[MySQL] Invalid database type '" + GenConf.DATABASE.name() + "'!");
                 sqlImplementation = new SQLiteImplementationStrategy();
+                tables = new SQLiteTables();
                 OpenGuild.getOGLogger().severe("[MySQL] Invalid database type! Setting db to SQLite!");
                 break;
         }
 
-        this.sqlHandler = new SQLHandler(this, sqlImplementation, tagManager, guilds);
+        this.sqlHandler = new SQLHandler(this, sqlImplementation, tables, guilds);
     }
 
     /**
@@ -291,7 +306,7 @@ public class OpenGuild extends JavaPlugin {
         pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), this);
 
         if (GenConf.cubEnabled) {
-            pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop), this);
+            pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop, guilds), this);
         }
 
         pm.registerEvents(new EntityDamageByEntityListener(logout, guilds), this);

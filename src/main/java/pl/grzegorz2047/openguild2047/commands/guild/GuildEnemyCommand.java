@@ -15,7 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047.commands.guild;
 
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import com.github.grzegorz2047.openguild.Relation;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
@@ -24,7 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.Guilds;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
@@ -75,7 +75,7 @@ public class GuildEnemyCommand extends Command {
             }
 
             for (Relation r : requestingGuild.getAlliances()) {
-                if (r.getAlliedGuildTag().equals(guild.getName()) || r.getWho().equals(guild.getName())) {
+                if (r.getAlliedGuildTag().equals(guild.getName()) || r.getBaseGuildTag().equals(guild.getName())) {
                     OpenGuild.getInstance().getTagManager().guildBrokeAlliance(requestingGuild, guild);
                     requestingGuild.getAlliances().remove(r);
                     guild.getAlliances().remove(r);

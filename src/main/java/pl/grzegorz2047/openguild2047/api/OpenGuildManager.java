@@ -16,8 +16,8 @@
 
 package pl.grzegorz2047.openguild2047.api;
 
-import com.github.grzegorz2047.openguild.GuildManager;
-import pl.grzegorz2047.openguild2047.GenConf;
+import com.github.grzegorz2047.openguild.interfaces.GuildManager;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 
 public class OpenGuildManager implements GuildManager {
     

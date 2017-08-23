@@ -17,9 +17,9 @@
 package pl.grzegorz2047.openguild2047.api;
 
 import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.PluginUpdater;
+import com.github.grzegorz2047.openguild.interfaces.PluginUpdater;
 import java.util.List;
-import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.utils.Updater;
 
 public class OpenPluginUpdater implements PluginUpdater {

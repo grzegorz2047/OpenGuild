@@ -16,7 +16,7 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
-import com.github.grzegorz2047.openguild.Guild;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import com.github.grzegorz2047.openguild.command.Command;
 import com.github.grzegorz2047.openguild.command.CommandException;
 import com.github.grzegorz2047.openguild.event.guild.GuildCreateEvent;
@@ -24,9 +24,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GenConf;
-import pl.grzegorz2047.openguild2047.Guilds;
-import com.github.grzegorz2047.openguild.Cuboid;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboid;
 import com.github.grzegorz2047.openguild.event.guild.GuildCreatedEvent;
 import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;

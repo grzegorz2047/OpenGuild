@@ -16,6 +16,7 @@
 
 package com.github.grzegorz2047.openguild;
 
+import com.github.grzegorz2047.openguild.interfaces.*;
 import com.github.grzegorz2047.openguild.module.ModuleManager;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +27,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import com.github.grzegorz2047.openguild.command.CommandInfo;
 import com.github.grzegorz2047.openguild.command.CommandManager;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

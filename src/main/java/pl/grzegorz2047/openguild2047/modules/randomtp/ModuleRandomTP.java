@@ -17,9 +17,7 @@
 package pl.grzegorz2047.openguild2047.modules.randomtp;
 
 import com.github.grzegorz2047.openguild.OpenGuild;
-import com.github.grzegorz2047.openguild.User;
-import com.github.grzegorz2047.openguild.command.CommandDescription;
-import com.github.grzegorz2047.openguild.command.CommandInfo;
+import com.github.grzegorz2047.openguild.interfaces.User;
 import com.github.grzegorz2047.openguild.module.Module;
 import com.github.grzegorz2047.openguild.module.ModuleInfo;
 import com.github.grzegorz2047.openguild.module.ModuleLoadException;
@@ -29,12 +27,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild2047.GenConf;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 

@@ -16,7 +16,7 @@
 
 package pl.grzegorz2047.openguild2047.api;
 
-import com.github.grzegorz2047.openguild.Messages;
+import com.github.grzegorz2047.openguild.interfaces.Messages;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

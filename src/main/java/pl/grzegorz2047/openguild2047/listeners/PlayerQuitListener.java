@@ -15,7 +15,6 @@
  */
 package pl.grzegorz2047.openguild2047.listeners;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -24,12 +23,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
-import pl.grzegorz2047.openguild2047.Teleporter;
-import pl.grzegorz2047.openguild2047.Guilds;
-import com.github.grzegorz2047.openguild.Guild;
-import pl.grzegorz2047.openguild2047.TpaRequest;
-import pl.grzegorz2047.openguild2047.TpaRequester;
+import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
+import pl.grzegorz2047.openguild2047.teleporters.TpaRequester;
 import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
