@@ -70,12 +70,15 @@ public class GuildHelpCommand extends Command {
         sender.sendMessage(help("unbanplayer <player>", "Unbans banned player for death"));
         sender.sendMessage(help("randomtp or random <player>", "Teleports you on random location"));
         sender.sendMessage(help("changehome or changehouse", "Teleports you on random location"));
+        sender.sendMessage(help("changeleader <player>", "Give leadership to someone else"));
     }
 
     private void showPolishHelpPage2(CommandSender sender) {
         sender.sendMessage(help("unbanplayer <gracz>", "Odbanowuje gracza po smierci"));
         sender.sendMessage(help("randomtp lub random <gracz>", "Teleportuje na losowa pozycje"));
         sender.sendMessage(help("changehome lub zmiendom", "Zmienia pozycje domu gildii"));
+        sender.sendMessage(help("zmienlidera <gracz> lub changeleader <gracz>", "Przekazuje wlasciciela gildii komus innemu"));
+
     }
 
     private void showEnglishHelpPage1(CommandSender sender) {

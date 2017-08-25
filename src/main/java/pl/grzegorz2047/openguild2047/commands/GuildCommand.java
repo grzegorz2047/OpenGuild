@@ -65,7 +65,8 @@ public class GuildCommand implements CommandExecutor {
         this.commands.put(new String[]{"leave", "opusc", "wyjdz"}, new GuildLeaveCommand(guilds,tagManager,sqlHandler));
         this.commands.put(new String[]{"disband", "rozwiaz", "zamknij"}, new GuildDisbandCommand(guilds, cuboids, sqlHandler, tagManager));
         this.commands.put(new String[]{"dom", "home", "house"}, new GuildHomeCommand(teleporter, guilds));
-        this.commands.put(new String[]{"zmiendom", "changehome", "changehouse"}, new GuildChangeHome(guilds, sqlHandler));
+        this.commands.put(new String[]{"zmiendom", "changehome", "changehouse"}, new GuildChangeHomeCommand(guilds, sqlHandler));
+        this.commands.put(new String[]{"zmienlidera", "changeleader"}, new GuildChangeLeaderCommand(guilds, sqlHandler));
         this.commands.put(new String[]{"list", "lista"}, new GuildListCommand(guilds));
         this.commands.put(new String[]{"description", "desc", "opis"}, new GuildDescriptionCommand(guilds, sqlHandler));
         this.commands.put(new String[]{"ally", "sojusz",}, new GuildAllyCommand(relations, guilds,tagManager,sqlHandler));

@@ -1,5 +1,6 @@
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild2047.commands.command.Command;
@@ -12,11 +13,11 @@ import pl.grzegorz2047.openguild2047.managers.MsgManager;
 /**
  * Created by grzeg on 26.08.2017.
  */
-public class GuildChangeHome extends Command {
+public class GuildChangeLeaderCommand extends Command {
     private final Guilds guilds;
     private final SQLHandler sqlHandler;
 
-    public GuildChangeHome(Guilds guilds, SQLHandler sqlHandler) {
+    public GuildChangeLeaderCommand(Guilds guilds, SQLHandler sqlHandler) {
         this.guilds = guilds;
         this.sqlHandler = sqlHandler;
     }
@@ -38,9 +39,29 @@ public class GuildChangeHome extends Command {
             player.sendMessage(MsgManager.get("playernotleader"));
             return;
         }
-        playerGuild.setHome(player.getLocation());
-        sqlHandler.changeHome(playerGuild.getName(), player.getLocation());
-        player.sendMessage(MsgManager.get("successfullychangedhomeposition"));
+        if (playerGuild.getLeader().equals(player.getUniqueId())) {
+            sender.sendMessage(MsgManager.get("cantchangeleadertoyourself"));
+            return;
+        }
+
+        if (args.length < 2) {
+            player.sendMessage(MsgManager.get("usagechangehomecommand"));
+            return;
+        }
+        String newLeaderName = args[1];
+
+        if(!playerGuild.getMembersNames().contains(newLeaderName)) {
+            player.sendMessage(MsgManager.get("playernotinyourguild"));
+            return;
+        }
+        Player newLeader = Bukkit.getPlayer(newLeaderName);
+        if (newLeader == null) {
+            player.sendMessage(MsgManager.get("playeroffline"));
+            return;
+        }
+        playerGuild.setLeader(newLeader.getUniqueId());
+        sqlHandler.changeLeader(playerGuild.getName(), playerGuild.getName());
+        player.sendMessage(MsgManager.get("successfullychangedleader"));
     }
 
     @Override

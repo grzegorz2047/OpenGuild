@@ -503,6 +503,25 @@ public class SQLHandler {
         });
     }
 
+    public void changeLeader(String newLeader, String guildTag) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String query = "UPDATE " + guildsTableName + " SET leader = ? WHERE tag = ?";
+                    statement = getConnection().prepareStatement(query);
+                    PreparedStatement preparedStatement = (PreparedStatement) SQLHandler.this.statement;
+                    preparedStatement.setString(1, newLeader);
+                    preparedStatement.setString(2, guildTag);
+                    preparedStatement.execute();
+                    SQLHandler.this.statement.close();
+                    SQLHandler.this.statement.getConnection().close();
+                } catch (Exception ex) {
+                    OpenGuild.getOGLogger().exceptionThrown(ex);
+                }
+            }
+        });
+    }
 }
 
 
