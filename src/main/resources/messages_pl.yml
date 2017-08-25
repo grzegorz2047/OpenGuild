@@ -155,3 +155,4 @@ tptodestinationsuccess: 'Zostales pomyslnie przeteleportowany! | NIE TEPAJ DO NI
 playerlogoutduringfight: '%PLAYER% wylogowal sie podczas walki!'
 playerjoinedservermsg: '&2%PLAYER% &6+'
 playerleftservermsg: '&2%PLAYER% &c-'
+strengthenchantblocked: 'Ten przedmiot zostal zablokowany przez admina serwera!'

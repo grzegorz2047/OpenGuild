@@ -299,12 +299,18 @@ public class SQLHandler {
      * Removes guild from database.
      *
      * @param tag tag of guild, which should be deleted.
+     * @param members
      */
-    public void removeGuild(String tag) {
+    public void removeGuild(String tag, List<UUID> members) {
         try {
             createStatement();
-            statement.execute("DELETE FROM " + guildsTableName + " WHERE `tag` = '" + tag + "'");
 
+            statement.addBatch("DELETE FROM " + guildsTableName + " WHERE `tag` = '" + tag + "'");
+            statement.addBatch("DELETE FROM " + cuboidsTableName + " WHERE `tag` = '" + tag + "'");
+            for(UUID member :members) {
+                statement.addBatch("UPDATE " + playersTableName + " SET `guild` = '' WHERE `uuid` = '" + member.toString() + "'");
+            }
+            statement.executeBatch();
             statement.close();
             statement.getConnection().close();
         } catch (Exception ex) {

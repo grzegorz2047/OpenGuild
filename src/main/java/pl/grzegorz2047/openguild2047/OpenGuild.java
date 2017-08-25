@@ -133,7 +133,7 @@ public class OpenGuild extends JavaPlugin {
 
         // Validate language file
         String translation = "messages_" + GenConf.lang.toLowerCase();
-        fileValidator.validateFile(getResource(translation), translation);
+        fileValidator.validateFile(getResource(translation + ".yml"), translation);
 
         /*
          * If some server admin doesn't want to use PermissionsEX or other
@@ -153,15 +153,11 @@ public class OpenGuild extends JavaPlugin {
         this.tagManager = new TagManager(guilds);
         teleporter = new Teleporter();
         tpaRequester = new TpaRequester();
-        HardcoreSQLHandler hardcoreSQLHandler = new HardcoreSQLHandler(sqlHandler);
-        // Register commands
 
-        // Register events
-
-
-        // Intialize guild helper class
         // Load database
         loadDB();
+        HardcoreSQLHandler hardcoreSQLHandler = new HardcoreSQLHandler(sqlHandler);
+
         loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler);
 
         loadAllListeners();
@@ -205,33 +201,6 @@ public class OpenGuild extends JavaPlugin {
         }
 
         System.out.println("Deleted " + deletedFiles + " files from 'plugins/OpenGuild2047/logger'");
-    }
-
-    /**
-     * This method checks if any update is available, and shows notification
-     * if there's new version of plugin.
-     */
-
-
-    /**
-     * This method is used to get all aliases of specified command.
-     *
-     * @param cmd command, which aliases should be get.
-     * @param def default aliases.
-     * @return an array of strings.
-     */
-    private String[] getAliases(String cmd, String[] def) {
-        List<String> aliases = getAPI().getCmdManager().getAliases(cmd);
-
-        if (aliases == null) {
-            return new String[]{};
-        }
-
-        if (def != null) {
-            aliases.addAll(Arrays.asList(def));
-        }
-
-        return aliases.toArray(new String[aliases.size()]);
     }
 
     /**
@@ -294,7 +263,6 @@ public class OpenGuild extends JavaPlugin {
         listenerLoader.loadListeners(pm);
     }
 
-
     /**
      * This method loads all players from database and adds
      * them to their guild's member list.
@@ -306,30 +274,6 @@ public class OpenGuild extends JavaPlugin {
             if (guild != null) {
                 guild.addMember(player);
             }
-        }
-        //    }
-    }
-
-    /**
-     * This method is used to validate YAML configuration file,
-     * it compares file from plugin's JAR and file in plugin's folder,
-     * and adds keys, which doesn't exist.
-     *
-     * @param name name of file to validate (without extension)
-     */
-
-
-    /**
-     * This method is used to broadcast message to all
-     * online players.
-     * We're not using Bukkit.broadcastMessage() method, because it sends
-     * messages also to the console.
-     *
-     * @param message message to be sent
-     */
-    public void broadcastMessage(String message) {
-        for (Player player : getServer().getOnlinePlayers()) {
-            player.sendMessage(message);
         }
     }
 

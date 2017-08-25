@@ -59,7 +59,6 @@ public class GuildDisbandCommand extends Command {
             return;
         }
 
-
         Player player = (Player) sender;
         if (args.length == 1) {
             if (!guilds.hasGuild(player)) {
@@ -94,16 +93,14 @@ public class GuildDisbandCommand extends Command {
             }
             for (UUID uuid : guild.getMembers()) {
                 guilds.getMappedPlayersToGuilds().remove(uuid);
-                guilds.getMappedPlayersToGuilds().put(uuid, null);
-                sqlHandler.updatePlayerTag(uuid, "");
             }
+
             cuboids.removeGuildCuboid(guild.getName());
-            sqlHandler.removeGuild(guild.getName().toUpperCase());
+            sqlHandler.removeGuild(guild.getName().toUpperCase(), guild.getMembers());
             guilds.getGuilds().remove(guild.getName());
             tagManager.playerDisbandGuild(guild);
             guilds.removeOnlineGuild(guild.getName());
             Bukkit.broadcastMessage(MsgManager.get("broadcast-disband").replace("{TAG}", guild.getName().toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
-
         }
 
     }

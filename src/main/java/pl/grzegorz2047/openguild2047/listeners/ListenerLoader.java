@@ -46,6 +46,10 @@ public class ListenerLoader {
         pm.registerEvents(new PlayerDeathListener(sqlHandler, logout), p);
         pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester, guilds), p);
         pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), p);
+        if (GenConf.BLOCK_STRENGTH_2) {
+            pm.registerEvents(new EnchantInsertListener(), p);
+        }
+        pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), p);
 
         if (GenConf.cubEnabled) {
             pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop, guilds), p);

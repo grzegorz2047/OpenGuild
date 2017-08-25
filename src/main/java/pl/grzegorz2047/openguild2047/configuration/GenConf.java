@@ -111,6 +111,7 @@ public class GenConf {
     public static boolean NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK;
     public static boolean DROP_ENABLED;
     public static boolean DROP_TO_EQ;
+    public static boolean BLOCK_STRENGTH_2;
     public static List<Material> ELIGIBLE_DROP_BLOCKS;
     public static String chatFormat;
 
@@ -125,6 +126,7 @@ public class GenConf {
         MAX_CUBOID_RADIUS = config.getInt("cuboid.max-cube-size", 50);
         TELEPORT_COOLDOWN = config.getInt("teleport-cooldown", 10);
         EXTRA_PROTECTION = config.getBoolean("cuboid.extra-protection", false);
+        BLOCK_STRENGTH_2 = config.getBoolean("block-strong-strenght-2", true);
         NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK = config.getBoolean("drop.notify-cant-drop-from-not-eligible-block", false);
 
         List<String> blockList = config.getStringList("blocks-from-where-item-drops");

@@ -24,7 +24,7 @@ public class RelationChange {
     }
 
     public boolean isExpired(long currentTime) {
-        return requestTime + expirationTime * 1000 > currentTime;
+        return requestTime + expirationTime * 1000 < currentTime;
     }
 
     public String getRequestingGuildName() {

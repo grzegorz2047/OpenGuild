@@ -11,6 +11,7 @@ teleport-cooldown: 10
 tpa-command: false
 tpa-expire-time: 15
 fight-antilogout: true
+block-strong-strenght-2: false
 spawn:
   location-max: [world, 50, 50]
   location-min: [world, -50, -50]

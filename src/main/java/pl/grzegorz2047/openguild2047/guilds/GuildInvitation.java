@@ -7,7 +7,7 @@ public class GuildInvitation {
     private final long inviteTime;
     private final String inviteePlayer;
     private final String hostGuild;
-    private int invitationExpireTime = 20;
+    private final int invitationExpireTime = 20;
 
     public GuildInvitation(String hostGuild, String inviteePlayer, long inviteTime) {
         this.hostGuild = hostGuild;
@@ -16,7 +16,7 @@ public class GuildInvitation {
     }
 
     public boolean isExpired(long currentTime) {
-        return inviteTime + (invitationExpireTime * 1000) > currentTime;
+        return inviteTime + (invitationExpireTime * 1000) < currentTime;
     }
 
     public boolean isInvited(String playerName) {

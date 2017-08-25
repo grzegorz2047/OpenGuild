@@ -64,7 +64,10 @@ public class GuildInvitations {
             toDelete.add(playerInvitation);
 
             guilds.addPlayer(player.getUniqueId(), guild);
-            sqlHandler.updatePlayerTag(player.getUniqueId(), guild.getName());
+            sqlHandler.
+                    updatePlayerTag(
+                            player.getUniqueId(),
+                    guild.getName());
             guild.addMember(player.getUniqueId());
             guild.addMembersName(player.getName());
 
