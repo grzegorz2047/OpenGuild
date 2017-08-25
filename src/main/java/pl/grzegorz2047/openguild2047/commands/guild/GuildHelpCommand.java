@@ -48,49 +48,72 @@ public class GuildHelpCommand extends Command {
         }
 
         sender.sendMessage(getHelpTitle(page));
-
         if (page == 1) {
             if (GenConf.lang.equals("PL")) {
-                sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
-                sender.sendMessage(help("zapros <gracz>", "Zapros gracza do gildii"));
-                sender.sendMessage(help("akceptuj <tag>", "Akceptuj zaproszenie od gildii"));
-                sender.sendMessage(help("opis [ustaw <opis...>]", "Stwórz lub zobacz opis gildii"));
-                sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii innemu graczowi"));
-                sender.sendMessage(help("akceptuj <gildia>", "Akceptuje dolaczenie do gildii"));
-                sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
-                sender.sendMessage(help("info <gildia>", "Informacje o gildii"));
-                sender.sendMessage(help("sojusz <gildia>", "Ustawienie sojuszu z inna gildia"));
-                sender.sendMessage(help("wrog <gildia>", "Zerwanie z inna gildia"));
-                sender.sendMessage(help("zamknij", "Zamknij gildie"));
-                sender.sendMessage(help("wyrzuc <gracz>", "Wyrzuca czlonka gildii"));
-                sender.sendMessage(help("itemy", "Lista itemów na gildie"));
-                sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
-                sender.sendMessage(help("lista", "Lista wszystkich  gildii"));
-                sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
+                showPolishHelpPage1(sender);
             } else {
-                sender.sendMessage(help("create <tag> [desc...]", "Create guild"));
-                sender.sendMessage(help("invite <player>", "Accepts invite to joint guild"));
-                sender.sendMessage(help("accept <guild>", "Accept invite to joint guild"));
-                sender.sendMessage(help("description [set <description...>]", "Change or see description of guild"));
-                sender.sendMessage(help("leader <gracz>", "Give leader to someone else"));
-                sender.sendMessage(help("invite", "Invite to guild (sends invite)"));
-                sender.sendMessage(help("leave", "Leave from current guild"));
-                sender.sendMessage(help("info <guild>", "Information about the guild"));
-                sender.sendMessage(help("ally <guild>", "Create an alliance"));
-                sender.sendMessage(help("enemy <guild>", "Broke an alliance"));
-                sender.sendMessage(help("disband", "Disband your guild"));
-                sender.sendMessage(help("items", "List of required items"));
-                sender.sendMessage(help("home", "Teleport to your guild home location"));
-                sender.sendMessage(help("list", "List all guilds"));
-                sender.sendMessage(help("kick <player>", "Kicks member of guild"));
-                sender.sendMessage(help("help [admin|page]", "Show help [admin/page]"));
+                showEnglishHelpPage1(sender);
             }
         } else if (page == 2) {
-            sender.sendMessage(help("unbanplayer <player>", "Unbans banned player for death"));
-            sender.sendMessage(help("randomtp or random <player>", "Teleports you on random location"));
+            if (GenConf.lang.equals("PL")) {
+                showPolishHelpPage2(sender);
+            }else  {
+                showEnglishHelpPage2(sender);
+            }
+
         } else {
             sender.sendMessage(MsgManager.get("pagenotfound", "&cStrona o numerze &7{NUMBER}&c nie zostala odnaleziona").replace("{NUMBER}", String.valueOf(page)));
         }
+    }
+
+    private void showEnglishHelpPage2(CommandSender sender) {
+        sender.sendMessage(help("unbanplayer <player>", "Unbans banned player for death"));
+        sender.sendMessage(help("randomtp or random <player>", "Teleports you on random location"));
+        sender.sendMessage(help("changehome or changehouse", "Teleports you on random location"));
+    }
+
+    private void showPolishHelpPage2(CommandSender sender) {
+        sender.sendMessage(help("unbanplayer <gracz>", "Odbanowuje gracza po smierci"));
+        sender.sendMessage(help("randomtp lub random <gracz>", "Teleportuje na losowa pozycje"));
+        sender.sendMessage(help("changehome lub zmiendom", "Zmienia pozycje domu gildii"));
+    }
+
+    private void showEnglishHelpPage1(CommandSender sender) {
+        sender.sendMessage(help("create <tag> [desc...]", "Create guild"));
+        sender.sendMessage(help("invite <player>", "Accepts invite to joint guild"));
+        sender.sendMessage(help("accept <guild>", "Accept invite to joint guild"));
+        sender.sendMessage(help("description [set <description...>]", "Change or see description of guild"));
+        sender.sendMessage(help("leader <gracz>", "Give leader to someone else"));
+        sender.sendMessage(help("invite", "Invite to guild (sends invite)"));
+        sender.sendMessage(help("leave", "Leave from current guild"));
+        sender.sendMessage(help("info <guild>", "Information about the guild"));
+        sender.sendMessage(help("ally <guild>", "Create an alliance"));
+        sender.sendMessage(help("enemy <guild>", "Broke an alliance"));
+        sender.sendMessage(help("disband", "Disband your guild"));
+        sender.sendMessage(help("items", "List of required items"));
+        sender.sendMessage(help("home", "Teleport to your guild home location"));
+        sender.sendMessage(help("list", "List all guilds"));
+        sender.sendMessage(help("kick <player>", "Kicks member of guild"));
+        sender.sendMessage(help("help [admin|page]", "Show help [admin/page]"));
+    }
+
+    private void showPolishHelpPage1(CommandSender sender) {
+        sender.sendMessage(help("zaloz <tag> [opis...]", "Zaloz gildie"));
+        sender.sendMessage(help("zapros <gracz>", "Zapros gracza do gildii"));
+        sender.sendMessage(help("akceptuj <tag>", "Akceptuj zaproszenie od gildii"));
+        sender.sendMessage(help("opis [ustaw <opis...>]", "Stwórz lub zobacz opis gildii"));
+        sender.sendMessage(help("lider <gracz>", "Oddaj lidera gildii innemu graczowi"));
+        sender.sendMessage(help("akceptuj <gildia>", "Akceptuje dolaczenie do gildii"));
+        sender.sendMessage(help("opusc", "Opusc gildie w której teraz jestes"));
+        sender.sendMessage(help("info <gildia>", "Informacje o gildii"));
+        sender.sendMessage(help("sojusz <gildia>", "Ustawienie sojuszu z inna gildia"));
+        sender.sendMessage(help("wrog <gildia>", "Zerwanie z inna gildia"));
+        sender.sendMessage(help("zamknij", "Zamknij gildie"));
+        sender.sendMessage(help("wyrzuc <gracz>", "Wyrzuca czlonka gildii"));
+        sender.sendMessage(help("itemy", "Lista itemów na gildie"));
+        sender.sendMessage(help("dom", "Teleportuj sie do gildii"));
+        sender.sendMessage(help("lista", "Lista wszystkich  gildii"));
+        sender.sendMessage(help("help [admin|strona]", "Pokaz pomoc [admin/strona]"));
     }
 
     private String getHelpTitle(int page) {

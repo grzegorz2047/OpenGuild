@@ -158,3 +158,4 @@ tptodestinationsuccess: 'You have been succesfully teleported! | Dont teleport t
 playerlogoutduringfight: '%PLAYER% log out from battle!'
 strengthenchantblocked: 'This enchantment is blocked by server admin!'
 killerkilledvictim: '&c{VICTIM} &a({VICTIMLOSE}) &7was killed by &c{KILLER} &a({KILLEREARN}) '
+successfullychangedhomeposition: 'You successfully change home postition!'

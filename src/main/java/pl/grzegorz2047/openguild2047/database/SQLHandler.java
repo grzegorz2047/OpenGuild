@@ -15,10 +15,7 @@
  */
 package pl.grzegorz2047.openguild2047.database;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 import org.bukkit.Location;
@@ -478,9 +475,34 @@ public class SQLHandler {
                 }
             }
         });
-
-
     }
+
+
+    public void changeHome(String guildTag, Location newHomeLocation) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String query = "UPDATE " + guildsTableName + " SET home_x = ?, home_y = ?, home_z = ?, home_pitch = ?, home_yaw = ?, home_world = ? WHERE  tag= ?";
+                    statement = getConnection().prepareStatement(query);
+                    PreparedStatement preparedStatement = (PreparedStatement) SQLHandler.this.statement;
+                    preparedStatement.setDouble(1, newHomeLocation.getX());
+                    preparedStatement.setDouble(2, newHomeLocation.getY());
+                    preparedStatement.setDouble(3, newHomeLocation.getZ());
+                    preparedStatement.setDouble(4, newHomeLocation.getPitch());
+                    preparedStatement.setDouble(5, newHomeLocation.getYaw());
+                    preparedStatement.setString(6, newHomeLocation.getWorld().getName());
+                    preparedStatement.setString(7, guildTag);
+                    preparedStatement.execute();
+                    SQLHandler.this.statement.close();
+                    SQLHandler.this.statement.getConnection().close();
+                } catch (Exception ex) {
+                    OpenGuild.getOGLogger().exceptionThrown(ex);
+                }
+            }
+        });
+    }
+
 }
 
 
