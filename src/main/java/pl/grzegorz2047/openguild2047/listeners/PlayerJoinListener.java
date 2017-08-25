@@ -24,6 +24,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
+import pl.grzegorz2047.openguild2047.database.SQLRecord;
+import pl.grzegorz2047.openguild2047.database.TempPlayerData;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
@@ -35,11 +37,13 @@ public class PlayerJoinListener implements Listener {
     private final TagManager tagManager;
     private final Guilds guilds;
     private final SQLHandler sqlHandler;
+    private final TempPlayerData tempPlayerData;
     private String joinMsg;
 
-    public PlayerJoinListener(Guilds guilds, TagManager tagManager, SQLHandler sqlHandler) {
+    public PlayerJoinListener(Guilds guilds, TagManager tagManager, SQLHandler sqlHandler, TempPlayerData tempPlayerData) {
         this.guilds = guilds;
         this.tagManager = tagManager;
+        this.tempPlayerData = tempPlayerData;
         this.sqlHandler = sqlHandler;
         this.joinMsg = ChatColor.translateAlternateColorCodes('&', MsgManager.getIgnorePref("playerjoinedservermsg"));
     }
@@ -51,14 +55,22 @@ public class PlayerJoinListener implements Listener {
         event.setJoinMessage(joinMsg.replace("%PLAYER%", player.getName()));
         //System.out.print("Wykonuje playerJoinEvent!");
 
-        if (!guilds.getMappedPlayersToGuilds().containsKey(uuid)) {
-            if (!player.hasPlayedBefore()) {
-                sqlHandler.insertPlayer(uuid);
-                return;
-            }
+        if (!player.hasPlayedBefore()) {
+            sqlHandler.insertPlayer(uuid);
+            return;
         }
 
+        //Pobierz dane gracza
+        SQLRecord playerRecord = this.tempPlayerData.getPlayerRecord(player.getUniqueId());
 
+        if (playerRecord != null) {
+            guilds.updatePlayerMetadata(player.getUniqueId(), "guild", playerRecord.getGuild());
+            guilds.updatePlayerMetadata(player.getUniqueId(), "elo", playerRecord.getElo());
+            guilds.updatePlayerMetadata(player.getUniqueId(), "kills", playerRecord.getKills());
+            guilds.updatePlayerMetadata(player.getUniqueId(), "deaths", playerRecord.getDeaths());
+            this.tempPlayerData.removePlayer(player.getUniqueId());
+
+        }
         if (guilds.hasGuild(player)) {
             Guild guild = guilds.getPlayerGuild(uuid);
             //tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);

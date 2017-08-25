@@ -7,9 +7,11 @@ import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboid;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
+import pl.grzegorz2047.openguild2047.database.TempPlayerData;
 import pl.grzegorz2047.openguild2047.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
+import pl.grzegorz2047.openguild2047.ranking.EloRanking;
 import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
 import pl.grzegorz2047.openguild2047.teleporters.TpaRequester;
 
@@ -41,11 +43,14 @@ public class ListenerLoader {
     }
 
     public void loadListeners(PluginManager pm) {
-        pm.registerEvents(new PlayerJoinListener(guilds, tagManager, sqlHandler), p);
+        TempPlayerData tempPlayerData = new TempPlayerData(p);
+        EloRanking eloRanking = new EloRanking(p, sqlHandler);
+        pm.registerEvents(new PlayerJoinListener(guilds, tagManager, sqlHandler, tempPlayerData), p);
         pm.registerEvents(new PlayerChatListener(guilds), p);
-        pm.registerEvents(new PlayerDeathListener(sqlHandler, logout), p);
+        pm.registerEvents(new PlayerDeathListener(sqlHandler, logout, eloRanking), p);
         pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester, guilds), p);
         pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), p);
+        pm.registerEvents(new PlayerCacheListenersController(tempPlayerData, sqlHandler, guilds), p);
         if (GenConf.BLOCK_STRENGTH_2) {
             pm.registerEvents(new EnchantInsertListener(), p);
         }

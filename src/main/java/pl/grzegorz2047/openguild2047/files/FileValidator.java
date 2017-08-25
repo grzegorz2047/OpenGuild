@@ -36,7 +36,9 @@ public class FileValidator {
             configInside.load(targetReader);
 
             for (String k : configInside.getKeys(true)) {
+                //System.out.println("Klucze z configu z jara! " + k);
                 if (!c.contains(k)) {
+                    //System.out.println("Nie zawiera " + k + " ustawiam na " + configInside.get(k));
                     c.set(k, configInside.get(k));
                 }
             }
@@ -44,7 +46,7 @@ public class FileValidator {
             c.save(file);
             targetReader.close();
         } catch (IOException | InvalidConfigurationException e) {
-            OpenGuild. getOGLogger().exceptionThrown(e);
+            OpenGuild.getOGLogger().exceptionThrown(e);
         }
     }
 }

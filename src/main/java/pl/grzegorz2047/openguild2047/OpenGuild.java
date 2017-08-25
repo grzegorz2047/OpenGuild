@@ -145,7 +145,7 @@ public class OpenGuild extends JavaPlugin {
         List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
         this.drop = new DropFromBlocks(GenConf.ELIGIBLE_DROP_BLOCKS, loadedDrops);
 
-        this.guilds = new Guilds(sqlHandler);
+        this.guilds = new Guilds(sqlHandler, this);
         this.relations = new Relations();
         this.cuboids = new Cuboids(guilds);
         this.logout = new AntiLogoutManager();
@@ -161,7 +161,6 @@ public class OpenGuild extends JavaPlugin {
         loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler);
 
         loadAllListeners();
-        loadPlayers();
         sqlHandler.loadRelations();
 
         // Load required items section.
@@ -261,20 +260,6 @@ public class OpenGuild extends JavaPlugin {
                 new ListenerLoader
                         (this, guilds, tagManager, sqlHandler, teleporter, tpaRequester, cuboids, logout, drop);
         listenerLoader.loadListeners(pm);
-    }
-
-    /**
-     * This method loads all players from database and adds
-     * them to their guild's member list.
-     */
-    private void loadPlayers() {
-        //for(Guild guild : this.guildHelper.getGuilds().values()) {
-        for (UUID player : this.guilds.getMappedPlayersToGuilds().keySet()) {
-            Guild guild = this.guilds.getPlayerGuild(player);
-            if (guild != null) {
-                guild.addMember(player);
-            }
-        }
     }
 
     /**

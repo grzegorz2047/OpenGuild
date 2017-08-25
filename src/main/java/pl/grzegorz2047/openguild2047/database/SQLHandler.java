@@ -71,10 +71,9 @@ public class SQLHandler {
 
         // Load guilds and players from database
         loadGuildsFromDB(cuboids, guilds);
-        this.loadPlayers();
+        this.loadPlayersToGuilds();
         OpenGuild.getOGLogger().info("Loaded " + guilds.getNumberOfGuilds() + " guilds from database.");
     }
-
 
 
     public void addKill(Player killer) {
@@ -149,10 +148,10 @@ public class SQLHandler {
         return new Location(Bukkit.getWorld(cuboidWorldName), cuboidCenterX, 0, cuboidCenterZ);
     }
 
-    private void loadPlayers() {
+    private void loadPlayersToGuilds() {
         try {
             createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM " + playersTableName);
+            ResultSet result = statement.executeQuery("SELECT * FROM " + playersTableName + " WHERE NOT guild=''");
             readPlayersDataFromResult(result);
             result.close();
             statement.close();
@@ -170,7 +169,7 @@ public class SQLHandler {
                 continue;
             }
             Guild playersGuild = guilds.getGuild(guildTag);
-            guilds.addPlayer(uuid, playersGuild);
+            playersGuild.addMember(uuid);
         }
     }
 
@@ -227,7 +226,7 @@ public class SQLHandler {
         final String uuid = player.toString();
         try {
             createStatement();
-            statement.execute("INSERT INTO " + playersTableName + " VALUES( '', '" + uuid + "', '" + 0 + "', '" + 0 + "', '" + 0 + "' , '" + Bukkit.getPlayer(player).getName() + "');");
+            statement.execute("INSERT INTO " + playersTableName + " VALUES( '', '" + uuid + "', '" + 0 + "', '" + 0 + "', '" + 0 + "' , '" + 1000 + "' , '" + Bukkit.getPlayer(player).getName() + "');");
             statement.close();
             statement.getConnection().close();
         } catch (Exception ex) {
@@ -298,7 +297,7 @@ public class SQLHandler {
     /**
      * Removes guild from database.
      *
-     * @param tag tag of guild, which should be deleted.
+     * @param tag     tag of guild, which should be deleted.
      * @param members
      */
     public void removeGuild(String tag, List<UUID> members) {
@@ -307,7 +306,7 @@ public class SQLHandler {
 
             statement.addBatch("DELETE FROM " + guildsTableName + " WHERE `tag` = '" + tag + "'");
             statement.addBatch("DELETE FROM " + cuboidsTableName + " WHERE `tag` = '" + tag + "'");
-            for(UUID member :members) {
+            for (UUID member : members) {
                 statement.addBatch("UPDATE " + playersTableName + " SET `guild` = '' WHERE `uuid` = '" + member.toString() + "'");
             }
             statement.executeBatch();
@@ -441,6 +440,45 @@ public class SQLHandler {
         } catch (Exception ex) {
             OpenGuild.getOGLogger().exceptionThrown(ex);
         }
+
+    }
+
+    public void updatePlayersElo(UUID winner, int winnerELO, UUID lost, int lostELO) {
+        try {
+            createStatement();
+            statement.addBatch("UPDATE " + playersTableName + " SET elo=" + winnerELO + " WHERE uuid='" + winner + "'");
+            statement.addBatch("UPDATE " + playersTableName + " SET elo=" + lostELO + " WHERE uuid='" + lost + "'");
+            statement.executeBatch();
+            statement.close();
+            statement.getConnection().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void getPlayerData(UUID uniqueId, TempPlayerData tempPlayerData) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    createStatement();
+                    ResultSet result = statement.executeQuery("SELECT * FROM " + playersTableName + " WHERE uuid='" + uniqueId + "'");
+                    while (anotherRecord(result)) {
+                        String guild = result.getString("guild");
+                        String lastseenname = result.getString("lastseenname");
+                        int kills = result.getInt("kills");
+                        int deaths = result.getInt("deaths");
+                        int elo = result.getInt("elo");
+                        String uuid = result.getString("uuid");
+                        tempPlayerData.addSQLRecord(UUID.fromString(uuid), guild, lastseenname, elo, kills, deaths);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
     }
 }

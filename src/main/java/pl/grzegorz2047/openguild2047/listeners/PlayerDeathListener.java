@@ -21,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
+import pl.grzegorz2047.openguild2047.ranking.EloRanking;
 
 /**
  * @author Aleksander
@@ -29,10 +30,12 @@ public class PlayerDeathListener implements Listener {
 
     private final SQLHandler sqlHandler;
     private final AntiLogoutManager antiLogoutManager;
+    private final EloRanking eloranking;
 
-    public PlayerDeathListener(SQLHandler sqlHandler, AntiLogoutManager antiLogoutManager) {
+    public PlayerDeathListener(SQLHandler sqlHandler, AntiLogoutManager antiLogoutManager, EloRanking eloRanking) {
         this.sqlHandler = sqlHandler;
         this.antiLogoutManager = antiLogoutManager;
+        this.eloranking = eloRanking;
     }
 
     @EventHandler
@@ -43,6 +46,7 @@ public class PlayerDeathListener implements Listener {
             sqlHandler.addDeath(player);
             sqlHandler.addKill(killer);
             antiLogoutManager.removePlayerFromFight(killer.getName());
+            eloranking.recountEloFight(killer, player);
         }
         antiLogoutManager.removePlayerFromFight(player.getName());
     }

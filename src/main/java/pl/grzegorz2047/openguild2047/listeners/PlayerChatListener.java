@@ -49,7 +49,7 @@ public class PlayerChatListener implements Listener {
 
             if (GenConf.guildprefixinchat) {
                 event.setFormat(ChatColor.translateAlternateColorCodes('&',
-                         GenConf.chatFormat
+                        GenConf.chatFormat
                                 .replace("{PLAYER}", player.getName())
                                 .replace("{GUILD}", "")
                                 .replace("{MESSAGE}", message)));
@@ -86,8 +86,10 @@ public class PlayerChatListener implements Listener {
                 return;
             }
         }
+        int elo = player.getMetadata("elo").get(0).asInt();
         event.setFormat(ChatColor.translateAlternateColorCodes('&',
                 GenConf.chatFormat
+                        .replace("{ELO}", String.valueOf(elo))
                         .replace("{PLAYER}", player.getName())
                         .replace("{GUILD}", guild.getName())
                         .replace("{MESSAGE}", message)));
@@ -104,8 +106,10 @@ public class PlayerChatListener implements Listener {
         String whoGuildTag = r.getBaseGuildTag();
         Guild whoGuild = guilds.getGuild(whoGuildTag);
         ally = getAllyGuildFromRelation(guild, r, whoGuild);
+        int elo = player.getMetadata("elo").get(0).asInt();
         if (ally != null) {
             String format = GenConf.allyChatFormat
+                    .replace("{ELO}", String.valueOf(elo))
                     .replace("{GUILD}", guild.getName())
                     .replace("{PLAYER}", player.getName())
                     .replace("{MESSAGE}", message);

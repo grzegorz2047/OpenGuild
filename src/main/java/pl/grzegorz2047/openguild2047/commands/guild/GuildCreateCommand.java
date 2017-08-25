@@ -145,7 +145,7 @@ public class GuildCreateCommand extends Command {
 
         cuboids.addCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
         Guild guild = guilds.addGuild(player.getLocation(), player.getUniqueId(), tag, description);
-        guilds.updatePlayerGuild(player.getUniqueId(), guild);
+        guilds.updatePlayerMetadata(player.getUniqueId(), "guild", guild.getName());
         guilds.addOnlineGuild(guild.getName());
 
         if (GenConf.playerprefixenabled) {

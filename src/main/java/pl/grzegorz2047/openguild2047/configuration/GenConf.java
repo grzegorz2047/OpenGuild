@@ -116,7 +116,6 @@ public class GenConf {
     public static String chatFormat;
 
 
-
     public static void loadConfiguration(FileConfiguration config) {
 
         forbiddenworlds = config.getStringList("forbidden-worlds");
@@ -127,6 +126,7 @@ public class GenConf {
         TELEPORT_COOLDOWN = config.getInt("teleport-cooldown", 10);
         EXTRA_PROTECTION = config.getBoolean("cuboid.extra-protection", false);
         BLOCK_STRENGTH_2 = config.getBoolean("block-strong-strenght-2", true);
+        System.out.println("block jest na " + BLOCK_STRENGTH_2);
         NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK = config.getBoolean("drop.notify-cant-drop-from-not-eligible-block", false);
 
         List<String> blockList = config.getStringList("blocks-from-where-item-drops");
@@ -303,7 +303,7 @@ public class GenConf {
     }
 
     private static void loadDatabase(FileConfiguration config) {
-         String host = config.getString("mysql.address");
+        String host = config.getString("mysql.address");
         int port = config.getInt("mysql.port");
         String user = config.getString("mysql.login");
         String pass = config.getString("mysql.password");

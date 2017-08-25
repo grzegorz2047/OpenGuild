@@ -17,6 +17,9 @@ package pl.grzegorz2047.openguild2047.guilds;
 
 import java.util.*;
 
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.relations.Relation;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,13 +34,14 @@ public class Guilds {
 
     private final SQLHandler sqlHandler;
     private final GuildInvitations guildInvitations;
+    private final Plugin plugin;
     private Map<String, Guild> guilds = new HashMap<String, Guild>();
-    private Map<UUID, Guild> mappedPlayersToGuilds = new HashMap<UUID, Guild>();
     private List<String> onlineGuilds = new ArrayList<>();
 
 
-    public Guilds(SQLHandler sqlHandler) {
+    public Guilds(SQLHandler sqlHandler, Plugin plugin) {
         this.sqlHandler = sqlHandler;
+        this.plugin = plugin;
         this.guildInvitations = new GuildInvitations(sqlHandler, this);
     }
 
@@ -122,10 +126,9 @@ public class Guilds {
     }
 
     public Guild getPlayerGuild(UUID uuid) {
-        if (this.hasGuild(uuid)) {
-            return mappedPlayersToGuilds.get(uuid);
-        }
-        return null;
+        List<MetadataValue> metadata = Bukkit.getPlayer(uuid).getMetadata("guild");
+        String guildTag = metadata.get(0).asString();
+        return guilds.get(guildTag);
     }
 
     public Guild getGuild(String guildTag) {
@@ -141,7 +144,9 @@ public class Guilds {
      * @return boolean
      */
     public boolean hasGuild(UUID uuid) {
-        return mappedPlayersToGuilds.containsKey(uuid) && mappedPlayersToGuilds.get(uuid) != null;
+        List<MetadataValue> metadata = Bukkit.getPlayer(uuid).getMetadata("guild");
+        String guildTag = metadata.get(0).asString();
+        return !Objects.equals(guildTag, "");
     }
 
     /**
@@ -165,16 +170,9 @@ public class Guilds {
     }
 
 
-    public void setMappedPlayersToGuilds(Map<UUID, Guild> mappedPlayersToGuilds) {
-        this.mappedPlayersToGuilds = mappedPlayersToGuilds;
-    }
-
     /**
      * @return map which contains all players, who are members of guilds.
      */
-    public Map<UUID, Guild> getMappedPlayersToGuilds() {
-        return mappedPlayersToGuilds;
-    }
 
     public Guild addGuild(Location home, UUID owner, String tag, String description) {
         Guild guild =
@@ -216,8 +214,8 @@ public class Guilds {
     }
 
 
-    public void updatePlayerGuild(UUID uniqueId, Guild guild) {
-        mappedPlayersToGuilds.put(uniqueId, guild);
+    public void updatePlayerMetadata(UUID uniqueId, String column, Object value) {
+        Bukkit.getPlayer(uniqueId).setMetadata(column, new FixedMetadataValue(plugin, value));
     }
 
     public int getNumberOfGuilds() {
@@ -225,7 +223,7 @@ public class Guilds {
     }
 
     public void addPlayer(UUID uuid, Guild playersGuild) {
-        mappedPlayersToGuilds.put(uuid, playersGuild);
+        updatePlayerMetadata(uuid, "guild", playersGuild.getName());
     }
 
     public List<String> getOnlineGuilds() {
@@ -241,6 +239,6 @@ public class Guilds {
     }
 
     public void acceptInvitation(Player player, Guild guild) {
-        this.guildInvitations.acceptGuildInvitation(player,guild);
+        this.guildInvitations.acceptGuildInvitation(player, guild);
     }
 }

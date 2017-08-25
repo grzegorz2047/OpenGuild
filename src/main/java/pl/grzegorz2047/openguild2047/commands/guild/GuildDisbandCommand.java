@@ -92,7 +92,7 @@ public class GuildDisbandCommand extends Command {
 
             }
             for (UUID uuid : guild.getMembers()) {
-                guilds.getMappedPlayersToGuilds().remove(uuid);
+                guilds.updatePlayerMetadata(uuid, "guild", "");
             }
 
             cuboids.removeGuildCuboid(guild.getName());

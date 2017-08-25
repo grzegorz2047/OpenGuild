@@ -53,6 +53,7 @@ public class MySQLTables implements SQLTables {
                     + "kills INT,"
                     + "deaths INT,"
                     + "points INT,"
+                    + "elo INT,"
                     + "lastseenname VARCHAR(16),"
                     + "PRIMARY KEY(uuid));";
             statement.addBatch(query);
