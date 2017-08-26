@@ -1,0 +1,95 @@
+language: EN
+teampvp: false
+teampvp-msg: false
+home-command: true
+spawn-command: true
+prevent-macro-ghost-block-placing: true
+teleport-cooldown: 10
+tpa-command: true
+tpa-expire-time: 15
+fight-antilogout: true
+spawn:
+  location-max:
+  - world
+  - -356
+  - 58
+  location-min:
+  - world
+  - -144
+  - 233
+  block-guild-creating: true
+  block-enter: false
+  block-enter-time: 10
+  message: '&cCant do it on spawn!'
+  extra: 50
+cuboid:
+  block-guild-creation-when-players-are-too-close: true
+  enabled: true
+  notify-permission: false
+  min-cube-size: 20
+  max-cube-size: 50
+  canenterarea: true
+  notify-enter: true
+  notify-enter-members: false
+  notify-enter-sound: false
+  notify-enter-sound-type: ENTITY_PARROT_IMITATE_ENDERMAN
+  extra-protection: true
+  breaking-blocks:
+    item-types:
+    - DIAMOND_PICKAXE
+    damage: 1600
+hardcore-bans:
+  enabled: true
+  ban-time: 2m
+  kick-message: '&4You are dead! &7You gonna revive at &6%TIME&7!'
+  login-message: '&7You cannot enter server cause youre dead! You have to wait till &6%TIME or unban on site XXX'
+  lightning: true
+random-tp:
+  enabled: true
+  button: true
+  range: 3000
+database: FILE
+file-dir: plugins/OpenGuild2047/og.db
+snooper: true
+updater: true
+sql-table-prefix: openguild_
+mysql:
+  address: localhost
+  port: 3306
+  database: izigildie
+  login: izigildie
+  password: 3pBOo8Qwe4lVQQLL
+  debug: true
+tags:
+  enabled: true
+  ally: '&b[{TAG}]&7 '
+  enemy: '&4[{TAG}]&7 '
+  guild: '&a[{TAG}]&7 '
+use-new-command-api: true
+join-msg: ''
+quit-msg: ''
+forcedesc: false
+debug: true
+chat:
+  prefix: '&6[{ELO}] &6[{TAG}] '
+  guild-format: '&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}'
+  guild-key: '@'
+  ally-format: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
+  ally-key: '!'
+  guildprefixinchat: true
+  chatFormat: '&8[&7{ELO}&8] &8[&7{GUILD}&8] &7{PLAYER}&7: &f{MESSAGE}'
+required-items:
+- WOOD:0:0:64
+listener:
+  player-move-event: true
+  tnt-block-enabled: true
+  tnt-block-time: 2
+forbidden-worlds:
+- world_nether
+drop:
+  enabled: true
+  notify-cant-drop-from-not-eligible-block: false
+  drop-to-eq: true
+  blocks-from-where-item-drops:
+  - STONE
+block-strong-strenght-2: true

@@ -1,0 +1,63 @@
+drop:
+  materials:
+    DIAMOND:
+      quantity: 1-2
+      chance: 0.08
+      minheight: 0
+      maxheight: 200
+      message: '&7Found: &b[%q] Diamond ore&7!'
+      tool:
+      - IRON_PICKAXE
+      - DIAMOND_PICKAXE
+      maxHeight: 50
+    GOLD_ORE:
+      quantity: 1-2
+      chance: 0.19
+      minheight: 0
+      maxheight: 200
+      message: '&7Found: &b[%q] Gold ore&7!'
+      tool:
+      - IRON_PICKAXE
+      - DIAMOND_PICKAXE
+      maxHeight: 50
+    IRON_ORE:
+      quantity: 2-4
+      chance: 0.2
+      minHeight: 0
+      maxHeight: 50
+      message: '&7Found: &b[%q] Iron ore&7!'
+    OBSIDIAN:
+      quantity: 1-2
+      chance: 0.2
+      minHeight: 0
+      maxHeight: 15
+      message: '&7Found: &b[%q] Obsydian&7!'
+      tool:
+      - DIAMOND_PICKAXE
+    LAPIS_ORE:
+      quantity: 1-2
+      chance: 0.15
+      minHeight: 0
+      maxHeight: 50
+      message: '&7Found: &b[%q] LAPIS&7!'
+      tool:
+      - IRON_PICKAXE
+      - DIAMOND_PICKAXE
+    REDSTONE:
+      quantity: 1-2
+      chance: 0.1
+      minHeight: 0
+      maxHeight: 25
+      message: '&7Found: &b[%q] Redstone&7!'
+      tool:
+      - IRON_PICKAXE
+      - DIAMOND_PICKAXE
+    EMERALD:
+      quantity: 1
+      chance: 0.08
+      minHeight: 0
+      maxHeight: 25
+      message: '&7Found: &b[%q] Redstone&7!'
+      tool:
+      - IRON_PICKAXE
+      - DIAMOND_PICKAXE
