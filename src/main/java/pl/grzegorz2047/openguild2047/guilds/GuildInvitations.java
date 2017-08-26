@@ -67,7 +67,7 @@ public class GuildInvitations {
             sqlHandler.
                     updatePlayerTag(
                             player.getUniqueId(),
-                    guild.getName());
+                            guild.getName());
             guild.addMember(player.getUniqueId());
             guild.addMembersName(player.getName());
 

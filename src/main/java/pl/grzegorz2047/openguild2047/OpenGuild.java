@@ -146,9 +146,10 @@ public class OpenGuild extends JavaPlugin {
         //}
         List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
         this.drop = new DropFromBlocks(GenConf.ELIGIBLE_DROP_BLOCKS, loadedDrops);
-
+        loadDB();
         this.cuboids = new Cuboids();
         this.guilds = new Guilds(sqlHandler, this, cuboids);
+        sqlHandler.startWork(cuboids, guilds);
         this.relations = new Relations();
 
         this.logout = new AntiLogoutManager();
@@ -159,13 +160,13 @@ public class OpenGuild extends JavaPlugin {
         tntGuildBlocker = new TntGuildBlocker();
 
         // Load database
-        loadDB();
+
         HardcoreSQLHandler hardcoreSQLHandler = new HardcoreSQLHandler(sqlHandler);
 
         loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler);
 
         loadAllListeners();
-        sqlHandler.loadRelations();
+        sqlHandler.loadRelations(guilds);
 
         // Load required items section.
         CuboidAndSpawnManipulationListeners.loadItems();
@@ -252,7 +253,7 @@ public class OpenGuild extends JavaPlugin {
                 break;
         }
 
-        this.sqlHandler = new SQLHandler(this, sqlImplementation, tables, guilds, cuboids);
+        this.sqlHandler = new SQLHandler(this, sqlImplementation, tables);
     }
 
     /**

@@ -32,9 +32,7 @@ import pl.grzegorz2047.openguild2047.database.interfaces.SQLTables;
 
 public class SQLHandler {
 
-    private final Guilds guilds;
-    private final Cuboids cuboids;
-    private OpenGuild plugin;
+      private OpenGuild plugin;
 
     private Statement statement;
     private SQLImplementationStrategy implementation;
@@ -45,30 +43,27 @@ public class SQLHandler {
     private String alliesTableName = "`" + GenConf.sqlTablePrefix + "allies`";
     private String guildsTableName = "`" + GenConf.sqlTablePrefix + "guilds`";
 
-    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation, SQLTables tables, Guilds guilds, Cuboids cuboids) {
+    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation, SQLTables tables) {
         this.plugin = plugin;
-        this.guilds = guilds;
-        this.tables = tables;
-        this.cuboids = cuboids;
+         this.tables = tables;
         try {
             this.implementation = implementation;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.startWork();
     }
 
     public Connection getConnection() throws Exception {
         return implementation.getConnection();
     }
 
-    private void startWork() {
+    public void startWork(Cuboids cuboids, Guilds guilds) {
         // Create tables is they doesn't exists
         tables.createTables(this);
 
         // Load guilds and players from database
         loadGuildsFromDB(cuboids, guilds);
-        this.loadPlayersToGuilds();
+        this.loadPlayersToGuilds(guilds);
         OpenGuild.getOGLogger().info("Loaded " + guilds.getNumberOfGuilds() + " guilds from database.");
     }
 
@@ -145,11 +140,11 @@ public class SQLHandler {
         return new Location(Bukkit.getWorld(cuboidWorldName), cuboidCenterX, 0, cuboidCenterZ);
     }
 
-    private void loadPlayersToGuilds() {
+    private void loadPlayersToGuilds(Guilds guilds) {
         try {
             createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM " + playersTableName + " WHERE NOT guild=''");
-            readPlayersDataFromResult(result);
+            readPlayersDataFromResult(result, guilds);
             result.close();
             statement.close();
             statement.getConnection().close();
@@ -158,7 +153,7 @@ public class SQLHandler {
         }
     }
 
-    private void readPlayersDataFromResult(ResultSet result) throws SQLException {
+    private void readPlayersDataFromResult(ResultSet result, Guilds guilds) throws SQLException {
         while (anotherRecord(result)) {
             String guildTag = result.getString("guild");
             UUID uuid = UUID.fromString(result.getString("uuid"));
@@ -171,7 +166,7 @@ public class SQLHandler {
     }
 
 
-    public void loadRelations() {
+    public void loadRelations(Guilds guilds) {
         try {
             createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM " + alliesTableName);
