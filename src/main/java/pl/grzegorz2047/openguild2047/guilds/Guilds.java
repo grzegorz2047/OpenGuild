@@ -158,6 +158,9 @@ public class Guilds {
      */
     public boolean hasGuild(UUID uuid) {
         List<MetadataValue> metadata = Bukkit.getPlayer(uuid).getMetadata("guild");
+        if(metadata.size() == 0) {
+            return  false;
+        }
         String guildTag = metadata.get(0).asString();
         return !Objects.equals(guildTag, "");
     }

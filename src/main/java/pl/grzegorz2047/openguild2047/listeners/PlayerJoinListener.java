@@ -17,6 +17,8 @@ package pl.grzegorz2047.openguild2047.listeners;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild2047.BagOfEverything;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -38,10 +40,12 @@ public class PlayerJoinListener implements Listener {
     private final Guilds guilds;
     private final SQLHandler sqlHandler;
     private final TempPlayerData tempPlayerData;
+    private final Plugin p;
     private String joinMsg;
 
-    public PlayerJoinListener(Guilds guilds, TagManager tagManager, SQLHandler sqlHandler, TempPlayerData tempPlayerData) {
+    public PlayerJoinListener(Guilds guilds, TagManager tagManager, SQLHandler sqlHandler, TempPlayerData tempPlayerData, Plugin p) {
         this.guilds = guilds;
+        this.p = p;
         this.tagManager = tagManager;
         this.tempPlayerData = tempPlayerData;
         this.sqlHandler = sqlHandler;
@@ -54,7 +58,6 @@ public class PlayerJoinListener implements Listener {
         UUID uuid = player.getUniqueId();
         event.setJoinMessage(joinMsg.replace("%PLAYER%", player.getName()));
         //System.out.print("Wykonuje playerJoinEvent!");
-
 
 
         //Pobierz dane gracza
@@ -74,14 +77,23 @@ public class PlayerJoinListener implements Listener {
                 guilds.addOnlineGuild(guild.getName());
                 guilds.notifyMembersJoinedGame(player, guild);
             }
-        }else {
+        } else {
             if (!player.hasPlayedBefore()) {
                 sqlHandler.insertPlayer(uuid);
+                guilds.updatePlayerMetadata(player.getUniqueId(), "guild", "");
+                guilds.updatePlayerMetadata(player.getUniqueId(), "elo", 1000);
+                guilds.updatePlayerMetadata(player.getUniqueId(), "kills", 0);
+                guilds.updatePlayerMetadata(player.getUniqueId(), "deaths", 0);
+            } else {
+                Bukkit.getScheduler().runTaskLater(p, new Runnable() {
+                    @Override
+                    public void run() {
+                        player.kickPlayer(MsgManager.get("youenteredservertoofastrelog"));
+                    }
+                }, 3l);
+                return;
             }
-            guilds.updatePlayerMetadata(player.getUniqueId(), "guild","");
-            guilds.updatePlayerMetadata(player.getUniqueId(), "elo", 1000);
-            guilds.updatePlayerMetadata(player.getUniqueId(), "kills", 0);
-            guilds.updatePlayerMetadata(player.getUniqueId(), "deaths", 0);
+
         }
 
         tagManager.prepareScoreboardTagForPlayerOnJoin(player);

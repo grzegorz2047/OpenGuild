@@ -47,6 +47,7 @@ public class PlayerDeathListener implements Listener {
             sqlHandler.addKill(killer);
             antiLogoutManager.removePlayerFromFight(killer.getName());
             eloranking.recountEloFight(killer, player);
+            //set last kill to winner w metadata i potem jak zginie ten sam nie nalicza elo
         }
         antiLogoutManager.removePlayerFromFight(player.getName());
     }

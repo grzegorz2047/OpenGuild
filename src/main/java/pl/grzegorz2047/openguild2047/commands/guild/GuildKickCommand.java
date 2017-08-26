@@ -88,7 +88,7 @@ public class GuildKickCommand extends Command {
 
         guild.removeMember(op.getUniqueId());
 
-        guilds.updatePlayerMetadata(op.getUniqueId(), "", "");
+        guilds.updatePlayerMetadata(op.getUniqueId(), "guild", "");
         if (op.isOnline()) {
             op.getPlayer().sendMessage(MsgManager.playerkicked.replace("{GUILD}", guild.getName()));
             tagManager.playerLeaveGuild(((Player) op), guild);

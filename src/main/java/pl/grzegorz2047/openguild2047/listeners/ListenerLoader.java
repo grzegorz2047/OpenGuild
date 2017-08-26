@@ -48,16 +48,15 @@ public class ListenerLoader {
     public void loadListeners(PluginManager pm) {
         TempPlayerData tempPlayerData = new TempPlayerData(p);
         EloRanking eloRanking = new EloRanking(p, sqlHandler);
-        pm.registerEvents(new PlayerJoinListener(guilds, tagManager, sqlHandler, tempPlayerData), p);
+        pm.registerEvents(new PlayerJoinListener(guilds, tagManager, sqlHandler, tempPlayerData, p), p);
         pm.registerEvents(new PlayerChatListener(guilds), p);
         pm.registerEvents(new PlayerDeathListener(sqlHandler, logout, eloRanking), p);
         pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester, guilds), p);
-        pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), p);
+        pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester, tempPlayerData), p);
         pm.registerEvents(new PlayerCacheListenersController(tempPlayerData, sqlHandler, guilds), p);
         if (GenConf.BLOCK_STRENGTH_2) {
             pm.registerEvents(new EnchantInsertListener(), p);
         }
-        pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester), p);
 
         if (GenConf.cubEnabled) {
             pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop, guilds), p);

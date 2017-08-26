@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import pl.grzegorz2047.openguild2047.database.TempPlayerData;
 import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
@@ -42,14 +43,15 @@ public class PlayerQuitListener implements Listener {
     private final TpaRequester tpaRequester;
     private final String quitMsg;
     private final ScoreboardPackets scoreboardPackets = new ScoreboardPackets();
+    private final TempPlayerData tempPlayerData;
 
-    public PlayerQuitListener(Guilds guilds, Cuboids cuboids, AntiLogoutManager logout, Teleporter teleporter, TpaRequester tpaRequester) {
+    public PlayerQuitListener(Guilds guilds, Cuboids cuboids, AntiLogoutManager logout, Teleporter teleporter, TpaRequester tpaRequester, TempPlayerData tempPlayerData) {
         this.guilds = guilds;
         this.cuboids = cuboids;
         this.logout = logout;
         this.teleporter = teleporter;
         this.tpaRequester = tpaRequester;
-
+        this.tempPlayerData = tempPlayerData;
         this.quitMsg = ChatColor.translateAlternateColorCodes('&', MsgManager.getIgnorePref("playerleftservermsg"));
 
     }
@@ -62,13 +64,14 @@ public class PlayerQuitListener implements Listener {
         if (guilds.isPlayerInGuild(player)) {
             Guild g = guilds.getPlayerGuild(player.getUniqueId());
             guilds.guildMemberLeftServer(player, uuid);
-            if(!guilds.isGuildOnline(g.getName())) {
+            if (!guilds.isGuildOnline(g.getName())) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     scoreboardPackets.sendDeleteTeamTag(p, g.getName());
                 }
             }
 
         }
+        tempPlayerData.removePlayer(player.getUniqueId());
         String playerName = player.getName();
         logout.handleLogoutDuringFight(player, playerName);
         cuboids.clearCuboidEnterNotification(player);

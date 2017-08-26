@@ -145,11 +145,14 @@ public class EloRanking {
 
 
     public int getKFactor(int wOldPoints) {
-        int wKFactor = 30;
-        if (wOldPoints < 2000) {
+        int wKFactor = 40;
+        if (wOldPoints < 1000) {
+            wKFactor = 40;
+        }
+        if (wOldPoints >= 1000 && wOldPoints < 2000) {
             wKFactor = 30;
         } else if (wOldPoints >= 2000 && wOldPoints <= 2400) {
-            wKFactor = 130 - ((wOldPoints) / 20);
+            wKFactor = 130 - ((wOldPoints) / 25);
         } else if (wOldPoints > 2400) {
             wKFactor = 10;
         }

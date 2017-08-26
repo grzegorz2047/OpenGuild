@@ -75,7 +75,7 @@ public class GuildLeaveCommand extends Command {
         }
 
         guild.removeMember(player.getUniqueId());
-        guilds.updatePlayerMetadata(player.getUniqueId(), "", "");
+        guilds.updatePlayerMetadata(player.getUniqueId(), "guild", "");
         for (UUID member : guild.getMembers()) {
             OfflinePlayer opp = Bukkit.getOfflinePlayer(member);
             if (opp.isOnline()) {

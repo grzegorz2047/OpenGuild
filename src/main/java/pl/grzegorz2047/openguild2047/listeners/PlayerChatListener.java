@@ -47,9 +47,11 @@ public class PlayerChatListener implements Listener {
         String message = event.getMessage().replace("%", "");
         if (!isInGuild(player)) {
 
+            int elo = getPlayerElo(player);
             if (GenConf.guildprefixinchat) {
                 event.setFormat(ChatColor.translateAlternateColorCodes('&',
                         GenConf.chatFormat
+                                .replace("{ELO}", String.valueOf(elo))
                                 .replace("{PLAYER}", player.getName())
                                 .replace("{GUILD}", "")
                                 .replace("{MESSAGE}", message)));
@@ -57,6 +59,10 @@ public class PlayerChatListener implements Listener {
             return;
         }
         processChatForPlayerWithGuild(event, player, uuid, message);
+    }
+
+    private int getPlayerElo(Player player) {
+        return player.getMetadata("elo").get(0).asInt();
     }
 
     private void processChatForPlayerWithGuild(AsyncPlayerChatEvent event, Player player, UUID uuid, String message) {
@@ -86,7 +92,7 @@ public class PlayerChatListener implements Listener {
                 return;
             }
         }
-        int elo = player.getMetadata("elo").get(0).asInt();
+        int elo = getPlayerElo(player);
         event.setFormat(ChatColor.translateAlternateColorCodes('&',
                 GenConf.chatFormat
                         .replace("{ELO}", String.valueOf(elo))
@@ -106,7 +112,7 @@ public class PlayerChatListener implements Listener {
         String whoGuildTag = r.getBaseGuildTag();
         Guild whoGuild = guilds.getGuild(whoGuildTag);
         ally = getAllyGuildFromRelation(guild, r, whoGuild);
-        int elo = player.getMetadata("elo").get(0).asInt();
+        int elo = getPlayerElo(player);
         if (ally != null) {
             String format = GenConf.allyChatFormat
                     .replace("{ELO}", String.valueOf(elo))
@@ -133,7 +139,9 @@ public class PlayerChatListener implements Listener {
     }
 
     private String prepareMessageFormat(Player player, String message) {
+        int elo = getPlayerElo(player);
         return GenConf.guildChatFormat
+                .replace("{ELO}", String.valueOf(elo))
                 .replace("{PLAYER}", player.getName())
                 .replace("{MESSAGE}", message);
     }
