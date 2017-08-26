@@ -15,8 +15,6 @@
  */
 package pl.grzegorz2047.openguild2047.listeners;
 
-import pl.grzegorz2047.openguild2047.OpenGuild;
-import pl.grzegorz2047.openguild2047.guilds.Guild;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,9 +33,11 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.PlayerInventory;
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
- import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.dropstone.DropFromBlocks;
+import pl.grzegorz2047.openguild2047.guilds.Guild;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
@@ -63,7 +63,6 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
         this.allowedInteractItems.add(Material.ENDER_CHEST);
         this.allowedInteractItems.add(Material.WOODEN_DOOR);
     }
-
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
@@ -92,9 +91,15 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     }
 
     private boolean processBreakingBlockInEnemyArea(BlockBreakEvent e, Player player, Block brokenBlock) {
+        String playerGuildTag = "";
+        if (guilds.hasGuild(player.getUniqueId())) {
+            Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
+            playerGuildTag = playerGuild.getName();
+
+        }
         if (player.hasPermission("openguild.cuboid.bypassbreak")) {
             return false;
-        } else if (!cuboids.allowedToDoItHere(player, brokenBlock.getLocation())) {// Damage jest rowny 0; niszczenie blokow jest wylaczone
+        } else if (!cuboids.hasRightToThisLocation(player, playerGuildTag, brokenBlock.getLocation())) {// Damage jest rowny 0; niszczenie blokow jest wylaczone
             if (!canbreakEnemyBlock()) {
                 e.setCancelled(true);
             }
@@ -112,52 +117,63 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
-        if (e.getClickedBlock() != null) {
-            Player player = e.getPlayer();
-            if (SpawnChecker.isSpawn(e.getClickedBlock().getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
-                if (allowedInteractItems.contains(e.getMaterial())) {
-                    return;
-                }
-                e.setCancelled(true);
-                player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
+        if (e.getClickedBlock() == null) {
+            return;
+        }
+        Player player = e.getPlayer();
+        String playerGuildTag = "";
+        if (guilds.hasGuild(player.getUniqueId())) {
+            Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
+            playerGuildTag = playerGuild.getName();
+        }
+        if (SpawnChecker.isSpawn(e.getClickedBlock().getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
+            if (allowedInteractItems.contains(e.getMaterial())) {
                 return;
             }
-            if (GenConf.EXTRA_PROTECTION) {
-                if (cuboids.allowedToDoItHere(player, e.getClickedBlock().getLocation())) {
-                    return;
-                }
-                if (player.hasPermission("openguild.cuboid.bypassinteract")) {
-                    Location block = player.getLocation();
-                    String interactionConsoleMsg = createConsoleInteractionMsg(player, block);
-                    OpenGuild.getOGLogger().info(interactionConsoleMsg);
-                    String interactionMsg = createInteractionMsg(block);
-                    player.sendMessage(interactionMsg);
-                } else {
-                    if (!canbreakEnemyBlock()) {
-                        e.setCancelled(true); // Damage jest rowny 0; niszczenie blokow jest wylaczone
-                        player.sendMessage(MsgManager.get("cantdoitonsomeonearea"));
-                        return;
-                    }
-                    if (!hasSpecialBreakingitem(player.getInventory())) {
-                        player.sendMessage(MsgManager.get("cantdoitonsomeonearea"));
-                        return;
-                    }
-                    Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
-                    if (playerGuild != null) {
-                        for (Guild ally : guilds.getAllyGuilds(playerGuild)) {
-                            String allyGuildTag = ally.getName();
-                            boolean isinAllyCuboid = cuboids.isInCuboid(player.getLocation(), allyGuildTag);
-                            if (isinAllyCuboid) {
-                                e.setCancelled(true);
-                                return;
-                            }
-                        }
-                    }
+            e.setCancelled(true);
+            player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
+            return;
+        }
+        if (!GenConf.EXTRA_PROTECTION) {
+            return;
+        }
 
-                }
+        if (cuboids.hasRightToThisLocation(player, playerGuildTag, e.getClickedBlock().getLocation())) {
+            return;
+        }
+        if (player.hasPermission("openguild.cuboid.bypassinteract")) {
+            return;
+        }
+
+        if (!canbreakEnemyBlock()) {
+            e.setCancelled(true); // Damage jest rowny 0; niszczenie blokow jest wylaczone
+            player.sendMessage(MsgManager.get("cantdoitonsomeonearea"));
+            return;
+        }
+        if (!hasSpecialBreakingitem(player.getInventory())) {
+            player.sendMessage(MsgManager.get("cantdoitonsomeonearea"));
+            return;
+        }
+        Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
+        if (playerGuild == null) {
+            return;
+        }
+        for (Guild ally : guilds.getAllyGuilds(playerGuild)) {
+            String allyGuildTag = ally.getName();
+            boolean isinAllyCuboid = cuboids.isInCuboid(player.getLocation(), allyGuildTag);
+            if (isinAllyCuboid) {
+                e.setCancelled(true);
+                return;
             }
         }
 
+        Location block = player.getLocation();
+        String interactionConsoleMsg = createConsoleInteractionMsg(player, block);
+        OpenGuild.getOGLogger()
+                .info(interactionConsoleMsg);
+
+        String interactionMsg = createInteractionMsg(block);
+        player.sendMessage(interactionMsg);
     }
 
 
@@ -180,6 +196,13 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
+        Player player = e.getPlayer();
+        String playerGuildTag = "";
+        if (guilds.hasGuild(player.getUniqueId())) {
+            Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
+            playerGuildTag = playerGuild.getName();
+
+        }
         if (GenConf.PREVENT_GHOST_BLOCK_PLACE) {
             if (e.isCancelled()) {
                 if (e.getBlock().getType().equals(Material.AIR)) {
@@ -187,23 +210,29 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
                 }
             }
         }
-        if (SpawnChecker.isSpawn(e.getBlock().getLocation()) && !e.getPlayer().hasPermission("openguild.spawn.bypass")) {
+        if (SpawnChecker.isSpawn(e.getBlock().getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
+            player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
             return;
         }
-        if (e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
+        if (player.hasPermission("openguild.cuboid.bypassplace")) {
             return;
         }
-        if (!cuboids.allowedToDoItHere(e.getPlayer(), e.getBlock().getLocation())) {
-            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+        if (!cuboids.hasRightToThisLocation(player, playerGuildTag, e.getBlock().getLocation())) {
+            player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
             e.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBucketTake(PlayerBucketFillEvent e) {
+        Player player = e.getPlayer();
+        String playerGuildTag = "";
+        if (guilds.hasGuild(player.getUniqueId())) {
+            Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
+            playerGuildTag = playerGuild.getName();
 
+        }
         if (SpawnChecker.isSpawn(e.getBlockClicked().getLocation()) && !e.getPlayer().hasPermission("openguild.spawn.bypass")) {
             e.setCancelled(true);
             e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
@@ -212,7 +241,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
         if (e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
             return;
         }
-        if (!cuboids.allowedToDoItHere(e.getPlayer(), e.getBlockClicked().getLocation())) {
+        if (!cuboids.hasRightToThisLocation(e.getPlayer(), playerGuildTag, e.getBlockClicked().getLocation())) {
             e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
             e.setCancelled(true);
         }
@@ -220,16 +249,25 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
 
     @EventHandler
     public void onBucketFlow(PlayerBucketEmptyEvent e) {
-        if (SpawnChecker.isSpawn(e.getBlockClicked().getLocation()) && !e.getPlayer().hasPermission("openguild.spawn.bypass")) {
+        Player player = e.getPlayer();
+
+        String playerGuildTag = "";
+        if (guilds.hasGuild(player.getUniqueId())) {
+            Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
+            playerGuildTag = playerGuild.getName();
+
+        }
+        Block blockClicked = e.getBlockClicked();
+        if (SpawnChecker.isSpawn(blockClicked.getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
+            player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
             return;
         }
-        if (e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
+        if (player.hasPermission("openguild.cuboid.bypassplace")) {
             return;
         }
-        if (!cuboids.allowedToDoItHere(e.getPlayer(), e.getBlockClicked().getLocation())) {
-            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+        if (!cuboids.hasRightToThisLocation(player, playerGuildTag, blockClicked.getLocation())) {
+            player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
             e.setCancelled(true);
         }
     }
@@ -249,7 +287,12 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent e) {
         Player player = (Player) e.getPlayer();
-        if (GenConf.EXTRA_PROTECTION && !cuboids.allowedToDoItHere(player, player.getLocation())) {
+        Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
+        String playerGuildTag = "";
+        if (playerGuild != null) {
+            playerGuildTag = playerGuild.getName();
+        }
+        if (GenConf.EXTRA_PROTECTION && !cuboids.hasRightToThisLocation(player, playerGuildTag, player.getLocation())) {
             if (e.getInventory().getType().equals(InventoryType.PLAYER)) {
                 return;
             }

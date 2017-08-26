@@ -57,7 +57,6 @@ public class PlayerJoinListener implements Listener {
 
         if (!player.hasPlayedBefore()) {
             sqlHandler.insertPlayer(uuid);
-            return;
         }
 
         //Pobierz dane gracza
@@ -69,7 +68,6 @@ public class PlayerJoinListener implements Listener {
             guilds.updatePlayerMetadata(player.getUniqueId(), "kills", playerRecord.getKills());
             guilds.updatePlayerMetadata(player.getUniqueId(), "deaths", playerRecord.getDeaths());
             this.tempPlayerData.removePlayer(player.getUniqueId());
-
         }
         if (guilds.hasGuild(player)) {
             Guild guild = guilds.getPlayerGuild(uuid);

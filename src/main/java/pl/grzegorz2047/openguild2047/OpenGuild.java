@@ -64,6 +64,7 @@ import pl.grzegorz2047.openguild2047.relations.Relations;
 import pl.grzegorz2047.openguild2047.tasks.Watcher;
 import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
 import pl.grzegorz2047.openguild2047.teleporters.TpaRequester;
+import pl.grzegorz2047.openguild2047.tntguildblocker.TntGuildBlocker;
 import pl.grzegorz2047.openguild2047.updater.Updater;
 
 
@@ -86,6 +87,7 @@ public class OpenGuild extends JavaPlugin {
     private TpaRequester tpaRequester;
     private DropFromBlocks drop;
     private Relations relations;
+    private TntGuildBlocker tntGuildBlocker;
 
     /**
      * Instance of built-in permissions manager main class.
@@ -145,14 +147,16 @@ public class OpenGuild extends JavaPlugin {
         List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
         this.drop = new DropFromBlocks(GenConf.ELIGIBLE_DROP_BLOCKS, loadedDrops);
 
-        this.guilds = new Guilds(sqlHandler, this);
+        this.cuboids = new Cuboids();
+        this.guilds = new Guilds(sqlHandler, this, cuboids);
         this.relations = new Relations();
-        this.cuboids = new Cuboids(guilds);
+
         this.logout = new AntiLogoutManager();
         // Setup Tag Manager
         this.tagManager = new TagManager(guilds);
         teleporter = new Teleporter();
         tpaRequester = new TpaRequester();
+        tntGuildBlocker = new TntGuildBlocker();
 
         // Load database
         loadDB();
@@ -171,7 +175,7 @@ public class OpenGuild extends JavaPlugin {
 
         // Register all hooks to this plugin
         Hooks.registerDefaults(this);
-        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester, guilds, relations), 0, 20);
+        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester, guilds, relations, tntGuildBlocker), 0, 20);
 
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!");
     }
@@ -258,7 +262,7 @@ public class OpenGuild extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         ListenerLoader listenerLoader =
                 new ListenerLoader
-                        (this, guilds, tagManager, sqlHandler, teleporter, tpaRequester, cuboids, logout, drop);
+                        (this, guilds, tagManager, sqlHandler, teleporter, tpaRequester, cuboids, logout, drop, tntGuildBlocker);
         listenerLoader.loadListeners(pm);
     }
 

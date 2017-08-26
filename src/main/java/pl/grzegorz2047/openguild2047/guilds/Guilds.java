@@ -20,6 +20,8 @@ import java.util.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboid;
+import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.relations.Relation;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -35,22 +37,31 @@ public class Guilds {
     private final SQLHandler sqlHandler;
     private final GuildInvitations guildInvitations;
     private final Plugin plugin;
+    private final Cuboids cuboids;
     private Map<String, Guild> guilds = new HashMap<String, Guild>();
     private List<String> onlineGuilds = new ArrayList<>();
 
 
-    public Guilds(SQLHandler sqlHandler, Plugin plugin) {
+    public Guilds(SQLHandler sqlHandler, Plugin plugin, Cuboids cuboids) {
         this.sqlHandler = sqlHandler;
+        this.cuboids = cuboids;
         this.plugin = plugin;
         this.guildInvitations = new GuildInvitations(sqlHandler, this);
     }
 
 
-    public void notifyMembersAboutSomeoneEnteringTheirCuboid(Player player, Guild g, String tag, boolean foundCuboid) {
-        for (UUID mem : g.getMembers()) {
+    public void notifyMembersAboutSomeoneEnteringTheirCuboid(Player player, String guildscuboidtag, Guild enemy) {
+        Guild guild = getGuild(guildscuboidtag);
+        boolean enemyGuildMember = false;
+        for (UUID mem : guild.getMembers()) {
             OfflinePlayer op = Bukkit.getOfflinePlayer(mem);
             if (op.isOnline()) {
-                notifySomeoneEnteredCuboid(player, tag, op, foundCuboid);
+                if (enemy != null) {
+                    notifySomeoneEnteredCuboid(op, player, enemy);
+                } else {
+                    notifySomeoneEnteredCuboid(op, player);
+
+                }
                 playSoundOnSomeoneEnteredCuboid(op);
             }
         }
@@ -62,19 +73,21 @@ public class Guilds {
         }
     }
 
-    private void notifySomeoneEnteredCuboid(Player player, String tag, OfflinePlayer op, boolean foundCuboid) {
-        if (GenConf.cubNotifyMem) {
-            if (!foundCuboid) {
+    private void notifySomeoneEnteredCuboid(OfflinePlayer op, Player player) {
+        op.getPlayer().sendMessage(
+                MsgManager.get("entercubmemsnoguild")
+                        .replace("{PLAYER}", player.getName()));
 
-                op.getPlayer().sendMessage(MsgManager.get("entercubmemsnoguild").
-                        replace("{PLAYER}", player.getName()));
-            } else {
-                op.getPlayer().sendMessage(MsgManager.get("entercubmems").
-                        replace("{PLAYER}", player.getName()).
-                        replace("{GUILD}", tag.toUpperCase()));
-            }
 
-        }
+    }
+
+    private void notifySomeoneEnteredCuboid(OfflinePlayer op, Player player, Guild enemy) {
+
+        op.getPlayer().sendMessage(
+                MsgManager.get("entercubmems")
+                        .replace("{PLAYER}", player.getName())
+                        .replace("{GUILD}", enemy.getName().toUpperCase()));
+
     }
 
     public List<Guild> getAllyGuilds(Guild g) {
@@ -240,5 +253,9 @@ public class Guilds {
 
     public void acceptInvitation(Player player, Guild guild) {
         this.guildInvitations.acceptGuildInvitation(player, guild);
+    }
+
+    public Guild getGuild(Location location) {
+        return guilds.get(cuboids.getGuildTagInLocation(location));
     }
 }

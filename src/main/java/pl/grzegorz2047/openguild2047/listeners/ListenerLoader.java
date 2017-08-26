@@ -14,6 +14,7 @@ import pl.grzegorz2047.openguild2047.managers.TagManager;
 import pl.grzegorz2047.openguild2047.ranking.EloRanking;
 import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
 import pl.grzegorz2047.openguild2047.teleporters.TpaRequester;
+import pl.grzegorz2047.openguild2047.tntguildblocker.TntGuildBlocker;
 
 /**
  * Created by grzeg on 23.08.2017.
@@ -29,8 +30,9 @@ public class ListenerLoader {
     private final AntiLogoutManager logout;
     private final DropFromBlocks drop;
     private final Plugin p;
+    private final TntGuildBlocker tntGuildBlocker;
 
-    public ListenerLoader(Plugin p, Guilds guilds, TagManager tagManager, SQLHandler sqlHandler, Teleporter teleporter, TpaRequester tpaRequester, Cuboids cuboids, AntiLogoutManager antiLogoutManager, DropFromBlocks dropFromBlocks) {
+    public ListenerLoader(Plugin p, Guilds guilds, TagManager tagManager, SQLHandler sqlHandler, Teleporter teleporter, TpaRequester tpaRequester, Cuboids cuboids, AntiLogoutManager antiLogoutManager, DropFromBlocks dropFromBlocks, TntGuildBlocker tntGuildBlocker) {
         this.guilds = guilds;
         this.tagManager = tagManager;
         this.sqlHandler = sqlHandler;
@@ -39,6 +41,7 @@ public class ListenerLoader {
         this.cuboids = cuboids;
         this.logout = antiLogoutManager;
         this.drop = dropFromBlocks;
+        this.tntGuildBlocker = tntGuildBlocker;
         this.p = p;
     }
 
@@ -63,7 +66,10 @@ public class ListenerLoader {
         pm.registerEvents(new EntityDamageByEntityListener(logout, guilds), p);
 
         if (GenConf.playerMoveEvent) {
-            pm.registerEvents(new PlayerMoveListener(cuboids), p);
+            pm.registerEvents(new PlayerMoveListener(guilds, cuboids), p);
+        }
+        if (GenConf.enableTNTExplodeListener) {
+            pm.registerEvents(new TNTExplode(guilds, drop, tntGuildBlocker), p);
         }
     }
 }

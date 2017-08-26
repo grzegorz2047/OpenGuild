@@ -25,6 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
+import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.interfaces.OpenGuildPlugin;
 
 import java.util.List;
@@ -37,34 +38,36 @@ import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
+import pl.grzegorz2047.openguild2047.tntguildblocker.TntGuildBlocker;
 
 public class TNTExplode implements Listener {
 
-    private final OpenGuildPlugin plugin;
-    private final Map<String, Integer> blockedGuilds = new HashMap<String, Integer>();
-    private final DropFromBlocks drop;
+     private final DropFromBlocks drop;
+    private final TntGuildBlocker tntGuildBlocker;
+    private final Guilds guilds;
 
-    public TNTExplode(OpenGuildPlugin plugin, DropFromBlocks drop) {
-        this.plugin = plugin;
+    public TNTExplode(Guilds guilds, DropFromBlocks drop, TntGuildBlocker tntGuildBlocker) {
+        this.guilds = guilds;
         this.drop = drop;
+        this.tntGuildBlocker = tntGuildBlocker;
     }
 
     public void handle(BlockPlaceEvent event) {
-        if (GenConf.enableTNTExplodeListener) {
-            Player player = event.getPlayer();
 
-            if (player.hasPermission("openguild.cuboid.bypassplace")) {
-                return;
-            }
+        Player player = event.getPlayer();
 
-            Guild guild = plugin.getGuild(event.getBlock().getLocation());
-            if (guild != null) {
-                if (blockedGuilds.containsKey(guild.getName())) {
-                    player.sendMessage(MsgManager.get("tntex").replace("{SEC}", String.valueOf(blockedGuilds.get(guild.getName()))));
-                    event.setCancelled(true);
-                }
+        if (player.hasPermission("openguild.cuboid.bypassplace")) {
+            return;
+        }
+
+        Guild guild = guilds.getGuild(event.getBlock().getLocation());
+        if (guild != null) {
+            if (tntGuildBlocker.isGuildBlocked(guild.getName())) {
+                player.sendMessage(MsgManager.get("tntex").replace("{SEC}", tntGuildBlocker.getTimeRemainingForBlockedGuild(guild.getName())));
+                event.setCancelled(true);
             }
         }
+
     }
 
     @EventHandler
@@ -75,31 +78,10 @@ public class TNTExplode implements Listener {
         }
         if (event.getEntityType().equals(EntityType.PRIMED_TNT) && GenConf.enableTNTExplodeListener) {
             Location location = event.getLocation();
-            final Guild guild = plugin.getGuild(location);
+            final Guild guild = guilds.getGuild(location);
 
             if (guild != null) {
-                if (!blockedGuilds.containsKey(guild.getName())) {
-                    EnhancedRunnable.startTask(plugin.getBukkit(), new EnhancedRunnable() {
-                        /**
-                         * Time left to 'free' guild.
-                         */
-                        private int blockTime = GenConf.defaultTNTBlockTime;
-
-                        @Override
-                        public void run() {
-                            blockTime = blockedGuilds.get(guild.getName());
-                            if (blockTime == 0) {
-                                blockedGuilds.remove(guild.getName());
-                                this.stopTask();
-                                return;
-                            }
-
-                            blockedGuilds.put(guild.getName(), blockTime--);
-                        }
-                    }, 5L, 20L);
-                }
-
-                blockedGuilds.put(guild.getName(), 30);
+                tntGuildBlocker.addGuildAsBlocked(guild.getName(), 30);
             }
         }
         if (GenConf.DROP_ENABLED) {
