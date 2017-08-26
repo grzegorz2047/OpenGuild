@@ -55,9 +55,7 @@ public class PlayerJoinListener implements Listener {
         event.setJoinMessage(joinMsg.replace("%PLAYER%", player.getName()));
         //System.out.print("Wykonuje playerJoinEvent!");
 
-        if (!player.hasPlayedBefore()) {
-            sqlHandler.insertPlayer(uuid);
-        }
+
 
         //Pobierz dane gracza
         SQLRecord playerRecord = this.tempPlayerData.getPlayerRecord(player.getUniqueId());
@@ -68,15 +66,24 @@ public class PlayerJoinListener implements Listener {
             guilds.updatePlayerMetadata(player.getUniqueId(), "kills", playerRecord.getKills());
             guilds.updatePlayerMetadata(player.getUniqueId(), "deaths", playerRecord.getDeaths());
             this.tempPlayerData.removePlayer(player.getUniqueId());
-        }
-        if (guilds.hasGuild(player)) {
-            Guild guild = guilds.getPlayerGuild(uuid);
-            //tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
-            tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
+            if (guilds.hasGuild(player)) {
+                Guild guild = guilds.getPlayerGuild(uuid);
+                //tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
+                tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
 
-            guilds.addOnlineGuild(guild.getName());
-            guilds.notifyMembersJoinedGame(player, guild);
+                guilds.addOnlineGuild(guild.getName());
+                guilds.notifyMembersJoinedGame(player, guild);
+            }
+        }else {
+            if (!player.hasPlayedBefore()) {
+                sqlHandler.insertPlayer(uuid);
+            }
+            guilds.updatePlayerMetadata(player.getUniqueId(), "guild","");
+            guilds.updatePlayerMetadata(player.getUniqueId(), "elo", 1000);
+            guilds.updatePlayerMetadata(player.getUniqueId(), "kills", 0);
+            guilds.updatePlayerMetadata(player.getUniqueId(), "deaths", 0);
         }
+
         tagManager.prepareScoreboardTagForPlayerOnJoin(player);
 
         notifyOpAboutUpdate(player);

@@ -1,7 +1,5 @@
 package pl.grzegorz2047.openguild2047.tntguildblocker;
 
-import pl.grzegorz2047.openguild2047.managers.MsgManager;
-
 import java.util.*;
 
 /**

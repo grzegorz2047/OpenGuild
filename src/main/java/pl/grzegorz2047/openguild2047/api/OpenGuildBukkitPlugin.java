@@ -93,13 +93,13 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     public Guild getGuild(Location location) {
         return null; // TODO
     }
-    
+
     @Override
     public Guild getGuild(Player player) {
         return null;
         // return getGuild(GuildHelper.getInstance().guildsplayers.get(player.getUniqueId()).getClanTag());
     }
-    
+
     @Override
     public Guild getGuild(String name) {
         for(Guild guild : getGuilds()) {
@@ -119,7 +119,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
     public GuildManager getGuildManager() {
         return manager;
     }
-    
+
     @Override
     public List<Guild> getGuilds() {
         return null; // TODO
@@ -179,7 +179,7 @@ public class OpenGuildBukkitPlugin implements OpenGuildPlugin {
         }
         return null;
     }
-    
+
     @Override
     public List<User> getUsers() {
         return null; // TODO
