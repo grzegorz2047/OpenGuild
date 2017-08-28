@@ -39,6 +39,7 @@ import pl.grzegorz2047.openguild.hardcore.HardcoreHandler;
 import pl.grzegorz2047.openguild.hardcore.HardcoreSQLHandler;
 import pl.grzegorz2047.openguild.randomtp.RandomTPHandler;
 import pl.grzegorz2047.openguild.relations.Relations;
+import pl.grzegorz2047.openguild.spawn.ModuleSpawn;
 import pl.grzegorz2047.openguild.tasks.Watcher;
 import pl.grzegorz2047.openguild.teleporters.Teleporter;
 import pl.grzegorz2047.openguild.teleporters.TpaRequester;
@@ -112,6 +113,9 @@ public class OpenGuild extends JavaPlugin {
 
         RandomTPHandler randomTPHandler = new RandomTPHandler();
         randomTPHandler.enable(this);
+
+        ModuleSpawn moduleSpawn = new ModuleSpawn();
+        moduleSpawn.enable(this);
 
         Relations relations = new Relations();
         loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler);

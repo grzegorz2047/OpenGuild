@@ -19,6 +19,7 @@ package pl.grzegorz2047.openguild.events.guild;
 import pl.grzegorz2047.openguild.guilds.Guild;
 
 import javax.annotation.Nonnull;
+
 import org.bukkit.ChatColor;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -37,20 +38,22 @@ public class GuildsChatMessageEvent extends Event implements Cancellable {
     private String format;
 
     public GuildsChatMessageEvent(@Nonnull String author,
-            @Nonnull Guild guild,
-            @Nonnull String message) {
+                                  @Nonnull Guild guild,
+                                  @Nonnull String message) {
         this.cancelled = false;
         this.author = author;
         this.guild = guild;
         this.format = ChatColor.GRAY + "[Guild] " + ChatColor.BLUE + author + ChatColor.GRAY + ": " + ChatColor.WHITE + message;
     }
 
-    @Nonnull public static HandlerList getHandlerList() {
+    @Nonnull
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
     @Override
-    @Nonnull public HandlerList getHandlers() {
+    @Nonnull
+    public HandlerList getHandlers() {
         return handlers;
     }
 
@@ -64,15 +67,18 @@ public class GuildsChatMessageEvent extends Event implements Cancellable {
         this.cancelled = cancel;
     }
 
-    @Nonnull public String getFormat() {
+    @Nonnull
+    public String getFormat() {
         return format;
     }
 
-    @Nonnull public Guild getGuild() {
+    @Nonnull
+    public Guild getGuild() {
         return guild;
     }
 
-    @Nonnull public String getAuthor() {
+    @Nonnull
+    public String getAuthor() {
         return author;
     }
 

@@ -39,12 +39,12 @@ public class PlayerJoinListener implements Listener {
     private final TempPlayerData tempPlayerData;
     private final Updater updater;
 
-    private String joinMsg;
-    private String guildColumn = "guild";
-    private String eloColumn = "elo";
-    private String killsColumn = "kills";
-    private String deathsColumn = "deaths";
-    private int defaultEloPoints = 1000;
+    private final String joinMsg;
+    private final String guildColumn = "guild";
+    private final String eloColumn = "elo";
+    private final String killsColumn = "kills";
+    private final String deathsColumn = "deaths";
+    private final int defaultEloPoints = 1000;
 
     public PlayerJoinListener(Guilds guilds, TagManager tagManager, SQLHandler sqlHandler, TempPlayerData tempPlayerData, Updater updater) {
         this.guilds = guilds;
@@ -108,8 +108,6 @@ public class PlayerJoinListener implements Listener {
         guilds.updatePlayerMetadata(uuid, killsColumn, playerKills);
         guilds.updatePlayerMetadata(uuid, deathsColumn, playerDeaths);
     }
-
-
 
 
 }

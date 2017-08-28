@@ -27,7 +27,7 @@ import pl.grzegorz2047.openguild.randomtp.RandomTPHandler;
 
 public class GuildRandomTPCommand extends Command {
 
-    RandomTPHandler randomTPHandler = new RandomTPHandler();
+    private RandomTPHandler randomTPHandler = new RandomTPHandler();
 
     public GuildRandomTPCommand(Plugin plugin) {
         randomTPHandler.enable(plugin);

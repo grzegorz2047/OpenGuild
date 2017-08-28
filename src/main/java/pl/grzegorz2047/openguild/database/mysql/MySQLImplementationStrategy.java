@@ -12,19 +12,10 @@ import java.sql.SQLException;
 public class MySQLImplementationStrategy implements SQLImplementationStrategy {
 
 
-    private final String host;
-    private final int port;
-    private final String user;
-    private final String password;
-    private final String dbName;
-    HikariDataSource hikari = new HikariDataSource();
+    private HikariDataSource hikari = new HikariDataSource();
 
     public MySQLImplementationStrategy(String host, int port, String user, String password, String dbName) {
-        this.host = host;
-        this.port = port;
-        this.user = user;
-        this.password = password;
-        this.dbName = dbName;
+
         hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
         hikari.addDataSourceProperty("serverName", host);
         hikari.addDataSourceProperty("port", port);

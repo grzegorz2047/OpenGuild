@@ -21,7 +21,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
- *
  * @author Aleksander
  */
 public class GuildRelationEvent extends GuildEvent implements Cancellable {
@@ -29,32 +28,32 @@ public class GuildRelationEvent extends GuildEvent implements Cancellable {
     private boolean cancel;
     private final Guild target;
     private final Relation.Status status;
-    
+
     public GuildRelationEvent(Guild guild, Guild target, Relation.Status status) {
         super(guild);
         this.target = target;
         this.status = status;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return cancel;
     }
-    
+
     @Override
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
     }
-    
+
     public Guild getTarget() {
         return target;
     }
-    
+
     public Relation.Status getStatus() {
         return status;
     }

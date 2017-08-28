@@ -46,9 +46,7 @@ public class MySQLData implements SQLData {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + name + "?autoReconnect=true", user, password);
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        } catch(ClassNotFoundException ex) {
+        } catch(SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
         }
         return connection;
@@ -57,22 +55,6 @@ public class MySQLData implements SQLData {
     @Override
     public String name() {
         return "mysql";
-    }
-    
-    public String getHost() {
-        return this.host;
-    }
-    
-    public int getPort() {
-        return this.port;
-    }
-    
-    public String getUser() {
-        return this.user;
-    }
-    
-    public String getPassword() {
-        return this.password;
     }
     
     public String getName() {

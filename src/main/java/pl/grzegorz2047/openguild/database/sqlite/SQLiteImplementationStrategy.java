@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Created by grzeg on 13.08.2017.
+ * File created by grzegorz2047 on 13.08.2017.
  */
 public class SQLiteImplementationStrategy implements SQLImplementationStrategy {
     @Override
@@ -17,13 +17,7 @@ public class SQLiteImplementationStrategy implements SQLImplementationStrategy {
         try {
             Class.forName("org.sqlite.JDBC").newInstance();
             connection = DriverManager.getConnection("jdbc:sqlite:" + GenConf.FILE_DIR);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (InstantiationException | IllegalAccessException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         if (connection == null) {

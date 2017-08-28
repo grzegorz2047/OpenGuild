@@ -41,7 +41,7 @@ public final class HardcoreSQLHandler {
         this.sqlHandler = sqlHandler;
     }
 
-    public  final String TABLENAME = "openguild_bans";
+    private final String TABLENAME = "openguild_bans";
 
     public  boolean createTables() {
         String query = "CREATE TABLE IF NOT EXISTS `" + TABLENAME + "` (UUID VARCHAR(36) NOT NULL primary key, NICK VARCHAR(16) NOT NULL, BAN_TIME BIGINT NOT NULL)";
@@ -70,9 +70,8 @@ public final class HardcoreSQLHandler {
     public  long getBan(UUID uniqueId) {
         if (playerExists(uniqueId)) {
             String query = "SELECT " + Column.BAN_TIME.toString() + " FROM " + TABLENAME + " WHERE " + Column.UUID.toString() + "='" + uniqueId + "'";
-            SQLHandler sql = sqlHandler;
             try {
-                Statement st = sql.getConnection().createStatement();
+                Statement st = sqlHandler.getConnection().createStatement();
                 ResultSet rs = st.executeQuery(query);
                 rs.next();
                 long ban_time = (long) rs.getDouble("BAN_TIME");
@@ -88,7 +87,7 @@ public final class HardcoreSQLHandler {
         return 0;
     }
 
-    public  boolean playerExists(UUID uniqueId) {
+    private boolean playerExists(UUID uniqueId) {
         String query = "SELECT COUNT(" + Column.UUID + ") FROM " + TABLENAME + " WHERE " + Column.UUID.toString() + "='" + uniqueId + "'";
         ResultSet rs = sqlHandler.executeQuery(query);
         int rowCount = -1;

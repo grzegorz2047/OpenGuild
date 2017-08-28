@@ -40,7 +40,7 @@ public class TNTExplode implements Listener {
     private final DropFromBlocks drop;
     private final TntGuildBlocker tntGuildBlocker;
     private final Guilds guilds;
-    private int defaultBlockTimeForGuildWhereTNTExploded = 30;
+    private final int defaultBlockTimeForGuildWhereTNTExploded = 30;
 
     public TNTExplode(Guilds guilds, DropFromBlocks drop, TntGuildBlocker tntGuildBlocker) {
         this.guilds = guilds;

@@ -55,12 +55,13 @@ public class GuildInvitationAcceptCommand extends Command {
             return;
         }
 
-        if (guilds.hasGuild(((Player) sender).getUniqueId())) {
+        Player player = (Player) sender;
+        if (guilds.hasGuild((player).getUniqueId())) {
             sender.sendMessage(MsgManager.alreadyinguild);
             return;
         }
 
-        List<Guild> invitationsFrom = new ArrayList<Guild>();
+        List<Guild> invitationsFrom = new ArrayList<>();
         for (Guild guild : guilds.getGuilds().values()) {
             GuildInvitation guildInvitation = guilds.getGuildInvitation(sender.getName(), guild.getName());
             if (guildInvitation != null) {
@@ -69,23 +70,24 @@ public class GuildInvitationAcceptCommand extends Command {
         }
 
         if (args.length == 1) {
-            if (invitationsFrom.size() > 1) {
+            int invitationsNumber = invitationsFrom.size();
+            if (invitationsNumber > 1) {
                 sender.sendMessage(MsgManager.get("invmore"));
                 for (Guild guild : invitationsFrom) {
                     sender.sendMessage(ChatColor.BOLD + guild.getName().toUpperCase() + ChatColor.GRAY + " - " + guild.getDescription());
                 }
-            } else if (invitationsFrom.size() == 1) {
-                accept((Player) sender, invitationsFrom.get(0));
+            } else if (invitationsNumber == 1) {
+                Guild onlyInvitationGuild = invitationsFrom.get(0);
+                accept(player, onlyInvitationGuild);
             } else {
                 sender.sendMessage(MsgManager.get("noinv"));
             }
         } else if (args.length >= 2) {
             String tag = args[1].toUpperCase();
             Guild target = guilds.getGuild(tag);
-            if (target != null && guilds.getGuilds().containsKey(tag)) {
-                if (invitationsFrom.contains(target)) {
-                    accept((Player) sender, target);
-                }
+            if (target != null && guilds.getGuilds().containsKey(tag) && invitationsFrom.contains(target)) {
+                accept(player, target);
+
             }
         }
     }

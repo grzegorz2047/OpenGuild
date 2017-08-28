@@ -24,11 +24,11 @@ import org.bukkit.event.HandlerList;
  */
 public class GuildCreatedEvent extends GuildEvent {
     private static final HandlerList handlers = new HandlerList();
-    
+
     public GuildCreatedEvent(Guild guild) {
         super(guild);
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;

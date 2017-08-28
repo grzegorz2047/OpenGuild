@@ -20,38 +20,37 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
- *
  * @author Aleksander
  */
 public class GuildDescriptionChangeEvent extends GuildEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancel;
     private String description;
-    
+
     public GuildDescriptionChangeEvent(Guild guild, String description) {
         super(guild);
         this.description = description;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return cancel;
     }
-    
+
     @Override
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
     }
-    
+
     public String getNewDescription() {
         return description;
     }
-    
+
     public void setNewDescription(String description) {
         this.description = description;
     }

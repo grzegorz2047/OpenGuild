@@ -18,6 +18,7 @@ package pl.grzegorz2047.openguild.events.guild;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -42,13 +43,15 @@ public class GuildCreateEvent extends Event implements Cancellable {
         this.leader = leader;
         this.home = home;
     }
-    
-    @Nonnull public static HandlerList getHandlerList() {
+
+    @Nonnull
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
     @Override
-    @Nonnull public HandlerList getHandlers() {
+    @Nonnull
+    public HandlerList getHandlers() {
         return handlers;
     }
 
@@ -62,19 +65,23 @@ public class GuildCreateEvent extends Event implements Cancellable {
         this.cancel = cancel;
     }
 
-    @Nonnull public String getTag() {
+    @Nonnull
+    public String getTag() {
         return tag;
     }
 
-    @Nullable public String getDescription() {
+    @Nullable
+    public String getDescription() {
         return description;
     }
 
-    @Nonnull public Player getLeader() {
+    @Nonnull
+    public Player getLeader() {
         return leader;
     }
 
-    @Nonnull public Location getHome() {
+    @Nonnull
+    public Location getHome() {
         return home;
     }
 }

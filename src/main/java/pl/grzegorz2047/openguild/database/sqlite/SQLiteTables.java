@@ -8,7 +8,7 @@ import pl.grzegorz2047.openguild.database.interfaces.SQLTables;
 import java.sql.Statement;
 
 /**
- * Created by grzeg on 23.08.2017.
+ * File created by grzegorz2047 on 23.08.2017.
  */
 public class SQLiteTables implements SQLTables {
 

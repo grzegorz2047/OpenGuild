@@ -26,14 +26,8 @@ import org.bukkit.entity.Player;
  * @author Grzegorz
  */
 public class Cuboids {
-    private Map<String, Cuboid> cuboids = new HashMap<String, Cuboid>();
-
-
-    public Cuboids() {
-
-    }
-
-    public HashMap<String, String> playersenteredcuboid = new HashMap<String, String>();
+    private Map<String, Cuboid> cuboids = new HashMap<>();
+    public HashMap<String, String> playersenteredcuboid = new HashMap<>();
 
     public Cuboid previewCuboid(Location home, String tag, int size) {
         return new Cuboid(home, tag, size);
@@ -71,7 +65,7 @@ public class Cuboids {
     }
 
 
-    public boolean isTheSame(String guildscuboidtag, String guildOnList) {
+    private boolean isTheSame(String guildscuboidtag, String guildOnList) {
         return guildOnList.equals(guildscuboidtag);
     }
 
@@ -84,12 +78,7 @@ public class Cuboids {
         return "";
     }
 
-    public boolean wasPlayerPreviouslyOnCuboid(Player player) {
-        return playersenteredcuboid.containsKey(player.getName());
-    }
-
-
-    public Cuboid getCuboidInLocation(Location to) {
+    private Cuboid getCuboidInLocation(Location to) {
         Collection<Cuboid> cuboids = this.cuboids.values();
         for (Cuboid cuboid : cuboids) {
             if (cuboid.isinCuboid(to)) {

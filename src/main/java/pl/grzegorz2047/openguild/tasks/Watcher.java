@@ -9,8 +9,9 @@ import pl.grzegorz2047.openguild.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild.tntguildblocker.TntGuildBlocker;
 
 /**
- * Created by grzeg on 13.08.2017.
+ * File created by grzegorz2047 on 13.08.2017.
  */
+
 public class Watcher implements Runnable {
     private final AntiLogoutManager logout;
     private final Teleporter teleporter;
@@ -42,16 +43,16 @@ public class Watcher implements Runnable {
             logout.checkExpiredFights();
         }
 
-        if(GenConf.TELEPORT_COOLDOWN > 0) {
+        if (GenConf.TELEPORT_COOLDOWN > 0) {
             teleporter.checkHomeRequests();
         }
 
-        if(GenConf.TPA_ENABLED) {
+        if (GenConf.TPA_ENABLED) {
             tpaRequester.checkExpiredTpaRequests();
         }
         this.guilds.checkPlayerInvitations();
         relations.checkGuildPendingRelations();
-        if(GenConf.enableTNTExplodeListener) {
+        if (GenConf.enableTNTExplodeListener) {
             tntGuildBlocker.checkTimesForBlockedGuilds();
         }
     }

@@ -1,32 +1,30 @@
 package pl.grzegorz2047.openguild.ranking;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild.database.SQLHandler;
-import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 /**
- * Created by grzeg on 20.12.2015.
+ * File created by grzegorz2047 on 20.12.2015.
  */
 public class EloRanking {
 
     private final Plugin plugin;
     private final SQLHandler sqlHandler;
-    private LinkedHashMap<String, Integer> userRank = new LinkedHashMap<String, Integer>();
-    private LinkedHashMap<String, Integer> guildRank = new LinkedHashMap<String, Integer>();
+/*
+    private LinkedHashMap<String, Integer> userRank = new LinkedHashMap<>();
+    private LinkedHashMap<String, Integer> guildRank = new LinkedHashMap<>();
+*/
 
 
     public EloRanking(Plugin plugin, SQLHandler sqlHandler) {
         this.sqlHandler = sqlHandler;
         this.plugin = plugin;
     }
+/*
 
     public LinkedHashMap<String, Integer> getGuildRank() {
         return guildRank;
@@ -41,7 +39,8 @@ public class EloRanking {
     }
 
     public void checkGuildpoints(Guild guild) {
-        /*if (guildRank.get(guildTag) != null) {
+        */
+/*if (guildRank.get(guildTag) != null) {
           //  guildRank.put(guildTag, guild.getGuildPoints());
         } else {
             if (guildRank.size() < 15) {
@@ -61,7 +60,8 @@ public class EloRanking {
                 }
             }
 
-        }*/
+        }*//*
+
     }
 
 
@@ -86,7 +86,8 @@ public class EloRanking {
     }
 
     public void reCountGuildPoints(Guild guild) {
-        /*int guildPoints = 0;
+        */
+/*int guildPoints = 0;
         int guildSize = guild.getMembers().size();
         for (String member : guild.getMembers()) {
             User u = new User(member);
@@ -95,8 +96,10 @@ public class EloRanking {
         }
         guildPoints = guildPoints / guildSize;
         guild.setGuildPoints(guildPoints);
-        plugin.getManager().getMysqlManager().getGuildQuery().updateGuild(guild);*/
+        plugin.getManager().getMysqlManager().getGuildQuery().updateGuild(guild);*//*
+
     }
+*/
 
     /*
     https://metinmediamath.wordpress.com/2013/11/27/how-to-calculate-the-elo-rating-including-example/
@@ -109,7 +112,7 @@ public class EloRanking {
         int wKFactor = getKFactor(wOldPoints);
 
         int lOldPoints = lost.getMetadata("elo").get(0).asInt();
-        int lKFactor = getKFactor(lOldPoints);
+        //int lKFactor = getKFactor(lOldPoints);
 
 
         double w = Math.pow(10, wOldPoints / 400);//R(1)
@@ -143,7 +146,7 @@ public class EloRanking {
     }
 
 
-    public int getKFactor(int wOldPoints) {
+    private int getKFactor(int wOldPoints) {
         int wKFactor = 40;
         if (wOldPoints < 1000) {
             wKFactor = 40;
@@ -159,7 +162,7 @@ public class EloRanking {
     }
 
 
-    public LinkedHashMap<String, Integer> getUserRank() {
+/*    public LinkedHashMap<String, Integer> getUserRank() {
         return userRank;
-    }
+    }*/
 }

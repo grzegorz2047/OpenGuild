@@ -21,38 +21,37 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 /**
- *
  * @author Aleksander
  */
 public class GuildInvitationEvent extends GuildEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancel;
     private Player invite;
-    
+
     public GuildInvitationEvent(Guild guild, Player invite) {
         super(guild);
         this.invite = invite;
     }
-    
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return cancel;
     }
-    
+
     @Override
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
     }
-    
+
     public Player getInvite() {
         return invite;
     }
-    
+
     public void setInvite(Player player) {
         this.invite = invite;
     }

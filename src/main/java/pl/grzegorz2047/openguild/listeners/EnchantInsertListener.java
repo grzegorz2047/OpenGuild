@@ -18,7 +18,7 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 import java.util.Collection;
 
 /**
- * Created by grzeg on 25.08.2017.
+ * File created by grzegorz2047 on 25.08.2017.
  */
 public class EnchantInsertListener implements Listener {
 
@@ -85,14 +85,8 @@ public class EnchantInsertListener implements Listener {
                     e.setItem(new ItemStack(Material.AIR));
                     player.sendMessage(MsgManager.get("strengthenchantblocked"));
 
-                } else {
-//                    System.out.println("inny!");
                 }
-            } else {
-                //System.out.println("inny nie strength");
             }
-        } else {
-//            System.out.println("nie potka!");
         }
     }
 

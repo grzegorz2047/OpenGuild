@@ -1,7 +1,7 @@
 package pl.grzegorz2047.openguild.guilds;
 
 /**
- * Created by grzeg on 23.08.2017.
+ * File created by grzegorz2047 on 23.08.2017.
  */
 public class GuildInvitation {
     private final long inviteTime;

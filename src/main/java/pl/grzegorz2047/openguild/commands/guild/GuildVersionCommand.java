@@ -36,7 +36,7 @@ public class GuildVersionCommand extends Command {
     private final Plugin plugin;
 
     public GuildVersionCommand(Plugin plugin) {
-        this.authors = new ArrayList<Author>();
+        this.authors = new ArrayList<>();
         this.loadAuthors();
         this.plugin = plugin;
     }

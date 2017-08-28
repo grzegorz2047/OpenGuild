@@ -13,29 +13,25 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by grzeg on 25.08.2017.
+ * File created by grzegorz2047 on 25.08.2017.
  */
 public class PlayerCacheListenersController implements Listener {
 
     private final TempPlayerData tempPlayerData;
     private final SQLHandler sqlHandler;
-    private final Guilds guilds;
     private List<UUID> preFire = new ArrayList<>();
 
-    public PlayerCacheListenersController(TempPlayerData tempPlayerData, SQLHandler sqlHandler, Guilds guilds) {
+    public PlayerCacheListenersController(TempPlayerData tempPlayerData, SQLHandler sqlHandler) {
         this.tempPlayerData = tempPlayerData;
         this.sqlHandler = sqlHandler;
-        this.guilds = guilds;
     }
 
     @EventHandler
     private void onLogin(AsyncPlayerPreLoginEvent e) {
         if (!e.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) {
-            System.out.println(" gracz " + e.getUniqueId() + " nie moze jeszcze wejsc na serwer on prelogin!");
             return;
         }
         preFire.add(e.getUniqueId());
-        System.out.println(" gracz " + e.getUniqueId() + " wchodzi na serwer on prelogin!!");
         this.sqlHandler.getPlayerData(e.getUniqueId(), tempPlayerData);
     }
 
@@ -43,11 +39,9 @@ public class PlayerCacheListenersController implements Listener {
     private void onLogin(PlayerLoginEvent e) {
         Player player = e.getPlayer();
         if (!e.getResult().equals(PlayerLoginEvent.Result.ALLOWED)) {
-            System.out.println(" gracz " + player.getName() + " nie moze jeszcze wejsc na serwer on login!");
             this.tempPlayerData.removePlayer(player.getUniqueId());
         }
         if (!preFire.contains(player.getUniqueId())) {
-            System.out.println("prelogin nie wystartowal dla " + player.getName());
             this.sqlHandler.getPlayerData(player.getUniqueId(), tempPlayerData);
         } else {
             preFire.remove(player.getUniqueId());

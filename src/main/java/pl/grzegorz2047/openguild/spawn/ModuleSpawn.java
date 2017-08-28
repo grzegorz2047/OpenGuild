@@ -20,12 +20,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.grzegorz2047.openguild.configuration.GenConf;
 
-public class ModuleSpawn     {
+public class ModuleSpawn {
 
     public void enable(JavaPlugin plugin) {
-        if(GenConf.blockGuildCreating) {
+        if (GenConf.blockGuildCreating) {
             Bukkit.getPluginManager().registerEvents(new SpawnListeners(), plugin);
         }
     }
-    
+
 }

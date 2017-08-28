@@ -45,7 +45,7 @@ public class GuildCommand implements CommandExecutor {
     /**
      * This map stores all sub-commands (and their aliases) and their handlers.
      */
-    private final Map<String[], Command> commands = new HashMap<String[], Command>();
+    private final Map<String[], Command> commands = new HashMap<>();
 
     public GuildCommand(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler, Plugin plugin) {
         registerCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler, plugin);

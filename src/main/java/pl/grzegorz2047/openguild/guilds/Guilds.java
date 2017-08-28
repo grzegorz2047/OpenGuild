@@ -32,16 +32,14 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 
 public class Guilds {
 
-    private final SQLHandler sqlHandler;
     private final GuildInvitations guildInvitations;
     private final Plugin plugin;
     private final Cuboids cuboids;
-    private Map<String, Guild> guilds = new HashMap<String, Guild>();
+    private Map<String, Guild> guilds = new HashMap<>();
     private List<String> onlineGuilds = new ArrayList<>();
 
 
     public Guilds(SQLHandler sqlHandler, Plugin plugin, Cuboids cuboids) {
-        this.sqlHandler = sqlHandler;
         this.cuboids = cuboids;
         this.plugin = plugin;
         this.guildInvitations = new GuildInvitations(sqlHandler, this);
@@ -115,7 +113,7 @@ public class Guilds {
         guild.notifyGuild(msg.replace("{PLAYER}", player.getDisplayName()));
     }
 
-    public void notifyGuildThatMemberLeft(Player player, Guild guild) {
+    private void notifyGuildThatMemberLeft(Player player, Guild guild) {
         String msg = MsgManager.get("guildmemberleft");
         guild.notifyGuild(msg.replace("{PLAYER}", player.getDisplayName()));
     }
@@ -125,7 +123,7 @@ public class Guilds {
     }
 
 
-    public void verifyOnlineGuild(Player player, Guild guild) {
+    private void verifyOnlineGuild(Player player, Guild guild) {
         List<String> onlineMembers = guild.getOnlineMembers();
         if (onlineMembers.size() == 0) {
             removeOnlineGuild(guild.getName());
@@ -156,8 +154,8 @@ public class Guilds {
      */
     public boolean hasGuild(UUID uuid) {
         List<MetadataValue> metadata = Bukkit.getPlayer(uuid).getMetadata("guild");
-        if(metadata.size() == 0) {
-            return  false;
+        if (metadata.size() == 0) {
+            return false;
         }
         String guildTag = metadata.get(0).asString();
         return !Objects.equals(guildTag, "");

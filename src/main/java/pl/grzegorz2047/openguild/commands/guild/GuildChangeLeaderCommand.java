@@ -11,7 +11,7 @@ import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 
 /**
- * Created by grzeg on 26.08.2017.
+ * File created by grzegorz2047 on 26.08.2017.
  */
 public class GuildChangeLeaderCommand extends Command {
     private final Guilds guilds;

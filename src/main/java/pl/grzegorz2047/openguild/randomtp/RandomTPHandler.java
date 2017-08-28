@@ -48,16 +48,16 @@ public final class RandomTPHandler {
     }
 
 
-    public void setEnabled(boolean enabled) {
+  /*  public void setEnabled(boolean enabled) {
         GenConf.ranTpEnabled = enabled;
     }
 
     public void setButtonEnabled(boolean enabled) {
         GenConf.ranTpButton = enabled;
     }
-
+*/
     public void teleport(Player player) {
-        Location location = null;
+        Location location;
         try {
             location = findSaveSpot(player);
             player.teleport(location);

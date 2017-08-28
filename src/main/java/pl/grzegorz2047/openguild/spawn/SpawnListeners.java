@@ -28,7 +28,7 @@ import pl.grzegorz2047.openguild.configuration.GenConf;
 
 public class SpawnListeners implements Listener {
     
-    private static final HashMap<UUID, Long> blocked = new HashMap<UUID, Long>();
+    private static final HashMap<UUID, Long> blocked = new HashMap<>();
     
     @EventHandler
     public void onGuildCreate(GuildCreateEvent e) {

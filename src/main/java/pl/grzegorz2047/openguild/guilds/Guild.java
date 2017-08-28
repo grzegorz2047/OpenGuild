@@ -30,11 +30,11 @@ public class Guild {
 
     private String tag;
     private String description;
-    private List<Relation> alliances = new ArrayList<Relation>();
+    private List<Relation> alliances = new ArrayList<>();
     private Location home;
     private UUID leader;
 
-    private final List<UUID> members = new ArrayList<UUID>();
+    private final List<UUID> members = new ArrayList<>();
     private List<String> membersNames = new ArrayList<>();
 
     public Guild(String tag, String description, Location home, UUID leaderUUID, Scoreboard scoreboard) {

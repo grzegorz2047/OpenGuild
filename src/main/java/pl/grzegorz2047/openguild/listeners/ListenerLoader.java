@@ -17,7 +17,7 @@ import pl.grzegorz2047.openguild.tntguildblocker.TntGuildBlocker;
 import pl.grzegorz2047.openguild.updater.Updater;
 
 /**
- * Created by grzeg on 23.08.2017.
+ * File created by grzegorz2047 on 23.08.2017.
  */
 public class ListenerLoader {
 
@@ -48,14 +48,14 @@ public class ListenerLoader {
     }
 
     public void loadListeners(PluginManager pm) {
-        TempPlayerData tempPlayerData = new TempPlayerData(p);
+        TempPlayerData tempPlayerData = new TempPlayerData();
         EloRanking eloRanking = new EloRanking(p, sqlHandler);
         pm.registerEvents(new PlayerJoinListener(guilds, tagManager, sqlHandler, tempPlayerData, updater), p);
         pm.registerEvents(new PlayerChatListener(guilds), p);
         pm.registerEvents(new PlayerDeathListener(sqlHandler, logout, eloRanking), p);
         pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester, guilds), p);
         pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester, tempPlayerData), p);
-        pm.registerEvents(new PlayerCacheListenersController(tempPlayerData, sqlHandler, guilds), p);
+        pm.registerEvents(new PlayerCacheListenersController(tempPlayerData, sqlHandler), p);
         if (GenConf.BLOCK_STRENGTH_2) {
             pm.registerEvents(new EnchantInsertListener(), p);
         }

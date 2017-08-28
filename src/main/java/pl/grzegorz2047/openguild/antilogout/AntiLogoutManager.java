@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import pl.grzegorz2047.openguild.managers.MsgManager;
+import pl.grzegorz2047.openguild.utils.ActionBar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,10 +22,6 @@ public class AntiLogoutManager {
 
     public AntiLogoutManager() {
 
-    }
-
-    public HashMap<String, Fight> getFightList() {
-        return fightList;
     }
 
     public void handleLogoutDuringFight(Player player, String playerName) {
@@ -63,7 +60,7 @@ public class AntiLogoutManager {
     private void sendCanLogoutMsg(Player p) {
         if (p != null) {
             String message = "§6Mozesz juz sie wylogowac!";
-            sendActionBar(p, message);
+            ActionBar.sendActionBar(p, message);
         }
     }
 
@@ -71,13 +68,6 @@ public class AntiLogoutManager {
         return cooldown <= System.currentTimeMillis();
     }
 
-    private void sendActionBar(Player p, String message) {
-        try {
-            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message));
-        } catch (Exception ex) {
-            p.sendMessage(message);
-        }
-    }
 
     private boolean isPlayerDuringFight(String name) {
         return fightList.containsKey(name);
@@ -91,7 +81,7 @@ public class AntiLogoutManager {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (isPlayerDuringFight(player.getName())) {
                 long secCalculate = (fightList.get(player.getName()).getEndCooldown() - System.currentTimeMillis()) / 1000;
-                sendActionBar(player, antiLogoutBarGenerator.generateActionBarAntilogout(secCalculate));
+                ActionBar.sendActionBar(player, antiLogoutBarGenerator.generateActionBarAntilogout(secCalculate));
             }
         }
     }

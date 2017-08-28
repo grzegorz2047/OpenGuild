@@ -5,7 +5,7 @@ import pl.grzegorz2047.openguild.guilds.Guild;
 import org.bukkit.entity.Player;
 
 /**
- * Created by grzeg on 19.08.2017.
+ * File created by grzegorz2047 on 19.08.2017.
  */
 public class ScoreboardPackets {
     public void sendCreateTeamTag(Player player, Guild guild, String guildTagTemplate) {

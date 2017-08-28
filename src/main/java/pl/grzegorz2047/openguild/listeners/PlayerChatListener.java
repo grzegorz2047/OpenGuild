@@ -134,10 +134,6 @@ public class PlayerChatListener implements Listener {
         return ally;
     }
 
-    private String getFirstLetterOfMsg(String message) {
-        return message.substring(1);
-    }
-
     private String prepareMessageFormat(Player player, String message) {
         int elo = getPlayerElo(player);
         return GenConf.guildChatFormat

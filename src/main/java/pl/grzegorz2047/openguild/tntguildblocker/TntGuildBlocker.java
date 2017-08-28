@@ -6,7 +6,7 @@ import java.util.*;
  * Created by grzeg on 26.08.2017.
  */
 public class TntGuildBlocker {
-    private final Map<String, Long> blockedGuilds = new HashMap<String, Long>();
+    private final Map<String, Long> blockedGuilds = new HashMap<>();
 
 
     public boolean isGuildBlocked(String guildName) {
@@ -26,7 +26,7 @@ public class TntGuildBlocker {
     }
 
     public void checkTimesForBlockedGuilds() {
-        List<String> toDelete = new ArrayList<String>();
+        List<String> toDelete = new ArrayList<>();
         Set<Map.Entry<String, Long>> entries = blockedGuilds.entrySet();
         for (Map.Entry<String, Long> entry : entries) {
             long left = entry.getValue() - System.currentTimeMillis();

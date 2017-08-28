@@ -13,7 +13,7 @@ public class AntiLogoutBarGenerator {
             out.append("§e ").append(time).append(" §6sec.");
             return out.toString();
         }
-        float perc = (((float) time / (float) Fight.COOLDOWN) * 100);
+        float perc = ((float) time / (float) Fight.COOLDOWN) * 100;
         //System.out.println("Perc: " + perc);
         out.append(makeHealthString(perc));
         out.append("§e ").append(time).append(" §6sec.");

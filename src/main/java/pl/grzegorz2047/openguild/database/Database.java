@@ -21,6 +21,6 @@ package pl.grzegorz2047.openguild.database;
 public enum Database {
 
     FILE,
-    MYSQL;
+    MYSQL
 
 }

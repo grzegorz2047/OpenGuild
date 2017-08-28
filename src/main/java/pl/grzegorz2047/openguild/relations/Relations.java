@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class Relations {
 
-    private final List<RelationChange> pendingRelationChanges = new ArrayList<RelationChange>();
+    private final List<RelationChange> pendingRelationChanges = new ArrayList<>();
     private List<RelationChange> toDelete = new ArrayList<>();
 
     public Relation createRelation(String who, String withwho, long expires, Relation.Status relationStatus) {
@@ -46,7 +46,6 @@ public class Relations {
                 Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage(MsgManager.get("toacceptallymsg").replace("{GUILD}", requestingGuild.getName()));
             } else {
                 Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage(MsgManager.get("sentallyrequestfrom").replace("{GUILD}", guild.getName()));
-                return;
             }
         } else {
             Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Juz wyslales prosbe o sojusz do " + requestingTag);

@@ -19,16 +19,15 @@ import pl.grzegorz2047.openguild.guilds.Guild;
 import org.bukkit.event.Event;
 
 /**
- *
  * @author Aleksander
  */
 public abstract class GuildEvent extends Event {
     protected Guild guild;
-    
+
     public GuildEvent(Guild guild) {
         this.guild = guild;
     }
-    
+
     public Guild getGuild() {
         return guild;
     }

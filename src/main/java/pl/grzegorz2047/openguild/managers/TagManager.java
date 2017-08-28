@@ -16,18 +16,14 @@
 
 package pl.grzegorz2047.openguild.managers;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Team;
-import pl.grzegorz2047.openguild.guilds.Guilds;
-import pl.grzegorz2047.openguild.guilds.Guild;
-import pl.grzegorz2047.openguild.relations.Relation;
-
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.OpenGuild;
+import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.guilds.Guild;
+import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.packets.ScoreboardPackets;
+import pl.grzegorz2047.openguild.relations.Relation;
 
 /**
  * @author Grzegorz
@@ -58,9 +54,6 @@ public class TagManager {
         }
     }
 
-    private void addPlayerToGuildTag(UUID uuid, Team whoT) {
-        whoT.addEntry(Bukkit.getOfflinePlayer(uuid).getName());
-    }
 
     public void guildBrokeAlliance(Guild firstGuild, Guild secondGuild) {
         for (Relation r : firstGuild.getAlliances()) {
@@ -94,7 +87,7 @@ public class TagManager {
             }
         }
     }
-
+/*
     public void playerJoinGuild(Player player, Guild guild) {
         scoreboardPackets.sendUpdateTeamTag(player, guild, GenConf.guildTag);
         for (Player p : Bukkit.getOnlinePlayers()) {
@@ -107,7 +100,7 @@ public class TagManager {
                 }
             }
         }
-    }
+    }*/
 
     public void playerLeaveGuild(Player joiner, Guild guild) {
         scoreboardPackets.sendDeleteTeamTag(joiner, guild.getName());
@@ -126,7 +119,7 @@ public class TagManager {
     public void playerCreatedGuild(Guild g, Player player) {
         scoreboardPackets.sendCreateTeamTag(player, g, GenConf.guildTag);
         //System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
-        String enemyTagTemplate = GenConf.enemyTag;
+        //String enemyTagTemplate = GenConf.enemyTag;
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (g.getMembers().contains(p.getUniqueId())) {
                 continue;

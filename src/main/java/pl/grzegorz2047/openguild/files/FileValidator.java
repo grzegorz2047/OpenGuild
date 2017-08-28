@@ -7,7 +7,7 @@ import pl.grzegorz2047.openguild.OpenGuild;
 import java.io.*;
 
 /**
- * Created by grzeg on 23.08.2017.
+ * File created by grzegorz2047 on 23.08.2017.
  */
 public class FileValidator {
 

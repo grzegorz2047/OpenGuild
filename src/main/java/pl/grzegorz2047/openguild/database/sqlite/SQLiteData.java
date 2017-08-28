@@ -38,13 +38,7 @@ public class SQLiteData implements SQLData {
         try {
             Class.forName("org.sqlite.JDBC").newInstance();
             connection = DriverManager.getConnection("jdbc:sqlite:" + getDir());
-        } catch(ClassNotFoundException ex) {
-            ex.printStackTrace();
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        } catch(InstantiationException ex) {
-            ex.printStackTrace();
-        } catch(IllegalAccessException ex) {
+        } catch(ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace();
         }
         return connection;
@@ -55,7 +49,7 @@ public class SQLiteData implements SQLData {
         return "sqlite";
     }
     
-    public String getDir() {
+    private String getDir() {
         return this.dir;
     }
 }

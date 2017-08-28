@@ -21,7 +21,7 @@ import pl.grzegorz2047.openguild.configuration.GenConf;
 
 public class SpawnChecker {
 
-    private static int extra = 50;
+    private final static int extra = 50;
 
     public static boolean isSpawn(Location l) {
         String worldName = l.getWorld().getName();
@@ -42,12 +42,11 @@ public class SpawnChecker {
 
     @Deprecated
     public static boolean isSpawnExtra(Location location) {
-        Location l = location;
         Location c1 = GenConf.spawnMax;
         Location c2 = GenConf.spawnMin;
-        if (l.getWorld().getName().equals(c1.getWorld().getName())) {
-            if (l.getBlockX() > c2.getBlockX() - extra && l.getBlockX() < c1.getBlockX() + extra) {
-                if (l.getBlockZ() > c2.getBlockZ() - extra && l.getBlockZ() < c1.getBlockZ() + extra) {
+        if (location.getWorld().getName().equals(c1.getWorld().getName())) {
+            if (location.getBlockX() > c2.getBlockX() - extra && location.getBlockX() < c1.getBlockX() + extra) {
+                if (location.getBlockZ() > c2.getBlockZ() - extra && location.getBlockZ() < c1.getBlockZ() + extra) {
                     return true;
                 }
             }

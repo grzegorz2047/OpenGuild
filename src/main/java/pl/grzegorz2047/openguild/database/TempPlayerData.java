@@ -10,11 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class TempPlayerData {
 
-    private final Plugin plugin;
     private ConcurrentHashMap<UUID, SQLRecord> data = new ConcurrentHashMap<>();
 
-    public TempPlayerData(Plugin plugin) {
-        this.plugin = plugin;
+    public TempPlayerData() {
     }
 
     public void addSQLRecord(UUID uuid, String guild, String lastSeenName, int elo, int kills, int deaths) {

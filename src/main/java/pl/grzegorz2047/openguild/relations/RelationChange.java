@@ -11,7 +11,7 @@ public class RelationChange {
     private final String guildName;
     private final Relation.Status status;
     private final long requestTime;
-    private int expirationTime = 20;
+    private final int expirationTime = 20;
     private UUID requestingLeader;
 
 
