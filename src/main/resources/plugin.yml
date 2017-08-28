@@ -1,11 +1,11 @@
-name: OpenGuild2047
-description: OpenGuild2047 is good, public, open source guild plugin
+name: OpenGuild
+description: OpenGuild is good, public, open source guild plugin
 authors: [grzegorz2047, shooly, TheMolkaPL]
 website: https://www.github.com/grzegorz2047/OpenGuild2047
 version: '${project.version}'
 prefix: 'OpenGuild'
 softdepend: [Skript, ProtocolLib]
-main: pl.grzegorz2047.openguild2047.OpenGuild
+main: pl.grzegorz2047.openguildnGuild
 commands:
   guild:
     description: Commands related to guilds

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.grzegorz2047</groupId>
-    <artifactId>OpenGuild2047</artifactId>
+    <artifactId>OpenGuild</artifactId>
     <version>0.7.0</version>
     <packaging>jar</packaging>
     <name>OpenGuild2047</name>
@@ -46,7 +46,6 @@
                                 <excludes>
                                     <exclude>org.spigotmc:spigot-api</exclude>
                                     <exclude>com.comphenix.protocol:ProtocolLib-API</exclude>
-                                    <exclude>ch.njol:skript</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>
@@ -63,10 +62,6 @@
         <repository>
             <id>bukkit-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
-        </repository>
-        <repository>
-            <id>njol-repo</id>
-            <url>http://maven.njol.ch/repo/</url>
         </repository>
         <repository>
             <id>spigot-repo</id>
@@ -89,12 +84,6 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.12.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.njol</groupId>
-            <artifactId>skript</artifactId>
-            <version>2.0.1</version><!-- Use whatever version you want to depend on -->
             <scope>provided</scope>
         </dependency>
         <dependency>

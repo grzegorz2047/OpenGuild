@@ -54,7 +54,7 @@ mysql:
   address: localhost
   port: 3306
   database: openguild
-  login: user
+  login: author
   password: password
   debug: false
 tags:
