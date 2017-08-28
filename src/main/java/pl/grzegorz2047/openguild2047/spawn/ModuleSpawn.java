@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package pl.grzegorz2047.openguild2047.modules.module;
+package pl.grzegorz2047.openguild2047.spawn;
 
-public interface Module {
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 
-    void enable(String id) throws ModuleLoadException;
+public class ModuleSpawn     {
 
-    ModuleInfo module();
-
+    public void enable(JavaPlugin plugin) {
+        if(GenConf.blockGuildCreating) {
+            Bukkit.getPluginManager().registerEvents(new SpawnListeners(), plugin);
+        }
+    }
+    
 }

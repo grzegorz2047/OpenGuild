@@ -23,15 +23,14 @@ import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import pl.grzegorz2047.openguild2047.interfaces.Logger;
-import pl.grzegorz2047.openguild2047.configuration.GenConf;
+ import pl.grzegorz2047.openguild2047.configuration.GenConf;
 
-public class OGLogger implements Logger {
+import static java.util.logging.Logger.*;
+
+public class OGLogger  {
     
     private File logFile;
-    private FileHandler handler;
-    private Formatter formatter = new OGFormatter();
-    private java.util.logging.Logger logger = java.util.logging.Logger.getLogger("OpenGuild");
+    private java.util.logging.Logger logger = getLogger("OpenGuild");
 
     public OGLogger() {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
@@ -45,8 +44,9 @@ public class OGLogger implements Logger {
             if(!logFile.exists()) {
                 logFile.createNewFile();
             }
-            
-            handler = new FileHandler(logFile.getPath(), true);
+
+            FileHandler handler = new FileHandler(logFile.getPath(), true);
+            Formatter formatter = new OGFormatter();
             handler.setFormatter(formatter);
             
             logger.addHandler(handler);
@@ -57,34 +57,34 @@ public class OGLogger implements Logger {
         }
     }
 
-    @Override
+
     public void debug(String debug) {
         if (GenConf.debug) {
             log(Level.INFO, debug);
         }
     }
 
-    @Override
+
     public void info(String info) {
         log(Level.INFO, info);
     }
 
-    @Override
+
     public void log(Level level, String log) {
         logger.log(level, "[OpenGuild] {0}", log);
     }
 
-    @Override
+
     public void severe(String severe) {
         log(Level.SEVERE, severe);
     }
 
-    @Override
+
     public void warning(String warning) {
         log(Level.WARNING, warning);
     }
 
-    @Override
+
     public void exceptionThrown(Exception exception) {
         log(Level.SEVERE, "---- AN EXCEPTION HAS BEEN THROWN!");
         if (GenConf.debug) {
@@ -95,7 +95,7 @@ public class OGLogger implements Logger {
         log(Level.SEVERE, "---- You can find entire report in log file!");
     }
     
-    @Override
+
     public File getLoggingDirectory() {
         return logFile.getParentFile();
     }

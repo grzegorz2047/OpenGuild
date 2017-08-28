@@ -32,7 +32,7 @@ import pl.grzegorz2047.openguild2047.database.interfaces.SQLTables;
 
 public class SQLHandler {
 
-      private OpenGuild plugin;
+    private OpenGuild plugin;
 
     private Statement statement;
     private SQLImplementationStrategy implementation;
@@ -45,7 +45,7 @@ public class SQLHandler {
 
     public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation, SQLTables tables) {
         this.plugin = plugin;
-         this.tables = tables;
+        this.tables = tables;
         try {
             this.implementation = implementation;
         } catch (Exception e) {
@@ -215,15 +215,21 @@ public class SQLHandler {
      * @param player instance of UUID class.
      */
     public void insertPlayer(UUID player) {
-        final String uuid = player.toString();
-        try {
-            createStatement();
-            statement.execute("INSERT INTO " + playersTableName + " VALUES( '', '" + uuid + "', '" + 0 + "', '" + 0 + "', '" + 0 + "' , '" + 1000 + "' , '" + Bukkit.getPlayer(player).getName() + "');");
-            statement.close();
-            statement.getConnection().close();
-        } catch (Exception ex) {
-            OpenGuild.getOGLogger().exceptionThrown(ex);
-        }
+        String uuidSTring = player.toString();
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    createStatement();
+                    statement.execute("INSERT INTO " + playersTableName + " VALUES( '', '" + uuidSTring + "', '" + 0 + "', '" + 0 + "', '" + 0 + "' , '" + 1000 + "' , '" + Bukkit.getPlayer(player).getName() + "');");
+                    statement.close();
+                    statement.getConnection().close();
+                } catch (Exception ex) {
+                    OpenGuild.getOGLogger().exceptionThrown(ex);
+                }
+            }
+        });
+
     }
 
     /**
@@ -378,10 +384,10 @@ public class SQLHandler {
                 statement.close();
                 statement.getConnection().close();
             } catch (SQLException ex) {
-                OpenGuild.getAPI().getLogger().exceptionThrown(ex);
+                OpenGuild.getOGLogger().exceptionThrown(ex);
             }
         } catch (Exception e) {
-            OpenGuild.getAPI().getLogger().exceptionThrown(e);
+            OpenGuild.getOGLogger().exceptionThrown(e);
         }
 
     }
@@ -450,26 +456,21 @@ public class SQLHandler {
     }
 
     public void getPlayerData(UUID uniqueId, TempPlayerData tempPlayerData) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    createStatement();
-                    ResultSet result = statement.executeQuery("SELECT * FROM " + playersTableName + " WHERE uuid='" + uniqueId + "'");
-                    while (anotherRecord(result)) {
-                        String guild = result.getString("guild");
-                        String lastseenname = result.getString("lastseenname");
-                        int kills = result.getInt("kills");
-                        int deaths = result.getInt("deaths");
-                        int elo = result.getInt("elo");
-                        String uuid = result.getString("uuid");
-                        tempPlayerData.addSQLRecord(UUID.fromString(uuid), guild, lastseenname, elo, kills, deaths);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        try {
+            createStatement();
+            ResultSet result = statement.executeQuery("SELECT * FROM " + playersTableName + " WHERE uuid='" + uniqueId + "'");
+            while (anotherRecord(result)) {
+                String guild = result.getString("guild");
+                String lastseenname = result.getString("lastseenname");
+                int kills = result.getInt("kills");
+                int deaths = result.getInt("deaths");
+                int elo = result.getInt("elo");
+                String uuid = result.getString("uuid");
+                tempPlayerData.addSQLRecord(UUID.fromString(uuid), guild, lastseenname, elo, kills, deaths);
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

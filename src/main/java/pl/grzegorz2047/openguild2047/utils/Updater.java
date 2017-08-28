@@ -16,13 +16,14 @@
 
 package pl.grzegorz2047.openguild2047.utils;
 
+import pl.grzegorz2047.openguild2047.OpenGuild;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import pl.grzegorz2047.openguild2047.api.Guilds;
 
 public class Updater {
     
@@ -43,7 +44,7 @@ public class Updater {
     private Scanner getScanner() {
         try {
             URL url = new URL(this.address);
-            Guilds.getLogger().info("Checking for updates...");
+            OpenGuild.getOGLogger().info("Checking for updates...");
             Scanner sc = new Scanner(url.openStream());
             return sc;
         } catch(MalformedURLException ex) {} catch(IOException ex) {}

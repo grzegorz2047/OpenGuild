@@ -25,7 +25,7 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler;
+import pl.grzegorz2047.openguild2047.hardcore.HardcoreSQLHandler;
 import pl.grzegorz2047.openguild2047.relations.Relations;
 import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
@@ -72,7 +72,7 @@ public class GuildCommand implements CommandExecutor {
         this.commands.put(new String[]{"ally", "sojusz",}, new GuildAllyCommand(relations, guilds,tagManager,sqlHandler));
         this.commands.put(new String[]{"enemy", "wrog",}, new GuildEnemyCommand(guilds,sqlHandler,tagManager));
         this.commands.put(new String[]{"unbanplayer", "odbanujgracza",}, new GuildUnbanPlayerCommand(hardcoreSQLHandler));
-        this.commands.put(new String[]{"randomtp", "randomtp",}, new GuildRandomTPCommand());
+        this.commands.put(new String[]{"randomtp", "randomtp",}, new GuildRandomTPCommand(plugin));
     }
 
     @Override

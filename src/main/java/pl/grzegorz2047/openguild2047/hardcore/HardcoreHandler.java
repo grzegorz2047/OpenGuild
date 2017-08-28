@@ -14,35 +14,26 @@
  * limitations under the License.
  */
 
-package pl.grzegorz2047.openguild2047.modules.hardcore;
+package pl.grzegorz2047.openguild2047.hardcore;
 
-import pl.grzegorz2047.openguild2047.BagOfEverything;
-import pl.grzegorz2047.openguild2047.modules.module.Module;
-import pl.grzegorz2047.openguild2047.modules.module.ModuleInfo;
-import pl.grzegorz2047.openguild2047.modules.module.ModuleLoadException;
 import org.bukkit.Bukkit;
+import pl.grzegorz2047.openguild2047.BagOfEverything;
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
 
-public class ModuleHardcore implements Module {
+public class HardcoreHandler {
 
 
     private final HardcoreSQLHandler hardcoreSQLHandler;
 
-    public ModuleHardcore(HardcoreSQLHandler hardcoreSQLHandler) {
+    public HardcoreHandler(HardcoreSQLHandler hardcoreSQLHandler) {
         this.hardcoreSQLHandler = hardcoreSQLHandler;
     }
 
-    @Override
-    public ModuleInfo module() {
-        return new ModuleInfo("Hardcore", "Hardcore mode features", "1.0");
-    }
-    
-    @Override
-    public void enable(String id) throws ModuleLoadException {
-        if(GenConf.hcBans) {
+    public void enable() {
+        if (GenConf.hcBans) {
             hardcoreSQLHandler.createTables();
             Bukkit.getPluginManager().registerEvents(new HardcoreListeners(hardcoreSQLHandler), BagOfEverything.getBukkit());
         }
     }
-    
+
 }

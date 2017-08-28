@@ -16,16 +16,23 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
-import pl.grzegorz2047.openguild2047.BagOfEverything;
-import pl.grzegorz2047.openguild2047.commands.command.Command;
-import pl.grzegorz2047.openguild2047.commands.command.CommandException;
-import pl.grzegorz2047.openguild2047.commands.command.PermException;
-import pl.grzegorz2047.openguild2047.modules.module.RandomTPModule;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+import pl.grzegorz2047.openguild2047.commands.command.Command;
+import pl.grzegorz2047.openguild2047.commands.command.CommandException;
+import pl.grzegorz2047.openguild2047.commands.command.PermException;
+import pl.grzegorz2047.openguild2047.randomtp.RandomTPHandler;
 
 public class GuildRandomTPCommand extends Command {
+
+    RandomTPHandler randomTPHandler = new RandomTPHandler();
+
+    public GuildRandomTPCommand(Plugin plugin){
+        randomTPHandler.enable(plugin);
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
@@ -35,7 +42,7 @@ public class GuildRandomTPCommand extends Command {
                 if(Bukkit.getPlayer(target) == null) {
                     throw new CommandException("Player \"" + target + "\" is not online");
                 } else {
-                    ((RandomTPModule) BagOfEverything.getModules().getModule("random-tp")).teleport(Bukkit.getPlayer(target));
+                    randomTPHandler.teleport(Bukkit.getPlayer(target));
                 }
             } else {
                 throw new PermException();
@@ -43,7 +50,7 @@ public class GuildRandomTPCommand extends Command {
         }
         
         if(sender instanceof Player) {
-            ((RandomTPModule) BagOfEverything.getModules().getModule("random-tp")).teleport((Player) sender);
+            randomTPHandler.teleport((Player) sender);
         } else {
             throw new CommandException("You must be a player in-game!");
         }

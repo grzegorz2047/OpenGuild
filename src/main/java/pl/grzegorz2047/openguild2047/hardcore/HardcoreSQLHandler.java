@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.grzegorz2047.openguild2047.modules.hardcore;
+package pl.grzegorz2047.openguild2047.hardcore;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

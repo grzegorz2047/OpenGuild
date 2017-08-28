@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.grzegorz2047.openguild2047.modules.hardcore;
+package pl.grzegorz2047.openguild2047.hardcore;
 
 import pl.grzegorz2047.openguild2047.BagOfEverything;
 import java.text.SimpleDateFormat;

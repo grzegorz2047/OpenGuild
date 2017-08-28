@@ -16,6 +16,7 @@
 
 package pl.grzegorz2047.openguild2047.commands.guild;
 
+import pl.grzegorz2047.openguild2047.OpenGuild;
 import pl.grzegorz2047.openguild2047.commands.command.Command;
 import pl.grzegorz2047.openguild2047.commands.command.CommandException;
 import pl.grzegorz2047.openguild2047.commands.command.UsageException;
@@ -23,9 +24,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild2047.configuration.GenConf;
-import pl.grzegorz2047.openguild2047.api.Guilds;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
-import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler;
+import pl.grzegorz2047.openguild2047.hardcore.HardcoreSQLHandler;
 
 public class GuildUnbanPlayerCommand extends Command {
 
@@ -53,7 +53,7 @@ public class GuildUnbanPlayerCommand extends Command {
         long banned = hardcoreSQLHandler.getBan(player.getUniqueId());
         if(banned != 0) {
             hardcoreSQLHandler.update(player.getUniqueId(), HardcoreSQLHandler.Column.BAN_TIME, "0");
-            Guilds.getLogger().info("Player " + player.getName() + " (" + player.getUniqueId() + ") was unbanned by " + sender.getName());
+            OpenGuild.getOGLogger().info("Player " + player.getName() + " (" + player.getUniqueId() + ") was unbanned by " + sender.getName());
             sender.sendMessage(MsgManager.get("hcub").replace("{PLAYER}", player.getName()));
         } else {
             throw new CommandException(MsgManager.get("notbanned").replace("{PLAYER}", player.getName()));

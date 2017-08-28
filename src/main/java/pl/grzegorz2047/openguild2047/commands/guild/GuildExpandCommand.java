@@ -27,6 +27,8 @@ public class GuildExpandCommand extends Command {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
+
+
         Player player = (Player) sender;
         Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
         if (playerGuild == null) {

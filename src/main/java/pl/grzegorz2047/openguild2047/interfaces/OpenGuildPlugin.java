@@ -16,72 +16,44 @@
 
 package pl.grzegorz2047.openguild2047.interfaces;
 
-import pl.grzegorz2047.openguild2047.guilds.Guild;
-import pl.grzegorz2047.openguild2047.modules.module.ModuleManager;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import pl.grzegorz2047.openguild2047.commands.command.CommandInfo;
-import pl.grzegorz2047.openguild2047.commands.command.CommandManager;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Set;
 
 public interface OpenGuildPlugin {
 
     void execute(@Nonnull CommandSender sender, @Nonnull String cmd);
 
-    @Nonnull Plugin getBukkit();
+    @Nonnull
+    Plugin getBukkit();
 
-    @Nonnull CommandManager getCmdManager();
+    @Nonnull
+    Set<String> getCommands();
 
-    @Nonnull CommandInfo getCommand(@Nonnull String name);
 
-    @Nonnull Set<String> getCommands();
+    @Nonnull
+    Messages getMessages();
 
-    @Nonnull Configuration getConfig();
+    @Nonnull
+    OpenGuildPlugin getPlugin();
 
-    @Nullable
-    Guild getGuild(@Nonnull Location location);
+    @Nonnull
+    PluginUpdater getUpdater();
 
-    @Nullable Guild getGuild(@Nonnull Player player);
 
-    @Nullable Guild getGuild(@Nonnull String name);
+    @Nonnull
+    String getVersion();
 
-    @Nullable Guild getGuild(@Nonnull User user);
-
-    @Nonnull GuildManager getGuildManager();
-
-    @Nonnull List<Guild> getGuilds();
-
-    @Nonnull Logger getLogger();
-
-    @Nonnull Messages getMessages();
-
-    @Nonnull ModuleManager getModules();
-
-    @Nonnull OpenGuildPlugin getPlugin();
-
-    @Nonnull PluginUpdater getUpdater();
-
-    @Nullable User getUser(@Nonnull String name);
-
-    @Nullable User getUser(@Nonnull Player player);
-
-    @Nullable User getUser(@Nonnull UUID uuid);
-
-    @Nonnull List<User> getUsers();
-
-    @Nonnull String getVersion();
-
-    void registerCommand(@Nonnull CommandInfo command);
 
     @Deprecated
     void reload(@Nonnull CommandSender sender);
 
-    @Nonnull Guild[] sortGuilds();
 
 }

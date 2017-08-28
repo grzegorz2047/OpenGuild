@@ -15,38 +15,18 @@
  */
 package pl.grzegorz2047.openguild2047;
 
-import pl.grzegorz2047.openguild2047.configuration.GenConf;
-import pl.grzegorz2047.openguild2047.files.FileValidator;
-import pl.grzegorz2047.openguild2047.guilds.Guild;
-import pl.grzegorz2047.openguild2047.interfaces.Logger;
-import pl.grzegorz2047.openguild2047.interfaces.OpenGuildPlugin;
-import pl.grzegorz2047.openguild2047.addons.Hooks;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import pl.grzegorz2047.openguild2047.antilogout.AntiLogoutManager;
-import pl.grzegorz2047.openguild2047.api.OpenGuildBukkitPlugin;
-import pl.grzegorz2047.openguild2047.api.command.OpenCommandManager;
-import pl.grzegorz2047.openguild2047.api.module.OpenModuleManager;
 import pl.grzegorz2047.openguild2047.commands.GuildCommand;
 import pl.grzegorz2047.openguild2047.commands.SpawnCommand;
 import pl.grzegorz2047.openguild2047.commands.TeamCommand;
 import pl.grzegorz2047.openguild2047.commands.TpaCommand;
+import pl.grzegorz2047.openguild2047.configuration.GenConf;
 import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
-import pl.grzegorz2047.openguild2047.database.*;
+import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.database.interfaces.SQLImplementationStrategy;
 import pl.grzegorz2047.openguild2047.database.interfaces.SQLTables;
 import pl.grzegorz2047.openguild2047.database.mysql.MySQLImplementationStrategy;
@@ -56,10 +36,14 @@ import pl.grzegorz2047.openguild2047.database.sqlite.SQLiteTables;
 import pl.grzegorz2047.openguild2047.dropstone.DropConfigLoader;
 import pl.grzegorz2047.openguild2047.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild2047.dropstone.DropProperties;
+import pl.grzegorz2047.openguild2047.files.FileValidator;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
-import pl.grzegorz2047.openguild2047.listeners.*;
+import pl.grzegorz2047.openguild2047.listeners.CuboidAndSpawnManipulationListeners;
+import pl.grzegorz2047.openguild2047.listeners.ListenerLoader;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
-import pl.grzegorz2047.openguild2047.modules.hardcore.HardcoreSQLHandler;
+import pl.grzegorz2047.openguild2047.hardcore.HardcoreHandler;
+import pl.grzegorz2047.openguild2047.hardcore.HardcoreSQLHandler;
+import pl.grzegorz2047.openguild2047.randomtp.RandomTPHandler;
 import pl.grzegorz2047.openguild2047.relations.Relations;
 import pl.grzegorz2047.openguild2047.tasks.Watcher;
 import pl.grzegorz2047.openguild2047.teleporters.Teleporter;
@@ -67,13 +51,16 @@ import pl.grzegorz2047.openguild2047.teleporters.TpaRequester;
 import pl.grzegorz2047.openguild2047.tntguildblocker.TntGuildBlocker;
 import pl.grzegorz2047.openguild2047.updater.Updater;
 
+import java.io.File;
+import java.util.List;
+
 
 /**
  * @author Grzegorz
  */
 public class OpenGuild extends JavaPlugin {
 
-    private static OpenGuildPlugin ogAPI;
+    private static OGLogger logger = new OGLogger();
 
     private Guilds guilds;
 
@@ -86,7 +73,6 @@ public class OpenGuild extends JavaPlugin {
     private Teleporter teleporter;
     private TpaRequester tpaRequester;
     private DropFromBlocks drop;
-    private Relations relations;
     private TntGuildBlocker tntGuildBlocker;
 
     /**
@@ -95,29 +81,13 @@ public class OpenGuild extends JavaPlugin {
     @Override
     public void onEnable() {
         // We use UUID, which were not available in Bukkit < 1.7.5.
-        try {
-            if (getServer().getOfflinePlayer("Notch").getUniqueId() == null) {
-                Bukkit.getLogger().warning("Your Minecraft server version is lower than 1.7.5!");
-                Bukkit.getLogger().warning("This plugin is not compatibile with your version of Minecraft server!");
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
-        } catch (Exception e) {
-            Bukkit.getLogger().warning("Your Minecraft server version is lower than 1.7.5!");
-            Bukkit.getLogger().warning("This plugin is not compatibile with your version of Minecraft server!");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
         System.out.print("Your Minecraft server version is " + Bukkit.getVersion());
 
         long startTime = System.currentTimeMillis();
 
 
         // Setup API
-        OpenGuildBukkitPlugin ogBP = new OpenGuildBukkitPlugin();
-        BagOfEverything.setOpenGuild(ogBP);
-        OpenGuild.ogAPI = ogBP.getPlugin();
+
 
         // Check for updates
         Updater updater = new Updater();
@@ -150,7 +120,7 @@ public class OpenGuild extends JavaPlugin {
         this.cuboids = new Cuboids();
         this.guilds = new Guilds(sqlHandler, this, cuboids);
         sqlHandler.startWork(cuboids, guilds);
-        this.relations = new Relations();
+        Relations relations = new Relations();
 
         this.logout = new AntiLogoutManager();
         // Setup Tag Manager
@@ -172,10 +142,12 @@ public class OpenGuild extends JavaPlugin {
         CuboidAndSpawnManipulationListeners.loadItems();
 
         // Load default plugin-modules
-        ((OpenModuleManager) ogAPI.getModules()).defaultModules(hardcoreSQLHandler);
 
         // Register all hooks to this plugin
-        Hooks.registerDefaults(this);
+        HardcoreHandler hardcoreHandler = new HardcoreHandler(hardcoreSQLHandler);
+        hardcoreHandler.enable();
+        RandomTPHandler randomTPHandler = new RandomTPHandler();
+        randomTPHandler.enable(this);
         watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester, guilds, relations, tntGuildBlocker), 0, 20);
 
         getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!");
@@ -218,7 +190,6 @@ public class OpenGuild extends JavaPlugin {
             getCommand("spawn").setExecutor(new SpawnCommand(teleporter));
         }
         getCommand("tpa").setExecutor(new TpaCommand(teleporter, tpaRequester));
-        OpenCommandManager.registerPluginCommands(this);
     }
 
     /**
@@ -268,17 +239,10 @@ public class OpenGuild extends JavaPlugin {
     }
 
     /**
-     * @return instance of OpenGuildPlugin (API) class.
-     */
-    public static OpenGuildPlugin getAPI() {
-        return ogAPI;
-    }
-
-    /**
      * @return instance of OGLogger class.
      */
-    public static Logger getOGLogger() {
-        return BagOfEverything.getLogger();
+    public static OGLogger getOGLogger() {
+        return logger;
     }
 
 

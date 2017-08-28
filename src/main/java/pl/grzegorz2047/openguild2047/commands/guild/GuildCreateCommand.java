@@ -33,7 +33,7 @@ import pl.grzegorz2047.openguild2047.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild2047.database.SQLHandler;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
 import pl.grzegorz2047.openguild2047.managers.TagManager;
-import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
+import pl.grzegorz2047.openguild2047.spawn.SpawnChecker;
 import pl.grzegorz2047.openguild2047.utils.GenUtil;
 
 /**

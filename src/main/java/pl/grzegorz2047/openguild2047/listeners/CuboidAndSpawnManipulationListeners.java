@@ -40,7 +40,7 @@ import pl.grzegorz2047.openguild2047.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild2047.guilds.Guild;
 import pl.grzegorz2047.openguild2047.guilds.Guilds;
 import pl.grzegorz2047.openguild2047.managers.MsgManager;
-import pl.grzegorz2047.openguild2047.modules.spawn.SpawnChecker;
+import pl.grzegorz2047.openguild2047.spawn.SpawnChecker;
 
 import java.util.ArrayList;
 import java.util.List;

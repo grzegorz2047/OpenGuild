@@ -56,42 +56,26 @@ public class PlayerJoinListener implements Listener {
     public void handleEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        event.setJoinMessage(joinMsg.replace("%PLAYER%", player.getName()));
+         event.setJoinMessage(joinMsg.replace("%PLAYER%", player.getName()));
         //System.out.print("Wykonuje playerJoinEvent!");
 
 
         //Pobierz dane gracza
-        SQLRecord playerRecord = this.tempPlayerData.getPlayerRecord(player.getUniqueId());
+        SQLRecord playerRecord = this.tempPlayerData.getPlayerRecord(uuid);
 
         if (playerRecord != null) {
-            guilds.updatePlayerMetadata(player.getUniqueId(), "guild", playerRecord.getGuild());
-            guilds.updatePlayerMetadata(player.getUniqueId(), "elo", playerRecord.getElo());
-            guilds.updatePlayerMetadata(player.getUniqueId(), "kills", playerRecord.getKills());
-            guilds.updatePlayerMetadata(player.getUniqueId(), "deaths", playerRecord.getDeaths());
-            this.tempPlayerData.removePlayer(player.getUniqueId());
-            if (guilds.hasGuild(player)) {
-                Guild guild = guilds.getPlayerGuild(uuid);
-                //tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
-                tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
-
-                guilds.addOnlineGuild(guild.getName());
-                guilds.notifyMembersJoinedGame(player, guild);
-            }
+            preparePlayerData(player, uuid, playerRecord);
         } else {
             if (!player.hasPlayedBefore()) {
                 sqlHandler.insertPlayer(uuid);
-                guilds.updatePlayerMetadata(player.getUniqueId(), "guild", "");
-                guilds.updatePlayerMetadata(player.getUniqueId(), "elo", 1000);
-                guilds.updatePlayerMetadata(player.getUniqueId(), "kills", 0);
-                guilds.updatePlayerMetadata(player.getUniqueId(), "deaths", 0);
+                guilds.updatePlayerMetadata(uuid, "guild", "");
+                guilds.updatePlayerMetadata(uuid, "elo", 1000);
+                guilds.updatePlayerMetadata(uuid, "kills", 0);
+                guilds.updatePlayerMetadata(uuid, "deaths", 0);
             } else {
-                Bukkit.getScheduler().runTaskLater(p, new Runnable() {
-                    @Override
-                    public void run() {
-                        player.kickPlayer(MsgManager.get("youenteredservertoofastrelog"));
-                    }
-                }, 3l);
-                return;
+                this.sqlHandler.getPlayerData(player.getUniqueId(), tempPlayerData);
+                playerRecord = this.tempPlayerData.getPlayerRecord(uuid);
+                preparePlayerData(player, uuid, playerRecord);
             }
 
         }
@@ -99,6 +83,22 @@ public class PlayerJoinListener implements Listener {
         tagManager.prepareScoreboardTagForPlayerOnJoin(player);
 
         notifyOpAboutUpdate(player);
+    }
+
+    private void preparePlayerData(Player player, UUID uuid, SQLRecord playerRecord) {
+        guilds.updatePlayerMetadata(uuid, "guild", playerRecord.getGuild());
+        guilds.updatePlayerMetadata(uuid, "elo", playerRecord.getElo());
+        guilds.updatePlayerMetadata(uuid, "kills", playerRecord.getKills());
+        guilds.updatePlayerMetadata(uuid, "deaths", playerRecord.getDeaths());
+        this.tempPlayerData.removePlayer(uuid);
+        if (guilds.hasGuild(player)) {
+            Guild guild = guilds.getPlayerGuild(uuid);
+            //tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
+            tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
+
+            guilds.addOnlineGuild(guild.getName());
+            guilds.notifyMembersJoinedGame(player, guild);
+        }
     }
 
     private void notifyOpAboutUpdate(Player player) {
