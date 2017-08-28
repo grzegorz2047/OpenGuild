@@ -56,61 +56,89 @@ public class GuildAllyCommand extends Command {
             return;
         }
         Player player = (Player) sender;
-        if (args.length >= 2) {
-            String guildToCheck = args[1].toUpperCase();
-            if (!guilds.doesGuildExists(guildToCheck)) {
-                sender.sendMessage(MsgManager.get("guilddoesntexists"));
-                return;
-            }
-            Guild requestingGuild = guilds.getPlayerGuild(player.getUniqueId());
-            if (!requestingGuild.getLeader().equals(player.getUniqueId())) {
-                player.sendMessage(MsgManager.get("playernotleader"));
-                return;
-            }
-            Guild guild = guilds.getGuild(guildToCheck);
-            OfflinePlayer leader = Bukkit.getOfflinePlayer(guild.getLeader());
-
-            if (guild.getName().equals(requestingGuild.getName())) {
-                sender.sendMessage(MsgManager.get("allyyourselferror"));
-                return;
-            }
-
-            if (!leader.isOnline()) {
-                sender.sendMessage(MsgManager.get("leadernotonline"));
-                return;
-            }
-            RelationChange request = relations.getRequest(guild.getName(), requestingGuild.getName());
-            if (request != null) {
-                if (!requestingGuild.getLeader().equals(player.getUniqueId())) {
-                    player.sendMessage(MsgManager.get("playernotleader"));
-                    return;
-                }
-
-                GuildRelationEvent event = new GuildRelationEvent(requestingGuild, guild, Relation.Status.ALLY);
-                Bukkit.getPluginManager().callEvent(event);
-                if (event.isCancelled()) {
-                    return;
-                }
-
-                relations.removeRequest(request);
-                Relation r = new Relation(guild.getName(), requestingGuild.getName(), 0, Relation.Status.ALLY);
-                boolean result = sqlHandler.insertAlliance(guild, requestingGuild);
-                if (!result) {
-                    OpenGuild.getOGLogger().warning("Could not register the ally for " + guild.getName() + " guild!");
-                }
-                tagManager.guildMakeAlliance(r);
-                guild.getAlliances().add(r);
-                requestingGuild.getAlliances().add(r);
-                Bukkit.broadcastMessage(MsgManager.get("broadcast-ally")
-                        .replace("{GUILD1}", guild.getName())
-                        .replace("{GUILD2}", requestingGuild.getName()));
-                return;
-            }
-            relations.changeRelationRequest(requestingGuild, guild, leader, Relation.Status.ALLY);
-        } else {
+        if (args.length < 2) {
             sender.sendMessage("/g ally <guild>");
+            return;
+        }
+        String guildToCheck = args[1].toUpperCase();
+        if (!guilds.doesGuildExists(guildToCheck)) {
+            sender.sendMessage(MsgManager.get("guilddoesntexists"));
+            return;
+        }
+        Guild requestingGuild = guilds.getPlayerGuild(player.getUniqueId());
+        if (!requestingGuild.getLeader().equals(player.getUniqueId())) {
+            player.sendMessage(MsgManager.get("playernotleader"));
+            return;
+        }
+        Guild guild = guilds.getGuild(guildToCheck);
+        OfflinePlayer leader = Bukkit.getOfflinePlayer(guild.getLeader());
+
+        if (guild.getName().equals(requestingGuild.getName())) {
+            sender.sendMessage(MsgManager.get("allyyourselferror"));
+            return;
         }
 
+        if (!leader.isOnline()) {
+            sender.sendMessage(MsgManager.get("leadernotonline"));
+            return;
+        }
+        RelationChange request = relations.getRequest(guild.getName(), requestingGuild.getName());
+        if (wasRequestedBefore(request)) {
+            acceptChangeREquest(player, requestingGuild, guild, request);
+            return;
+        }
+        createNewRelationChangeRequest(requestingGuild, guild, leader);
+    }
+
+    private void createNewRelationChangeRequest(Guild requestingGuild, Guild guild, OfflinePlayer leader) {
+        relations.changeRelationRequest(requestingGuild, guild, leader, Relation.Status.ALLY);
+    }
+
+    private void acceptChangeREquest(Player player, Guild requestingGuild, Guild guild, RelationChange request) {
+        if (!requestingGuild.getLeader().equals(player.getUniqueId())) {
+            player.sendMessage(MsgManager.get("playernotleader"));
+            return;
+        }
+
+        if (invokeRelationEventCancelled(requestingGuild, guild)) return;
+
+        clearRequest(request);
+        addRelationData(requestingGuild, guild);
+        broadcastRelationChangeToAll(requestingGuild, guild);
+    }
+
+    private boolean wasRequestedBefore(RelationChange request) {
+        return request != null;
+    }
+
+    private void clearRequest(RelationChange request) {
+        relations.removeRequest(request);
+    }
+
+    private void broadcastRelationChangeToAll(Guild requestingGuild, Guild guild) {
+        Bukkit.broadcastMessage(MsgManager.get("broadcast-ally")
+                .replace("{GUILD1}", guild.getName())
+                .replace("{GUILD2}", requestingGuild.getName()));
+    }
+
+    private void addRelationData(Guild requestingGuild, Guild guild) {
+        Relation r = new Relation(guild.getName(), requestingGuild.getName(), 0, Relation.Status.ALLY);
+        boolean result = sqlHandler.insertAlliance(guild, requestingGuild);
+        if (!result) {
+            OpenGuild.getOGLogger().warning("Could not register the ally for " + guild.getName() + " guild!");
+        }
+        tagManager.guildMakeAlliance(r);
+        guild.getAlliances().add(r);
+        requestingGuild.getAlliances().add(r);
+    }
+
+    private boolean invokeRelationEventCancelled(Guild requestingGuild, Guild guild) {
+        GuildRelationEvent event = new GuildRelationEvent(requestingGuild, guild, Relation.Status.ALLY);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return true;
+        }
+        return false;
     }
 
     @Override

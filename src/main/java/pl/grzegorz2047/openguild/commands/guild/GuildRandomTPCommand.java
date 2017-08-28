@@ -29,16 +29,16 @@ public class GuildRandomTPCommand extends Command {
 
     RandomTPHandler randomTPHandler = new RandomTPHandler();
 
-    public GuildRandomTPCommand(Plugin plugin){
+    public GuildRandomTPCommand(Plugin plugin) {
         randomTPHandler.enable(plugin);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        if(args.length == 2) {
-            if(sender.hasPermission("openguild.randomtp.other")) {
+        if (args.length == 2) {
+            if (sender.hasPermission("openguild.randomtp.other")) {
                 String target = args[1];
-                if(Bukkit.getPlayer(target) == null) {
+                if (Bukkit.getPlayer(target) == null) {
                     throw new CommandException("Player \"" + target + "\" is not online");
                 } else {
                     randomTPHandler.teleport(Bukkit.getPlayer(target));
@@ -47,14 +47,14 @@ public class GuildRandomTPCommand extends Command {
                 throw new PermException();
             }
         }
-        
-        if(sender instanceof Player) {
+
+        if (sender instanceof Player) {
             randomTPHandler.teleport((Player) sender);
         } else {
             throw new CommandException("You must be a player in-game!");
         }
     }
-    
+
     @Override
     public int minArgs() {
         return 1;

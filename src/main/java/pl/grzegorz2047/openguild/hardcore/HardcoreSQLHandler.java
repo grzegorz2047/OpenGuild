@@ -27,7 +27,7 @@ import pl.grzegorz2047.openguild.database.SQLHandler;
 /**
  * @author Grzegorz
  */
-public class HardcoreSQLHandler {
+public final class HardcoreSQLHandler {
     private final SQLHandler sqlHandler;
 
     /* Można zrobić API do dostania się na polaczenie openguilda */

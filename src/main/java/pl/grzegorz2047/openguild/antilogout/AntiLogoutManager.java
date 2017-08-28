@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by grzeg on 23.12.2015.
+ * Created by grzegorz2047 on 23.12.2015.
  */
 public class AntiLogoutManager {
     HashMap<String, Fight> fightList = new HashMap<String, Fight>();
@@ -26,11 +26,6 @@ public class AntiLogoutManager {
         return fightList;
     }
 
-    public void clearFightList() {
-        fightList.clear();
-    }
-
-
     public void handleLogoutDuringFight(Player player, String playerName) {
         if (isPlayerDuringFight(playerName)) {
             Player potentialKiller = Bukkit.getPlayer(getPotentialKillerName(playerName));
@@ -38,9 +33,9 @@ public class AntiLogoutManager {
             player.getInventory().clear();
             player.getInventory().setArmorContents(new ItemStack[4]);
             removePlayerFromFight(playerName);
-            if (potentialKiller != null) {
+            /*if (potentialKiller != null) {
 
-            }
+            }*/
             Bukkit.broadcastMessage(MsgManager.get("playerlogoutduringfight").replace("%PLAYER%", playerName));
         }
     }
@@ -83,11 +78,11 @@ public class AntiLogoutManager {
         }
     }
 
-    public boolean isPlayerDuringFight(String name) {
+    private boolean isPlayerDuringFight(String name) {
         return fightList.containsKey(name);
     }
 
-    public String getPotentialKillerName(String victim) {
+    private String getPotentialKillerName(String victim) {
         return fightList.get(victim).getAttacker();
     }
 
@@ -116,40 +111,18 @@ public class AntiLogoutManager {
     }
 
     private String makeHealthString(float perc) {
-        if (perc >= 100) {
-            return "§c▉▉▉▉▉▉▉▉▉▉";
+        String splitColor = "§4";
+        String firstColor = "§c";
+        String defaultAntiLogoutBar = "▉▉▉▉▉▉▉▉▉▉";
+        if (perc <= 10) {
+            return splitColor + defaultAntiLogoutBar;
         }
-        if (perc >= 90 && perc < 100) {
-            return "§c▉▉▉▉▉▉▉▉▉§4▉";
-        }
-        if (perc >= 80 && perc < 90) {
-            return "§c▉▉▉▉▉▉▉▉§4▉▉";
-        }
-        if (perc >= 70 && perc < 80) {
-            return "§c▉▉▉▉▉▉▉§4▉▉▉";
-        }
-        if (perc >= 60 && perc < 70) {
-            return "§c▉▉▉▉▉▉§4▉▉▉▉";
-        }
-        if (perc >= 50 && perc < 60) {
-            return "§c▉▉▉▉▉§4▉▉▉▉▉";
-        }
-        if (perc >= 40 && perc < 50) {
-            return "§c▉▉▉▉§4▉▉▉▉▉▉";
-        }
-        if (perc >= 30 && perc < 40) {
-            return "§c▉▉▉§4▉▉▉▉▉▉▉";
-        }
-        if (perc >= 20 && perc < 30) {
-            return "§c▉▉§4▉▉▉▉▉▉▉▉";
-        }
-        if (perc >= 10 && perc < 20) {
-            return "§c▉§4▉▉▉▉▉▉▉▉▉";
-        }
-        if (perc < 10) {
-            return "§4▉▉▉▉▉▉▉▉▉▉";
-        }
-        return "§4▉▉▉▉▉▉▉▉▉▉";
+        int splitPosition = ((int) perc / 10) % 10;
+        int splitIndexFixed = splitPosition - 1;
+        String partBar = defaultAntiLogoutBar.substring(0, splitIndexFixed) + splitColor;
+        String finalBar = partBar + defaultAntiLogoutBar.substring(splitIndexFixed + 1);
+        finalBar = firstColor + finalBar;
+        return finalBar;
     }
 
     public void updatePlayersFight(Player attacker, Player attacked) {
