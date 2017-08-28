@@ -333,7 +333,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     }
 
 
-    public static void loadItems() {
+    public static void loadSpecialItemsToDestroyEnemyCuboidBlocks() {
         breakingItems = new ArrayList<Material>();
         for (String item : GenConf.BREAKING_ITEMS) {
             try {

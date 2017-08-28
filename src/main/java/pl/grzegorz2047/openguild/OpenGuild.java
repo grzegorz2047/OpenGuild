@@ -27,12 +27,6 @@ import pl.grzegorz2047.openguild.commands.TpaCommand;
 import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.database.SQLHandler;
-import pl.grzegorz2047.openguild.database.interfaces.SQLImplementationStrategy;
-import pl.grzegorz2047.openguild.database.interfaces.SQLTables;
-import pl.grzegorz2047.openguild.database.mysql.MySQLImplementationStrategy;
-import pl.grzegorz2047.openguild.database.mysql.MySQLTables;
-import pl.grzegorz2047.openguild.database.sqlite.SQLiteImplementationStrategy;
-import pl.grzegorz2047.openguild.database.sqlite.SQLiteTables;
 import pl.grzegorz2047.openguild.dropstone.DropConfigLoader;
 import pl.grzegorz2047.openguild.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild.dropstone.DropProperties;
@@ -66,7 +60,6 @@ public class OpenGuild extends JavaPlugin {
 
     private TagManager tagManager;
 
-    private SQLHandler sqlHandler;
     private Cuboids cuboids;
     private AntiLogoutManager logout;
     private BukkitTask watcher;
@@ -81,31 +74,16 @@ public class OpenGuild extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        // We use UUID, which were not available in Bukkit < 1.7.5.
-        System.out.print("Your Minecraft server version is " + Bukkit.getVersion());
-
         long startTime = System.currentTimeMillis();
 
-
-        // Setup API
-
-
-        // Check for updates
         updater.checkForUpdates();
 
-        // Validate files
         FileValidator fileValidator = new FileValidator();
 
-        fileValidator.validateFile(getResource("config.yml"), "config");
-        fileValidator.validateFile(getResource("commands.yml"), "commands");
-        fileValidator.validateFile(getResource("drop.yml"), "drop");
+        loadConfigFiles(fileValidator);
 
-        // Load configuration
         GenConf.loadConfiguration(getConfig());
-
-        // Validate language file
-        String translation = "messages_" + GenConf.lang.toLowerCase();
-        fileValidator.validateFile(getResource(translation + ".yml"), translation);
+        loadTranslationFiles(fileValidator);
 
         /*
          * If some server admin doesn't want to use PermissionsEX or other
@@ -114,13 +92,10 @@ public class OpenGuild extends JavaPlugin {
         //if(GenConf.useNativePermissionsManager) {
         //  TODO   
         //}
-        List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
-        this.drop = new DropFromBlocks(GenConf.ELIGIBLE_DROP_BLOCKS, loadedDrops);
-        loadDB();
-        this.cuboids = new Cuboids();
-        this.guilds = new Guilds(sqlHandler, this, cuboids);
-        sqlHandler.startWork(cuboids, guilds);
-        Relations relations = new Relations();
+        loadDropFromBlocks();
+        SQLHandler sqlHandler = new SQLHandler(this);
+        sqlHandler.loadDB(getConfig());
+        loadDataFromDB(sqlHandler);
 
         this.logout = new AntiLogoutManager();
         // Setup Tag Manager
@@ -132,25 +107,56 @@ public class OpenGuild extends JavaPlugin {
         // Load database
 
         HardcoreSQLHandler hardcoreSQLHandler = new HardcoreSQLHandler(sqlHandler);
-
-        loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler);
-
-        loadAllListeners();
-        sqlHandler.loadRelations(guilds);
-
-        // Load required items section.
-        CuboidAndSpawnManipulationListeners.loadItems();
-
-        // Load default plugin-modules
-
-        // Register all hooks to this plugin
         HardcoreHandler hardcoreHandler = new HardcoreHandler(hardcoreSQLHandler, this);
         hardcoreHandler.enable();
+
         RandomTPHandler randomTPHandler = new RandomTPHandler();
         randomTPHandler.enable(this);
-        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester, guilds, relations, tntGuildBlocker), 0, 20);
 
-        getServer().getConsoleSender().sendMessage("§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!");
+        Relations relations = new Relations();
+        loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler);
+
+        loadAllListeners(sqlHandler);
+        sqlHandler.loadRelations(guilds);
+
+        CuboidAndSpawnManipulationListeners.loadSpecialItemsToDestroyEnemyCuboidBlocks();
+
+
+        loadWatcherTask(relations);
+
+        String enabledMsg = "§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!";
+        showFancyMessageInConsole(enabledMsg);
+    }
+
+    private void showFancyMessageInConsole(String message) {
+        getServer().getConsoleSender().sendMessage(message);
+    }
+
+    private void loadWatcherTask(Relations relations) {
+        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester, guilds, relations, tntGuildBlocker), 0, 20);
+    }
+
+    private void loadDataFromDB(SQLHandler sqlHandler) {
+        this.cuboids = new Cuboids();
+        this.guilds = new Guilds(sqlHandler, this, cuboids);
+        sqlHandler.startWork(cuboids, guilds);
+    }
+
+    private void loadDropFromBlocks() {
+        List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
+        this.drop = new DropFromBlocks(GenConf.ELIGIBLE_DROP_BLOCKS, loadedDrops);
+    }
+
+    private void loadTranslationFiles(FileValidator fileValidator) {
+        // Validate language file
+        String translation = "messages_" + GenConf.lang.toLowerCase();
+        fileValidator.validateFile(getResource(translation + ".yml"), translation);
+    }
+
+    private void loadConfigFiles(FileValidator fileValidator) {
+        fileValidator.validateFile(getResource("config.yml"), "config");
+        fileValidator.validateFile(getResource("commands.yml"), "commands");
+        fileValidator.validateFile(getResource("drop.yml"), "drop");
     }
 
     @Override
@@ -158,14 +164,12 @@ public class OpenGuild extends JavaPlugin {
 
         this.logout.dispose();
         this.watcher.cancel();
-        try {
-            this.sqlHandler.getConnection().close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.sqlHandler = null;
         this.tagManager = null;
 
+        removeUnnessessaryLogFiles();
+    }
+
+    private void removeUnnessessaryLogFiles() {
         int deletedFiles = 0;
 
         for (File file : getOGLogger().getLoggingDirectory().listFiles()) {
@@ -185,7 +189,7 @@ public class OpenGuild extends JavaPlugin {
      * This method sets executors of all commands, and
      * registers them in our API.
      */
-    private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandlers, Relations relations, HardcoreSQLHandler hardcoreSQLHandler) {
+    private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler) {
         getCommand("team").setExecutor(new TeamCommand(guilds));
         getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler, this));
         if (GenConf.SPAWN_COMMAND_ENABLED) {
@@ -194,46 +198,11 @@ public class OpenGuild extends JavaPlugin {
         getCommand("tpa").setExecutor(new TpaCommand(teleporter, tpaRequester));
     }
 
-    /**
-     * This method connects plugin with database using informations from
-     * configuration file.
-     */
-    private void loadDB() {
-        String host = getConfig().getString("mysql.address");
-        int port = getConfig().getInt("mysql.port");
-        String user = getConfig().getString("mysql.login");
-        String pass = getConfig().getString("mysql.password");
-        String name = getConfig().getString("mysql.database");
-
-        SQLImplementationStrategy sqlImplementation;
-        SQLTables tables;
-        OGLogger ogLogger = OpenGuild.getOGLogger();
-        switch (GenConf.DATABASE) {
-            case FILE:
-                ogLogger.info("[SQLite] Connecting to SQLite database ...");
-                sqlImplementation = new SQLiteImplementationStrategy();
-                tables = new SQLiteTables();
-                ogLogger.info("[SQLite] Connected to SQLite successfully!");
-                break;
-            case MYSQL:
-                sqlImplementation = new MySQLImplementationStrategy(host, port, user, pass, name);
-                tables = new MySQLTables();
-                break;
-            default:
-                ogLogger.severe("[MySQL] Invalid database type '" + GenConf.DATABASE.name() + "'!");
-                sqlImplementation = new SQLiteImplementationStrategy();
-                tables = new SQLiteTables();
-                ogLogger.severe("[MySQL] Invalid database type! Setting db to SQLite!");
-                break;
-        }
-
-        this.sqlHandler = new SQLHandler(this, sqlImplementation, tables);
-    }
 
     /**
      * This method registers all events.
      */
-    private void loadAllListeners() {
+    private void loadAllListeners(SQLHandler sqlHandler) {
         PluginManager pm = getServer().getPluginManager();
         ListenerLoader listenerLoader = new ListenerLoader
                 (this, guilds, tagManager, sqlHandler, teleporter, tpaRequester, cuboids, logout, drop, tntGuildBlocker, updater);

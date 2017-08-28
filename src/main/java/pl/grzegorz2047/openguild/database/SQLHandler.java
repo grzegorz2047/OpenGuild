@@ -19,8 +19,15 @@ import java.sql.*;
 import java.util.*;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import pl.grzegorz2047.openguild.OGLogger;
 import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.database.mysql.MySQLImplementationStrategy;
+import pl.grzegorz2047.openguild.database.mysql.MySQLTables;
+import pl.grzegorz2047.openguild.database.sqlite.SQLiteImplementationStrategy;
+import pl.grzegorz2047.openguild.database.sqlite.SQLiteTables;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.guilds.Guild;
@@ -32,7 +39,7 @@ import pl.grzegorz2047.openguild.database.interfaces.SQLTables;
 
 public final class SQLHandler {
 
-    private OpenGuild plugin;
+    private Plugin plugin;
 
     private Statement statement;
     private SQLImplementationStrategy implementation;
@@ -49,13 +56,41 @@ public final class SQLHandler {
     private String eloColumn = "elo";
     private String uuidColumn = "uuid";
 
-    public SQLHandler(OpenGuild plugin, SQLImplementationStrategy implementation, SQLTables tables) {
+    public SQLHandler(Plugin plugin) {
         this.plugin = plugin;
-        this.tables = tables;
-        try {
-            this.implementation = implementation;
-        } catch (Exception e) {
-            e.printStackTrace();
+    }
+
+    /**
+     * This method connects plugin with database using informations from
+     * configuration file.
+     *
+     * @param config
+     */
+    public void loadDB(FileConfiguration config) {
+        String host = config.getString("mysql.address");
+        int port = config.getInt("mysql.port");
+        String user = config.getString("mysql.login");
+        String pass = config.getString("mysql.password");
+        String name = config.getString("mysql.database");
+
+        OGLogger ogLogger = OpenGuild.getOGLogger();
+        switch (GenConf.DATABASE) {
+            case FILE:
+                ogLogger.info("[SQLite] Connecting to SQLite database ...");
+                implementation = new SQLiteImplementationStrategy();
+                tables = new SQLiteTables();
+                ogLogger.info("[SQLite] Connected to SQLite successfully!");
+                break;
+            case MYSQL:
+                implementation = new MySQLImplementationStrategy(host, port, user, pass, name);
+                tables = new MySQLTables();
+                break;
+            default:
+                ogLogger.severe("[MySQL] Invalid database type '" + GenConf.DATABASE.name() + "'!");
+                implementation = new SQLiteImplementationStrategy();
+                tables = new SQLiteTables();
+                ogLogger.severe("[MySQL] Invalid database type! Setting db to SQLite!");
+                break;
         }
     }
 
