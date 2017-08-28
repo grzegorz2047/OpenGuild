@@ -30,7 +30,7 @@ public class MsgManager {
 
     private static HashMap<String, String> messages;
 
-    public static File file = new File("plugins/OpenGuild2047/messages_" + GenConf.lang.toLowerCase() + ".yml");
+    public static File file = new File("plugins/OpenGuild/messages_" + GenConf.lang.toLowerCase() + ".yml");
     public static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
     public static String createguildsuccess = get("createguildsuccess", "Gildia zostala pomysnie stworzona.");

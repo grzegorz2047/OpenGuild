@@ -149,7 +149,7 @@ public class GenConf {
         TPA_ENABLED = config.getBoolean("tpa-command", false);
         DATABASE = Database.valueOf(config.getString("database", "FILE").toUpperCase());
         loadDatabase(config);
-        FILE_DIR = config.getString("file-dir", "plugins/OpenGuild2047/og.db");
+        FILE_DIR = config.getString("file-dir", "plugins/OpenGuild/og.db");
         SNOOPER = config.getBoolean("snooper", true);
         ANTI_LOGOUT = config.getBoolean("fight-antilogout", true);
         TEAMPVP_MSG = config.getBoolean("teampvp-msg", false);

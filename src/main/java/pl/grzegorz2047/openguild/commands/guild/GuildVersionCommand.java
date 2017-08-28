@@ -43,7 +43,7 @@ public class GuildVersionCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        sender.sendMessage(this.getTitle(ChatColor.GOLD + "OpenGuild2047"));
+        sender.sendMessage(this.getTitle(ChatColor.GOLD + "OpenGuild"));
         sender.sendMessage(ChatColor.DARK_GRAY + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion());
         sender.sendMessage(ChatColor.DARK_GRAY + "Authors: \n" + this.getAuthors());
         sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild2047");

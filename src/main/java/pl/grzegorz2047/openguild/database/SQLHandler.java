@@ -195,9 +195,10 @@ public final class SQLHandler {
     }
 
     private void readPlayersDataFromResult(ResultSet result, Guilds guilds) throws SQLException {
-        while (anotherRecord(result)) {
+         while (anotherRecord(result)) {
             String guildTag = result.getString(guildColumn);
             UUID uuid = UUID.fromString(result.getString(uuidColumn));
+            System.out.println(guildTag + "  tag");
             if (!guilds.doesGuildExists(guildTag)) {
                 continue;
             }

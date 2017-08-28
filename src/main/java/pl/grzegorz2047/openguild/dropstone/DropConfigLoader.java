@@ -17,7 +17,8 @@ public class DropConfigLoader {
     private final FileConfiguration config;
 
     public DropConfigLoader() {
-        File file = new File("plugins/OpenGuild2047/drop.yml");
+        String openGuildFolderName = "OpenGuild";
+        File file = new File("plugins/" + openGuildFolderName + "/drop.yml");
         this.config = YamlConfiguration.loadConfiguration(file);
     }
 

@@ -16,9 +16,10 @@ public class FileValidator {
 
         YamlConfiguration c = new YamlConfiguration();
         try {
-            File file = new File("plugins/OpenGuild2047/" + name + ".yml");
+            String openGuildPluginFolderName = "OpenGuild";
+            File file = new File("plugins/" + openGuildPluginFolderName + "/" + name + ".yml");
             if (!file.exists()) {
-                OpenGuild.getOGLogger().info("File plugins/OpenGuild2047/" + name + ".yml does not exists - creating ...");
+                OpenGuild.getOGLogger().info("File plugins/" + openGuildPluginFolderName + "/" + name + ".yml does not exists - creating ...");
                 file.createNewFile();
             }
 

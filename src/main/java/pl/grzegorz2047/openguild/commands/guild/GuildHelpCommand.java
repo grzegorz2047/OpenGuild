@@ -141,7 +141,7 @@ public class GuildHelpCommand extends Command {
         } else {
             hide++;
         }
-        sender.sendMessage(help("version", "Informacje o plugine OpenGuild2047"));
+        sender.sendMessage(help("version", "Informacje o plugine OpenGuild"));
 
         if (hide > 0) {
             sender.sendMessage(MsgManager.get("skipped").replace("{HELP}", String.valueOf(hide)));

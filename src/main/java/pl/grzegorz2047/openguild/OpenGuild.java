@@ -182,7 +182,7 @@ public class OpenGuild extends JavaPlugin {
             }
         }
 
-        System.out.println("Deleted " + deletedFiles + " files from 'plugins/OpenGuild2047/logger'");
+        System.out.println("Deleted " + deletedFiles + " files from 'plugins/OpenGuild/logger'");
     }
 
     /**

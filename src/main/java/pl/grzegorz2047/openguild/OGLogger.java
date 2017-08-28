@@ -35,7 +35,7 @@ public class OGLogger  {
 
     public OGLogger() {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        logFile = new File(String.format("plugins/OpenGuild2047/logger/%s.log", format.format(new Date())));
+        logFile = new File(String.format("plugins/OpenGuild/logger/%s.log", format.format(new Date())));
         
         if(!logFile.getParentFile().exists()) {
             logFile.getParentFile().mkdirs();
