@@ -5,7 +5,7 @@ website: https://www.github.com/grzegorz2047/OpenGuild2047
 version: '${project.version}'
 prefix: 'OpenGuild'
 softdepend: [Skript, ProtocolLib]
-main: pl.grzegorz2047.openguildnGuild
+main: pl.grzegorz2047.openguild
 commands:
   guild:
     description: Commands related to guilds

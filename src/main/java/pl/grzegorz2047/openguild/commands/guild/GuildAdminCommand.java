@@ -22,26 +22,25 @@ import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 
 /**
- *
  * @author Grzegorz
  */
 public class GuildAdminCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        if(!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
         Player player = (Player) sender;
-        if(args.length == 1){
+        if (args.length == 1) {
             player.sendMessage(MsgManager.get("cmdhelp-us") + "/g admin <arg> <value>");
         }
     }
 
     @Override
     public int minArgs() {
-       return 1;
+        return 1;
     }
-    
+
 }

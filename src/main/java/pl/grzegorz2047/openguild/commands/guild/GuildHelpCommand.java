@@ -57,7 +57,7 @@ public class GuildHelpCommand extends Command {
         } else if (page == 2) {
             if (GenConf.lang.equals("PL")) {
                 showPolishHelpPage2(sender);
-            }else  {
+            } else {
                 showEnglishHelpPage2(sender);
             }
 

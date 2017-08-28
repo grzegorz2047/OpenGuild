@@ -19,14 +19,16 @@ package pl.grzegorz2047.openguild.commands.guild;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild.commands.command.Command;
 import pl.grzegorz2047.openguild.commands.command.CommandException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 /**
  * Command used to check version of this plugin.
- * 
+ * <p>
  * Usage: /guild version
  */
 public class GuildVersionCommand extends Command {

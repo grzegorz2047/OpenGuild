@@ -65,7 +65,7 @@ public class GuildInviteCommand extends Command {
             return;
         }
 
-        Player invite =Bukkit.getPlayer(playerToInvite);
+        Player invite = Bukkit.getPlayer(playerToInvite);
 
         GuildInvitationEvent event = new GuildInvitationEvent(guild, invite);
         Bukkit.getPluginManager().callEvent(event);
