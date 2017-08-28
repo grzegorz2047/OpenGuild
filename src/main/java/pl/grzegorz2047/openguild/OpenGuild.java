@@ -180,7 +180,7 @@ public class OpenGuild extends JavaPlugin {
             String fileName = file.getName();
             int fileNameLength = fileName.length();
             String format = fileName.substring(fileNameLength - 4, fileNameLength);
-            if (!format.equals(".log")) {
+            if (!".log".equals(format)) {
                 file.delete();
                 deletedFiles++;
             }

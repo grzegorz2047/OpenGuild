@@ -128,16 +128,7 @@ public class GenConf {
         System.out.println("block jest na " + BLOCK_STRENGTH_2);
         NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK = config.getBoolean("drop.notify-cant-drop-from-not-eligible-block", false);
 
-        List<String> blockList = config.getStringList("blocks-from-where-item-drops");
-        ELIGIBLE_DROP_BLOCKS = new ArrayList<>();
-        for (String dropMat : blockList) {
-            try {
-                ELIGIBLE_DROP_BLOCKS.add(Material.valueOf(dropMat));
-            } catch (IllegalArgumentException ex) {
-                System.out.println("Incorrect drop block " + dropMat + ". Check Material bukkit google it!");
-            }
-
-        }
+        loadMainDropData(config);
         DROP_ENABLED = config.getBoolean("drop.enabled", false);
         DROP_TO_EQ = config.getBoolean("drop.drop-to-eq", false);
         SPAWN_COMMAND_ENABLED = config.getBoolean("spawn-command", false);
@@ -148,8 +139,7 @@ public class GenConf {
         SQL_DEBUG = config.getBoolean("mysql.debug", false);
         TPA_ENABLED = config.getBoolean("tpa-command", false);
         DATABASE = Database.valueOf(config.getString("database", "FILE").toUpperCase());
-        loadDatabase(config);
-        FILE_DIR = config.getString("file-dir", "plugins/OpenGuild/og.db");
+         FILE_DIR = config.getString("file-dir", "plugins/OpenGuild/og.db");
         SNOOPER = config.getBoolean("snooper", true);
         ANTI_LOGOUT = config.getBoolean("fight-antilogout", true);
         TEAMPVP_MSG = config.getBoolean("teampvp-msg", false);
@@ -157,10 +147,7 @@ public class GenConf {
         lang = config.getString("language").toUpperCase();
 
         loadBans(config);
-        List listMax = config.getList("spawn.location-max");
-        List listMin = config.getList("spawn.location-min");
-        spawnMin = new Location(Bukkit.getWorld((String) listMin.get(0)), (Integer) listMin.get(1), Integer.MIN_VALUE, (Integer) listMin.get(2));
-        spawnMax = new Location(Bukkit.getWorld((String) listMax.get(0)), (Integer) listMax.get(1), Integer.MAX_VALUE, (Integer) listMax.get(2));
+        loadSpawnCoords(config);
 
         spawnMessage = config.getString("spawn.message", "&4Message 'spawn.message' in config.yml file was not found! This is an error! Please notify an operator about it!").replace("&", "§");
         blockGuildCreating = config.getBoolean("spawn.block-guild-creating", true);
@@ -181,6 +168,64 @@ public class GenConf {
         cubEnabled = config.getBoolean("cuboid.enabled", true);
         teampvp = config.getBoolean("teampvp", false);
         homecommand = config.getBoolean("home-command", true);
+        loadItemsForGuild(config);
+        playerprefixenabled = config.getBoolean("tags.enabled", true);
+        enemyTag = config.getString("tags.enemy", "{TAG}").replace("&", "§");
+        allyTag = config.getString("tags.ally", "{TAG}").replace("&", "§");
+        guildTag = config.getString("tags.guild", "{TAG}").replace("&", "§");
+        guildprefixinchat = config.getBoolean("chat.guildprefixinchat", true);
+        chatFormat = config.getString("chat.chatFormat", "&8{&7GUILD&8} &7{PLAYER}&7: &f{MESSAGE}");
+        hcLightning = config.getBoolean("hardcore-bans.lightning", true);
+        newCmdApi = config.getBoolean("use-new-command-api", false);
+        ranTpEnabled = config.getBoolean("random-tp.enabled", false);
+        ranTpButton = config.getBoolean("random-tp.button", true);
+        ranTpRange = config.getInt("random-tp.range", 3000);
+        spawnExtra = config.getInt("spawn.extra", 50);
+        blockEnter = config.getBoolean("spawn.block-enter", false);
+        blockEnterTime = config.getInt("spawn.block-enter-time", 10);
+        joinMsg = config.getString("join-msg", "").replace("&", "§");
+        quitMsg = config.getString("quit-msg", "").replace("&", "§");
+        channelOnlyGuildKey = config.getString("chat.guild-key", "guild:");
+        guildChatFormat = config.getString("chat.guild-format", "&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
+        channelAllyAndGuildKey = config.getString("chat.ally-key", "allies:");
+        allyChatFormat = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
+        debug = config.getBoolean("debug", false);
+        loadSQLPrefix(config);
+        cuboidCheckPlayers = config.getBoolean("cuboid.block-guild-creation-when-players-are-too-close", false);
+
+        defaultTNTBlockTime = config.getInt("listener.tnt-block-time", 30);
+        enableTNTExplodeListener = config.getBoolean("listener.tnt-block-enabled", true);
+    }
+
+    private static void loadMainDropData(FileConfiguration config) {
+        List<String> blockList = config.getStringList("blocks-from-where-item-drops");
+        ELIGIBLE_DROP_BLOCKS = new ArrayList<>();
+        for (String dropMat : blockList) {
+            try {
+                ELIGIBLE_DROP_BLOCKS.add(Material.valueOf(dropMat));
+            } catch (IllegalArgumentException ex) {
+                System.out.println("Incorrect drop block " + dropMat + ". Check Material bukkit google it!");
+            }
+
+        }
+    }
+
+    private static void loadSpawnCoords(FileConfiguration config) {
+        List listMax = config.getList("spawn.location-max");
+        List listMin = config.getList("spawn.location-min");
+        spawnMin = new Location(Bukkit.getWorld((String) listMin.get(0)), (Integer) listMin.get(1), Integer.MIN_VALUE, (Integer) listMin.get(2));
+        spawnMax = new Location(Bukkit.getWorld((String) listMax.get(0)), (Integer) listMax.get(1), Integer.MAX_VALUE, (Integer) listMax.get(2));
+    }
+
+    private static void loadSQLPrefix(FileConfiguration config) {
+        sqlTablePrefix = config.getString("sql-table-prefix", "openguild");
+        if (sqlTablePrefix.length() > 10 || sqlTablePrefix.length() < 3) {
+            OpenGuild.getOGLogger().warning("Could not load SQL table prefix - too low (3 chars) or too long (10 chars).");
+            sqlTablePrefix = "openguild";
+        }
+    }
+
+    private static void loadItemsForGuild(FileConfiguration config) {
         if (config.getStringList("required-items") != null || !config.getStringList("required-items").isEmpty()) {
             List<String> reqItems = config.getStringList("required-items");
             reqitems = new ArrayList<ItemStack>();
@@ -241,36 +286,6 @@ public class GenConf {
         } else {
             reqitems = new ArrayList<ItemStack>();
         }
-        playerprefixenabled = config.getBoolean("tags.enabled", true);
-        enemyTag = config.getString("tags.enemy", "{TAG}").replace("&", "§");
-        allyTag = config.getString("tags.ally", "{TAG}").replace("&", "§");
-        guildTag = config.getString("tags.guild", "{TAG}").replace("&", "§");
-        guildprefixinchat = config.getBoolean("chat.guildprefixinchat", true);
-        chatFormat = config.getString("chat.chatFormat", "&8{&7GUILD&8} &7{PLAYER}&7: &f{MESSAGE}");
-        hcLightning = config.getBoolean("hardcore-bans.lightning", true);
-        newCmdApi = config.getBoolean("use-new-command-api", false);
-        ranTpEnabled = config.getBoolean("random-tp.enabled", false);
-        ranTpButton = config.getBoolean("random-tp.button", true);
-        ranTpRange = config.getInt("random-tp.range", 3000);
-        spawnExtra = config.getInt("spawn.extra", 50);
-        blockEnter = config.getBoolean("spawn.block-enter", false);
-        blockEnterTime = config.getInt("spawn.block-enter-time", 10);
-        joinMsg = config.getString("join-msg", "").replace("&", "§");
-        quitMsg = config.getString("quit-msg", "").replace("&", "§");
-        channelOnlyGuildKey = config.getString("chat.guild-key", "guild:");
-        guildChatFormat = config.getString("chat.guild-format", "&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
-        channelAllyAndGuildKey = config.getString("chat.ally-key", "allies:");
-        allyChatFormat = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
-        debug = config.getBoolean("debug", false);
-        sqlTablePrefix = config.getString("sql-table-prefix", "openguild");
-        if (sqlTablePrefix.length() > 10 || sqlTablePrefix.length() < 3) {
-            OpenGuild.getOGLogger().warning("Could not load SQL table prefix - too low (3 chars) or too long (10 chars).");
-            sqlTablePrefix = "openguild";
-        }
-        cuboidCheckPlayers = config.getBoolean("cuboid.block-guild-creation-when-players-are-too-close", false);
-
-        defaultTNTBlockTime = config.getInt("listener.tnt-block-time", 30);
-        enableTNTExplodeListener = config.getBoolean("listener.tnt-block-enabled", true);
     }
 
     private static void loadBans(Configuration configuration) {
@@ -301,22 +316,7 @@ public class GenConf {
         hcBantime = result;
     }
 
-    private static void loadDatabase(FileConfiguration config) {
-        String host = config.getString("mysql.address");
-        int port = config.getInt("mysql.port");
-        String user = config.getString("mysql.login");
-        String pass = config.getString("mysql.password");
-        String name = config.getString("mysql.database");
 
-        switch (DATABASE) {
-            case FILE:
-                sqlData = new SQLiteData(FILE_DIR);
-                break;
-            case MYSQL:
-                sqlData = new MySQLData(host, port, user, pass, name);
-                break;
-        }
-    }
 
     public static SQLData getSqlData() {
         return sqlData;

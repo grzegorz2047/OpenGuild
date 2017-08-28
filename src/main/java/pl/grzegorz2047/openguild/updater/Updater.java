@@ -10,7 +10,7 @@ import pl.grzegorz2047.openguild.utils.NewVersionChecker;
 /**
  * Created by grzeg on 23.08.2017.
  */
-public class Updater {
+public final class Updater {
 
     NewVersionChecker newVersionChecker = new NewVersionChecker();
 

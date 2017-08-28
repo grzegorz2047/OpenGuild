@@ -37,7 +37,7 @@ public class Guild {
     private final List<UUID> members = new ArrayList<>();
     private List<String> membersNames = new ArrayList<>();
 
-    public Guild(String tag, String description, Location home, UUID leaderUUID, Scoreboard scoreboard) {
+    public Guild(String tag, String description, Location home, UUID leaderUUID) {
 
         this.tag = tag;
         this.description = description;
@@ -138,7 +138,6 @@ public class Guild {
     public List<UUID> getMembers() {
         return members;
     }
-
 
 
     public void addMember(UUID member) {

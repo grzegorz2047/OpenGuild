@@ -86,11 +86,9 @@ public class PlayerChatListener implements Listener {
         }
         String msgFormat = event.getFormat();
 
-        if (!GenConf.guildprefixinchat) {
-            if (msgFormat.contains("%OPENGUILD_TAG%")) {
-                event.setFormat(msgFormat.replace("%OPENGUILD_TAG%", tag));
-                return;
-            }
+        if (!GenConf.guildprefixinchat && msgFormat.contains("%OPENGUILD_TAG%")) {
+            event.setFormat(msgFormat.replace("%OPENGUILD_TAG%", tag));
+            return;
         }
         int elo = getPlayerElo(player);
         event.setFormat(ChatColor.translateAlternateColorCodes('&',

@@ -1,7 +1,5 @@
 package pl.grzegorz2047.openguild.antilogout;
 
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,15 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by grzegorz2047 on 23.12.2015.
+ * File created by grzegorz2047 on 23.12.2015.
  */
-public class AntiLogoutManager {
-    private HashMap<String, Fight> fightList = new HashMap<String, Fight>();
+public final class AntiLogoutManager {
+    private HashMap<String, Fight> fightList = new HashMap<>();
     private AntiLogoutBarGenerator antiLogoutBarGenerator = new AntiLogoutBarGenerator();
-
-    public AntiLogoutManager() {
-
-    }
 
     public void handleLogoutDuringFight(Player player, String playerName) {
         if (isPlayerDuringFight(playerName)) {
@@ -39,7 +33,7 @@ public class AntiLogoutManager {
     }
 
     public void checkExpiredFights() {
-        List<String> toDelete = new ArrayList<String>();
+        List<String> toDelete = new ArrayList<>();
         for (Map.Entry<String, Fight> entry : fightList.entrySet()) {
             // Bukkit.getLogger().log(Level.INFO, "checkFights_for_enter");
             if (hasFightExpired(entry.getValue().getEndCooldown())) {

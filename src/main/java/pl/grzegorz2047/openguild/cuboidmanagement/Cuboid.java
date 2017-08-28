@@ -81,12 +81,7 @@ public class Cuboid {
         int foreignMinZ = Math.min(this.getMin().getBlockZ(), this.getMax().getBlockZ());
         int foreignMaxZ = Math.max(this.getMin().getBlockZ(), this.getMax().getBlockZ());
 
-        if (foreignMinX > localMinX && foreignMaxX < localMaxX) {
-            if (foreignMinZ > localMinZ && foreignMaxZ < localMaxZ) {
-                return true;
-            }
-        }
-        return false;
+        return (foreignMinX > localMinX && foreignMaxX < localMaxX) && (foreignMinZ > localMinZ && foreignMaxZ < localMaxZ);
     }
 
 }

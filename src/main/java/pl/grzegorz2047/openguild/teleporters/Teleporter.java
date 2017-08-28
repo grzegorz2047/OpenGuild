@@ -14,7 +14,6 @@ public class Teleporter {
 
 
     private HashMap<UUID, TeleportRequest> requests = new HashMap<>();
-    private long cooldown = GenConf.TELEPORT_COOLDOWN * 1000;
 
     public void addRequest(UUID player, Location source, Location destination, int delay) {
         requests.put(player, new TeleportRequest(player, source, destination, delay));

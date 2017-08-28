@@ -76,23 +76,16 @@ public class EnchantInsertListener implements Listener {
 
         if (item.getType().equals(Material.POTION)) {
             Potion p = Potion.fromItemStack(item);
-//            System.out.println("Potion! " + p.getType().name());
-            if (p.getType().equals(PotionType.STRENGTH)) {
-//                System.out.println("Strength!");
-                if (p.getLevel() >= 2) {
-//                    System.out.println("2");
-                    e.setCancelled(true);
-                    e.setItem(new ItemStack(Material.AIR));
-                    player.sendMessage(MsgManager.get("strengthenchantblocked"));
-
-                }
+            if (p.getType().equals(PotionType.STRENGTH) && p.getLevel() >= 2) {
+                e.setCancelled(true);
+                e.setItem(new ItemStack(Material.AIR));
+                player.sendMessage(MsgManager.get("strengthenchantblocked"));
             }
         }
     }
 
     private boolean isStrength(Collection<PotionEffect> effects) {
         for (PotionEffect potionEffect : effects) {
-//            System.out.println("Typ efektu " + potionEffect.getType().getName());
             if (potionEffect.getType().equals(PotionEffectType.INCREASE_DAMAGE)) {
                 int level = potionEffect.getAmplifier();
                 if (level >= 1) {

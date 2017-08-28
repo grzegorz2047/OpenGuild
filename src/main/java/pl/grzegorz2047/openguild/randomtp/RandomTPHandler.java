@@ -31,6 +31,10 @@ import java.util.Random;
 
 public final class RandomTPHandler {
 
+
+    private static Random random = new Random();
+    private List<Material> unsafeMaterials = Arrays.asList(Material.LAVA, Material.WATER);
+
     public void enable(Plugin plugin) {
         if (GenConf.ranTpEnabled) {
             Bukkit.getPluginManager().registerEvents(new RandomTPListeners(this), plugin);
@@ -48,14 +52,14 @@ public final class RandomTPHandler {
     }
 
 
-  /*  public void setEnabled(boolean enabled) {
-        GenConf.ranTpEnabled = enabled;
-    }
+    /*  public void setEnabled(boolean enabled) {
+          GenConf.ranTpEnabled = enabled;
+      }
 
-    public void setButtonEnabled(boolean enabled) {
-        GenConf.ranTpButton = enabled;
-    }
-*/
+      public void setButtonEnabled(boolean enabled) {
+          GenConf.ranTpButton = enabled;
+      }
+  */
     public void teleport(Player player) {
         Location location;
         try {
@@ -66,8 +70,6 @@ public final class RandomTPHandler {
         }
     }
 
-    private static Random random = new Random();
-    private List<Material> unsafeMaterials = Arrays.asList(Material.LAVA, Material.WATER);
 
     private Location findSaveSpot(Player player) throws Exception {
         for (int i = 0; i < 10; i++) {

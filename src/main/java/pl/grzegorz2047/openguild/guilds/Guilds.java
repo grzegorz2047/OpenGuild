@@ -48,7 +48,6 @@ public class Guilds {
 
     public void notifyMembersAboutSomeoneEnteringTheirCuboid(Player player, String guildscuboidtag, Guild enemy) {
         Guild guild = getGuild(guildscuboidtag);
-        boolean enemyGuildMember = false;
         for (UUID mem : guild.getMembers()) {
             OfflinePlayer op = Bukkit.getOfflinePlayer(mem);
             if (op.isOnline()) {
@@ -56,7 +55,6 @@ public class Guilds {
                     notifySomeoneEnteredCuboid(op, player, enemy);
                 } else {
                     notifySomeoneEnteredCuboid(op, player);
-
                 }
                 playSoundOnSomeoneEnteredCuboid(op);
             }
@@ -192,33 +190,32 @@ public class Guilds {
                         tag,
                         description,
                         home,
-                        owner,
-                        Bukkit.getScoreboardManager().getNewScoreboard());
+                        owner
+                );
         guild.addMember(owner);
         guilds.put(tag, guild);
         return guild;
     }
 
     public void invitePlayer(final Player player, Player who, Guild guild) {
-        final UUID uuid = player.getUniqueId();
         String guildName = guild.getName();
 
         guildInvitations.addGuildInvitation(player, who, guild, guildName);
     }
 
 
-    public boolean addOnlineGuild(String guild) {
+    public void addOnlineGuild(String guild) {
         if (onlineGuilds.contains(guild)) {
-            return false;
+            return;
         }
-        return this.onlineGuilds.add(guild);
+        this.onlineGuilds.add(guild);
     }
 
-    public boolean removeOnlineGuild(String guild) {
+    public void removeOnlineGuild(String guild) {
         if (!onlineGuilds.contains(guild)) {
-            return false;
+            return;
         }
-        return this.onlineGuilds.remove(guild);
+        this.onlineGuilds.remove(guild);
     }
 
     public boolean isGuildOnline(String guild) {

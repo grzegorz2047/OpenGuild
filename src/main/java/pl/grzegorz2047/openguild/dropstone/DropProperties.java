@@ -19,7 +19,6 @@ public class DropProperties {
     private String message;
     private final List<Material> items;
     private final Random r = new Random();
-    private boolean showMsg = true;
 
     public DropProperties(Material dropType, int minQuantity,
                           int maxQuantity,
@@ -46,10 +45,7 @@ public class DropProperties {
         return items.contains(itemType) || items.size() == 0;
     }
 
-    public String getDropMessage() {
-        return message;
-    }
-
+ 
     public boolean isLucky(Map<Enchantment, Integer> itemEnchantmens) {
         if (itemEnchantmens.containsKey(Enchantment.LUCK)) {
             Integer level = itemEnchantmens.get(Enchantment.LUCK);
@@ -66,17 +62,10 @@ public class DropProperties {
         return new ItemStack(dropType, quantity);
     }
 
-    public void setDropMessage(String message) {
-        this.message = message;
-    }
-
     public String getDropMessage(int quantity) {
         return message.replace("%q", String.valueOf(quantity));
     }
 
-    public void setShowMsg(boolean showMsg) {
-        this.showMsg = showMsg;
-    }
 
     @Override
     public String toString() {
