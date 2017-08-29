@@ -198,7 +198,6 @@ public final class SQLHandler {
          while (anotherRecord(result)) {
             String guildTag = result.getString(guildColumn);
             UUID uuid = UUID.fromString(result.getString(uuidColumn));
-            System.out.println(guildTag + "  tag");
             if (!guilds.doesGuildExists(guildTag)) {
                 continue;
             }

@@ -224,7 +224,10 @@ public class Guilds {
 
 
     public void updatePlayerMetadata(UUID uniqueId, String column, Object value) {
-        Bukkit.getPlayer(uniqueId).setMetadata(column, new FixedMetadataValue(plugin, value));
+        Player player = Bukkit.getPlayer(uniqueId);
+        if (player == null) return;
+        player.
+                setMetadata(column, new FixedMetadataValue(plugin, value));
     }
 
     public int getNumberOfGuilds() {
