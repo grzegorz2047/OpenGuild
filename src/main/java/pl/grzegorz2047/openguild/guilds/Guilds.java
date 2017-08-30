@@ -20,14 +20,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.managers.MsgManager;
+import pl.grzegorz2047.openguild.metada.PlayerMetadataController;
+import pl.grzegorz2047.openguild.metada.PlayerMetadataController.PlayerMetaDataColumn;
 import pl.grzegorz2047.openguild.relations.Relation;
 import pl.grzegorz2047.openguild.utils.ItemGUI;
 
@@ -39,7 +39,7 @@ public class Guilds {
     private final Plugin plugin;
     private final Cuboids cuboids;
     private final String playerTemplateNameLabel = "{PLAYER}";
-
+    private final PlayerMetadataController playerMetadataController;
     private Map<String, Guild> guilds = new HashMap<>();
     private List<String> onlineGuilds = new ArrayList<>();
     private ArrayList<ItemStack> requiredItemStacks;
@@ -49,6 +49,7 @@ public class Guilds {
         this.cuboids = cuboids;
         this.plugin = plugin;
         this.guildInvitations = new GuildInvitations(sqlHandler, this);
+        playerMetadataController = new PlayerMetadataController(plugin);
     }
 
 
@@ -77,12 +78,9 @@ public class Guilds {
         op.getPlayer().sendMessage(
                 MsgManager.get("entercubmemsnoguild")
                         .replace(playerTemplateNameLabel, player.getName()));
-
-
     }
 
     private void notifySomeoneEnteredCuboid(OfflinePlayer op, Player player, Guild enemy) {
-
         op.getPlayer().sendMessage(
                 MsgManager.get("entercubmems")
                         .replace(playerTemplateNameLabel, player.getName())
@@ -139,10 +137,10 @@ public class Guilds {
     }
 
     public Guild getPlayerGuild(UUID uuid) {
-        List<MetadataValue> metadata = Bukkit.getPlayer(uuid).getMetadata("guild");
-        String guildTag = metadata.get(0).asString();
+        String guildTag = playerMetadataController.getPlayerGuildTagFromMetaData(uuid);
         return guilds.get(guildTag);
     }
+
 
     public Guild getGuild(String guildTag) {
         return guilds.get(guildTag);
@@ -157,11 +155,7 @@ public class Guilds {
      * @return boolean
      */
     public boolean hasGuild(UUID uuid) {
-        List<MetadataValue> metadata = Bukkit.getPlayer(uuid).getMetadata("guild");
-        if (metadata.size() == 0) {
-            return false;
-        }
-        String guildTag = metadata.get(0).asString();
+        String guildTag = playerMetadataController.getPlayerGuildTagFromMetaData(uuid);
         return !Objects.equals(guildTag, "");
     }
 
@@ -199,7 +193,6 @@ public class Guilds {
 
     public void invitePlayer(final Player player, Player who, Guild guild) {
         String guildName = guild.getName();
-
         guildInvitations.addGuildInvitation(player, who, guild, guildName);
     }
 
@@ -222,20 +215,12 @@ public class Guilds {
         return onlineGuilds.contains(guild);
     }
 
-
-    public void updatePlayerMetadata(UUID uniqueId, String column, Object value) {
-        Player player = Bukkit.getPlayer(uniqueId);
-        if (player == null) return;
-        player.
-                setMetadata(column, new FixedMetadataValue(plugin, value));
-    }
-
     public int getNumberOfGuilds() {
         return guilds.size();
     }
 
     public void addPlayer(UUID uuid, Guild playersGuild) {
-        updatePlayerMetadata(uuid, "guild", playersGuild.getName());
+        playerMetadataController.updatePlayerMetadata(uuid, PlayerMetaDataColumn.GUILD.name(), playersGuild.getName());
     }
 
     public List<String> getOnlineGuilds() {
@@ -319,8 +304,6 @@ public class Guilds {
                     }
 
                 }
-
-
             }
             inv.setContents(contents);
         }
@@ -494,7 +477,6 @@ public class Guilds {
                 amount += i.getAmount();
             }
         }
-
         return amount;
     }
 
@@ -502,9 +484,15 @@ public class Guilds {
         return GenConf.FORBIDDEN_WORLDS.contains(playerWorldName);
     }
 
-
     public int getRequiredItemsSize() {
         return requiredItemStacks.size();
     }
 
+    public void updatePlayerMetadata(UUID uuid, String guildColumn, Object guildName) {
+        playerMetadataController.updatePlayerMetadata(uuid, guildColumn, guildName);
+    }
+
+    public void updatePlayerMeta(UUID uuid, String guildName, int eloPoints, int playerKills, int playerDeaths) {
+        playerMetadataController.updatePlayerMetaAll(uuid, guildName, eloPoints, playerKills, playerDeaths);
+    }
 }

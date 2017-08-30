@@ -27,7 +27,6 @@ import java.util.Scanner;
 public class NewVersionChecker {
     
     private static String address;
-    private static Scanner scanner;
     private static List<String> versions;
     
     public NewVersionChecker() {
@@ -50,9 +49,9 @@ public class NewVersionChecker {
     }
     
     private void read() {
-        scanner = getScanner();
+        Scanner scanner = getScanner();
         if(scanner != null) {
-            versions = new ArrayList<String>();
+            versions = new ArrayList<>();
             while(scanner.hasNext()) {
                 String version = scanner.next();
                 versions.add(version);

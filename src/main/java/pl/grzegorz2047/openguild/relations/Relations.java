@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by grzeg on 23.08.2017.
+ * Created by grzegorz2047 on 23.08.2017.
  */
 
 
@@ -26,30 +26,46 @@ public class Relations {
     }
 
     public void changeRelationRequest(Guild requestingGuild, Guild guild, final OfflinePlayer requestedLeader, Relation.Status status) {
-        final String tag = guild.getName();
-        final String requestingTag = requestingGuild.getName();
-        final UUID requestingLeader = requestingGuild.getLeader();
+        String requestingGuildName = requestingGuild.getName();
+        final String requestingTag = requestingGuildName;
+        String requestedGuildName = guild.getName();
+        UUID requestingGuildLeader = requestingGuild.getLeader();
+        Player requestingPlayer = Bukkit.getPlayer(requestingGuildLeader);
+
         for (Relation r : requestingGuild.getAlliances()) {
-            if (r.getAlliedGuildTag().equals(guild.getName()) || r.getBaseGuildTag().equals(guild.getName())) {
-                if (r.getState().equals(status)) {
-                    Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage(MsgManager.get("allyexists"));
+            String alliedGuildTag = r.getAlliedGuildTag();
+            String baseGuildTag = r.getBaseGuildTag();
+            if (isInRelation(guild, alliedGuildTag, baseGuildTag)) {
+                Relation.Status currentState = r.getState();
+                if (theSameStatus(status, currentState)) {
+                    requestingPlayer.sendMessage(MsgManager.get("allyexists"));
                     return;
                 }
             }
         }
-        RelationChange request = getRequest(requestingGuild.getName(), guild.getName());
+        RelationChange request = getRequest(requestingGuildName, requestedGuildName);
         if (request == null) {
-            pendingRelationChanges.add(new RelationChange(requestingGuild.getName(), guild.getName(), requestingLeader, status, System.currentTimeMillis()));
-            Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage(MsgManager.get("sentallyrequest"));
+            pendingRelationChanges.add(new RelationChange(requestingGuildName, requestedGuildName, requestingGuildLeader, status, System.currentTimeMillis()));
+            requestingPlayer.sendMessage(MsgManager.get("sentallyrequest"));
             if (requestedLeader.isOnline()) {
-                Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage(MsgManager.get("sentallyrequestfrom").replace("{GUILD}", requestingGuild.getName()));
-                Bukkit.getPlayer(requestedLeader.getUniqueId()).sendMessage(MsgManager.get("toacceptallymsg").replace("{GUILD}", requestingGuild.getName()));
+                UUID requestedLeaderUniqueId = requestedLeader.getUniqueId();
+                Player requestedPlayer = Bukkit.getPlayer(requestedLeaderUniqueId);
+                requestedPlayer.sendMessage(MsgManager.get("sentallyrequestfrom").replace("{GUILD}", requestingGuildName));
+                requestedPlayer.sendMessage(MsgManager.get("toacceptallymsg").replace("{GUILD}", requestingGuildName));
             } else {
-                Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage(MsgManager.get("sentallyrequestfrom").replace("{GUILD}", guild.getName()));
+                requestingPlayer.sendMessage(MsgManager.get("sentallyrequestfrom").replace("{GUILD}", requestedGuildName));
             }
         } else {
-            Bukkit.getPlayer(requestingGuild.getLeader()).sendMessage("Juz wyslales prosbe o sojusz do " + requestingTag);
+            requestingPlayer.sendMessage(MsgManager.get("").replace("{GUILD}", requestingTag));
         }
+    }
+
+    private boolean theSameStatus(Relation.Status status, Relation.Status currentState) {
+        return currentState.equals(status);
+    }
+
+    private boolean isInRelation(Guild guild, String alliedGuildTag, String baseGuildTag) {
+        return alliedGuildTag.equals(guild.getName()) || baseGuildTag.equals(guild.getName());
     }
 
     public void checkGuildPendingRelations() {
@@ -61,10 +77,10 @@ public class Relations {
             }
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (playersToInform.containsKey(p.getUniqueId())) {
-                RelationChange relationChange = playersToInform.get(p.getUniqueId());
+            UUID playerUUID = p.getUniqueId();
+            if (playersToInform.containsKey(playerUUID)) {
+                RelationChange relationChange = playersToInform.get(playerUUID);
                 p.sendMessage(MsgManager.get("allyrequestexpired").replace("{GUILD}", relationChange.getGuildName()));
-
             }
         }
         pendingRelationChanges.removeAll(toDelete);
@@ -73,10 +89,8 @@ public class Relations {
 
     public RelationChange getRequest(String requestingGuildName, String guildName) {
         for (RelationChange relationChange : pendingRelationChanges) {
-            if (relationChange.getRequestingGuildName().equals(requestingGuildName)) {
-                if (relationChange.getGuildName().equals(guildName)) {
-                    return relationChange;
-                }
+            if (relationChange.getRequestingGuildName().equals(requestingGuildName) && relationChange.getGuildName().equals(guildName)) {
+                return relationChange;
             }
         }
         return null;

@@ -66,8 +66,8 @@ public class Cuboid {
         return center.getWorld().getName();
     }
 
-    public boolean isColliding(Cuboid cuboid) {
-        if (!cuboid.getWorldName().equals(getWorldName())) {
+    public boolean isColliding(String worldName, Location foreignMin, Location foreignMax) {
+        if (!worldName.equals(getWorldName())) {
             return false;
         }
 
@@ -76,10 +76,10 @@ public class Cuboid {
         int localMinZ = Math.min(this.min.getBlockZ(), this.max.getBlockZ());
         int localMaxZ = Math.max(this.min.getBlockZ(), this.max.getBlockZ());
 
-        int foreignMinX = Math.min(this.getMin().getBlockX(), this.getMax().getBlockX());
-        int foreignMaxX = Math.max(this.getMin().getBlockX(), this.getMax().getBlockX());
-        int foreignMinZ = Math.min(this.getMin().getBlockZ(), this.getMax().getBlockZ());
-        int foreignMaxZ = Math.max(this.getMin().getBlockZ(), this.getMax().getBlockZ());
+        int foreignMinX = Math.min(foreignMin.getBlockX(), foreignMax.getBlockX());
+        int foreignMaxX = Math.max(foreignMin.getBlockX(), foreignMax.getBlockX());
+        int foreignMinZ = Math.min(foreignMin.getBlockZ(), foreignMax.getBlockZ());
+        int foreignMaxZ = Math.max(foreignMin.getBlockZ(), foreignMax.getBlockZ());
 
         return (foreignMinX > localMinX && foreignMaxX < localMaxX) && (foreignMinZ > localMinZ && foreignMaxZ < localMaxZ);
     }

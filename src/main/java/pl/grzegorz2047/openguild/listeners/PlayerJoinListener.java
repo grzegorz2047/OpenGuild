@@ -27,6 +27,8 @@ import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.managers.TagManager;
+import pl.grzegorz2047.openguild.metada.PlayerMetadataController;
+import pl.grzegorz2047.openguild.metada.PlayerMetadataController.PlayerMetaDataColumn;
 import pl.grzegorz2047.openguild.updater.Updater;
 
 import java.util.UUID;
@@ -40,10 +42,7 @@ public class PlayerJoinListener implements Listener {
     private final Updater updater;
 
     private final String joinMsg;
-    private final String guildColumn = "guild";
-    private final String eloColumn = "elo";
-    private final String killsColumn = "kills";
-    private final String deathsColumn = "deaths";
+
     private final int defaultEloPoints = 1000;
 
     public PlayerJoinListener(Guilds guilds, TagManager tagManager, SQLHandler sqlHandler, TempPlayerData tempPlayerData, Updater updater) {
@@ -66,12 +65,19 @@ public class PlayerJoinListener implements Listener {
         //Pobierz dane gracza
         SQLRecord playerRecord = this.tempPlayerData.getPlayerRecord(uuid);
 
+        processPlayerRecord(player, uuid, playerRecord);
+        tagManager.prepareScoreboardTagForPlayerOnJoin(player);
+
+        updater.notifyOpAboutUpdate(player);
+    }
+
+    private void processPlayerRecord(Player player, UUID uuid, SQLRecord playerRecord) {
         if (playerRecord != null) {
             preparePlayerData(player, uuid, playerRecord);
         } else {
             if (!player.hasPlayedBefore()) {
                 sqlHandler.insertPlayer(uuid);
-                updatePlayerMeta(uuid, "", defaultEloPoints, 0, 0);
+                guilds.updatePlayerMeta(uuid, "", defaultEloPoints, 0, 0);
             } else {
                 this.sqlHandler.getPlayerData(player.getUniqueId(), tempPlayerData);
                 playerRecord = this.tempPlayerData.getPlayerRecord(uuid);
@@ -79,10 +85,6 @@ public class PlayerJoinListener implements Listener {
             }
 
         }
-
-        tagManager.prepareScoreboardTagForPlayerOnJoin(player);
-
-        updater.notifyOpAboutUpdate(player);
     }
 
     private void preparePlayerData(Player player, UUID uuid, SQLRecord playerRecord) {
@@ -91,7 +93,7 @@ public class PlayerJoinListener implements Listener {
         int playerKills = playerRecord.getKills();
         int playerDeaths = playerRecord.getDeaths();
 
-        updatePlayerMeta(uuid, guildName, eloPoints, playerKills, playerDeaths);
+        guilds.updatePlayerMeta(uuid, guildName, eloPoints, playerKills, playerDeaths);
         this.tempPlayerData.removePlayer(uuid);
         if (guilds.hasGuild(player)) {
             Guild guild = guilds.getPlayerGuild(uuid);
@@ -102,12 +104,7 @@ public class PlayerJoinListener implements Listener {
         }
     }
 
-    private void updatePlayerMeta(UUID uuid, String guildName, int eloPoints, int playerKills, int playerDeaths) {
-        guilds.updatePlayerMetadata(uuid, guildColumn, guildName);
-        guilds.updatePlayerMetadata(uuid, eloColumn, eloPoints);
-        guilds.updatePlayerMetadata(uuid, killsColumn, playerKills);
-        guilds.updatePlayerMetadata(uuid, deathsColumn, playerDeaths);
-    }
+
 
 
 }

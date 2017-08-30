@@ -107,11 +107,9 @@ public class EloRanking {
 
 
      */
-    public void recountEloFight(Player winner, Player lost) {
-        int wOldPoints = winner.getMetadata("elo").get(0).asInt();
+    public RankDifference recountEloFight(Player winner, Player lost, int lOldPoints, int wOldPoints) {
         int wKFactor = getKFactor(wOldPoints);
 
-        int lOldPoints = lost.getMetadata("elo").get(0).asInt();
         //int lKFactor = getKFactor(lOldPoints);
 
 
@@ -133,16 +131,10 @@ public class EloRanking {
         winner.setMetadata("elo", new FixedMetadataValue(plugin, (int) wNewPoints));
         lost.setMetadata("elo", new FixedMetadataValue(plugin, (int) lNewPoints));
 
-        int wDiff = (int) (wOldPoints - wNewPoints);
-        int lDiff = (int) (lOldPoints - lNewPoints);
+        int winDifference = (int) (wOldPoints - wNewPoints);
+        int lostDifference = (int) (lOldPoints - lNewPoints);
 
-        Bukkit.broadcastMessage(MsgManager.get("killerkilledvictim").
-                replace("{VICTIM}", lost.getName()).
-                replace("{KILLER}", winner.getName()).
-                replace("{VICTIMLOSE}", -lDiff + "").
-                replace("{KILLEREARN}", -wDiff + ""));
-
-        sqlHandler.updatePlayersElo(winner.getUniqueId(), (int) wNewPoints, lost.getUniqueId(), (int) lNewPoints);
+        return new RankDifference(lostDifference, winDifference, wNewPoints, lNewPoints);
     }
 
 
