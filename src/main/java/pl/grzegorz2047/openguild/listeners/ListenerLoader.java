@@ -33,6 +33,8 @@ public class ListenerLoader {
     private final TntGuildBlocker tntGuildBlocker;
     private final Updater updater;
 
+    //Definitywnie trzeba coś ti zrobić xd
+
     public ListenerLoader(Plugin p, Guilds guilds, TagManager tagManager, SQLHandler sqlHandler, Teleporter teleporter, TpaRequester tpaRequester, Cuboids cuboids, AntiLogoutManager antiLogoutManager, DropFromBlocks dropFromBlocks, TntGuildBlocker tntGuildBlocker, Updater updater) {
         this.guilds = guilds;
         this.tagManager = tagManager;

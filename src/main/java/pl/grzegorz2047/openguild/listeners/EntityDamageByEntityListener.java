@@ -17,6 +17,7 @@
 package pl.grzegorz2047.openguild.listeners;
 
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,32 +47,32 @@ public class EntityDamageByEntityListener implements Listener {
         }
         Player attacked = null;
         Player attacker = null;
-        if (event.getDamager() instanceof Player) {
-            if (event.getEntity() instanceof Player) {
-                attacked = (Player) event.getEntity();
-                attacker = (Player) event.getDamager();
+        Entity entity = event.getEntity();
+        Entity damager = event.getDamager();
+
+        if (damager instanceof Player && entity instanceof Player) {
+            attacked = (Player) entity;
+            attacker = (Player) damager;
+
+        } else if (damager instanceof Arrow && entity instanceof Player) {
+            attacked = (Player) entity;
+            ProjectileSource attackerEntity = ((Arrow) damager).getShooter();
+            if (attackerEntity instanceof Player) {
+                attacker = (Player) attackerEntity;
             }
-        } else if (event.getDamager() instanceof Arrow) {
-            if (event.getEntity() instanceof Player) {
-                attacked = (Player) event.getEntity();
-                ProjectileSource attackerEntity = ((Arrow) event.getDamager()).getShooter();
-                if (attackerEntity instanceof Player) {
-                    attacker = (Player) attackerEntity;
-                }
-            }
-        } else if (event.getDamager() instanceof Snowball) {
-            if (event.getEntity() instanceof Player) {
-                attacked = (Player) event.getEntity();
-                ProjectileSource attackerEntity = ((Snowball) event.getDamager()).getShooter();
-                if (attackerEntity instanceof Player) {
-                    attacker = (Player) attackerEntity;
-                }
+
+        } else if (damager instanceof Snowball && entity instanceof Player) {
+            attacked = (Player) entity;
+            ProjectileSource attackerEntity = ((Snowball) damager).getShooter();
+            if (attackerEntity instanceof Player) {
+                attacker = (Player) attackerEntity;
             }
         }
-        if (attacker != null && attacked != null) {
+        if (attacker != null) {
             teamPVPCheck(event, attacked, attacker);
 
         }
+
     }
 
     private void teamPVPCheck(EntityDamageByEntityEvent event, Player attacked, Player attacker) {
@@ -90,7 +91,7 @@ public class EntityDamageByEntityListener implements Listener {
             processTeamPVP(event, attacker);
         } else if (attackerGuild.isAlly(attackedGuild)) {
             processTeamPVP(event, attacker);
-        }else {
+        } else {
             checkAntilogout(attacked, attacker);
         }
     }
