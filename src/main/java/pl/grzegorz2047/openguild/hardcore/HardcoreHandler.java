@@ -18,24 +18,76 @@ package pl.grzegorz2047.openguild.hardcore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.OpenGuild;
 
 public class HardcoreHandler {
 
 
     private final HardcoreSQLHandler hardcoreSQLHandler;
     private final Plugin plugin;
+    private String hardcoreBansKickMessage;
+    private String hadcoreBansLoginBannedMessage;
+    private long hardcoreBansTime;
+    private boolean enabled;
 
     public HardcoreHandler(HardcoreSQLHandler hardcoreSQLHandler, Plugin plugin) {
         this.hardcoreSQLHandler = hardcoreSQLHandler;
         this.plugin = plugin;
     }
 
-    public void enable() {
-        if (GenConf.hcBans) {
-            hardcoreSQLHandler.createTables();
-            Bukkit.getPluginManager().registerEvents(new HardcoreListeners(hardcoreSQLHandler, plugin), plugin);
+    public void loadBans(boolean bansEnabled, String hardcoreBansKickMessage, String hadcoreBansLoginBannedMessage, String banTime) {
+        if (!bansEnabled) {
+            return;
         }
+        enabled = bansEnabled;
+        hardcoreSQLHandler.createTables();
+        Bukkit.getPluginManager().registerEvents(new HardcoreListeners(hardcoreSQLHandler, this, plugin), plugin);
+        this.hardcoreBansKickMessage = hardcoreBansKickMessage;
+        this.hadcoreBansLoginBannedMessage = hadcoreBansLoginBannedMessage;
+
+        String length = banTime.substring(0, banTime.length() - 1);
+        long result;
+        try {
+            result = Long.parseLong(length);
+        } catch (NumberFormatException ex) {
+            OpenGuild.getOGLogger().warning("Could not load ban time, defaults using 1 minute. Check your ban-time in config.yml file.");
+            hardcoreBansTime = 60 * 1000;
+            return;
+        }
+        if (banTime.endsWith("s")) { // Seconds
+            result = result * 1000;
+        } else if (banTime.endsWith("m")) { // Minutes
+            result = result * 60 * 1000;
+        } else if (banTime.endsWith("h")) { // Hours
+            result = result * 60 * 60 * 1000;
+        } else if (banTime.endsWith("d")) { // Days
+            result = result * 60 * 24 * 60 * 1000;
+        }
+        hardcoreBansTime = result;
+
     }
 
+    public String getHardcoreBansKickMessage() {
+        return hardcoreBansKickMessage;
+    }
+
+    public String getHadcoreBansLoginBannedMessage() {
+        return hadcoreBansLoginBannedMessage;
+    }
+
+    public void setHadcoreBansLoginBannedMessage(String hadcoreBansLoginBannedMessage) {
+        this.hadcoreBansLoginBannedMessage = hadcoreBansLoginBannedMessage;
+    }
+
+    public long getHardcoreBansTime() {
+        return hardcoreBansTime;
+    }
+
+    public void setHardcoreBansTime(long hardcoreBansTime) {
+        this.hardcoreBansTime = hardcoreBansTime;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
 }

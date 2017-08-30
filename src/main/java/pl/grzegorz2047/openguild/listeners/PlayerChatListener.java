@@ -48,9 +48,9 @@ public class PlayerChatListener implements Listener {
         if (!isInGuild(player)) {
 
             int elo = getPlayerElo(player);
-            if (GenConf.guildprefixinchat) {
+            if (GenConf.GUILD_PREFIX_IN_CHAT_ENABLED) {
                 event.setFormat(ChatColor.translateAlternateColorCodes('&',
-                        GenConf.chatFormat
+                        GenConf.CHAT_FORMAT
                                 .replace("{ELO}", String.valueOf(elo))
                                 .replace("{PLAYER}", player.getName())
                                 .replace("{GUILD}", "")
@@ -69,14 +69,14 @@ public class PlayerChatListener implements Listener {
         Guild guild = guilds.getPlayerGuild(uuid);
         String tag = guild.getName().toUpperCase();
         String format;
-        if (isInGuildChatMode(message, GenConf.channelOnlyGuildKey)) {
+        if (isInGuildChatMode(message, GenConf.GUILD_ONLY_CHAT_MSG_KEY)) {
             message = message.substring(1);
             format = prepareMessageFormat(player, message);
             guild.notifyGuild(format);
             event.setCancelled(true);
             return;
         }
-        if (isInGuildChatMode(message, GenConf.channelAllyAndGuildKey)) {
+        if (isInGuildChatMode(message, GenConf.GUILD_AND_ALLY_ONLY_CHAT_KEY)) {
             message = message.substring(1);
             format = prepareMessageFormat(player, message);
             guild.notifyGuild(format);
@@ -86,13 +86,13 @@ public class PlayerChatListener implements Listener {
         }
         String msgFormat = event.getFormat();
 
-        if (!GenConf.guildprefixinchat && msgFormat.contains("%OPENGUILD_TAG%")) {
+        if (!GenConf.GUILD_PREFIX_IN_CHAT_ENABLED && msgFormat.contains("%OPENGUILD_TAG%")) {
             event.setFormat(msgFormat.replace("%OPENGUILD_TAG%", tag));
             return;
         }
         int elo = getPlayerElo(player);
         event.setFormat(ChatColor.translateAlternateColorCodes('&',
-                GenConf.chatFormat
+                GenConf.CHAT_FORMAT
                         .replace("{ELO}", String.valueOf(elo))
                         .replace("{PLAYER}", player.getName())
                         .replace("{GUILD}", guild.getName())
@@ -112,7 +112,7 @@ public class PlayerChatListener implements Listener {
         ally = getAllyGuildFromRelation(guild, r, whoGuild);
         int elo = getPlayerElo(player);
         if (ally != null) {
-            String format = GenConf.allyChatFormat
+            String format = GenConf.GUILD_AND_ALLY_ONLY_CHAT_FORMAT
                     .replace("{ELO}", String.valueOf(elo))
                     .replace("{GUILD}", guild.getName())
                     .replace("{PLAYER}", player.getName())
@@ -134,7 +134,7 @@ public class PlayerChatListener implements Listener {
 
     private String prepareMessageFormat(Player player, String message) {
         int elo = getPlayerElo(player);
-        return GenConf.guildChatFormat
+        return GenConf.GUILD_ONLY_CHAT_FORMAT
                 .replace("{ELO}", String.valueOf(elo))
                 .replace("{PLAYER}", player.getName())
                 .replace("{MESSAGE}", message);

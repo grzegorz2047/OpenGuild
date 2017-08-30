@@ -30,7 +30,7 @@ public class MsgManager {
 
     private static HashMap<String, String> messages;
 
-    public static File file = new File("plugins/OpenGuild/messages_" + GenConf.lang.toLowerCase() + ".yml");
+    public static File file = new File("plugins/OpenGuild/messages_" + GenConf.LANG.toLowerCase() + ".yml");
     public static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
     public static String createguildsuccess = get("createguildsuccess", "Gildia zostala pomysnie stworzona.");
@@ -82,11 +82,11 @@ public class MsgManager {
     }
 
     public static String getIgnorePref(String path) {
-        return getIgnorePref(path, getNullMessage(GenConf.lang, path));
+        return getIgnorePref(path, getNullMessage(GenConf.LANG, path));
     }
 
     public static String get(String path, String def) {
-        return GenConf.prefix + getIgnorePref(path, getNullMessage(GenConf.lang, path));
+        return GenConf.prefix + getIgnorePref(path, getNullMessage(GenConf.LANG, path));
     }
     
     public static String getIgnorePref(String path, String def) {

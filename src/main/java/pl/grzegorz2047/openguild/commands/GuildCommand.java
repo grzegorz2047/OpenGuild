@@ -25,6 +25,7 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import pl.grzegorz2047.openguild.hardcore.HardcoreHandler;
 import pl.grzegorz2047.openguild.hardcore.HardcoreSQLHandler;
 import pl.grzegorz2047.openguild.relations.Relations;
 import pl.grzegorz2047.openguild.teleporters.Teleporter;
@@ -47,11 +48,11 @@ public class GuildCommand implements CommandExecutor {
      */
     private final Map<String[], Command> commands = new HashMap<>();
 
-    public GuildCommand(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler, Plugin plugin) {
-        registerCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler, plugin);
+    public GuildCommand(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler, Plugin plugin) {
+        registerCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler, hardcoreHandler, plugin);
     }
 
-    private void registerCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler, Plugin plugin) {
+    private void registerCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler, Plugin plugin) {
         // Register 'guild' command sub-commands.
         String[] createAliases = {"create", "zaloz", "stworz"};
         commands.put(createAliases, new GuildCreateCommand(cuboids, guilds, sqlHandler, tagManager));
@@ -68,7 +69,7 @@ public class GuildCommand implements CommandExecutor {
         String[] reloadAliases = {"reload", "przeladuj"};
         commands.put(reloadAliases, new GuildReloadCommand(plugin.getConfig()));
         String[] itemsAliases = {"items", "itemy", "przedmioty"};
-        commands.put(itemsAliases, new GuildItemsCommand(plugin));
+        commands.put(itemsAliases, new GuildItemsCommand(plugin, guilds));
         String[] versionAliases = {"version", "wersja", "ver", "about"};
         commands.put(versionAliases, new GuildVersionCommand(plugin));
         String[] leaveAliases = {"leave", "opusc", "wyjdz"};
@@ -90,7 +91,7 @@ public class GuildCommand implements CommandExecutor {
         String[] enemyAliases = {"enemy", "wrog",};
         commands.put(enemyAliases, new GuildEnemyCommand(guilds, sqlHandler, tagManager));
         String[] unbanPlayerAliases = {"unbanplayer", "odbanujgracza",};
-        commands.put(unbanPlayerAliases, new GuildUnbanPlayerCommand(hardcoreSQLHandler));
+        commands.put(unbanPlayerAliases, new GuildUnbanPlayerCommand(hardcoreSQLHandler, hardcoreHandler));
         String[] randomTPAliases = {"randomtp", "randomtp"};
         commands.put(randomTPAliases, new GuildRandomTPCommand(plugin));
     }

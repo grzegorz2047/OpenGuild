@@ -16,6 +16,7 @@
 package pl.grzegorz2047.openguild;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -83,7 +84,8 @@ public class OpenGuild extends JavaPlugin {
 
         loadConfigFiles(fileValidator);
 
-        GenConf.loadConfiguration(getConfig());
+        FileConfiguration mainConfig = getConfig();
+        GenConf.loadConfiguration(mainConfig);
         loadTranslationFiles(fileValidator);
 
         /*
@@ -93,10 +95,15 @@ public class OpenGuild extends JavaPlugin {
         //if(GenConf.useNativePermissionsManager) {
         //  TODO   
         //}
-        loadDropFromBlocks();
+        loadDropFromBlocks(mainConfig);
         SQLHandler sqlHandler = new SQLHandler(this);
-        sqlHandler.loadDB(getConfig());
-        loadDataFromDB(sqlHandler);
+        sqlHandler.loadSQLNames(mainConfig.getString("sql-table-prefix", "openguild"));
+        sqlHandler.loadDB(mainConfig.getString("mysql.address"), mainConfig.getInt("mysql.port"), mainConfig.getString("mysql.login"), mainConfig.getString("mysql.password"), mainConfig.getString("mysql.database"));
+
+        this.cuboids = new Cuboids();
+        this.guilds = new Guilds(sqlHandler, this, cuboids);
+        this.guilds.loadRequiredItemsForGuild(this.getConfig().getStringList("required-items"));
+        sqlHandler.startWork(cuboids, guilds);
 
         this.logout = new AntiLogoutManager();
         // Setup Tag Manager
@@ -105,11 +112,11 @@ public class OpenGuild extends JavaPlugin {
         tpaRequester = new TpaRequester();
         tntGuildBlocker = new TntGuildBlocker();
 
-        // Load database
 
         HardcoreSQLHandler hardcoreSQLHandler = new HardcoreSQLHandler(sqlHandler);
         HardcoreHandler hardcoreHandler = new HardcoreHandler(hardcoreSQLHandler, this);
-        hardcoreHandler.enable();
+        hardcoreHandler.loadBans(mainConfig.getBoolean("hardcore-bans.enabled"), mainConfig.getString("hardcore-bans.kick-message").replace("&", "§"), mainConfig.getString("hardcore-bans.login-message").replace("&", "§"), mainConfig.getString("hardcore-bans.ban-time"));
+
 
         RandomTPHandler randomTPHandler = new RandomTPHandler();
         randomTPHandler.enable(this);
@@ -118,7 +125,7 @@ public class OpenGuild extends JavaPlugin {
         moduleSpawn.enable(this);
 
         Relations relations = new Relations();
-        loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler);
+        loadCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler, hardcoreHandler);
 
         loadAllListeners(sqlHandler);
         sqlHandler.loadRelations(guilds);
@@ -141,19 +148,18 @@ public class OpenGuild extends JavaPlugin {
     }
 
     private void loadDataFromDB(SQLHandler sqlHandler) {
-        this.cuboids = new Cuboids();
-        this.guilds = new Guilds(sqlHandler, this, cuboids);
-        sqlHandler.startWork(cuboids, guilds);
+
     }
 
-    private void loadDropFromBlocks() {
+    private void loadDropFromBlocks(FileConfiguration config) {
         List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
-        this.drop = new DropFromBlocks(GenConf.ELIGIBLE_DROP_BLOCKS, loadedDrops);
+        this.drop = new DropFromBlocks(loadedDrops);
+        this.drop.loadMainDropData(config.getStringList("blocks-from-where-item-drops"));
     }
 
     private void loadTranslationFiles(FileValidator fileValidator) {
         // Validate language file
-        String translation = "messages_" + GenConf.lang.toLowerCase();
+        String translation = "messages_" + GenConf.LANG.toLowerCase();
         fileValidator.validateFile(getResource(translation + ".yml"), translation);
     }
 
@@ -193,9 +199,9 @@ public class OpenGuild extends JavaPlugin {
      * This method sets executors of all commands, and
      * registers them in our API.
      */
-    private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler) {
+    private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler) {
         getCommand("team").setExecutor(new TeamCommand(guilds));
-        getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler, this));
+        getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler, hardcoreHandler, this));
         if (GenConf.SPAWN_COMMAND_ENABLED) {
             getCommand("spawn").setExecutor(new SpawnCommand(teleporter));
         }

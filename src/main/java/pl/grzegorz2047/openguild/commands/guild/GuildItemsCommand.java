@@ -19,12 +19,15 @@ package pl.grzegorz2047.openguild.commands.guild;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild.commands.command.Command;
 import pl.grzegorz2047.openguild.commands.command.CommandException;
 import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.utils.ItemGUI;
 
@@ -37,15 +40,17 @@ import java.util.Collections;
  */
 public class GuildItemsCommand extends Command {
     private final Plugin plugin;
+    private final Guilds guilds;
 
-    public GuildItemsCommand(Plugin plugin) {
+    public GuildItemsCommand(Plugin plugin, Guilds guilds) {
         setPermission("openguild.command.items");
         this.plugin = plugin;
+        this.guilds = guilds;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        if (GenConf.reqitems == null || GenConf.reqitems.isEmpty()) {
+        if (guilds.getRequiredItemsSize() == 0) {
             sender.sendMessage(MsgManager.get("reqitemsoff"));
             return;
         }
@@ -56,49 +61,8 @@ public class GuildItemsCommand extends Command {
         }
 
         Player player = (Player) sender;
-
-        if (GenConf.reqitems.size() > 0) {
-            int inventorySize = 9;
-
-            if (GenConf.reqitems.size() > 9) {
-                inventorySize = 18;
-            } else if (GenConf.reqitems.size() > 18) {
-                inventorySize = 27;
-            } else if (GenConf.reqitems.size() > 27) {
-                inventorySize = 36;
-            } else if (GenConf.reqitems.size() > 36) {
-                inventorySize = 45;
-            } else if (GenConf.reqitems.size() > 45) {
-                inventorySize = 54;
-            }
-
-            ItemGUI itemsGUI = new ItemGUI(MsgManager.getIgnorePref("gui-items"), inventorySize, plugin);
-            for (ItemStack item : GenConf.reqitems) {
-                ItemStack cloned = item.clone();
-                ItemMeta meta = cloned.getItemMeta();
-
-                int amount = getAmount(player, cloned);
-
-                if (amount < cloned.getAmount()) {
-                    meta.setLore(Collections.singletonList(
-                            ChatColor.RED + "" + amount + "/" + cloned.getAmount()
-                    ));
-                } else {
-                    meta.setLore(Collections.singletonList(
-                            ChatColor.GREEN + "" + amount + "/" + cloned.getAmount()
-                    ));
-                }
-                cloned.setItemMeta(meta);
-
-                itemsGUI.addItem(cloned, new ItemGUI.ItemGUIClickEventHandler() {
-                    @Override
-                    public void handle(ItemGUI.ItemGUIClickEvent event) {
-                        event.getPlayer().closeInventory();
-                    }
-                });
-            }
-            player.openInventory(itemsGUI.getInventory());
-        }
+        Inventory requiredItemsInventory = guilds.prepareItemGuidInventory(player.getInventory());
+        player.openInventory(requiredItemsInventory);
     }
 
     @Override
@@ -106,16 +70,5 @@ public class GuildItemsCommand extends Command {
         return 1;
     }
 
-    private int getAmount(Player player, ItemStack item) {
-        int amount = 0;
-
-        for (ItemStack i : player.getInventory().getContents()) {
-            if (i != null && i.isSimilar(item)) {
-                amount += i.getAmount();
-            }
-        }
-
-        return amount;
-    }
 
 }

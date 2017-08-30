@@ -33,32 +33,27 @@ public class HardcoreListeners implements Listener {
 
     private final HardcoreSQLHandler hardcoreSQLHandler;
     private final Plugin plugin;
+    private final HardcoreHandler hardcoreHandler;
     private String datePattern = "dd-MM-yyy HH:mm";
 
-    public HardcoreListeners(HardcoreSQLHandler hardcoreSQLHandler, Plugin plugin) {
+    public HardcoreListeners(HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler, Plugin plugin) {
         this.hardcoreSQLHandler = hardcoreSQLHandler;
         this.plugin = plugin;
+        this.hardcoreHandler = hardcoreHandler;
     }
 
     @EventHandler
     public void onPlayerDead(PlayerDeathEvent e) {
-        if (!GenConf.hcBans) {
-            return;
-        }
-
-        if (GenConf.hcLightning) {
+        if (GenConf.LIGHTNING_ON_DEATH_ENABLED) {
             e.getEntity().getWorld().strikeLightningEffect(e.getEntity().getLocation());
         }
 
-        long ban = System.currentTimeMillis() + GenConf.hcBantime;
+        long ban = System.currentTimeMillis() + hardcoreHandler.getHardcoreBansTime();
         hardcoreSQLHandler.update(e.getEntity().getUniqueId(), HardcoreSQLHandler.Column.BAN_TIME, String.valueOf(ban));
     }
 
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent e) {
-        if (!GenConf.hcBans) {
-            return;
-        }
         if (e.getPlayer().hasPermission("openguild.hardcore.bypass")) {
             return;
         }
@@ -67,19 +62,16 @@ public class HardcoreListeners implements Listener {
         if (System.currentTimeMillis() < ban) {
             SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
             Date date = new Date(ban);
-            e.disallow(PlayerLoginEvent.Result.KICK_OTHER, GenConf.hcLoginMsg.replace("%TIME", dateFormat.format(date)));
+            e.disallow(PlayerLoginEvent.Result.KICK_OTHER, hardcoreHandler.getHadcoreBansLoginBannedMessage().replace("%TIME", dateFormat.format(date)));
         }
     }
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent e) {
-        if (!GenConf.hcBans) {
-            return;
-        }
 
         final Player player = e.getPlayer();
         hardcoreSQLHandler.getBan(player.getUniqueId()); // We must insert this player into the hardcore-table.
-        long banTime = System.currentTimeMillis() + GenConf.hcBantime;
+        long banTime = System.currentTimeMillis() + hardcoreHandler.getHardcoreBansTime();
 
         final String time = new SimpleDateFormat(datePattern).format(new Date(banTime));
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
@@ -87,7 +79,7 @@ public class HardcoreListeners implements Listener {
             @Override
             public void run() {
                 if (player != null) { // If the player logout and the Player object is null, this scheduler will do nothing
-                    player.kickPlayer(GenConf.hcLoginMsg.replace("%TIME", time));
+                    player.kickPlayer(hardcoreHandler.getHardcoreBansKickMessage().replace("%TIME", time));
                 }
             }
         }, 5 * 20L); // 5 seconds to say "Good bye"

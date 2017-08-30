@@ -90,7 +90,7 @@ public class GuildCreateCommand extends Command {
             return;
         }
 
-        if (GenConf.badwords != null && GenConf.badwords.contains(tag)) {
+        if (GenConf.BAD_WORDS != null && GenConf.BAD_WORDS.contains(tag)) {
             player.sendMessage(MsgManager.illegaltag);
             return;
         }
@@ -111,12 +111,12 @@ public class GuildCreateCommand extends Command {
             return;
         }
 
-        if (GenConf.forbiddenworlds.contains(player.getWorld().getName())) {
+        if (GenConf.FORBIDDEN_WORLDS.contains(player.getWorld().getName())) {
             player.sendMessage(MsgManager.get("forbiddenworld"));
             return;
         }
 
-        if (GenConf.cuboidCheckPlayers && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE)) {
+        if (GenConf.CHECK_PLAYERS_TOO_CLOSE_WHEN_CREATING_GUILD && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE)) {
             player.sendMessage(MsgManager.playerstooclose);
             return;
         }
@@ -125,21 +125,18 @@ public class GuildCreateCommand extends Command {
             player.sendMessage(MsgManager.get("guildtocloseothers"));
             return;
         }
-        boolean reqitems = false;
-        if (GenConf.reqitems != null && !GenConf.reqitems.isEmpty()) {
-            reqitems = true;
-            if (!GenUtil.hasEnoughItemsForGuild(player.getInventory())) {
-                player.sendMessage(MsgManager.get("notenoughitems"));
-                return;
-            }
+        if (!guilds.hasEnoughItemsForGuild(player.getInventory())) {
+            player.sendMessage(MsgManager.get("notenoughitems"));
+            return;
         }
+
 
         GuildCreateEvent event = new GuildCreateEvent(tag, description, player, player.getLocation());
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
-        } else if (reqitems) {
-            GenUtil.removeRequiredItemsForGuild(player.getInventory());
+        } else {
+            guilds.removeRequiredItemsForGuild(player.getInventory());
         }
 
 
@@ -148,13 +145,13 @@ public class GuildCreateCommand extends Command {
         guilds.updatePlayerMetadata(player.getUniqueId(), "guild", guild.getName());
         guilds.addOnlineGuild(guild.getName());
 
-        if (GenConf.playerprefixenabled) {
+        if (GenConf.PLAYER_GUILD_TAGS_ENABLED) {
             tagManager.playerCreatedGuild(guild, player);
         }
 
         OpenGuild.getOGLogger().info("Player '" + player.getName() + "' successfully created new guild '" + tag.toUpperCase() + "'.");
 
-        /**
+        /*
          @TODO:
          - cuboids
          - call MessageBroadcastEvent

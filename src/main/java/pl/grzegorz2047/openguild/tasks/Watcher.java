@@ -52,7 +52,7 @@ public class Watcher implements Runnable {
         }
         this.guilds.checkPlayerInvitations();
         relations.checkGuildPendingRelations();
-        if (GenConf.enableTNTExplodeListener) {
+        if (GenConf.TNT_PLACE_BLOCK_CUBOID_ENABLED) {
             tntGuildBlocker.checkTimesForBlockedGuilds();
         }
     }

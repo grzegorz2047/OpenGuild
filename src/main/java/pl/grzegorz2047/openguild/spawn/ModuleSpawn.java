@@ -23,7 +23,7 @@ import pl.grzegorz2047.openguild.configuration.GenConf;
 public class ModuleSpawn {
 
     public void enable(JavaPlugin plugin) {
-        if (GenConf.blockGuildCreating) {
+        if (GenConf.BLOCK_GUILD_CREATION_ON_SPAWN) {
             Bukkit.getPluginManager().registerEvents(new SpawnListeners(), plugin);
         }
     }

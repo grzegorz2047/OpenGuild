@@ -30,6 +30,7 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
  */
 public class GuildHelpCommand extends Command {
 
+
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         int page = 1;
@@ -49,13 +50,13 @@ public class GuildHelpCommand extends Command {
 
         sender.sendMessage(getHelpTitle(page));
         if (page == 1) {
-            if (GenConf.lang.equals("PL")) {
+            if (GenConf.LANG.equals("PL")) {
                 showPolishHelpPage1(sender);
             } else {
                 showEnglishHelpPage1(sender);
             }
         } else if (page == 2) {
-            if (GenConf.lang.equals("PL")) {
+            if (GenConf.LANG.equals("PL")) {
                 showPolishHelpPage2(sender);
             } else {
                 showEnglishHelpPage2(sender);
@@ -124,7 +125,7 @@ public class GuildHelpCommand extends Command {
     }
 
     private String help(String usage, String desc) {
-        if (GenConf.lang.equals("PL")) {
+        if (GenConf.LANG.equals("PL")) {
             return ChatColor.GREEN + "/gildia " + ChatColor.AQUA + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
         } else {
             return ChatColor.GREEN + "/guild " + ChatColor.AQUA + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
@@ -133,19 +134,10 @@ public class GuildHelpCommand extends Command {
     }
 
     private void admin(CommandSender sender) {
-        int hide = 0;
         sender.sendMessage(this.getTitle(ChatColor.GOLD + "Help Admin"));
         sender.sendMessage(help("reload", "Przeladuj konfiguracje pluginu"));
-        if (GenConf.hcBans) {
-            sender.sendMessage(help("unban <player>", "Odbanuj gracza"));
-        } else {
-            hide++;
-        }
+        sender.sendMessage(help("unban <player>", "Odbanuj gracza"));
         sender.sendMessage(help("version", "Informacje o plugine OpenGuild"));
-
-        if (hide > 0) {
-            sender.sendMessage(MsgManager.get("skipped").replace("{HELP}", String.valueOf(hide)));
-        }
     }
 
     @Override

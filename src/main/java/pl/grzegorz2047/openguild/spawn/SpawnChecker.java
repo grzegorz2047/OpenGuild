@@ -25,8 +25,8 @@ public class SpawnChecker {
 
     public static boolean isSpawn(Location l) {
         String worldName = l.getWorld().getName();
-        Location c1 = GenConf.spawnMax;
-        Location c2 = GenConf.spawnMin;
+        Location c1 = GenConf.SPAWN_MAX_CORNER_LOCATION;
+        Location c2 = GenConf.SPAWN_MIN_CORNER_LOCATION;
         return worldName.equals(c1.getWorld().getName()) &&
                 isWithinXCords(l, c1, c2) &&
                 isWithinZCords(l, c1, c2);
@@ -42,8 +42,8 @@ public class SpawnChecker {
 
     @Deprecated
     public static boolean isSpawnExtra(Location location) {
-        Location c1 = GenConf.spawnMax;
-        Location c2 = GenConf.spawnMin;
+        Location c1 = GenConf.SPAWN_MAX_CORNER_LOCATION;
+        Location c2 = GenConf.SPAWN_MIN_CORNER_LOCATION;
         if (location.getWorld().getName().equals(c1.getWorld().getName())) {
             if (location.getBlockX() > c2.getBlockX() - extra && location.getBlockX() < c1.getBlockX() + extra) {
                 if (location.getBlockZ() > c2.getBlockZ() - extra && location.getBlockZ() < c1.getBlockZ() + extra) {

@@ -30,12 +30,24 @@ public class DropFromBlocks {
             );
     private List<DropProperties> loadedDrops = new ArrayList<>();
 
-    public DropFromBlocks(List<Material> eligibleBlocks, List<DropProperties> loadedDrops) {
-        this.eligibleBlocks = eligibleBlocks;
+    public DropFromBlocks(List<DropProperties> loadedDrops) {
         this.loadedDrops = loadedDrops;
         if (loadedDrops.size() == 0) {
             System.out.println("Nie wczytalo dropu! wylaczam drop z blockow!");
             GenConf.DROP_ENABLED = false;
+        }
+    }
+
+
+    public void loadMainDropData(List<String> blockList) {
+        this.eligibleBlocks = new ArrayList<>();
+        for (String dropMat : blockList) {
+            try {
+                this.eligibleBlocks.add(Material.valueOf(dropMat));
+            } catch (IllegalArgumentException ex) {
+                System.out.println("Incorrect drop block " + dropMat + ". Check Material bukkit google it!");
+            }
+
         }
     }
 
@@ -154,7 +166,7 @@ public class DropFromBlocks {
     }
 
     public boolean isNotUsedInDropFromBlocks(Material type) {
-        //OpenGuild.getOGLogger().debug("Zwraca " + (!ores.contains(type) && !eligibleBlocks.contains(type)) + "dla " + type);
+        //OpenGuild.getOGLogger().IS_IN_DEBUG_MODE("Zwraca " + (!ores.contains(type) && !eligibleBlocks.contains(type)) + "dla " + type);
         return !ores.contains(type) && !eligibleBlocks.contains(type);
     }
 
@@ -163,7 +175,7 @@ public class DropFromBlocks {
     }
 
     private void dropNaturally(Location blockLocation, World playerWorld, ItemStack receivedDrop) {
-        //OpenGuild.getOGLogger().debug("DROP: " + receivedDrop.toString());
+        //OpenGuild.getOGLogger().IS_IN_DEBUG_MODE("DROP: " + receivedDrop.toString());
         playerWorld.dropItemNaturally(blockLocation, receivedDrop);
 
     }

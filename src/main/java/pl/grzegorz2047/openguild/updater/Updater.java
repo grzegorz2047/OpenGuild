@@ -15,7 +15,7 @@ public final class Updater {
     NewVersionChecker newVersionChecker = new NewVersionChecker();
 
     public void checkForUpdates() {
-        if (!GenConf.updater) {
+        if (!GenConf.UPDATER_ENABLED) {
             OpenGuild.getOGLogger().warning("Updater is disabled.");
         } else {
             if (isAvailable()) {
@@ -36,12 +36,12 @@ public final class Updater {
     }
 
     public void notifyOpAboutUpdate(Player player) {
-        if (player.isOp() && GenConf.updater && isAvailable()) {
+        if (player.isOp() && GenConf.UPDATER_ENABLED && isAvailable()) {
             player.sendMessage(ChatColor.RED + " =============== OpenGuild UPDATER =============== ");
-            if (GenConf.lang.equalsIgnoreCase("PL")) {
+            if (GenConf.LANG.equalsIgnoreCase("PL")) {
                 player.sendMessage(ChatColor.YELLOW + "Znaleziono aktualizacje! Prosze zaktualizowac Twój plugin do najnowszej wersji!");
                 player.sendMessage(ChatColor.YELLOW + "Pobierz go z https://github.com/grzegorz2047/OpenGuild2047/releases");
-            } else if (GenConf.lang.equalsIgnoreCase("SV")) {
+            } else if (GenConf.LANG.equalsIgnoreCase("SV")) {
                 player.sendMessage(ChatColor.YELLOW + "Uppdatering hittas! Uppdatera ditt plugin till den senaste version!");
                 player.sendMessage(ChatColor.YELLOW + "Ladda ner det från https://github.com/grzegorz2047/OpenGuild2047/releases");
             } else {

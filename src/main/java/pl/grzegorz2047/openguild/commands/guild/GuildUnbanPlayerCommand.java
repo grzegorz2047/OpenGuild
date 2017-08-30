@@ -24,21 +24,24 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.hardcore.HardcoreHandler;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.hardcore.HardcoreSQLHandler;
 
 public class GuildUnbanPlayerCommand extends Command {
 
     private final HardcoreSQLHandler hardcoreSQLHandler;
+    private final HardcoreHandler hardcoreHandler;
 
-    public GuildUnbanPlayerCommand(HardcoreSQLHandler hardcoreSQLHandler) {
+    public GuildUnbanPlayerCommand(HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler) {
         setPermission("openguild.command.hardcore.unban");
         this.hardcoreSQLHandler = hardcoreSQLHandler;
+        this.hardcoreHandler = hardcoreHandler;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
-        if (!GenConf.hcBans) {
+        if (!hardcoreHandler.isEnabled()) {
             throw new CommandException(MsgManager.get("hcnotenabled"));
         } else if (args.length != 2) {
             throw new UsageException(MsgManager.get("wrongcmdargument"));

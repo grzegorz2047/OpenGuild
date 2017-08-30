@@ -12,13 +12,12 @@ import java.sql.Statement;
  */
 public class SQLiteTables implements SQLTables {
 
-    private String cuboidsTableName = "`" + GenConf.sqlTablePrefix + "cuboids`";
-    private String playersTableName = "`" + GenConf.sqlTablePrefix + "players`";
-    private String alliesTableName = "`" + GenConf.sqlTablePrefix + "allies`";
-    private String guildsTableName = "`" + GenConf.sqlTablePrefix + "guilds`";
-
     @Override
     public void createTables(SQLHandler handler) {
+        String cuboidsTableName = handler.getCuboidsTableName();
+        String playersTableName = handler.getPlayersTableName();
+        String alliesTableName = handler.getAlliesTableName();
+        String guildsTableName = handler.getGuildsTableName();
         OpenGuild.getOGLogger().info("[DB] Creating tables if not exists ...");
 
         try {

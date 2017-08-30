@@ -60,7 +60,7 @@ public class OGLogger  {
 
 
     public void debug(String debug) {
-        if (GenConf.debug) {
+        if (GenConf.IS_IN_DEBUG_MODE) {
             log(Level.INFO, debug);
         }
     }
@@ -88,7 +88,7 @@ public class OGLogger  {
 
     public void exceptionThrown(Exception exception) {
         log(Level.SEVERE, "---- AN EXCEPTION HAS BEEN THROWN!");
-        if (GenConf.debug) {
+        if (GenConf.IS_IN_DEBUG_MODE) {
             exception.printStackTrace();
         } else {
             log(Level.SEVERE, exception.toString());

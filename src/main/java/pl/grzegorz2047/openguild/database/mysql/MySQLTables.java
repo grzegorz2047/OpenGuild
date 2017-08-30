@@ -1,6 +1,5 @@
 package pl.grzegorz2047.openguild.database.mysql;
 
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.database.interfaces.SQLTables;
@@ -12,13 +11,14 @@ import java.sql.Statement;
  */
 public class MySQLTables implements SQLTables {
 
-    private String cuboidsTableName = "`" + GenConf.sqlTablePrefix + "cuboids`";
-    private String playersTableName = "`" + GenConf.sqlTablePrefix + "players`";
-    private String alliesTableName = "`" + GenConf.sqlTablePrefix + "allies`";
-    private String guildsTableName = "`" + GenConf.sqlTablePrefix + "guilds`";
+
 
     @Override
     public void createTables(SQLHandler handler) {
+        String cuboidsTableName = handler.getCuboidsTableName();
+        String playersTableName = handler.getPlayersTableName();
+        String alliesTableName = handler.getAlliesTableName();
+        String guildsTableName = handler.getGuildsTableName();
         OpenGuild.getOGLogger().info("[DB] Creating tables if not exists ...");
 
         try {

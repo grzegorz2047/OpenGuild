@@ -60,16 +60,16 @@ public class ListenerLoader {
             pm.registerEvents(new EnchantInsertListener(), p);
         }
 
-        if (GenConf.cubEnabled) {
+        if (GenConf.CUBOID_ENABLED) {
             pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop, guilds), p);
         }
 
         pm.registerEvents(new EntityDamageByEntityListener(logout, guilds), p);
 
-        if (GenConf.playerMoveEvent) {
+        if (GenConf.ENABLED_PLAYER_MOVE_EVENT) {
             pm.registerEvents(new PlayerMoveListener(guilds, cuboids), p);
         }
-        if (GenConf.enableTNTExplodeListener) {
+        if (GenConf.TNT_PLACE_BLOCK_CUBOID_ENABLED) {
             pm.registerEvents(new TNTExplode(guilds, drop, tntGuildBlocker), p);
         }
     }

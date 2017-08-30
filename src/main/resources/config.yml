@@ -64,8 +64,6 @@ tags:
   guild: '&a[{TAG}]&7 '
 forbiddenguildnames:
 use-new-command-api: true
-join-msg: ''
-quit-msg: ''
 forcedesc: false
 debug: false
 chat:

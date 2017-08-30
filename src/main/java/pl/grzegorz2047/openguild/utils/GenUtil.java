@@ -28,66 +28,8 @@ import pl.grzegorz2047.openguild.configuration.GenConf;
  */
 public class GenUtil {
 
-    public static void removeFromInv(Inventory inv, Material mat, int dmgValue, int amount, byte data) {
-        if(inv.contains(mat)) {
-            int remaining = amount;
-            ItemStack[] contents = inv.getContents();
-            for(ItemStack is : contents) {
-                if(is != null) {
-                    if(is.getType() == mat) {
-                        if(data != -1) {
-                            if(is.getData() != null) {
-                                if(is.getData().getData() == data) {
-                                    if(is.getDurability() == dmgValue || dmgValue <= 0) {
-                                        if(is.getAmount() > remaining) {
-                                            is.setAmount(is.getAmount() - remaining);
-                                            remaining = 0;
-                                        }
-                                        else if(is.getAmount() <= remaining) {
-                                            if(remaining > 0) {
-                                                remaining -= is.getAmount();
-                                                is.setType(Material.AIR);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            if(is.getDurability() == dmgValue || dmgValue <= 0) {
-                                if(is.getAmount() > remaining) {
-                                    is.setAmount(is.getAmount() - remaining);
-                                    remaining = 0;
-                                }
-                                else if(is.getAmount() <= remaining) {
-                                    if(remaining > 0) {
-                                        remaining -= is.getAmount();
-                                        is.setType(Material.AIR);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            inv.setContents(contents);
-        }
-    }
 
-    public static boolean hasEnoughItemsForGuild(Inventory inv) {
-        for(ItemStack item : GenConf.reqitems) {
-            if(!inv.containsAtLeast(item, item.getAmount())) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
 
-    public static void removeRequiredItemsForGuild(Inventory inv) {
-        for(ItemStack item : GenConf.reqitems) {
-            removeFromInv(inv, item.getType(), item.getDurability(), item.getAmount(), item.getData().getData());
-        }
-    }
 
     public static String argsToString(String args[], int minindex, int maxindex) {
         StringBuilder sb = new StringBuilder();

@@ -1,7 +1,7 @@
-OpenGuild2047 ![alt tag](https://travis-ci.org/grzegorz2047/OpenGuild2047.svg?branch=master)
+OpenGuild2047 ![alt tag](https://travis-ci.org/grzegorz2047/OpenGuild2047.svg?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e83f2c9b11994cc2912d94fd42c21c45)](https://www.codacy.com/app/grzegorz2047/OpenGuild2047?utm_source=github.com&utm_medium=referral&utm_content=grzegorz2047/OpenGuild2047&utm_campaign=badger)
+
 =============
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e83f2c9b11994cc2912d94fd42c21c45)](https://www.codacy.com/app/grzegorz2047/OpenGuild2047?utm_source=github.com&utm_medium=referral&utm_content=grzegorz2047/OpenGuild2047&utm_campaign=badger)
 
 
 OpenGuild2047 to publiczny, open source plugin na gildie tworzony przez Grzegorza2047.

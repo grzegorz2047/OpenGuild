@@ -72,7 +72,7 @@ public class TNTExplode implements Listener {
             event.setCancelled(true);
             return;
         }
-        if (event.getEntityType().equals(EntityType.PRIMED_TNT) && GenConf.enableTNTExplodeListener) {
+        if (event.getEntityType().equals(EntityType.PRIMED_TNT) && GenConf.TNT_PLACE_BLOCK_CUBOID_ENABLED) {
             Location location = event.getLocation();
             final Guild guild = guilds.getGuild(location);
 

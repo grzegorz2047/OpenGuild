@@ -17,18 +17,22 @@ package pl.grzegorz2047.openguild.guilds;
 
 import java.util.*;
 
+import org.bukkit.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.relations.Relation;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.managers.MsgManager;
+import pl.grzegorz2047.openguild.utils.ItemGUI;
 
 public class Guilds {
 
@@ -37,6 +41,7 @@ public class Guilds {
     private final Cuboids cuboids;
     private Map<String, Guild> guilds = new HashMap<>();
     private List<String> onlineGuilds = new ArrayList<>();
+    private ArrayList<ItemStack> requiredItemStacks;
 
 
     public Guilds(SQLHandler sqlHandler, Plugin plugin, Cuboids cuboids) {
@@ -62,8 +67,8 @@ public class Guilds {
     }
 
     private void playSoundOnSomeoneEnteredCuboid(OfflinePlayer op) {
-        if (GenConf.cubNotifySound) {
-            op.getPlayer().playSound(op.getPlayer().getLocation(), GenConf.cubNotifySoundType, 10f, 5f);
+        if (GenConf.CUBOID_ENTER_SOUND_ENABLED) {
+            op.getPlayer().playSound(op.getPlayer().getLocation(), GenConf.CUBOID_ENTER_SOUND_TYPE, 10f, 5f);
         }
     }
 
@@ -257,4 +262,185 @@ public class Guilds {
     public Guild getGuild(Location location) {
         return guilds.get(cuboids.getGuildTagInLocation(location));
     }
+
+    public boolean hasEnoughItemsForGuild(Inventory inv) {
+        for (ItemStack item : requiredItemStacks) {
+            if (!inv.containsAtLeast(item, item.getAmount())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void removeRequiredItemsForGuild(Inventory inv) {
+        for (ItemStack item : requiredItemStacks) {
+            removeFromInv(inv, item.getType(), item.getDurability(), item.getAmount(), item.getData().getData());
+        }
+    }
+
+    private static void removeFromInv(Inventory inv, Material mat, int dmgValue, int amount, byte data) {
+        if (inv.contains(mat)) {
+            int remaining = amount;
+            ItemStack[] contents = inv.getContents();
+            for (ItemStack is : contents) {
+                if (is != null) {
+                    if (is.getType() == mat) {
+                        if (data != -1) {
+                            if (is.getData() != null) {
+                                if (is.getData().getData() == data) {
+                                    if (is.getDurability() == dmgValue || dmgValue <= 0) {
+                                        if (is.getAmount() > remaining) {
+                                            is.setAmount(is.getAmount() - remaining);
+                                            remaining = 0;
+                                        } else if (is.getAmount() <= remaining) {
+                                            if (remaining > 0) {
+                                                remaining -= is.getAmount();
+                                                is.setType(Material.AIR);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            if (is.getDurability() == dmgValue || dmgValue <= 0) {
+                                if (is.getAmount() > remaining) {
+                                    is.setAmount(is.getAmount() - remaining);
+                                    remaining = 0;
+                                } else if (is.getAmount() <= remaining) {
+                                    if (remaining > 0) {
+                                        remaining -= is.getAmount();
+                                        is.setType(Material.AIR);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            inv.setContents(contents);
+        }
+    }
+
+
+    public void loadRequiredItemsForGuild(List<String> requiredItemsString) {
+        requiredItemStacks = new ArrayList<>();
+
+        if (requiredItemsString == null) {
+            return;
+        }
+        if (requiredItemsString.isEmpty()) {
+            return;
+        }
+        if (requiredItemsString.size() > 54) {
+            OpenGuild.getOGLogger().warning("Too many specified items (required-items)! Maximum size is 54!");
+        } else {
+            for (String s : requiredItemsString) {
+                String[] info = s.split(":");
+                if (info.length != 4) {
+                    OpenGuild.getOGLogger().warning("Oops! It looks like you're using an old configuration file!/You have made mistake with required-items section! We changed pattern of required-items section. Now it looks like this: Material:Durability:Data:Amount (old was: Material:Amount) - please update your config.yml Exact line is " + s);
+                    break;
+                }
+                Material material = Material.valueOf(info[0]);
+                if (material == null) {
+                    OpenGuild.getOGLogger().warning("Invalid material: " + info[0] + "! Check your configuration file!");
+                    continue;
+                }
+
+                for (ItemStack i : requiredItemStacks) {
+                    if (i.getType().equals(material)) {
+                        OpenGuild.getOGLogger().warning("Duplicate item found! Skipping ...");
+                    }
+                }
+
+                short durability = 0;
+                try {
+                    durability = Short.valueOf(info[1]);
+                } catch (NumberFormatException e) {
+                    OpenGuild.getOGLogger().warning("Durability must be a number! Please fix 'required-items' section in your config.yml");
+                }
+
+                byte data = 0;
+                try {
+                    data = Byte.valueOf(info[2]);
+                } catch (NumberFormatException e) {
+                    OpenGuild.getOGLogger().warning("Data must be a number! Please fix 'required-items' section in your config.yml");
+                }
+
+                int amount = 1;
+                try {
+                    amount = Integer.valueOf(info[3]);
+
+                    if (amount > 64) {
+                        amount = 64;
+                    } else if (amount < 0) {
+                        continue;
+                    }
+                } catch (NumberFormatException e) {
+                    OpenGuild.getOGLogger().warning("Amount must be a number! Please fix 'required-items' section in your config.yml");
+                }
+
+                ItemStack item = new ItemStack(material, amount, durability, data);
+                requiredItemStacks.add(item);
+            }
+        }
+    }
+    public Inventory prepareItemGuidInventory(Inventory inventory) {
+        int inventorySize = 9;
+
+        if (getRequiredItemsSize() > 9) {
+            inventorySize = 18;
+        } else if (getRequiredItemsSize() > 18) {
+            inventorySize = 27;
+        } else if (getRequiredItemsSize() > 27) {
+            inventorySize = 36;
+        } else if (getRequiredItemsSize() > 36) {
+            inventorySize = 45;
+        } else if (getRequiredItemsSize() > 45) {
+            inventorySize = 54;
+        }
+
+        ItemGUI itemsGUI = new ItemGUI(MsgManager.getIgnorePref("gui-items"), inventorySize, plugin);
+        for (ItemStack item : requiredItemStacks) {
+            ItemStack cloned = item.clone();
+            ItemMeta meta = cloned.getItemMeta();
+
+            int amount = getAmount(cloned, inventory);
+
+            if (amount < cloned.getAmount()) {
+                meta.setLore(Collections.singletonList(
+                        ChatColor.RED + "" + amount + "/" + cloned.getAmount()
+                ));
+            } else {
+                meta.setLore(Collections.singletonList(
+                        ChatColor.GREEN + "" + amount + "/" + cloned.getAmount()
+                ));
+            }
+            cloned.setItemMeta(meta);
+
+            itemsGUI.addItem(cloned, new ItemGUI.ItemGUIClickEventHandler() {
+                @Override
+                public void handle(ItemGUI.ItemGUIClickEvent event) {
+                    event.getPlayer().closeInventory();
+                }
+            });
+        }
+        return itemsGUI.getInventory();
+    }
+    private int getAmount(ItemStack item, Inventory inventory) {
+        int amount = 0;
+
+        for (ItemStack i : inventory.getContents()) {
+            if (i != null && i.isSimilar(item)) {
+                amount += i.getAmount();
+            }
+        }
+
+        return amount;
+    }
+
+    public int getRequiredItemsSize() {
+        return requiredItemStacks.size();
+    }
+
 }

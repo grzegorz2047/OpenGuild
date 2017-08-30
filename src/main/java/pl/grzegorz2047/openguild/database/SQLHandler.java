@@ -19,7 +19,6 @@ import java.sql.*;
 import java.util.*;
 
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild.OGLogger;
@@ -39,16 +38,17 @@ import pl.grzegorz2047.openguild.database.interfaces.SQLTables;
 
 public final class SQLHandler {
 
+    private String sqlTablePrefix = "openguild_";
     private Plugin plugin;
 
     private Statement statement;
     private SQLImplementationStrategy implementation;
     private SQLTables tables;
 
-    private String cuboidsTableName = "`" + GenConf.sqlTablePrefix + "cuboids`";
-    private String playersTableName = "`" + GenConf.sqlTablePrefix + "players`";
-    private String alliesTableName = "`" + GenConf.sqlTablePrefix + "allies`";
-    private String guildsTableName = "`" + GenConf.sqlTablePrefix + "guilds`";
+    private String cuboidsTableName = "`" + sqlTablePrefix + "cuboids`";
+    private String playersTableName = "`" + sqlTablePrefix + "players`";
+    private String alliesTableName = "`" + sqlTablePrefix + "allies`";
+    private String guildsTableName = "`" + sqlTablePrefix + "guilds`";
     private String guildColumn = "guild";
     private String lastseennameColumn = "lastseenname";
     private String killsColumn = "kills";
@@ -60,18 +60,27 @@ public final class SQLHandler {
         this.plugin = plugin;
     }
 
+
+
+    public void loadSQLNames(String sqlTablePrefix) {
+        if (sqlTablePrefix.length() <= 10 && sqlTablePrefix.length() >= 3) {
+            this.sqlTablePrefix = sqlTablePrefix;
+        } else {
+            OpenGuild.getOGLogger().warning("Could not load SQL table prefix - too low (3 chars) or too long (10 chars). Setting to default openguild_");
+
+        }
+        cuboidsTableName = "`" + sqlTablePrefix + "cuboids`";
+        playersTableName = "`" + sqlTablePrefix + "players`";
+        alliesTableName = "`" + sqlTablePrefix + "allies`";
+        guildsTableName = "`" + sqlTablePrefix + "guilds`";
+
+    }
+
     /**
      * This method connects plugin with database using informations from
      * configuration file.
-     *
-     * @param config
      */
-    public void loadDB(FileConfiguration config) {
-        String host = config.getString("mysql.address");
-        int port = config.getInt("mysql.port");
-        String user = config.getString("mysql.login");
-        String pass = config.getString("mysql.password");
-        String name = config.getString("mysql.database");
+    public void loadDB(String host, int port, String user, String pass, String name) {
 
         OGLogger ogLogger = OpenGuild.getOGLogger();
         switch (GenConf.DATABASE) {
@@ -120,7 +129,7 @@ public final class SQLHandler {
     private void loadGuildsFromDB(Cuboids cuboids, Guilds guilds) {
         try {
             createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM " + guildsTableName + " JOIN `" + GenConf.sqlTablePrefix + "cuboids` USING(tag)");
+            ResultSet result = statement.executeQuery("SELECT * FROM " + guildsTableName + " JOIN `" + sqlTablePrefix + "cuboids` USING(tag)");
             loopTroughGuildAndCuboidResults(cuboids, guilds, result);
             result.close();
             statement.close();
@@ -195,7 +204,7 @@ public final class SQLHandler {
     }
 
     private void readPlayersDataFromResult(ResultSet result, Guilds guilds) throws SQLException {
-         while (anotherRecord(result)) {
+        while (anotherRecord(result)) {
             String guildTag = result.getString(guildColumn);
             UUID uuid = UUID.fromString(result.getString(uuidColumn));
             if (!guilds.doesGuildExists(guildTag)) {
@@ -354,7 +363,7 @@ public final class SQLHandler {
     public boolean insertAlliance(Guild who, Guild withWho) {
         try {
             createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM `" + GenConf.sqlTablePrefix + "allies`" + " WHERE who='" + who + "'" + "OR withwho='" + who + "';");
+            ResultSet rs = statement.executeQuery("SELECT * FROM `" + sqlTablePrefix + "allies`" + " WHERE who='" + who + "'" + "OR withwho='" + who + "';");
             if (!containsAlliance(rs)) {
                 statement.execute("INSERT INTO " + alliesTableName + " VALUES('" + who.getName() + "', '" + withWho.getName() + "', '" + Relation.Status.ALLY.toString() + "', 0);");
                 rs.close();
@@ -543,6 +552,21 @@ public final class SQLHandler {
                 }
             }
         });
+    }
+    public String getCuboidsTableName() {
+        return cuboidsTableName;
+    }
+
+    public String getPlayersTableName() {
+        return playersTableName;
+    }
+
+    public String getAlliesTableName() {
+        return alliesTableName;
+    }
+
+    public String getGuildsTableName() {
+        return guildsTableName;
     }
 }
 

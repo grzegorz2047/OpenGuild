@@ -40,11 +40,11 @@ public class EloRanking {
 
     public void checkGuildpoints(Guild guild) {
         */
-/*if (guildRank.get(guildTag) != null) {
-          //  guildRank.put(guildTag, guild.getGuildPoints());
+/*if (guildRank.get(OWN_GUILD_TAG_FORMAT) != null) {
+          //  guildRank.put(OWN_GUILD_TAG_FORMAT, guild.getGuildPoints());
         } else {
             if (guildRank.size() < 15) {
-                guildRank.put(guildTag, guild.getGuildPoints());
+                guildRank.put(OWN_GUILD_TAG_FORMAT, guild.getGuildPoints());
             } else {
                 int maxVal = 0;
                 String topGuildTag = "";
@@ -56,7 +56,7 @@ public class EloRanking {
                 }
                 if (!topGuildTag.isEmpty()) {
                     guildRank.remove(topGuildTag);
-                    guildRank.put(guildTag, guild.getGuildPoints());
+                    guildRank.put(OWN_GUILD_TAG_FORMAT, guild.getGuildPoints());
                 }
             }
 
@@ -70,8 +70,8 @@ public class EloRanking {
 
     }
 
-    public void addGuildPoints(String guildTag, int points) {
-        guildRank.put(guildTag, points);
+    public void addGuildPoints(String OWN_GUILD_TAG_FORMAT, int points) {
+        guildRank.put(OWN_GUILD_TAG_FORMAT, points);
     }
 
     public void printUserRanking(Player p) {

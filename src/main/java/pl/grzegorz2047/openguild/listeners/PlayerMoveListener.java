@@ -65,7 +65,7 @@ public class PlayerMoveListener implements Listener {
         if (playerGuild != null && isAllyEntering(playerGuild, currentCuboidGuild)) {
             return;
         }
-        if (GenConf.cubNotifyMem) {
+        if (GenConf.NOTIFY_GUILD_MEMBERS_ABOUT_SOMEONE_ENTERED_CUBOID) {
             guilds.notifyMembersAboutSomeoneEnteringTheirCuboid(player, guildscuboidtag, playerGuild);
         }
         if (event.isCancelled() || GenConf.CANENTERAREA || player.hasPermission("openguild.cuboid.bypassenterflag")) {

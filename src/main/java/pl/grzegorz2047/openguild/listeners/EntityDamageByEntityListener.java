@@ -41,7 +41,7 @@ public class EntityDamageByEntityListener implements Listener {
 
     @EventHandler
     private void entityDMGbyEntity(EntityDamageByEntityEvent event) {
-        if (event.isCancelled() || GenConf.teampvp) {
+        if (event.isCancelled() || GenConf.TEAM_PVP_ENABLED) {
             return;
         }
         Player attacked = null;
@@ -123,6 +123,6 @@ public class EntityDamageByEntityListener implements Listener {
     }
 
     private boolean isTeamPvpDisabled() {
-        return !GenConf.teampvp;
+        return !GenConf.TEAM_PVP_ENABLED;
     }
 }

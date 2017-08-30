@@ -32,9 +32,9 @@ public class SpawnListeners implements Listener {
     
     @EventHandler
     public void onGuildCreate(GuildCreateEvent e) {
-        if(GenConf.blockGuildCreating && SpawnChecker.isSpawnExtra(e.getHome())) {
+        if(GenConf.BLOCK_GUILD_CREATION_ON_SPAWN && SpawnChecker.isSpawnExtra(e.getHome())) {
             e.setCancelled(true);
-            e.getLeader().sendMessage(GenConf.prefix + ChatColor.RED + GenConf.spawnMessage);
+            e.getLeader().sendMessage(GenConf.prefix + ChatColor.RED + GenConf.SPAWN_MESSAGE);
         }
     }
     
@@ -46,7 +46,7 @@ public class SpawnListeners implements Listener {
          * podany w configu jako 'block-enter-time'
          */
         
-        if(GenConf.blockEnter) {
+        if(GenConf.BLOCK_ENTER_ON_SPAWN_ENABLED) {
             if(e.getFrom().getBlock().equals(e.getTo().getBlock())) {
                 return;
             }
@@ -61,7 +61,7 @@ public class SpawnListeners implements Listener {
                 long ms = 0;
                 
                 if(blocked.containsKey(player.getUniqueId())) {
-                    ms = GenConf.blockEnterTime * 1000 + blocked.get(player.getUniqueId());
+                    ms = GenConf.BLOCK_ENTER_ON_SPAWN_TIME * 1000 + blocked.get(player.getUniqueId());
                 }
                 
                 if(System.currentTimeMillis() < ms) {
