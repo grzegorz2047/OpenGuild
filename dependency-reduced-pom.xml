@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>pl.grzegorz2047</groupId>
   <artifactId>OpenGuild</artifactId>
-  <name>OpenGuild2047</name>
-  <version>0.7.0</version>
+  <name>OpenGuild</name>
+  <version>0.7.1</version>
   <url>http://maven.apache.org</url>
   <build>
     <resources>

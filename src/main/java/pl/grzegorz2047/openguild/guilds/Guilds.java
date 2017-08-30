@@ -26,8 +26,8 @@ import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.managers.MsgManager;
-import pl.grzegorz2047.openguild.metada.PlayerMetadataController;
-import pl.grzegorz2047.openguild.metada.PlayerMetadataController.PlayerMetaDataColumn;
+import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
+import pl.grzegorz2047.openguild.metadata.PlayerMetadataController.PlayerMetaDataColumn;
 import pl.grzegorz2047.openguild.relations.Relation;
 import pl.grzegorz2047.openguild.utils.ItemGUI;
 

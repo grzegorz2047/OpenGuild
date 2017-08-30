@@ -26,6 +26,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.guilds.Guild;
+import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
 import pl.grzegorz2047.openguild.relations.Relation;
 
 public class PlayerChatListener implements Listener {
@@ -62,7 +63,7 @@ public class PlayerChatListener implements Listener {
     }
 
     private int getPlayerElo(Player player) {
-        return player.getMetadata("elo").get(0).asInt();
+        return player.getMetadata(PlayerMetadataController.PlayerMetaDataColumn.ELO.name()).get(0).asInt();
     }
 
     private void processChatForPlayerWithGuild(AsyncPlayerChatEvent event, Player player, UUID uuid, String message) {

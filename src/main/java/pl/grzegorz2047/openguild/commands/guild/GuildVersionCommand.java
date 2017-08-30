@@ -46,10 +46,9 @@ public class GuildVersionCommand extends Command {
         sender.sendMessage(this.getTitle(ChatColor.GOLD + "OpenGuild"));
         sender.sendMessage(ChatColor.DARK_GRAY + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion());
         sender.sendMessage(ChatColor.DARK_GRAY + "Authors: \n" + this.getAuthors());
-        sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild2047");
+        sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild");
         sender.sendMessage(ChatColor.DARK_GRAY + "BukkitDev: " + ChatColor.GOLD + "http://dev.bukkit.org/bukkit-plugins/openguild");
-        sender.sendMessage(ChatColor.DARK_GRAY + "MCStats: " + ChatColor.GOLD + "http://mcstats.org/plugin/OpenGuild2047");
-    }
+     }
 
     @Override
     public int minArgs() {

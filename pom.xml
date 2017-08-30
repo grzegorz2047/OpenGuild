@@ -4,9 +4,9 @@
 
     <groupId>pl.grzegorz2047</groupId>
     <artifactId>OpenGuild</artifactId>
-    <version>0.7.0</version>
+    <version>0.7.1</version>
     <packaging>jar</packaging>
-    <name>OpenGuild2047</name>
+    <name>OpenGuild</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <upload.dbo.category>server-mods</upload.dbo.category>

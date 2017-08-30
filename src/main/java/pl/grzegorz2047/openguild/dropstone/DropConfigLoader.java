@@ -25,7 +25,9 @@ public class DropConfigLoader {
     public List<DropProperties> getLoadedListDropPropertiesFromConfig() {
         List<DropProperties> drops = new ArrayList<>();
         ConfigurationSection materialsDropData = config.getConfigurationSection("drop.materials");
-
+        if (materialsDropData == null) {
+            return drops;
+        }
         Set<String> materialsConfigData = materialsDropData.getKeys(false);
         for (String materialString : materialsConfigData) {
 
@@ -70,7 +72,6 @@ public class DropConfigLoader {
         }
         return drops;
     }
-
 
 
 }

@@ -1,10 +1,10 @@
 name: OpenGuild
 description: OpenGuild is good, public, open source guild plugin
 authors: [grzegorz2047, shooly, TheMolkaPL]
-website: https://www.github.com/grzegorz2047/OpenGuild2047
+website: https://www.github.com/grzegorz2047/OpenGuild
 version: '${project.version}'
 prefix: 'OpenGuild'
-softdepend: [Skript, ProtocolLib]
+softdepend: [ProtocolLib]
 main: pl.grzegorz2047.openguild.OpenGuild
 commands:
   guild:

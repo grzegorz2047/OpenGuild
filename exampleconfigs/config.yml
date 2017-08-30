@@ -49,7 +49,7 @@ random-tp:
   button: true
   range: 3000
 database: FILE
-file-dir: plugins/OpenGuild2047/og.db
+file-dir: plugins/OpenGuild/og.db
 snooper: true
 updater: true
 sql-table-prefix: openguild_

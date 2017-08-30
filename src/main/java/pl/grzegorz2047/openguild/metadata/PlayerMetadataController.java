@@ -1,4 +1,4 @@
-package pl.grzegorz2047.openguild.metada;
+package pl.grzegorz2047.openguild.metadata;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

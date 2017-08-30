@@ -20,12 +20,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import pl.grzegorz2047.openguild.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
-import pl.grzegorz2047.openguild.metada.PlayerMetadataController;
+import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
 import pl.grzegorz2047.openguild.ranking.EloRanking;
 import pl.grzegorz2047.openguild.ranking.RankDifference;
 

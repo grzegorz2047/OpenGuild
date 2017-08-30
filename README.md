@@ -4,7 +4,7 @@ OpenGuild2047 ![alt tag](https://travis-ci.org/grzegorz2047/OpenGuild2047.svg?br
 
 
 
-OpenGuild2047 to publiczny, open source plugin na gildie tworzony przez Grzegorza2047.
+OpenGuild to publiczny, open source plugin na gildie tworzony przez Grzegorza2047.
 Kod możecie dowolnie użytkować itd.
 Każde błędy, poprawki, propozycje piszcie w zakładce issues (po prawej stronie).
 

@@ -46,7 +46,6 @@ public class GuildInviteCommand extends Command {
             return;
         }
 
-
         Player player = (Player) sender;
         if (!guilds.hasGuild(player)) {
             sender.sendMessage(MsgManager.get("notinguild"));

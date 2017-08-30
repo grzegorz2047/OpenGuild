@@ -27,8 +27,6 @@ import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.managers.TagManager;
-import pl.grzegorz2047.openguild.metada.PlayerMetadataController;
-import pl.grzegorz2047.openguild.metada.PlayerMetadataController.PlayerMetaDataColumn;
 import pl.grzegorz2047.openguild.updater.Updater;
 
 import java.util.UUID;
@@ -73,21 +71,37 @@ public class PlayerJoinListener implements Listener {
 
     private void processPlayerRecord(Player player, UUID uuid, SQLRecord playerRecord) {
         if (playerRecord != null) {
-            preparePlayerData(player, uuid, playerRecord);
+            //System.out.println("PlRek1 " + playerRecord.toString());
+            prepareCurrentPlayerData(player, uuid, playerRecord);
         } else {
+            //System.out.println("PlRek ;< ");
+
             if (!player.hasPlayedBefore()) {
+                //System.out.println("PlRek ;< never ");
                 sqlHandler.insertPlayer(uuid);
-                guilds.updatePlayerMeta(uuid, "", defaultEloPoints, 0, 0);
+                createDefaultPlayerMetaData(uuid);
             } else {
+                //System.out.println("PlRek ;< retry");
                 this.sqlHandler.getPlayerData(player.getUniqueId(), tempPlayerData);
                 playerRecord = this.tempPlayerData.getPlayerRecord(uuid);
-                preparePlayerData(player, uuid, playerRecord);
+                if (playerRecord == null) {
+                    sqlHandler.insertPlayer(uuid);
+                    createDefaultPlayerMetaData(uuid);
+                   // System.out.println("PlRek2 emergency");
+                    return;
+                }
+                //System.out.println("PlRek2 " + playerRecord.toString());
+                prepareCurrentPlayerData(player, uuid, playerRecord);
             }
 
         }
     }
 
-    private void preparePlayerData(Player player, UUID uuid, SQLRecord playerRecord) {
+    private void createDefaultPlayerMetaData(UUID uuid) {
+        guilds.updatePlayerMeta(uuid, "", defaultEloPoints, 0, 0);
+    }
+
+    private void prepareCurrentPlayerData(Player player, UUID uuid, SQLRecord playerRecord) {
         String guildName = playerRecord.getGuild();
         int eloPoints = playerRecord.getElo();
         int playerKills = playerRecord.getKills();
@@ -103,8 +117,6 @@ public class PlayerJoinListener implements Listener {
             guilds.notifyMembersJoinedGame(player, guild);
         }
     }
-
-
 
 
 }
