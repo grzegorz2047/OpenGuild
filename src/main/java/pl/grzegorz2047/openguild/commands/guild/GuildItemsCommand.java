@@ -16,22 +16,14 @@
 
 package pl.grzegorz2047.openguild.commands.guild;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild.commands.command.Command;
 import pl.grzegorz2047.openguild.commands.command.CommandException;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
-import pl.grzegorz2047.openguild.utils.ItemGUI;
-
-import java.util.Collections;
 
 /**
  * Command used to see items, which are needed to create a guild.
@@ -61,7 +53,7 @@ public class GuildItemsCommand extends Command {
         }
 
         Player player = (Player) sender;
-        Inventory requiredItemsInventory = guilds.prepareItemGuidInventory(player.getInventory());
+        Inventory requiredItemsInventory = guilds.prepareItemGuildWindowInventory(player.getInventory());
         player.openInventory(requiredItemsInventory);
     }
 
