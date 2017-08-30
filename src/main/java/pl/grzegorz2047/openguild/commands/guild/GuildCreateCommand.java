@@ -63,83 +63,33 @@ public class GuildCreateCommand extends Command {
         }
         Player player = (Player) sender;
 
-        if (GenConf.FORCE_DESC) {
-            if (args.length < 3) {
-                player.sendMessage(MsgManager.get("descrequired"));
-                return;
-            }
-        }
-        if (guilds.hasGuild(player)) {
-            player.sendMessage(MsgManager.get("alreadyinguild"));
-            return;
-        }
-        //Bukkit.broadcastMessage("Is on Spawn = " + SpawnChecker.isSpawn(player.getLocation()));
-        if (SpawnChecker.isSpawn(player.getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
-            player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
-            return;
-        }
-
         String tag = args[1].toUpperCase();
-        if (!tag.matches("[0-9a-zA-Z]*")) {
-            player.sendMessage(MsgManager.unsupportedchars);
-            return;
-        }
-
-        if (tag.length() > GenConf.maxclantag || tag.length() < GenConf.minclantag) {
-            player.sendMessage(MsgManager.toolongshorttag);
-            return;
-        }
-
-        if (GenConf.BAD_WORDS != null && GenConf.BAD_WORDS.contains(tag)) {
-            player.sendMessage(MsgManager.illegaltag);
-            return;
-        }
-
-        if (guilds.doesGuildExists(tag)) {
-            player.sendMessage(MsgManager.get("guildexists"));
-            return;
-        }
-
         String description = GenUtil.argsToString(args, 2, args.length);
-        if (description.length() > 32) {
-            player.sendMessage(MsgManager.get("desctoolong"));
-            return;
-        }
-
-        if (cuboids.isCuboidInterferingWithOtherCuboid(player.getLocation())) {
-            player.sendMessage(MsgManager.get("guildtocloseothers"));
-            return;
-        }
-
-        if (GenConf.FORBIDDEN_WORLDS.contains(player.getWorld().getName())) {
-            player.sendMessage(MsgManager.get("forbiddenworld"));
-            return;
-        }
-
-        if (GenConf.CHECK_PLAYERS_TOO_CLOSE_WHEN_CREATING_GUILD && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE)) {
-            player.sendMessage(MsgManager.playerstooclose);
-            return;
-        }
         Cuboid cuboid = cuboids.previewCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
-        if (cuboids.isCuboidInterferingWithOtherCuboid(cuboid)) {
-            player.sendMessage(MsgManager.get("guildtocloseothers"));
-            return;
-        }
-        if (!guilds.hasEnoughItemsForGuild(player.getInventory())) {
-            player.sendMessage(MsgManager.get("notenoughitems"));
-            return;
-        }
+
+        if (!fufilledRequirements(args, player, tag, description, cuboid)) return;
 
 
-        GuildCreateEvent event = new GuildCreateEvent(tag, description, player, player.getLocation());
-        Bukkit.getServer().getPluginManager().callEvent(event);
+        GuildCreateEvent event = invokeGuildCreateEvent(player, tag, description);
         if (event.isCancelled()) {
             return;
-        } else {
-            guilds.removeRequiredItemsForGuild(player.getInventory());
         }
 
+        Guild guild = insertGuildData(player, tag, description, cuboid);
 
+        String guildCreatedMsg = MsgManager.get("broadcast-create").replace("{TAG}", tag.toUpperCase()).replace("{PLAYER}", player.getDisplayName());
+        Bukkit.broadcastMessage(guildCreatedMsg);
+
+        invokeGuildCreatedEvent(guild);
+    }
+
+    private void invokeGuildCreatedEvent(Guild guild) {
+        GuildCreatedEvent createdEvent = new GuildCreatedEvent(guild);
+        Bukkit.getPluginManager().callEvent(createdEvent);
+    }
+
+    private Guild insertGuildData(Player player, String tag, String description, Cuboid cuboid) {
+        guilds.removeRequiredItemsForGuild(player.getInventory());
         cuboids.addCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
         Guild guild = guilds.addGuild(player.getLocation(), player.getUniqueId(), tag, description);
         guilds.updatePlayerMetadata(player.getUniqueId(), "guild", guild.getName());
@@ -159,11 +109,80 @@ public class GuildCreateCommand extends Command {
         sqlHandler.insertGuild(tag, description, player.getUniqueId(), player.getLocation(), player.getLocation().getWorld().getName());
         sqlHandler.addGuildCuboid(cuboid.getCenter(), cuboid.getCuboidSize(), cuboid.getOwner(), cuboid.getWorldName());
         sqlHandler.updatePlayerTag(player.getUniqueId(), guild.getName());
+        return guild;
+    }
 
-        Bukkit.broadcastMessage(MsgManager.get("broadcast-create").replace("{TAG}", tag.toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
+    private GuildCreateEvent invokeGuildCreateEvent(Player player, String tag, String description) {
+        GuildCreateEvent event = new GuildCreateEvent(tag, description, player, player.getLocation());
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        return event;
+    }
 
-        GuildCreatedEvent createdEvent = new GuildCreatedEvent(guild);
-        Bukkit.getPluginManager().callEvent(createdEvent);
+    private boolean fufilledRequirements(String[] args, Player player, String tag, String description, Cuboid cuboid) {
+        if (GenConf.FORCE_DESC) {
+            if (args.length < 3) {
+                player.sendMessage(MsgManager.get("descrequired"));
+                return false;
+            }
+        }
+        if (guilds.hasGuild(player)) {
+            player.sendMessage(MsgManager.get("alreadyinguild"));
+            return false;
+        }
+        //Bukkit.broadcastMessage("Is on Spawn = " + SpawnChecker.isSpawn(player.getLocation()));
+        if (SpawnChecker.isSpawn(player.getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
+            player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
+            return false;
+        }
+
+        if (!tag.matches("[0-9a-zA-Z]*")) {
+            player.sendMessage(MsgManager.unsupportedchars);
+            return false;
+        }
+
+        if (tag.length() > GenConf.maxclantag || tag.length() < GenConf.minclantag) {
+            player.sendMessage(MsgManager.toolongshorttag);
+            return false;
+        }
+
+        if (GenConf.BAD_WORDS != null && GenConf.BAD_WORDS.contains(tag)) {
+            player.sendMessage(MsgManager.illegaltag);
+            return false;
+        }
+
+        if (guilds.doesGuildExists(tag)) {
+            player.sendMessage(MsgManager.get("guildexists"));
+            return false;
+        }
+
+        if (description.length() > 32) {
+            player.sendMessage(MsgManager.get("desctoolong"));
+            return false;
+        }
+
+        if (cuboids.isCuboidInterferingWithOtherCuboid(player.getLocation())) {
+            player.sendMessage(MsgManager.get("guildtocloseothers"));
+            return false;
+        }
+
+        if (GenConf.FORBIDDEN_WORLDS.contains(player.getWorld().getName())) {
+            player.sendMessage(MsgManager.get("forbiddenworld"));
+            return false;
+        }
+
+        if (GenConf.CHECK_PLAYERS_TOO_CLOSE_WHEN_CREATING_GUILD && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE)) {
+            player.sendMessage(MsgManager.playerstooclose);
+            return false;
+        }
+        if (!guilds.hasEnoughItemsForGuild(player.getInventory())) {
+            player.sendMessage(MsgManager.get("notenoughitems"));
+            return false;
+        }
+        if (cuboids.isCuboidInterferingWithOtherCuboid(cuboid)) {
+            player.sendMessage(MsgManager.get("guildtocloseothers"));
+            return false;
+        }
+        return true;
     }
 
 

@@ -28,9 +28,6 @@ import pl.grzegorz2047.openguild.configuration.GenConf;
  */
 public class GenUtil {
 
-
-
-
     public static String argsToString(String args[], int minindex, int maxindex) {
         StringBuilder sb = new StringBuilder();
         for(int i = minindex; i < maxindex; i++) {
@@ -40,7 +37,7 @@ public class GenUtil {
         return sb.toString();
     }
 
-    public static boolean isPlayerNearby(Player p, int radius) {//Znaleziony kod
+    public static boolean isPlayerNearby(Player p, int radius) {
         Location l = p.getLocation();
         for(Player player : p.getLocation().getWorld().getPlayers()) {
             if(p.equals(player)) {
