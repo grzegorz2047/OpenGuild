@@ -17,6 +17,7 @@
 package pl.grzegorz2047.openguild.spawn;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.configuration.GenConf;
 
 public class SpawnChecker {
@@ -52,6 +53,10 @@ public class SpawnChecker {
             }
         }
         return false;
+    }
+
+    public static boolean cantDoItOnSpawn(Player player, Location playerLocation) {
+        return SpawnChecker.isSpawn(playerLocation) && !player.hasPermission("openguild.spawn.bypass");
     }
 
 }

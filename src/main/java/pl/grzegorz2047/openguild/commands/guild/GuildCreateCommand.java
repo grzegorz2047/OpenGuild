@@ -16,6 +16,7 @@
 
 package pl.grzegorz2047.openguild.commands.guild;
 
+import org.bukkit.Location;
 import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.commands.command.Command;
 import pl.grzegorz2047.openguild.commands.command.CommandException;
@@ -67,7 +68,7 @@ public class GuildCreateCommand extends Command {
         String description = GenUtil.argsToString(args, 2, args.length);
         Cuboid cuboid = cuboids.previewCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
 
-        if (!fufilledRequirements(args, player, tag, description, cuboid)) return;
+        if (!fufilledRequirements(player, tag, description, cuboid, args.length)) return;
 
 
         GuildCreateEvent event = invokeGuildCreateEvent(player, tag, description);
@@ -75,6 +76,7 @@ public class GuildCreateCommand extends Command {
             return;
         }
 
+        guilds.removeRequiredItemsForGuild(player.getInventory());
         Guild guild = insertGuildData(player, tag, description, cuboid);
 
         String guildCreatedMsg = MsgManager.get("broadcast-create").replace("{TAG}", tag.toUpperCase()).replace("{PLAYER}", player.getDisplayName());
@@ -89,7 +91,6 @@ public class GuildCreateCommand extends Command {
     }
 
     private Guild insertGuildData(Player player, String tag, String description, Cuboid cuboid) {
-        guilds.removeRequiredItemsForGuild(player.getInventory());
         cuboids.addCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
         Guild guild = guilds.addGuild(player.getLocation(), player.getUniqueId(), tag, description);
         guilds.updatePlayerMetadata(player.getUniqueId(), "guild", guild.getName());
@@ -106,10 +107,14 @@ public class GuildCreateCommand extends Command {
          - cuboids
          - call MessageBroadcastEvent
          */
+        addDataToDatabase(player, tag, description, cuboid, guild);
+        return guild;
+    }
+
+    private void addDataToDatabase(Player player, String tag, String description, Cuboid cuboid, Guild guild) {
         sqlHandler.insertGuild(tag, description, player.getUniqueId(), player.getLocation(), player.getLocation().getWorld().getName());
         sqlHandler.addGuildCuboid(cuboid.getCenter(), cuboid.getCuboidSize(), cuboid.getOwner(), cuboid.getWorldName());
         sqlHandler.updatePlayerTag(player.getUniqueId(), guild.getName());
-        return guild;
     }
 
     private GuildCreateEvent invokeGuildCreateEvent(Player player, String tag, String description) {
@@ -118,9 +123,10 @@ public class GuildCreateCommand extends Command {
         return event;
     }
 
-    private boolean fufilledRequirements(String[] args, Player player, String tag, String description, Cuboid cuboid) {
-        if (GenConf.FORCE_DESC) {
-            if (args.length < 3) {
+    private boolean fufilledRequirements(Player player, String tag, String description, Cuboid cuboid, int argsLength) {
+        Location playerLocation = player.getLocation();
+        if (isDescriptionForced()) {
+            if (!isDescriptionAdded(argsLength)) {
                 player.sendMessage(MsgManager.get("descrequired"));
                 return false;
             }
@@ -130,22 +136,22 @@ public class GuildCreateCommand extends Command {
             return false;
         }
         //Bukkit.broadcastMessage("Is on Spawn = " + SpawnChecker.isSpawn(player.getLocation()));
-        if (SpawnChecker.isSpawn(player.getLocation()) && !player.hasPermission("openguild.spawn.bypass")) {
+        if (SpawnChecker.cantDoItOnSpawn(player, playerLocation)) {
             player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
             return false;
         }
 
-        if (!tag.matches("[0-9a-zA-Z]*")) {
+        if (!hasLegalCharactersInTag(tag)) {
             player.sendMessage(MsgManager.unsupportedchars);
             return false;
         }
 
-        if (tag.length() > GenConf.maxclantag || tag.length() < GenConf.minclantag) {
+        if (!hasTagCorrectLength(tag)) {
             player.sendMessage(MsgManager.toolongshorttag);
             return false;
         }
 
-        if (GenConf.BAD_WORDS != null && GenConf.BAD_WORDS.contains(tag)) {
+        if (hasBadWords(tag)) {
             player.sendMessage(MsgManager.illegaltag);
             return false;
         }
@@ -155,22 +161,23 @@ public class GuildCreateCommand extends Command {
             return false;
         }
 
-        if (description.length() > 32) {
+        if (isDescriptionToLong(description)) {
             player.sendMessage(MsgManager.get("desctoolong"));
             return false;
         }
 
-        if (cuboids.isCuboidInterferingWithOtherCuboid(player.getLocation())) {
+        if (cuboids.isCuboidInterferingWithOtherCuboid(playerLocation)) {
             player.sendMessage(MsgManager.get("guildtocloseothers"));
             return false;
         }
 
-        if (GenConf.FORBIDDEN_WORLDS.contains(player.getWorld().getName())) {
+        String playerWorldName = player.getWorld().getName();
+        if (guilds.isPlayerInForbiddenWorld(playerWorldName)) {
             player.sendMessage(MsgManager.get("forbiddenworld"));
             return false;
         }
 
-        if (GenConf.CHECK_PLAYERS_TOO_CLOSE_WHEN_CREATING_GUILD && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE)) {
+        if (isOtherPlayerTooClose(player)) {
             player.sendMessage(MsgManager.playerstooclose);
             return false;
         }
@@ -183,6 +190,36 @@ public class GuildCreateCommand extends Command {
             return false;
         }
         return true;
+    }
+
+    private boolean isDescriptionForced() {
+        return GenConf.FORCE_DESC;
+    }
+
+    private boolean isOtherPlayerTooClose(Player player) {
+        return GenConf.CHECK_PLAYERS_TOO_CLOSE_WHEN_CREATING_GUILD && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE);
+    }
+
+
+    private boolean isDescriptionToLong(String description) {
+        return description.length() > 32;
+    }
+
+    private boolean hasBadWords(String tag) {
+        return GenConf.BAD_WORDS != null && GenConf.BAD_WORDS.contains(tag);
+    }
+
+    private boolean hasTagCorrectLength(String tag) {
+        return tag.length() <= GenConf.maxclantag && tag.length() >= GenConf.minclantag;
+    }
+
+    private boolean hasLegalCharactersInTag(String tag) {
+        return tag.matches("[0-9a-zA-Z]*");
+    }
+
+
+    private boolean isDescriptionAdded(int argsLength) {
+        return argsLength >= 3;
     }
 
 

@@ -385,6 +385,7 @@ public class Guilds {
             }
         }
     }
+
     public Inventory prepareItemGuidInventory(Inventory inventory) {
         int inventorySize = 9;
 
@@ -427,6 +428,7 @@ public class Guilds {
         }
         return itemsGUI.getInventory();
     }
+
     private int getAmount(ItemStack item, Inventory inventory) {
         int amount = 0;
 
@@ -438,6 +440,11 @@ public class Guilds {
 
         return amount;
     }
+
+    public boolean isPlayerInForbiddenWorld(String playerWorldName) {
+        return GenConf.FORBIDDEN_WORLDS.contains(playerWorldName);
+    }
+
 
     public int getRequiredItemsSize() {
         return requiredItemStacks.size();
