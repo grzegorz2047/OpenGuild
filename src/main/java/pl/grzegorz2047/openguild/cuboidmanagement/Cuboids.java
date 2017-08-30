@@ -102,7 +102,7 @@ public class Cuboids {
     public boolean isCuboidInterferingWithOtherCuboid(Cuboid potential) {
         for (Map.Entry<String, Cuboid> entry : cuboids.entrySet()) {
             Cuboid cuboid = entry.getValue();
-            Boolean withinCuboid = cuboid.isColliding(potential.getWorldName(), potential.getMin(), potential.getMax());
+            Boolean withinCuboid = cuboid.isColliding(potential.getWorldId(), potential.getMin(), potential.getMax());
             if (withinCuboid) return true;
         }
         return false;

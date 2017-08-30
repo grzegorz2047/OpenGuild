@@ -18,6 +18,8 @@ package pl.grzegorz2047.openguild.cuboidmanagement;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+import java.util.UUID;
+
 /**
  * @author Grzegorz
  */
@@ -66,8 +68,12 @@ public class Cuboid {
         return center.getWorld().getName();
     }
 
-    public boolean isColliding(String worldName, Location foreignMin, Location foreignMax) {
-        if (!worldName.equals(getWorldName())) {
+    public UUID getWorldId() {
+        return center.getWorld().getUID();
+    }
+
+    public boolean isColliding(UUID worldId, Location foreignMin, Location foreignMax) {
+        if (!worldId.equals(getWorldId())) {
             return false;
         }
 
