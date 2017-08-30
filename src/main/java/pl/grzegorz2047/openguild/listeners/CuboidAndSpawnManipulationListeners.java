@@ -105,7 +105,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
             }
             PlayerInventory inventory = player.getInventory();
             if (!hasSpecialBreakingitem(inventory)) {
-                player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+                player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonsomeonearea"));
                 e.setCancelled(true);
                 return true;
             }
@@ -219,7 +219,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
             return;
         }
         if (!cuboids.hasRightToThisLocation(player, playerGuildTag, e.getBlock().getLocation())) {
-            player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+            player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonsomeonearea"));
             e.setCancelled(true);
         }
     }
@@ -242,7 +242,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
             return;
         }
         if (!cuboids.hasRightToThisLocation(e.getPlayer(), playerGuildTag, e.getBlockClicked().getLocation())) {
-            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("cantdoitonsomeonearea"));
             e.setCancelled(true);
         }
     }
@@ -267,7 +267,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
             return;
         }
         if (!cuboids.hasRightToThisLocation(player, playerGuildTag, blockClicked.getLocation())) {
-            player.sendMessage(ChatColor.RED + MsgManager.cantdoitonsomeonearea);
+            player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonsomeonearea"));
             e.setCancelled(true);
         }
     }

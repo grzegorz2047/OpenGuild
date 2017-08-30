@@ -58,7 +58,7 @@ public class TeamCommand implements CommandExecutor {
 
         Player player = (Player) sender;
         if (!guilds.hasGuild(player)) {
-            player.sendMessage(MsgManager.notinguild);
+            player.sendMessage(MsgManager.get("notinguild"));
             return true;
         }
 

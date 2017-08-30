@@ -146,11 +146,7 @@ public class OpenGuild extends JavaPlugin {
     private void loadWatcherTask(Relations relations) {
         watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester, guilds, relations, tntGuildBlocker), 0, 20);
     }
-
-    private void loadDataFromDB(SQLHandler sqlHandler) {
-
-    }
-
+    
     private void loadDropFromBlocks(FileConfiguration config) {
         List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
         this.drop = new DropFromBlocks(loadedDrops);

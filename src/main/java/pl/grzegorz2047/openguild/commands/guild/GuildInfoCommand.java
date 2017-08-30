@@ -47,7 +47,7 @@ public class GuildInfoCommand extends Command {
             String guildToCheck = args[1].toUpperCase();
 
             if (!guilds.doesGuildExists(guildToCheck)) {
-                sender.sendMessage(MsgManager.guilddoesntexists);
+                sender.sendMessage(MsgManager.get("guilddoesntexists"));
                 return;
             }
 
@@ -58,7 +58,7 @@ public class GuildInfoCommand extends Command {
             sender.sendMessage(MsgManager.getIgnorePref("ginfomemlist").replace("{SIZE}", String.valueOf(guild.getMembers().size())).replace("{MEMBERS}", getMembers(guild.getMembers())));
         } else {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(MsgManager.cmdonlyforplayer);
+                sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
                 return;
             }
 

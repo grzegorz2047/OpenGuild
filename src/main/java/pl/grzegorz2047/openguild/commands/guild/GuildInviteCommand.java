@@ -74,7 +74,7 @@ public class GuildInviteCommand extends Command {
         }
 
         if (guilds.hasGuild(event.getInvite())) {
-            player.sendMessage(MsgManager.playerhasguild);
+            player.sendMessage(MsgManager.get("playerhasguild"));
             return;
         }
 

@@ -142,17 +142,17 @@ public class GuildCreateCommand extends Command {
         }
 
         if (!hasLegalCharactersInTag(tag)) {
-            player.sendMessage(MsgManager.unsupportedchars);
+            player.sendMessage(MsgManager.get("unsupportedchars"));
             return false;
         }
 
         if (!hasTagCorrectLength(tag)) {
-            player.sendMessage(MsgManager.toolongshorttag);
+            player.sendMessage(MsgManager.get("toolongshorttag"));
             return false;
         }
 
         if (hasBadWords(tag)) {
-            player.sendMessage(MsgManager.illegaltag);
+            player.sendMessage(MsgManager.get("illegaltag"));
             return false;
         }
 
@@ -178,7 +178,7 @@ public class GuildCreateCommand extends Command {
         }
 
         if (isOtherPlayerTooClose(player)) {
-            player.sendMessage(MsgManager.playerstooclose);
+            player.sendMessage(MsgManager.get("playerstooclose"));
             return false;
         }
         if (!guilds.hasEnoughItemsForGuild(player.getInventory())) {

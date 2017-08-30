@@ -53,10 +53,9 @@ public class GuildHomeCommand extends Command {
             return;
         }
 
-
         final Player player = (Player) sender;
         if (!guilds.hasGuild(player)) {
-            player.sendMessage(MsgManager.notinguild);
+            player.sendMessage(MsgManager.get("notinguild"));
             return;
         }
 
@@ -69,7 +68,7 @@ public class GuildHomeCommand extends Command {
         }
 
         teleporter.addRequest(player.getUniqueId(), player.getLocation(), guild.getHome(), GenConf.TELEPORT_COOLDOWN);
-        player.sendMessage(ChatColor.GRAY + MsgManager.timetotpnotify.replace("{GUILD}", guild.getName().toUpperCase()).replace("{HOMETPSECONDS}", String.valueOf(GenConf.TELEPORT_COOLDOWN)));
+        player.sendMessage(ChatColor.GRAY + MsgManager.get("timetotpnotify").replace("{GUILD}", guild.getName().toUpperCase()).replace("{HOMETPSECONDS}", String.valueOf(GenConf.TELEPORT_COOLDOWN)));
 
     }
 

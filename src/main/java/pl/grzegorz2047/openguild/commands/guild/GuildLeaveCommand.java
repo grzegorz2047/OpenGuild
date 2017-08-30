@@ -51,14 +51,14 @@ public class GuildLeaveCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MsgManager.cmdonlyforplayer);
+            sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
 
 
         Player player = (Player) sender;
         if (!guilds.hasGuild(player)) {
-            player.sendMessage(MsgManager.notinguild);
+            player.sendMessage(MsgManager.get("notinguild"));
             return;
         }
 
@@ -84,7 +84,7 @@ public class GuildLeaveCommand extends Command {
         }
         tagManager.playerLeaveGuild(player, guild);
         sqlHandler.updatePlayerTag(player.getUniqueId(), "");
-        player.sendMessage(MsgManager.leaveguildsuccess);
+        player.sendMessage(MsgManager.get("leaveguildsuccess"));
     }
 
     @Override

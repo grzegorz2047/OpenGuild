@@ -52,7 +52,7 @@ public class GuildAllyCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MsgManager.cmdonlyforplayer);
+            sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
         Player player = (Player) sender;

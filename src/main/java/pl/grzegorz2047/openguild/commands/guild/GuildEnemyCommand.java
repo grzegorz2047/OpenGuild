@@ -49,7 +49,7 @@ public class GuildEnemyCommand extends Command {
 
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MsgManager.cmdonlyforplayer);
+            sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
         Player player = (Player) sender;

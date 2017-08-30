@@ -51,27 +51,26 @@ public class GuildKickCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MsgManager.cmdonlyforplayer);
+            sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
 
-
         Player player = (Player) sender;
         if (!guilds.hasGuild(player)) {
-            sender.sendMessage(MsgManager.notinguild);
+            sender.sendMessage(MsgManager.get("notinguild"));
             return;
         }
 
         Guild guild = guilds.getPlayerGuild(player.getUniqueId());
         if (!guild.getLeader().equals(player.getUniqueId())) {
-            sender.sendMessage(MsgManager.playernotleader);
+            sender.sendMessage(MsgManager.get("playernotleader"));
             return;
         }
 
         String toKick = args[1];
         OfflinePlayer op = Bukkit.getOfflinePlayer(toKick);
         if (!guild.getMembers().contains(op.getUniqueId())) {
-            sender.sendMessage(MsgManager.playernotinthisguild);
+            sender.sendMessage(MsgManager.get("playernotinthisguild"));
             return;
         }
         if (guild.getLeader().equals(op.getUniqueId())) {
@@ -90,7 +89,7 @@ public class GuildKickCommand extends Command {
 
         guilds.updatePlayerMetadata(op.getUniqueId(), "guild", "");
         if (op.isOnline()) {
-            op.getPlayer().sendMessage(MsgManager.playerkicked.replace("{GUILD}", guild.getName()));
+            op.getPlayer().sendMessage(MsgManager.get("playerkicked").replace("{GUILD}", guild.getName()));
             tagManager.playerLeaveGuild(((Player) op), guild);
         }
 
@@ -103,7 +102,7 @@ public class GuildKickCommand extends Command {
 
         sqlHandler.updatePlayerTag(op.getUniqueId(), "");
         tagManager.playerLeaveGuild(player, guild);
-        player.sendMessage(MsgManager.playerkicksuccess);
+        player.sendMessage(MsgManager.get("playerkicksuccess"));
     }
 
     @Override
