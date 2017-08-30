@@ -65,7 +65,7 @@ public class Cuboids {
     }
 
 
-    private boolean isTheSame(String guildscuboidtag, String guildOnList) {
+    private boolean isTheSame(UUID guildscuboidtag, UUID guildOnList) {
         return guildOnList.equals(guildscuboidtag);
     }
 
@@ -113,7 +113,7 @@ public class Cuboids {
     }
 
     private Boolean checkIfLocationWithinCuboid(Cuboid c, Location loc1, Location loc) {
-        return isTheSame(loc1.getWorld().getName(), loc.getWorld().getName()) && c.isinCuboid(loc);
+        return isTheSame(loc1.getWorld().getUID(), loc.getWorld().getUID()) && c.isinCuboid(loc);
     }
 
 
