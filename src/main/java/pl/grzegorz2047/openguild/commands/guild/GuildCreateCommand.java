@@ -34,6 +34,7 @@ import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.managers.TagManager;
+import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
 import pl.grzegorz2047.openguild.spawn.SpawnChecker;
 import pl.grzegorz2047.openguild.utils.GenUtil;
 
@@ -93,7 +94,7 @@ public class GuildCreateCommand extends Command {
     private Guild insertGuildData(Player player, String tag, String description, Cuboid cuboid) {
         cuboids.addCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
         Guild guild = guilds.addGuild(player.getLocation(), player.getUniqueId(), tag, description);
-        guilds.updatePlayerMetadata(player.getUniqueId(), "guild", guild.getName());
+        guilds.updatePlayerMetadata(player.getUniqueId(), PlayerMetadataController.PlayerMetaDataColumn.GUILD.name(), guild.getName());
         guilds.addOnlineGuild(guild.getName());
 
         if (GenConf.PLAYER_GUILD_TAGS_ENABLED) {

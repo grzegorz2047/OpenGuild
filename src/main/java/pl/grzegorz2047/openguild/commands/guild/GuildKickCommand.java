@@ -30,6 +30,7 @@ import pl.grzegorz2047.openguild.events.guild.GuildKickEvent;
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.managers.TagManager;
+import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
 
 /**
  * Command used to kick player out of players' guild.
@@ -87,7 +88,7 @@ public class GuildKickCommand extends Command {
 
         guild.removeMember(op.getUniqueId());
 
-        guilds.updatePlayerMetadata(op.getUniqueId(), "guild", "");
+        guilds.updatePlayerMetadata(op.getUniqueId(), PlayerMetadataController.PlayerMetaDataColumn.GUILD.name(), "");
         if (op.isOnline()) {
             op.getPlayer().sendMessage(MsgManager.get("playerkicked").replace("{GUILD}", guild.getName()));
             tagManager.playerLeaveGuild(((Player) op), guild);

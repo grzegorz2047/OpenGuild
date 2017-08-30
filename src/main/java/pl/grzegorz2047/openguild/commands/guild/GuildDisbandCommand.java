@@ -22,6 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.guilds.Guild;
+import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
 import pl.grzegorz2047.openguild.relations.Relation;
 import pl.grzegorz2047.openguild.commands.command.Command;
 import pl.grzegorz2047.openguild.commands.command.CommandException;
@@ -91,7 +92,7 @@ public class GuildDisbandCommand extends Command {
 
             }
             for (UUID uuid : guild.getMembers()) {
-                guilds.updatePlayerMetadata(uuid, "guild", "");
+                guilds.updatePlayerMetadata(uuid, PlayerMetadataController.PlayerMetaDataColumn.GUILD.name(), "");
             }
 
             cuboids.removeGuildCuboid(guild.getName());

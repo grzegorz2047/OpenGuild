@@ -30,6 +30,7 @@ import pl.grzegorz2047.openguild.events.guild.GuildLeaveEvent;
 import org.bukkit.Bukkit;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.managers.TagManager;
+import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
 
 /**
  * Command used by players to leave current guild.
@@ -75,7 +76,7 @@ public class GuildLeaveCommand extends Command {
         }
 
         guild.removeMember(player.getUniqueId());
-        guilds.updatePlayerMetadata(player.getUniqueId(), "guild", "");
+        guilds.updatePlayerMetadata(player.getUniqueId(), PlayerMetadataController.PlayerMetaDataColumn.GUILD.name(), "");
         for (UUID member : guild.getMembers()) {
             OfflinePlayer opp = Bukkit.getOfflinePlayer(member);
             if (opp.isOnline()) {
