@@ -28,17 +28,18 @@ import pl.grzegorz2047.openguild.commands.TpaCommand;
 import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.database.SQLHandler;
+import pl.grzegorz2047.openguild.database.TempPlayerData;
 import pl.grzegorz2047.openguild.dropstone.DropConfigLoader;
 import pl.grzegorz2047.openguild.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild.dropstone.DropProperties;
 import pl.grzegorz2047.openguild.files.FileValidator;
 import pl.grzegorz2047.openguild.guilds.Guilds;
-import pl.grzegorz2047.openguild.listeners.CuboidAndSpawnManipulationListeners;
-import pl.grzegorz2047.openguild.listeners.ListenerLoader;
+import pl.grzegorz2047.openguild.listeners.*;
 import pl.grzegorz2047.openguild.managers.TagManager;
 import pl.grzegorz2047.openguild.hardcore.HardcoreHandler;
 import pl.grzegorz2047.openguild.hardcore.HardcoreSQLHandler;
 import pl.grzegorz2047.openguild.randomtp.RandomTPHandler;
+import pl.grzegorz2047.openguild.ranking.EloRanking;
 import pl.grzegorz2047.openguild.relations.Relations;
 import pl.grzegorz2047.openguild.spawn.ModuleSpawn;
 import pl.grzegorz2047.openguild.tasks.Watcher;
@@ -210,9 +211,29 @@ public class OpenGuild extends JavaPlugin {
      */
     private void loadAllListeners(SQLHandler sqlHandler) {
         PluginManager pm = getServer().getPluginManager();
-        ListenerLoader listenerLoader = new ListenerLoader
-                (this, guilds, tagManager, sqlHandler, teleporter, tpaRequester, cuboids, logout, drop, tntGuildBlocker, updater);
-        listenerLoader.loadListeners(pm);
+        TempPlayerData tempPlayerData = new TempPlayerData();
+        pm.registerEvents(new PlayerJoinListener(guilds, tagManager, sqlHandler, tempPlayerData, updater), this);
+        pm.registerEvents(new PlayerChatListener(guilds), this);
+        pm.registerEvents(new PlayerDeathListener(sqlHandler, logout, guilds), this);
+        pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester, guilds), this);
+        pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester, tempPlayerData), this);
+        pm.registerEvents(new PlayerCacheListenersController(tempPlayerData, sqlHandler), this);
+        if (GenConf.BLOCK_STRENGTH_2) {
+            pm.registerEvents(new EnchantInsertListener(), this);
+        }
+
+        if (GenConf.CUBOID_ENABLED) {
+            pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop, guilds), this);
+        }
+
+        pm.registerEvents(new EntityDamageByEntityListener(logout, guilds), this);
+
+        if (GenConf.ENABLED_PLAYER_MOVE_EVENT) {
+            pm.registerEvents(new PlayerMoveListener(guilds, cuboids), this);
+        }
+        if (GenConf.TNT_PLACE_BLOCK_CUBOID_ENABLED) {
+            pm.registerEvents(new TNTExplode(guilds, drop, tntGuildBlocker), this);
+        }
     }
 
     /**

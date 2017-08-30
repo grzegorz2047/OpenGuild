@@ -20,8 +20,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import pl.grzegorz2047.openguild.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild.database.SQLHandler;
+import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.metada.PlayerMetadataController;
 import pl.grzegorz2047.openguild.ranking.EloRanking;
@@ -34,12 +36,12 @@ public class PlayerDeathListener implements Listener {
 
     private final SQLHandler sqlHandler;
     private final AntiLogoutManager antiLogoutManager;
-    private final EloRanking eloRanking;
+    private final Guilds guilds;
 
-    public PlayerDeathListener(SQLHandler sqlHandler, AntiLogoutManager antiLogoutManager, EloRanking eloRanking) {
+    public PlayerDeathListener(SQLHandler sqlHandler, AntiLogoutManager antiLogoutManager, Guilds guilds) {
         this.sqlHandler = sqlHandler;
         this.antiLogoutManager = antiLogoutManager;
-        this.eloRanking = eloRanking;
+        this.guilds = guilds;
     }
 
     @EventHandler
@@ -50,7 +52,7 @@ public class PlayerDeathListener implements Listener {
             sqlHandler.addDeath(lost);
             sqlHandler.addKill(killer);
             antiLogoutManager.removePlayerFromFight(killer.getName());
-            RankDifference rankDifference = eloRanking.recountEloFight(killer, lost, lost.getMetadata(PlayerMetadataController.PlayerMetaDataColumn.ELO.name()).get(0).asInt(), killer.getMetadata(PlayerMetadataController.PlayerMetaDataColumn.ELO.name()).get(0).asInt());
+            RankDifference rankDifference = EloRanking.recountEloFight(lost.getMetadata(PlayerMetadataController.PlayerMetaDataColumn.ELO.name()).get(0).asInt(), killer.getMetadata(PlayerMetadataController.PlayerMetaDataColumn.ELO.name()).get(0).asInt());
             Bukkit.broadcastMessage(MsgManager.get("killerkilledvictim").
                     replace("{VICTIM}", lost.getName()).
                     replace("{KILLER}", killer.getName()).
@@ -58,6 +60,8 @@ public class PlayerDeathListener implements Listener {
                     replace("{KILLEREARN}", -rankDifference.getWinDifference() + ""));
 
             sqlHandler.updatePlayersElo(killer.getUniqueId(), (int) rankDifference.getWinNewPoints(), lost.getUniqueId(), (int) rankDifference.getLostNewPoints());
+            guilds.updatePlayerMetadata(killer.getUniqueId(), PlayerMetadataController.PlayerMetaDataColumn.ELO.name(), rankDifference.getWinNewPoints());
+            guilds.updatePlayerMetadata(lost.getUniqueId(), PlayerMetadataController.PlayerMetaDataColumn.ELO.name(), rankDifference.getLostNewPoints());
             //set last kill to winner w metadata i potem jak zginie ten sam nie nalicza elo
         }
         antiLogoutManager.removePlayerFromFight(lost.getName());

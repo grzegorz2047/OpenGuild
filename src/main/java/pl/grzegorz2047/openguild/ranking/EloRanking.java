@@ -13,15 +13,13 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 public class EloRanking {
 
     private final Plugin plugin;
-    private final SQLHandler sqlHandler;
 /*
     private LinkedHashMap<String, Integer> userRank = new LinkedHashMap<>();
     private LinkedHashMap<String, Integer> guildRank = new LinkedHashMap<>();
 */
 
 
-    public EloRanking(Plugin plugin, SQLHandler sqlHandler) {
-        this.sqlHandler = sqlHandler;
+    public EloRanking(Plugin plugin ) {
         this.plugin = plugin;
     }
 /*
@@ -107,7 +105,7 @@ public class EloRanking {
 
 
      */
-    public RankDifference recountEloFight(Player winner, Player lost, int lOldPoints, int wOldPoints) {
+    public static RankDifference recountEloFight(int lOldPoints, int wOldPoints) {
         int wKFactor = getKFactor(wOldPoints);
 
         //int lKFactor = getKFactor(lOldPoints);
@@ -128,8 +126,7 @@ public class EloRanking {
         //Bukkit.broadcastMessage("Nowe punkty z " + wOldPoints + " na " + wNewPoints);
         //Bukkit.broadcastMessage("Nowe punkty z " + lOldPoints + " na " + lNewPoints);
 
-        winner.setMetadata("elo", new FixedMetadataValue(plugin, (int) wNewPoints));
-        lost.setMetadata("elo", new FixedMetadataValue(plugin, (int) lNewPoints));
+
 
         int winDifference = (int) (wOldPoints - wNewPoints);
         int lostDifference = (int) (lOldPoints - lNewPoints);
@@ -138,7 +135,7 @@ public class EloRanking {
     }
 
 
-    private int getKFactor(int wOldPoints) {
+    private static int getKFactor(int wOldPoints) {
         int wKFactor = 40;
         if (wOldPoints < 1000) {
             wKFactor = 40;
