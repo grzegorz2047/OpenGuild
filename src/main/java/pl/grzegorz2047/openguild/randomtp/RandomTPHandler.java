@@ -65,6 +65,7 @@ public final class RandomTPHandler {
         try {
             location = findSaveSpot(player);
             player.teleport(location);
+            player.sendMessage(MsgManager.get("rantp"));
         } catch (Exception e) {
             player.sendMessage(MsgManager.get("nosafertp"));
         }
@@ -82,7 +83,6 @@ public final class RandomTPHandler {
                 z = z - (2 * z);
             Location randomisedLocation = new Location(world, x, 64, z);
             Location highestRandomisedLocation = world.getHighestBlockAt(randomisedLocation).getLocation();
-            player.sendMessage(MsgManager.get("rantp"));
 
             if (!unsafeMaterials.contains(highestRandomisedLocation.getBlock().getType())) {
                 return highestRandomisedLocation;
