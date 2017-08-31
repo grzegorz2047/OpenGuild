@@ -83,8 +83,10 @@ public final class RandomTPHandler {
                 z = z - (2 * z);
             Location randomisedLocation = new Location(world, x, 64, z);
             Location highestRandomisedLocation = world.getHighestBlockAt(randomisedLocation).getLocation();
+            Location highestMinusOneRandomisedLocation = world.getHighestBlockAt(randomisedLocation).getLocation();
+            highestMinusOneRandomisedLocation.setY(highestMinusOneRandomisedLocation.getY() - 1);
 
-            if (!unsafeMaterials.contains(highestRandomisedLocation.getBlock().getType())) {
+            if (!unsafeMaterials.contains(highestRandomisedLocation.getBlock().getType()) && !unsafeMaterials.contains(highestMinusOneRandomisedLocation.getBlock().getType())) {
                 return highestRandomisedLocation;
             }
         }
