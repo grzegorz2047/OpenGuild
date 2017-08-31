@@ -42,6 +42,7 @@ public class GuildRandomTPCommand extends Command {
                     throw new CommandException("Player \"" + target + "\" is not online");
                 } else {
                     randomTPHandler.teleport(Bukkit.getPlayer(target));
+                    return;
                 }
             } else {
                 throw new PermException();

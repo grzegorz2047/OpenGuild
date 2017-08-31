@@ -66,7 +66,7 @@ public final class RandomTPHandler {
             location = findSaveSpot(player);
             player.teleport(location);
             player.sendMessage(MsgManager.get("rantp"));
-        } catch (Exception e) {
+         } catch (Exception e) {
             player.sendMessage(MsgManager.get("nosafertp"));
         }
     }

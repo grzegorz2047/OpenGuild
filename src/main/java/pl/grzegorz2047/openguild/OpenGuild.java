@@ -119,8 +119,7 @@ public class OpenGuild extends JavaPlugin {
         hardcoreHandler.loadBans(mainConfig.getBoolean("hardcore-bans.enabled"), mainConfig.getString("hardcore-bans.kick-message").replace("&", "§"), mainConfig.getString("hardcore-bans.login-message").replace("&", "§"), mainConfig.getString("hardcore-bans.ban-time"));
 
 
-        RandomTPHandler randomTPHandler = new RandomTPHandler();
-        randomTPHandler.enable(this);
+
 
         ModuleSpawn moduleSpawn = new ModuleSpawn();
         moduleSpawn.enable(this);
