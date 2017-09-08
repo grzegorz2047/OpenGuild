@@ -76,7 +76,6 @@ public class Cuboid {
         if (!worldId.equals(getWorldId())) {
             return false;
         }
-
         int localMinX = Math.min(this.min.getBlockX(), max.getBlockX());
         int localMaxX = Math.max(this.min.getBlockX(), max.getBlockX());
         int localMinZ = Math.min(this.min.getBlockZ(), this.max.getBlockZ());

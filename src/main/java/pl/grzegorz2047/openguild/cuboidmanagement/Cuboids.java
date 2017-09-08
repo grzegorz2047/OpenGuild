@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 /**
  * @author Grzegorz
  */
+
 public class Cuboids {
     private Map<String, Cuboid> cuboids = new HashMap<>();
     public HashMap<String, String> playersenteredcuboid = new HashMap<>();
