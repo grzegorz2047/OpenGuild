@@ -30,9 +30,11 @@ public class Cuboid {
     private Location min;
     private Location max;
     private int cuboidSize;
+    private UUID uid;
 
-    public Cuboid(Location center, String owner, int size) {
+    public Cuboid(Location center, String owner, int size, UUID uid) {
         this.center = center;
+        this.uid = uid;
         this.owner = owner;
         this.cuboidSize = size;
         this.min = new Location(center.getWorld(), center.getBlockX() - size, Integer.MIN_VALUE, center.getBlockZ() - size);
@@ -69,14 +71,18 @@ public class Cuboid {
     }
 
     public UUID getWorldId() {
-        return center.getWorld().getUID();
+        return uid;
     }
 
     public boolean isColliding(UUID worldId, Location foreignMin, Location foreignMax) {
         if (!worldId.equals(getWorldId())) {
             return false;
         }
-        int localMinX = Math.min(this.min.getBlockX(), max.getBlockX());
+        boolean isInMinMaxMin = this.min.toVector().isInAABB(foreignMin.toVector(), foreignMax.toVector());
+        boolean isInMinMaxMax = this.max.toVector().isInAABB(foreignMin.toVector(), foreignMax.toVector());
+        //System.out.println("min is " + isInMinMaxMin + " max is " + isInMinMaxMax);
+        return isInMinMaxMin || isInMinMaxMax;
+        /* int localMinX = Math.min(this.min.getBlockX(), max.getBlockX());
         int localMaxX = Math.max(this.min.getBlockX(), max.getBlockX());
         int localMinZ = Math.min(this.min.getBlockZ(), this.max.getBlockZ());
         int localMaxZ = Math.max(this.min.getBlockZ(), this.max.getBlockZ());
@@ -86,7 +92,7 @@ public class Cuboid {
         int foreignMinZ = Math.min(foreignMin.getBlockZ(), foreignMax.getBlockZ());
         int foreignMaxZ = Math.max(foreignMin.getBlockZ(), foreignMax.getBlockZ());
 
-        return (foreignMinX > localMinX && foreignMaxX < localMaxX) && (foreignMinZ > localMinZ && foreignMaxZ < localMaxZ);
+        return (foreignMinX > localMinX && foreignMaxX < localMaxX) && (foreignMinZ > localMinZ && foreignMaxZ < localMaxZ);*/
     }
 
 }

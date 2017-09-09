@@ -31,11 +31,11 @@ public class Cuboids {
     public HashMap<String, String> playersenteredcuboid = new HashMap<>();
 
     public Cuboid previewCuboid(Location home, String tag, int size) {
-        return new Cuboid(home, tag, size);
+        return new Cuboid(home, tag, size, home.getWorld().getUID());
     }
 
     public void addCuboid(Location home, String tag, int size) {
-        Cuboid cuboid = new Cuboid(home, tag, size);
+        Cuboid cuboid = new Cuboid(home, tag, size, home.getWorld().getUID());
         cuboids.put(tag, cuboid);
     }
 
