@@ -17,6 +17,7 @@
 package pl.grzegorz2047.openguild.managers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.configuration.GenConf;
@@ -32,10 +33,16 @@ public class TagManager {
 
 
     private final Guilds guilds;
+    private final String ENEMY_GUILD_TAG_FORMAT;
+    private final String ALLY_GUILD_TAG_FORMAT;
+    private final String OWN_GUILD_TAG_FORMAT;
     private ScoreboardPackets scoreboardPackets = new ScoreboardPackets();
 
-    public TagManager(Guilds guilds) {
+    public TagManager(Guilds guilds, FileConfiguration config) {
         this.guilds = guilds;
+        ENEMY_GUILD_TAG_FORMAT = config.getString("tags.enemy", "{TAG}").replace("&", "§");
+        ALLY_GUILD_TAG_FORMAT = config.getString("tags.ally", "{TAG}").replace("&", "§");
+        OWN_GUILD_TAG_FORMAT = config.getString("tags.guild", "{TAG}").replace("&", "§");
     }
 
     public void playerDisbandGuild(Guild guild) {
@@ -60,10 +67,10 @@ public class TagManager {
             if (r.getBaseGuildTag().equals(secondGuild.getName()) || r.getAlliedGuildTag().equals(secondGuild.getName())) {//Trzeba to odzielic jakos na 2 przypadki (else if) zamiast ||
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (firstGuild.getMembers().contains(p.getUniqueId())) {
-                        scoreboardPackets.sendUpdateTeamTag(p, secondGuild, GenConf.ENEMY_GUILD_TAG_FORMAT);
+                        scoreboardPackets.sendUpdateTeamTag(p, secondGuild, ENEMY_GUILD_TAG_FORMAT);
                     }
                     if (secondGuild.getMembers().contains(p.getUniqueId())) {
-                        scoreboardPackets.sendUpdateTeamTag(p, firstGuild, GenConf.ENEMY_GUILD_TAG_FORMAT);
+                        scoreboardPackets.sendUpdateTeamTag(p, firstGuild, ENEMY_GUILD_TAG_FORMAT);
                     }
                 }
             }
@@ -80,10 +87,10 @@ public class TagManager {
         Guild withWhoGuild = guilds.getGuild(withwho);
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (whoGuild.getMembers().contains(p.getUniqueId())) {
-                scoreboardPackets.sendUpdateTeamTag(p, withWhoGuild, GenConf.ALLY_GUILD_TAG_FORMAT);
+                scoreboardPackets.sendUpdateTeamTag(p, withWhoGuild, ALLY_GUILD_TAG_FORMAT);
             }
             if (withWhoGuild.getMembers().contains(p.getUniqueId())) {
-                scoreboardPackets.sendUpdateTeamTag(p, whoGuild, GenConf.ALLY_GUILD_TAG_FORMAT);
+                scoreboardPackets.sendUpdateTeamTag(p, whoGuild, ALLY_GUILD_TAG_FORMAT);
             }
         }
     }
@@ -94,9 +101,9 @@ public class TagManager {
             if (guild.getMembers().contains(p.getUniqueId())) {
                 scoreboardPackets.sendUpdateTeamTag(p, guild, GenConf.OWN_GUILD_TAG_FORMAT);
             } else {
-                scoreboardPackets.sendUpdateTeamTag(p, guild, GenConf.ENEMY_GUILD_TAG_FORMAT);
+                scoreboardPackets.sendUpdateTeamTag(p, guild, ENEMY_GUILD_TAG_FORMAT);
                 for (Guild ally : guilds.getAllyGuilds(guild)) {
-                    updateTagsForGuildRelations(guild, ally, GenConf.ALLY_GUILD_TAG_FORMAT);
+                    updateTagsForGuildRelations(guild, ally, ALLY_GUILD_TAG_FORMAT);
                 }
             }
         }
@@ -106,10 +113,10 @@ public class TagManager {
         scoreboardPackets.sendDeleteTeamTag(joiner, guild.getName());
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (guild.getMembers().contains(p.getUniqueId())) {
-                scoreboardPackets.sendUpdateTeamTag(p, guild, GenConf.OWN_GUILD_TAG_FORMAT);
+                scoreboardPackets.sendUpdateTeamTag(p, guild, OWN_GUILD_TAG_FORMAT);
             } else {
                 for (Guild ally : guilds.getAllyGuilds(guild)) {
-                    updateTagsForGuildRelations(guild, ally, GenConf.ALLY_GUILD_TAG_FORMAT);
+                    updateTagsForGuildRelations(guild, ally, ALLY_GUILD_TAG_FORMAT);
                 }
             }
         }
@@ -117,14 +124,14 @@ public class TagManager {
 
 
     public void playerCreatedGuild(Guild g, Player player) {
-        scoreboardPackets.sendCreateTeamTag(player, g, GenConf.OWN_GUILD_TAG_FORMAT);
+        scoreboardPackets.sendCreateTeamTag(player, g, OWN_GUILD_TAG_FORMAT);
         //System.out.println("Liczba obiektow team "+this.getGlobalScoreboard().getTeams().size());
-        //String enemyTagTemplate = GenConf.ENEMY_GUILD_TAG_FORMAT;
+        //String enemyTagTemplate = ENEMY_GUILD_TAG_FORMAT;
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (g.getMembers().contains(p.getUniqueId())) {
                 continue;
             }
-            scoreboardPackets.sendCreateTeamTag(p, g, GenConf.ENEMY_GUILD_TAG_FORMAT);
+            scoreboardPackets.sendCreateTeamTag(p, g, ENEMY_GUILD_TAG_FORMAT);
         }
     }
 
@@ -139,19 +146,19 @@ public class TagManager {
             if (playerGuild != null) {
                 if (g.equals(playerGuild)) {
                     scoreboardPackets
-                            .sendCreateTeamTag(p, g, GenConf.OWN_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
+                            .sendCreateTeamTag(p, g, OWN_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
                 }
                 if (playerGuild.isAlly(g)) {
                     scoreboardPackets
-                            .sendCreateTeamTag(p, g, GenConf.ALLY_GUILD_TAG_FORMAT);
+                            .sendCreateTeamTag(p, g, ALLY_GUILD_TAG_FORMAT);
                 } else {
                     scoreboardPackets
-                            .sendCreateTeamTag(p, g, GenConf.ENEMY_GUILD_TAG_FORMAT);
+                            .sendCreateTeamTag(p, g, ENEMY_GUILD_TAG_FORMAT);
                 }
             } else {
                 System.out.println("Gosciu " + p.getName() + " nie ma gildii");
                 scoreboardPackets
-                        .sendCreateTeamTag(p, g, GenConf.ENEMY_GUILD_TAG_FORMAT);
+                        .sendCreateTeamTag(p, g, ENEMY_GUILD_TAG_FORMAT);
             }
         }
     }
@@ -164,24 +171,24 @@ public class TagManager {
             Guild playerGuild = guilds.getPlayerGuild(p.getUniqueId());
             if (playerGuild == null) {
                 scoreboardPackets
-                        .sendCreateTeamTag(p, g, GenConf.ENEMY_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
+                        .sendCreateTeamTag(p, g, ENEMY_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
                 continue;
             }
             if (!guilds.isGuildOnline(g.getName())) {
                 OpenGuild.getOGLogger().debug("Przechodze przez gildie " + playerGuild.getName());
                 if (g.isAlly(playerGuild)) {
                     scoreboardPackets
-                            .sendCreateTeamTag(p, g, GenConf.ALLY_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
-                    scoreboardPackets.sendUpdateTeamTag(p, g, GenConf.ALLY_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
+                            .sendCreateTeamTag(p, g, ALLY_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
+                    scoreboardPackets.sendUpdateTeamTag(p, g, ALLY_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
                 } else {
                     scoreboardPackets
-                            .sendCreateTeamTag(p, g, GenConf.ENEMY_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
-                    scoreboardPackets.sendUpdateTeamTag(p, g, GenConf.ENEMY_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
+                            .sendCreateTeamTag(p, g, ENEMY_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
+                    scoreboardPackets.sendUpdateTeamTag(p, g, ENEMY_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
                 }
             } else {
                 if (g.equals(playerGuild)) {
                     OpenGuild.getOGLogger().debug("Odswieza team u gracza ze swojej gildii");
-                    scoreboardPackets.sendUpdateTeamTag(p, g, GenConf.OWN_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
+                    scoreboardPackets.sendUpdateTeamTag(p, g, OWN_GUILD_TAG_FORMAT.replace("%GUILD%", g.getName()));
                 }
             }
         }

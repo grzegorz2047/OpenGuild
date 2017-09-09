@@ -53,6 +53,8 @@ public class GuildCreateCommand extends Command {
     private final SQLHandler sqlHandler;
     private final TagManager tagManager;
     private final boolean blockGuildCreationWhenPlayersTooClose;
+    private final int maxclantag = 6;
+    private final int minclantag = 4;
 
     public GuildCreateCommand(Cuboids cuboids, Guilds guilds, SQLHandler sqlHandler, TagManager tagManager, FileConfiguration config) {
         setPermission("openguild.command.create");
@@ -221,7 +223,7 @@ public class GuildCreateCommand extends Command {
     }
 
     private boolean hasTagCorrectLength(String tag) {
-        return tag.length() <= GenConf.maxclantag && tag.length() >= GenConf.minclantag;
+        return tag.length() <= maxclantag && tag.length() >= minclantag;
     }
 
     private boolean hasLegalCharactersInTag(String tag) {

@@ -71,7 +71,7 @@ public class OpenGuild extends JavaPlugin {
     private TpaRequester tpaRequester;
     private DropFromBlocks drop;
     private TntGuildBlocker tntGuildBlocker;
-    private Updater updater = new Updater();
+    private Updater updater = new Updater(getConfig());
 
     /**
      * Instance of built-in permissions manager main class.
@@ -109,7 +109,7 @@ public class OpenGuild extends JavaPlugin {
 
         this.logout = new AntiLogoutManager();
         // Setup Tag Manager
-        this.tagManager = new TagManager(guilds);
+        this.tagManager = new TagManager(guilds, getConfig());
         teleporter = new Teleporter();
         tpaRequester = new TpaRequester();
         tntGuildBlocker = new TntGuildBlocker();
@@ -143,7 +143,7 @@ public class OpenGuild extends JavaPlugin {
     }
 
     private void loadWatcherTask(Relations relations) {
-        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester, guilds, relations, tntGuildBlocker), 0, 20);
+        watcher = Bukkit.getScheduler().runTaskTimer(this, new Watcher(logout, teleporter, tpaRequester, guilds, relations, tntGuildBlocker, getConfig()), 0, 20);
     }
 
     private void loadDropFromBlocks(FileConfiguration config) {

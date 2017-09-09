@@ -1,7 +1,9 @@
 package pl.grzegorz2047.openguild.tasks;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.guilds.Guilds;
+import pl.grzegorz2047.openguild.listeners.EntityDamageByEntityListener;
 import pl.grzegorz2047.openguild.listeners.TNTExplode;
 import pl.grzegorz2047.openguild.relations.Relations;
 import pl.grzegorz2047.openguild.teleporters.Teleporter;
@@ -22,14 +24,16 @@ public class Watcher implements Runnable {
     private final TntGuildBlocker tntGuildBlocker;
 
     private int seconds;
+    private boolean tpaEnabled;
 
-    public Watcher(AntiLogoutManager logout, Teleporter teleporter, TpaRequester tpaRequester, Guilds guilds, Relations relations, TntGuildBlocker tntGuildBlocker) {
+    public Watcher(AntiLogoutManager logout, Teleporter teleporter, TpaRequester tpaRequester, Guilds guilds, Relations relations, TntGuildBlocker tntGuildBlocker, FileConfiguration config) {
         this.logout = logout;
         this.teleporter = teleporter;
         this.tpaRequester = tpaRequester;
         this.guilds = guilds;
         this.relations = relations;
         this.tntGuildBlocker = tntGuildBlocker;
+        tpaEnabled = config.getBoolean("tpa-command", false);
     }
 
     @Override
@@ -39,7 +43,7 @@ public class Watcher implements Runnable {
             seconds = 0;
         }
 
-        if (GenConf.ANTI_LOGOUT) {
+        if (EntityDamageByEntityListener.ANTI_LOGOUT) {
             logout.updatePlayerActionBar();
             logout.checkExpiredFights();
         }
@@ -48,7 +52,7 @@ public class Watcher implements Runnable {
             teleporter.checkHomeRequests();
         }
 
-        if (GenConf.TPA_ENABLED) {
+        if (tpaEnabled) {
             tpaRequester.checkExpiredTpaRequests();
         }
         this.guilds.checkPlayerInvitations();

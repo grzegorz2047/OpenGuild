@@ -2,6 +2,7 @@ package pl.grzegorz2047.openguild.updater;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.configuration.GenConf;
@@ -14,9 +15,15 @@ import pl.grzegorz2047.openguild.utils.NewVersionChecker;
 public final class Updater {
 
     NewVersionChecker newVersionChecker = new NewVersionChecker();
+    private boolean updaterEnabled;
+
+    public Updater(FileConfiguration config) {
+        updaterEnabled = config.getBoolean("updater", false);
+    }
 
     public void checkForUpdates() {
-        if (!GenConf.UPDATER_ENABLED) {
+
+        if (!updaterEnabled) {
             OpenGuild.getOGLogger().warning("Updater is disabled.");
         } else {
             if (isAvailable()) {
@@ -37,7 +44,7 @@ public final class Updater {
     }
 
     public void notifyOpAboutUpdate(Player player) {
-        if (player.isOp() && GenConf.UPDATER_ENABLED && isAvailable()) {
+        if (player.isOp() && updaterEnabled && isAvailable()) {
             player.sendMessage(ChatColor.RED + " =============== OpenGuild UPDATER =============== ");
             if (MsgManager.LANG.equalsIgnoreCase("PL")) {
                 player.sendMessage(ChatColor.YELLOW + "Znaleziono aktualizacje! Prosze zaktualizowac Twój plugin do najnowszej wersji!");

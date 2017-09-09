@@ -36,12 +36,15 @@ public class EntityDamageByEntityListener implements Listener {
     private final Guilds guilds;
     private AntiLogoutManager logout;
     public static boolean TEAMPVP_MSG;
+    public static boolean ANTI_LOGOUT = false;
 
     public EntityDamageByEntityListener(AntiLogoutManager logout, Guilds guilds, FileConfiguration config) {
         this.logout = logout;
         this.guilds = guilds;
         TEAMPVP_MSG = config.getBoolean("teampvp-msg", false);
+        ANTI_LOGOUT = config.getBoolean("fight-antilogout", true);
     }
+
 
     @EventHandler
     private void entityDMGbyEntity(EntityDamageByEntityEvent event) {
@@ -100,7 +103,7 @@ public class EntityDamageByEntityListener implements Listener {
     }
 
     private void checkAntilogout(Player attacked, Player attacker) {
-        if (GenConf.ANTI_LOGOUT) {
+        if (ANTI_LOGOUT) {
             logout.updatePlayersFight(attacker, attacked);
         }
     }
