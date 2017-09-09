@@ -18,8 +18,8 @@ import java.util.UUID;
 
 public class Relations {
 
-    private final List<RelationChange> pendingRelationChanges = new ArrayList<>();
-    private List<RelationChange> toDelete = new ArrayList<>();
+    private final List<RelationChangeRequest> pendingRelationChangeRequests = new ArrayList<>();
+    private List<RelationChangeRequest> toDelete = new ArrayList<>();
 
     public Relation createRelation(String who, String withwho, long expires, Relation.Status relationStatus) {
         return new Relation(who, withwho, expires, relationStatus);
@@ -43,9 +43,9 @@ public class Relations {
                 }
             }
         }
-        RelationChange request = getRequest(requestingGuildName, requestedGuildName);
+        RelationChangeRequest request = getRequest(requestingGuildName, requestedGuildName);
         if (request == null) {
-            pendingRelationChanges.add(new RelationChange(requestingGuildName, requestedGuildName, requestingGuildLeader, status, System.currentTimeMillis()));
+            pendingRelationChangeRequests.add(new RelationChangeRequest(requestingGuildName, requestedGuildName, requestingGuildLeader, status, System.currentTimeMillis()));
             requestingPlayer.sendMessage(MsgManager.get("sentallyrequest"));
             if (requestedLeader.isOnline()) {
                 UUID requestedLeaderUniqueId = requestedLeader.getUniqueId();
@@ -69,34 +69,34 @@ public class Relations {
     }
 
     public void checkGuildPendingRelations() {
-        HashMap<UUID, RelationChange> playersToInform = new HashMap<>();
-        for (RelationChange relationChange : pendingRelationChanges) {
-            if (relationChange.isExpired(System.currentTimeMillis())) {
-                this.toDelete.add(relationChange);
-                playersToInform.put(relationChange.getRequestingLeader(), relationChange);
+        HashMap<UUID, RelationChangeRequest> playersToInform = new HashMap<>();
+        for (RelationChangeRequest relationChangeRequest : pendingRelationChangeRequests) {
+            if (relationChangeRequest.isExpired(System.currentTimeMillis())) {
+                this.toDelete.add(relationChangeRequest);
+                playersToInform.put(relationChangeRequest.getRequestingLeader(), relationChangeRequest);
             }
         }
         for (Player p : Bukkit.getOnlinePlayers()) {
             UUID playerUUID = p.getUniqueId();
             if (playersToInform.containsKey(playerUUID)) {
-                RelationChange relationChange = playersToInform.get(playerUUID);
-                p.sendMessage(MsgManager.get("allyrequestexpired").replace("{GUILD}", relationChange.getGuildName()));
+                RelationChangeRequest relationChangeRequest = playersToInform.get(playerUUID);
+                p.sendMessage(MsgManager.get("allyrequestexpired").replace("{GUILD}", relationChangeRequest.getGuildName()));
             }
         }
-        pendingRelationChanges.removeAll(toDelete);
+        pendingRelationChangeRequests.removeAll(toDelete);
         playersToInform.clear();
     }
 
-    public RelationChange getRequest(String requestingGuildName, String guildName) {
-        for (RelationChange relationChange : pendingRelationChanges) {
-            if (relationChange.getRequestingGuildName().equals(requestingGuildName) && relationChange.getGuildName().equals(guildName)) {
-                return relationChange;
+    public RelationChangeRequest getRequest(String requestingGuildName, String guildName) {
+        for (RelationChangeRequest relationChangeRequest : pendingRelationChangeRequests) {
+            if (relationChangeRequest.getRequestingGuildName().equals(requestingGuildName) && relationChangeRequest.getGuildName().equals(guildName)) {
+                return relationChangeRequest;
             }
         }
         return null;
     }
 
-    public void removeRequest(RelationChange request) {
+    public void removeRequest(RelationChangeRequest request) {
         toDelete.add(request);
     }
 }

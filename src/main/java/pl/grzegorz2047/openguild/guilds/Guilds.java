@@ -43,6 +43,8 @@ public class Guilds {
     private Map<String, Guild> guilds = new HashMap<>();
     private List<String> onlineGuilds = new ArrayList<>();
     private ArrayList<ItemStack> requiredItemStacks;
+    private final boolean playSoundWHenSomeoneEnteredCuboidEnabled;
+    private Sound cuboidEnterSound = Sound.ENTITY_ENDERDRAGON_DEATH;
 
 
     public Guilds(final SQLHandler sqlHandler, Plugin plugin, Cuboids cuboids) {
@@ -50,6 +52,14 @@ public class Guilds {
         this.plugin = plugin;
         this.guildInvitations = new GuildInvitations(sqlHandler, this);
         playerMetadataController = new PlayerMetadataController(plugin);
+        playSoundWHenSomeoneEnteredCuboidEnabled = plugin.getConfig().getBoolean("cuboid.notify-enter-sound", false);
+
+        try {
+            Sound configSound = Sound.valueOf(plugin.getConfig().getString("cuboid.notify-enter-sound-type", "ENDERMAN_DEATH"));
+            cuboidEnterSound = configSound;
+        } catch (IllegalArgumentException ex) {
+            OpenGuild.getOGLogger().warning("Sound type " + plugin.getConfig().getString("cuboid.notify-enter-sound-type") + " is incorrect! Please visit http://jd.bukkit.org/rb/apidocs/org/bukkit/Sound.html for help.");
+        }
     }
 
 
@@ -69,8 +79,10 @@ public class Guilds {
     }
 
     private void playSoundOnSomeoneEnteredCuboid(OfflinePlayer op) {
-        if (GenConf.CUBOID_ENTER_SOUND_ENABLED) {
-            op.getPlayer().playSound(op.getPlayer().getLocation(), GenConf.CUBOID_ENTER_SOUND_TYPE, 10f, 5f);
+        if (playSoundWHenSomeoneEnteredCuboidEnabled) {
+
+
+            op.getPlayer().playSound(op.getPlayer().getLocation(), cuboidEnterSound, 10f, 5f);
         }
     }
 

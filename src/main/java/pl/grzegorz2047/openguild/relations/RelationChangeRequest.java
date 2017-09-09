@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * Created by grzeg on 23.08.2017.
  */
-public class RelationChange {
+public class RelationChangeRequest {
 
     private final String requestingGuildName;
     private final String guildName;
@@ -15,7 +15,7 @@ public class RelationChange {
     private UUID requestingLeader;
 
 
-    public RelationChange(String requestingGuildName, String guildName, UUID requestingLeader, Relation.Status status, long requestTime) {
+    public RelationChangeRequest(String requestingGuildName, String guildName, UUID requestingLeader, Relation.Status status, long requestTime) {
         this.requestingGuildName = requestingGuildName;
         this.guildName = guildName;
         this.status = status;

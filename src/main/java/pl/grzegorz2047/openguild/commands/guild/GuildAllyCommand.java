@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.managers.MsgManager;
-import pl.grzegorz2047.openguild.relations.RelationChange;
+import pl.grzegorz2047.openguild.relations.RelationChangeRequest;
 import pl.grzegorz2047.openguild.relations.Relations;
 
 /**
@@ -82,7 +82,7 @@ public class GuildAllyCommand extends Command {
             sender.sendMessage(MsgManager.get("leadernotonline"));
             return;
         }
-        RelationChange request = relations.getRequest(guild.getName(), requestingGuild.getName());
+        RelationChangeRequest request = relations.getRequest(guild.getName(), requestingGuild.getName());
         if (wasRequestedBefore(request)) {
             acceptChangeREquest(player, requestingGuild, guild, request);
             return;
@@ -94,7 +94,7 @@ public class GuildAllyCommand extends Command {
         relations.changeRelationRequest(requestingGuild, guild, leader, Relation.Status.ALLY);
     }
 
-    private void acceptChangeREquest(Player player, Guild requestingGuild, Guild guild, RelationChange request) {
+    private void acceptChangeREquest(Player player, Guild requestingGuild, Guild guild, RelationChangeRequest request) {
         if (!requestingGuild.getLeader().equals(player.getUniqueId())) {
             player.sendMessage(MsgManager.get("playernotleader"));
             return;
@@ -107,11 +107,11 @@ public class GuildAllyCommand extends Command {
         broadcastRelationChangeToAll(requestingGuild, guild);
     }
 
-    private boolean wasRequestedBefore(RelationChange request) {
+    private boolean wasRequestedBefore(RelationChangeRequest request) {
         return request != null;
     }
 
-    private void clearRequest(RelationChange request) {
+    private void clearRequest(RelationChangeRequest request) {
         relations.removeRequest(request);
     }
 

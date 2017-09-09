@@ -15,6 +15,8 @@
  */
 package pl.grzegorz2047.openguild.listeners;
 
+import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,42 +27,53 @@ import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 
+import java.util.UUID;
+
 public class PlayerMoveListener implements Listener {
 
 
     private final Cuboids cuboids;
     private final Guilds guilds;
+    private boolean notifyCuboidEnter;
 
-    public PlayerMoveListener(Guilds guilds, Cuboids cuboids) {
+    public PlayerMoveListener(Guilds guilds, Cuboids cuboids, FileConfiguration config) {
         this.cuboids = cuboids;
         this.guilds = guilds;
+        notifyCuboidEnter = config.getBoolean("cuboid.notify-enter", true);
     }
 
     @EventHandler
     public void handleEvent(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
+        UUID playerUniqueId = player.getUniqueId();
+        Guild playerGuild = guilds.getPlayerGuild(playerUniqueId);
 
-        String guildscuboidtag = cuboids.getGuildTagInLocation(player.getLocation());
+        Location playerLocation = player.getLocation();
+        String guildscuboidtag = cuboids.getGuildTagInLocation(playerLocation);
         Guild currentCuboidGuild = guilds.getGuild(guildscuboidtag);
 
         //Bukkit.broadcastMessage("Gracz "+player.getName()+" jest na "+guildscuboidtag);
 
-        boolean wasOnCuboidBefore = cuboids.playersenteredcuboid.containsKey(player.getName());
+        String playerName = player.getName();
+        boolean wasOnCuboidBefore = cuboids.playersenteredcuboid.containsKey(playerName);
         if (currentCuboidGuild == null && !wasOnCuboidBefore) {
             return;
         }
-        if(wasOnCuboidBefore) {
-            if(currentCuboidGuild == null) {
+        if (wasOnCuboidBefore) {
+            if (currentCuboidGuild == null) {
                 processPlayerLeftCuboid(player);
                 return;
             }
-            if (cuboids.playersenteredcuboid.get(player.getName()).equals(currentCuboidGuild.getName())) {
+            String currentCuboidGuildName = currentCuboidGuild.getName();
+            if (cuboids.playersenteredcuboid.get(playerName).equals(currentCuboidGuildName)) {
                 return;
             }
         }
-        player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", guildscuboidtag.toUpperCase()));
-        cuboids.playersenteredcuboid.put(player.getName(), guildscuboidtag);
+        if (notifyCuboidEnter) {
+            player.sendMessage(MsgManager.get("entercubpl").replace("{GUILD}", guildscuboidtag.toUpperCase()));
+
+        }
+        cuboids.playersenteredcuboid.put(playerName, guildscuboidtag);
 
         if (playerGuild != null && isAllyEntering(playerGuild, currentCuboidGuild)) {
             return;

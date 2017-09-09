@@ -16,6 +16,7 @@
 
 package pl.grzegorz2047.openguild.listeners;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -34,10 +35,12 @@ public class EntityDamageByEntityListener implements Listener {
 
     private final Guilds guilds;
     private AntiLogoutManager logout;
+    public static boolean TEAMPVP_MSG;
 
-    public EntityDamageByEntityListener(AntiLogoutManager logout, Guilds guilds) {
+    public EntityDamageByEntityListener(AntiLogoutManager logout, Guilds guilds, FileConfiguration config) {
         this.logout = logout;
         this.guilds = guilds;
+        TEAMPVP_MSG = config.getBoolean("teampvp-msg", false);
     }
 
     @EventHandler
@@ -118,7 +121,7 @@ public class EntityDamageByEntityListener implements Listener {
     }
 
     private void sendMessageTeamPvpBlocked(Player attacker) {
-        if (GenConf.TEAMPVP_MSG) {
+        if (TEAMPVP_MSG) {
             attacker.sendMessage(MsgManager.get("pvpguildmember", "&cNie mozesz uderzyc gracza sojuszniczej gildii"));
         }
     }

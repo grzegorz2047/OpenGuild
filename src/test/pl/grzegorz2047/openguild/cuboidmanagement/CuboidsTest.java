@@ -15,9 +15,10 @@ public class CuboidsTest {
         Location sourceHome = new Location(null, 0, 0, 0);
         int cuboidSize = 15;
         String testTagGuildName = "TEST";
-        Cuboid testCuboid = cuboids.previewCuboid(sourceHome, testTagGuildName, cuboidSize);
+        Cuboid testCuboid = cuboids.
+                previewCuboid(sourceHome, testTagGuildName, cuboidSize, UUID.randomUUID());
         assertEquals(sourceHome, testCuboid.getCenter());
         assertEquals(cuboidSize, testCuboid.getCuboidSize());
-        
+
     }
 }

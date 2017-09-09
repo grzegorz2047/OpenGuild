@@ -25,6 +25,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.managers.MsgManager;
 
 public class SpawnListeners implements Listener {
     
@@ -34,7 +35,7 @@ public class SpawnListeners implements Listener {
     public void onGuildCreate(GuildCreateEvent e) {
         if(GenConf.BLOCK_GUILD_CREATION_ON_SPAWN && SpawnChecker.isSpawnExtra(e.getHome())) {
             e.setCancelled(true);
-            e.getLeader().sendMessage(GenConf.prefix + ChatColor.RED + GenConf.SPAWN_MESSAGE);
+            e.getLeader().sendMessage(MsgManager.get("cantdoitonspawn"));
         }
     }
     

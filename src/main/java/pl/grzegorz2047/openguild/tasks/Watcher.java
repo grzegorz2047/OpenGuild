@@ -2,6 +2,7 @@ package pl.grzegorz2047.openguild.tasks;
 
 import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.guilds.Guilds;
+import pl.grzegorz2047.openguild.listeners.TNTExplode;
 import pl.grzegorz2047.openguild.relations.Relations;
 import pl.grzegorz2047.openguild.teleporters.Teleporter;
 import pl.grzegorz2047.openguild.teleporters.TpaRequester;
@@ -52,7 +53,7 @@ public class Watcher implements Runnable {
         }
         this.guilds.checkPlayerInvitations();
         relations.checkGuildPendingRelations();
-        if (GenConf.TNT_PLACE_BLOCK_CUBOID_ENABLED) {
+        if (TNTExplode.TNT_BLOCK_ENABLED) {
             tntGuildBlocker.checkTimesForBlockedGuilds();
         }
     }

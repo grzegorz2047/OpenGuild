@@ -55,7 +55,7 @@ public class GuildCommand implements CommandExecutor {
     private void registerCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler, Plugin plugin) {
         // Register 'guild' command sub-commands.
         String[] createAliases = {"create", "zaloz", "stworz"};
-        commands.put(createAliases, new GuildCreateCommand(cuboids, guilds, sqlHandler, tagManager));
+        commands.put(createAliases, new GuildCreateCommand(cuboids, guilds, sqlHandler, tagManager, plugin.getConfig()));
         String[] acceptAliases = {"accept", "akceptuj"};
         commands.put(acceptAliases, new GuildInvitationAcceptCommand(tagManager, guilds));
         String[] helpAliases = {"help", "pomoc"};

@@ -19,6 +19,7 @@ package pl.grzegorz2047.openguild.listeners;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,10 +33,12 @@ import pl.grzegorz2047.openguild.relations.Relation;
 public class PlayerChatListener implements Listener {
 
     private final Guilds guilds;
+    public static String CHAT_FORMAT;
 
-
-    public PlayerChatListener(Guilds guilds) {
+    public PlayerChatListener(Guilds guilds, FileConfiguration config) {
         this.guilds = guilds;
+        CHAT_FORMAT = config.getString("chat.chatFormat", "&8{&7GUILD&8} &7{PLAYER}&7: &f{MESSAGE}");
+
     }
 
     @EventHandler
@@ -51,7 +54,7 @@ public class PlayerChatListener implements Listener {
             int elo = getPlayerElo(player);
             if (GenConf.GUILD_PREFIX_IN_CHAT_ENABLED) {
                 event.setFormat(ChatColor.translateAlternateColorCodes('&',
-                        GenConf.CHAT_FORMAT
+                        CHAT_FORMAT
                                 .replace("{ELO}", String.valueOf(elo))
                                 .replace("{PLAYER}", player.getName())
                                 .replace("{GUILD}", "")
@@ -93,7 +96,7 @@ public class PlayerChatListener implements Listener {
         }
         int elo = getPlayerElo(player);
         event.setFormat(ChatColor.translateAlternateColorCodes('&',
-                GenConf.CHAT_FORMAT
+                CHAT_FORMAT
                         .replace("{ELO}", String.valueOf(elo))
                         .replace("{PLAYER}", player.getName())
                         .replace("{GUILD}", guild.getName())

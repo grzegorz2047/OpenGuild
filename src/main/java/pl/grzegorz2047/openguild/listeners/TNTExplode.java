@@ -17,6 +17,7 @@ package pl.grzegorz2047.openguild.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,12 +41,16 @@ public class TNTExplode implements Listener {
     private final DropFromBlocks drop;
     private final TntGuildBlocker tntGuildBlocker;
     private final Guilds guilds;
-    private final int defaultBlockTimeForGuildWhereTNTExploded = 30;
+    private int defaultBlockTimeForGuildWhereTNTExploded = 30;
+    public static boolean TNT_BLOCK_ENABLED = false;
 
-    public TNTExplode(Guilds guilds, DropFromBlocks drop, TntGuildBlocker tntGuildBlocker) {
+    public TNTExplode(Guilds guilds, DropFromBlocks drop, TntGuildBlocker tntGuildBlocker, FileConfiguration config) {
         this.guilds = guilds;
         this.drop = drop;
         this.tntGuildBlocker = tntGuildBlocker;
+        TNT_BLOCK_ENABLED = true;
+        defaultBlockTimeForGuildWhereTNTExploded = config.getInt("listener.tnt-block-time", 30);
+
     }
 
     public void handle(BlockPlaceEvent event) {
@@ -72,7 +77,7 @@ public class TNTExplode implements Listener {
             event.setCancelled(true);
             return;
         }
-        if (event.getEntityType().equals(EntityType.PRIMED_TNT) && GenConf.TNT_PLACE_BLOCK_CUBOID_ENABLED) {
+        if (event.getEntityType().equals(EntityType.PRIMED_TNT)) {
             Location location = event.getLocation();
             final Guild guild = guilds.getGuild(location);
 

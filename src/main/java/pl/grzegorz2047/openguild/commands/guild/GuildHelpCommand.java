@@ -50,13 +50,13 @@ public class GuildHelpCommand extends Command {
 
         sender.sendMessage(getHelpTitle(page));
         if (page == 1) {
-            if (GenConf.LANG.equals("PL")) {
+            if (MsgManager.LANG.equals("PL")) {
                 showPolishHelpPage1(sender);
             } else {
                 showEnglishHelpPage1(sender);
             }
         } else if (page == 2) {
-            if (GenConf.LANG.equals("PL")) {
+            if (MsgManager.LANG.equals("PL")) {
                 showPolishHelpPage2(sender);
             } else {
                 showEnglishHelpPage2(sender);
@@ -125,7 +125,7 @@ public class GuildHelpCommand extends Command {
     }
 
     private String help(String usage, String desc) {
-        if (GenConf.LANG.equals("PL")) {
+        if (MsgManager.LANG.equals("PL")) {
             return ChatColor.GREEN + "/gildia " + ChatColor.AQUA + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;
         } else {
             return ChatColor.GREEN + "/guild " + ChatColor.AQUA + usage + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + desc;

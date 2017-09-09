@@ -17,6 +17,8 @@
 package pl.grzegorz2047.openguild.commands.guild;
 
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.commands.command.Command;
 import pl.grzegorz2047.openguild.commands.command.CommandException;
@@ -38,6 +40,8 @@ import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
 import pl.grzegorz2047.openguild.spawn.SpawnChecker;
 import pl.grzegorz2047.openguild.utils.GenUtil;
 
+import java.util.UUID;
+
 /**
  * Command used to create new guild.
  * <p>
@@ -48,13 +52,15 @@ public class GuildCreateCommand extends Command {
     private final Guilds guilds;
     private final SQLHandler sqlHandler;
     private final TagManager tagManager;
+    private final boolean blockGuildCreationWhenPlayersTooClose;
 
-    public GuildCreateCommand(Cuboids cuboids, Guilds guilds, SQLHandler sqlHandler, TagManager tagManager) {
+    public GuildCreateCommand(Cuboids cuboids, Guilds guilds, SQLHandler sqlHandler, TagManager tagManager, FileConfiguration config) {
         setPermission("openguild.command.create");
         this.cuboids = cuboids;
         this.guilds = guilds;
         this.sqlHandler = sqlHandler;
         this.tagManager = tagManager;
+        blockGuildCreationWhenPlayersTooClose = config.getBoolean("cuboid.block-guild-creation-when-players-are-too-close", false);
     }
 
     @Override
@@ -67,7 +73,10 @@ public class GuildCreateCommand extends Command {
 
         String tag = args[1].toUpperCase();
         String description = GenUtil.argsToString(args, 2, args.length);
-        Cuboid cuboid = cuboids.previewCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
+        Location playerLocation = player.getLocation();
+        World playerLocationWorld = playerLocation.getWorld();
+        UUID worldUUID = playerLocationWorld.getUID();
+        Cuboid cuboid = cuboids.previewCuboid(playerLocation, tag, GenConf.MIN_CUBOID_SIZE, worldUUID);
 
         if (!fufilledRequirements(player, tag, description, cuboid, args.length)) return;
 
@@ -198,7 +207,8 @@ public class GuildCreateCommand extends Command {
     }
 
     private boolean isOtherPlayerTooClose(Player player) {
-        return GenConf.CHECK_PLAYERS_TOO_CLOSE_WHEN_CREATING_GUILD && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE);
+
+        return blockGuildCreationWhenPlayersTooClose && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE);
     }
 
 

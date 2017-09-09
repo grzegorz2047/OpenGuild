@@ -29,20 +29,21 @@ import pl.grzegorz2047.openguild.configuration.GenConf;
 public class MsgManager {
 
     private static HashMap<String, String> messages;
-
-    public static File file = new File("plugins/OpenGuild/messages_" + GenConf.LANG.toLowerCase() + ".yml");
+    public static String prefix = "§7[§6OpenGuild§7]§7 ";
+    public static String LANG = "EN";
+    public static File file = new File("plugins/OpenGuild/messages_" + LANG.toLowerCase() + ".yml");
     private static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
     public static String get(String path) {
-        return GenConf.prefix + getIgnorePref(path);
+        return prefix + getIgnorePref(path);
     }
 
     public static String getIgnorePref(String path) {
-        return getIgnorePref(path, getNullMessage(GenConf.LANG, path));
+        return getIgnorePref(path, getNullMessage(LANG, path));
     }
 
     public static String get(String path, String def) {
-        return GenConf.prefix + getIgnorePref(path, getNullMessage(GenConf.LANG, path));
+        return prefix + getIgnorePref(path, getNullMessage(LANG, path));
     }
 
     private static String getIgnorePref(String path, String def) {
@@ -76,5 +77,8 @@ public class MsgManager {
 
         return ChatColor.RED + result + " :( MSG: " + path;
     }
+    public static void setLANG(String lang) {
+       LANG = lang;
 
+    }
 }

@@ -35,6 +35,7 @@ import pl.grzegorz2047.openguild.dropstone.DropProperties;
 import pl.grzegorz2047.openguild.files.FileValidator;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.listeners.*;
+import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.managers.TagManager;
 import pl.grzegorz2047.openguild.hardcore.HardcoreHandler;
 import pl.grzegorz2047.openguild.hardcore.HardcoreSQLHandler;
@@ -119,8 +120,6 @@ public class OpenGuild extends JavaPlugin {
         hardcoreHandler.loadBans(mainConfig.getBoolean("hardcore-bans.enabled"), mainConfig.getString("hardcore-bans.kick-message").replace("&", "§"), mainConfig.getString("hardcore-bans.login-message").replace("&", "§"), mainConfig.getString("hardcore-bans.ban-time"));
 
 
-
-
         ModuleSpawn moduleSpawn = new ModuleSpawn();
         moduleSpawn.enable(this);
 
@@ -155,8 +154,9 @@ public class OpenGuild extends JavaPlugin {
 
     private void loadTranslationFiles(FileValidator fileValidator) {
         // Validate language file
-        String translation = "messages_" + GenConf.LANG.toLowerCase();
+        String translation = "messages_" + MsgManager.LANG.toLowerCase();
         fileValidator.validateFile(getResource(translation + ".yml"), translation);
+        MsgManager.setLANG(getConfig().getString("language").toUpperCase());
     }
 
     private void loadConfigFiles(FileValidator fileValidator) {
@@ -212,26 +212,28 @@ public class OpenGuild extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         TempPlayerData tempPlayerData = new TempPlayerData();
         pm.registerEvents(new PlayerJoinListener(guilds, tagManager, sqlHandler, tempPlayerData, updater), this);
-        pm.registerEvents(new PlayerChatListener(guilds), this);
+        pm.registerEvents(new PlayerChatListener(guilds, getConfig()), this);
         pm.registerEvents(new PlayerDeathListener(sqlHandler, logout, guilds), this);
         pm.registerEvents(new PlayerKickListener(teleporter, cuboids, tpaRequester, guilds), this);
         pm.registerEvents(new PlayerQuitListener(guilds, cuboids, logout, teleporter, tpaRequester, tempPlayerData), this);
         pm.registerEvents(new PlayerCacheListenersController(tempPlayerData, sqlHandler), this);
-        if (GenConf.BLOCK_STRENGTH_2) {
+        boolean isStrength2Disabled = getConfig().getBoolean("block-strong-strength-2", true);
+        if (isStrength2Disabled) {
             pm.registerEvents(new EnchantInsertListener(), this);
         }
 
-        if (GenConf.CUBOID_ENABLED) {
-            pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop, guilds), this);
-        }
+        pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop, guilds), this);
 
-        pm.registerEvents(new EntityDamageByEntityListener(logout, guilds), this);
+        pm.registerEvents(new EntityDamageByEntityListener(logout, guilds, getConfig()), this);
 
-        if (GenConf.ENABLED_PLAYER_MOVE_EVENT) {
-            pm.registerEvents(new PlayerMoveListener(guilds, cuboids), this);
+        boolean enabledPlayerMoveListener = getConfig().getBoolean("listener.player-move-event", false);
+
+        if (enabledPlayerMoveListener) {
+            pm.registerEvents(new PlayerMoveListener(guilds, cuboids, getConfig()), this);
         }
-        if (GenConf.TNT_PLACE_BLOCK_CUBOID_ENABLED) {
-            pm.registerEvents(new TNTExplode(guilds, drop, tntGuildBlocker), this);
+        boolean blockPlacingBlocksOnTntExplodeEnabled = getConfig().getBoolean("listener.tnt-block-enabled", true);
+        if (blockPlacingBlocksOnTntExplodeEnabled) {
+            pm.registerEvents(new TNTExplode(guilds, drop, tntGuildBlocker, getConfig()), this);
         }
     }
 

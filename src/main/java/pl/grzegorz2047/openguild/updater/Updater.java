@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.utils.NewVersionChecker;
 
 /**
@@ -38,10 +39,10 @@ public final class Updater {
     public void notifyOpAboutUpdate(Player player) {
         if (player.isOp() && GenConf.UPDATER_ENABLED && isAvailable()) {
             player.sendMessage(ChatColor.RED + " =============== OpenGuild UPDATER =============== ");
-            if (GenConf.LANG.equalsIgnoreCase("PL")) {
+            if (MsgManager.LANG.equalsIgnoreCase("PL")) {
                 player.sendMessage(ChatColor.YELLOW + "Znaleziono aktualizacje! Prosze zaktualizowac Twój plugin do najnowszej wersji!");
                 player.sendMessage(ChatColor.YELLOW + "Pobierz go z https://github.com/grzegorz2047/OpenGuild2047/releases");
-            } else if (GenConf.LANG.equalsIgnoreCase("SV")) {
+            } else if (MsgManager.LANG.equalsIgnoreCase("SV")) {
                 player.sendMessage(ChatColor.YELLOW + "Uppdatering hittas! Uppdatera ditt plugin till den senaste version!");
                 player.sendMessage(ChatColor.YELLOW + "Ladda ner det från https://github.com/grzegorz2047/OpenGuild2047/releases");
             } else {

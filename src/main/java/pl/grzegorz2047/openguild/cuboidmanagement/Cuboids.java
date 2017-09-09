@@ -30,8 +30,8 @@ public class Cuboids {
     private Map<String, Cuboid> cuboids = new HashMap<>();
     public HashMap<String, String> playersenteredcuboid = new HashMap<>();
 
-    public Cuboid previewCuboid(Location home, String tag, int size) {
-        return new Cuboid(home, tag, size, home.getWorld().getUID());
+    public Cuboid previewCuboid(Location home, String tag, int size, UUID worldUUID) {
+        return new Cuboid(home, tag, size, worldUUID);
     }
 
     public void addCuboid(Location home, String tag, int size) {
