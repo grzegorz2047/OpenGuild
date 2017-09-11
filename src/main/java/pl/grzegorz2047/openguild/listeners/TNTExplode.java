@@ -15,32 +15,31 @@
  */
 package pl.grzegorz2047.openguild.listeners;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import pl.grzegorz2047.openguild.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.guilds.Guilds;
-
-import java.util.List;
-
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild.configuration.GenConf;
-import pl.grzegorz2047.openguild.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.spawn.SpawnChecker;
 import pl.grzegorz2047.openguild.tntguildblocker.TntGuildBlocker;
+
+import java.util.List;
 
 public class TNTExplode implements Listener {
 
     private final DropFromBlocks drop;
     private final TntGuildBlocker tntGuildBlocker;
     private final Guilds guilds;
+    private final boolean DROP_ENABLED;
     private int defaultBlockTimeForGuildWhereTNTExploded = 30;
     public static boolean TNT_BLOCK_ENABLED = false;
 
@@ -50,6 +49,7 @@ public class TNTExplode implements Listener {
         this.tntGuildBlocker = tntGuildBlocker;
         TNT_BLOCK_ENABLED = true;
         defaultBlockTimeForGuildWhereTNTExploded = config.getInt("listener.tnt-block-time", 30);
+        DROP_ENABLED = config.getBoolean("drop.enabled", false);
 
     }
 
@@ -85,7 +85,7 @@ public class TNTExplode implements Listener {
                 tntGuildBlocker.addGuildAsBlocked(guild.getName(), defaultBlockTimeForGuildWhereTNTExploded);
             }
         }
-        if (GenConf.DROP_ENABLED) {
+        if (DROP_ENABLED) {
             List<Block> blocksToExplode = event.blockList();
             for (Block blockToExplode : blocksToExplode) {
                 if (!drop.isNotUsedInDropFromBlocks(blockToExplode.getType())) {

@@ -16,11 +16,10 @@
 
 package pl.grzegorz2047.openguild.commands.guild;
 
-import pl.grzegorz2047.openguild.commands.command.Command;
-import pl.grzegorz2047.openguild.commands.command.CommandException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.commands.command.Command;
+import pl.grzegorz2047.openguild.commands.command.CommandException;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 
 /**

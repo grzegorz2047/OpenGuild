@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.guilds.Guilds;
@@ -34,12 +33,17 @@ public class PlayerMoveListener implements Listener {
 
     private final Cuboids cuboids;
     private final Guilds guilds;
+    private final boolean NOTIFY_GUILD_MEMBERS_ABOUT_SOMEONE_ENTERED_CUBOID;
+    private final boolean CANENTERAREA;
     private boolean notifyCuboidEnter;
 
     public PlayerMoveListener(Guilds guilds, Cuboids cuboids, FileConfiguration config) {
         this.cuboids = cuboids;
         this.guilds = guilds;
         notifyCuboidEnter = config.getBoolean("cuboid.notify-enter", true);
+        NOTIFY_GUILD_MEMBERS_ABOUT_SOMEONE_ENTERED_CUBOID = config.getBoolean("cuboid.notify-enter-members", false);
+        CANENTERAREA = config.getBoolean("cuboid.canenterarea", true);
+
     }
 
     @EventHandler
@@ -78,10 +82,10 @@ public class PlayerMoveListener implements Listener {
         if (playerGuild != null && isAllyEntering(playerGuild, currentCuboidGuild)) {
             return;
         }
-        if (GenConf.NOTIFY_GUILD_MEMBERS_ABOUT_SOMEONE_ENTERED_CUBOID) {
+        if (NOTIFY_GUILD_MEMBERS_ABOUT_SOMEONE_ENTERED_CUBOID) {
             guilds.notifyMembersAboutSomeoneEnteringTheirCuboid(player, guildscuboidtag, playerGuild);
         }
-        if (event.isCancelled() || GenConf.CANENTERAREA || player.hasPermission("openguild.cuboid.bypassenterflag")) {
+        if (event.isCancelled() || CANENTERAREA || player.hasPermission("openguild.cuboid.bypassenterflag")) {
             return;
         }
         if (!cuboids.canMove(playerGuild, event.getFrom(), event.getTo())) {

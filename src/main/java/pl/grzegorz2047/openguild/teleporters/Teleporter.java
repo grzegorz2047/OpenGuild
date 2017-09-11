@@ -3,7 +3,6 @@ package pl.grzegorz2047.openguild.teleporters;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 
 import java.util.HashMap;

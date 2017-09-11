@@ -16,28 +16,38 @@
 
 package pl.grzegorz2047.openguild.listeners;
 
-import java.util.UUID;
-
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import pl.grzegorz2047.openguild.configuration.GenConf;
-import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.guilds.Guild;
+import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
 import pl.grzegorz2047.openguild.relations.Relation;
+
+import java.util.UUID;
 
 public class PlayerChatListener implements Listener {
 
     private final Guilds guilds;
     public static String CHAT_FORMAT;
+    private final boolean GUILD_PREFIX_IN_CHAT_ENABLED;
+    private final String GUILD_AND_ALLY_ONLY_CHAT_FORMAT;
+    private final String GUILD_ONLY_CHAT_MSG_KEY;
+    private final String GUILD_ONLY_CHAT_FORMAT;
+    private final String GUILD_AND_ALLY_ONLY_CHAT_KEY;
 
     public PlayerChatListener(Guilds guilds, FileConfiguration config) {
         this.guilds = guilds;
         CHAT_FORMAT = config.getString("chat.chatFormat", "&8{&7GUILD&8} &7{PLAYER}&7: &f{MESSAGE}");
+        GUILD_PREFIX_IN_CHAT_ENABLED = config.getBoolean("chat.guildprefixinchat", true);
+        GUILD_AND_ALLY_ONLY_CHAT_FORMAT = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
+        GUILD_ONLY_CHAT_MSG_KEY = config.getString("chat.guild-key", "guild:");
+        GUILD_ONLY_CHAT_FORMAT = config.getString("chat.guild-format", "&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
+        GUILD_AND_ALLY_ONLY_CHAT_KEY = config.getString("chat.ally-key", "allies:");
+
 
     }
 
@@ -52,7 +62,7 @@ public class PlayerChatListener implements Listener {
         if (!isInGuild(player)) {
 
             int elo = getPlayerElo(player);
-            if (GenConf.GUILD_PREFIX_IN_CHAT_ENABLED) {
+            if (GUILD_PREFIX_IN_CHAT_ENABLED) {
                 event.setFormat(ChatColor.translateAlternateColorCodes('&',
                         CHAT_FORMAT
                                 .replace("{ELO}", String.valueOf(elo))
@@ -73,14 +83,14 @@ public class PlayerChatListener implements Listener {
         Guild guild = guilds.getPlayerGuild(uuid);
         String tag = guild.getName().toUpperCase();
         String format;
-        if (isInGuildChatMode(message, GenConf.GUILD_ONLY_CHAT_MSG_KEY)) {
+        if (isInGuildChatMode(message, GUILD_ONLY_CHAT_MSG_KEY)) {
             message = message.substring(1);
             format = prepareMessageFormat(player, message);
             guild.notifyGuild(format);
             event.setCancelled(true);
             return;
         }
-        if (isInGuildChatMode(message, GenConf.GUILD_AND_ALLY_ONLY_CHAT_KEY)) {
+        if (isInGuildChatMode(message, GUILD_AND_ALLY_ONLY_CHAT_KEY)) {
             message = message.substring(1);
             format = prepareMessageFormat(player, message);
             guild.notifyGuild(format);
@@ -90,7 +100,7 @@ public class PlayerChatListener implements Listener {
         }
         String msgFormat = event.getFormat();
 
-        if (!GenConf.GUILD_PREFIX_IN_CHAT_ENABLED && msgFormat.contains("%OPENGUILD_TAG%")) {
+        if (!GUILD_PREFIX_IN_CHAT_ENABLED && msgFormat.contains("%OPENGUILD_TAG%")) {
             event.setFormat(msgFormat.replace("%OPENGUILD_TAG%", tag));
             return;
         }
@@ -116,7 +126,7 @@ public class PlayerChatListener implements Listener {
         ally = getAllyGuildFromRelation(guild, r, whoGuild);
         int elo = getPlayerElo(player);
         if (ally != null) {
-            String format = GenConf.GUILD_AND_ALLY_ONLY_CHAT_FORMAT
+            String format = GUILD_AND_ALLY_ONLY_CHAT_FORMAT
                     .replace("{ELO}", String.valueOf(elo))
                     .replace("{GUILD}", guild.getName())
                     .replace("{PLAYER}", player.getName())
@@ -138,7 +148,7 @@ public class PlayerChatListener implements Listener {
 
     private String prepareMessageFormat(Player player, String message) {
         int elo = getPlayerElo(player);
-        return GenConf.GUILD_ONLY_CHAT_FORMAT
+        return GUILD_ONLY_CHAT_FORMAT
                 .replace("{ELO}", String.valueOf(elo))
                 .replace("{PLAYER}", player.getName())
                 .replace("{MESSAGE}", message);

@@ -19,6 +19,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +35,6 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.PlayerInventory;
 import pl.grzegorz2047.openguild.OpenGuild;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild.guilds.Guild;
@@ -51,17 +51,29 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     private final DropFromBlocks drop;
     private final Guilds guilds;
     private static List<Material> breakingItems;
+    private final List<String> BREAKING_ITEMS;
+    private final short BREAKING_DAMAGE;
+    private final boolean EXTRA_PROTECTION;
+    private final boolean PREVENT_GHOST_BLOCK_PLACE;
+    private final boolean DROP_ENABLED;
     private List<Material> allowedInteractItems;
 
 
-    public CuboidAndSpawnManipulationListeners(Cuboids cuboids, DropFromBlocks drop, Guilds guilds) {
+    public CuboidAndSpawnManipulationListeners(Cuboids cuboids, DropFromBlocks drop, Guilds guilds, FileConfiguration config) {
         this.cuboids = cuboids;
+        BREAKING_ITEMS = config.getStringList("cuboid.breaking-blocks.item-types");
+        BREAKING_DAMAGE = Short.parseShort(config.getString("cuboid.breaking-blocks.damage", "0"));
+
         this.drop = drop;
         this.guilds = guilds;
         this.allowedInteractItems = new ArrayList<>();
         this.allowedInteractItems.add(Material.CHEST);
         this.allowedInteractItems.add(Material.ENDER_CHEST);
         this.allowedInteractItems.add(Material.WOODEN_DOOR);
+        EXTRA_PROTECTION = config.getBoolean("cuboid.extra-protection", false);
+        PREVENT_GHOST_BLOCK_PLACE = config.getBoolean("prevent-macro-ghost-block-placing", false);
+        DROP_ENABLED = config.getBoolean("drop.enabled", false);
+        loadSpecialItemsToDestroyEnemyCuboidBlocks();
     }
 
     @EventHandler
@@ -73,7 +85,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
         Block brokenBlock = e.getBlock();
         if (checkIfOnSpawn(e, player, brokenBlock)) return;
         if (processBreakingBlockInEnemyArea(e, player, brokenBlock)) return;
-        if (GenConf.DROP_ENABLED) {
+        if (DROP_ENABLED) {
             drop.processDropFromBlocks(player, brokenBlock);
             if (!drop.isNotUsedInDropFromBlocks(brokenBlock.getType())) {
                 e.setDropItems(false);
@@ -109,7 +121,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
                 e.setCancelled(true);
                 return true;
             }
-            inventory.getItemInMainHand().setDurability((short) (inventory.getItemInMainHand().getDurability() + GenConf.BREAKING_DAMAGE));
+            inventory.getItemInMainHand().setDurability((short) (inventory.getItemInMainHand().getDurability() + BREAKING_DAMAGE));
             return true;
         }
         return false;
@@ -134,7 +146,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
             player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
             return;
         }
-        if (!GenConf.EXTRA_PROTECTION) {
+        if (!EXTRA_PROTECTION) {
             return;
         }
 
@@ -182,7 +194,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     }
 
     private boolean canbreakEnemyBlock() {
-        return GenConf.BREAKING_DAMAGE > 0;
+        return BREAKING_DAMAGE > 0;
     }
 
     @EventHandler
@@ -203,7 +215,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
             playerGuildTag = playerGuild.getName();
 
         }
-        if (GenConf.PREVENT_GHOST_BLOCK_PLACE) {
+        if (PREVENT_GHOST_BLOCK_PLACE) {
             if (e.isCancelled()) {
                 if (e.getBlock().getType().equals(Material.AIR)) {
                     e.getBlockPlaced().setType(Material.AIR);
@@ -292,7 +304,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
         if (playerGuild != null) {
             playerGuildTag = playerGuild.getName();
         }
-        if (GenConf.EXTRA_PROTECTION && !cuboids.hasRightToThisLocation(player, playerGuildTag, player.getLocation())) {
+        if (EXTRA_PROTECTION && !cuboids.hasRightToThisLocation(player, playerGuildTag, player.getLocation())) {
             if (e.getInventory().getType().equals(InventoryType.PLAYER)) {
                 return;
             }
@@ -333,9 +345,9 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     }
 
 
-    public static void loadSpecialItemsToDestroyEnemyCuboidBlocks() {
+    public void loadSpecialItemsToDestroyEnemyCuboidBlocks() {
         breakingItems = new ArrayList<Material>();
-        for (String item : GenConf.BREAKING_ITEMS) {
+        for (String item : BREAKING_ITEMS) {
             try {
                 breakingItems.add(Material.valueOf(item.toUpperCase()));
             } catch (IllegalArgumentException ex) {

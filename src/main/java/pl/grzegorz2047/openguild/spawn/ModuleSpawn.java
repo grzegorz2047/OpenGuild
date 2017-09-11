@@ -18,13 +18,16 @@ package pl.grzegorz2047.openguild.spawn;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 
 public class ModuleSpawn {
 
+    private boolean BLOCK_GUILD_CREATION_ON_SPAWN;
+
+
     public void enable(JavaPlugin plugin) {
-        if (GenConf.BLOCK_GUILD_CREATION_ON_SPAWN) {
-            Bukkit.getPluginManager().registerEvents(new SpawnListeners(), plugin);
+        BLOCK_GUILD_CREATION_ON_SPAWN = plugin.getConfig().getBoolean("spawn.block-guild-creating", true);
+        if (BLOCK_GUILD_CREATION_ON_SPAWN) {
+            Bukkit.getPluginManager().registerEvents(new SpawnListeners(plugin.getConfig()), plugin);
         }
     }
 

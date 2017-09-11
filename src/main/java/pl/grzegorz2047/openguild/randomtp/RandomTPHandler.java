@@ -20,9 +20,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 
 import java.util.Arrays;
@@ -34,21 +34,29 @@ public final class RandomTPHandler {
 
     private static Random random = new Random();
     private List<Material> unsafeMaterials = Arrays.asList(Material.LAVA, Material.WATER);
+    private int RANDOM_TP_RANGE;
+    private boolean RANDOM_TP_ENABLED;
+    private boolean USE_BUTTON_FOR_RANDOM_TP;
 
     public void enable(Plugin plugin) {
-        if (GenConf.RANDOM_TP_ENABLED) {
+        FileConfiguration config = plugin.getConfig();
+        RANDOM_TP_RANGE = config.getInt("random-tp.range", 3000);
+        RANDOM_TP_ENABLED = config.getBoolean("random-tp.enabled", false);
+        USE_BUTTON_FOR_RANDOM_TP = config.getBoolean("random-tp.button", true);
+
+        if (RANDOM_TP_ENABLED) {
             Bukkit.getPluginManager().registerEvents(new RandomTPListeners(this), plugin);
         }
     }
 
 
     public boolean isEnabled() {
-        return GenConf.RANDOM_TP_ENABLED;
+        return RANDOM_TP_ENABLED;
     }
 
 
     public boolean isButtonEnabled() {
-        return GenConf.USE_BUTTON_FOR_RANDOM_TP;
+        return USE_BUTTON_FOR_RANDOM_TP;
     }
 
 
@@ -66,7 +74,7 @@ public final class RandomTPHandler {
             location = findSaveSpot(player);
             player.teleport(location);
             player.sendMessage(MsgManager.get("rantp"));
-         } catch (Exception e) {
+        } catch (Exception e) {
             player.sendMessage(MsgManager.get("nosafertp"));
         }
     }
@@ -75,8 +83,8 @@ public final class RandomTPHandler {
     private Location findSaveSpot(Player player) throws Exception {
         for (int i = 0; i < 10; i++) {
             World world = player.getWorld();
-            int x = random.nextInt(GenConf.RANDOM_TP_RANGE);
-            int z = random.nextInt(GenConf.RANDOM_TP_RANGE);
+            int x = random.nextInt(RANDOM_TP_RANGE);
+            int z = random.nextInt(RANDOM_TP_RANGE);
             if (random.nextBoolean())
                 x = x - (2 * x);
             if (random.nextBoolean())

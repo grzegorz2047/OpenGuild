@@ -1,14 +1,13 @@
 package pl.grzegorz2047.openguild.tasks;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.listeners.EntityDamageByEntityListener;
 import pl.grzegorz2047.openguild.listeners.TNTExplode;
 import pl.grzegorz2047.openguild.relations.Relations;
 import pl.grzegorz2047.openguild.teleporters.Teleporter;
 import pl.grzegorz2047.openguild.teleporters.TpaRequester;
-import pl.grzegorz2047.openguild.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild.tntguildblocker.TntGuildBlocker;
 
 /**
@@ -22,6 +21,7 @@ public class Watcher implements Runnable {
     private final Guilds guilds;
     private final Relations relations;
     private final TntGuildBlocker tntGuildBlocker;
+    private final int TELEPORT_COOLDOWN;
 
     private int seconds;
     private boolean tpaEnabled;
@@ -34,6 +34,7 @@ public class Watcher implements Runnable {
         this.relations = relations;
         this.tntGuildBlocker = tntGuildBlocker;
         tpaEnabled = config.getBoolean("tpa-command", false);
+        TELEPORT_COOLDOWN = config.getInt("teleport-cooldown", 10);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class Watcher implements Runnable {
             logout.checkExpiredFights();
         }
 
-        if (GenConf.TELEPORT_COOLDOWN > 0) {
+        if (TELEPORT_COOLDOWN > 0) {
             teleporter.checkHomeRequests();
         }
 

@@ -1,20 +1,28 @@
 package pl.grzegorz2047.openguild.teleporters;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 
 import java.util.HashMap;
 
-import static pl.grzegorz2047.openguild.configuration.GenConf.TPA_EXPIRE_TIME;
 
 public class TpaRequester {
 
+
     private HashMap<String, TpaRequest> requests = new HashMap<>();
-    private int expireTime = TPA_EXPIRE_TIME * 1000;
+    private int expireTime = 30 * 1000;
+    private final int TPA_EXPIRE_TIME;
+
+    public TpaRequester(FileConfiguration config) {
+        TPA_EXPIRE_TIME = config.getInt("tpa-expire-time", 15);
+        expireTime = TPA_EXPIRE_TIME * 1000;
+    }
+
 
     public boolean addRequest(String source, String destination) {
-        if(requests.containsKey(source)) {
+        if (requests.containsKey(source)) {
             return false;
         }
         requests.put(source, new TpaRequest(source, destination, System.currentTimeMillis()));

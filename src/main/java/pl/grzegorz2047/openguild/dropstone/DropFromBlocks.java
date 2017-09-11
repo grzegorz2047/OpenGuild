@@ -5,17 +5,20 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 
 import java.util.*;
 
 public class DropFromBlocks {
     private final static Random r = new Random();
+    private final boolean NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK;
+    private boolean DROP_ENABLED;
+    private final boolean DROP_TO_EQ;
     private List<Material> eligibleBlocks = new ArrayList<>();
     private List<Material> ores =
             Arrays.asList(
@@ -30,11 +33,15 @@ public class DropFromBlocks {
             );
     private List<DropProperties> loadedDrops = new ArrayList<>();
 
-    public DropFromBlocks(List<DropProperties> loadedDrops) {
+    public DropFromBlocks(List<DropProperties> loadedDrops, FileConfiguration config) {
         this.loadedDrops = loadedDrops;
+        NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK = config.getBoolean("drop.notify-cant-drop-from-not-eligible-block", false);
+        DROP_ENABLED = config.getBoolean("drop.enabled", false);
+        DROP_TO_EQ = config.getBoolean("drop.drop-to-eq", false);
+
         if (loadedDrops.size() == 0) {
             System.out.println("Nie wczytalo dropu! wylaczam drop z blockow!");
-            GenConf.DROP_ENABLED = false;
+            DROP_ENABLED = false;
         }
     }
 
@@ -76,7 +83,7 @@ public class DropFromBlocks {
         Material itemInHandType = itemInHand.getType();
         Map<Enchantment, Integer> itemEnchantmens = itemInHand.getEnchantments();
         if (!isEligible(brokenBlockType)) {
-            if (GenConf.NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK) {
+            if (NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK) {
                 player.sendMessage(MsgManager.get("notifynodropfromthistypeofblock"));
             }
         }
@@ -97,7 +104,7 @@ public class DropFromBlocks {
         }
 
         Material receivedDropType = receivedDrop.getType();
-        if (GenConf.DROP_TO_EQ) {
+        if (DROP_TO_EQ) {
             int firstFreeSlot = playerInventory.firstEmpty();
             if (hasDroppedBlockTypeInInventory(playerInventory, receivedDropType)) {
                 boolean canAddToItemStack = false;

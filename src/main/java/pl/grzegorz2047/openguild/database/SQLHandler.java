@@ -22,7 +22,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild.OGLogger;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.database.mysql.MySQLImplementationStrategy;
 import pl.grzegorz2047.openguild.database.mysql.MySQLTables;
 import pl.grzegorz2047.openguild.database.sqlite.SQLiteImplementationStrategy;
@@ -61,7 +60,6 @@ public final class SQLHandler {
     }
 
 
-
     public void loadSQLNames(String sqlTablePrefix) {
         if (sqlTablePrefix.length() <= 10 && sqlTablePrefix.length() >= 3) {
             this.sqlTablePrefix = sqlTablePrefix;
@@ -81,12 +79,14 @@ public final class SQLHandler {
      * configuration file.
      */
     public void loadDB(String host, int port, String user, String pass, String name) {
+        Database database = Database.valueOf(plugin.getConfig().getString("database", "FILE").toUpperCase());
+        String fileDir = plugin.getConfig().getString("file-dir", "plugins/OpenGuild/og.db");
 
         OGLogger ogLogger = OpenGuild.getOGLogger();
-        switch (GenConf.DATABASE) {
+        switch (database) {
             case FILE:
                 ogLogger.info("[SQLite] Connecting to SQLite database ...");
-                implementation = new SQLiteImplementationStrategy();
+                implementation = new SQLiteImplementationStrategy(fileDir);
                 tables = new SQLiteTables();
                 ogLogger.info("[SQLite] Connected to SQLite successfully!");
                 break;
@@ -95,8 +95,8 @@ public final class SQLHandler {
                 tables = new MySQLTables();
                 break;
             default:
-                ogLogger.severe("[MySQL] Invalid database type '" + GenConf.DATABASE.name() + "'!");
-                implementation = new SQLiteImplementationStrategy();
+                ogLogger.severe("[MySQL] Invalid database type '" + database.name() + "'!");
+                implementation = new SQLiteImplementationStrategy(fileDir);
                 tables = new SQLiteTables();
                 ogLogger.severe("[MySQL] Invalid database type! Setting db to SQLite!");
                 break;
@@ -553,6 +553,7 @@ public final class SQLHandler {
             }
         });
     }
+
     public String getCuboidsTableName() {
         return cuboidsTableName;
     }

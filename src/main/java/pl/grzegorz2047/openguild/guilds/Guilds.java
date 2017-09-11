@@ -22,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild.OpenGuild;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.managers.MsgManager;
@@ -40,6 +39,7 @@ public class Guilds {
     private final Cuboids cuboids;
     private final String playerTemplateNameLabel = "{PLAYER}";
     private final PlayerMetadataController playerMetadataController;
+    private final List<String> FORBIDDEN_WORLDS;
     private Map<String, Guild> guilds = new HashMap<>();
     private List<String> onlineGuilds = new ArrayList<>();
     private ArrayList<ItemStack> requiredItemStacks;
@@ -53,6 +53,7 @@ public class Guilds {
         this.guildInvitations = new GuildInvitations(sqlHandler, this);
         playerMetadataController = new PlayerMetadataController(plugin);
         playSoundWHenSomeoneEnteredCuboidEnabled = plugin.getConfig().getBoolean("cuboid.notify-enter-sound", false);
+        FORBIDDEN_WORLDS = plugin.getConfig().getStringList("forbidden-worlds");
 
         try {
             Sound configSound = Sound.valueOf(plugin.getConfig().getString("cuboid.notify-enter-sound-type", "ENDERMAN_DEATH"));
@@ -493,7 +494,7 @@ public class Guilds {
     }
 
     public boolean isPlayerInForbiddenWorld(String playerWorldName) {
-        return GenConf.FORBIDDEN_WORLDS.contains(playerWorldName);
+        return FORBIDDEN_WORLDS.contains(playerWorldName);
     }
 
     public int getRequiredItemsSize() {

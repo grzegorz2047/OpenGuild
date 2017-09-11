@@ -16,19 +16,19 @@
 
 package pl.grzegorz2047.openguild.commands;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.guilds.Guild;
-import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.utils.GenUtil;
+
+import java.util.UUID;
 
 /**
  * This command is used to send message to members of guild.
@@ -38,9 +38,13 @@ import pl.grzegorz2047.openguild.utils.GenUtil;
 public class TeamCommand implements CommandExecutor {
 
     private final Guilds guilds;
+    private final String GUILD_ONLY_CHAT_FORMAT;
 
-    public TeamCommand(Guilds guilds) {
+    public TeamCommand(Guilds guilds, FileConfiguration config) {
         this.guilds = guilds;
+        GUILD_ONLY_CHAT_FORMAT = config.getString("chat.guild-format", "&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
+
+
     }
 
     @Override
@@ -65,7 +69,7 @@ public class TeamCommand implements CommandExecutor {
         String message = GenUtil.argsToString(args, 0, args.length);
 
         Guild guild = guilds.getPlayerGuild(player.getUniqueId());
-        String format = GenConf.GUILD_ONLY_CHAT_FORMAT
+        String format = GUILD_ONLY_CHAT_FORMAT
                 .replace("{GUILD}", guild.getName())
                 .replace("{PLAYER}", player.getName())
                 .replace("{MESSAGE}", message);

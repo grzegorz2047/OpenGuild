@@ -4,21 +4,24 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.teleporters.Teleporter;
 import pl.grzegorz2047.openguild.teleporters.TpaRequester;
-import pl.grzegorz2047.openguild.managers.MsgManager;
 
 
 public class TpaCommand implements CommandExecutor {
 
     private final Teleporter teleporter;
     private final TpaRequester tpaRequester;
+    private final int TELEPORT_COOLDOWN;
 
-    public TpaCommand(Teleporter teleporter, TpaRequester tpaRequester) {
+    public TpaCommand(Teleporter teleporter, TpaRequester tpaRequester, FileConfiguration config) {
         this.teleporter = teleporter;
         this.tpaRequester = tpaRequester;
+        TELEPORT_COOLDOWN = config.getInt("teleport-cooldown", 10);
+
 
     }
 
@@ -40,9 +43,9 @@ public class TpaCommand implements CommandExecutor {
                 if (isNotRequesting(p, sourceName)) return true;
                 Player sourcePlayer = Bukkit.getPlayer(sourceName);
                 if (isNotOnline(p, sourcePlayer)) return true;
-                teleporter.addRequest(sourcePlayer.getUniqueId(), sourcePlayer.getLocation(), p.getLocation(), GenConf.TELEPORT_COOLDOWN);
+                teleporter.addRequest(sourcePlayer.getUniqueId(), sourcePlayer.getLocation(), p.getLocation(), TELEPORT_COOLDOWN);
                 tpaRequester.removeRequest(sourceName);
-                sourcePlayer.sendMessage(MsgManager.get("tpaccepteddontmove").replace("%SECONDS%", String.valueOf(GenConf.TELEPORT_COOLDOWN)));
+                sourcePlayer.sendMessage(MsgManager.get("tpaccepteddontmove").replace("%SECONDS%", String.valueOf(TELEPORT_COOLDOWN)));
             }
             if (subcmd.equalsIgnoreCase("deny")) {
                 if (isNotRequesting(p, sourceName)) return true;

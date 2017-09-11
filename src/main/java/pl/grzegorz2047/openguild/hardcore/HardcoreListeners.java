@@ -16,9 +16,6 @@
 
 package pl.grzegorz2047.openguild.hardcore;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,24 +24,29 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.plugin.Plugin;
-import pl.grzegorz2047.openguild.configuration.GenConf;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class HardcoreListeners implements Listener {
 
     private final HardcoreSQLHandler hardcoreSQLHandler;
     private final Plugin plugin;
     private final HardcoreHandler hardcoreHandler;
+    private final boolean LIGHTNING_ON_DEATH_ENABLED;
     private String datePattern = "dd-MM-yyy HH:mm";
 
     public HardcoreListeners(HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler, Plugin plugin) {
         this.hardcoreSQLHandler = hardcoreSQLHandler;
         this.plugin = plugin;
         this.hardcoreHandler = hardcoreHandler;
+        LIGHTNING_ON_DEATH_ENABLED = plugin.getConfig().getBoolean("hardcore-bans.lightning", true);
+
     }
 
     @EventHandler
     public void onPlayerDead(PlayerDeathEvent e) {
-        if (GenConf.LIGHTNING_ON_DEATH_ENABLED) {
+        if (LIGHTNING_ON_DEATH_ENABLED) {
             e.getEntity().getWorld().strikeLightningEffect(e.getEntity().getLocation());
         }
 

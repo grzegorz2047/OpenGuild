@@ -16,17 +16,16 @@
 
 package pl.grzegorz2047.openguild.commands.guild;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.commands.command.Command;
 import pl.grzegorz2047.openguild.commands.command.CommandException;
 import pl.grzegorz2047.openguild.commands.command.UsageException;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.hardcore.HardcoreHandler;
-import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.hardcore.HardcoreSQLHandler;
+import pl.grzegorz2047.openguild.managers.MsgManager;
 
 public class GuildUnbanPlayerCommand extends Command {
 

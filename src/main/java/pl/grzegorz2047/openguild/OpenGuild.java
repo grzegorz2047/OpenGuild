@@ -25,7 +25,6 @@ import pl.grzegorz2047.openguild.commands.GuildCommand;
 import pl.grzegorz2047.openguild.commands.SpawnCommand;
 import pl.grzegorz2047.openguild.commands.TeamCommand;
 import pl.grzegorz2047.openguild.commands.TpaCommand;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.database.TempPlayerData;
@@ -34,15 +33,14 @@ import pl.grzegorz2047.openguild.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild.dropstone.DropProperties;
 import pl.grzegorz2047.openguild.files.FileValidator;
 import pl.grzegorz2047.openguild.guilds.Guilds;
+import pl.grzegorz2047.openguild.hardcore.HardcoreHandler;
+import pl.grzegorz2047.openguild.hardcore.HardcoreSQLHandler;
 import pl.grzegorz2047.openguild.listeners.*;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.managers.TagManager;
-import pl.grzegorz2047.openguild.hardcore.HardcoreHandler;
-import pl.grzegorz2047.openguild.hardcore.HardcoreSQLHandler;
-import pl.grzegorz2047.openguild.randomtp.RandomTPHandler;
-import pl.grzegorz2047.openguild.ranking.EloRanking;
 import pl.grzegorz2047.openguild.relations.Relations;
 import pl.grzegorz2047.openguild.spawn.ModuleSpawn;
+import pl.grzegorz2047.openguild.spawn.SpawnChecker;
 import pl.grzegorz2047.openguild.tasks.Watcher;
 import pl.grzegorz2047.openguild.teleporters.Teleporter;
 import pl.grzegorz2047.openguild.teleporters.TpaRequester;
@@ -59,7 +57,6 @@ import java.util.List;
 public class OpenGuild extends JavaPlugin {
 
     private static OGLogger logger = new OGLogger();
-
     private Guilds guilds;
 
     private TagManager tagManager;
@@ -87,10 +84,11 @@ public class OpenGuild extends JavaPlugin {
         loadConfigFiles(fileValidator);
 
         FileConfiguration mainConfig = getConfig();
-        GenConf.loadConfiguration(mainConfig);
-        loadTranslationFiles(fileValidator);
+        SpawnChecker.loadSpawnCoords(getConfig().getList("spawn.location-max"), getConfig().getList("spawn.location-min"));
 
-        /*
+        loadTranslationFiles(fileValidator);
+        logger.setDebugMode(mainConfig.getBoolean("debug", false));
+          /*
          * If some server admin doesn't want to use PermissionsEX or other
          * permission plugin - he can use our built-in permissions manager.
          */
@@ -111,7 +109,7 @@ public class OpenGuild extends JavaPlugin {
         // Setup Tag Manager
         this.tagManager = new TagManager(guilds, getConfig());
         teleporter = new Teleporter();
-        tpaRequester = new TpaRequester();
+        tpaRequester = new TpaRequester(getConfig());
         tntGuildBlocker = new TntGuildBlocker();
 
 
@@ -129,9 +127,6 @@ public class OpenGuild extends JavaPlugin {
         loadAllListeners(sqlHandler);
         sqlHandler.loadRelations(guilds);
 
-        CuboidAndSpawnManipulationListeners.loadSpecialItemsToDestroyEnemyCuboidBlocks();
-
-
         loadWatcherTask(relations);
 
         String enabledMsg = "§a" + this.getName() + "§6 by §3grzegorz2047§6 has been enabled in " + String.valueOf(System.currentTimeMillis() - startTime) + " ms!";
@@ -148,7 +143,7 @@ public class OpenGuild extends JavaPlugin {
 
     private void loadDropFromBlocks(FileConfiguration config) {
         List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
-        this.drop = new DropFromBlocks(loadedDrops);
+        this.drop = new DropFromBlocks(loadedDrops, getConfig());
         this.drop.loadMainDropData(config.getStringList("blocks-from-where-item-drops"));
     }
 
@@ -164,6 +159,19 @@ public class OpenGuild extends JavaPlugin {
         fileValidator.validateFile(getResource("commands.yml"), "commands");
         fileValidator.validateFile(getResource("drop.yml"), "drop");
     }
+/*
+    public static void loadConfiguration(FileConfiguration config) {
+        int MAX_CUBOID_RADIUS = config.getInt("cuboid.max-cube-size", 50);
+        boolean SQL_DEBUG = config.getBoolean("mysql.debug", false);
+        boolean SNOOPER = config.getBoolean("snooper", true);
+        // System.out.print("Pobral cubnotifymem "+config.getBoolean("cuboid.notify-enter-members")+" a jest "+NOTIFY_GUILD_MEMBERS_ABOUT_SOMEONE_ENTERED_CUBOID);
+        boolean cubNotifyPerm = config.getBoolean("cuboid.notify-permission", false);
+        String CHAT_PREFIX = config.getString("chat.prefix", "&6[{TAG}] ");
+        boolean NEW_COMMAND_API_USED = config.getBoolean("use-new-command-api", false);
+        int SPAWN_EXTRA_SPACE = config.getInt("spawn.extra", 50);
+    }
+*/
+
 
     @Override
     public void onDisable() {
@@ -196,12 +204,14 @@ public class OpenGuild extends JavaPlugin {
      * registers them in our API.
      */
     private void loadCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler) {
-        getCommand("team").setExecutor(new TeamCommand(guilds));
+        getCommand("team").setExecutor(new TeamCommand(guilds, getConfig()));
         getCommand("guild").setExecutor(new GuildCommand(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler, hardcoreHandler, this));
-        if (GenConf.SPAWN_COMMAND_ENABLED) {
-            getCommand("spawn").setExecutor(new SpawnCommand(teleporter));
+        boolean spawnCommand = getConfig().getBoolean("spawn-command", false);
+
+        if (spawnCommand) {
+            getCommand("spawn").setExecutor(new SpawnCommand(teleporter, getConfig()));
         }
-        getCommand("tpa").setExecutor(new TpaCommand(teleporter, tpaRequester));
+        getCommand("tpa").setExecutor(new TpaCommand(teleporter, tpaRequester, getConfig()));
     }
 
 
@@ -222,7 +232,7 @@ public class OpenGuild extends JavaPlugin {
             pm.registerEvents(new EnchantInsertListener(), this);
         }
 
-        pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop, guilds), this);
+        pm.registerEvents(new CuboidAndSpawnManipulationListeners(cuboids, drop, guilds, getConfig()), this);
 
         pm.registerEvents(new EntityDamageByEntityListener(logout, guilds, getConfig()), this);
 

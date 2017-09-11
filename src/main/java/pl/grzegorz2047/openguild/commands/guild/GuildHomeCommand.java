@@ -16,18 +16,18 @@
 
 package pl.grzegorz2047.openguild.commands.guild;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild.configuration.GenConf;
-import pl.grzegorz2047.openguild.teleporters.Teleporter;
-import pl.grzegorz2047.openguild.guilds.Guilds;
-import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.commands.command.Command;
 import pl.grzegorz2047.openguild.commands.command.CommandException;
 import pl.grzegorz2047.openguild.events.guild.GuildHomeTeleportEvent;
-import org.bukkit.Bukkit;
+import pl.grzegorz2047.openguild.guilds.Guild;
+import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
+import pl.grzegorz2047.openguild.teleporters.Teleporter;
 
 /**
  * Command used by players to teleport to their guild home.
@@ -37,13 +37,16 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 public class GuildHomeCommand extends Command {
 
     private final Guilds guilds;
+    private final int TELEPORT_COOLDOWN;
     private Teleporter teleporter;
 
 
-    public GuildHomeCommand(Teleporter teleporter, Guilds guilds) {
+    public GuildHomeCommand(Teleporter teleporter, Guilds guilds, FileConfiguration config) {
         setPermission("openguild.command.home");
         this.teleporter = teleporter;
         this.guilds = guilds;
+        TELEPORT_COOLDOWN = config.getInt("teleport-cooldown", 10);
+
     }
 
     @Override
@@ -67,8 +70,8 @@ public class GuildHomeCommand extends Command {
             return;
         }
 
-        teleporter.addRequest(player.getUniqueId(), player.getLocation(), guild.getHome(), GenConf.TELEPORT_COOLDOWN);
-        player.sendMessage(ChatColor.GRAY + MsgManager.get("timetotpnotify").replace("{GUILD}", guild.getName().toUpperCase()).replace("{HOMETPSECONDS}", String.valueOf(GenConf.TELEPORT_COOLDOWN)));
+        teleporter.addRequest(player.getUniqueId(), player.getLocation(), guild.getHome(), TELEPORT_COOLDOWN);
+        player.sendMessage(ChatColor.GRAY + MsgManager.get("timetotpnotify").replace("{GUILD}", guild.getName().toUpperCase()).replace("{HOMETPSECONDS}", String.valueOf(TELEPORT_COOLDOWN)));
 
     }
 

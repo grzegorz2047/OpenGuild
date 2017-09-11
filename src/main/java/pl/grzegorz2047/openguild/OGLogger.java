@@ -24,34 +24,34 @@ import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
- import pl.grzegorz2047.openguild.configuration.GenConf;
 
-import static java.util.logging.Logger.*;
+import static java.util.logging.Logger.getLogger;
 
-public class OGLogger  {
-    
+public class OGLogger {
+
     private File logFile;
     private java.util.logging.Logger logger = getLogger("OpenGuild");
+    private boolean debugMode = false;
 
     public OGLogger() {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         logFile = new File(String.format("plugins/OpenGuild/logger/%s.log", format.format(new Date())));
-        
-        if(!logFile.getParentFile().exists()) {
+
+        if (!logFile.getParentFile().exists()) {
             logFile.getParentFile().mkdirs();
         }
-        
+
         try {
-            if(!logFile.exists()) {
+            if (!logFile.exists()) {
                 logFile.createNewFile();
             }
 
             FileHandler handler = new FileHandler(logFile.getPath(), true);
             Formatter formatter = new OGFormatter();
             handler.setFormatter(formatter);
-            
+
             logger.addHandler(handler);
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println("---- AN EXCEPTION HAS BEEN THROWN!");
             System.out.println("Message: " + e.getMessage());
             System.out.println("---- You can find entire report in log file!");
@@ -60,7 +60,7 @@ public class OGLogger  {
 
 
     public void debug(String debug) {
-        if (GenConf.IS_IN_DEBUG_MODE) {
+        if (debugMode) {
             log(Level.INFO, debug);
         }
     }
@@ -88,17 +88,21 @@ public class OGLogger  {
 
     public void exceptionThrown(Exception exception) {
         log(Level.SEVERE, "---- AN EXCEPTION HAS BEEN THROWN!");
-        if (GenConf.IS_IN_DEBUG_MODE) {
+        if (debugMode) {
             exception.printStackTrace();
         } else {
             log(Level.SEVERE, exception.toString());
         }
         log(Level.SEVERE, "---- You can find entire report in log file!");
     }
-    
+
 
     public File getLoggingDirectory() {
         return logFile.getParentFile();
+    }
+
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
     }
 
     class OGFormatter extends Formatter {

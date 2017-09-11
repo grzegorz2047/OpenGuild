@@ -77,7 +77,7 @@ public class GuildCommand implements CommandExecutor {
         String[] disbandAliases = {"disband", "rozwiaz", "zamknij"};
         commands.put(disbandAliases, new GuildDisbandCommand(guilds, cuboids, sqlHandler, tagManager));
         String[] homeAliases = {"dom", "home", "house"};
-        commands.put(homeAliases, new GuildHomeCommand(teleporter, guilds));
+        commands.put(homeAliases, new GuildHomeCommand(teleporter, guilds, plugin.getConfig()));
         String[] setHomeAliases = {"ustawdom", "sethome", "sethouse"};
         commands.put(setHomeAliases, new GuildChangeHomeCommand(guilds, sqlHandler));
         String[] changeLeaderAliases = {"zmienlidera", "changeleader"};

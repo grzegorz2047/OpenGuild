@@ -20,7 +20,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.OpenGuild;
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.packets.ScoreboardPackets;

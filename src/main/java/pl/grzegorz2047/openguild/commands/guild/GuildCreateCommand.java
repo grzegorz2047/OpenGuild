@@ -16,30 +16,30 @@
 
 package pl.grzegorz2047.openguild.commands.guild;
 
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
-import pl.grzegorz2047.openguild.guilds.Guild;
-import pl.grzegorz2047.openguild.commands.command.Command;
-import pl.grzegorz2047.openguild.commands.command.CommandException;
-import pl.grzegorz2047.openguild.events.guild.GuildCreateEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import pl.grzegorz2047.openguild.configuration.GenConf;
-import pl.grzegorz2047.openguild.guilds.Guilds;
-import pl.grzegorz2047.openguild.cuboidmanagement.Cuboid;
-import pl.grzegorz2047.openguild.events.guild.GuildCreatedEvent;
 import pl.grzegorz2047.openguild.OpenGuild;
+import pl.grzegorz2047.openguild.commands.command.Command;
+import pl.grzegorz2047.openguild.commands.command.CommandException;
+import pl.grzegorz2047.openguild.cuboidmanagement.Cuboid;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.database.SQLHandler;
+import pl.grzegorz2047.openguild.events.guild.GuildCreateEvent;
+import pl.grzegorz2047.openguild.events.guild.GuildCreatedEvent;
+import pl.grzegorz2047.openguild.guilds.Guild;
+import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.managers.TagManager;
 import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
 import pl.grzegorz2047.openguild.spawn.SpawnChecker;
 import pl.grzegorz2047.openguild.utils.GenUtil;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -55,6 +55,10 @@ public class GuildCreateCommand extends Command {
     private final boolean blockGuildCreationWhenPlayersTooClose;
     private final int maxclantag = 6;
     private final int minclantag = 4;
+    private final int MIN_CUBOID_SIZE;
+    private final boolean FORCE_DESC;
+    private List<String> badWords;
+    private boolean playerGuildTagsEnabled;
 
     public GuildCreateCommand(Cuboids cuboids, Guilds guilds, SQLHandler sqlHandler, TagManager tagManager, FileConfiguration config) {
         setPermission("openguild.command.create");
@@ -63,6 +67,12 @@ public class GuildCreateCommand extends Command {
         this.sqlHandler = sqlHandler;
         this.tagManager = tagManager;
         blockGuildCreationWhenPlayersTooClose = config.getBoolean("cuboid.block-guild-creation-when-players-are-too-close", false);
+        badWords = config.getStringList("forbiddenguildnames");
+        playerGuildTagsEnabled = config.getBoolean("tags.enabled", true);
+        MIN_CUBOID_SIZE = config.getInt("cuboid.min-cube-size", 15);
+        FORCE_DESC = config.getBoolean("forcedesc", false);
+
+
     }
 
     @Override
@@ -78,7 +88,7 @@ public class GuildCreateCommand extends Command {
         Location playerLocation = player.getLocation();
         World playerLocationWorld = playerLocation.getWorld();
         UUID worldUUID = playerLocationWorld.getUID();
-        Cuboid cuboid = cuboids.previewCuboid(playerLocation, tag, GenConf.MIN_CUBOID_SIZE, worldUUID);
+        Cuboid cuboid = cuboids.previewCuboid(playerLocation, tag, MIN_CUBOID_SIZE, worldUUID);
 
         if (!fufilledRequirements(player, tag, description, cuboid, args.length)) return;
 
@@ -103,12 +113,12 @@ public class GuildCreateCommand extends Command {
     }
 
     private Guild insertGuildData(Player player, String tag, String description, Cuboid cuboid) {
-        cuboids.addCuboid(player.getLocation(), tag, GenConf.MIN_CUBOID_SIZE);
+        cuboids.addCuboid(player.getLocation(), tag, MIN_CUBOID_SIZE);
         Guild guild = guilds.addGuild(player.getLocation(), player.getUniqueId(), tag, description);
         guilds.updatePlayerMetadata(player.getUniqueId(), PlayerMetadataController.PlayerMetaDataColumn.GUILD.name(), guild.getName());
         guilds.addOnlineGuild(guild.getName());
 
-        if (GenConf.PLAYER_GUILD_TAGS_ENABLED) {
+        if (playerGuildTagsEnabled) {
             tagManager.playerCreatedGuild(guild, player);
         }
 
@@ -205,12 +215,12 @@ public class GuildCreateCommand extends Command {
     }
 
     private boolean isDescriptionForced() {
-        return GenConf.FORCE_DESC;
+        return FORCE_DESC;
     }
 
     private boolean isOtherPlayerTooClose(Player player) {
 
-        return blockGuildCreationWhenPlayersTooClose && GenUtil.isPlayerNearby(player, GenConf.MIN_CUBOID_SIZE);
+        return blockGuildCreationWhenPlayersTooClose && GenUtil.isPlayerNearby(player, MIN_CUBOID_SIZE);
     }
 
 
@@ -219,7 +229,7 @@ public class GuildCreateCommand extends Command {
     }
 
     private boolean hasBadWords(String tag) {
-        return GenConf.BAD_WORDS != null && GenConf.BAD_WORDS.contains(tag);
+        return badWords != null && badWords.contains(tag);
     }
 
     private boolean hasTagCorrectLength(String tag) {

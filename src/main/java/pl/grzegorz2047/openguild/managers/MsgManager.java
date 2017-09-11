@@ -15,13 +15,12 @@
  */
 package pl.grzegorz2047.openguild.managers;
 
-import java.io.File;
-import java.util.HashMap;
-
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import pl.grzegorz2047.openguild.configuration.GenConf;
+
+import java.io.File;
+import java.util.HashMap;
 
 /**
  * @author Grzegorz

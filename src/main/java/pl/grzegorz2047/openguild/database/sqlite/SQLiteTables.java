@@ -1,6 +1,5 @@
 package pl.grzegorz2047.openguild.database.sqlite;
 
-import pl.grzegorz2047.openguild.configuration.GenConf;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.database.interfaces.SQLTables;

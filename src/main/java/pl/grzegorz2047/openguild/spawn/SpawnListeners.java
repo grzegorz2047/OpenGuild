@@ -16,24 +16,34 @@
 
 package pl.grzegorz2047.openguild.spawn;
 
-import pl.grzegorz2047.openguild.events.guild.GuildCreateEvent;
-import java.util.HashMap;
-import java.util.UUID;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import pl.grzegorz2047.openguild.configuration.GenConf;
+import pl.grzegorz2047.openguild.events.guild.GuildCreateEvent;
 import pl.grzegorz2047.openguild.managers.MsgManager;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class SpawnListeners implements Listener {
     
     private static final HashMap<UUID, Long> blocked = new HashMap<>();
-    
+    private final int BLOCK_ENTER_ON_SPAWN_TIME;
+    private final boolean BLOCK_GUILD_CREATION_ON_SPAWN;
+    private final boolean BLOCK_ENTER_ON_SPAWN_ENABLED;
+
+    public SpawnListeners(FileConfiguration config) {
+        BLOCK_ENTER_ON_SPAWN_TIME = config.getInt("spawn.block-enter-time", 10);
+        BLOCK_GUILD_CREATION_ON_SPAWN = config.getBoolean("spawn.block-guild-creating", true);
+        BLOCK_ENTER_ON_SPAWN_ENABLED = config.getBoolean("spawn.block-enter", false);
+
+    }
     @EventHandler
     public void onGuildCreate(GuildCreateEvent e) {
-        if(GenConf.BLOCK_GUILD_CREATION_ON_SPAWN && SpawnChecker.isSpawnExtra(e.getHome())) {
+        if(BLOCK_GUILD_CREATION_ON_SPAWN && SpawnChecker.isSpawnExtra(e.getHome())) {
             e.setCancelled(true);
             e.getLeader().sendMessage(MsgManager.get("cantdoitonspawn"));
         }
@@ -47,7 +57,7 @@ public class SpawnListeners implements Listener {
          * podany w configu jako 'block-enter-time'
          */
         
-        if(GenConf.BLOCK_ENTER_ON_SPAWN_ENABLED) {
+        if(BLOCK_ENTER_ON_SPAWN_ENABLED) {
             if(e.getFrom().getBlock().equals(e.getTo().getBlock())) {
                 return;
             }
@@ -62,7 +72,7 @@ public class SpawnListeners implements Listener {
                 long ms = 0;
                 
                 if(blocked.containsKey(player.getUniqueId())) {
-                    ms = GenConf.BLOCK_ENTER_ON_SPAWN_TIME * 1000 + blocked.get(player.getUniqueId());
+                    ms = BLOCK_ENTER_ON_SPAWN_TIME * 1000 + blocked.get(player.getUniqueId());
                 }
                 
                 if(System.currentTimeMillis() < ms) {

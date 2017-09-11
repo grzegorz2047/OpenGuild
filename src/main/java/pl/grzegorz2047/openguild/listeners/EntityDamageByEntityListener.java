@@ -20,15 +20,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.projectiles.ProjectileSource;
-import pl.grzegorz2047.openguild.configuration.GenConf;
-import pl.grzegorz2047.openguild.guilds.Guilds;
-import pl.grzegorz2047.openguild.guilds.Guild;
-import org.bukkit.entity.Snowball;
 import pl.grzegorz2047.openguild.antilogout.AntiLogoutManager;
+import pl.grzegorz2047.openguild.guilds.Guild;
+import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 
 public class EntityDamageByEntityListener implements Listener {
@@ -37,10 +36,12 @@ public class EntityDamageByEntityListener implements Listener {
     private AntiLogoutManager logout;
     public static boolean TEAMPVP_MSG;
     public static boolean ANTI_LOGOUT = false;
+    private boolean teamPvpEnabled;
 
     public EntityDamageByEntityListener(AntiLogoutManager logout, Guilds guilds, FileConfiguration config) {
         this.logout = logout;
         this.guilds = guilds;
+        teamPvpEnabled = config.getBoolean("teampvp", false);
         TEAMPVP_MSG = config.getBoolean("teampvp-msg", false);
         ANTI_LOGOUT = config.getBoolean("fight-antilogout", true);
     }
@@ -48,7 +49,7 @@ public class EntityDamageByEntityListener implements Listener {
 
     @EventHandler
     private void entityDMGbyEntity(EntityDamageByEntityEvent event) {
-        if (event.isCancelled() || GenConf.TEAM_PVP_ENABLED) {
+        if (event.isCancelled() || teamPvpEnabled) {
             return;
         }
         Player attacked = null;
@@ -130,6 +131,6 @@ public class EntityDamageByEntityListener implements Listener {
     }
 
     private boolean isTeamPvpDisabled() {
-        return !GenConf.TEAM_PVP_ENABLED;
+        return !teamPvpEnabled;
     }
 }
