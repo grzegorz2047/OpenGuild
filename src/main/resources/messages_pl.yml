@@ -163,3 +163,4 @@ successfullychangedleader: 'Pomyslnie zmieniono lidera gildii! Nie jestes juz li
 cantchangeleadertoyourself: 'Nie mozesz nadac lidera samemu sobie!'
 playernotinyourguild: 'Ten gracz nie jest czlonkiem twojej gildii!'
 youenteredservertoofastrelog: 'Wszedles za szybko na serwer! Relognij!'
+maxcuboidsizereached: 'Nie mozesz juz bardziej powiekszyc cuboida!'

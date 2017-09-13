@@ -161,7 +161,6 @@ public class OpenGuild extends JavaPlugin {
     }
 /*
     public static void loadConfiguration(FileConfiguration config) {
-        int MAX_CUBOID_RADIUS = config.getInt("cuboid.max-cube-size", 50);
         boolean SQL_DEBUG = config.getBoolean("mysql.debug", false);
         boolean SNOOPER = config.getBoolean("snooper", true);
         // System.out.print("Pobral cubnotifymem "+config.getBoolean("cuboid.notify-enter-members")+" a jest "+NOTIFY_GUILD_MEMBERS_ABOUT_SOMEONE_ENTERED_CUBOID);

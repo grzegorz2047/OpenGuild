@@ -94,6 +94,8 @@ public class GuildCommand implements CommandExecutor {
         commands.put(unbanPlayerAliases, new GuildUnbanPlayerCommand(hardcoreSQLHandler, hardcoreHandler));
         String[] randomTPAliases = {"randomtp", "randomtp"};
         commands.put(randomTPAliases, new GuildRandomTPCommand(plugin));
+        String[] expandAliases = {"expand", "powieksz"};
+        commands.put(expandAliases, new GuildExpandCommand(guilds, sqlHandler, cuboids, plugin.getConfig()));
     }
 
     @Override

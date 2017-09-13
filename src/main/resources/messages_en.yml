@@ -166,3 +166,4 @@ successfullychangedleader: 'Successfully changed guild leader! You are no longer
 cantchangeleadertoyourself: 'You cant give leadership to yourself!'
 playernotinyourguild: 'This player isnt member of your guild!'
 youenteredservertoofastrelog: 'You entered server too fast! Enter again!'
+maxcuboidsizereached: 'You cannot expand your cuboid more than current size!'

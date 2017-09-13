@@ -1,9 +1,12 @@
 package pl.grzegorz2047.openguild.commands.guild;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.commands.command.Command;
 import pl.grzegorz2047.openguild.commands.command.CommandException;
+import pl.grzegorz2047.openguild.cuboidmanagement.Cuboid;
+import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.guilds.Guilds;
@@ -15,10 +18,15 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 public class GuildExpandCommand extends Command {
     private final Guilds guilds;
     private final SQLHandler sqlHandler;
+    private final int MAX_CUBOID_RADIUS;
+    private final Cuboids cuboids;
 
-    public GuildExpandCommand(Guilds guilds, SQLHandler sqlHandler) {
+    public GuildExpandCommand(Guilds guilds, SQLHandler sqlHandler, Cuboids cuboids, FileConfiguration config) {
         this.guilds = guilds;
         this.sqlHandler = sqlHandler;
+        this.cuboids = cuboids;
+          MAX_CUBOID_RADIUS = config.getInt("cuboid.max-cube-size", 50);
+
     }
 
     @Override
@@ -39,9 +47,14 @@ public class GuildExpandCommand extends Command {
             player.sendMessage(MsgManager.get("playernotleader"));
             return;
         }
-        playerGuild.setHome(player.getLocation());
-        sqlHandler.changeHome(playerGuild.getName(), player.getLocation());
-        player.sendMessage(MsgManager.get("successfullychangedhomeposition"));
+        Cuboid cuboid = cuboids.getCuboids().get(playerGuild.getName());
+        if(cuboid.getCuboidSize() >= MAX_CUBOID_RADIUS) {
+            player.sendMessage(MsgManager.get("maxcuboidsizereached"));
+            return;
+        }
+        //listRequiredItems + obecna wielkosc cuboida ?
+        //wez wymagane itemy
+        //sqlHandler.expandCuboid(playerGuild.getName());
     }
 
     @Override

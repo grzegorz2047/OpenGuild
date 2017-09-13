@@ -569,6 +569,23 @@ public final class SQLHandler {
     public String getGuildsTableName() {
         return guildsTableName;
     }
+
+    public void expandCuboid(String guildName) {
+        try {
+            createStatement();
+            try {
+                statement.execute("UPDATE " + cuboidsTableName + "SET '" + "cuboid_size" +
+                        "'=" + "cuboid_size" + "+1 WHERE tag='" + guildName + "';");
+                statement.close();
+                statement.getConnection().close();
+            } catch (SQLException ex) {
+                OpenGuild.getOGLogger().exceptionThrown(ex);
+            }
+        } catch (Exception e) {
+            OpenGuild.getOGLogger().exceptionThrown(e);
+        }
+
+    }
 }
 
 
