@@ -35,7 +35,8 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 public class GuildInfoCommand extends Command {
     private final Guilds guilds;
 
-    public GuildInfoCommand(Guilds guilds) {
+    public GuildInfoCommand(String[] aliases, Guilds guilds) {
+        super(aliases);
         setPermission("openguild.command.info");
         this.guilds = guilds;
     }

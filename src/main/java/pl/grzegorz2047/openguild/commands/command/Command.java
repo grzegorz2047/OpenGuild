@@ -19,8 +19,16 @@ package pl.grzegorz2047.openguild.commands.command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
+import java.util.List;
+
 public abstract class Command {
     private String permission;
+    private List<String> aliases;
+
+    public Command(String[] aliases) {
+        this.aliases = Arrays.asList(aliases);
+    }
 
     public abstract void execute(CommandSender sender, String[] args) throws CommandException;
 
@@ -30,7 +38,7 @@ public abstract class Command {
 
     protected String getTitle(String title) {
         String label = ChatColor.GRAY + "------------------" + ChatColor.DARK_GRAY + "[" + ChatColor.RESET;
-        String label2 = ChatColor.DARK_GRAY + "]" +  ChatColor.GRAY + "------------------" + ChatColor.RESET;
+        String label2 = ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + "------------------" + ChatColor.RESET;
         return label + " " + title + ChatColor.RESET + " " + label2;
     }
 
@@ -42,5 +50,9 @@ public abstract class Command {
 
     public void setPermission(String permission) {
         this.permission = permission;
+    }
+
+    public List<String> getAliases() {
+        return aliases;
     }
 }

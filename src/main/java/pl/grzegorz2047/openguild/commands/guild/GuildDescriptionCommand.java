@@ -38,7 +38,8 @@ public class GuildDescriptionCommand extends Command {
     private final Guilds guilds;
     private final SQLHandler sqlHandler;
 
-    public GuildDescriptionCommand(Guilds guilds, SQLHandler sqlHandler) {
+    public GuildDescriptionCommand(String[] aliases, Guilds guilds, SQLHandler sqlHandler) {
+        super(aliases);
         setPermission("openguild.command.description");
         this.guilds = guilds;
         this.sqlHandler = sqlHandler;

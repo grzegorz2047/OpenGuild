@@ -16,7 +16,8 @@ public class GuildChangeHomeCommand extends Command {
     private final Guilds guilds;
     private final SQLHandler sqlHandler;
 
-    public GuildChangeHomeCommand(Guilds guilds, SQLHandler sqlHandler) {
+    public GuildChangeHomeCommand(String[] strings, Guilds guilds, SQLHandler sqlHandler) {
+        super(strings);
         this.guilds = guilds;
         this.sqlHandler = sqlHandler;
     }

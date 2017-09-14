@@ -42,7 +42,8 @@ public class GuildKickCommand extends Command {
     private final Guilds guilds;
     private final SQLHandler sqlHandler;
 
-    public GuildKickCommand(TagManager tagManager, Guilds guilds, SQLHandler sqlHandler) {
+    public GuildKickCommand(String[] aliases, TagManager tagManager, Guilds guilds, SQLHandler sqlHandler) {
+        super(aliases);
         setPermission("openguild.command.kick");
         this.tagManager = tagManager;
         this.guilds = guilds;

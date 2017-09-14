@@ -41,7 +41,8 @@ public class GuildAllyCommand extends Command {
     private final TagManager tagManager;
     private SQLHandler sqlHandler;
 
-    public GuildAllyCommand(Relations relations, Guilds guilds, TagManager tagManager, SQLHandler sqlHandler) {
+    public GuildAllyCommand(String[] aliases, Relations relations, Guilds guilds, TagManager tagManager, SQLHandler sqlHandler) {
+        super(aliases);
         setPermission("openguild.command.ally");
         this.relations = relations;
         this.guilds = guilds;

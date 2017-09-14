@@ -42,7 +42,8 @@ public class GuildLeaveCommand extends Command {
     private final TagManager tagManager;
     private final SQLHandler sqlHandler;
 
-    public GuildLeaveCommand(Guilds guilds, TagManager tagManager, SQLHandler sqlHandler) {
+    public GuildLeaveCommand(String[] aliases, Guilds guilds, TagManager tagManager, SQLHandler sqlHandler) {
+        super(aliases);
         setPermission("openguild.command.leave");
         this.guilds = guilds;
         this.tagManager = tagManager;

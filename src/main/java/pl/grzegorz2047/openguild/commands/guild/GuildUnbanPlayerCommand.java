@@ -32,7 +32,8 @@ public class GuildUnbanPlayerCommand extends Command {
     private final HardcoreSQLHandler hardcoreSQLHandler;
     private final HardcoreHandler hardcoreHandler;
 
-    public GuildUnbanPlayerCommand(HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler) {
+    public GuildUnbanPlayerCommand(String[] aliases, HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler) {
+        super(aliases);
         setPermission("openguild.command.hardcore.unban");
         this.hardcoreSQLHandler = hardcoreSQLHandler;
         this.hardcoreHandler = hardcoreHandler;

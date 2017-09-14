@@ -34,7 +34,8 @@ public class GuildItemsCommand extends Command {
     private final Plugin plugin;
     private final Guilds guilds;
 
-    public GuildItemsCommand(Plugin plugin, Guilds guilds) {
+    public GuildItemsCommand(String[] aliases, Plugin plugin, Guilds guilds) {
+        super(aliases);
         setPermission("openguild.command.items");
         this.plugin = plugin;
         this.guilds = guilds;

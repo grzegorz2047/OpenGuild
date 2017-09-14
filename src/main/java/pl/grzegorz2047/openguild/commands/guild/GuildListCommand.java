@@ -31,7 +31,8 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 public class GuildListCommand extends Command {
     private final Guilds guilds;
 
-    public GuildListCommand(Guilds guilds) {
+    public GuildListCommand(String[] aliases, Guilds guilds) {
+        super(aliases);
         setPermission("openguild.command.list");
         this.guilds = guilds;
     }

@@ -44,7 +44,8 @@ public class GuildDisbandCommand extends Command {
     private final SQLHandler sqlHandler;
     private final TagManager tagManager;
 
-    public GuildDisbandCommand(Guilds guilds, Cuboids cuboids, SQLHandler sqlHandler, TagManager tagManager) {
+    public GuildDisbandCommand(String[] aliases, Guilds guilds, Cuboids cuboids, SQLHandler sqlHandler, TagManager tagManager) {
+        super(aliases);
         setPermission("openguild.command.disband");
         this.guilds = guilds;
         this.cuboids = cuboids;

@@ -41,7 +41,8 @@ public class GuildHomeCommand extends Command {
     private Teleporter teleporter;
 
 
-    public GuildHomeCommand(Teleporter teleporter, Guilds guilds, FileConfiguration config) {
+    public GuildHomeCommand(String[] aliases, Teleporter teleporter, Guilds guilds, FileConfiguration config) {
+        super(aliases);
         setPermission("openguild.command.home");
         this.teleporter = teleporter;
         this.guilds = guilds;

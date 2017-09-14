@@ -29,7 +29,8 @@ public class GuildRandomTPCommand extends Command {
 
     private RandomTPHandler randomTPHandler = new RandomTPHandler();
 
-    public GuildRandomTPCommand(Plugin plugin) {
+    public GuildRandomTPCommand(String[] aliases, Plugin plugin) {
+        super(aliases);
         randomTPHandler.enable(plugin);
     }
 

@@ -42,7 +42,8 @@ public class GuildInvitationAcceptCommand extends Command {
     private final TagManager tagManager;
     private final Guilds guilds;
 
-    public GuildInvitationAcceptCommand(TagManager tagManager, Guilds guilds) {
+    public GuildInvitationAcceptCommand(String[] aliases, TagManager tagManager, Guilds guilds) {
+        super(aliases);
         setPermission("openguild.command.invitationaccept");
         this.tagManager = tagManager;
         this.guilds = guilds;

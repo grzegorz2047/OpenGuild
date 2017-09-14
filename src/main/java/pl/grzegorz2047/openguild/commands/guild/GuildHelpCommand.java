@@ -30,6 +30,10 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 public class GuildHelpCommand extends Command {
 
 
+    public GuildHelpCommand(String[] strings) {
+        super(strings);
+    }
+
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         int page = 1;

@@ -21,7 +21,8 @@ public class GuildExpandCommand extends Command {
     private final int MAX_CUBOID_RADIUS;
     private final Cuboids cuboids;
 
-    public GuildExpandCommand(Guilds guilds, SQLHandler sqlHandler, Cuboids cuboids, FileConfiguration config) {
+    public GuildExpandCommand(String[] aliases, Guilds guilds, SQLHandler sqlHandler, Cuboids cuboids, FileConfiguration config) {
+        super(aliases);
         this.guilds = guilds;
         this.sqlHandler = sqlHandler;
         this.cuboids = cuboids;

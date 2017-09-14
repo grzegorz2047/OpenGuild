@@ -26,6 +26,10 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
  */
 public class GuildAdminCommand extends Command {
 
+    public GuildAdminCommand(String[] aliases) {
+        super(aliases);
+    }
+
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         if (!(sender instanceof Player)) {

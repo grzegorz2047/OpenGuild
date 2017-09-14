@@ -37,7 +37,8 @@ public class GuildEnemyCommand extends Command {
     private final SQLHandler sqlHandler;
     private final TagManager tagManager;
 
-    public GuildEnemyCommand(Guilds guilds, SQLHandler sqlHandler, TagManager tagManager) {
+    public GuildEnemyCommand(String[] aliases, Guilds guilds, SQLHandler sqlHandler, TagManager tagManager) {
+        super(aliases);
         setPermission("openguild.command.enemy");
         this.guilds = guilds;
         this.sqlHandler = sqlHandler;

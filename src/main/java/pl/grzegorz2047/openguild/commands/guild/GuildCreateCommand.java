@@ -60,7 +60,8 @@ public class GuildCreateCommand extends Command {
     private List<String> badWords;
     private boolean playerGuildTagsEnabled;
 
-    public GuildCreateCommand(Cuboids cuboids, Guilds guilds, SQLHandler sqlHandler, TagManager tagManager, FileConfiguration config) {
+    public GuildCreateCommand(String[] aliases, Cuboids cuboids, Guilds guilds, SQLHandler sqlHandler, TagManager tagManager, FileConfiguration config) {
+        super(aliases);
         setPermission("openguild.command.create");
         this.cuboids = cuboids;
         this.guilds = guilds;
@@ -71,8 +72,6 @@ public class GuildCreateCommand extends Command {
         playerGuildTagsEnabled = config.getBoolean("tags.enabled", true);
         MIN_CUBOID_SIZE = config.getInt("cuboid.min-cube-size", 15);
         FORCE_DESC = config.getBoolean("forcedesc", false);
-
-
     }
 
     @Override

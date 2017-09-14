@@ -35,7 +35,8 @@ public class GuildVersionCommand extends Command {
     private final List<Author> authors;
     private final Plugin plugin;
 
-    public GuildVersionCommand(Plugin plugin) {
+    public GuildVersionCommand(String[] aliases, Plugin plugin) {
+        super(aliases);
         this.authors = new ArrayList<>();
         this.loadAuthors();
         this.plugin = plugin;
@@ -48,7 +49,7 @@ public class GuildVersionCommand extends Command {
         sender.sendMessage(ChatColor.DARK_GRAY + "Authors: \n" + this.getAuthors());
         sender.sendMessage(ChatColor.DARK_GRAY + "GitHub: " + ChatColor.GOLD + "https://github.com/grzegorz2047/OpenGuild");
         sender.sendMessage(ChatColor.DARK_GRAY + "BukkitDev: " + ChatColor.GOLD + "http://dev.bukkit.org/bukkit-plugins/openguild");
-     }
+    }
 
     @Override
     public int minArgs() {

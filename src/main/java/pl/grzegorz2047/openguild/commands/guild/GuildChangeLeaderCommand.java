@@ -17,7 +17,8 @@ public class GuildChangeLeaderCommand extends Command {
     private final Guilds guilds;
     private final SQLHandler sqlHandler;
 
-    public GuildChangeLeaderCommand(Guilds guilds, SQLHandler sqlHandler) {
+    public GuildChangeLeaderCommand(String[] aliases, Guilds guilds, SQLHandler sqlHandler) {
+        super(aliases);
         this.guilds = guilds;
         this.sqlHandler = sqlHandler;
     }

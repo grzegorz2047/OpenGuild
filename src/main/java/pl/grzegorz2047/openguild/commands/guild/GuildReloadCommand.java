@@ -34,7 +34,8 @@ import java.io.IOException;
 public class GuildReloadCommand extends Command {
     private FileConfiguration fileConfiguration;
 
-    public GuildReloadCommand(FileConfiguration fileConfiguration) {
+    public GuildReloadCommand(String[] aliases, FileConfiguration fileConfiguration) {
+        super(aliases);
         setPermission("openguild.command.reload");
         this.fileConfiguration = fileConfiguration;
     }

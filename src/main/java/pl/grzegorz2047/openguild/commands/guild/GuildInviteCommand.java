@@ -34,7 +34,8 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 public class GuildInviteCommand extends Command {
     private final Guilds guilds;
 
-    public GuildInviteCommand(Guilds guilds) {
+    public GuildInviteCommand(String[] aliases, Guilds guilds) {
+        super(aliases);
         setPermission("openguild.command.invite");
         this.guilds = guilds;
     }

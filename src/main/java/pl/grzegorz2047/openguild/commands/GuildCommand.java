@@ -19,7 +19,9 @@ import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild.commands.command.Command;
 import pl.grzegorz2047.openguild.commands.command.CommandException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
@@ -46,7 +48,7 @@ public class GuildCommand implements CommandExecutor {
     /**
      * This map stores all sub-commands (and their aliases) and their handlers.
      */
-    private final Map<String[], Command> commands = new HashMap<>();
+    private final List<Command> commands = new ArrayList<>();
 
     public GuildCommand(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler, Plugin plugin) {
         registerCommands(cuboids, guilds, teleporter, tagManager, sqlHandler, relations, hardcoreSQLHandler, hardcoreHandler, plugin);
@@ -54,87 +56,68 @@ public class GuildCommand implements CommandExecutor {
 
     private void registerCommands(Cuboids cuboids, Guilds guilds, Teleporter teleporter, TagManager tagManager, SQLHandler sqlHandler, Relations relations, HardcoreSQLHandler hardcoreSQLHandler, HardcoreHandler hardcoreHandler, Plugin plugin) {
         // Register 'guild' command sub-commands.
-        String[] createAliases = {"create", "zaloz", "stworz"};
-        commands.put(createAliases, new GuildCreateCommand(cuboids, guilds, sqlHandler, tagManager, plugin.getConfig()));
-        String[] acceptAliases = {"accept", "akceptuj"};
-        commands.put(acceptAliases, new GuildInvitationAcceptCommand(tagManager, guilds));
-        String[] helpAliases = {"help", "pomoc"};
-        commands.put(helpAliases, new GuildHelpCommand());
-        String[] infoAliases = {"info", "informacja"};
-        commands.put(infoAliases, new GuildInfoCommand(guilds));
-        String[] inviteAliases = {"invite", "zapros"};
-        commands.put(inviteAliases, new GuildInviteCommand(guilds));
-        String[] kickAliases = {"kick", "wyrzuc"};
-        commands.put(kickAliases, new GuildKickCommand(tagManager, guilds, sqlHandler));
-        String[] reloadAliases = {"reload", "przeladuj"};
-        commands.put(reloadAliases, new GuildReloadCommand(plugin.getConfig()));
-        String[] itemsAliases = {"items", "itemy", "przedmioty"};
-        commands.put(itemsAliases, new GuildItemsCommand(plugin, guilds));
-        String[] versionAliases = {"version", "wersja", "ver", "about"};
-        commands.put(versionAliases, new GuildVersionCommand(plugin));
-        String[] leaveAliases = {"leave", "opusc", "wyjdz"};
-        commands.put(leaveAliases, new GuildLeaveCommand(guilds, tagManager, sqlHandler));
-        String[] disbandAliases = {"disband", "rozwiaz", "zamknij"};
-        commands.put(disbandAliases, new GuildDisbandCommand(guilds, cuboids, sqlHandler, tagManager));
-        String[] homeAliases = {"dom", "home", "house"};
-        commands.put(homeAliases, new GuildHomeCommand(teleporter, guilds, plugin.getConfig()));
-        String[] setHomeAliases = {"ustawdom", "sethome", "sethouse"};
-        commands.put(setHomeAliases, new GuildChangeHomeCommand(guilds, sqlHandler));
-        String[] changeLeaderAliases = {"zmienlidera", "changeleader"};
-        commands.put(changeLeaderAliases, new GuildChangeLeaderCommand(guilds, sqlHandler));
-        String[] listAliases = {"list", "lista"};
-        commands.put(listAliases, new GuildListCommand(guilds));
-        String[] descriptionAliases = {"description", "desc", "opis"};
-        commands.put(descriptionAliases, new GuildDescriptionCommand(guilds, sqlHandler));
-        String[] allyAliases = {"ally", "sojusz",};
-        commands.put(allyAliases, new GuildAllyCommand(relations, guilds, tagManager, sqlHandler));
-        String[] enemyAliases = {"enemy", "wrog",};
-        commands.put(enemyAliases, new GuildEnemyCommand(guilds, sqlHandler, tagManager));
-        String[] unbanPlayerAliases = {"unbanplayer", "odbanujgracza",};
-        commands.put(unbanPlayerAliases, new GuildUnbanPlayerCommand(hardcoreSQLHandler, hardcoreHandler));
-        String[] randomTPAliases = {"randomtp", "randomtp"};
-        commands.put(randomTPAliases, new GuildRandomTPCommand(plugin));
-        String[] expandAliases = {"expand", "powieksz"};
-        commands.put(expandAliases, new GuildExpandCommand(guilds, sqlHandler, cuboids, plugin.getConfig()));
+
+        commands.add(new GuildCreateCommand(new String[]{"create", "zaloz", "stworz"}, cuboids, guilds, sqlHandler, tagManager, plugin.getConfig()));
+        commands.add(new GuildInvitationAcceptCommand(new String[]{"accept", "akceptuj"}, tagManager, guilds));
+        commands.add(new GuildHelpCommand(new String[]{"help", "pomoc"}));
+        commands.add(new GuildInfoCommand(new String[]{"info", "informacja"}, guilds));
+        commands.add(new GuildInviteCommand(new String[]{"invite", "zapros"}, guilds));
+        commands.add(new GuildKickCommand(new String[]{"kick", "wyrzuc"}, tagManager, guilds, sqlHandler));
+        commands.add(new GuildReloadCommand(new String[]{"reload", "przeladuj"}, plugin.getConfig()));
+        commands.add(new GuildItemsCommand(new String[]{"items", "itemy", "przedmioty"}, plugin, guilds));
+        commands.add(new GuildVersionCommand(new String[]{"version", "wersja", "ver", "about"}, plugin));
+        commands.add(new GuildLeaveCommand(new String[]{"leave", "opusc", "wyjdz"}, guilds, tagManager, sqlHandler));
+        commands.add(new GuildDisbandCommand(new String[]{"disband", "rozwiaz", "zamknij"}, guilds, cuboids, sqlHandler, tagManager));
+        commands.add(new GuildHomeCommand(new String[]{"dom", "home", "house"}, teleporter, guilds, plugin.getConfig()));
+        commands.add(new GuildChangeHomeCommand(new String[]{"ustawdom", "sethome", "sethouse"}, guilds, sqlHandler));
+        commands.add(new GuildChangeLeaderCommand(new String[]{"zmienlidera", "changeleader"}, guilds, sqlHandler));
+        commands.add(new GuildListCommand(new String[]{"list", "lista"}, guilds));
+        commands.add(new GuildDescriptionCommand(new String[]{"description", "desc", "opis"}, guilds, sqlHandler));
+        commands.add(new GuildAllyCommand(new String[]{"ally", "sojusz"}, relations, guilds, tagManager, sqlHandler));
+        commands.add(new GuildEnemyCommand(new String[]{"enemy", "wrog"}, guilds, sqlHandler, tagManager));
+        commands.add(new GuildUnbanPlayerCommand(new String[]{"unbanplayer", "odbanujgracza"}, hardcoreSQLHandler, hardcoreHandler));
+        commands.add(new GuildRandomTPCommand(new String[]{"randomtp", "randomtp"}, plugin));
+
+        commands.add(new GuildExpandCommand(new String[]{"expand", "powieksz"}, guilds, sqlHandler, cuboids, plugin.getConfig()));
     }
 
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
         if (args.length == 0) {
-            GuildHelpCommand helpCommand = new GuildHelpCommand();
+            GuildHelpCommand helpCommand = new GuildHelpCommand(new String[]{});
             helpCommand.execute(sender, args);
-        } else {
-            String subCommand = args[0];
-
-            boolean subCommandFound = false;
-            for (String[] aliases : commands.keySet()) {
-                for (String alias : aliases) {
-                    if (subCommand.equalsIgnoreCase(alias)) {
-                        Command executor = commands.get(aliases);
-                        if (executor.hasPermission() && !sender.hasPermission(executor.getPermission())) {
-                            sender.sendMessage(MsgManager.get("permission"));
-                        } else if (args.length >= executor.minArgs()) {
-                            try {
-                                executor.execute(sender, args);
-                            } catch (CommandException ex) {
-                                sender.sendMessage(MsgManager.get("cmdsyntaxerr"));
-                                if (ex.getMessage() != null) sender.sendMessage(ChatColor.RED + ex.getMessage());
-                            }
-                        } else {
-                            sender.sendMessage(MsgManager.get("cmdsyntaxerr"));
-                            sender.sendMessage(MsgManager.get("seehelp"));
-                        }
-                        subCommandFound = true;
-                    }
-                }
-            }
-
-            if (!subCommandFound) {
-                String cmdnotfound = MsgManager.get("cmdnotfound").replace("{COMMAND}", "/" + label + " " + subCommand);
-                sender.sendMessage(cmdnotfound);
-            }
+            return true;
         }
+        String subCommand = args[0];
+        boolean subCommandFound = false;
+        for (Command executor : commands) {
+            if (!executor.getAliases().contains(args[0])) {
+                continue;
+            }
+            if (executor.hasPermission() && !sender.hasPermission(executor.getPermission())) {
+                sender.sendMessage(MsgManager.get("permission"));
+                break;
+            }
+            if (args.length >= executor.minArgs()) {
+                try {
+                    executor.execute(sender, args);
+                } catch (CommandException ex) {
+                    sender.sendMessage(MsgManager.get("cmdsyntaxerr"));
+                    if (ex.getMessage() != null) sender.sendMessage(ChatColor.RED + ex.getMessage());
+                    break;
+                }
+                break;
+            }
+            sender.sendMessage(MsgManager.get("cmdsyntaxerr"));
+            sender.sendMessage(MsgManager.get("seehelp"));
+            subCommandFound = true;
+            break;
 
+        }
+        if (!subCommandFound) {
+            String cmdnotfound = MsgManager.get("cmdnotfound").replace("{COMMAND}", "/" + label + " " + subCommand);
+            sender.sendMessage(cmdnotfound);
+        }
         return true;
     }
 }
