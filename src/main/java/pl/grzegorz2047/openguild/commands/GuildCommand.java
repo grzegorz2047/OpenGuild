@@ -91,7 +91,7 @@ public class GuildCommand implements CommandExecutor {
         String subCommand = args[0];
         boolean subCommandFound = false;
         for (Command executor : commands) {
-            if (!executor.getAliases().contains(args[0])) {
+            if (!executor.getAliases().contains(args[0].toLowerCase())) {
                 continue;
             }
             if (executor.hasPermission() && !sender.hasPermission(executor.getPermission())) {
