@@ -136,10 +136,7 @@ public class GuildAllyCommand extends Command {
     private boolean invokeRelationEventCancelled(Guild requestingGuild, Guild guild) {
         GuildRelationEvent event = new GuildRelationEvent(requestingGuild, guild, Relation.Status.ALLY);
         Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return true;
-        }
-        return false;
+        return event.isCancelled();
     }
 
     @Override

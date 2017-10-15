@@ -77,8 +77,7 @@ public class GuildCommand implements CommandExecutor {
         commands.add(new GuildEnemyCommand(new String[]{"enemy", "wrog"}, guilds, sqlHandler, tagManager));
         commands.add(new GuildUnbanPlayerCommand(new String[]{"unbanplayer", "odbanujgracza"}, hardcoreSQLHandler, hardcoreHandler));
         commands.add(new GuildRandomTPCommand(new String[]{"randomtp", "randomtp"}, plugin));
-
-        commands.add(new GuildExpandCommand(new String[]{"expand", "powieksz"}, guilds, sqlHandler, cuboids, plugin.getConfig()));
+        commands.add(new GuildExpandCommand(new String[]{"expand", "powieksz", "enlarge"}, guilds, sqlHandler, cuboids, plugin.getConfig()));
     }
 
     @Override
@@ -101,18 +100,17 @@ public class GuildCommand implements CommandExecutor {
             if (args.length >= executor.minArgs()) {
                 try {
                     executor.execute(sender, args);
+                    return true;
                 } catch (CommandException ex) {
                     sender.sendMessage(MsgManager.get("cmdsyntaxerr"));
                     if (ex.getMessage() != null) sender.sendMessage(ChatColor.RED + ex.getMessage());
-                    break;
+                    return true;
                 }
-                break;
             }
             sender.sendMessage(MsgManager.get("cmdsyntaxerr"));
             sender.sendMessage(MsgManager.get("seehelp"));
             subCommandFound = true;
             break;
-
         }
         if (!subCommandFound) {
             String cmdnotfound = MsgManager.get("cmdnotfound").replace("{COMMAND}", "/" + label + " " + subCommand);

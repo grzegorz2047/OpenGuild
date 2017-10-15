@@ -30,6 +30,10 @@ cuboid:
   notify-enter-sound: false
   notify-enter-sound-type: ENDERMAN_DEATH
   extra-protection: true
+  expand:
+    take-cuboid-size-into-account-when-expanding: false
+    items-to-expand:
+     - 'LOG:1:2:1'
   breaking-blocks:
     item-types: [DIAMOND_PICKAXE]
     damage: 0

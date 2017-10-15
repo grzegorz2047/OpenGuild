@@ -129,4 +129,9 @@ public class Cuboids {
     public void removeGuildCuboid(String tag) {
         cuboids.remove(tag);
     }
+
+    public Cuboid getCuboidByGuildName(String playerGuildName) {
+        return cuboids.get(playerGuildName);
+    }
+
 }

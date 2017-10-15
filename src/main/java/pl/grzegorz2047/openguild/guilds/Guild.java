@@ -155,6 +155,10 @@ public class Guild {
         }
     }
 
+    public boolean isLeader(UUID playerUUID) {
+        return leader.equals(playerUUID);
+    }
+
     public boolean containsMember(UUID member) {
         return members.contains(member);
     }

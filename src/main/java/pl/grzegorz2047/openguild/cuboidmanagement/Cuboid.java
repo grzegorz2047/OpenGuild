@@ -95,4 +95,7 @@ public class Cuboid {
         return (foreignMinX > localMinX && foreignMaxX < localMaxX) && (foreignMinZ > localMinZ && foreignMaxZ < localMaxZ);*/
     }
 
+    public void expand(int number) {
+        this.cuboidSize += number;
+    }
 }

@@ -19,8 +19,10 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
+import pl.grzegorz2047.openguild.InventoryManipulator;
+import pl.grzegorz2047.openguild.ItemsLoader;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.database.SQLHandler;
@@ -28,7 +30,6 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
 import pl.grzegorz2047.openguild.metadata.PlayerMetadataController.PlayerMetaDataColumn;
 import pl.grzegorz2047.openguild.relations.Relation;
-import pl.grzegorz2047.openguild.utils.ItemGUI;
 
 import java.util.*;
 
@@ -56,11 +57,11 @@ public class Guilds {
         FORBIDDEN_WORLDS = plugin.getConfig().getStringList("forbidden-worlds");
 
         try {
-            Sound configSound = Sound.valueOf(plugin.getConfig().getString("cuboid.notify-enter-sound-type", "ENDERMAN_DEATH"));
-            cuboidEnterSound = configSound;
+            cuboidEnterSound = Sound.valueOf(plugin.getConfig().getString("cuboid.notify-enter-sound-type", "ENDERMAN_DEATH"));
         } catch (IllegalArgumentException ex) {
             OpenGuild.getOGLogger().warning("Sound type " + plugin.getConfig().getString("cuboid.notify-enter-sound-type") + " is incorrect! Please visit http://jd.bukkit.org/rb/apidocs/org/bukkit/Sound.html for help.");
         }
+
     }
 
 
@@ -256,249 +257,9 @@ public class Guilds {
         return guilds.get(cuboids.getGuildTagInLocation(location));
     }
 
-    public boolean hasEnoughItemsForGuild(Inventory inv) {
-        for (ItemStack item : requiredItemStacks) {
-            if (!inv.containsAtLeast(item, item.getAmount())) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public void removeRequiredItemsForGuild(Inventory inv) {
-        for (ItemStack item : requiredItemStacks) {
-            removeFromInv(inv, item.getType(), item.getDurability(), item.getAmount(), item.getData().getData());
-        }
-    }
-
-    private static void removeFromInv(Inventory inv, Material mat, int dmgValue, int amount, byte data) {
-        if (inv.contains(mat)) {
-            int remaining = amount;
-            ItemStack[] contents = inv.getContents();
-            for (ItemStack is : contents) {
-                if (isEmptySlot(is)) {
-                    continue;
-                }
-                if (isDifferentMaterial(mat, is)) {
-                    continue;
-                }
-                if (isSpecificType(data)) {
-                    if (is.getData() == null) {
-                        continue;
-                    }
-                    if (isDifferentType(data, is)) {
-                        continue;
-                    }
-                    if (isBroken(dmgValue, is)) {
-                        continue;
-                    }
-                    if (hasMoreThanEnough(remaining, is)) {
-                        is.setAmount(is.getAmount() - remaining);
-                        remaining = 0;
-                    } else if (hasLessOrEquals(remaining, is)) {
-                        if (isStillNotEnough(remaining)) {
-                            remaining -= is.getAmount();
-                            is.setType(Material.AIR);
-                        }
-                    }
-                } else {
-                    if (isBroken(dmgValue, is)) {
-                        continue;
-                    }
-                    if (hasMoreThanEnough(remaining, is)) {
-                        is.setAmount(is.getAmount() - remaining);
-                        remaining = 0;
-                    } else if (hasLessOrEquals(remaining, is)) {
-                        if (isStillNotEnough(remaining)) {
-                            remaining -= is.getAmount();
-                            is.setType(Material.AIR);
-                        }
-                    }
-
-                }
-            }
-            inv.setContents(contents);
-        }
-    }
-
-    private static boolean isStillNotEnough(int remaining) {
-        return remaining > 0;
-    }
-
-    private static boolean isEmptySlot(ItemStack is) {
-        return is == null;
-    }
-
-    private static boolean isDifferentMaterial(Material mat, ItemStack is) {
-        return is.getType() != mat;
-    }
-
-    private static boolean isSpecificType(byte data) {
-        return data != -1;
-    }
-
-    private static boolean isDifferentType(byte data, ItemStack is) {
-        return is.getData().getData() != data;
-    }
-
-    private static boolean isBroken(int dmgValue, ItemStack is) {
-        return is.getDurability() != dmgValue && dmgValue > 0;
-    }
-
-    private static boolean hasLessOrEquals(int remaining, ItemStack is) {
-        return is.getAmount() <= remaining;
-    }
-
-    private static boolean hasMoreThanEnough(int remaining, ItemStack is) {
-        return is.getAmount() > remaining;
-    }
-
-
-    public void loadRequiredItemsForGuild(List<String> requiredItemsString) {
-        requiredItemStacks = new ArrayList<>();
-
-        if (requiredItemsString == null) {
-            return;
-        }
-        if (requiredItemsString.isEmpty()) {
-            return;
-        }
-        if (requiredItemsString.size() > 54) {
-            OpenGuild.getOGLogger().warning("Too many specified items (required-items)! Maximum size is 54!");
-        } else {
-            for (String s : requiredItemsString) {
-                String[] info = s.split(":");
-                if (info.length != 4) {
-                    OpenGuild.getOGLogger().warning("Oops! It looks like you're using an old configuration file!/You have made mistake with required-items section! We changed pattern of required-items section. Now it looks like this: Material:Durability:Data:Amount (old was: Material:Amount) - please update your config.yml Exact line is " + s);
-                    break;
-                }
-                Material material;
-                try {
-                    material = Material.valueOf(info[0]);
-                } catch (IllegalArgumentException ex) {
-                    OpenGuild.getOGLogger().warning("Invalid material: " + info[0] + "! Check your configuration file!");
-                    continue;
-                }
-
-                short durability = 0;
-                try {
-                    durability = Short.valueOf(info[1]);
-                } catch (NumberFormatException e) {
-                    OpenGuild.getOGLogger().warning("Durability must be a number! Please fix 'required-items' section in your config.yml");
-                }
-
-                byte data = getItemData(info[2]);
-
-                for (ItemStack i : requiredItemStacks) {
-                    if (i.getType().equals(material) && data == i.getData().getData()) {
-                        OpenGuild.getOGLogger().warning("Duplicate item found! Skipping ...");
-                    }
-                }
-
-                int amount = 1;
-                try {
-                    amount = Integer.valueOf(info[3]);
-
-                    if (amount > 64) {
-                        amount = 64;
-                    } else if (amount < 0) {
-                        continue;
-                    }
-                } catch (NumberFormatException e) {
-                    OpenGuild.getOGLogger().warning("Amount must be a number! Please fix 'required-items' section in your config.yml");
-                }
-
-                ItemStack item = new ItemStack(material, amount, durability, data);
-                requiredItemStacks.add(item);
-            }
-        }
-    }
-
-    private byte getItemData(String dataPart) {
-        byte data = 0;
-        try {
-            data = Byte.valueOf(dataPart);
-        } catch (NumberFormatException e) {
-            OpenGuild.getOGLogger().warning("Data must be a number! Please fix 'required-items' section in your config.yml");
-        }
-        return data;
-    }
-
-    public Inventory prepareItemGuildWindowInventory(Inventory inventory) {
-        int inventorySize = getRequiredItemsWindowInventorySize();
-        ItemGUI itemsGUI = new ItemGUI(MsgManager.getIgnorePref("gui-items"), inventorySize, plugin);
-        for (ItemStack item : requiredItemStacks) {
-            ItemStack cloned = prepareItemStackWithCustomItemMeta(inventory, item);
-
-            addItemToInventoryWindowWithClosingWindowAfterClick(itemsGUI, cloned);
-        }
-        return itemsGUI.getInventory();
-    }
-
-    private void addItemToInventoryWindowWithClosingWindowAfterClick(ItemGUI itemsGUI, ItemStack cloned) {
-        itemsGUI.addItem(cloned, new ItemGUI.ItemGUIClickEventHandler() {
-            @Override
-            public void handle(ItemGUI.ItemGUIClickEvent event) {
-                event.getPlayer().closeInventory();
-            }
-        });
-    }
-
-    private ItemStack prepareItemStackWithCustomItemMeta(Inventory inventory, ItemStack item) {
-        ItemStack cloned = item.clone();
-        ItemMeta meta = cloned.getItemMeta();
-
-        int amount = getAmount(cloned, inventory);
-
-        String desc = "" + amount + "/" + cloned.getAmount();
-
-        if (amount < cloned.getAmount()) {
-            meta.setLore(Collections.singletonList(
-                    ChatColor.RED + desc
-            ));
-        } else {
-            meta.setLore(Collections.singletonList(
-                    ChatColor.GREEN + "" + desc
-            ));
-        }
-        cloned.setItemMeta(meta);
-        return cloned;
-    }
-
-    private int getRequiredItemsWindowInventorySize() {
-        int inventorySize = 9;
-
-        if (getRequiredItemsSize() > 9) {
-            inventorySize = 18;
-        } else if (getRequiredItemsSize() > 18) {
-            inventorySize = 27;
-        } else if (getRequiredItemsSize() > 27) {
-            inventorySize = 36;
-        } else if (getRequiredItemsSize() > 36) {
-            inventorySize = 45;
-        } else if (getRequiredItemsSize() > 45) {
-            inventorySize = 54;
-        }
-        return inventorySize;
-    }
-
-    private int getAmount(ItemStack item, Inventory inventory) {
-        int amount = 0;
-        for (ItemStack i : inventory.getContents()) {
-            if (i != null && i.isSimilar(item)) {
-                amount += i.getAmount();
-            }
-        }
-        return amount;
-    }
 
     public boolean isPlayerInForbiddenWorld(String playerWorldName) {
         return FORBIDDEN_WORLDS.contains(playerWorldName);
-    }
-
-    public int getRequiredItemsSize() {
-        return requiredItemStacks.size();
     }
 
     public void updatePlayerMetadata(UUID uuid, String guildColumn, Object guildName) {
@@ -507,5 +268,29 @@ public class Guilds {
 
     public void updatePlayerMeta(UUID uuid, String guildName, int eloPoints, int playerKills, int playerDeaths) {
         playerMetadataController.updatePlayerMetaAll(uuid, guildName, eloPoints, playerKills, playerDeaths);
+    }
+
+    public void loadRequiredItemsForGuild(List<String> stringList) {
+        ItemsLoader itemsLoader = new ItemsLoader();
+        this.requiredItemStacks = itemsLoader.loadItems(stringList);
+    }
+
+    public boolean hasEnoughItemsForGuild(PlayerInventory inventory) {
+        InventoryManipulator inventoryManipulator = new InventoryManipulator();
+        return inventoryManipulator.hasEnoughItems(inventory, requiredItemStacks);
+    }
+
+    public void removeRequiredItemsForGuild(PlayerInventory inventory) {
+        InventoryManipulator itemManipulator = new InventoryManipulator();
+        itemManipulator.removeRequiredItemsForGuild(inventory, requiredItemStacks);
+    }
+
+    public Inventory prepareItemGuildWindowInventory(PlayerInventory inventory) {
+        InventoryManipulator inventoryManipulator = new InventoryManipulator();
+        return inventoryManipulator.prepareItemGuildWindowInventory(inventory, requiredItemStacks, plugin);
+    }
+
+    public int getRequiredItemsSize() {
+        return requiredItemStacks.size();
     }
 }
