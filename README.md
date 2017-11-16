@@ -9,7 +9,7 @@ Każde błędy, poprawki, propozycje piszcie w zakładce issues (po prawej stron
 
 Testowanie
 -----------
-Aby przetestować plugin wystarczy wejść na serwer: s2.klepahc.pl
+Aby przetestować plugin wystarczy wejść na serwer: mc.grzegorz2047.pl
 
 Zobacz [instalacje](https://github.com/grzegorz2047/OpenGuild/wiki/Pobieranie-oraz-instalacja) pluginu oraz jego [konfigurację](https://github.com/grzegorz2047/OpenGuild/wiki/Konfiguracja).
 
@@ -29,7 +29,7 @@ Każdy uznany i znaleziony bug/propozycje prosimy kierować w zakładcę [Issues
 Kontakt
 -----------
 Jeżeli chcesz się ze mną skontaktować to napisz mi na maila: grzegorz2047@gmail.com
-Jeżeli chcesz ze mną pogadać to wbij na mój prywatny mini serwer TeamSpeak3 - ts.klepahc.pl
+Jeżeli chcesz ze mną pogadać to wbij na mój prywatny mini serwer TeamSpeak3 - ts.grzegorz2047.pl
 Kompilacja
 -----------
 
