@@ -18,6 +18,7 @@ package pl.grzegorz2047.openguild.cuboidmanagement;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -97,5 +98,9 @@ public class Cuboid {
 
     public void expand(int number) {
         this.cuboidSize += number;
+    }
+
+    public boolean equals(Cuboid cuboid) {
+        return this.center == cuboid.center && Objects.equals(this.owner, cuboid.getOwner());
     }
 }

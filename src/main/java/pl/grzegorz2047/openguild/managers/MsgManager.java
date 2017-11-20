@@ -30,7 +30,8 @@ public class MsgManager {
     private static HashMap<String, String> messages;
     public static String prefix = "§7[§6OpenGuild§7]§7 ";
     public static String LANG = "EN";
-    public static File file = new File("plugins/OpenGuild/messages_" + LANG.toLowerCase() + ".yml");
+    public static File file;
+
     private static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
     public static String get(String path) {
@@ -46,9 +47,6 @@ public class MsgManager {
     }
 
     private static String getIgnorePref(String path, String def) {
-        if (messages == null) {
-            loadMessages();
-        }
         if (messages.get(path) == null) {
             return def;
         } else {
@@ -57,7 +55,8 @@ public class MsgManager {
 
     }
 
-    private static void loadMessages() {
+    public static void loadMessages() {
+        file = new File("plugins/OpenGuild/messages_" + LANG.toLowerCase() + ".yml");
         messages = new HashMap<>();
         for (String path : config.getConfigurationSection("").getKeys(false)) {
             messages.put(path, config.getString(path).replace("&", "§"));

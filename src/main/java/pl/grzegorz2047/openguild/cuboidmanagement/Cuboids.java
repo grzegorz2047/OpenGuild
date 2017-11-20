@@ -103,7 +103,10 @@ public class Cuboids {
     public boolean isCuboidInterferingWithOtherCuboid(Cuboid potential) {
         for (Map.Entry<String, Cuboid> entry : cuboids.entrySet()) {
             Cuboid cuboid = entry.getValue();
-            Boolean withinCuboid = cuboid.isColliding(potential.getWorldId(), potential.getMin(), potential.getMax());
+            boolean withinCuboid = cuboid.isColliding(potential.getWorldId(), potential.getMin(), potential.getMax());
+            if(potential.equals(cuboid)) {
+                continue;
+            }
             if (withinCuboid) return true;
         }
         return false;
@@ -113,7 +116,7 @@ public class Cuboids {
         return cuboids.get(guildTag).isinCuboid(location);
     }
 
-    private Boolean checkIfLocationWithinCuboid(Cuboid c, Location loc1, Location loc) {
+    private boolean checkIfLocationWithinCuboid(Cuboid c, Location loc1, Location loc) {
         return isTheSame(loc1.getWorld().getUID(), loc.getWorld().getUID()) && c.isinCuboid(loc);
     }
 

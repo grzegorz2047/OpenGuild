@@ -149,9 +149,11 @@ public class OpenGuild extends JavaPlugin {
 
     private void loadTranslationFiles(FileValidator fileValidator) {
         // Validate language file
-        MsgManager.setLANG(getConfig().getString("language").toUpperCase());
-        String translation = "messages_" + MsgManager.LANG.toLowerCase();
+        String language = getConfig().getString("language").toUpperCase();
+        MsgManager.setLANG(language);
+        String translation = "messages_" + language.toLowerCase();
         fileValidator.validateFile(getResource(translation + ".yml"), translation);
+        MsgManager.loadMessages();
     }
 
     private void loadConfigFiles(FileValidator fileValidator) {
