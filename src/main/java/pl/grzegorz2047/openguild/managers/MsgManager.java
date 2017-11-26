@@ -32,8 +32,6 @@ public class MsgManager {
     public static String LANG = "EN";
     public static File file;
 
-    private static FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-
     public static String get(String path) {
         return prefix + getIgnorePref(path);
     }
@@ -57,6 +55,7 @@ public class MsgManager {
 
     public static void loadMessages() {
         file = new File("plugins/OpenGuild/messages_" + LANG.toLowerCase() + ".yml");
+        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
         messages = new HashMap<>();
         for (String path : config.getConfigurationSection("").getKeys(false)) {
             messages.put(path, config.getString(path).replace("&", "§"));
