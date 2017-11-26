@@ -1,172 +1,172 @@
-# English translation by TheMolkaPL (themolkapl@gmail.com) - 01.05.2014
+﻿# English translation by TheMolkaPL (themolkapl@gmail.com) - 01.05.2014
 # Fixed some mistakes by grzegorz2047 - 05.05.2014
-cmderror: '&cAn error ocurred while perform this command. Check console.'
-numneededsyntax: '&cYou must type a numer, not {STRING}!'
-createguildsuccess: '&aGuild has been created.'
-cmdonlyforplayer: '&cCommand only for in-game players!'
-alreadyinguild: '&cYou cannot do this, because you are already in the guild!'
-unsupportedchars: '&cGuild name can only contain &7[0-9a-zA-Z]'
-toolongshorttag: '&cYour guild name is too long or too short! Minimal length: &7{MIN}&c, maximal length: &7{MAX}&c.'
-illegaltag: '&cYour guild name contains banned word(s)!'
-notinguild: '&cYou must be in guild to do this!'
-errornotinguild: '&cYou are not in guild?! Cleaning!'
-teleportsuccess: '&aYou have been teleported!'
-leaveguildsuccess: '&aYou have left the guild!'
-nomembersinguild: '&cCurrently, you dont have any members in guild.'
-notenoughitems: '&cYou do not have valid items to create guild.'
-homenotenabled: '&cCommand &7/guild home &cis not enabled on this server!'
-hometpdontmove: '&aYou will be teleported in %TIME% seconds! &7Do not move!'
-wrongcmdargument: '&cInvalid argument!'
-wronguseddesccmd: '&cUsage: &7/gildia home &cchange <desc>&c.'
-playernotleader: '&cYou cannot perform this because you are not a leader of this guild!'
-playerneverplayed: '&cYou cannot pass the leadership to person, who never played on this server!'
-guilddisbandsuccess: '&aYour guild has successfully disbanded!'
-guildtocloseothers: '&cYou cannot create new guild while you are too close another guild!'
-playerstooclose: '&cYou cannot create a guild close to other players!'
-guildexists: '&cGuild with that name already exists!'
-cantdoitonsomeonearea: '&cYou cannot build here.'
-guildjoinsuccess: '&aYou have successfully joined the guild'
-playernotinvited: '&cYou are not invited! &7Sending a request to the leader!'
-askforaccept: '&aGuild leader asks for an acceptation. &7To accept write /g accept '
-invitedplayersuccessfullyjoined: '&aPlayer successfully joined to your guild!'
-guildinviteaccepted: '&aYour request to join the guild was successfully accepted!'
-playernotoninvitedlist: '&cThis player is not on the invite list!'
-guilddoesntexists: '&cGuild with that tag does not exist!'
-leadernotonline: '&cThe leader is not currently online!'
-notyetaccepted: '&cYour request has not been approved yet'
-desctoolong: '&cYour guild description is too long'
-pvpguildmember: '&cYou can not damage member of your guild'
-pagenotnumber: '&cPage number must be a number!'
-pagenotfound: '&cPage &7{NUMBER} &cnot found.'
-seehelp: '&cUse &7/g help&c, for help.'
-cmdsyntaxerr: '&cGiven an error in the command!'
-permission: '&cYou do not have permission to do this.'
-configreloaded: '&7config.yml &afile was successfully reloaded!'
-configerr: '&cThere was a problem with your &7config.yml &afile!'
-configyaml: '&cThere was a problem with YAML in your &7config.yml &cfile! Check all spaces!'
-confignew: '&cThere was a problem with your &7config.yml &cfile! Created a new one.'
-hcnotenabled: '&cHardcore module is not enabled on this server.'
-notbanned: '&cPlayer &7{PLAYER} &cis not banned!'
-hcub: '&aPlayer &7{PLAYER} &ahas been unbanned!'
-skipped: '&7Skipped {HELP} help topic(s).'
-notplayedbefore: '&cPlayer &7{PLAYER} &cnot played on this server!'
-invitesendsuccess: '&aInvite sent!'
-kickplayernotinguild: '&cYou cannot kick someone without guild!'
-playernotinthisguild: '&cPlayer is not in your guild!'
-playerkicked: '&7You have been kicked from guild by leader!'
-playerkicksuccess: '&aPlayer has been successfully kicked from guild!'
-timetotpnotify: '&aYou will be teleported to &7{GUILD} &ain &7{HOMETPSECONDS} seconds&a!'
-titleguildlist: '&cGuilds list'
-titleitems: 'Items'
-titlemems: 'Members'
-numguilds: '&7Number of guilds: '
-interinguild: '&cInteraction at guilds cuboid region at {X}, {Y}, {Z}.'
-entercubpl: '&cYou have entered &7{GUILD} &ccuboid region!'
-leavecubpl: '&cYou have left &7{GUILD} &ccuboid region!'
-entercubmems: '&cPlayer &7{PLAYER} &cfrom guild &7{GUILD} &chas entered your guild region!'
-entercubmemsnoguild: '&cPlayer &7{PLAYER} &chas entered your guild region!'
-kickleader: '&cYou can not kick yourself from the guild as a leader'
-enemynotfound: '&cYou dont have that enemy'
-invitesent: '&aInvite sent to &7{PLAYER}&a.'
-tpcan: '&cTeleportation has been cancelled because you moved!'
-noinv: '&cNo invitation available!'
-invmore: '&cYou have more than one invitation. Please type &7/g accept <tag> &cto join.\n&6Your invitations:'
-broadcast-ally: '&aGuild &7{GUILD1} &ais now ally with &7{GUILD2}&a.'
-broadcast-enemy: '&aGuild &7{GUILD1} &abroke an alliance with &7{GUILD2}&a.'
-broadcast-join: '&7{PLAYER} &ahas joined guild &7[{TAG}]&a.'
-broadcast-create: '&7{PLAYER} &ahas created guild &7[{TAG}]&a.'
-broadcast-cuboidexpand: '&7{PLAYER} &ahas expanded &7[{TAG}] &acuboid to &7{RADIUS} &ablocks.'
-broadcast-description: '&7{PLAYER} &ahas changed &7[{TAG}] &adescription to &7{DESC}&a.'
-broadcast-disband: '&7{PLAYER} &ahas disbanded &7[{TAG}]&a guild.'
-broadcast-kick: '&7{PLAYER} &akicked &7{MEMBER} &afrom guild &7[{TAG}]&a.'
-broadcast-leader: '&7{LEADER} &atook leadership of guild &7[{TAG}] &aby &7{PLAYER}&a.'
-broadcast-leave: '&7{PLAYER} &ahas left guild &7[{TAG}]&a.'
-ginfotit: '&aAbout {GUILD}'
-ginfodesc: '&aDescription: &7&o{DESCRIPTION}'
-ginfoleader: '&ALeader: &7{LEADER}'
-ginfomemlist: '&aMembers ({SIZE}):&7 {MEMBERS}'
-reqitemsoff: '&cYou dont need any items for guild (or list is empty).'
-tntex: '&cYou can not build beacuse TNT exploded. Try again in &7{SEC}&C second(s).'
-cmdnodesc: 'Not available yet'
-cmdnotfound: '&cAlias or command {COMMAND} was not found.'
-relnosupp: '&cReloading is not supported, please restart your server!'
-cmd-help: 'Help'
-cmd-reload: 'Reload the plugin, NOT SUPPORTED!'
-cmd-version: 'See the plugin version'
-cmdhelp-noexe: 'Executor is not defined!'
-cmdhelp-cmd: 'Command: '
-cmdhelp-al: 'Aliases: '
-cmdhelp-us: 'Usage: '
-cmdhelp-perm: 'Permission: '
-cmdhelp-null: 'Command, alias or page was not found.'
-cmdhelp-page: 'Page number must be positive'
-rantp: '&9Teleporting to random location...'
-cmd-accept: 'Accept invite to join the guild'
-cmd-admin: 'Admin management commands'
-cmd-ally: 'Set other guild as ally'
-cmd-create: 'Create guild'
-cmd-description: 'Change or see description of guild'
-cmd-disband: 'Disband your guild'
-cmd-enemy: 'Set other guild as enemy'
-cmd-expand: 'Expand your guilds cuboid'
-cmd-home: 'Teleport to your guilds home location'
-cmd-info: 'Information about the guild'
-cmd-invite: 'Invite to guild (sends invite)'
-cmd-items: 'List of required items'
-cmd-kick: 'Kicks member of guild'
-cmd-leader: 'Pass leadership to someone else'
-cmd-leave: 'Leave current guild'
-cmd-list: 'List all guilds'
-cmd-members: 'List of your guild members'
-gui-items: 'Items'
-playerhasguild: '&CThis player is already in guild.'
-guildmemberjoined: '&7{PLAYER} &Afrom your guild joined the server!'
-guildmemberleft: '&7{PLAYER} &afrom your guild left the server!'
-operationsuccess: '&aOperation completed successfully!'
-guild-description-changed: '&AYour guild description has been changed to &7{NEW}&a.'
-guild-invitation: '&aPlayer &7{WHO}&a, wants you to join his guild &7{TAG}&a - type &7/guild accept&A, to accept. &aThis invitation will expire in &725 &aseconds!'
-guild-invitation-expired: '&cInvitation from guild &7{TAG} &ahas expired!'
-cantkickleader: '&cYou cant kick yourself from guild!'
-playeroffline: '&cThis player is offline!'
-usage: '&aUsage:&7 {USAGE}'
-allyexists: '&aAlliance exists!'
-sentallyrequest: '&aAlliance request sent!'
-sentallyrequestfrom: 'You received an Alliance request from {GUILD}.'
-allyreqleaderoffline: 'Leader from guild {GUILD} is offline'
-toacceptallymsg: 'Type /g ally {GUILD} to accept Alliance'
-allyrequestexpired: '&aAn alliance request with {GUILD} expired'
-descrequired: '&aTo create guild you need to write description!'
-allyyourselferror: '&aYou cant make an alliance with yourself!'
-enemyyourselferror: '&aYou cant broke an alliance with yourself!'
-forbiddenworld: '&cYou cannot create a guild on this world!'
-cantdoitonspawn: '&cYou cannot do it on spawn!'
-tpadestinationexpired: 'Teleport request to %REQUESTER% expired!'
-tpasourceexpired: 'Teleport request sent to %REQUESTED% expired!'
-playernotonline: 'This player is not on the server!'
-tparequestnotfound: 'This player didnt send you a tpa request!'
-tparequestsentsuccess: 'Tpa request successfuly send to %PLAYER%'
-tparequestsentfailed: 'Tpa request send failed! Wait for current request expiration or acceptance!'
-usagetpa: 'Usage: /tpa <nick>, /tpa accept <nick>, /tpa deny <nick>'
-usagetpaaccept: 'Usage: /tpa accept <nick>'
-usagetpadeny: 'Usage: /tpa deny <nick>'
-notifynodropfromthistypeofblock: 'You cannot get drop from this kind of block'
-defaultdropmsg: 'You dropped: %d'
-tpaccepteddontmove: 'Teleport request accepted! Dont move for %SECONDS%'
-tpadenied: 'Teleport request to %PLAYER% has been denied!'
-tparequested: '%PLAYER% request teleport type &c/tpa accept &b%PLAYER% &7| Dont accept tp from strangers! '
-tptodestinationsuccess: 'You have been succesfully teleported! | Dont teleport to strangers!'
-playerlogoutduringfight: '%PLAYER% log out from battle!'
-playerjoinedservermsg: '&2%PLAYER% &6+'
-playerleftservermsg: '&2%PLAYER% &c-'
-strengthenchantblocked: 'This enchantment is blocked by server admin!'
-killerkilledvictim: '&c{VICTIM} &a({VICTIMLOSE}) &7was killed by &c{KILLER} &a({KILLEREARN}) '
-successfullychangedhomeposition: 'You successfully change home postition!'
-usagechangehomecommand: 'Usage: /g changeleader <player>'
-successfullychangedleader: 'Successfully changed guild leader! You are no longer guild leader!'
-cantchangeleadertoyourself: 'You cant give leadership to yourself!'
-playernotinyourguild: 'This player isnt member of your guild!'
-youenteredservertoofastrelog: 'You entered server too fast! Enter again!'
-maxcuboidsizereached: 'You cannot expand your cuboid more than current size!'
-notenoughitemstoexpand: 'You have not enough items to expand cuboid!'
-cuboidexpandedsuccessfully: 'Cuboid has been expanded by 1 block in every direction!'
-cuboidcannotbeexpandeddueothercuboidclose: 'You cannot expand cuboid because other cuboid is too close!'
+cmderror: "&cAn error ocurred while perform this command. Check console."
+numneededsyntax: "&cYou must type a numer, not {STRING}!"
+createguildsuccess: "&aGuild has been created."
+cmdonlyforplayer: "&cCommand only for in-game players!"
+alreadyinguild: "&cYou cannot do this, because you are already in the guild!"
+unsupportedchars: "&cGuild name can only contain &7[0-9a-zA-Z]"
+toolongshorttag: "&cYour guild name is too long or too short! Minimal length: &7{MIN}&c, maximal length: &7{MAX}&c."
+illegaltag: "&cYour guild name contains banned word(s)!"
+notinguild: "&cYou must be in guild to do this!"
+errornotinguild: "&cYou are not in guild?! Cleaning!"
+teleportsuccess: "&aYou have been teleported!"
+leaveguildsuccess: "&aYou have left the guild!"
+nomembersinguild: "&cCurrently, you dont have any members in guild."
+notenoughitems: "&cYou do not have valid items to create guild."
+homenotenabled: "&cCommand &7/guild home &cis not enabled on this server!"
+hometpdontmove: "&aYou will be teleported in %TIME% seconds! &7Do not move!"
+wrongcmdargument: "&cInvalid argument!"
+wronguseddesccmd: "&cUsage: &7/gildia home &cchange <desc>&c."
+playernotleader: "&cYou cannot perform this because you are not a leader of this guild!"
+playerneverplayed: "&cYou cannot pass the leadership to person, who never played on this server!"
+guilddisbandsuccess: "&aYour guild has successfully disbanded!"
+guildtocloseothers: "&cYou cannot create new guild while you are too close another guild!"
+playerstooclose: "&cYou cannot create a guild close to other players!"
+guildexists: "&cGuild with that name already exists!"
+cantdoitonsomeonearea: "&cYou cannot build here."
+guildjoinsuccess: "&aYou have successfully joined the guild"
+playernotinvited: "&cYou are not invited! &7Sending a request to the leader!"
+askforaccept: "&aGuild leader asks for an acceptation. &7To accept write /g accept "
+invitedplayersuccessfullyjoined: "&aPlayer successfully joined to your guild!"
+guildinviteaccepted: "&aYour request to join the guild was successfully accepted!"
+playernotoninvitedlist: "&cThis player is not on the invite list!"
+guilddoesntexists: "&cGuild with that tag does not exist!"
+leadernotonline: "&cThe leader is not currently online!"
+notyetaccepted: "&cYour request has not been approved yet"
+desctoolong: "&cYour guild description is too long"
+pvpguildmember: "&cYou can not damage member of your guild"
+pagenotnumber: "&cPage number must be a number!"
+pagenotfound: "&cPage &7{NUMBER} &cnot found."
+seehelp: "&cUse &7/g help&c, for help."
+cmdsyntaxerr: "&cGiven an error in the command!"
+permission: "&cYou do not have permission to do this."
+configreloaded: "&7config.yml &afile was successfully reloaded!"
+configerr: "&cThere was a problem with your &7config.yml &afile!"
+configyaml: "&cThere was a problem with YAML in your &7config.yml &cfile! Check all spaces!"
+confignew: "&cThere was a problem with your &7config.yml &cfile! Created a new one."
+hcnotenabled: "&cHardcore module is not enabled on this server."
+notbanned: "&cPlayer &7{PLAYER} &cis not banned!"
+hcub: "&aPlayer &7{PLAYER} &ahas been unbanned!"
+skipped: "&7Skipped {HELP} help topic(s)."
+notplayedbefore: "&cPlayer &7{PLAYER} &cnot played on this server!"
+invitesendsuccess: "&aInvite sent!"
+kickplayernotinguild: "&cYou cannot kick someone without guild!"
+playernotinthisguild: "&cPlayer is not in your guild!"
+playerkicked: "&7You have been kicked from guild by leader!"
+playerkicksuccess: "&aPlayer has been successfully kicked from guild!"
+timetotpnotify: "&aYou will be teleported to &7{GUILD} &ain &7{HOMETPSECONDS} seconds&a!"
+titleguildlist: "&cGuilds list"
+titleitems: "Items"
+titlemems: "Members"
+numguilds: "&7Number of guilds: "
+interinguild: "&cInteraction at guilds cuboid region at {X}, {Y}, {Z}."
+entercubpl: "&cYou have entered &7{GUILD} &ccuboid region!"
+leavecubpl: "&cYou have left &7{GUILD} &ccuboid region!"
+entercubmems: "&cPlayer &7{PLAYER} &cfrom guild &7{GUILD} &chas entered your guild region!"
+entercubmemsnoguild: "&cPlayer &7{PLAYER} &chas entered your guild region!"
+kickleader: "&cYou can not kick yourself from the guild as a leader"
+enemynotfound: "&cYou dont have that enemy"
+invitesent: "&aInvite sent to &7{PLAYER}&a."
+tpcan: "&cTeleportation has been cancelled because you moved!"
+noinv: "&cNo invitation available!"
+invmore: "&cYou have more than one invitation. Please type &7/g accept <tag> &cto join.\n&6Your invitations:"
+broadcast-ally: "&aGuild &7{GUILD1} &ais now ally with &7{GUILD2}&a."
+broadcast-enemy: "&aGuild &7{GUILD1} &abroke an alliance with &7{GUILD2}&a."
+broadcast-join: "&7{PLAYER} &ahas joined guild &7[{TAG}]&a."
+broadcast-create: "&7{PLAYER} &ahas created guild &7[{TAG}]&a."
+broadcast-cuboidexpand: "&7{PLAYER} &ahas expanded &7[{TAG}] &acuboid to &7{RADIUS} &ablocks."
+broadcast-description: "&7{PLAYER} &ahas changed &7[{TAG}] &adescription to &7{DESC}&a."
+broadcast-disband: "&7{PLAYER} &ahas disbanded &7[{TAG}]&a guild."
+broadcast-kick: "&7{PLAYER} &akicked &7{MEMBER} &afrom guild &7[{TAG}]&a."
+broadcast-leader: "&7{LEADER} &atook leadership of guild &7[{TAG}] &aby &7{PLAYER}&a."
+broadcast-leave: "&7{PLAYER} &ahas left guild &7[{TAG}]&a."
+ginfotit: "&aAbout {GUILD}"
+ginfodesc: "&aDescription: &7&o{DESCRIPTION}"
+ginfoleader: "&ALeader: &7{LEADER}"
+ginfomemlist: "&aMembers ({SIZE}):&7 {MEMBERS}"
+reqitemsoff: "&cYou dont need any items for guild (or list is empty)."
+tntex: "&cYou can not build beacuse TNT exploded. Try again in &7{SEC}&C second(s)."
+cmdnodesc: "Not available yet"
+cmdnotfound: "&cAlias or command {COMMAND} was not found."
+relnosupp: "&cReloading is not supported, please restart your server!"
+cmd-help: "Help"
+cmd-reload: "Reload the plugin, NOT SUPPORTED!"
+cmd-version: "See the plugin version"
+cmdhelp-noexe: "Executor is not defined!"
+cmdhelp-cmd: "Command: "
+cmdhelp-al: "Aliases: "
+cmdhelp-us: "Usage: "
+cmdhelp-perm: "Permission: "
+cmdhelp-null: "Command, alias or page was not found."
+cmdhelp-page: "Page number must be positive"
+rantp: "&9Teleporting to random location..."
+cmd-accept: "Accept invite to join the guild"
+cmd-admin: "Admin management commands"
+cmd-ally: "Set other guild as ally"
+cmd-create: "Create guild"
+cmd-description: "Change or see description of guild"
+cmd-disband: "Disband your guild"
+cmd-enemy: "Set other guild as enemy"
+cmd-expand: "Expand your guilds cuboid"
+cmd-home: "Teleport to your guilds home location"
+cmd-info: "Information about the guild"
+cmd-invite: "Invite to guild (sends invite)"
+cmd-items: "List of required items"
+cmd-kick: "Kicks member of guild"
+cmd-leader: "Pass leadership to someone else"
+cmd-leave: "Leave current guild"
+cmd-list: "List all guilds"
+cmd-members: "List of your guild members"
+gui-items: "Items"
+playerhasguild: "&CThis player is already in guild."
+guildmemberjoined: "&7{PLAYER} &Afrom your guild joined the server!"
+guildmemberleft: "&7{PLAYER} &afrom your guild left the server!"
+operationsuccess: "&aOperation completed successfully!"
+guild-description-changed: "&AYour guild description has been changed to &7{NEW}&a."
+guild-invitation: "&aPlayer &7{WHO}&a, wants you to join his guild &7{TAG}&a - type &7/guild accept&A, to accept. &aThis invitation will expire in &725 &aseconds!"
+guild-invitation-expired: "&cInvitation from guild &7{TAG} &ahas expired!"
+cantkickleader: "&cYou cant kick yourself from guild!"
+playeroffline: "&cThis player is offline!"
+usage: "&aUsage:&7 {USAGE}"
+allyexists: "&aAlliance exists!"
+sentallyrequest: "&aAlliance request sent!"
+sentallyrequestfrom: "You received an Alliance request from {GUILD}."
+allyreqleaderoffline: "Leader from guild {GUILD} is offline"
+toacceptallymsg: "Type /g ally {GUILD} to accept Alliance"
+allyrequestexpired: "&aAn alliance request with {GUILD} expired"
+descrequired: "&aTo create guild you need to write description!"
+allyyourselferror: "&aYou cant make an alliance with yourself!"
+enemyyourselferror: "&aYou cant broke an alliance with yourself!"
+forbiddenworld: "&cYou cannot create a guild on this world!"
+cantdoitonspawn: "&cYou cannot do it on spawn!"
+tpadestinationexpired: "Teleport request to %REQUESTER% expired!"
+tpasourceexpired: "Teleport request sent to %REQUESTED% expired!"
+playernotonline: "This player is not on the server!"
+tparequestnotfound: "This player didnt send you a tpa request!"
+tparequestsentsuccess: "Tpa request successfuly send to %PLAYER%"
+tparequestsentfailed: "Tpa request send failed! Wait for current request expiration or acceptance!"
+usagetpa: "Usage: /tpa <nick>, /tpa accept <nick>, /tpa deny <nick>"
+usagetpaaccept: "Usage: /tpa accept <nick>"
+usagetpadeny: "Usage: /tpa deny <nick>"
+notifynodropfromthistypeofblock: "You cannot get drop from this kind of block"
+defaultdropmsg: "You dropped: %d"
+tpaccepteddontmove: "Teleport request accepted! Dont move for %SECONDS%"
+tpadenied: "Teleport request to %PLAYER% has been denied!"
+tparequested: "%PLAYER% request teleport type &c/tpa accept &b%PLAYER% &7| Dont accept tp from strangers!"
+tptodestinationsuccess: "You have been succesfully teleported! | Dont teleport to strangers!"
+playerlogoutduringfight: "%PLAYER% log out from battle!"
+playerjoinedservermsg: "&2%PLAYER% &6+"
+playerleftservermsg: "&2%PLAYER% &c-"
+strengthenchantblocked: "This enchantment is blocked by server admin!"
+killerkilledvictim: "&c{VICTIM} &a({VICTIMLOSE}) &7was killed by &c{KILLER} &a({KILLEREARN})"
+successfullychangedhomeposition: "You successfully change home postition!"
+usagechangehomecommand: "Usage: /g changeleader <player>"
+successfullychangedleader: "Successfully changed guild leader! You are no longer guild leader!"
+cantchangeleadertoyourself: "You cant give leadership to yourself!"
+playernotinyourguild: "This player isnt member of your guild!"
+youenteredservertoofastrelog: "You entered server too fast! Enter again!"
+maxcuboidsizereached: "You cannot expand your cuboid more than current size!"
+notenoughitemstoexpand: "You have not enough items to expand cuboid!"
+cuboidexpandedsuccessfully: "Cuboid has been expanded by 1 block in every direction!"
+cuboidcannotbeexpandeddueothercuboidclose: "You cannot expand cuboid because other cuboid is too close!"

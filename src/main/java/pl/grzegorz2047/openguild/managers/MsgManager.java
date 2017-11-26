@@ -17,9 +17,14 @@ package pl.grzegorz2047.openguild.managers;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+import pl.grzegorz2047.openguild.files.FileNotValidetedException;
+import pl.grzegorz2047.openguild.files.FileDataUpdater;
+import pl.grzegorz2047.openguild.files.YamlFileCreator;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 /**
@@ -30,7 +35,6 @@ public class MsgManager {
     private static HashMap<String, String> messages;
     public static String prefix = "§7[§6OpenGuild§7]§7 ";
     public static String LANG = "EN";
-    public static File file;
 
     public static String get(String path) {
         return prefix + getIgnorePref(path);
@@ -53,9 +57,7 @@ public class MsgManager {
 
     }
 
-    public static void loadMessages() {
-        file = new File("plugins/OpenGuild/messages_" + LANG.toLowerCase() + ".yml");
-        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+    public static void loadMessages(FileConfiguration config) {
         messages = new HashMap<>();
         for (String path : config.getConfigurationSection("").getKeys(false)) {
             messages.put(path, config.getString(path).replace("&", "§"));
@@ -74,8 +76,28 @@ public class MsgManager {
 
         return ChatColor.RED + result + " :( MSG: " + path;
     }
-    public static void setLANG(String lang) {
-       LANG = lang;
 
+    public static void setLANG(String lang) {
+        LANG = lang;
+
+    }
+
+
+    public static void loadTranslation(FileConfiguration config, Plugin plugin) throws IOException, FileNotValidetedException {
+        // Validate language file
+        FileDataUpdater FileDataUpdater = new FileDataUpdater();
+        String language = config.getString("language").toUpperCase();
+        MsgManager.setLANG(language);
+        String translation = "messages_" + language.toLowerCase();
+        YamlFileCreator yamlFileCreator = new YamlFileCreator();
+        InputStream jarTranslationFile = plugin.getResource(translation + ".yml");
+        File translationFile = yamlFileCreator.prepareFileToLoadYamlConfiguration(jarTranslationFile, translation);
+
+        //FileDataUpdater.updateFile(jarTranslationFile, translationFile);
+        //if (FileDataUpdater.isValidated()) {
+            MsgManager.loadMessages(FileDataUpdater.getUpdatedConfig());
+        //} else {
+        //    throw new FileNotValidetedException("File with translation was not loaded");
+        //}
     }
 }

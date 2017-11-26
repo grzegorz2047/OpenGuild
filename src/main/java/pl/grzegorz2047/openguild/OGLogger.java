@@ -91,6 +91,7 @@ public class OGLogger {
         if (debugMode) {
             exception.printStackTrace();
         } else {
+            log(Level.INFO, "Full information available in debug mode!");
             log(Level.SEVERE, exception.toString());
         }
         log(Level.SEVERE, "---- You can find entire report in log file!");

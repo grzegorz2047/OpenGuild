@@ -31,7 +31,9 @@ import pl.grzegorz2047.openguild.database.TempPlayerData;
 import pl.grzegorz2047.openguild.dropstone.DropConfigLoader;
 import pl.grzegorz2047.openguild.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild.dropstone.DropProperties;
-import pl.grzegorz2047.openguild.files.FileValidator;
+import pl.grzegorz2047.openguild.files.FileNotValidetedException;
+import pl.grzegorz2047.openguild.files.FileDataUpdater;
+import pl.grzegorz2047.openguild.files.YamlFileCreator;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.hardcore.HardcoreHandler;
 import pl.grzegorz2047.openguild.hardcore.HardcoreSQLHandler;
@@ -48,7 +50,10 @@ import pl.grzegorz2047.openguild.tntguildblocker.TntGuildBlocker;
 import pl.grzegorz2047.openguild.updater.Updater;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.logging.Level;
 
 
 /**
@@ -76,17 +81,24 @@ public class OpenGuild extends JavaPlugin {
     @Override
     public void onEnable() {
         long startTime = System.currentTimeMillis();
-
         updater.checkForUpdates();
-
-        FileValidator fileValidator = new FileValidator();
-
-        loadConfigFiles(fileValidator);
-
+        try {
+            loadConfigFiles();
+        } catch (IOException | FileNotValidetedException e) {
+            disableOnCriticalError();
+            e.printStackTrace();
+            return;
+        }
         FileConfiguration mainConfig = getConfig();
-        SpawnChecker.loadSpawnCoords(getConfig().getList("spawn.location-max"), getConfig().getList("spawn.location-min"));
+        SpawnChecker.loadSpawnCoords(mainConfig.getList("spawn.location-max"), mainConfig.getList("spawn.location-min"));
 
-        loadTranslationFiles(fileValidator);
+        try {
+            MsgManager.loadTranslation(mainConfig, this);
+        } catch (IOException | FileNotValidetedException e) {
+            e.printStackTrace();
+            disableOnCriticalError();
+            return;
+        }
         logger.setDebugMode(mainConfig.getBoolean("debug", false));
           /*
          * If some server admin doesn't want to use PermissionsEX or other
@@ -102,14 +114,14 @@ public class OpenGuild extends JavaPlugin {
 
         this.cuboids = new Cuboids();
         this.guilds = new Guilds(sqlHandler, this, cuboids);
-        this.guilds.loadRequiredItemsForGuild(this.getConfig().getStringList("required-items"));
+        this.guilds.loadRequiredItemsForGuild(mainConfig.getStringList("required-items"));
         sqlHandler.startWork(cuboids, guilds);
 
         this.logout = new AntiLogoutManager();
         // Setup Tag Manager
-        this.tagManager = new TagManager(guilds, getConfig());
+        this.tagManager = new TagManager(guilds, mainConfig);
         teleporter = new Teleporter();
-        tpaRequester = new TpaRequester(getConfig());
+        tpaRequester = new TpaRequester(mainConfig);
         tntGuildBlocker = new TntGuildBlocker();
 
 
@@ -133,6 +145,11 @@ public class OpenGuild extends JavaPlugin {
         showFancyMessageInConsole(enabledMsg);
     }
 
+    private void disableOnCriticalError() {
+        logger.log(Level.SEVERE, "Critical error: File didnt load correctly! Plugin shuts down.");
+        Bukkit.getPluginManager().disablePlugin(this);
+    }
+
     private void showFancyMessageInConsole(String message) {
         getServer().getConsoleSender().sendMessage(message);
     }
@@ -147,19 +164,30 @@ public class OpenGuild extends JavaPlugin {
         this.drop.loadMainDropData(config.getStringList("blocks-from-where-item-drops"));
     }
 
-    private void loadTranslationFiles(FileValidator fileValidator) {
-        // Validate language file
-        String language = getConfig().getString("language").toUpperCase();
-        MsgManager.setLANG(language);
-        String translation = "messages_" + language.toLowerCase();
-        fileValidator.validateFile(getResource(translation + ".yml"), translation);
-        MsgManager.loadMessages();
-    }
 
-    private void loadConfigFiles(FileValidator fileValidator) {
-        fileValidator.validateFile(getResource("config.yml"), "config");
-        fileValidator.validateFile(getResource("commands.yml"), "commands");
-        fileValidator.validateFile(getResource("drop.yml"), "drop");
+    private void loadConfigFiles() throws IOException, FileNotValidetedException //{
+        FileDataUpdater FileDataUpdater = new FileDataUpdater();
+        InputStream jarConfigFile = getResource("config.yml");
+        InputStream jarCommandsFile = getResource("commands.yml");
+        InputStream jarDropFile = getResource("drop.yml");
+        YamlFileCreator yamlFileCreator = new YamlFileCreator();
+        File localConfigFile = yamlFileCreator.prepareFileToLoadYamlConfiguration(jarConfigFile, "config");
+        File localCommandsFile = yamlFileCreator.prepareFileToLoadYamlConfiguration(jarCommandsFile, "commands");
+        File localDropFile = yamlFileCreator.prepareFileToLoadYamlConfiguration(jarDropFile, "drop");
+
+
+       /* FileDataUpdater.updateFile(jarConfigFile, localConfigFile);
+        if (!FileDataUpdater.isValidated()) {
+            throw new FileNotValidetedException("File config was not loaded");
+        }
+        FileDataUpdater.updateFile(jarCommandsFile, localCommandsFile);
+        if (!FileDataUpdater.isValidated()) {
+            throw new FileNotValidetedException("File commands was not loaded");
+        }
+        FileDataUpdater.updateFile(jarDropFile, localDropFile);
+        if (!FileDataUpdater.isValidated()) {
+            throw new FileNotValidetedException("File drop was not loaded");
+        }*/
     }
 /*
     public static void loadConfiguration(FileConfiguration config) {
@@ -176,11 +204,13 @@ public class OpenGuild extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        try {
+            this.logout.dispose();
+            this.watcher.cancel();
+        } catch (Exception ignored) {
 
-        this.logout.dispose();
-        this.watcher.cancel();
+        }
         this.tagManager = null;
-
         removeUnnessessaryLogFiles();
     }
 

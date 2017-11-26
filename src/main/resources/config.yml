@@ -1,10 +1,22 @@
-# English: See the configuration tutorial at http://dev.bukkit.org/bukkit-plugins/openguild/pages/config-configuration/
+﻿# English: See the configuration tutorial at http://dev.bukkit.org/bukkit-plugins/openguild/pages/config-configuration/
 # polski: Patrz poradnik konfiguracji na https://github.com/grzegorz2047/OpenGuild2047/wiki/Konfiguracja
 # svenska: Det finns inte konfiguration guide på svenska :(
 language: EN
 teampvp: false
 teampvp-msg: false
 spawn-command: false
+database: FILE
+file-dir: plugins/OpenGuild/og.db
+snooper: true
+updater: true
+sql-table-prefix: openguild_
+mysql:
+  address: localhost
+  port: 3306
+  database: openguild
+  login: author
+  password: password
+  debug: false
 prevent-macro-ghost-block-placing: false
 teleport-cooldown: 10
 tpa-command: false
@@ -47,18 +59,6 @@ random-tp:
   enabled: false
   button: true
   range: 3000
-database: FILE
-file-dir: plugins/OpenGuild/og.db
-snooper: true
-updater: true
-sql-table-prefix: openguild_
-mysql:
-  address: localhost
-  port: 3306
-  database: openguild
-  login: author
-  password: password
-  debug: false
 tags:
   enabled: true
   ally: '&b[{TAG}]&7 '

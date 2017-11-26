@@ -10,7 +10,7 @@ commands:
   guild:
     description: Commands related to guilds
     aliases: [g, gildia, guild, clan, f, og, openguild]
-    usage: Am I dying? Did I run without any errors? Check console!
+    usage: /guild <arg[s]...> Type 'guild help' for help
   team:
     description: Teams chat
     aliases: [t]
