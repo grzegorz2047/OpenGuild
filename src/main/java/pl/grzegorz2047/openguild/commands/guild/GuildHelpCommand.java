@@ -90,7 +90,7 @@ public class GuildHelpCommand extends Command {
         sender.sendMessage(help("invite <player>", "Accepts invite to joint guild"));
         sender.sendMessage(help("accept <guild>", "Accept invite to joint guild"));
         sender.sendMessage(help("description [set <description...>]", "Change or see description of guild"));
-        sender.sendMessage(help("leader <gracz>", "Give leader to someone else"));
+        sender.sendMessage(help("leader <player>", "Give leader to someone else"));
         sender.sendMessage(help("invite", "Invite to guild (sends invite)"));
         sender.sendMessage(help("leave", "Leave from current guild"));
         sender.sendMessage(help("info <guild>", "Information about the guild"));
