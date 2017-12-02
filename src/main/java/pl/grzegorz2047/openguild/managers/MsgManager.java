@@ -17,14 +17,9 @@ package pl.grzegorz2047.openguild.managers;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild.files.FileNotValidetedException;
-import pl.grzegorz2047.openguild.files.FileDataUpdater;
-import pl.grzegorz2047.openguild.files.YamlFileCreator;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 
 /**
@@ -83,19 +78,12 @@ public class MsgManager {
     }
 
 
-    public static void loadTranslation(FileConfiguration config, Plugin plugin) throws IOException, FileNotValidetedException {
-        // Validate language file
-        FileDataUpdater fileDataUpdater = new FileDataUpdater();
-        String language = config.getString("language").toUpperCase();
-        MsgManager.setLANG(language);
-        String translation = "messages_" + language.toLowerCase();
-        YamlFileCreator yamlFileCreator = new YamlFileCreator();
-        InputStream jarTranslationFile = plugin.getResource(translation + ".yml");
-        File translationFile = yamlFileCreator.prepareFileToLoadYamlConfiguration(jarTranslationFile, translation);
-        fileDataUpdater.updateFile(jarTranslationFile, translationFile);
+    public static void loadTranslation(FileConfiguration updatedConfig) throws IOException, FileNotValidetedException {
+        // Validate language translationFile
+
         //fileDataUpdater.updateFile(jarTranslationFile, translationFile);
         //if (fileDataUpdater.isValidated()) {
-        MsgManager.loadMessages(fileDataUpdater.getUpdatedConfig());
+
         //} else {
         //    throw new FileNotValidetedException("File with translation was not loaded");
         //}

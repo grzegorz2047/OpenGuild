@@ -31,8 +31,8 @@ import pl.grzegorz2047.openguild.database.TempPlayerData;
 import pl.grzegorz2047.openguild.dropstone.DropConfigLoader;
 import pl.grzegorz2047.openguild.dropstone.DropFromBlocks;
 import pl.grzegorz2047.openguild.dropstone.DropProperties;
-import pl.grzegorz2047.openguild.files.FileNotValidetedException;
 import pl.grzegorz2047.openguild.files.FileDataUpdater;
+import pl.grzegorz2047.openguild.files.FileNotValidetedException;
 import pl.grzegorz2047.openguild.files.YamlFileCreator;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.hardcore.HardcoreHandler;
@@ -49,9 +49,8 @@ import pl.grzegorz2047.openguild.teleporters.TpaRequester;
 import pl.grzegorz2047.openguild.tntguildblocker.TntGuildBlocker;
 import pl.grzegorz2047.openguild.updater.Updater;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -75,6 +74,10 @@ public class OpenGuild extends JavaPlugin {
     private TntGuildBlocker tntGuildBlocker;
     private Updater updater = new Updater(getConfig());
 
+    private static String rootPath = "plugins/";
+    private static String openGuildPluginFolderName = "OpenGuild";
+    private String fullPath = rootPath + openGuildPluginFolderName;
+
     /**
      * Instance of built-in permissions manager main class.
      */
@@ -93,8 +96,8 @@ public class OpenGuild extends JavaPlugin {
         SpawnChecker.loadSpawnCoords(mainConfig.getList("spawn.location-max"), mainConfig.getList("spawn.location-min"));
 
         try {
-            MsgManager.loadTranslation(mainConfig, this);
-        } catch (IOException | FileNotValidetedException e) {
+            loadMessagesFile();
+        } catch (IOException e) {
             e.printStackTrace();
             disableOnCriticalError();
             return;
@@ -145,6 +148,25 @@ public class OpenGuild extends JavaPlugin {
         showFancyMessageInConsole(enabledMsg);
     }
 
+    private void loadMessagesFile() throws IOException {
+        String language = getConfig().getString("language").toUpperCase();
+        MsgManager.setLANG(language);
+        String translation = "messages_" + language.toLowerCase();
+
+        File translationFile = new File(fullPath + "/" + translation + ".yml");
+        InputStream jarTranslationFile = this.getResource(translation + ".yml");
+        final InputStreamReader inputStreamReader = new InputStreamReader(jarTranslationFile, StandardCharsets.UTF_8);
+
+        YamlFileCreator yamlFileCreator = new YamlFileCreator();
+        FileDataUpdater fileDataUpdater = new FileDataUpdater();
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+        yamlFileCreator.prepareFileToLoadYamlConfiguration(translationFile, bufferedReader);
+        fileDataUpdater.updateFile(jarTranslationFile, translationFile);
+        FileConfiguration newestVersionOfTranslationConfig = fileDataUpdater.getUpdatedConfig();
+        MsgManager.loadMessages(newestVersionOfTranslationConfig);
+    }
+
     private void disableOnCriticalError() {
         logger.log(Level.SEVERE, "Critical error: File didnt load correctly! Plugin shuts down.");
         Bukkit.getPluginManager().disablePlugin(this);
@@ -165,14 +187,18 @@ public class OpenGuild extends JavaPlugin {
     }
 
     private void loadConfigFiles() throws IOException, FileNotValidetedException {
-        FileDataUpdater FileDataUpdater = new FileDataUpdater();
         InputStream jarConfigFile = getResource("config.yml");
         InputStream jarCommandsFile = getResource("commands.yml");
         InputStream jarDropFile = getResource("drop.yml");
         YamlFileCreator yamlFileCreator = new YamlFileCreator();
-        File localConfigFile = yamlFileCreator.prepareFileToLoadYamlConfiguration(jarConfigFile, "config");
-        File localCommandsFile = yamlFileCreator.prepareFileToLoadYamlConfiguration(jarCommandsFile, "commands");
-        File localDropFile = yamlFileCreator.prepareFileToLoadYamlConfiguration(jarDropFile, "drop");
+
+        File localConfigFile = new File(fullPath + "/" + "config" + ".yml");
+        File localCommandsFile = new File(fullPath + "/" + "commands" + ".yml");
+        File localDropFile = new File(fullPath + "/" + "drop" + ".yml");
+
+        yamlFileCreator.prepareFileToLoadYamlConfiguration(localConfigFile, new BufferedReader(new InputStreamReader(jarConfigFile, StandardCharsets.UTF_8)));
+        yamlFileCreator.prepareFileToLoadYamlConfiguration(localCommandsFile, new BufferedReader(new InputStreamReader(jarCommandsFile, StandardCharsets.UTF_8)));
+        yamlFileCreator.prepareFileToLoadYamlConfiguration(localDropFile, new BufferedReader(new InputStreamReader(jarDropFile, StandardCharsets.UTF_8)));
 
 
        /* FileDataUpdater.updateFile(jarConfigFile, localConfigFile);
