@@ -16,9 +16,9 @@ import java.util.*;
 
 public class DropFromBlocks {
     private final static Random r = new Random();
-    private final boolean NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK;
+    private boolean NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK;
     private boolean DROP_ENABLED;
-    private final boolean DROP_TO_EQ;
+    private boolean DROP_TO_EQ;
     private List<Material> eligibleBlocks = new ArrayList<>();
     private List<Material> ores =
             Arrays.asList(
@@ -33,20 +33,17 @@ public class DropFromBlocks {
             );
     private List<DropProperties> loadedDrops = new ArrayList<>();
 
-    public DropFromBlocks(List<DropProperties> loadedDrops, FileConfiguration config) {
+
+    public void loadMainDropData(List<String> blockList, List<DropProperties> loadedDrops, FileConfiguration config) {
         this.loadedDrops = loadedDrops;
         NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK = config.getBoolean("drop.notify-cant-drop-from-not-eligible-block", false);
         DROP_ENABLED = config.getBoolean("drop.enabled", false);
         DROP_TO_EQ = config.getBoolean("drop.drop-to-eq", false);
 
         if (loadedDrops.size() == 0) {
-            System.out.println("Nie wczytalo dropu! wylaczam drop z blockow!");
+            System.out.println("Drop config is not configured! Turning drop off!");
             DROP_ENABLED = false;
         }
-    }
-
-
-    public void loadMainDropData(List<String> blockList) {
         this.eligibleBlocks = new ArrayList<>();
         for (String dropMat : blockList) {
             try {

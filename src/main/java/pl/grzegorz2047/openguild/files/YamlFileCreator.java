@@ -17,9 +17,9 @@ public class YamlFileCreator {
         if (!file.exists()) {
             OpenGuild.getOGLogger().info("File plugins/" + openGuildPluginFolderName + "/" + name + ".yml does not exists - creating ...");
             file.createNewFile();
+            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            writeDefaultDataToFile(file, r);
         }
-        BufferedReader r = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        writeDefaultDataToFile(file, r);
         return file;
     }
 
@@ -29,11 +29,12 @@ public class YamlFileCreator {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
         String str = null;
         while ((str = scanner.readLine()) != null) {
+            System.out.println("czytam " + str);
             bw.write(str);
             bw.newLine();
         }
-        bw.close();
         bw.flush();
+        bw.close();
     }
 
     private boolean isFileJustCreated(Scanner scanner) {

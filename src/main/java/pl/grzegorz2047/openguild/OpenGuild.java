@@ -160,12 +160,11 @@ public class OpenGuild extends JavaPlugin {
 
     private void loadDropFromBlocks(FileConfiguration config) {
         List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
-        this.drop = new DropFromBlocks(loadedDrops, getConfig());
-        this.drop.loadMainDropData(config.getStringList("blocks-from-where-item-drops"));
+        this.drop = new DropFromBlocks();
+        this.drop.loadMainDropData(config.getStringList("blocks-from-where-item-drops"), loadedDrops, getConfig());
     }
 
-
-    private void loadConfigFiles() throws IOException, FileNotValidetedException //{
+    private void loadConfigFiles() throws IOException, FileNotValidetedException {
         FileDataUpdater FileDataUpdater = new FileDataUpdater();
         InputStream jarConfigFile = getResource("config.yml");
         InputStream jarCommandsFile = getResource("commands.yml");

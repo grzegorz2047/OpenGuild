@@ -85,17 +85,17 @@ public class MsgManager {
 
     public static void loadTranslation(FileConfiguration config, Plugin plugin) throws IOException, FileNotValidetedException {
         // Validate language file
-        FileDataUpdater FileDataUpdater = new FileDataUpdater();
+        FileDataUpdater fileDataUpdater = new FileDataUpdater();
         String language = config.getString("language").toUpperCase();
         MsgManager.setLANG(language);
         String translation = "messages_" + language.toLowerCase();
         YamlFileCreator yamlFileCreator = new YamlFileCreator();
         InputStream jarTranslationFile = plugin.getResource(translation + ".yml");
         File translationFile = yamlFileCreator.prepareFileToLoadYamlConfiguration(jarTranslationFile, translation);
-
-        //FileDataUpdater.updateFile(jarTranslationFile, translationFile);
-        //if (FileDataUpdater.isValidated()) {
-            MsgManager.loadMessages(FileDataUpdater.getUpdatedConfig());
+        fileDataUpdater.updateFile(jarTranslationFile, translationFile);
+        //fileDataUpdater.updateFile(jarTranslationFile, translationFile);
+        //if (fileDataUpdater.isValidated()) {
+        MsgManager.loadMessages(fileDataUpdater.getUpdatedConfig());
         //} else {
         //    throw new FileNotValidetedException("File with translation was not loaded");
         //}

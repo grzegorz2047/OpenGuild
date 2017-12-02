@@ -77,10 +77,17 @@ chat:
   guildprefixinchat: true
   chatFormat: '&8[&7{ELO}&8] &8[&7{GUILD}&8] &7{PLAYER}&7: &f{MESSAGE}'
 required-items:
-- 'WOOL:1:2:1'
+  - 'WOOL:1:2:1'
 listener:
   player-move-event: false
   tnt-block-enabled: true
   tnt-block-time: 30
 forbidden-worlds:
   - myforbbidenworld
+drop:
+  enabled: true
+  notify-cant-drop-from-not-eligible-block: false
+  drop-to-eq: true
+  blocks-from-where-item-drops:
+    - STONE
+block-strong-strenght-2: true
