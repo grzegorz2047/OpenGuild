@@ -37,6 +37,10 @@ public class Cuboid {
         this.center = center;
         this.uid = uid;
         this.owner = owner;
+        updateMinMax(center, size);
+    }
+
+    private void updateMinMax(Location center, int size) {
         this.cuboidSize = size;
         this.min = new Location(center.getWorld(), center.getBlockX() - size, Integer.MIN_VALUE, center.getBlockZ() - size);
         this.max = new Location(center.getWorld(), center.getBlockX() + size, Integer.MAX_VALUE, center.getBlockZ() + size);
@@ -97,7 +101,8 @@ public class Cuboid {
     }
 
     public void expand(int number) {
-        this.cuboidSize += number;
+        updateMinMax(center, cuboidSize += number);
+
     }
 
     public boolean equals(Cuboid cuboid) {

@@ -21,6 +21,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import pl.grzegorz2047.openguild.OpenGuild;
+import pl.grzegorz2047.openguild.cuboidmanagement.Cuboid;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.guilds.Guilds;
@@ -54,9 +56,13 @@ public class PlayerMoveListener implements Listener {
 
         Location playerLocation = player.getLocation();
         String guildscuboidtag = cuboids.getGuildTagInLocation(playerLocation);
-        Guild currentCuboidGuild = guilds.getGuild(guildscuboidtag);
 
-        //Bukkit.broadcastMessage("Gracz "+player.getName()+" jest na "+guildscuboidtag);
+        Guild currentCuboidGuild = guilds.getGuild(guildscuboidtag);
+        Cuboid currentCuboid = cuboids.getCuboidByGuildName(guildscuboidtag);
+        if (currentCuboid != null) {
+
+            OpenGuild.getOGLogger().debug(String.valueOf(currentCuboid.getCuboidSize()));
+        }//Bukkit.broadcastMessage("Gracz "+player.getName()+" jest na "+guildscuboidtag);
 
         String playerName = player.getName();
         boolean wasOnCuboidBefore = cuboids.playersenteredcuboid.containsKey(playerName);
