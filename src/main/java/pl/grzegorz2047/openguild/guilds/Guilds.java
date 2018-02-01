@@ -45,7 +45,7 @@ public class Guilds {
     private List<String> onlineGuilds = new ArrayList<>();
     private ArrayList<ItemStack> requiredItemStacks;
     private final boolean playSoundWHenSomeoneEnteredCuboidEnabled;
-    private Sound cuboidEnterSound = Sound.ENTITY_ENDERDRAGON_DEATH;
+    private Sound cuboidEnterSound = Sound.BLOCK_ANVIL_BREAK;
 
 
     public Guilds(final SQLHandler sqlHandler, Plugin plugin, Cuboids cuboids) {
