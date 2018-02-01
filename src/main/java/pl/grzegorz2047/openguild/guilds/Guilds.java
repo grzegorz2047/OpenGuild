@@ -45,7 +45,7 @@ public class Guilds {
     private List<String> onlineGuilds = new ArrayList<>();
     private ArrayList<ItemStack> requiredItemStacks;
     private final boolean playSoundWHenSomeoneEnteredCuboidEnabled;
-    private Sound cuboidEnterSound = Sound.BLOCK_ANVIL_BREAK;
+    private Sound cuboidEnterSound;
 
 
     public Guilds(final SQLHandler sqlHandler, Plugin plugin, Cuboids cuboids) {
@@ -55,7 +55,11 @@ public class Guilds {
         playerMetadataController = new PlayerMetadataController(plugin);
         playSoundWHenSomeoneEnteredCuboidEnabled = plugin.getConfig().getBoolean("cuboid.notify-enter-sound", false);
         FORBIDDEN_WORLDS = plugin.getConfig().getStringList("forbidden-worlds");
-
+        try {
+            cuboidEnterSound = Sound.BLOCK_ANVIL_BREAK;
+        } catch (Exception ex) {
+            cuboidEnterSound = Sound.valueOf("ANVIL_BREAK");
+        }
         try {
             cuboidEnterSound = Sound.valueOf(plugin.getConfig().getString("cuboid.notify-enter-sound-type", "ENDERMAN_DEATH"));
         } catch (IllegalArgumentException ex) {

@@ -76,7 +76,12 @@ public class DropFromBlocks {
         Location blockLocation = brokenBlock.getLocation();
         int blockHeight = blockLocation.getBlockY();
         PlayerInventory playerInventory = player.getInventory();
-        ItemStack itemInHand = playerInventory.getItemInMainHand();
+        ItemStack itemInHand;
+        try {
+            itemInHand = playerInventory.getItemInMainHand();
+        } catch (Exception ex) {
+            itemInHand = player.getInventory().getItemInHand();
+        }
         Material itemInHandType = itemInHand.getType();
         Map<Enchantment, Integer> itemEnchantmens = itemInHand.getEnchantments();
         if (!isEligible(brokenBlockType)) {

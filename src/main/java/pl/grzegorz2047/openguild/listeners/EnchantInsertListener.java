@@ -44,7 +44,11 @@ public class EnchantInsertListener implements Listener {
     private void blockEvent(PotionSplashEvent e, ThrownPotion potion) {
         e.getAffectedEntities().clear();
         e.setCancelled(true);
-        potion.setItem(new ItemStack(Material.SPLASH_POTION));
+        try {
+            potion.setItem(new ItemStack(Material.SPLASH_POTION));
+        }catch (Exception ex) {
+            potion.setItem(new ItemStack(Material.getMaterial("POTION")));
+        }
     }
 
 

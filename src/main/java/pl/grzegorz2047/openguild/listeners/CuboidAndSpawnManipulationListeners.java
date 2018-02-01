@@ -33,6 +33,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
@@ -88,7 +89,11 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
         if (DROP_ENABLED) {
             drop.processDropFromBlocks(player, brokenBlock);
             if (!drop.isNotUsedInDropFromBlocks(brokenBlock.getType())) {
-                e.setDropItems(false);
+                try {
+                    e.setDropItems(false);
+                } catch (Exception ex) {
+                    System.out.println("DROP NIE JEST WSPIERANY! Wylacz drop z configu");
+                }
             }
         }
     }
@@ -121,7 +126,11 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
                 e.setCancelled(true);
                 return true;
             }
-            inventory.getItemInMainHand().setDurability((short) (inventory.getItemInMainHand().getDurability() + BREAKING_DAMAGE));
+            try {
+                inventory.getItemInMainHand().setDurability((short) (inventory.getItemInMainHand().getDurability() + BREAKING_DAMAGE));
+            } catch (Exception ex) {
+                inventory.getItemInHand().setDurability((short) (inventory.getItemInHand().getDurability() + BREAKING_DAMAGE));
+            }
             return true;
         }
         return false;
@@ -190,7 +199,13 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
 
 
     private boolean hasSpecialBreakingitem(PlayerInventory inventory) {
-        return breakingItems.contains(inventory.getItemInMainHand().getType());
+        ItemStack inHand;
+        try {
+            inHand = inventory.getItemInMainHand();
+        } catch (Exception ex) {
+            inHand = inventory.getItemInHand();
+        }
+        return breakingItems.contains(inHand.getType());
     }
 
     private boolean canbreakEnemyBlock() {
