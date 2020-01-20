@@ -33,8 +33,10 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import pl.grzegorz2047.openguild.OGLogger;
 import pl.grzegorz2047.openguild.OpenGuild;
 import pl.grzegorz2047.openguild.cuboidmanagement.Cuboids;
 import pl.grzegorz2047.openguild.dropstone.DropFromBlocks;
@@ -44,7 +46,9 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 import pl.grzegorz2047.openguild.spawn.SpawnChecker;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class CuboidAndSpawnManipulationListeners implements Listener {
 
@@ -57,7 +61,15 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
     private final boolean EXTRA_PROTECTION;
     private final boolean PREVENT_GHOST_BLOCK_PLACE;
     private final boolean DROP_ENABLED;
-    private List<Material> allowedInteractItems;
+    private final OGLogger ogLogger = OpenGuild.getOGLogger();
+    private List<Material> allowedInteractItems = Arrays.asList(
+            Material.CHEST,
+            Material.ENDER_CHEST,
+            Material.DARK_OAK_DOOR,
+            Material.ACACIA_DOOR,
+            Material.BIRCH_DOOR,
+            Material.JUNGLE_DOOR,
+            Material.OAK_DOOR);
 
 
     public CuboidAndSpawnManipulationListeners(Cuboids cuboids, DropFromBlocks drop, Guilds guilds, FileConfiguration config) {
@@ -67,10 +79,6 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
 
         this.drop = drop;
         this.guilds = guilds;
-        this.allowedInteractItems = new ArrayList<>();
-        this.allowedInteractItems.add(Material.CHEST);
-        this.allowedInteractItems.add(Material.ENDER_CHEST);
-        this.allowedInteractItems.add(Material.WOODEN_DOOR);
         EXTRA_PROTECTION = config.getBoolean("cuboid.extra-protection", false);
         PREVENT_GHOST_BLOCK_PLACE = config.getBoolean("prevent-macro-ghost-block-placing", false);
         DROP_ENABLED = config.getBoolean("drop.enabled", false);
@@ -109,8 +117,9 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
 
     private boolean processBreakingBlockInEnemyArea(BlockBreakEvent e, Player player, Block brokenBlock) {
         String playerGuildTag = "";
-        if (guilds.hasGuild(player.getUniqueId())) {
-            Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
+        UUID uniqueId = player.getUniqueId();
+        if (guilds.hasGuild(uniqueId)) {
+            Guild playerGuild = guilds.getPlayerGuild(uniqueId);
             playerGuildTag = playerGuild.getName();
 
         }
@@ -126,10 +135,12 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
                 e.setCancelled(true);
                 return true;
             }
+            ItemStack itemInMainHand = inventory.getItemInMainHand();
+            ItemStack itemInHand = inventory.getItemInHand();
             try {
-                inventory.getItemInMainHand().setDurability((short) (inventory.getItemInMainHand().getDurability() + BREAKING_DAMAGE));
+                itemInMainHand.setDurability((short) (itemInMainHand.getDurability() + BREAKING_DAMAGE));
             } catch (Exception ex) {
-                inventory.getItemInHand().setDurability((short) (inventory.getItemInHand().getDurability() + BREAKING_DAMAGE));
+                itemInHand.setDurability((short) (itemInHand.getDurability() + BREAKING_DAMAGE));
             }
             return true;
         }
@@ -190,7 +201,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
 
         Location block = player.getLocation();
         String interactionConsoleMsg = createConsoleInteractionMsg(player, block);
-        OpenGuild.getOGLogger()
+        ogLogger
                 .info(interactionConsoleMsg);
 
         String interactionMsg = createInteractionMsg(block);
@@ -260,16 +271,17 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
             playerGuildTag = playerGuild.getName();
 
         }
-        if (SpawnChecker.isSpawn(e.getBlockClicked().getLocation()) && !e.getPlayer().hasPermission("openguild.spawn.bypass")) {
+        Location location = e.getBlockClicked().getLocation();
+        if (SpawnChecker.isSpawn(location) && !e.getPlayer().hasPermission("openguild.spawn.bypass")) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
+            player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonspawn"));
             return;
         }
-        if (e.getPlayer().hasPermission("openguild.cuboid.bypassplace")) {
+        if (player.hasPermission("openguild.cuboid.bypassplace")) {
             return;
         }
-        if (!cuboids.hasRightToThisLocation(e.getPlayer(), playerGuildTag, e.getBlockClicked().getLocation())) {
-            e.getPlayer().sendMessage(ChatColor.RED + MsgManager.get("cantdoitonsomeonearea"));
+        if (!cuboids.hasRightToThisLocation(player, playerGuildTag, location)) {
+            player.sendMessage(ChatColor.RED + MsgManager.get("cantdoitonsomeonearea"));
             e.setCancelled(true);
         }
     }
@@ -320,25 +332,27 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
             playerGuildTag = playerGuild.getName();
         }
         if (EXTRA_PROTECTION && !cuboids.hasRightToThisLocation(player, playerGuildTag, player.getLocation())) {
-            if (e.getInventory().getType().equals(InventoryType.PLAYER)) {
+            Inventory inventory = e.getInventory();
+            InventoryType type = inventory.getType();
+            if (type.equals(InventoryType.PLAYER)) {
                 return;
             }
-            if (e.getInventory().getType().equals(InventoryType.CRAFTING)) {
+            if (type.equals(InventoryType.CRAFTING)) {
                 return;
             }
-            if (e.getInventory().getTitle().equals(MsgManager.getIgnorePref("gui-items"))) {
+            String title = e.getView().getTitle();
+            if (title.equals(MsgManager.getIgnorePref("gui-items"))) {
                 return;
             }
             if (player.hasPermission("openguild.cuboid.bypassinteract")) {
                 // I am not sure, but I think there should be an 'if' checking if inventory type is chest/enderchest etc.
-
                 Location block = player.getLocation();
                 String interactionConsoleMsg = createConsoleInteractionMsg(player, block);
-                OpenGuild.getOGLogger().info(interactionConsoleMsg);
+                ogLogger.info(interactionConsoleMsg);
                 String interactionMsg = createInteractionMsg(block);
                 player.sendMessage(interactionMsg);
             } else {
-                player.sendMessage("Nie mozesz tego otworzyc: " + e.getInventory().getType());
+                player.sendMessage("Nie mozesz tego otworzyc: " + type);
                 e.setCancelled(true);
             }
         }
@@ -366,7 +380,7 @@ public class CuboidAndSpawnManipulationListeners implements Listener {
             try {
                 breakingItems.add(Material.valueOf(item.toUpperCase()));
             } catch (IllegalArgumentException ex) {
-                OpenGuild.getOGLogger().severe("Wystapil blad podczas ladowana itemow do niszczenia blokow na teranie gildii: Nie mozna wczytac " + item.toUpperCase());
+                ogLogger.severe("Wystapil blad podczas ladowana itemow do niszczenia blokow na teranie gildii: Nie mozna wczytac " + item.toUpperCase());
             }
         }
     }

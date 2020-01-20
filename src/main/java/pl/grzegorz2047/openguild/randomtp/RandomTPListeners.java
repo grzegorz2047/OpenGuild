@@ -23,9 +23,20 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.Button;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class RandomTPListeners implements Listener {
 
     private final RandomTPHandler randomTPHandler;
+    private List<Material> materials =
+            Arrays.asList(
+                    Material.ACACIA_BUTTON,
+                    Material.BIRCH_BUTTON,
+                    Material.DARK_OAK_BUTTON,
+                    Material.SPRUCE_BUTTON,
+                    Material.OAK_BUTTON,
+                    Material.STONE_BUTTON);
 
     public RandomTPListeners(RandomTPHandler randomTPHandler) {
         this.randomTPHandler = randomTPHandler;
@@ -33,19 +44,19 @@ public class RandomTPListeners implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
-        if(e.getClickedBlock() == null)
+        Block clickedBlock = e.getClickedBlock();
+        if (clickedBlock == null)
             return;
 
-        if(!randomTPHandler.isEnabled() || !randomTPHandler.isButtonEnabled())
+        if (!randomTPHandler.isEnabled() || !randomTPHandler.isButtonEnabled())
             return;
 
-        Block block = e.getClickedBlock();
-        if(block.getType() == Material.STONE_BUTTON ||
-                block.getType() == Material.WOOD_BUTTON) {
-            Button button = (Button) e.getClickedBlock().getState().getData();
-            if(block.getRelative(button.getAttachedFace()).getType() == Material.SPONGE)
+
+        if (materials.contains(clickedBlock.getType())) {
+            Button button = (Button) clickedBlock.getState().getData();
+            if (clickedBlock.getRelative(button.getAttachedFace()).getType() == Material.SPONGE)
                 randomTPHandler.teleport(e.getPlayer());
         }
     }
-    
+
 }

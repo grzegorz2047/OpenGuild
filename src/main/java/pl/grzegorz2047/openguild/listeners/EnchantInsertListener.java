@@ -63,7 +63,7 @@ public class EnchantInsertListener implements Listener {
                 if (type.equals(Material.GLOWSTONE_DUST)) {
                     glowstoneDust = true;
                 }
-                if (it.getData().getItemTypeId() == 373) {
+                if (it.getType() == Material.POTION) {
                     potion = true;
                 }
             }

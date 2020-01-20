@@ -5,6 +5,7 @@ website: https://www.github.com/grzegorz2047/OpenGuild
 version: '${project.version}'
 prefix: 'OpenGuild'
 softdepend: [ProtocolLib]
+api-version: 1.15
 main: pl.grzegorz2047.openguild.OpenGuild
 commands:
   guild:

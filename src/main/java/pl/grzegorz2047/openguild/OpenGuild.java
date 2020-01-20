@@ -51,6 +51,9 @@ import pl.grzegorz2047.openguild.updater.Updater;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -103,7 +106,7 @@ public class OpenGuild extends JavaPlugin {
             return;
         }
         logger.setDebugMode(mainConfig.getBoolean("debug", false));
-          /*
+        /*
          * If some server admin doesn't want to use PermissionsEX or other
          * permission plugin - he can use our built-in permissions manager.
          */
@@ -192,13 +195,13 @@ public class OpenGuild extends JavaPlugin {
         InputStream jarDropFile = getResource("drop.yml");
         YamlFileCreator yamlFileCreator = new YamlFileCreator();
 
-        File localConfigFile = new File(fullPath + "/" + "config" + ".yml");
-        File localCommandsFile = new File(fullPath + "/" + "commands" + ".yml");
-        File localDropFile = new File(fullPath + "/" + "drop" + ".yml");
+        File localConfigFile = new File(fullPath + File.separator + "config" + ".yml");
+        File localCommandsFile = new File(fullPath + File.separator + "commands" + ".yml");
+        File localDropFile = new File(fullPath + File.separator + "drop" + ".yml");
 
-        yamlFileCreator.prepareFileToLoadYamlConfiguration(localConfigFile, new BufferedReader(new InputStreamReader(jarConfigFile, StandardCharsets.UTF_8)));
-        yamlFileCreator.prepareFileToLoadYamlConfiguration(localCommandsFile, new BufferedReader(new InputStreamReader(jarCommandsFile, StandardCharsets.UTF_8)));
-        yamlFileCreator.prepareFileToLoadYamlConfiguration(localDropFile, new BufferedReader(new InputStreamReader(jarDropFile, StandardCharsets.UTF_8)));
+        Files.copy(jarConfigFile, localConfigFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(jarCommandsFile, localCommandsFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(jarDropFile, localDropFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 
        /* FileDataUpdater.updateFile(jarConfigFile, localConfigFile);

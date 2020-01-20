@@ -28,7 +28,6 @@ public class DropFromBlocks {
                     Material.EMERALD_ORE,
                     Material.LAPIS_ORE,
                     Material.REDSTONE_ORE,
-                    Material.GLOWING_REDSTONE_ORE,
                     Material.STONE
             );
     private List<DropProperties> loadedDrops = new ArrayList<>();
@@ -137,10 +136,10 @@ public class DropFromBlocks {
                 processDropToEq(player, playerInventory, dropProperties, receivedDrop, brokenBlock);
             } else {
 
-                processDropNaturally(player, blockLocation, playerWorld, dropProperties, receivedDrop, brokenBlock);
+                processDropNaturally(player, blockLocation, playerWorld, dropProperties, receivedDrop, brokenBlock.getType());
             }
         } else {
-            processDropNaturally(player, blockLocation, playerWorld, dropProperties, receivedDrop, brokenBlock);
+            processDropNaturally(player, blockLocation, playerWorld, dropProperties, receivedDrop, brokenBlock.getType());
         }
     }
 
@@ -167,9 +166,9 @@ public class DropFromBlocks {
         }
     }
 
-    private void processDropNaturally(Player player, Location blockLocation, World playerWorld, DropProperties dropProperties, ItemStack receivedDrop, Block b) {
+    private void processDropNaturally(Player player, Location blockLocation, World playerWorld, DropProperties dropProperties, ItemStack receivedDrop, Material type) {
         dropNaturally(blockLocation, playerWorld, receivedDrop);
-        if (!b.getType().equals(Material.COBBLESTONE)) {
+        if (!type.equals(Material.COBBLESTONE)) {
             player.sendMessage(dropProperties.getDropMessage(receivedDrop.getAmount()));
         }
     }
