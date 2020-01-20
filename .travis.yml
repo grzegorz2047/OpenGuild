@@ -1,5 +1,6 @@
 language: java
 script: mvn clean install
+dist: trusty
 jdk:
   - oraclejdk9
 addons:
