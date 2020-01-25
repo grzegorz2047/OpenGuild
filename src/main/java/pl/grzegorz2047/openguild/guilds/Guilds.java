@@ -16,6 +16,7 @@
 package pl.grzegorz2047.openguild.guilds;
 
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -43,7 +44,7 @@ public class Guilds {
     private final List<String> FORBIDDEN_WORLDS;
     private Map<String, Guild> guilds = new HashMap<>();
     private List<String> onlineGuilds = new ArrayList<>();
-    private ArrayList<ItemStack> requiredItemStacks;
+    private List<ItemStack> requiredItemStacks;
     private final boolean playSoundWHenSomeoneEnteredCuboidEnabled;
     private Sound cuboidEnterSound;
 
@@ -53,17 +54,19 @@ public class Guilds {
         this.plugin = plugin;
         this.guildInvitations = new GuildInvitations(sqlHandler, this);
         playerMetadataController = new PlayerMetadataController(plugin);
-        playSoundWHenSomeoneEnteredCuboidEnabled = plugin.getConfig().getBoolean("cuboid.notify-enter-sound", false);
-        FORBIDDEN_WORLDS = plugin.getConfig().getStringList("forbidden-worlds");
+        FileConfiguration config = plugin.getConfig();
+        playSoundWHenSomeoneEnteredCuboidEnabled = config.getBoolean("cuboid.notify-enter-sound", false);
+        FORBIDDEN_WORLDS = config.getStringList("forbidden-worlds");
         try {
             cuboidEnterSound = Sound.BLOCK_ANVIL_BREAK;
         } catch (Exception ex) {
             cuboidEnterSound = Sound.valueOf("ANVIL_BREAK");
         }
         try {
-            cuboidEnterSound = Sound.valueOf(plugin.getConfig().getString("cuboid.notify-enter-sound-type", "ENDERMAN_DEATH"));
+            String entity_enderman_death = config.getString("cuboid.notify-enter-sound-type", "ENTITY_ENDERMAN_DEATH");
+            cuboidEnterSound = Sound.valueOf(entity_enderman_death);
         } catch (IllegalArgumentException ex) {
-            OpenGuild.getOGLogger().warning("Sound type " + plugin.getConfig().getString("cuboid.notify-enter-sound-type") + " is incorrect! Please visit http://jd.bukkit.org/rb/apidocs/org/bukkit/Sound.html for help.");
+            OpenGuild.getOGLogger().warning("Sound type " + config.getString("cuboid.notify-enter-sound-type") + " is incorrect! Please visit https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html for help.");
         }
 
     }
@@ -274,9 +277,9 @@ public class Guilds {
         playerMetadataController.updatePlayerMetaAll(uuid, guildName, eloPoints, playerKills, playerDeaths);
     }
 
-    public void loadRequiredItemsForGuild(List<String> stringList) {
+    public void loadRequiredItemsForGuild(List<Map<?, ?>> itemList) {
         ItemsLoader itemsLoader = new ItemsLoader();
-        this.requiredItemStacks = itemsLoader.loadItems(stringList);
+        this.requiredItemStacks = itemsLoader.loadItems(itemList);
     }
 
     public boolean hasEnoughItemsForGuild(PlayerInventory inventory) {

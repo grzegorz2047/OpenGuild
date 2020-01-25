@@ -56,9 +56,7 @@ public class SpawnChecker {
         Location c2 = SPAWN_MIN_CORNER_LOCATION;
         if (location.getWorld().getName().equals(c1.getWorld().getName())) {
             if (location.getBlockX() > c2.getBlockX() - extra && location.getBlockX() < c1.getBlockX() + extra) {
-                if (location.getBlockZ() > c2.getBlockZ() - extra && location.getBlockZ() < c1.getBlockZ() + extra) {
-                    return true;
-                }
+                return location.getBlockZ() > c2.getBlockZ() - extra && location.getBlockZ() < c1.getBlockZ() + extra;
             }
         }
         return false;

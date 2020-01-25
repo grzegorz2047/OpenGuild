@@ -1,81 +1,82 @@
 package pl.grzegorz2047.openguild;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ItemsLoader {
 
-    public ArrayList<ItemStack> loadItems(List<String> requiredItemsString) {
+    private final OGLogger ogLogger = OpenGuild.getOGLogger();
+
+    public ArrayList<ItemStack> loadItems(List<Map<?, ?>> requiredItemsString) {
         ArrayList<ItemStack> requiredItemStacks = new ArrayList<>();
         if (requiredItemsString == null) {
+            ogLogger.warning("No specified guild create items (no section found: required-items)!");
             return requiredItemStacks;
         }
         if (requiredItemsString.isEmpty()) {
+            ogLogger.warning("No specified guild create items (required-items)!");
             return requiredItemStacks;
         }
         if (requiredItemsString.size() > 54) {
-            OpenGuild.getOGLogger().warning("Too many specified items (required-items)! Maximum size is 54!");
-        } else {
-            for (String s : requiredItemsString) {
-                String[] info = s.split(":");
-                if (info.length != 4) {
-                    OpenGuild.getOGLogger().warning("Oops! It looks like you're using an old configuration file!/You have made mistake with required-items section! We changed pattern of required-items section. Now it looks like this: Material:Durability:Data:Amount (old was: Material:Amount) - please update your config.yml Exact line is " + s);
-                    break;
-                }
-                Material material;
-                try {
-                    material = Material.valueOf(info[0]);
-                } catch (IllegalArgumentException ex) {
-                    OpenGuild.getOGLogger().warning("Invalid material: " + info[0] + "! Check your configuration file!");
-                    continue;
-                }
-
-                short durability = 0;
-                try {
-                    durability = Short.valueOf(info[1]);
-                } catch (NumberFormatException e) {
-                    OpenGuild.getOGLogger().warning("Durability must be a number! Please fix 'required-items' section in your config.yml");
-                }
-
-                byte data = getItemData(info[2]);
-
-                for (ItemStack i : requiredItemStacks) {
-                    if (i.getType().equals(material) && data == i.getData().getData()) {
-                        OpenGuild.getOGLogger().warning("Duplicate item found! Skipping ...");
-                    }
-                }
-
-                int amount = 1;
-                try {
-                    amount = Integer.valueOf(info[3]);
-
-                    if (amount > 64) {
-                        amount = 64;
-                    } else if (amount < 0) {
-                        continue;
-                    }
-                } catch (NumberFormatException e) {
-                    OpenGuild.getOGLogger().warning("Amount must be a number! Please fix 'required-items' section in your config.yml");
-                }
-
-                ItemStack item = new ItemStack(material, amount, durability, data);
-                requiredItemStacks.add(item);
+            ogLogger.warning("Too many specified items (required-items)! Maximum size is 54!");
+            return requiredItemStacks;
+        }
+        for (Map<?, ?> s : requiredItemsString) {
+            Optional<ItemStack> parsedItem = getParsedItem((Map<String, Object>) s);
+            if (!parsedItem.isPresent()) {
+                ogLogger.warning("Couldnt parse required guild creation item");
+                continue;
             }
+            ItemStack item = parsedItem.get();
+            for (ItemStack alreadyLoadedItem : requiredItemStacks) {
+                if (alreadyLoadedItem.isSimilar(item)) {
+                    ogLogger.warning("Duplicate item found! Skipping ...");
+                }
+            }
+            requiredItemStacks.add(item);
         }
         return requiredItemStacks;
     }
 
-    private byte getItemData(String dataPart) {
-        byte data = 0;
+    private Optional<ItemStack> getParsedItem(Map<String, Object> itemInfo) {
+        Material material;
+        short durability = 0;
+        int amount;
+
+        String type = String.valueOf(itemInfo.get("type"));
         try {
-            data = Byte.valueOf(dataPart);
-        } catch (NumberFormatException e) {
-            OpenGuild.getOGLogger().warning("Data must be a number! Please fix 'required-items' section in your config.yml");
+            material = Material.valueOf(type);
+        } catch (IllegalArgumentException ex) {
+            ogLogger.warning("Invalid material: " + type + "! Check your configuration file!");
+            return Optional.empty();
         }
-        return data;
+
+        try {
+            durability = Short.parseShort(String.valueOf(itemInfo.get("damage")));
+        } catch (NumberFormatException e) {
+            ogLogger.warning("Durability for " + type + " invalid or not specifed in 'required-items' section in your config.yml");
+        }
+        try {
+            amount = Integer.parseInt(String.valueOf(itemInfo.get("amount")));
+
+            if (amount > 64) {
+                amount = 64;
+            } else if (amount < 0) {
+                return Optional.empty();
+            }
+        } catch (NumberFormatException e) {
+            ogLogger.warning("Amount must be a number! Please fix 'required-items' section in your config.yml");
+            return Optional.empty();
+        }
+        ItemStack item = new ItemStack(material, amount);
+        ItemMeta itemMeta = item.getItemMeta();
+        ((Damageable) itemMeta).setDamage(durability);
+        return Optional.of(item);
     }
 
 

@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import pl.grzegorz2047.openguild.managers.MsgManager;
@@ -11,11 +12,12 @@ import pl.grzegorz2047.openguild.utils.ItemGUI;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class InventoryManipulator {
 
 
-    public boolean hasEnoughItems(Inventory inv, ArrayList<ItemStack> requiredItemStacks) {
+    public boolean hasEnoughItems(Inventory inv, List<ItemStack> requiredItemStacks) {
         for (ItemStack item : requiredItemStacks) {
             if (!inv.containsAtLeast(item, item.getAmount())) {
                 return false;
@@ -24,60 +26,40 @@ public class InventoryManipulator {
         return true;
     }
 
-    public void removeRequiredItemsForGuild(Inventory inv, ArrayList<ItemStack> requiredItemStacks) {
+    public void removeRequiredItemsForGuild(Inventory inv, List<ItemStack> requiredItemStacks) {
         for (ItemStack item : requiredItemStacks) {
-            removeFromInv(inv, item.getType(), item.getDurability(), item.getAmount(), item.getData().getData());
+            removeFromInv(inv, item.getType(), item.getDurability(), item.getAmount());
         }
     }
 
-    private static void removeFromInv(Inventory inv, Material mat, int dmgValue, int amount, byte data) {
-        if (inv.contains(mat)) {
-            int remaining = amount;
-            ItemStack[] contents = inv.getContents();
-            for (ItemStack is : contents) {
-                if (isEmptySlot(is)) {
-                    continue;
-                }
-                if (isDifferentMaterial(mat, is)) {
-                    continue;
-                }
-                if (isSpecificType(data)) {
-                    if (is.getData() == null) {
-                        continue;
-                    }
-                    if (isDifferentType(data, is)) {
-                        continue;
-                    }
-                    if (isBroken(dmgValue, is)) {
-                        continue;
-                    }
-                    if (hasMoreThanEnough(remaining, is)) {
-                        is.setAmount(is.getAmount() - remaining);
-                        remaining = 0;
-                    } else if (hasLessOrEquals(remaining, is)) {
-                        if (isStillNotEnough(remaining)) {
-                            remaining -= is.getAmount();
-                            is.setType(Material.AIR);
-                        }
-                    }
-                } else {
-                    if (isBroken(dmgValue, is)) {
-                        continue;
-                    }
-                    if (hasMoreThanEnough(remaining, is)) {
-                        is.setAmount(is.getAmount() - remaining);
-                        remaining = 0;
-                    } else if (hasLessOrEquals(remaining, is)) {
-                        if (isStillNotEnough(remaining)) {
-                            remaining -= is.getAmount();
-                            is.setType(Material.AIR);
-                        }
-                    }
+    private static void removeFromInv(Inventory inv, Material mat, int dmgValue, int amount) {
+        if (!inv.contains(mat)) {
+            return;
+        }
+        int remaining = amount;
+        ItemStack[] contents = inv.getContents();
+        for (ItemStack is : contents) {
+            if (isEmptySlot(is)) {
+                continue;
+            }
+            if (isDifferentMaterial(mat, is)) {
+                continue;
+            }
 
+            if (isBroken(dmgValue, is)) {
+                continue;
+            }
+            if (hasMoreThanEnough(remaining, is)) {
+                is.setAmount(is.getAmount() - remaining);
+                remaining = 0;
+            } else if (hasLessOrEquals(remaining, is)) {
+                if (isStillNotEnough(remaining)) {
+                    remaining -= is.getAmount();
+                    is.setType(Material.AIR);
                 }
             }
-            inv.setContents(contents);
         }
+        inv.setContents(contents);
     }
 
     private static boolean isStillNotEnough(int remaining) {
@@ -92,16 +74,9 @@ public class InventoryManipulator {
         return is.getType() != mat;
     }
 
-    private static boolean isSpecificType(byte data) {
-        return data != -1;
-    }
-
-    private static boolean isDifferentType(byte data, ItemStack is) {
-        return is.getData().getData() != data;
-    }
 
     private static boolean isBroken(int dmgValue, ItemStack is) {
-        return is.getDurability() != dmgValue && dmgValue > 0;
+        return ((Damageable) is.getItemMeta()).getDamage() != dmgValue && dmgValue > 0;
     }
 
     private static boolean hasLessOrEquals(int remaining, ItemStack is) {
@@ -134,7 +109,7 @@ public class InventoryManipulator {
         return cloned;
     }
 
-    private int getRequiredItemsWindowInventorySize(ArrayList<ItemStack> requiredItemStacks) {
+    private int getRequiredItemsWindowInventorySize(List<ItemStack> requiredItemStacks) {
         int inventorySize = 9;
 
         if (getRequiredItemsSize(requiredItemStacks) > 9) {
@@ -162,12 +137,12 @@ public class InventoryManipulator {
     }
 
 
-    public int getRequiredItemsSize(ArrayList<ItemStack> requiredItemStacks) {
+    public int getRequiredItemsSize(List<ItemStack> requiredItemStacks) {
         return requiredItemStacks.size();
     }
 
 
-    public Inventory prepareItemGuildWindowInventory(Inventory inventory, ArrayList<ItemStack> requiredItemStacks, Plugin plugin) {
+    public Inventory prepareItemGuildWindowInventory(Inventory inventory, List<ItemStack> requiredItemStacks, Plugin plugin) {
         int inventorySize = getRequiredItemsWindowInventorySize(requiredItemStacks);
         ItemGUI itemsGUI = new ItemGUI(MsgManager.getIgnorePref("gui-items"), inventorySize, plugin);
         for (ItemStack item : requiredItemStacks) {

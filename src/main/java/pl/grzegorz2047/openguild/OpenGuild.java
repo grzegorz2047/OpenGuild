@@ -17,6 +17,7 @@ package pl.grzegorz2047.openguild;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -51,10 +52,11 @@ import pl.grzegorz2047.openguild.updater.Updater;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 
@@ -120,7 +122,8 @@ public class OpenGuild extends JavaPlugin {
 
         this.cuboids = new Cuboids();
         this.guilds = new Guilds(sqlHandler, this, cuboids);
-        this.guilds.loadRequiredItemsForGuild(mainConfig.getStringList("required-items"));
+        List<Map<?, ?>> mapList = mainConfig.getMapList("required-items");
+        this.guilds.loadRequiredItemsForGuild(mapList);
         sqlHandler.startWork(cuboids, guilds);
 
         this.logout = new AntiLogoutManager();
@@ -195,13 +198,16 @@ public class OpenGuild extends JavaPlugin {
         InputStream jarDropFile = getResource("drop.yml");
         YamlFileCreator yamlFileCreator = new YamlFileCreator();
 
-        File localConfigFile = new File(fullPath + File.separator + "config" + ".yml");
-        File localCommandsFile = new File(fullPath + File.separator + "commands" + ".yml");
-        File localDropFile = new File(fullPath + File.separator + "drop" + ".yml");
 
-        Files.copy(jarConfigFile, localConfigFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(jarCommandsFile, localCommandsFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(jarDropFile, localDropFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        StandardCopyOption fileCopyOption = StandardCopyOption.REPLACE_EXISTING;
+        String configPath = fullPath + File.separator + "config" + ".yml";
+        copyFileData(jarConfigFile, fileCopyOption, configPath);
+
+        String commandsPath = fullPath + File.separator + "commands" + ".yml";
+        copyFileData(jarCommandsFile, fileCopyOption, commandsPath);
+
+        String dropPath = fullPath + File.separator + "drop" + ".yml";
+        copyFileData(jarDropFile, fileCopyOption, dropPath);
 
 
        /* FileDataUpdater.updateFile(jarConfigFile, localConfigFile);
@@ -216,6 +222,15 @@ public class OpenGuild extends JavaPlugin {
         if (!FileDataUpdater.isValidated()) {
             throw new FileNotValidetedException("File drop was not loaded");
         }*/
+    }
+
+    private void copyFileData(InputStream jarConfigFile, StandardCopyOption fileCopyOption, String configPath) throws IOException {
+        File localConfigFile = new File(configPath);
+        if(localConfigFile.exists()){
+           return;
+        }
+        Path configToPath = localConfigFile.toPath();
+        Files.copy(jarConfigFile, configToPath, fileCopyOption);
     }
 /*
     public static void loadConfiguration(FileConfiguration config) {

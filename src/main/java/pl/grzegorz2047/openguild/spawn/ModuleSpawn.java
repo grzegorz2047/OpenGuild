@@ -17,6 +17,7 @@
 package pl.grzegorz2047.openguild.spawn;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ModuleSpawn {
@@ -25,9 +26,10 @@ public class ModuleSpawn {
 
 
     public void enable(JavaPlugin plugin) {
-        BLOCK_GUILD_CREATION_ON_SPAWN = plugin.getConfig().getBoolean("spawn.block-guild-creating", true);
+        FileConfiguration config = plugin.getConfig();
+        BLOCK_GUILD_CREATION_ON_SPAWN = config.getBoolean("spawn.block-guild-creating", true);
         if (BLOCK_GUILD_CREATION_ON_SPAWN) {
-            Bukkit.getPluginManager().registerEvents(new SpawnListeners(plugin.getConfig()), plugin);
+            Bukkit.getPluginManager().registerEvents(new SpawnListeners(config), plugin);
         }
     }
 

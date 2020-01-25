@@ -40,12 +40,13 @@ cuboid:
   notify-enter: true
   notify-enter-members: false
   notify-enter-sound: false
-  notify-enter-sound-type: ENDERMAN_DEATH
+  notify-enter-sound-type: ENTITY_ENDERMAN_STARE
   extra-protection: true
   expand:
     take-cuboid-size-into-account-when-expanding: false
     items-to-expand:
-     - 'LOG:1:2:1'
+      - type: STONE_SWORD
+        amount: 1
   breaking-blocks:
     item-types: [DIAMOND_PICKAXE]
     damage: 0
@@ -77,7 +78,8 @@ chat:
   guildprefixinchat: true
   chatFormat: '&8[&7{ELO}&8] &8[&7{GUILD}&8] &7{PLAYER}&7: &f{MESSAGE}'
 required-items:
-  - 'WOOL:1:2:1'
+  - type: STONE_SWORD
+    amount: 1
 listener:
   player-move-event: false
   tnt-block-enabled: true

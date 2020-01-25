@@ -17,6 +17,7 @@ import pl.grzegorz2047.openguild.managers.MsgManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -35,11 +36,10 @@ public class GuildExpandCommand extends Command {
         this.sqlHandler = sqlHandler;
         this.cuboids = cuboids;
         MAX_CUBOID_RADIUS = config.getInt("cuboid.max-cube-size", 50);
-        List<String> ITEMS_TO_EXPAND = config.getStringList("cuboid.expand.items-to-expand");
+        List<Map<?, ?>> ITEMS_TO_EXPAND = config.getMapList("cuboid.expand.items-to-expand");
         loadItemsToExpand(ITEMS_TO_EXPAND);
     }
-
-    private void loadItemsToExpand(List<String> itemsToExpand) {
+    private void loadItemsToExpand(List<Map<?, ?>> itemsToExpand) {
         ItemsLoader itemsLoader = new ItemsLoader();
         this.requiredItems = itemsLoader.loadItems(itemsToExpand);
     }
