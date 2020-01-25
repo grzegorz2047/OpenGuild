@@ -1,6 +1,7 @@
 package pl.grzegorz2047.openguild.packets;
 
 import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import pl.grzegorz2047.openguild.guilds.Guild;
 import org.bukkit.entity.Player;
 
@@ -10,7 +11,7 @@ import org.bukkit.entity.Player;
 public class ScoreboardPackets {
     public void sendCreateTeamTag(Player player, Guild guild, String guildTagTemplate) {
         WrapperPlayServerScoreboardTeam tagPacket = new WrapperPlayServerScoreboardTeam();
-        tagPacket.setPrefix(guildTagTemplate.replace("{TAG}", guild.getName()));
+        tagPacket.setPrefix(WrappedChatComponent.fromText(guildTagTemplate.replace("{TAG}", guild.getName())));
         tagPacket.setName(guild.getName());
         tagPacket.setDisplayName(tagPacket.getPrefix());
         tagPacket.setPlayers(guild.getMembersNames());
@@ -19,7 +20,7 @@ public class ScoreboardPackets {
     }
     public void sendUpdateTeamTag(Player player, Guild guild, String guildTagTemplate) {
         WrapperPlayServerScoreboardTeam tagPacket = new WrapperPlayServerScoreboardTeam();
-        tagPacket.setPrefix(guildTagTemplate.replace("{TAG}", guild.getName()));
+        tagPacket.setPrefix(WrappedChatComponent.fromText(guildTagTemplate.replace("{TAG}", guild.getName())));
         tagPacket.setName(guild.getName());
         tagPacket.setDisplayName(tagPacket.getPrefix());
         tagPacket.setPlayers(guild.getMembersNames());

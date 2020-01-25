@@ -168,7 +168,9 @@ public class GuildCreateCommand extends Command {
         }
 
         if (!hasTagCorrectLength(tag)) {
-            player.sendMessage(MsgManager.get("toolongshorttag"));
+            player.sendMessage(MsgManager.get("toolongshorttag")
+                    .replaceAll("\\{MIN}", String.valueOf(minclantag))
+                    .replaceAll("\\{MAX}", String.valueOf(maxclantag)));
             return false;
         }
 

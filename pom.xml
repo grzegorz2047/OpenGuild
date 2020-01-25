@@ -81,9 +81,18 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.dmulloy2</groupId>
+            <artifactId>PacketWrapper</artifactId>
+            <version>master-cb99e56a3d-1</version>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -103,15 +112,9 @@
         </dependency>
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib-API</artifactId>
-            <version>4.3.0</version>
+            <artifactId>ProtocolLib</artifactId>
+            <version>4.5.0</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.md-5:bungeecord-chat</groupId>
-                    <artifactId>1.15-SNAPSHOT</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>

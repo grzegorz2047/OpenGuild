@@ -19,37 +19,6 @@
         <version>2.22.2</version>
       </plugin>
       <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.9</version>
-        <executions>
-          <execution>
-            <id>prepare-agent</id>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>report</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>post-unit-test</id>
-            <phase>test</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-            <configuration>
-              <dataFile>target/jacoco.exec</dataFile>
-              <outputDirectory>target/jacoco-ut</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
@@ -99,6 +68,10 @@
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
     </repository>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -131,14 +104,10 @@
     </dependency>
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
-      <artifactId>ProtocolLib-API</artifactId>
-      <version>4.3.0</version>
+      <artifactId>ProtocolLib</artifactId>
+      <version>4.5.0</version>
       <scope>provided</scope>
       <exclusions>
-        <exclusion>
-          <artifactId>1.15-SNAPSHOT</artifactId>
-          <groupId>net.md-5:bungeecord-chat</groupId>
-        </exclusion>
         <exclusion>
           <artifactId>cglib-nodep</artifactId>
           <groupId>cglib</groupId>
