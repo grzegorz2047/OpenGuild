@@ -56,37 +56,8 @@ public class GuildLeaveCommand extends Command {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
-
-
         Player player = (Player) sender;
-        if (!guilds.hasGuild(player)) {
-            player.sendMessage(MsgManager.get("notinguild"));
-            return;
-        }
-
-        Guild guild = guilds.getPlayerGuild(player.getUniqueId());
-        if (guild.getLeader().equals(player.getUniqueId())) {
-            player.sendMessage(MsgManager.get("kickleader"));
-            return;
-        }
-
-        GuildLeaveEvent event = new GuildLeaveEvent(guild, player);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
-
-        guild.removeMember(player.getUniqueId());
-        guilds.updatePlayerMetadata(player.getUniqueId(), PlayerMetadataController.PlayerMetaDataColumn.GUILD.name(), "");
-        for (UUID member : guild.getMembers()) {
-            OfflinePlayer opp = Bukkit.getOfflinePlayer(member);
-            if (opp.isOnline()) {
-                opp.getPlayer().sendMessage(MsgManager.get("broadcast-leave").replace("{PLAYER}", player.getDisplayName()).replace("{TAG}", guild.getName().toUpperCase()));
-            }
-        }
-        tagManager.playerLeaveGuild(player, guild);
-        sqlHandler.updatePlayerTag(player.getUniqueId(), "");
-        player.sendMessage(MsgManager.get("leaveguildsuccess"));
+        guilds.playerLeaveGuild(player);
     }
 
     @Override

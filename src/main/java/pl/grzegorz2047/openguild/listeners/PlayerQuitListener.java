@@ -59,24 +59,25 @@ public class PlayerQuitListener implements Listener {
     @EventHandler
     public void handleEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
-        event.setQuitMessage(quitMsg.replace("%PLAYER%", player.getName()));
+        UUID uniqueId = player.getUniqueId();
+        String playerName = player.getName();
+        event.setQuitMessage(quitMsg.replace("%PLAYER%", playerName));
         if (guilds.isPlayerInGuild(player)) {
-            Guild g = guilds.getPlayerGuild(player.getUniqueId());
-            guilds.guildMemberLeftServer(player, uuid);
-            if (!guilds.isGuildOnline(g.getName())) {
+            Guild g = guilds.getPlayerGuild(uniqueId);
+            guilds.guildMemberLeftServer(player, uniqueId);
+            String guildName = g.getName();
+            if (!guilds.isGuildOnline(guildName)) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    scoreboardPackets.sendDeleteTeamTag(p, g.getName());
+                    scoreboardPackets.sendDeleteTeamTag(p, guildName);
                 }
             }
 
         }
-        tempPlayerData.removePlayer(player.getUniqueId());
-        String playerName = player.getName();
+        tempPlayerData.removePlayer(uniqueId);
         logout.handleLogoutDuringFight(player, playerName);
         cuboids.clearCuboidEnterNotification(player);
-        teleporter.removeRequest(uuid);
-        tpaRequester.removeRequest(event.getPlayer().getName());
+        teleporter.removeRequest(uniqueId);
+        tpaRequester.removeRequest(playerName);
     }
 
 

@@ -20,9 +20,17 @@ public class PlayerMetadataController {
         this.plugin = plugin;
     }
 
+    public void updatePlayerGuildMetadata(UUID uniqueId, String name) {
+        updatePlayerMetadata(uniqueId, PlayerMetadataController.PlayerMetaDataColumn.GUILD.name(), name);
+    }
+
     public void updatePlayerMetadata(UUID uniqueId, String column, Object value) {
         Player player = Bukkit.getPlayer(uniqueId);
         if (player == null) return;
+        player.setMetadata(column, new FixedMetadataValue(plugin, value));
+    }
+
+    public void updatePlayerMetadata(Player player, String column, Object value) {
         player.setMetadata(column, new FixedMetadataValue(plugin, value));
     }
 
@@ -33,6 +41,7 @@ public class PlayerMetadataController {
         }
         return metadata.get(0).asString();
     }
+
     public void updatePlayerMetaAll(UUID uuid, String guildName, int eloPoints, int playerKills, int playerDeaths) {
         updatePlayerMetadata(uuid, PlayerMetaDataColumn.GUILD.name(), guildName);
         updatePlayerMetadata(uuid, PlayerMetaDataColumn.ELO.name(), eloPoints);

@@ -38,21 +38,23 @@ public class PlayerCacheListenersController implements Listener {
     @EventHandler
     private void onLogin(PlayerLoginEvent e) {
         Player player = e.getPlayer();
+        UUID playerUniqueId = player.getUniqueId();
         if (!e.getResult().equals(PlayerLoginEvent.Result.ALLOWED)) {
-            this.tempPlayerData.removePlayer(player.getUniqueId());
+            this.tempPlayerData.removePlayer(playerUniqueId);
         }
-        if (!preFire.contains(player.getUniqueId())) {
-            this.sqlHandler.getPlayerData(player.getUniqueId(), tempPlayerData);
+        if (!preFire.contains(playerUniqueId)) {
+            this.sqlHandler.getPlayerData(playerUniqueId, tempPlayerData);
         } else {
-            preFire.remove(player.getUniqueId());
+            preFire.remove(playerUniqueId);
         }
     }
 
 
     @EventHandler
     private void onQuit(PlayerQuitEvent e) {
-        if (e.getPlayer() != null) {
-            this.tempPlayerData.removePlayer(e.getPlayer().getUniqueId());
+        Player player = e.getPlayer();
+        if (player != null) {
+            this.tempPlayerData.removePlayer(player.getUniqueId());
         }
     }
 

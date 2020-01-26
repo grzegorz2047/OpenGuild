@@ -10,6 +10,8 @@ import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
 
+import java.util.UUID;
+
 /**
  * File created by grzegorz2047 on 26.08.2017.
  */
@@ -30,40 +32,17 @@ public class GuildChangeLeaderCommand extends Command {
             sender.sendMessage(MsgManager.get("cmdonlyforplayer"));
             return;
         }
-        Player player = (Player) sender;
-        Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
-        if (playerGuild == null) {
-            player.sendMessage(MsgManager.get("notinguild"));
-            return;
-        }
-        if (!playerGuild.getLeader().equals(player.getUniqueId())) {
-            player.sendMessage(MsgManager.get("playernotleader"));
-            return;
-        }
-        if (playerGuild.getLeader().equals(player.getUniqueId())) {
-            sender.sendMessage(MsgManager.get("cantchangeleadertoyourself"));
-            return;
-        }
 
+        Player possibleCurrentLeader = (Player) sender;
         if (args.length < 2) {
-            player.sendMessage(MsgManager.get("usagechangehomecommand"));
+            possibleCurrentLeader.sendMessage(MsgManager.get("usagechangehomecommand"));
             return;
         }
         String newLeaderName = args[1];
-
-        if(!playerGuild.getMembersNames().contains(newLeaderName)) {
-            player.sendMessage(MsgManager.get("playernotinyourguild"));
-            return;
-        }
-        Player newLeader = Bukkit.getPlayer(newLeaderName);
-        if (newLeader == null) {
-            player.sendMessage(MsgManager.get("playeroffline"));
-            return;
-        }
-        playerGuild.setLeader(newLeader.getUniqueId());
-        sqlHandler.changeLeader(playerGuild.getName(), playerGuild.getName());
-        player.sendMessage(MsgManager.get("successfullychangedleader"));
+        guilds.changeLeader(possibleCurrentLeader, newLeaderName);
     }
+
+
 
     @Override
     public int minArgs() {

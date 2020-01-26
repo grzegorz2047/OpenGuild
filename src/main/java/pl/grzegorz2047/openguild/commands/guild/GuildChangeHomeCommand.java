@@ -1,5 +1,6 @@
 package pl.grzegorz2047.openguild.commands.guild;
 
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.commands.command.Command;
@@ -8,6 +9,8 @@ import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.guilds.Guild;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.managers.MsgManager;
+
+import java.util.UUID;
 
 /**
  * Created by grzeg on 26.08.2017.
@@ -30,19 +33,16 @@ public class GuildChangeHomeCommand extends Command {
             return;
         }
         Player player = (Player) sender;
-        Guild playerGuild = guilds.getPlayerGuild(player.getUniqueId());
-        if (playerGuild == null) {
-            player.sendMessage(MsgManager.get("notinguild"));
+        UUID playerUniqueId = player.getUniqueId();
+        Location playerLocation = player.getLocation();
+        if (!guilds.changeHome(player, playerUniqueId, playerLocation)) {
             return;
         }
-        if (!playerGuild.getLeader().equals(player.getUniqueId())) {
-            player.sendMessage(MsgManager.get("playernotleader"));
-            return;
-        }
-        playerGuild.setHome(player.getLocation());
-        sqlHandler.changeHome(playerGuild.getName(), player.getLocation());
-        player.sendMessage(MsgManager.get("successfullychangedhomeposition"));
+
     }
+
+
+
 
     @Override
     public int minArgs() {

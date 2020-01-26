@@ -106,9 +106,10 @@ public class PlayerMoveListener implements Listener {
 
 
     private void processPlayerLeftCuboid(Player player) {
-        String tagSaved = cuboids.playersenteredcuboid.get(player.getName());
+        String playerName = player.getName();
+        String tagSaved = cuboids.playersenteredcuboid.get(playerName);
         player.sendMessage(MsgManager.get("leavecubpl").replace("{GUILD}", tagSaved.toUpperCase()));
-        cuboids.playersenteredcuboid.remove(player.getName());
+        cuboids.playersenteredcuboid.remove(playerName);
     }
 
 }

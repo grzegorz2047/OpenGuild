@@ -82,7 +82,7 @@ public class GuildDisbandCommand extends Command {
             for (Relation r : guild.getAlliances()) {
                 Guild g1 = guilds.getGuild(r.getBaseGuildTag());
                 Guild g2 = guilds.getGuild(r.getAlliedGuildTag());
-                tagManager.guildBrokeAlliance(g1, g2);
+                guilds.guildBrokeAlliance(g1, g2);
                 if (!guild.equals(g1)) {
                     g1.getAlliances().remove(r);
                 }
@@ -99,7 +99,7 @@ public class GuildDisbandCommand extends Command {
             cuboids.removeGuildCuboid(guild.getName());
             sqlHandler.removeGuild(guild.getName().toUpperCase(), guild.getMembers());
             guilds.getGuilds().remove(guild.getName());
-            tagManager.playerDisbandGuild(guild);
+            tagManager.playerDisbandGuild(guild.getName());
             guilds.removeOnlineGuild(guild.getName());
             Bukkit.broadcastMessage(MsgManager.get("broadcast-disband").replace("{TAG}", guild.getName().toUpperCase()).replace("{PLAYER}", player.getDisplayName()));
         }

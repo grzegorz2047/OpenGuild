@@ -34,9 +34,9 @@ public class PlayerKickListener implements Listener {
         if (guilds.isPlayerInGuild(player)) {
             guilds.guildMemberLeftServer(player, uuid);
         }
-        cuboids.clearCuboidEnterNotification(e.getPlayer());
-        teleporter.removeRequest(e.getPlayer().getUniqueId());
-        tpaRequester.removeRequest(e.getPlayer().getName());
+        cuboids.clearCuboidEnterNotification(player);
+        teleporter.removeRequest(uuid);
+        tpaRequester.removeRequest(player.getName());
     }
 
 

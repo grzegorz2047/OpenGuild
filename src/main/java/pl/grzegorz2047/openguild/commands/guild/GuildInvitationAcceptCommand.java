@@ -105,7 +105,6 @@ public class GuildInvitationAcceptCommand extends Command {
         }
 
         guilds.acceptInvitation(player, guild);
-        tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
         Bukkit.broadcastMessage(MsgManager.get("broadcast-join")
                 .replace("{PLAYER}", player.getName())
                 .replace("{TAG}", guild.getName().toUpperCase()));

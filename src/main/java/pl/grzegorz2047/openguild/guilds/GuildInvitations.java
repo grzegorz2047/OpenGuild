@@ -4,10 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.database.SQLHandler;
 import pl.grzegorz2047.openguild.managers.MsgManager;
+import pl.grzegorz2047.openguild.metadata.PlayerMetadataController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by grzeg on 23.08.2017.
@@ -15,12 +17,12 @@ import java.util.List;
 public class GuildInvitations {
     private final List<GuildInvitation> pendingInvitations = new ArrayList<GuildInvitation>();
     private final SQLHandler sqlHandler;
-    private final Guilds guilds;
+    private final PlayerMetadataController playerMetadataController;
     private List<GuildInvitation> toDelete = new ArrayList<>();
 
-    public GuildInvitations(SQLHandler sqlHandler, Guilds guilds) {
+    public GuildInvitations(SQLHandler sqlHandler, PlayerMetadataController playerMetadataController) {
         this.sqlHandler = sqlHandler;
-        this.guilds = guilds;
+        this.playerMetadataController = playerMetadataController;
     }
 
     public void checkPlayerInvitations() {
@@ -58,17 +60,17 @@ public class GuildInvitations {
 
 
     public void acceptGuildInvitation(Player player, Guild guild) {
-        GuildInvitation playerInvitation = getPlayerInvitation(player.getName(), guild.getName());
+        String playerName = player.getName();
+        String guildName = guild.getName();
+        GuildInvitation playerInvitation = getPlayerInvitation(playerName, guildName);
         if (playerInvitation != null) {
             toDelete.add(playerInvitation);
 
-            guilds.addPlayer(player.getUniqueId(), guild);
-            sqlHandler.
-                    updatePlayerTag(
-                            player.getUniqueId(),
-                            guild.getName());
-            guild.addMember(player.getUniqueId());
-            guild.addMembersName(player.getName());
+            UUID playerUniqueId = player.getUniqueId();
+            playerMetadataController.updatePlayerGuildMetadata(playerUniqueId, guildName);
+            sqlHandler.updatePlayerTag(playerUniqueId, guildName);
+            guild.addMember(playerUniqueId);
+
 
         }
     }

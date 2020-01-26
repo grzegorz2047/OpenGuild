@@ -17,7 +17,6 @@ package pl.grzegorz2047.openguild;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -121,14 +120,15 @@ public class OpenGuild extends JavaPlugin {
         sqlHandler.loadDB(mainConfig.getString("mysql.address"), mainConfig.getInt("mysql.port"), mainConfig.getString("mysql.login"), mainConfig.getString("mysql.password"), mainConfig.getString("mysql.database"));
 
         this.cuboids = new Cuboids();
-        this.guilds = new Guilds(sqlHandler, this, cuboids);
+        // Setup Tag Manager
+        this.tagManager = new TagManager(mainConfig);
+        this.guilds = new Guilds(sqlHandler, this, cuboids, tagManager);
         List<Map<?, ?>> mapList = mainConfig.getMapList("required-items");
         this.guilds.loadRequiredItemsForGuild(mapList);
         sqlHandler.startWork(cuboids, guilds);
 
         this.logout = new AntiLogoutManager();
-        // Setup Tag Manager
-        this.tagManager = new TagManager(guilds, mainConfig);
+
         teleporter = new Teleporter();
         tpaRequester = new TpaRequester(mainConfig);
         tntGuildBlocker = new TntGuildBlocker();

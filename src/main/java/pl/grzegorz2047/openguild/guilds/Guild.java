@@ -15,11 +15,11 @@
  */
 package pl.grzegorz2047.openguild.guilds;
 
+import org.bukkit.entity.Player;
 import pl.grzegorz2047.openguild.relations.Relation;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.scoreboard.Scoreboard;
 import pl.grzegorz2047.openguild.relations.Relations;
 
 import java.util.ArrayList;
@@ -71,6 +71,18 @@ public class Guild {
 
     public void notifyGuild(String msg) {
         for (UUID mem : this.getMembers()) {
+            OfflinePlayer om = Bukkit.getOfflinePlayer(mem);
+            if (om.isOnline()) {
+                notifyPlayer(om, msg);
+            }
+        }
+    }
+
+    public void notifyOtherGuildMembers(String msg, Player player) {
+        for (UUID mem : this.getMembers()) {
+            if (mem.equals(player.getUniqueId())) {
+                continue;
+            }
             OfflinePlayer om = Bukkit.getOfflinePlayer(mem);
             if (om.isOnline()) {
                 notifyPlayer(om, msg);
@@ -141,17 +153,16 @@ public class Guild {
 
 
     public void addMember(UUID member) {
-        if (!members.contains(member)) {
+        if (!isMember(member)) {
             members.add(member);
             membersNames.add(Bukkit.getOfflinePlayer(member).getName());
         }
     }
 
     public void removeMember(UUID member) {
-        if (members.contains(member)) {
+        if (isMember(member)) {
             members.remove(member);
             membersNames.remove(Bukkit.getOfflinePlayer(member).getName());
-
         }
     }
 
@@ -159,15 +170,11 @@ public class Guild {
         return leader.equals(playerUUID);
     }
 
-    public boolean containsMember(UUID member) {
-        return members.contains(member);
-    }
-
-    public List<String> getMembersNames() {
+    public List<String> getMemberNames() {
         return membersNames;
     }
 
-    public void addMembersName(String playerName) {
-        this.membersNames.add(playerName);
+    public boolean isMember(UUID uniqueId) {
+        return members.contains(uniqueId);
     }
 }

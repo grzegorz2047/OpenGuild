@@ -2,28 +2,29 @@ package pl.grzegorz2047.openguild.packets;
 
 import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import pl.grzegorz2047.openguild.guilds.Guild;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * File created by grzegorz2047 on 19.08.2017.
  */
 public class ScoreboardPackets {
-    public void sendCreateTeamTag(Player player, Guild guild, String guildTagTemplate) {
+    public void sendCreateTeamTag(Player player, String guildTagTemplate, String guildName, List<String> guildMemberNames) {
         WrapperPlayServerScoreboardTeam tagPacket = new WrapperPlayServerScoreboardTeam();
-        tagPacket.setPrefix(WrappedChatComponent.fromText(guildTagTemplate.replace("{TAG}", guild.getName())));
-        tagPacket.setName(guild.getName());
+        tagPacket.setPrefix(WrappedChatComponent.fromText(guildTagTemplate.replace("{TAG}", guildName)));
+        tagPacket.setName(guildName);
         tagPacket.setDisplayName(tagPacket.getPrefix());
-        tagPacket.setPlayers(guild.getMembersNames());
+        tagPacket.setPlayers(guildMemberNames);
         tagPacket.setMode(WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);
         tagPacket.sendPacket(player);
     }
-    public void sendUpdateTeamTag(Player player, Guild guild, String guildTagTemplate) {
+    public void sendUpdateTeamTag(Player player, String guildTagTemplate, String guildName, List<String> guildMembersNames) {
         WrapperPlayServerScoreboardTeam tagPacket = new WrapperPlayServerScoreboardTeam();
-        tagPacket.setPrefix(WrappedChatComponent.fromText(guildTagTemplate.replace("{TAG}", guild.getName())));
-        tagPacket.setName(guild.getName());
+        tagPacket.setPrefix(WrappedChatComponent.fromText(guildTagTemplate.replace("{TAG}", guildName)));
+        tagPacket.setName(guildName);
         tagPacket.setDisplayName(tagPacket.getPrefix());
-        tagPacket.setPlayers(guild.getMembersNames());
+        tagPacket.setPlayers(guildMembersNames);
         tagPacket.setMode(WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED);
         tagPacket.sendPacket(player);
     }
@@ -35,4 +36,5 @@ public class ScoreboardPackets {
         tagPacket.sendPacket(p);
 
     }
+
 }

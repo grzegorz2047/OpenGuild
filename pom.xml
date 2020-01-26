@@ -4,7 +4,7 @@
 
     <groupId>pl.grzegorz2047</groupId>
     <artifactId>OpenGuild</artifactId>
-    <version>0.7.2</version>
+    <version>0.73</version>
     <packaging>jar</packaging>
     <name>OpenGuild</name>
     <properties>

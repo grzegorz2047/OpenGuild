@@ -42,6 +42,7 @@ public class NewVersionChecker {
     private Scanner getScanner() {
         try {
             URL url = new URL(address);
+
             OpenGuild.getOGLogger().info("Checking for updates...");
             return new Scanner(url.openStream());
         } catch(IOException ignored) {}
@@ -56,7 +57,9 @@ public class NewVersionChecker {
                 String version = scanner.next();
                 versions.add(version);
             }
+            scanner.close();
         }
+
     }
     
     public static void reset() {

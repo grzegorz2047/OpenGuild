@@ -64,7 +64,7 @@ public class PlayerJoinListener implements Listener {
         SQLRecord playerRecord = this.tempPlayerData.getPlayerRecord(uuid);
 
         processPlayerRecord(player, uuid, playerRecord);
-        tagManager.prepareScoreboardTagForPlayerOnJoin(player);
+        guilds.prepareScoreboardTagForPlayerOnJoin(player);
 
         updater.notifyOpAboutUpdate(player);
     }
@@ -111,7 +111,7 @@ public class PlayerJoinListener implements Listener {
         this.tempPlayerData.removePlayer(uuid);
         if (guilds.hasGuild(player)) {
             Guild guild = guilds.getPlayerGuild(uuid);
-            tagManager.refreshScoreboardTagsForAllPlayersOnServerApartFromJoiner(player, guild);
+            guilds.refreshScoreboardTagsForAllPlayers(guild);
 
             guilds.addOnlineGuild(guild.getName());
             guilds.notifyMembersJoinedGame(player, guild);

@@ -128,7 +128,7 @@ public class GuildAllyCommand extends Command {
         if (!result) {
             OpenGuild.getOGLogger().warning("Could not register the ally for " + guild.getName() + " guild!");
         }
-        tagManager.guildMakeAlliance(r);
+        guilds.guildMakeAlliance(guilds.getGuild(r.getBaseGuildTag()), guilds.getGuild(r.getAlliedGuildTag()));
         guild.getAlliances().add(r);
         requestingGuild.getAlliances().add(r);
     }

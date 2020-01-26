@@ -92,7 +92,7 @@ public class GuildKickCommand extends Command {
         guilds.updatePlayerMetadata(op.getUniqueId(), PlayerMetadataController.PlayerMetaDataColumn.GUILD.name(), "");
         if (op.isOnline()) {
             op.getPlayer().sendMessage(MsgManager.get("playerkicked").replace("{GUILD}", guild.getName()));
-            tagManager.playerLeaveGuild(((Player) op), guild);
+            guilds.playerLeaveGuild(((Player) op));
         }
 
         for (UUID member : guild.getMembers()) {
@@ -102,8 +102,7 @@ public class GuildKickCommand extends Command {
             }
         }
 
-        sqlHandler.updatePlayerTag(op.getUniqueId(), "");
-        tagManager.playerLeaveGuild(player, guild);
+        guilds.playerLeaveGuild(((Player) op));
         player.sendMessage(MsgManager.get("playerkicksuccess"));
     }
 
