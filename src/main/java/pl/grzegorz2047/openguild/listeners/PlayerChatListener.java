@@ -33,6 +33,7 @@ public class PlayerChatListener implements Listener {
 
     private final Guilds guilds;
     public static String CHAT_FORMAT;
+    public static String GUILD_CHAT_FORMAT;
     private final boolean GUILD_PREFIX_IN_CHAT_ENABLED;
     private final String GUILD_AND_ALLY_ONLY_CHAT_FORMAT;
     private final String GUILD_ONLY_CHAT_MSG_KEY;
@@ -41,14 +42,13 @@ public class PlayerChatListener implements Listener {
 
     public PlayerChatListener(Guilds guilds, FileConfiguration config) {
         this.guilds = guilds;
-        CHAT_FORMAT = config.getString("chat.chatFormat", "&8{&7GUILD&8} &7{PLAYER}&7: &f{MESSAGE}");
+        GUILD_CHAT_FORMAT = config.getString("chat.guildChatFormat", "&8{&7GUILD&8} &7{PLAYER}&7: &f{MESSAGE}");
+        CHAT_FORMAT = config.getString("chat.noGuildChatFormat", "&7{PLAYER}&7: &f{MESSAGE}");
         GUILD_PREFIX_IN_CHAT_ENABLED = config.getBoolean("chat.guildprefixinchat", true);
         GUILD_AND_ALLY_ONLY_CHAT_FORMAT = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
         GUILD_ONLY_CHAT_MSG_KEY = config.getString("chat.guild-key", "guild:");
         GUILD_ONLY_CHAT_FORMAT = config.getString("chat.guild-format", "&8[&aGuild&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");
         GUILD_AND_ALLY_ONLY_CHAT_KEY = config.getString("chat.ally-key", "allies:");
-
-
     }
 
     @EventHandler
@@ -57,31 +57,30 @@ public class PlayerChatListener implements Listener {
             return;
         }
         Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
-        String message = event.getMessage().replace("%", "");
-        if (!isInGuild(player)) {
 
-            int elo = getPlayerElo(player);
-            if (GUILD_PREFIX_IN_CHAT_ENABLED) {
-                event.setFormat(ChatColor.translateAlternateColorCodes('&',
-                        CHAT_FORMAT
-                                .replace("{ELO}", String.valueOf(elo))
-                                .replace("{PLAYER}", player.getName())
-                                .replace("{GUILD}", "")
-                                .replace("{MESSAGE}", message)));
-            }
+        String message = event.getMessage().replace("%", "");
+        if (guilds.hasGuild(player)) {
+            processChatForPlayerWithGuild(event, player, message);
             return;
         }
-        processChatForPlayerWithGuild(event, player, uuid, message);
+        int elo = getPlayerElo(player);
+        if (GUILD_PREFIX_IN_CHAT_ENABLED) {
+            event.setFormat(ChatColor.translateAlternateColorCodes('&',
+                    CHAT_FORMAT
+                            .replace("{ELO}", String.valueOf(elo))
+                            .replace("{PLAYER}", player.getName())
+                            .replace("{MESSAGE}", message)));
+        }
     }
 
     private int getPlayerElo(Player player) {
         return player.getMetadata(PlayerMetadataController.PlayerMetaDataColumn.ELO.name()).get(0).asInt();
     }
 
-    private void processChatForPlayerWithGuild(AsyncPlayerChatEvent event, Player player, UUID uuid, String message) {
-        Guild guild = guilds.getPlayerGuild(uuid);
-        String tag = guild.getName().toUpperCase();
+    private void processChatForPlayerWithGuild(AsyncPlayerChatEvent event, Player player,  String message) {
+        Guild guild = guilds.getPlayerGuild(player.getUniqueId());
+        String guildName = guild.getName();
+        String tag = guildName.toUpperCase();
         String format;
         if (isInGuildChatMode(message, GUILD_ONLY_CHAT_MSG_KEY)) {
             message = message.substring(1);
@@ -106,10 +105,10 @@ public class PlayerChatListener implements Listener {
         }
         int elo = getPlayerElo(player);
         event.setFormat(ChatColor.translateAlternateColorCodes('&',
-                CHAT_FORMAT
+                GUILD_CHAT_FORMAT
                         .replace("{ELO}", String.valueOf(elo))
                         .replace("{PLAYER}", player.getName())
-                        .replace("{GUILD}", guild.getName())
+                        .replace("{GUILD}", tag)
                         .replace("{MESSAGE}", message)));
     }
 
@@ -158,7 +157,4 @@ public class PlayerChatListener implements Listener {
         return message.startsWith(allyChatKey) && message.length() >= 2;
     }
 
-    private boolean isInGuild(Player player) {
-        return guilds.hasGuild(player);
-    }
 }

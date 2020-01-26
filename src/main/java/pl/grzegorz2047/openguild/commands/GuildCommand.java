@@ -20,9 +20,7 @@ import pl.grzegorz2047.openguild.commands.command.Command;
 import pl.grzegorz2047.openguild.commands.command.CommandException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
@@ -66,7 +64,7 @@ public class GuildCommand implements CommandExecutor {
         commands.add(new GuildReloadCommand(new String[]{"reload", "przeladuj"}, plugin.getConfig()));
         commands.add(new GuildItemsCommand(new String[]{"items", "itemy", "przedmioty"}, plugin, guilds));
         commands.add(new GuildVersionCommand(new String[]{"version", "wersja", "ver", "about"}, plugin));
-        commands.add(new GuildLeaveCommand(new String[]{"leave", "opusc", "wyjdz"}, guilds, tagManager, sqlHandler));
+        commands.add(new GuildLeaveCommand(new String[]{"leave", "opusc", "wyjdz"}, guilds));
         commands.add(new GuildDisbandCommand(new String[]{"disband", "rozwiaz", "zamknij"}, guilds, cuboids, sqlHandler, tagManager));
         commands.add(new GuildHomeCommand(new String[]{"dom", "home", "house"}, teleporter, guilds, plugin.getConfig()));
         commands.add(new GuildChangeHomeCommand(new String[]{"ustawdom", "sethome", "sethouse"}, guilds, sqlHandler));

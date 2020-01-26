@@ -63,6 +63,7 @@ public class Guilds {
     private Sound cuboidEnterSound;
     private final int maxclantag = 6;
     private final int minclantag = 4;
+    private final int defaultEloPoints = 1000;
 
 
     public Guilds(final SQLHandler sqlHandler, Plugin plugin, Cuboids cuboids, TagManager tagManager) {
@@ -113,8 +114,6 @@ public class Guilds {
 
     private void playSoundOnSomeoneEnteredCuboid(OfflinePlayer op) {
         if (playSoundWHenSomeoneEnteredCuboidEnabled) {
-
-
             op.getPlayer().playSound(op.getPlayer().getLocation(), cuboidEnterSound, 10f, 5f);
         }
     }
@@ -318,6 +317,9 @@ public class Guilds {
         playerMetadataController.updatePlayerMetadata(player, column, value);
     }
 
+    public void createDefaultPlayerMetaData(UUID uuid) {
+        updatePlayerMeta(uuid, "", defaultEloPoints, 0, 0);
+    }
 
     public void updatePlayerMeta(UUID uuid, String guildName, int eloPoints, int playerKills, int playerDeaths) {
         playerMetadataController.updatePlayerMetaAll(uuid, guildName, eloPoints, playerKills, playerDeaths);
@@ -603,7 +605,7 @@ public class Guilds {
         return tag.matches("[0-9a-zA-Z]*");
     }
 
-    public boolean playerLeaveGuild(Player player) {
+    public boolean playerLeaveGuild(Player player, String leavePlayerReason) {
         if (!hasGuild(player)) {
             player.sendMessage(MsgManager.get("notinguild"));
             return false;
@@ -633,8 +635,7 @@ public class Guilds {
                 tagManager.sendDeleteTeamTag(p, guildName);
                 tagManager.sendCreateOwnTeamTag(p, guildName, guildMemberNames);
                 tagManager.sendUpdateOwnTeamTag(p, guildName, guildMemberNames);
-                String msg = MsgManager.get("broadcast-leave").replace("{PLAYER}", player.getDisplayName()).replace("{TAG}", guildName.toUpperCase());
-                p.sendMessage(msg);
+                p.sendMessage(leavePlayerReason);
             }
             for (Guild ally : getAllyGuilds(guild)) {
                 List<UUID> whoGuildMembers = guild.getMembers();
@@ -702,7 +703,6 @@ public class Guilds {
                     tagManager.sendCreateDefaultTeamTag(p, guildName, guildMemberNames);
                 }
             } else {
-                System.out.println("Gosciu " + p.getName() + " nie ma gildii");
                 tagManager.sendCreateDefaultTeamTag(p, guildName, guildMemberNames);
             }
         }

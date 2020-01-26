@@ -27,12 +27,11 @@ public final class Updater {
         if (!updaterEnabled) {
             OpenGuild.getOGLogger().warning("Updater is disabled.");
         } else {
-
             if (isAvailable()) {
                 OpenGuild.getOGLogger().info(" ");
                 OpenGuild.getOGLogger().info(" ==================== UPDATER ==================== ");
                 OpenGuild.getOGLogger().info("Update found! Please update your plugin to the newest version!");
-                OpenGuild.getOGLogger().info("Download it from https://github.com/grzegorz2047/OpenGuild2047/releases");
+                OpenGuild.getOGLogger().info("Download it from https://github.com/grzegorz2047/OpenGuild/releases");
                 OpenGuild.getOGLogger().info(" ==================== UPDATER ==================== ");
                 OpenGuild.getOGLogger().info(" ");
             } else {
@@ -44,7 +43,7 @@ public final class Updater {
     private boolean isAvailable() {
         try {
             String version = newVersionChecker.getVersions().get(0);
-            return Float.parseFloat(version) < Float.parseFloat(Bukkit.getPluginManager().getPlugin("OpenGuild").getDescription().getVersion());
+            return Float.parseFloat(version) > Float.parseFloat(Bukkit.getPluginManager().getPlugin("OpenGuild").getDescription().getVersion());
         } catch (Exception ex) {
             OpenGuild.getOGLogger().info("Couldnt check updates! :<");
             return false;

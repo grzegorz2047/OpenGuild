@@ -1,5 +1,5 @@
 # English: See the configuration tutorial at http://dev.bukkit.org/bukkit-plugins/openguild/pages/config-configuration/
-# polski: Patrz poradnik konfiguracji na https://github.com/grzegorz2047/OpenGuild2047/wiki/Konfiguracja
+# polski: Patrz poradnik konfiguracji na https://github.com/grzegorz2047/OpenGuild/wiki/Konfiguracja
 # svenska: Det finns inte konfiguration guide på svenska :(
 language: EN
 teampvp: false
@@ -76,7 +76,8 @@ chat:
   ally-format: '&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}'
   ally-key: '!'
   guildprefixinchat: true
-  chatFormat: '&8[&7{ELO}&8] &8[&7{GUILD}&8] &7{PLAYER}&7: &f{MESSAGE}'
+  guildChatFormat: '&8[&7{ELO}&8] &8[&7{GUILD}&8] &7{PLAYER}&7: &f{MESSAGE}'
+  noGuildChatFormat: '&8[&7{ELO}&8] &7{PLAYER}&7: &f{MESSAGE}'
 required-items:
   - type: STONE_SWORD
     amount: 1

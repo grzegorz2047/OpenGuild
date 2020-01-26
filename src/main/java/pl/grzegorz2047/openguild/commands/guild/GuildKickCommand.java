@@ -69,40 +69,44 @@ public class GuildKickCommand extends Command {
             return;
         }
 
-        String toKick = args[1];
-        OfflinePlayer op = Bukkit.getOfflinePlayer(toKick);
-        if (!guild.getMembers().contains(op.getUniqueId())) {
+        String toKickName = args[1];
+        OfflinePlayer playerToKick = Bukkit.getOfflinePlayer(toKickName);
+        if (!guild.isMember(playerToKick.getUniqueId())) {
             sender.sendMessage(MsgManager.get("playernotinthisguild"));
             return;
         }
-        if (guild.getLeader().equals(op.getUniqueId())) {
+        if (guild.isLeader(playerToKick.getUniqueId())) {
             sender.sendMessage(MsgManager.get("cantkickleader", "You cant kick yourself from your own guild!"));
             return;
         }
 
-        GuildKickEvent event = new GuildKickEvent(guild, op);
+        GuildKickEvent event = new GuildKickEvent(guild, playerToKick);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
         }
 
+        String senderOfCommand = ((Player) playerToKick).getDisplayName();
+        String leavePlayerReason = MsgManager.get("broadcast-leave")
+                .replace("{PLAYER}", senderOfCommand)
+                .replace("{TAG}", guild.getName().toUpperCase());
+        Player onlinePlayerToKick = playerToKick.getPlayer();
 
-        guild.removeMember(op.getUniqueId());
-
-        guilds.updatePlayerMetadata(op.getUniqueId(), PlayerMetadataController.PlayerMetaDataColumn.GUILD.name(), "");
-        if (op.isOnline()) {
-            op.getPlayer().sendMessage(MsgManager.get("playerkicked").replace("{GUILD}", guild.getName()));
-            guilds.playerLeaveGuild(((Player) op));
+        if (playerToKick.isOnline()) {
+            onlinePlayerToKick.sendMessage(MsgManager.get("playerkicked").replace("{GUILD}", guild.getName()));
+            guilds.playerLeaveGuild(((Player) playerToKick), leavePlayerReason);
         }
-
+        String kickMsg = MsgManager.get("broadcast-kick")
+                .replace("{PLAYER}", senderOfCommand)
+                .replace("{MEMBER}", toKickName)
+                .replace("{TAG}", guild.getName().toUpperCase());
         for (UUID member : guild.getMembers()) {
-            OfflinePlayer opp = Bukkit.getOfflinePlayer(member);
-            if (opp.isOnline()) {
-                opp.getPlayer().sendMessage(MsgManager.get("broadcast-kick").replace("{PLAYER}", player.getDisplayName()).replace("{MEMBER}", op.getName()).replace("{TAG}", guild.getName().toUpperCase()));
+            OfflinePlayer guildMemberOffPlayer = Bukkit.getOfflinePlayer(member);
+            if (guildMemberOffPlayer.isOnline()) {
+                guildMemberOffPlayer.getPlayer().sendMessage(kickMsg);
             }
         }
-
-        guilds.playerLeaveGuild(((Player) op));
+        guilds.playerLeaveGuild(((Player) playerToKick), leavePlayerReason);
         player.sendMessage(MsgManager.get("playerkicksuccess"));
     }
 
