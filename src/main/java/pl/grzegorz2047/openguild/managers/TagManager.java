@@ -60,6 +60,7 @@ public class TagManager {
     public void sendCreateOwnTeamTag(Player p, String guildName, List<String> guildMemberNames) {
         String guildTagTemplate = OWN_GUILD_TAG_FORMAT.replace("%GUILD%", guildName);
         scoreboardPackets.sendCreateTeamTag(p, guildTagTemplate, guildName, guildMemberNames);
+        System.out.println(guildTagTemplate);
     }
 
     public void sendCreateAllyTeamTag(Player p, String guildName, List<String> guildMemberNames) {
