@@ -98,9 +98,9 @@ public class PlayerChatListener implements Listener {
             return;
         }
         String msgFormat = event.getFormat();
-
-        if (!GUILD_PREFIX_IN_CHAT_ENABLED && msgFormat.contains("%OPENGUILD_TAG%")) {
-            event.setFormat(msgFormat.replace("%OPENGUILD_TAG%", tag));
+        System.out.println(msgFormat);
+        if (!GUILD_PREFIX_IN_CHAT_ENABLED && msgFormat.contains("{OPENGUILD_TAG}")) {
+            event.setFormat(msgFormat.replace("{OPENGUILD_TAG}", tag));
             return;
         }
         int elo = getPlayerElo(player);
