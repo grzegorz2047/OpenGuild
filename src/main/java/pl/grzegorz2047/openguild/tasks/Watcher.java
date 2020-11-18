@@ -4,7 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import pl.grzegorz2047.openguild.antilogout.AntiLogoutManager;
 import pl.grzegorz2047.openguild.guilds.Guilds;
 import pl.grzegorz2047.openguild.listeners.EntityDamageByEntityListener;
-import pl.grzegorz2047.openguild.listeners.TNTExplode;
+import pl.grzegorz2047.openguild.listeners.TNTExplodeListener;
 import pl.grzegorz2047.openguild.relations.Relations;
 import pl.grzegorz2047.openguild.teleporters.Teleporter;
 import pl.grzegorz2047.openguild.teleporters.TpaRequester;
@@ -58,7 +58,7 @@ public class Watcher implements Runnable {
         }
         this.guilds.checkPlayerInvitations();
         relations.checkGuildPendingRelations();
-        if (TNTExplode.TNT_BLOCK_ENABLED) {
+        if (TNTExplodeListener.TNT_BLOCK_ENABLED) {
             tntGuildBlocker.checkTimesForBlockedGuilds();
         }
     }

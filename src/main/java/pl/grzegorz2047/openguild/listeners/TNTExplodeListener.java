@@ -34,7 +34,7 @@ import pl.grzegorz2047.openguild.tntguildblocker.TntGuildBlocker;
 
 import java.util.List;
 
-public class TNTExplode implements Listener {
+public class TNTExplodeListener implements Listener {
 
     private final DropFromBlocks drop;
     private final TntGuildBlocker tntGuildBlocker;
@@ -43,7 +43,7 @@ public class TNTExplode implements Listener {
     private int defaultBlockTimeForGuildWhereTNTExploded = 30;
     public static boolean TNT_BLOCK_ENABLED = false;
 
-    public TNTExplode(Guilds guilds, DropFromBlocks drop, TntGuildBlocker tntGuildBlocker, FileConfiguration config) {
+    public TNTExplodeListener(Guilds guilds, DropFromBlocks drop, TntGuildBlocker tntGuildBlocker, FileConfiguration config) {
         this.guilds = guilds;
         this.drop = drop;
         this.tntGuildBlocker = tntGuildBlocker;
@@ -53,14 +53,13 @@ public class TNTExplode implements Listener {
 
     }
 
+    @EventHandler
     public void handle(BlockPlaceEvent event) {
-
         Player player = event.getPlayer();
 
         if (player.hasPermission("openguild.cuboid.bypassplace")) {
             return;
         }
-
         Guild guild = guilds.getGuild(event.getBlock().getLocation());
         if (guild != null) {
             if (tntGuildBlocker.isGuildBlocked(guild.getName())) {

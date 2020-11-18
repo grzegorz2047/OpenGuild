@@ -317,7 +317,7 @@ public class OpenGuild extends JavaPlugin {
         }
         boolean blockPlacingBlocksOnTntExplodeEnabled = getConfig().getBoolean("listener.tnt-block-enabled", true);
         if (blockPlacingBlocksOnTntExplodeEnabled) {
-            pm.registerEvents(new TNTExplode(guilds, drop, tntGuildBlocker, getConfig()), this);
+            pm.registerEvents(new TNTExplodeListener(guilds, drop, tntGuildBlocker, getConfig()), this);
         }
     }
 
