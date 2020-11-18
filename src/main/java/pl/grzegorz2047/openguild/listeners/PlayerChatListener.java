@@ -39,6 +39,7 @@ public class PlayerChatListener implements Listener {
     private final String GUILD_ONLY_CHAT_MSG_KEY;
     private final String GUILD_ONLY_CHAT_FORMAT;
     private final String GUILD_AND_ALLY_ONLY_CHAT_KEY;
+    private final String CUSTOM_CHAT_TAG_CONFIG_LABEL = "{OPENGUILD_TAG}";
 
     public PlayerChatListener(Guilds guilds, FileConfiguration config) {
         this.guilds = guilds;
@@ -62,6 +63,8 @@ public class PlayerChatListener implements Listener {
         if (guilds.hasGuild(player)) {
             processChatForPlayerWithGuild(event, player, message);
             return;
+        } else {
+            event.setFormat(event.getFormat().replace(CUSTOM_CHAT_TAG_CONFIG_LABEL, ""));
         }
         int elo = getPlayerElo(player);
         if (GUILD_PREFIX_IN_CHAT_ENABLED) {
@@ -98,8 +101,8 @@ public class PlayerChatListener implements Listener {
             return;
         }
         String msgFormat = event.getFormat();
-        if (!GUILD_PREFIX_IN_CHAT_ENABLED && msgFormat.contains("{OPENGUILD_TAG}")) {
-            event.setFormat(msgFormat.replace("{OPENGUILD_TAG}", tag));
+        if (!GUILD_PREFIX_IN_CHAT_ENABLED && msgFormat.contains(CUSTOM_CHAT_TAG_CONFIG_LABEL)) {
+            event.setFormat(msgFormat.replace(CUSTOM_CHAT_TAG_CONFIG_LABEL, tag));
             return;
         }
         int elo = getPlayerElo(player);
