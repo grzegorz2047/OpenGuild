@@ -30,6 +30,7 @@ Kontakt
 -----------
 Jeżeli chcesz się ze mną skontaktować to napisz mi na maila: grzegorz2047@gmail.com
 Jeżeli chcesz ze mną pogadać to wbij na mój prywatny mini serwer TeamSpeak3 - ts.grzegorz2047.pl
+
 Kompilacja
 -----------
 
