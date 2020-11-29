@@ -189,7 +189,10 @@ public class OpenGuild extends JavaPlugin {
     private void loadDropFromBlocks(FileConfiguration config) {
         List<DropProperties> loadedDrops = new DropConfigLoader().getLoadedListDropPropertiesFromConfig();
         this.drop = new DropFromBlocks();
-        this.drop.loadMainDropData(config.getStringList("blocks-from-where-item-drops"), loadedDrops, getConfig());
+        List<String> stringList = config.getStringList("drop.blocks-from-where-item-drops");
+        logger.log(Level.INFO, "drop z: " + stringList.size());
+        stringList.forEach(x -> logger.log(Level.INFO, x));
+        this.drop.loadMainDropData(stringList, loadedDrops, getConfig());
     }
 
     private void loadConfigFiles() throws IOException, FileNotValidetedException {
@@ -226,8 +229,8 @@ public class OpenGuild extends JavaPlugin {
 
     private void copyFileData(InputStream jarConfigFile, StandardCopyOption fileCopyOption, String configPath) throws IOException {
         File localConfigFile = new File(configPath);
-        if(localConfigFile.exists()){
-           return;
+        if (localConfigFile.exists()) {
+            return;
         }
         Path configToPath = localConfigFile.toPath();
         Files.copy(jarConfigFile, configToPath, fileCopyOption);

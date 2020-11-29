@@ -149,7 +149,7 @@ tparequestsentfailed: "Tpa request send failed! Wait for current request expirat
 usagetpa: "Usage: /tpa <nick>, /tpa accept <nick>, /tpa deny <nick>"
 usagetpaaccept: "Usage: /tpa accept <nick>"
 usagetpadeny: "Usage: /tpa deny <nick>"
-notifynodropfromthistypeofblock: "You cannot get drop from this kind of block"
+notifynodropfromthistypeofblock: "%BLOCK% drops only from stone"
 defaultdropmsg: "You dropped: %d"
 tpaccepteddontmove: "Teleport request accepted! Dont move for %SECONDS%"
 tpadenied: "Teleport request to %PLAYER% has been denied!"

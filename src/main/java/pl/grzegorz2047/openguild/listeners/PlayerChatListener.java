@@ -43,7 +43,7 @@ public class PlayerChatListener implements Listener {
 
     public PlayerChatListener(Guilds guilds, FileConfiguration config) {
         this.guilds = guilds;
-        GUILD_CHAT_FORMAT = config.getString("chat.guildChatFormat", "&8{&7GUILD&8} &7{PLAYER}&7: &f{MESSAGE}");
+        GUILD_CHAT_FORMAT = config.getString("chat.guildChatFormat", "{GUILD} &7{PLAYER}&7: &f{MESSAGE}");
         CHAT_FORMAT = config.getString("chat.noGuildChatFormat", "&7{PLAYER}&7: &f{MESSAGE}");
         GUILD_PREFIX_IN_CHAT_ENABLED = config.getBoolean("chat.guildprefixinchat", true);
         GUILD_AND_ALLY_ONLY_CHAT_FORMAT = config.getString("chat.ally-format", "&8[&9Ally&8] &8[&9{GUILD}&8] &b{PLAYER}&7: &f{MESSAGE}").replace("&", "§");

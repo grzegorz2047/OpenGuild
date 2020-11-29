@@ -43,6 +43,7 @@ public class GuildReloadCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) throws CommandException {
         try {
+            System.out.println(fileConfiguration.getCurrentPath());
             fileConfiguration.load(fileConfiguration.getCurrentPath());
 
             sender.sendMessage(MsgManager.get("configreloaded"));

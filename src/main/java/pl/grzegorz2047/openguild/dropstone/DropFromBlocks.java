@@ -38,7 +38,7 @@ public class DropFromBlocks {
         NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK = config.getBoolean("drop.notify-cant-drop-from-not-eligible-block", false);
         DROP_ENABLED = config.getBoolean("drop.enabled", false);
         DROP_TO_EQ = config.getBoolean("drop.drop-to-eq", false);
-
+        System.out.println(loadedDrops.size() + " !!!!");
         if (loadedDrops.size() == 0) {
             System.out.println("Drop config is not configured! Turning drop off!");
             DROP_ENABLED = false;
@@ -47,6 +47,7 @@ public class DropFromBlocks {
         for (String dropMat : blockList) {
             try {
                 this.eligibleBlocks.add(Material.valueOf(dropMat));
+                System.out.println(dropMat + " !!!!!");
             } catch (IllegalArgumentException ex) {
                 System.out.println("Incorrect drop block " + dropMat + ". Check Material bukkit google it!");
             }
@@ -85,7 +86,7 @@ public class DropFromBlocks {
         Map<Enchantment, Integer> itemEnchantmens = itemInHand.getEnchantments();
         if (!isEligible(brokenBlockType)) {
             if (NOTIFY_NO_DROP_FROM_THIS_TYPE_OF_BLOCK) {
-                player.sendMessage(MsgManager.get("notifynodropfromthistypeofblock"));
+                player.sendMessage(MsgManager.get("notifynodropfromthistypeofblock").replace("%BLOCK%", brokenBlockType.name()));
             }
         }
         World playerWorld = player.getWorld();

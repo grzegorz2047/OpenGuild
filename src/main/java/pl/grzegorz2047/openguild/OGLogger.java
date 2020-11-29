@@ -31,7 +31,7 @@ public class OGLogger {
 
     private File logFile;
     private java.util.logging.Logger logger = getLogger("OpenGuild");
-    private boolean debugMode = false;
+    private boolean debugMode = true;
 
     public OGLogger() {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
