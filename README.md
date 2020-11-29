@@ -16,7 +16,7 @@ Zobacz [instalacje](https://github.com/grzegorz2047/OpenGuild/wiki/Pobieranie-or
 Pobieranie
 -----------
 
-Oficjalne wersje pluginu dostępne są [__tutaj__](https://github.com/grzegorz/OpenGuild/releases).
+Oficjalne wersje pluginu dostępne są [__tutaj__](https://github.com/grzegorz2047/OpenGuild/releases).
 Wersje dev - na dzień dzisiejszy, niedostępne
 
 Plugin dostepny także na stronie [__BukkitDev__](http://dev.bukkit.org/bukkit-plugins/openguild/).
