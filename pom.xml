@@ -12,7 +12,7 @@
         <upload.dbo.category>server-mods</upload.dbo.category>
         <upload.dbo.slug>OpenGuild</upload.dbo.slug>
     </properties>
-    <url>http://maven.apache.org</url>
+    <url>httpS://maven.apache.org</url>
 
     <build>
         <resources>
@@ -71,11 +71,11 @@
     <repositories>
         <repository>
             <id>dmulloy2-repo</id>
-            <url>http://repo.dmulloy2.net/content/groups/public/</url>
+            <url>httpS://repo.dmulloy2.net/content/groups/public/</url>
         </repository>
         <repository>
             <id>bukkit-repo</id>
-            <url>http://maven.sk89q.com/repo/</url>
+            <url>httpS://maven.sk89q.com/repo/</url>
         </repository>
         <repository>
             <id>spigot-repo</id>
