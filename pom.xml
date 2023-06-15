@@ -69,21 +69,22 @@
     </build>
 
     <repositories>
+	<repository>
+	    <id>jitpack.io</id>
+	    <url>https://jitpack.io</url>
+	</repository>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
+
     </repositories>
 
     <dependencies>
 	<dependency>
 	    <groupId>com.github.dmulloy2</groupId>
 	    <artifactId>ProtocolLib</artifactId>
-	    <version>5.0.0</version>
+	    <version>4.8.0</version>
 	</dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
